@@ -1,4 +1,4 @@
-import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Language, Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 import {
   Column,
   CreateDateColumn,
@@ -43,6 +43,8 @@ const VIDEO_CODECS: VideoCodec[] = [
   VideoCodec.X265_10BIT,
   VideoCodec.AV1_10BIT,
 ];
+
+const LANGUAGES: ReadonlySet<string> = new Set(Object.values(Language));
 
 const SOURCE_TYPES: Source[] = [
   Source.WEB,
@@ -134,6 +136,25 @@ export class ContentSource {
     },
   })
   videoCodec: VideoCodec | null; // e.g. "x264", "x265", "HVEC"
+
+  /**
+   * Languages the release name gives ("FRENCH", "MULTI"), in the order found; null when not
+   * known yet. Stored comma-separated.
+   */
+  @Column({
+    type: 'varchar',
+    length: 160,
+    nullable: true,
+    transformer: {
+      to: (value?: Language[] | null) =>
+        value === undefined ? undefined : value === null ? null : value.join(','),
+      from: (value?: string | null) =>
+        value === undefined || value === null
+          ? null
+          : (value.split(',').filter(item => LANGUAGES.has(item)) as Language[]),
+    },
+  })
+  languages: Language[] | null;
 
   @Column({ nullable: true })
   broadcasters?: number;

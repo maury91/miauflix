@@ -21,6 +21,8 @@ export interface HandleRequestParams {
   API_AUTH_HEADER: string;
   API_AUTH_HEADER_IS_BEARER: boolean;
   RECORD_PROVIDER_FIXTURES: boolean;
+  /** The request body, read when POST recordings are keyed by it (`KEY_POST_BY_BODY`). */
+  body?: string;
 }
 
 export interface HandleRequestResponse<T = unknown> {

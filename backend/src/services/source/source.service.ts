@@ -30,6 +30,13 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
 
 /** How long a source whose file list could not be fetched waits before another try. */
 const UNRESOLVED_RETRY_MS = 60 * 60_000;
+/**
+ * Below this many seeders (or with unknown release languages), an episode's stored matches don't
+ * stop another search.
+ */
+const WEAK_SWARM_BROADCASTERS = 10;
+/** How long an episode whose matches are all weak waits before another search. */
+const WEAK_RESEARCH_MS = 6 * 60 * 60_000;
 
 interface TVRelease {
   metadata: SourceMetadata;
@@ -94,6 +101,8 @@ export class SourceService {
   private readonly movieRepository: MovieRepository;
   private readonly contentSourceRepository: ContentSourceRepository;
   private readonly episodeSourceRepository: EpisodeSourceRepository;
+  /** When episodes whose stored matches were all weak were last searched again. */
+  private readonly weakEpisodeSearches = new Map<number, number>();
   private readonly tvReleaseSearches = new Map<
     string,
     { expiresAt: number; promise: Promise<TVRelease[]> }
@@ -342,18 +351,44 @@ export class SourceService {
     showImdbId: string | null;
     seasonNumber: number;
     episodeNumber: number;
+    /** TMDB's numbering of an anime numbered by AniList entry; sources speak TMDB's. */
+    providerSeasonNumber?: number | null;
+    providerEpisodeNumber?: number | null;
     airDate?: string | null;
   }): Promise<EpisodeSource[]> {
     if (!this.isEpisodeWithinLeakTolerance(episode.airDate)) return [];
     const existing = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
-    if (existing.some(association => association.matchKind === 'single')) return existing;
-    const releases = await this.getTVReleases(episode);
+    const single = existing.filter(association => association.matchKind === 'single');
+    // Matches with a live swarm are enough. Weak ones are searched again now and then: a provider
+    // enabled since (or newer releases) may have a better copy. So are ones stored before release
+    // languages were recorded: the search records them, and selection needs them.
+    if (
+      single.some(
+        association =>
+          (association.source?.broadcasters ?? 0) >= WEAK_SWARM_BROADCASTERS &&
+          association.source?.languages !== null
+      ) ||
+      (single.length &&
+        Date.now() - (this.weakEpisodeSearches.get(episode.episodeId) ?? 0) < WEAK_RESEARCH_MS)
+    )
+      return existing;
+    if (single.length) {
+      this.weakEpisodeSearches.set(episode.episodeId, Date.now());
+      if (this.weakEpisodeSearches.size > 1000)
+        this.weakEpisodeSearches.delete(this.weakEpisodeSearches.keys().next().value!);
+    }
+    const searched = {
+      ...episode,
+      seasonNumber: episode.providerSeasonNumber ?? episode.seasonNumber,
+      episodeNumber: episode.providerEpisodeNumber ?? episode.episodeNumber,
+    };
+    const releases = await this.getTVReleases(searched);
     const associate = (allowCombined: boolean) =>
       releases.flatMap(release => {
         const match = matchEpisodeFile(
           release.metadata,
-          episode.seasonNumber,
-          episode.episodeNumber,
+          searched.seasonNumber,
+          searched.episodeNumber,
           allowCombined
         );
         return match ? [{ release, match }] : [];
@@ -362,12 +397,12 @@ export class SourceService {
     if (!matches.length) {
       const metadataCandidates = releases
         .filter(release =>
-          mayContainEpisode(release.metadata, episode.seasonNumber, episode.episodeNumber)
+          mayContainEpisode(release.metadata, searched.seasonNumber, searched.episodeNumber)
         )
         .sort((left, right) => {
           const exact = (release: TVRelease) =>
-            release.metadata.season === episode.seasonNumber &&
-            release.metadata.episode === episode.episodeNumber
+            release.metadata.season === searched.seasonNumber &&
+            release.metadata.episode === searched.episodeNumber
               ? 1
               : 0;
           return (
@@ -376,7 +411,8 @@ export class SourceService {
           );
         })
         .slice(0, 2);
-      for (const candidate of metadataCandidates) {
+      // Each lookup can wait out a slow swarm: run them side by side, not one after another.
+      const resolveFiles = async (candidate: TVRelease): Promise<void> => {
         try {
           const source =
             (await this.contentSourceRepository.findById(candidate.source.id)) ?? candidate.source;
@@ -400,7 +436,7 @@ export class SourceService {
                 source.hash
               )) ?? undefined;
           }
-          if (!torrentFile) continue;
+          if (!torrentFile) return;
 
           const parsed = await parseTorrent(torrentFile);
           if (parsed.infoHash?.toLowerCase() !== source.hash.toLowerCase()) {
@@ -408,7 +444,7 @@ export class SourceService {
               'SourceService',
               `Ignoring torrent metadata with a mismatched hash for TV source ${source.id}`
             );
-            continue;
+            return;
           }
           const files = (parsed.files ?? []).map(file => file.path).filter(Boolean);
           if (!source.file) {
@@ -426,7 +462,8 @@ export class SourceService {
             error
           );
         }
-      }
+      };
+      await Promise.all(metadataCandidates.map(resolveFiles));
       matches = associate(false);
     }
     if (!matches.length) matches = associate(true);

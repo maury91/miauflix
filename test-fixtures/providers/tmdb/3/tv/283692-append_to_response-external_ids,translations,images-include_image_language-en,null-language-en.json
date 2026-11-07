@@ -1,0 +1,547 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"2c146e8591eda1ef432f48e5910d28b5\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/k5G4ALskmO8GcSOO3fN8fePa9Ny.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://saikyosoubi.com",
+    "id": 283692,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7903942,
+      "name": "The Singing Crystal",
+      "overview": "Against a massive fleet, Hiro and his crew go on a reckless giant-killing mission.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-01",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 283692,
+      "still_path": "/hmOgMRjNXW5aqt6leKFKaMJV5qC.jpg"
+    },
+    "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+    "next_episode_to_air": {
+      "id": 7903943,
+      "name": "The Arein System",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 283692,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 13,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "目覚めたら最強装備と宇宙船持ちだったので、一戸建て目指して傭兵として自由に生きたい",
+    "overview": "When office worker Takahiro Satou awakens inside his favorite sci-fi game, he finds himself commanding a powerful spaceship. He takes to the stars as Hiro the mercenary, battling enemies and gathering allies along the way. But he soon faces a big problem: he has no home and, more importantly, no carbonated drinks! There's only one thing to do…buy himself a house on a planet!",
+    "popularity": 9.7612,
+    "poster_path": "/uF5ls69ae5oskSCGcEGtXgwHy6N.jpg",
+    "production_companies": [
+      {
+        "id": 95861,
+        "logo_path": "/zgASi8usQpL3nsYjGOywho0VSmM.png",
+        "name": "Studio A-CAT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157002,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Tokyo MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 60197,
+        "logo_path": "/D5B8l99tlFJGoMpYJk1kqxYdey.png",
+        "name": "Good Smile Company",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11727,
+        "logo_path": "/cIMyE9cw1W4kMFGxmC17HKTnVz9.png",
+        "name": "Yomiuri Telecasting Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 131362,
+        "logo_path": null,
+        "name": "Sansei R&D",
+        "origin_country": "JP"
+      },
+      {
+        "id": 60195,
+        "logo_path": "/wR7YDBvNzdJRkmxOTgJobOpUG8X.png",
+        "name": "Docomo Anime Store",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157807,
+        "logo_path": "/tyrJOOVAUIxQEJzjP1PhP2H5zFi.png",
+        "name": "WOWOW",
+        "origin_country": "JP"
+      },
+      {
+        "id": 229878,
+        "logo_path": "/jPFCAv3mAjPJpNJtv3iwroiLaxQ.png",
+        "name": "HAYATE",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-04",
+        "episode_count": 13,
+        "id": 441303,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/uF5ls69ae5oskSCGcEGtXgwHy6N.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.5,
+    "vote_count": 4,
+    "external_ids": {
+      "imdb_id": "tt41298100",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 459942,
+      "tvrage_id": null,
+      "wikidata_id": "Q132153995",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "saikyosoubi"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship",
+            "overview": "Sato Takahiro, un oficinista y jugador aficionado, despierta en una nave espacial similar a su juego favorito. Con una tripulación de chicas y un universo por descubrir, aprovecha la oportunidad para vivir la aventura de sus sueños.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+            "overview": "Quando Satou Takahiro é levado para longe de sua vida comum até o mundo de fantasia do seu jogo favorito, um universo de batalhas espaciais, colônias interestelares e perigo na vastidão do espaço exterior o espera. Logo, ele está vivendo como \"Hiro\", o mercenário, com uma nave espacial e uma garota em cada braço! Existem piratas espaciais, meninas para resgatar e problemas para enfrentar. Hiro vai viver sua nova vida ao máximo!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+            "overview": "Takahiro Satous eintöniges Leben endet, als er in seinem liebsten Sci-Fi-Game erwacht, direkt im Cockpit eines mächtigen Raumschiffs. Unter dem Namen „Hiro“ beginnt er ein neues Leben als Söldner, findet Verbündete und stürzt sich in intergalaktische Kämpfe. Doch schon bald hat er ein neues Ziel: genug Geld für ein eigenes Zuhause auf einem Planeten zu verdienen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship",
+            "overview": "Cuando Satou Takahiro abandona su vida cotidiana y se adentra en el mundo de su videojuego favorito, lo espera un universo de batallas espaciales, colonias interestelares y peligros en la inmensidad del espacio exterior. Pronto, vivirá como “Hiro”, el mercenario, con una nave espacial modificada y una nena en cada brazo. Hay piratas espaciales con los que luchar, chicas que rescatar y problemas en los que meterse (y, con suerte, de los que salir). ¡Hiro va a vivir su nueva vida al máximo!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "退屈で苦労の多い日々を送る会社員の佐藤孝弘。ある日、孝弘が目を覚ますと、そこは夢中でやり込んでいたSFゲームの世界――最強装備の宇宙船のコクピットだった。冒険するもよし、交易するもよし、傭兵になるのもよし。そんな自由すぎる宇宙で、最強装備を手にした孝弘は、「ヒロ」と名を変えて生きることを決める。――「キャプテン・ヒロ。傭兵だ」 やがてヒロは仲間と出会い、戦いを繰り返すうちにあることに気づく。宇宙では、唯一の好物である炭酸飲料が飲めない。さらに、仲間と帰る家もない。ならば目指すは……、超高額だが『惑星上に庭付き一戸建てを買う』ことだ！こうして最強装備と仲間たちと共に、ヒロの傭兵稼業が始まる。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+            "overview": "When office worker Takahiro Satou awakens inside his favorite sci-fi game, he finds himself commanding a powerful spaceship. He takes to the stars as Hiro the mercenary, battling enemies and gathering allies along the way. But he soon faces a big problem: he has no home and, more importantly, no carbonated drinks! There's only one thing to do…buy himself a house on a planet!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "一觉醒来就有了最强装备跟太空船，决定以自家独栋建筑为目标当佣兵自由过活",
+            "overview": "身为上班族的佐藤孝弘每天都过着无趣又劳累的生活。然而某天醒来时，他发现自己身处平时最爱玩的SF游戏世界里，而且还坐在搭载最强装备的宇宙飞船玤驾驶舱里。不仅可以去冒险，也可以贸易，甚至成为佣兵。掌握了这个宇宙的最强装备的孝弘决定改名为“西罗”，并以这个身分活下去。“我是西罗舰长，是一名佣兵。”后来，西罗遇到了其他伙伴，并在一次又一次的战斗中察觉到——在外太空喝不到自己唯一喜欢的碳酸饮料。而且，他没有一个能和伙伴们一起回去的家。因此，虽然价格高得惊人，但他下定决心要“在行星上买一栋附带庭院的独栋住宅”！就这样，西罗带着最强的装备与伙伴们展开了他的佣兵生涯。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+            "overview": "Takahiro Satô est arraché à son quotidien lorsqu’il se réincarne dans l'univers de son jeu vidéo préféré : un monde galactique où se jouent des batailles spatiales, peuplé de colonies interstellaires mais aussi jonché de dangers. Très vite, il devient « Hiro », un mercenaire équipé d'un vaisseau spatial ultrasophistiqué et accompagné de deux beautés !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "눈을 떴더니 최강 무장과 우주선을 가지고 있어서, 집 한 채를 목표로 용병으로 자유롭게 살고 싶다",
+            "overview": "지루하고 고생 많았던 나날을 보내왔던 회사원 사토 타카히로.\n\n어느 날 타카히로가 눈을 뜨자, 그곳은 그가 열심히 파고들었던 SF 게임 세계\n\n- 최강 무장을 갖춘 우주선의 콕핏이었다.\n\n모험을 해도 되고, 무역을 해도 되고, 용병이 되어도 된다.\n\n그렇게 너무나도 자유로운 우주에서 최강 무장을 손에 넣은 타카히로는,\n\n'히로'로 이름을 바꾸고 살기로 결정했다.\n\n'캡틴 히로. 용병이다.'\n\n이윽고 히로는 동료들을 만나고, 전투를 반복하는 가운데 무언가를 깨달았다.\n\n우주에서는 유일하게 좋아하는 탄산음료를 마실 수 없었다. 게다가 동료와 돌아갈 집도 없었다.\n\n그렇다면 목표는... 엄청나게 비싸지만 '행성 위에 지어진 정원 딸린 집 한 채를 사는' 것이다!\n\n이렇게 최강 장비와 동료들과 함께 히로의 용병 생활이 시작된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "一覺醒來就有了最強裝備跟太空船 決定以自家獨棟建築為目標當傭兵自由過活",
+            "overview": "身為上班族的佐藤孝弘每天都過著無趣又勞累的生活。然而某天醒來時，他發現自己身處平時最愛玩的SF遊戲世界裡，而且還坐在搭載最強裝備的太空船駕駛艙裡。不僅可以去冒險，也可以貿易，甚至成為傭兵。掌握了這個宇宙的最強裝備的孝弘決定改名為「西羅」，並以這個身分活下去。「我是西羅艦長，是一名傭兵。」\n\n後來，西羅遇到了其他夥伴，並在一次又一次的戰鬥中察覺到——在外太空喝不到自己唯一喜歡的碳酸飲料。而且，他沒有一個能和夥伴們一起回去的家。因此，雖然價格高得驚人，但他下定決心要「在行星上買一棟附帶庭院的獨棟住宅」！\n\n就這樣，西羅帶著最強的裝備與夥伴們展開了他的傭兵生涯。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "一覺醒來就有了最強裝備跟太空船 決定以自家獨棟建築為目標當傭兵自由過活",
+            "overview": "身為上班族的佐藤孝弘每天都過著無趣又勞累的生活。然而某天醒來時，他發現自己身處平時最愛玩的 SF 遊戲世界裏，而且還坐在搭載最強裝備的太空船駕駛艙裏。不僅可以去冒險，也可以貿易，甚至成為傭兵。掌握了這個宇宙的最強裝備的孝弘決定改名為「西羅」，並以這個身分活下去。「我是西羅艦長，是一名傭兵。」\n\n後來，西羅遇到了其他夥伴，並在一次又一次的戰鬥中察覺到——在外太空喝不到自己唯一喜歡的碳酸飲料。而且，他沒有一個能和夥伴們一起回去的家。因此，雖然價格高得驚人，但他下定決心要「在行星上買一棟附帶庭院的獨棟住宅」！\n\n就這樣，西羅帶著最強的裝備與夥伴們展開了他的傭兵生涯。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Я очнулся будучи пилотом сильнейшего космического корабля, а потому решил стать межгалактическим наёмником",
+            "overview": "Сато Такахиро был обычным офисным работником и заядлым любителем видеоигр, пока однажды не проснулся на борту космического корабля, удивительно похожего на самое мощное судно из его любимого космического шутера. Так что теперь у него есть навороченный корабль, а в придачу ещё и команда прекрасных девушек, ну и целая вселенная для исследования.\n\nПохоже, судьба подарила ему невероятный шанс, и Такахиро намерен воспользоваться им по полной, чтобы построить жизнь, о которой всегда мечтал.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Wanneer kantoormedewerker Takahiro Satou wakker wordt in zijn favoriete sciencefictionspel, merkt hij dat hij het bevel voert over een krachtig ruimteschip. Hij gaat naar de sterren als Hiro de huursoldaat, terwijl hij onderweg tegen vijanden vecht en bondgenoten verzamelt. Maar hij wordt al snel geconfronteerd met een groot probleem: hij heeft geen huis en, nog belangrijker, geen koolzuurhoudende dranken! Er zit maar één ding op: een huis op een planeet voor zichzelf kopen!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Reborn as a Space Mercenary: I Woke Up Piloting the Strongest Starship!",
+            "overview": "Al suo risveglio, Takahiro Satō si ritrova all'interno di una nave spaziale che è simile a quella presente nel suo videogioco preferito: un universo pieno di battaglie spaziali, colonie interstellari e pericoli di ogni tipo che ti attendono nella vastità dello spazio. Takahiro, seppur inizialmente confuso, decide di vivere come \"Hiro il mercenario\", navigando con una navicella truccata ed una ragazza per ogni braccio! Ci sono pirati spaziali da combattere, ragazze da salvare e guai da affrontare (e da cui si spera di uscire)... Hiro ha deciso di vivere la sua nuova vita al massimo!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Wanneer kantoormedewerker Takahiro Satou wakker wordt in zijn favoriete sciencefictionspel, merkt hij dat hij het bevel voert over een krachtig ruimteschip. Hij gaat naar de sterren als Hiro de huursoldaat, terwijl hij onderweg tegen vijanden vecht en bondgenoten verzamelt. Maar hij wordt al snel geconfronteerd met een groot probleem: hij heeft geen huis en, nog belangrijker, geen koolzuurhoudende dranken! Er zit maar één ding op: een huis op een planeet voor zichzelf kopen!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Tái Sinh Làm Lính Đánh Thuê Vũ Trụ: Tôi Tỉnh Dậy Trong Buồng Lái Của Phi Thuyền Mạnh Nhất!",
+            "overview": "Khi nhân viên văn phòng Takahiro Satou tỉnh dậy bên trong trò chơi khoa học viễn tưởng yêu thích của mình, anh thấy mình đang chỉ huy một con tàu vũ trụ hùng mạnh. Anh bước ra vũ trụ với tư cách Hiro — lính đánh thuê, chiến đấu với kẻ thù và thu thập đồng minh trên đường đi. Nhưng anh sớm gặp một vấn đề lớn: anh không có nhà, và quan trọng hơn — không có đồ uống có ga! Chỉ còn một cách… mua cho mình một ngôi nhà trên hành tinh!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bXftkFfkWgKDfRv36A8YvYsqQL2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k5G4ALskmO8GcSOO3fN8fePa9Ny.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jw3lE0QlWWswA2tkimGnThk0ABF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 961,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xqil5t29q1k6reedUlMy4nYd9f7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1709
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fZlxLLNMN8Ybh6XbnLdPZPKf71m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.846,
+          "height": 421,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2n7hXr6wbzFwwJ0rWLiEkQHZByy.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1198
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pHmuOtqK2cIXa0XV4q1yCYOsaqF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uF5ls69ae5oskSCGcEGtXgwHy6N.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5R9UhAkKSrpvGWcaMUZ4FCunrXZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tfAEdr7OmZIdFPpiUZiw3cWukN1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u7ZpGNdkpqvCiMKjMiK3ghBiJxG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.685,
+          "height": 2918,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sSEUCS4H692ObGr67K0zjtbAD2D.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9mrIkh8IgNJgN2eHbWsDI0rRi0T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

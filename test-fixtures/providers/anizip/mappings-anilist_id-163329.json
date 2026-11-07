@@ -1,0 +1,370 @@
+{
+  "headers": {
+    "access-control-allow-methods": "*",
+    "access-control-allow-origin": "*",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=900, s-maxage=900",
+    "content-type": "application/json; charset=utf-8"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "titles": {
+      "x-jat": "Tokyo Revengers: Tenjiku Hen",
+      "en": "tr s3",
+      "ja": "東京リベンジャーズ 天竺編",
+      "de": "Tokyo Revengers: Tenjiku Arc",
+      "zh-Hant": "東京復仇者 天竺篇",
+      "zh-Hans": "东京复仇者 天竺篇"
+    },
+    "episodes": {
+      "1": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10001296,
+        "seasonNumber": 3,
+        "episodeNumber": 1,
+        "absoluteEpisodeNumber": 38,
+        "title": {
+          "ja": "The longest day",
+          "en": "The Longest Day",
+          "de": "Der längste Tag",
+          "x-jat": "The Longest Day"
+        },
+        "airDate": "2023-10-04",
+        "airDateUtc": "2023-10-03T16:15:00Z",
+        "runtime": 24,
+        "overview": "The Yokohama team \"Tenjiku\" rides into Shibuya to destroy Tokyo Manjikai. Takemichi and the Mizonaka 5 and Chifuyu were ambushed by members of Tenjiku. Takemichi and the others struggle alone, but they are unable to compete due to the overwhelming difference in numbers. In a desperate situation, Kanji Mochizuki (Mocchi), a member of the four heavenly kings of Jersey, appears in addition to Risaki, who is dressed in a Jersey suicide uniform, and the situation is further brought to the brink of despair.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10001296/screencap/6519f97728883.jpg",
+        "episode": "1",
+        "anidbEid": 271530,
+        "length": 25,
+        "airdate": "2023-10-04",
+        "rating": "7.87",
+        "summary": "Set on crushing Toman, Yokohama gang Tenjiku ambushes Takemichi and his friends in Shibuya. The situation turns desperate for Takemichi when an old foe and one of Tenjiku’s Big Four show up.\nSource: Disney+"
+      },
+      "2": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004346,
+        "seasonNumber": 3,
+        "episodeNumber": 2,
+        "absoluteEpisodeNumber": 39,
+        "title": {
+          "ja": "Mortal enemy",
+          "en": "Mortal Enemy",
+          "de": "Erzfeind",
+          "x-jat": "Mortal Enemy"
+        },
+        "airDate": "2023-10-11",
+        "airDateUtc": "2023-10-10T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi and his friends are attacked by Tenjiku, and with the help of the guard squad commander Nahoya Kawada (Smiley) and vice-captain Souya Kawada (Angry), they get into Tenjiku's hideout. There was Tsurucho, Takemichi's childhood friend, who told him that they were enemies, but advised him to be careful of the traitor. The next day, the Tokyo Manjikai holds an emergency meeting to gather information about Tenjiku, but Takemichi is concerned about Tsurucho's advice and Kisaki's plan.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004346/screencap/6520e60dd3012.jpg",
+        "episode": "2",
+        "anidbEid": 271531,
+        "length": 25,
+        "airdate": "2023-10-11",
+        "rating": "5.48",
+        "summary": "Smiley and Angry, Captain and Vice-Captain of Fourth Division, come to the rescue of Takemichi and his friends. To get revenge, they head to Tenjiku`s hideout, where Takemichi encounters a childhood friend who gives him some disturbing information.\nSource: Disney+"
+      },
+      "3": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004348,
+        "seasonNumber": 3,
+        "episodeNumber": 3,
+        "absoluteEpisodeNumber": 40,
+        "title": {
+          "ja": "Run out of patience",
+          "en": "Run Out of Patience",
+          "de": "Keine Geduld mehr",
+          "x-jat": "Run Out of Patience"
+        },
+        "airDate": "2023-10-18",
+        "airDateUtc": "2023-10-17T16:15:00Z",
+        "runtime": 24,
+        "overview": "Back in the present, Takemichi and Naoto meet up with Taiju Shiba and learn who is essentially leading Toman. Then Inupi and Koko suddenly barge in there. Takemichi and Naoto try to make their escape but end up jumping from the frying pan into the fire.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004348/screencap/652e8da5a881c.jpg",
+        "episode": "3",
+        "anidbEid": 271532,
+        "length": 25,
+        "airdate": "2023-10-18",
+        "rating": "4.82",
+        "summary": "Back in the present, Takemichi and Naoto meet up with Taiju Shiba and learn who is essentially leading Toman. Then Inupi and Koko suddenly barge in there. Takemichi and Naoto try to make their escape but end up jumping from the frying pan into the fire.\nSource: Disney+"
+      },
+      "4": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004420,
+        "seasonNumber": 3,
+        "episodeNumber": 4,
+        "absoluteEpisodeNumber": 41,
+        "title": {
+          "ja": "Come back to life",
+          "en": "Come Back to Life",
+          "de": "Komm ins Leben zurück",
+          "x-jat": "Come Back to Life"
+        },
+        "airDate": "2023-10-25",
+        "airDateUtc": "2023-10-24T16:15:00Z",
+        "runtime": 24,
+        "overview": "Depressed over the tragedy in the present, Takemichi's resolve is rekindled by the words of Hinata. He then learns the connection between Mikey and Izana, and just as the rest of the First Division shows up to talk about their next steps, they get a surprise visit from another Toman captain.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004420/screencap/653828780987c.jpg",
+        "episode": "4",
+        "anidbEid": 271533,
+        "length": 25,
+        "airdate": "2023-10-25",
+        "rating": "5.41",
+        "summary": "Depressed over the tragedy in the present, Takemichi`s resolve is rekindled by the words of Hinata. He then learns the connection between Mikey and Izana, and just as the rest of the First Division shows up to talk about their next steps, they get a surprise visit from another Toman captain.\nSource: Disney+"
+      },
+      "5": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004422,
+        "seasonNumber": 3,
+        "episodeNumber": 5,
+        "absoluteEpisodeNumber": 42,
+        "title": {
+          "ja": "A bad hunch",
+          "en": "A Bad Hunch",
+          "de": "Ein ungutes Gefühl",
+          "x-jat": "A Bad Hunch"
+        },
+        "airDate": "2023-11-01",
+        "airDateUtc": "2023-10-31T16:15:00Z",
+        "runtime": 24,
+        "overview": "Battered and bloody, Takemichi shows what he is truly made of by resisting an S-62 Generation member to protect Koko. After witnessing Takemichi's heroism, Inupi makes an unbelievable request. Later, Takemichi reports to Mikey about the betrayal by a Toman captain.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004422/screencap/6541572a1233b.jpg",
+        "episode": "5",
+        "anidbEid": 272499,
+        "length": 25,
+        "airdate": "2023-11-01",
+        "rating": "7.10",
+        "summary": "Battered and bloody, Takemichi shows what he is truly made of by resisting an S-62 Generation member to protect Koko. After witnessing Takemichi`s heroism, Inupi makes an unbelievable request. Later, Takemichi reports to Mikey about the betrayal by a Toman captain.\nSource: Disney+"
+      },
+      "6": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004385,
+        "seasonNumber": 3,
+        "episodeNumber": 6,
+        "absoluteEpisodeNumber": 43,
+        "title": {
+          "ja": "Rise against",
+          "en": "Rise Against",
+          "de": "Auflehnung",
+          "x-jat": "Rise Against"
+        },
+        "airDate": "2023-11-08",
+        "airDateUtc": "2023-11-07T16:15:00Z",
+        "runtime": 24,
+        "overview": "Mikey falls into despair after a tragic incident. Takemichi too is devastated and becomes hopeless as he realizes there is nothing he can do anymore to change the past. Who will lead Toman now?",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004385/screencap/654a6f753a1b4.jpg",
+        "episode": "6",
+        "anidbEid": 272500,
+        "length": 25,
+        "airdate": "2023-11-08",
+        "rating": "7.29",
+        "summary": "Mikey falls into despair after a tragic incident. Takemichi too is devastated and becomes hopeless as he realizes there is nothing he can do anymore to change the past. Who will lead Toman now?\nSource: Disney+"
+      },
+      "7": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004386,
+        "seasonNumber": 3,
+        "episodeNumber": 7,
+        "absoluteEpisodeNumber": 44,
+        "title": {
+          "ja": "Turn the tide",
+          "en": "Turn the Tide",
+          "de": "Das Blatt wenden",
+          "x-jat": "Turn the Tide"
+        },
+        "airDate": "2023-11-15",
+        "airDateUtc": "2023-11-14T16:15:00Z",
+        "runtime": 24,
+        "overview": "While Tenjiku waits at a Yokohama pier with their Big Four ready to do battle, the members of Toman flinch at entering into the seemingly hopeless battle that awaits them. With their top two absent, Mikey and Draken, Takemichi tries to fire up Toman.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004386/screencap/6553c06ff238a.jpg",
+        "episode": "7",
+        "anidbEid": 272501,
+        "length": 25,
+        "airdate": "2023-11-15",
+        "rating": "5.49",
+        "summary": "While Tenjiku waits at a Yokohama pier with their Big Four ready to do battle, the members of Toman flinch at entering into the seemingly hopeless battle that awaits them. With their top two absent, Mikey and Draken, Takemichi tries to fire up Toman.\nSource: Disney+"
+      },
+      "8": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004387,
+        "seasonNumber": 3,
+        "episodeNumber": 8,
+        "absoluteEpisodeNumber": 45,
+        "title": {
+          "ja": "I know in my head",
+          "en": "I Know in My Head",
+          "de": "Ich weiß es einfach",
+          "x-jat": "I Know in My Head"
+        },
+        "airDate": "2023-11-22",
+        "airDateUtc": "2023-11-21T16:15:00Z",
+        "runtime": 24,
+        "overview": "As the brawl between Toman and Tenjiku gets underway, First Division does its best to clear a path so Takemichi can make his way to Kisaki. Amid the battle, Inupi utters a single name that enrages Koko.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004387/screencap/655cf2a8e8906.jpg",
+        "episode": "8",
+        "anidbEid": 272502,
+        "length": 25,
+        "airdate": "2023-11-22",
+        "rating": "5.48",
+        "summary": "As the brawl between Toman and Tenjiku gets underway, First Division does its best to clear a path so Takemichi can make his way to Kisaki. Amid the battle, Inupi utters a single name that enrages Koko.\nSource: Disney+"
+      },
+      "9": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004430,
+        "seasonNumber": 3,
+        "episodeNumber": 9,
+        "absoluteEpisodeNumber": 46,
+        "title": {
+          "ja": "The blue ogre",
+          "en": "The Blue Ogre",
+          "de": "Der blaue Oger",
+          "x-jat": "The Blue Ogre"
+        },
+        "airDate": "2023-11-29",
+        "airDateUtc": "2023-11-28T16:15:00Z",
+        "runtime": 24,
+        "overview": "Sorely missing the presence of Mikey and Draken, Takemichi and the other members of Toman face a monumental struggle against Tenjiku. The Haitani Brothers including one of Tenjiku's Big Four work in magnificent combination. Hakkai and Angry must figure out how to overcome this formidable pair.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004430/screencap/65663276cc3b1.jpg",
+        "episode": "9",
+        "anidbEid": 273259,
+        "length": 25,
+        "airdate": "2023-11-29",
+        "rating": "8.69",
+        "summary": "Sorely missing the presence of Mikey and Draken, Takemichi and the other members of Toman face a monumental struggle against Tenjiku. The Haitani Brothers including one of Tenjiku`s Big Four work in magnificent combination. Hakkai and Angry must figure out how to overcome this formidable pair.\nSource: Disney+"
+      },
+      "10": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004432,
+        "seasonNumber": 3,
+        "episodeNumber": 10,
+        "absoluteEpisodeNumber": 47,
+        "title": {
+          "ja": "Brave heart",
+          "en": "Brave Heart",
+          "de": "Tapferes Herz",
+          "x-jat": "Brave Heart"
+        },
+        "airDate": "2023-12-06",
+        "airDateUtc": "2023-12-05T16:15:00Z",
+        "runtime": 24,
+        "overview": "The battle between Toman and Tenjiku seesaws back and forth, but one by one, Toman's toughest fighters are no longer able to carry on. Yet Takemichi keeps getting back up no matter how many times Kakucho beats him down. Kisaki then steps in trying to end things, but Takemichi does not flinch.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004432/screencap/656f83822ffa0.jpg",
+        "episode": "10",
+        "anidbEid": 273260,
+        "length": 25,
+        "airdate": "2023-12-06",
+        "rating": "8.24",
+        "summary": "The battle between Toman and Tenjiku seesaws back and forth, but one by one, Toman`s toughest fighters are no longer able to carry on. Yet Takemichi keeps getting back up no matter how many times Kakucho beats him down. Kisaki then steps in trying to end things, but Takemichi does not flinch.\nSource: Disney+"
+      },
+      "11": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004390,
+        "seasonNumber": 3,
+        "episodeNumber": 11,
+        "absoluteEpisodeNumber": 48,
+        "title": {
+          "ja": "Nothing is left",
+          "en": "Nothing Is Left",
+          "de": "Nichts bleibt übrig",
+          "x-jat": "Nothing Is Left"
+        },
+        "airDate": "2023-12-13",
+        "airDateUtc": "2023-12-12T16:15:00Z",
+        "runtime": 24,
+        "overview": "Mikey and Draken show up at the pier, though they should be in the depths of despair. Now Mikey confronts his brother Izana, and the battle between the leaders of Toman and Tenjiku begins.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004390/screencap/6577a2047436e.jpg",
+        "episode": "11",
+        "anidbEid": 273261,
+        "length": 25,
+        "airdate": "2023-12-13",
+        "rating": "7.96",
+        "summary": "Mikey and Draken show up at the pier, though they should be in the depths of despair. Now Mikey confronts his brother Izana, and the battle between the leaders of Toman and Tenjiku begins.\nSource: Disney+"
+      },
+      "12": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004366,
+        "seasonNumber": 3,
+        "episodeNumber": 12,
+        "absoluteEpisodeNumber": 49,
+        "title": {
+          "ja": "Paradise lost",
+          "en": "Paradise Lost",
+          "de": "Verlorenes Paradies",
+          "x-jat": "Paradise Lost"
+        },
+        "airDate": "2023-12-20",
+        "airDateUtc": "2023-12-19T16:15:00Z",
+        "runtime": 24,
+        "overview": "Izana appears to be dominating in his fight against Mikey, but Mikey's kicks take a toll on Izana's body too. Out of desperation, Izana takes rash measures and the situation gets out of control.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004366/screencap/6581dbd702227.jpg",
+        "episode": "12",
+        "anidbEid": 273262,
+        "length": 25,
+        "airdate": "2023-12-20",
+        "rating": "7.94",
+        "summary": "Izana appears to be dominating in his fight against Mikey, but Mikey`s kicks take a toll on Izana`s body too. Out of desperation, Izana takes rash measures and the situation gets out of control.\nSource: Disney+"
+      },
+      "13": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10004438,
+        "seasonNumber": 3,
+        "episodeNumber": 13,
+        "absoluteEpisodeNumber": 50,
+        "title": {
+          "ja": "Meet his fate",
+          "en": "Meet His Fate",
+          "de": "Treffe sein Schicksal",
+          "x-jat": "Meet His Fate"
+        },
+        "airDate": "2023-12-27",
+        "airDateUtc": "2023-12-26T16:15:00Z",
+        "runtime": 24,
+        "finaleType": "season",
+        "overview": "With the situation coming to a close, Izana makes a surprising confession, and Hanma and Kisaki make their escape. Fearing that Kisaki will continue to threaten the future, Takemichi and Draken go after them in the falling snow.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10004438/screencap/65860e1c66f2e.jpg",
+        "episode": "13",
+        "anidbEid": 273263,
+        "length": 25,
+        "airdate": "2023-12-27",
+        "rating": "7.83",
+        "summary": "With the situation coming to a close, Izana makes a surprising confession, and Hanma and Kisaki make their escape. Fearing that Kisaki will continue to threaten the future, Takemichi and Draken go after them in the falling snow.\nSource: Disney+"
+      }
+    },
+    "episodeCount": 13,
+    "specialCount": 0,
+    "images": [
+      {
+        "coverType": "Banner",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/banners/63f699395631b.jpg"
+      },
+      {
+        "coverType": "Poster",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/posters/60d20e7c9ca6a.jpg"
+      },
+      {
+        "coverType": "Fanart",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/backgrounds/60f3733aa53e2.jpg"
+      },
+      {
+        "coverType": "Clearlogo",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/clearlogo/611d007ea31b7.png"
+      }
+    ],
+    "mappings": {
+      "animeplanet_id": "tokyo-revengers-tenjiku-hen",
+      "kitsu_id": 47278,
+      "mal_id": 54918,
+      "type": "TV",
+      "anilist_id": 163329,
+      "anisearch_id": 18331,
+      "anidb_id": 17969,
+      "notifymoe_id": null,
+      "livechart_id": 11923,
+      "thetvdb_id": 393478,
+      "imdb_id": "tt13196080",
+      "themoviedb_id": "105009"
+    }
+  }
+}

@@ -20,6 +20,7 @@ const setup = () => {
       port: 3001,
       dataDir,
       disableBackgroundTasks: true,
+      anime: { animeLists: '', aniZip: '' },
       bunqueue: { host: '127.0.0.1', port: 6789 },
     },
     config,

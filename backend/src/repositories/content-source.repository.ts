@@ -26,6 +26,7 @@ const PROVIDER_FIELDS = [
   'quality',
   'size',
   'videoCodec',
+  'languages',
   'source',
   'sourceType',
   'sourceUploadedAt',
@@ -164,7 +165,9 @@ export class ContentSourceRepository {
       const same =
         value instanceof Date && current instanceof Date
           ? value.getTime() === current.getTime()
-          : value === current;
+          : Array.isArray(value) && Array.isArray(current)
+            ? value.join(',') === current.join(',')
+            : value === current;
       if (!same) changes[field] = value;
     }
     return Object.keys(changes).length ? (changes as Partial<ContentSource>) : null;

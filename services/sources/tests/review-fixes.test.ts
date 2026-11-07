@@ -42,6 +42,7 @@ const setupTest = async (
 ) => {
   const dir = mkdtempSync(join(tmpdir(), 'sources-review-'));
   const made = createSourcesService({
+    animeListsUrl: '',
     dataDir: dir,
     now,
     keyFile: `${dir}/.key`,

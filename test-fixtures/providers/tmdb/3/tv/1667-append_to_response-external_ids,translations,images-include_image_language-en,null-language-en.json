@@ -1,0 +1,1778 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16550",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"84a78a9b2ca8f78471f8ca0f6d70a495\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/sSAX59Kf01lBRkBW4UcIL4kIoIm.jpg",
+    "created_by": [
+      {
+        "id": 1215166,
+        "credit_id": "52570fc0760ee3776a0b15bb",
+        "name": "Dick Ebersol",
+        "original_name": "Dick Ebersol",
+        "gender": 2,
+        "profile_path": "/kftpY2vdkVBsEQ7dVvThGBWGvu.jpg"
+      },
+      {
+        "id": 56158,
+        "credit_id": "52570fc0760ee3776a0b15b5",
+        "name": "Lorne Michaels",
+        "original_name": "Lorne Michaels",
+        "gender": 2,
+        "profile_path": "/lVBbmYJmYQWOODTPJFjOZzvS4x8.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "1975-10-11",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10763,
+        "name": "News"
+      }
+    ],
+    "homepage": "http://www.nbc.com/Saturday_Night_Live/",
+    "id": 1667,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-31",
+    "last_episode_to_air": {
+      "id": 7648180,
+      "name": "October 31 - Inde Navarrette",
+      "overview": "Inde Navarrette hosts Saturday Night Live on October 31, 2026, with musical guest Gracie Abrams.",
+      "vote_average": 5.2,
+      "vote_count": 5,
+      "air_date": "2026-10-31",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 67,
+      "season_number": 52,
+      "show_id": 1667,
+      "still_path": "/s7qKx3oxsXAmXL5VMx1UusjCGdd.jpg"
+    },
+    "name": "Saturday Night Live",
+    "next_episode_to_air": {
+      "id": 7648181,
+      "name": "November 7 - Druski",
+      "overview": "Druski hosts Saturday Night Live on November 7, 2026, with musical guest The Strokes.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-07",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 52,
+      "show_id": 1667,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "NBC",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 1018,
+    "number_of_seasons": 52,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Saturday Night Live",
+    "overview": "A late-night live television sketch comedy and variety show created by Lorne Michaels. The show's comedy sketches, which parody contemporary culture and politics, are performed by a large and varying cast of repertory and newer cast members. Each episode is hosted by a celebrity guest, who usually delivers an opening monologue and performs in sketches with the cast, and features performances by a musical guest.",
+    "popularity": 136.1934,
+    "poster_path": "/s1cZBqbMwAF3w8S3Yo0j5nr2Yuo.jpg",
+    "production_companies": [
+      {
+        "id": 1756,
+        "logo_path": "/d7YyNzysIF0lSb4lJRf1ar6MHxi.png",
+        "name": "Broadway Video",
+        "origin_country": "US"
+      },
+      {
+        "id": 7928,
+        "logo_path": "/tsa8zFtAIHlOJjL5G4fe75bBeCP.png",
+        "name": "NBC Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Universal Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 2822,
+        "logo_path": "/db94bUlhu5GH7KB7IHofCyix66K.png",
+        "name": "SNL Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1977-02-20",
+        "episode_count": 221,
+        "id": 59623,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/azt3NaDnPrqaIFuTg191fjkBpCB.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1975-10-11",
+        "episode_count": 24,
+        "id": 59588,
+        "name": "Season 1",
+        "overview": "The first season of Saturday Night Live, the weekly late-night 90-minute American sketch comedy/variety show on NBC, aired during the 1975–1976 television season. Saturday Night Live premiered on October 11, 1975 and consisted of a total of 24 episodes, the last of which aired on July 31, 1976.\n\nIn 1974, NBC Tonight Show host Johnny Carson requested that the weekend broadcasts of \"Best of Carson\" come to an end, so that Carson could take two weeknights off and NBC would thus air those repeats on those nights rather than feed them to affiliates for broadcast on either Saturdays or Sundays. Given Carson's undisputed status as the dean of late-night television, NBC heard his request as an ultimatum, fearing he might use the issue as grounds to defect to either ABC or CBS. To fill the gap, the network drew up some ideas and brought in Dick Ebersol – a protégé of legendary ABC Sports president Roone Arledge – to develop a 90-minute late-night variety show. Ebersol's first order of business was hiring a young Canadian producer named Lorne Michaels to be the show-runner.",
+        "poster_path": "/sjOaQhU84QhHcWtZ3FNB2DQyEKX.jpg",
+        "season_number": 1,
+        "vote_average": 6.6
+      },
+      {
+        "air_date": "1976-09-18",
+        "episode_count": 22,
+        "id": 59589,
+        "name": "Season 2",
+        "overview": "Saturday Night Live aired its second season during the 1976–1977 television season on NBC. The second season started on September 18, 1976, and ended on May 21, 1977.\n\nThis season saw the first of many SNL cast changes. Chevy Chase, who was pursuing a movie career in California, left the show after the October 30th episode hosted by Buck Henry with musical guest, The Band. Jane Curtin became the first female cast member to become a Weekend Update anchor following Chase's departure. On the January 15, 1977 episode, Bill Murray joined the cast to fill the void left by Chase's departure.\n\nThis season also saw another change in the show: its name. Following the cancellation of ABC's Saturday Night Live with Howard Cosell, NBC changed the name of the show from NBC's Saturday Night to its current title, Saturday Night Live in the episode hosted by Jack Burns in 1977.\n\nIt was the last time that the Muppet sketches would appear on the show. In a 1977 interview with Playboy, O'Donoghue who was head writer/performer, referred to the Muppets as \"those fucking Muppets, those little hairy facecloths\" and were \"made from the refuse after they cleaned up after Woodstock\". He also refused to write for them, saying \"I don’t write for felt\". O'Donoghue also had a lynched Big Bird hanging in the writer's office.",
+        "poster_path": "/mZbTQfW6eNAGmZSyiZdVvvJI339.jpg",
+        "season_number": 2,
+        "vote_average": 6.2
+      },
+      {
+        "air_date": "1977-09-24",
+        "episode_count": 20,
+        "id": 59590,
+        "name": "Season 3",
+        "overview": "Saturday Night Live aired its third season during the 1977–1978 television season on NBC. The season began on September 24, 1977 and ended on May 20, 1978. The DVD for the entire season was released on May 13, 2008.\n\nThe entire cast from the previous season returned for season three. The show also introduced the concept of the \"featured player.\" Writers Tom Davis and Al Franken became cast members.\n\nThe season is also notable for the contest, Anyone Can Host. During the start of the season the show advertised the contest for a non-celebrity to host the show. The winner was 80 year-old grandmother Miskel Spillman, the only non-celebrity to host an SNL episode. During Spillman's show the musical guest, Elvis Costello, halted his band, the Attractions, seven seconds into the song \"Less Than Zero\", launching into \"Radio Radio\", an as-yet unreleased song critical of mainstream broadcasting. The change angered Lorne Michaels, who banned future appearances on the show for a while.\n\nChevy Chase's hosted during the season, making him the first cast member to host after leaving the show. Backstage during the show Chase and Bill Murray engaged in a physical altercation that was broken up by John Belushi and Dan Aykroyd. Chase later accused Murray of trying to upstage him on set and for making explicit remarks about Chase's wife. Chase would host the show several times throughout the show's history, though he was unpopular with the cast and crew.",
+        "poster_path": "/o13uHXrdrT5Sq5D94PYwRF7zuww.jpg",
+        "season_number": 3,
+        "vote_average": 6.5
+      },
+      {
+        "air_date": "1978-10-07",
+        "episode_count": 20,
+        "id": 59591,
+        "name": "Season 4",
+        "overview": "Saturday Night Live aired its fourth season during the 1978–1979 television season on NBC. The fourth season started on October 7, 1978 and ended on May 26, 1979. The season four DVD was released on December 2, 2008.\n\nThe entire cast from the previous season returned. This would be the final season for Dan Aykroyd and John Belushi. Aykroyd and Belushi left to work on The Blues Brothers film.",
+        "poster_path": "/fg83ld21HBNELI4UtOoSHBib7oS.jpg",
+        "season_number": 4,
+        "vote_average": 6.5
+      },
+      {
+        "air_date": "1979-10-13",
+        "episode_count": 20,
+        "id": 59592,
+        "name": "Season 5",
+        "overview": "Saturday Night Live aired its fifth season during the 1979–1980 television season on NBC, and also the final season with the original cast. This fifth season started on October 13, 1979 and ended on May 24, 1980. SNL's fifth season was released on DVD on December 1, 2009.\n\nJohn Belushi and Dan Aykroyd left the show at the end of the fourth season, leaving a void in the cast that most fans thought would be the beginning of the end of the late-night sketch show.\n\nTo keep the show going, Lorne Michaels upgraded many of the show's writers to cast member status: Peter Aykroyd, Jim Downey, Brian Doyle-Murray, Don Novello, Tom Schiller and Alan Zweibel. Band leader Paul Shaffer also joined the cast, becoming the first person from the SNL band to become a cast member. Harry Shearer joined the show as a featured cast member and was promoted to repertory status during the season.\n\nThis would be the final season for everyone in the cast. Tom Davis and Downey would return to the show in future seasons as writers. Al Franken, Doyle-Murray, Novello, and Shearer would rejoin the cast in future seasons.",
+        "poster_path": "/kq8siB5ZpgQLPk4rX5qyTPzTMUm.jpg",
+        "season_number": 5,
+        "vote_average": 6.7
+      },
+      {
+        "air_date": "1980-11-15",
+        "episode_count": 13,
+        "id": 59593,
+        "name": "Season 6",
+        "overview": "Saturday Night Live aired its sixth season during the 1980–1981 television season on NBC. Season six started on November 15, 1980 and ended on April 11, 1981, with only 13 episodes. This season was alternatively known as Saturday Night Live '80.",
+        "poster_path": "/hT547KBg92ehwCLaMv15hNfNQUh.jpg",
+        "season_number": 6,
+        "vote_average": 3.9
+      },
+      {
+        "air_date": "1981-10-03",
+        "episode_count": 20,
+        "id": 59594,
+        "name": "Season 7",
+        "overview": "Saturday Night Live aired its seventh season during the 1981–1982 television season on NBC. The seventh season started on October 3, 1981 and ended on May 22, 1982. A total of 20 episodes were broadcast.\n\nFollowing the dismissal of producer Jean Doumanian and most of her cast members, the show was shut down due to the commencement of the 1981 WGA strike.\n\nDick Ebersol, the program's developer, was hired as Doumanian's replacement. The new cast of Saturday Night Live for this season were the same ones from the episode Ebersol produced on the April 11, 1981 episode: Robin Duke, Tim Kazurinsky and Tony Rosato along with the Doumanian era's sole survivors Eddie Murphy and Joe Piscopo. Denny Dillon and Gail Matthius were fired following the April 1981 episode while Laurie Metcalf and unseen castmember Emily Prager weren't asked back to be cast members on the show.\n\nEbersol then hired two new cast members: Mary Gross and Christine Ebersole. Both were hired to fill the gap left by Metcalf and Prager.\n\nWanting to distance the show from its first five seasons, Ebersol cut the popular opening line Live from New York, It's Saturday Night! from the cold openings. In fact, sometimes cold openings weren't even shown and the monologues were skipped over almost entirely. These changes were not permanent, as Ebersol decided to reverse them for the eighth season.",
+        "poster_path": "/sFlbysYRKk60pQ3xzMtaItR9mBU.jpg",
+        "season_number": 7,
+        "vote_average": 5.8
+      },
+      {
+        "air_date": "1982-09-25",
+        "episode_count": 20,
+        "id": 59595,
+        "name": "Season 8",
+        "overview": "Saturday Night Live aired its eighth season during the 1982–1983 season on NBC. The 8th season started on September 25, 1982 and ended on May 14, 1983. This was the third season to air since Lorne Michaels had left his first tenure as executive producer.\n\nMany changes happened before the start of the season. Brian Doyle-Murray, Christine Ebersole and Tony Rosato were dropped from the show to make room for new cast members. Hired in their places were Brad Hall, Julia Louis-Dreyfus, and Gary Kroeger.\n\nDick Ebersol brought back the show's cold openings that ended with \"Live from New York, it's Saturday Night!\" and the monologues by the host. Ebersol also changed Weekend Update's name for the second time, to Saturday Night News. Since Doyle-Murray and Ebersole had both been dropped, a new anchor was needed for the segment. Hall got the gig and became the new anchor.\n\nNotable moments of this season included Drew Barrymore hosting the show—the youngest ever person to host the show. During the episode hosted by Barrymore, the audience at home was given the chance to vote on whether or not Andy Kaufman should be banned from the show. The vote was conducted by a 1-900 number. At the end of the show Kaufman was banned from ever performing on SNL again.",
+        "poster_path": "/nj6ht3r3kwvnkPhTpT1OZXM1fxW.jpg",
+        "season_number": 8,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1983-10-08",
+        "episode_count": 19,
+        "id": 59596,
+        "name": "Season 9",
+        "overview": "Saturday Night Live aired its ninth season during the 1983–1984 television season on NBC. The ninth season started on October 8, 1983 and ended on May 12, 1984.\n\nBefore the start of the season the entire cast returned for another season. The only change was the hiring of Jim Belushi.\n\nThe notable moment of season was when Eddie Murphy left the show mid-season. After 48 Hours, Murphy's star began to eclipse that of Joe Piscopo's. From the start of season 7, Dick Ebersol made it clear that his strategy was to showcase Murphy and Piscopo as much as possible while all the other cast members would play mainly supporting roles and were treated with very little patience by the producers.\n\nWhen Murphy's 48 Hours co-star Nick Nolte dropped out of hosting at the last minute, Ebersol offered Murphy the chance to host — a move that Piscopo would perceive as a major slight. Piscopo would later claim Ebersol used Murphy's success to divide the two erstwhile friends and play them against one another. Others countered that Piscopo was simply being a prima donna; said one writer, \"Eddie Murphy's fame went to Joe Piscopo's head.\"",
+        "poster_path": "/IpkUFm6ntUfO6Ap9R68lfUkReb.jpg",
+        "season_number": 9,
+        "vote_average": 9.4
+      },
+      {
+        "air_date": "1984-10-06",
+        "episode_count": 17,
+        "id": 59597,
+        "name": "Season 10",
+        "overview": "Saturday Night Live aired its tenth season during the 1984-1985 television season on NBC. The season contained 18 episodes and was cut short due to a writer's strike and budget constraints.\n\nDuring the previous season Eddie Murphy left the show mid season. Because of Murphy's departure Joe Piscopo also left the show because he did not want to do it without Murphy. Dick Ebersol then fired Robin Duke, Brad Hall and Tim Kazurinsky.\n\nEbersol then wanted to blow up the show by adding seasoned comedians instead of newcomers. He hired Billy Crystal, Harry Shearer, New Zealander Pamela Stephenson, Rich Hall, Martin Short, and Christopher Guest. Guest would become the anchor of Saturday Night News.\n\nIn the middle of the season, Harry Shearer left the show, due to \"creative differences\". Despite his departure, his image is still shown in the opening credits.",
+        "poster_path": "/ses3oAb22jChwEH9kP4ETOdGmhY.jpg",
+        "season_number": 10,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1985-11-09",
+        "episode_count": 18,
+        "id": 59598,
+        "name": "Season 11",
+        "overview": "Saturday Night Live aired its 11th season during the 1985-1986 television season on NBC. The season started on November 9, 1985 and ended on May 24, 1986, 18 episodes were produced.\n\nDick Ebersol left the show after the 1984-85 season, when the network refused his request to shut the program down entirely for six months and shift much of the material onto tape, not live broadcast. Once again, NBC briefly considered cancelling the show, but programming head Brandon Tartikoff decided to continue the show and re-hire erstwhile producer Lorne Michaels.\n\nIn some ways the job Michaels returned to was more challenging than the one he took on in 1975. For starters, Michaels' \"golden boy\" reputation was somewhat tarnished. His most recent effort, the previous season's The New Show confused critics and was ignored by audiences. Also, the 1984-1985 season had been a critical and ratings hit, generating memorable characters and stand-out performers. However, Michaels would not be the only member of the old guard to return: original writers Al Franken and Tom Davis would return as producers, and Jim Downey would be head writer. Fans and critics welcomed Michaels and many of the original producers and writers back, calling it a return to the show's roots.",
+        "poster_path": "/1sH4EXPmW9oeB13VqE3XOkhTozc.jpg",
+        "season_number": 11,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "1986-10-11",
+        "episode_count": 20,
+        "id": 59599,
+        "name": "Season 12",
+        "overview": "Saturday Night Live aired its twelfth season during the 1986-1987 television season on NBC. The 12th season started on October 11, 1986, the 11th anniversary of the show's first episode, and ended on May 23, 1987.\n\nDespite plans to have Saturday Night Live canceled due to the ratings of its previous season, producer Lorne Michaels convinced Brandon Tartikoff to give the show another chance, provided that a better cast be found for the next season. As a result, many of season 11's cast members were fired, except for Nora Dunn, Jon Lovitz, featured player A. Whitney Brown, and Weekend Update anchor Dennis Miller. Al Franken was rehired as a writer. The rest were relative unknowns, led by Dana Carvey, Phil Hartman, Jan Hooks, Victoria Jackson, and Kevin Nealon. Hooks had auditioned to be in the season 10 and 11 casts, but had been turned down. Hartman helped write sketches in season 11's Thanksgiving episode hosted by Pee-wee Herman, and appeared in a sketch as a Pilgrim.\n\nThe first show of the 1986-1987 season opened with Madonna, host of the previous season opener, reading a \"statement\" from NBC about season 11's mediocre writing and bad cast choices. According to the \"statement\", the entire 1985-1986 season was \"...all a dream. A horrible, horrible dream.\"",
+        "poster_path": "/lyM1p7m9VvjcJd6GaADISdWB4AJ.jpg",
+        "season_number": 12,
+        "vote_average": 9.5
+      },
+      {
+        "air_date": "1987-10-17",
+        "episode_count": 13,
+        "id": 59600,
+        "name": "Season 13",
+        "overview": "Saturday Night Live aired its thirteenth season during the 1987–1988 television season on NBC. Season 13 started on October 17, 1987 and ended on February 27, 1988.\n\nBefore the start of the season few changes happened. Kevin Nealon was promoted to repertory status and Al Franken returned to the cast.\n\nAlthough the changes to the cast were minimal there were, however, major events that impeded the show's production. During production of the season premiere, a fire broke out near Studio 8H during dress rehearsal.\n\nDespite plans to cancel the show for the week, Steve Martin pushed the cast to perform, making the Steve Martin/Sting episode the only episode without a dress rehearsal.\n\nOn March 7, 1988, the Writers Guild of America went on strike, cancelling many planned episodes, including one originally planned to be hosted by former \"Not Ready for Primetime\" player Gilda Radner. Radner, however, would never get the chance to host due to her death from ovarian cancer the following year. The host for the March 12, 1988 broadcast was never confirmed.",
+        "poster_path": "/jZPb88mYduQlxsMMZb9qNuOcCHm.jpg",
+        "season_number": 13,
+        "vote_average": 8.7
+      },
+      {
+        "air_date": "1988-10-08",
+        "episode_count": 20,
+        "id": 59601,
+        "name": "Season 14",
+        "overview": "Saturday Night Live aired its fourteenth season during the 1988 - 1989 television season on NBC. The season began on October 8, 1988, and ended on May 20, 1989. 20 episodes were produced. Before the start of the season, no changes were made to the cast. However, as the season progressed Lorne Michaels would hire two new people to the cast: Mike Myers and Ben Stiller, who joined the show midseason as featured players. Stiller had actually appeared on the show before; his film made it onto the show in the episode hosted by Charlton Heston in 1987.\n\nThis season notably saw the second death of an original cast member, Gilda Radner, who died on the day of the season finale from ovarian cancer. In memory of Radner, Steve Martin showed a clip from the famous \"Dancing in the Dark\" sketch from the 1978 episode hosted by Martin himself as part of his monologue. This was the only season of the show for Stiller. After being on the show for five episodes, Stiller left the show due to creative differences with Michaels.",
+        "poster_path": "/kXnxBo3Zp8dQdAXHNYzrg8QzIIJ.jpg",
+        "season_number": 14,
+        "vote_average": 9
+      },
+      {
+        "air_date": "1989-09-30",
+        "episode_count": 20,
+        "id": 59602,
+        "name": "Season 15",
+        "overview": "Saturday Night Live aired its fifteenth season during the 1989 - 1990 television season on NBC. The fifteenth season started off with a 15th anniversary special on September 24, 1989 and ended on May 19, 1990. 21 episodes were produced, including the anniversary special.\n\nFew changes happened before the start of the season. The only change was the absence of Ben Stiller. After being on the show for five episodes, Stiller left the show due to creative differences with Lorne Michaels. Mike Myers was upgraded to repertory status.\n\nThis season saw the first hosting gigs of three celebrities who would go on to be frequent SNL hosts: John Goodman, Christopher Walken, and Alec Baldwin.\n\nThis season is also notorious for an in-cast spat towards the end of the season. Nora Dunn staged a boycott over the host of the episode, controversial comedian Andrew Dice Clay. Dunn refused to appear in the episode because of Clay's profane jokes about women. The original musical guest for the episode, Sinéad O'Connor, joined Dunn in her boycott and canceled her scheduled appearance. O'Connor was replaced by Julee Cruise and The Spanic Boys.",
+        "poster_path": "/zdMg4qRUmCIYwIpgrKk7CWrh2Ji.jpg",
+        "season_number": 15,
+        "vote_average": 8
+      },
+      {
+        "air_date": "1990-09-29",
+        "episode_count": 20,
+        "id": 59603,
+        "name": "Season 16",
+        "overview": "Saturday Night Live aired its sixteenth season during the 1990-1991 television season on NBC. 20 episodes were produced. The sixteenth season began on September 29, 1990, and ended on May 18, 1991.\n\nThe 16th season of SNL was a transitional one: Several longtime cast members left, and a large number of additions were made to the roster. To ensure that he was not short on talent, Michaels chose to retain most of the late 1980s cast while in the process of hiring the people that would make up the early 1990s cast. At one point during the season, sixteen people were listed as cast members or featured players.",
+        "poster_path": "/wgR8S0Oag6j3S29DhkNPIAgwMGV.jpg",
+        "season_number": 16,
+        "vote_average": 9
+      },
+      {
+        "air_date": "1991-09-28",
+        "episode_count": 20,
+        "id": 59604,
+        "name": "Season 17",
+        "overview": "Saturday Night Live aired its seventeenth season during the 1991-1992 television season on NBC. The seventeenth season started on September 28, 1991, and ended on May 16, 1992. Twenty episodes were produced.\n\nMany changes happened before the start of the season. A. Whitney Brown and Jan Hooks both left the show, but the major blow was the departure of long time cast member Dennis Miller, who had been the anchor of Weekend Update for six seasons. Following Miller's departure, Kevin Nealon was promoted to anchor of the skit.\n\nNew cast members included Ellen Cleghorne, Siobhan Fallon and writer Robert Smigel. Beth Cahill and Melanie Hutsell also later joined the cast. Chris Farley, Chris Rock and Julia Sweeney were upgraded to repertory status. Tim Meadows, Adam Sandler, Rob Schneider and David Spade all stayed featured players.\n\nThis was the final season for Victoria Jackson, who receive no on-screen goodbye at the end of the season. At the time, Jackson became the longest serving female cast member, with a total six seasons under her belt. She was later topped by Molly Shannon in the 26th season. This would be Beth Cahill and Siobhan Fallon's only season on the show.",
+        "poster_path": "/4a7dXFVqmmXSuOl8UOM9bel9UZw.jpg",
+        "season_number": 17,
+        "vote_average": 8.8
+      },
+      {
+        "air_date": "1992-09-28",
+        "episode_count": 20,
+        "id": 59605,
+        "name": "Season 18",
+        "overview": "Saturday Night Live aired its eighteenth season during the 1992-1993 television season on NBC. The eighteenth season began on September 26, 1992, and ended on May 15, 1993.\n\nMany changes happened before the start of the season. Long term cast member Victoria Jackson left the show after 6 seasons. Newer cast members Beth Cahill and Siobhan Fallon were both fired to make room in the cast.\n\nUnlike the past two seasons Lorne Michaels did not hire any new cast members. Ellen Cleghorne, Melanie Hutsell, Tim Meadows, Adam Sandler, Robert Smigel and David Spade stayed as featured players. Rob Schneider was upgraded to repertory status.\n\nLong term cast member Dana Carvey decided to leave the show mid season. This would also be the final season for Chris Rock and Robert Smigel.\n\nAfter three years with the show, Rock decided to quit the show at the end of the season. Rock had become frustrated with never quite finding a voice on the show and wanted to instead focus on his stand-up career. Writer and featured player Smigel left to become the head writer for Late Night with Conan O'Brien, but would later return to the show in 1996 to write and produce the \"TV Funhouse\" cartoons.\n\nThis season was also home to one of SNL's most infamous moments: Sinéad O'Connor tearing Pope John Paul II's photo at the end of her second performance on the episode hosted by Tim Robbins.",
+        "poster_path": "/b73DZZkqwXOuEuTQGtkxG59T9Yi.jpg",
+        "season_number": 18,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1993-09-25",
+        "episode_count": 20,
+        "id": 59606,
+        "name": "Season 19",
+        "overview": "Saturday Night Live aired its nineteenth season during the 1993-1994 television season on NBC. The season began on September 25, 1993 and ended on May 14, 1994.\n\nMany changes happened before the start of the season. Dana Carvey had left the show in the middle of the previous season. Chris Rock and Robert Smigel also left the show at the end of the previous season.\n\nEllen Cleghorne, Melanie Hutsell, Tim Meadows, Adam Sandler, and David Spade were all promoted to repertory status.\n\nStand-up comics Norm Macdonald, Jay Mohr and Sarah Silverman were hired as writers and would debut as featured players a few episodes into the season. Veteran comic actor Michael McKean joined the show mid-season as a repertory cast member.\n\nThis would also be the final season for Phil Hartman, Melanie Hutsell, Rob Schneider, Sarah Silverman and Julia Sweeney.\n\nA major blow for the show was the loss of Hartman. Before his final show the entire cast and crew presented him with a bronzed stick of glue, symbolizing how he had become \"The Glue\" of the show, a term coined by Adam Sandler.",
+        "poster_path": "/c4rflsGNORtycqLbmxpZwB8P08u.jpg",
+        "season_number": 19,
+        "vote_average": 2
+      },
+      {
+        "air_date": "1994-09-24",
+        "episode_count": 20,
+        "id": 59607,
+        "name": "Season 20",
+        "overview": "Saturday Night Live aired its twentieth season during the 1994–95 television season on NBC. The twentieth season began on September 24, 1994 and ended on May 13, 1995. Much like seasons six and eleven, this season was lambasted by critics for its decline in quality. Season twenty suffered from having sketches based on very thin premises, a high number of which focused on or mentioned O. J. Simpson's 1995 murder trial.\n\nMuch like the 1980–1981 season and the 1985–1986 season, NBC worried over SNL's decline in quality and initially decided that now would be the best time to pull the plug on the show once and for all. According to the prime time special Saturday Night Live in the '90s: Pop Culture Nation, Lorne Michaels credits this season as the closest he's ever been to being fired. In the end, the cast member firings and crew turnover resulting from this season represented the biggest involvement into the show's affairs by NBC executives since the 1980–1981 season and the biggest cast overhaul since the 1985–1986 season.\n\nThis season saw the deaths of two SNL alumni: Danitra Vance and Michael O'Donoghue. The Sarah Jessica Parker/R.E.M. episode featured a special appearance by Bill Murray, who introduced a clip of \"Mr. Mike's Least Favorite Bedtime Stories\" in O'Donoghue's memory.",
+        "poster_path": "/nu9jHApRcJYHfVSAvl1Kx35wJEA.jpg",
+        "season_number": 20,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1995-09-30",
+        "episode_count": 20,
+        "id": 59608,
+        "name": "Season 21",
+        "overview": "The twenty-first season began September 30, 1995 and ended on May 18, 1996. 20 episodes were produced. SNL once again dodged cancellation from season twenty's low ratings and scathing reviews about the show's decline in quality. Only five cast members: Norm Macdonald, Mark McKinney, Tim Meadows, Molly Shannon and David Spade returned to the show from the previous season. This would be the final season for David Spade. Spade had agreed to stay only for a year so that he could be a bridge between the old and new casts. Newcomers David Koechner and Nancy Walls were also let go after this season.",
+        "poster_path": "/uUm1gcHJB4Gw0p2gpP7rsZjB1NV.jpg",
+        "season_number": 21,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1996-09-28",
+        "episode_count": 20,
+        "id": 59609,
+        "name": "Season 22",
+        "overview": "The twenty-second season began on September 28, 1996 and ended on May 17, 1997 with 20 episodes in all. Many changes happened before the start of the season. David Koechner and Nancy Walls were both let go after one season with the show. David Spade left the show on his own terms. This season is also notable for the people who hosted. Seven of the twenty hosts were former cast members. They included Dana Carvey, Robert Downey, Jr., Phil Hartman, Chris Rock and Martin Short. Chevy Chase and Mike Myers would host later in the season. This would mark Chase's final time hosting before getting banned.",
+        "poster_path": "/uafInheLF4w9yxIxkeMpBtQSYhC.jpg",
+        "season_number": 22,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1997-09-27",
+        "episode_count": 20,
+        "id": 59610,
+        "name": "Season 23",
+        "overview": "The twenty-third season started September 27, 1997 and ended on May 9, 1998, with 20 episodes being produced. A few changes happened before the start of the season; Colin Quinn was promoted to repertory status and Mark McKinney left the show while Fred Wolf left in the start of the twenty-second season. This season was also notable for not having any featured players or any new cast members. This season was also the only season to have an opening sequence that didn't show any shots of New York City, being replaced by a 1950's-inspired design.",
+        "poster_path": "/eNsp8b4b9an8wLIDwhsrWIW4TA4.jpg",
+        "season_number": 23,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1998-09-26",
+        "episode_count": 19,
+        "id": 59611,
+        "name": "Season 24",
+        "overview": "The twenty-fourth season started on September 26, 1998 and ended on May 15, 1999 with 19 episodes in all. Before the start of the season Jim Breuer left the show. Norm Macdonald left the show halfway through the previous season after being taken off Weekend Update. After two years, Saturday Night Live hired new cast members. They included stand-up comic Jimmy Fallon, Chris Parnell of The Groundlings in Los Angeles and Horatio Sanz of Second City in Chicago.",
+        "poster_path": "/xuk5qmAMIqOHfCaHmxKVYInrBsz.jpg",
+        "season_number": 24,
+        "vote_average": 1
+      },
+      {
+        "air_date": "1999-10-02",
+        "episode_count": 20,
+        "id": 59612,
+        "name": "Season 25",
+        "overview": "The 25th season started on September 25, 1999 and ended on May 20, 2000 with 20 regular episodes plus a 25th Anniversary Special. The special looked back at the series' highlights during its first quarter-century. The entire cast from last season returned for another year. Jimmy Fallon, Chris Parnell and Horatio Sanz were all promoted to repertory status, with the cast otherwise unchanged at the start of the season. As the season progressed, the show added two new cast members. Rachel Dratch, recruited from Chicago's The Second City, where she was head writer Tina Fey's comedy partner, joined the show in the episode hosted by Norm Macdonald. Towards the end of the season, Maya Rudolph of The Groundlings joined the show, starting with the episode hosted by John Goodman.",
+        "poster_path": "/3OX2zKm1nyKmep6stZNCIy4t4Yk.jpg",
+        "season_number": 25,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2000-10-07",
+        "episode_count": 20,
+        "id": 59613,
+        "name": "Season 26",
+        "overview": "Saturday Night Live aired its twenty-sixth season during the 2000–2001 television season on NBC. 20 episodes were produced. The season began on October 7, 2000 and ended on May 19, 2001.\n\nBefore the start of the season Cheri Oteri, Colin Quinn, and Tim Meadows left the show. With the three of them gone, the show added two new castmembers. SNL head writer Tina Fey and Second City comedian Jerry Minor joined the cast as featured players at the start of the season. Fey had been a writer on the show since 1997 and began as the show's head writer in 1999. Rachel Dratch and Maya Rudolph remained featured players.\n\nThis would be Molly Shannon's final season on the show, leaving mid-season. Chris Parnell and Jerry Minor were both let go after this season ended. However, Chris Parnell would be re-hired midway through the next season. Michaels would later admit he made a mistake in firing Parnell from the cast and wanted him back.\n\nWith Colin Quinn's seat on Weekend Update empty, executive producer Lorne Michaels decided to have two anchors just as SNL had had in the 1970s. Jimmy Fallon and head writer Tina Fey were brought up to anchor the segment together. Because of Fey's head writer status she would appear rarely out of Weekend Update.",
+        "poster_path": "/qogzl6ZTUOje96nrk0PY0a8ltXD.jpg",
+        "season_number": 26,
+        "vote_average": 4
+      },
+      {
+        "air_date": "2001-09-29",
+        "episode_count": 20,
+        "id": 59614,
+        "name": "Season 27",
+        "overview": "Saturday Night Live aired its twenty-seventh season during the 2001-2002 television season on NBC. The season started on September 29, 2001 and ended on May 18, 2002, 20 episodes were produced.\n\nEighteen days before the season started, the September 11, 2001 attacks took place in New York. The season premiere went on as scheduled, with a special cold open featuring Rudy Giuliani, the Mayor of New York City at the time, along with the firefighters and police officers of New York, declaring that despite the terrorist attack, New York City will run as normal and Saturday Night Live will go on as planned.\n\nThree weeks into the season the show faced another scare when anthrax was found in the GE Building. The scare caused most of the cast and crew, as well as that week's guest host Drew Barrymore, to evacuate the building.\n\nBefore the start of the season, Jerry Minor and Chris Parnell were both let go from the show. However, luck was on Parnell's side as he was hired back to the show mid-season in the episode hosted by Jonny Moseley, becoming the second cast member to be hired back to the show after being fired, the first person being Jim Belushi in 1983.",
+        "poster_path": "/urvJVjHvNCYcYmRzT0EEZpS3Eed.jpg",
+        "season_number": 27,
+        "vote_average": 10
+      },
+      {
+        "air_date": "2002-10-05",
+        "episode_count": 20,
+        "id": 59615,
+        "name": "Season 28",
+        "overview": "Saturday Night Live aired its twenty-eighth season during the 2002-2003 television season on NBC. Season 28 started on October 5, 2002 and ended on May 17, 2003 having 20 episodes through the season.\n\nBefore the start of the season, Will Ferrell and Ana Gasteyer left the show. The latter gave birth to her baby and went on maternity leave, but decided not to return to the show during her leave. Hired to fill their absences were comedian/musician Fred Armisen and TV writer Will Forte, who both joined the show as featured players.\n\nThis would be the final season for Dean Edwards, Chris Kattan and Tracy Morgan. The latter two would make cameo appearances in many episodes of the following season.",
+        "poster_path": "/9sq6IcP3Ha0lWJCOr48LPUCDF2c.jpg",
+        "season_number": 28,
+        "vote_average": 8.5
+      },
+      {
+        "air_date": "2003-10-04",
+        "episode_count": 20,
+        "id": 59616,
+        "name": "Season 29",
+        "overview": "Saturday Night Live aired its twenty-ninth season during the 2003–04 television season on NBC. The twenty-ninth season began on October 4, 2003 and ended on May 15, 2004 with 20 episodes in all.\n\nBefore the start of the season Chris Kattan and Tracy Morgan left the show and Dean Edwards was fired. Despite Kattan and Morgan's departure, the two would make guest appearances in several episodes throughout the season.\n\nBefore the season started, Will Forte, Seth Meyers and Jeff Richards were all promoted to repertory status, while Fred Armisen remained a featured player.\n\nThe show added two new black cast members: stand-up comedian Finesse Mitchell and Kenan Thompson, a former child star from the Nickelodeon comedy shows All That and Kenan and Kel. With this season, Thompson becomes the first SNL cast member to be born after the show's premiere in 1975 and the first SNL cast member to get his start on children's shows.\n\nThis season saw the first appearance of Justin Timberlake as an SNL host.",
+        "poster_path": "/jvoaOuQnUTSO0BVUeegoYrwdlRK.jpg",
+        "season_number": 29,
+        "vote_average": 4
+      },
+      {
+        "air_date": "2004-10-02",
+        "episode_count": 20,
+        "id": 59617,
+        "name": "Season 30",
+        "overview": "Saturday Night Live had its thirtieth season on the 2004-2005 television season on NBC. The thirtieth season began on October 2, 2004 and ended on May 21, 2005 with 20 episodes in all.\n\nBefore the start of this season, Jimmy Fallon left the show. In the wake of his departure, Fred Armisen was promoted to repertory status, while Finesse Mitchell and Kenan Thompson remained feature players.\n\nNew cast members this season include Rob Riggle, an improv comedian and U.S. Marine. This would be Riggle's only season on the show. In addition, SNL writer Jason Sudeikis joined the cast as a featured player for the last three episodes of the season.\n\nWith Fallon gone, Amy Poehler became Tina Fey's co-anchor on Weekend Update, making Fey and Poehler the first two-woman anchor team.\n\nThis season was also notable for Ashlee Simpson's infamous lip-syncing gaffe during her second performance. This season was also home to many sketches focused on the 2004 U.S. Presidential election, but, unlike the 2000 election, there was little to no media coverage about the sketches.",
+        "poster_path": "/8WUVhj9JBvqpqaK0yfkDcr5lC2c.jpg",
+        "season_number": 30,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-10-01",
+        "episode_count": 19,
+        "id": 59618,
+        "name": "Season 31",
+        "overview": "Saturday Night Live aired its thirty-first season in the 2005-06 television season on NBC. The season began on October 1, 2005, and ended on May 20, 2006, with 19 episodes in all. The season was cut one episode short due to the 2006 Winter Olympic Games. A 30th anniversary special for the show was planned, but the plan was scrapped due to budget cuts.\n\nBefore the start of the season, featured player Rob Riggle was let go from the show. Finesse Mitchell and Kenan Thompson were both promoted to repertory status while Jason Sudeikis remained a featured player.\n\nThe show then added three new cast members to the show. They included: Los Angeles-based sketch comedian Bill Hader, Andy Samberg and Kristen Wiig of The Groundlings. Wiig debuted on the show in November, in the episode hosted by Jason Lee. Samberg, Schaffer and Taccone would be a notable force for creating SNL Digital Shorts. One such short was \"Lazy Sunday\"; after it aired during the Jack Black episode it became an Internet phenomenon.\n\nTina Fey and Maya Rudolph missed a few episodes in this season due to both of them being pregnant and on maternity leave. Fey's place on Weekend Update was briefly taken over by Horatio Sanz until her return in the episode hosted by Catherine Zeta-Jones, making Sanz the first Hispanic Weekend Update anchor. Fey returned to the show before her maternity leave time was up. Maya Rudolph, however, appeared on the first episode of the new season, and then went on maternity leave and returned in February, in the episode hosted by Steve Martin.",
+        "poster_path": "/4RcwWf3yy3Wp7yrRtLUNvVdznzO.jpg",
+        "season_number": 31,
+        "vote_average": 6.6
+      },
+      {
+        "air_date": "2006-09-30",
+        "episode_count": 20,
+        "id": 59619,
+        "name": "Season 32",
+        "overview": "Saturday Night Live aired its thirty-second season during the 2006-2007 television season. This season began on September 30, 2006 and ended on May 19, 2007 with 20 episodes produced.\n\nBefore the start of the season, the show suffered massive budget cuts. Finesse Mitchell, Chris Parnell and Horatio Sanz were all fired from the show because of the cuts. This was the second time Parnell had been fired from the show due to budget cuts, the first being after season 26 ended. In addition, Rachel Dratch and Tina Fey left the show on their own terms to begin to work on 30 Rock.\n\nBill Hader, Andy Samberg, Jason Sudeikis, and Kristen Wiig were all promoted to repertory status. Due budget cuts from the network, this is the first time since the 23rd season to have no featured players or new members of the repertory cast.\n\nAfter a long slump in quality starting after season 27, episodes hosted by Shia LaBeouf, Dane Cook, Alec Baldwin, Jeremy Piven, Rainn Wilson, and Peyton Manning pulled in big ratings and revived interest in watching the program. With Fey's departure, Saturday Night Live returned to having one male and one female anchor on Weekend Update with the inclusion of Seth Meyers as Amy Poehler's co-anchor. Don Roy King was hired as SNL's newest director.",
+        "poster_path": "/ej0SF8d4xgDCALIRLuQCNZ0iBcv.jpg",
+        "season_number": 32,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2007-09-29",
+        "episode_count": 12,
+        "id": 59620,
+        "name": "Season 33",
+        "overview": "Saturday Night Live aired its thirty-third season, during the 2007–2008 television season on NBC.\n\nBecause of the 2007–08 Writers Guild of America strike, there were only 12 episodes produced in this season instead of the usual 20, making this the shortest season in the series run and beating out both the sixth season and the thirteenth season, which had thirteen episodes. This is also the only season in SNL history not to have a new Christmas episode, since the WGA strike spanned from November 2007 to February 2008.\n\nNo changes to the cast happened over the summer and everyone from last season returned. During the strike, long-time castmember Maya Rudolph left the show, as she had no contract with SNL that year. Casey Wilson, an actress and writer who frequently performs at the Upright Citizens Brigade Theater, was hired in January 2008 to fill the void, but due to the strike, did not appear on the show until they returned on February 23, 2008.\n\nOn November 5, 2007, after the episode hosted by Brian Williams, the Writers Guild of America went on strike. It was announced that SNL would air its next episode on November 10, 2007, live on air, with a future episode to follow, featuring Jonah Hill and musical guest Kid Rock. However, on November 7, 2007, SNL's official website confirmed that those episodes were canceled and reruns would be seen beginning November 10, and would continue during the duration of the strike. The Rock/Winehouse show was canceled, along with the Jonah Hill/Kid Rock episode.",
+        "poster_path": "/s85GFo7tYOIB9BpnJ9PiuZ1eqSO.jpg",
+        "season_number": 33,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2008-09-13",
+        "episode_count": 22,
+        "id": 59621,
+        "name": "Season 34",
+        "overview": "The thirty-fourth season of the variety series Saturday Night Live began airing in 2008 and concluded in 2009 on NBC. This season of Saturday Night Live consisted of 22 episodes, in an attempt to compensate for episodes lost during the 2007–2008 Writers Guild of America strike. This made it the longest season since the show's second season.\n\nThe season began on September 13, 2008 on NBC, with Olympic swimming gold medalist Michael Phelps as host and Tina Fey appearing as Republican vice presidential candidate Sarah Palin, alongside Amy Poehler as Hillary Clinton, and rapper Lil Wayne as the musical guest. The show scored its highest-rated premiere since September 2001 and is the second most-watched SNL ever. The season premiere date of September 13 was earlier than the premiere date for previous seasons, which typically have started during the final weekend of September or in early October. However, a month later, the show drew its highest ratings in over 14 years when the real Sarah Palin appeared. SNL had 17 million viewers during its first half-hour.\n\nBefore the start of the season the cast remained mostly unchanged except for the addition of Bobby Moynihan. Moynihan came to SNL as a performer with the Upright Citizens Brigade Theater; in season 33, Moynihan and Wilson were among the group of Upright Citizens Brigade performers SNL auditioned mid-season while the show was looking for a new cast member to join after the writers' strike in early 2008. Moynihan did not make the cut in his season 33 audition, but instead ended up being invited back for another audition shortly before this season started. Wilson remained a featured player.",
+        "poster_path": "/wkDaar6o6cRuNWIcre6tHcPpC9.jpg",
+        "season_number": 34,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2009-09-26",
+        "episode_count": 22,
+        "id": 59622,
+        "name": "Season 35",
+        "overview": "Saturday Night Live aired its thirty-fifth season during the 2009–2010 television season on NBC. This season began on September 26, 2009 and ended on May 15, 2010.\n\nA total of 22 episodes were broadcast during the show's eight-month-long season, which included a two-week break in February due to the 2010 Winter Olympics. The season was accompanied by three prime-time episodes of Saturday Night Live Weekend Update Thursday and three prime-time SNL clip shows.\n\nPrior to the start of the season, many cast changes occurred. Darrell Hammond, the last cast member from the 1990s, left the show after a record 14 seasons in the cast. Featured players Michaela Watkins and Casey Wilson were both let go from the show before the start of the season.\n\nTo fill their absence the show brought in two new featured players, Nasim Pedrad and Jenny Slate. Abby Elliott and Bobby Moynihan continued as featured players.\n\nA notable moment of the season was when an internet campaign was created to get actress Betty White to host an episode of the show. The campaign was started in early 2010 on Facebook and the group was called \"Betty White to Host SNL!\" The campaign was successful, and White became the oldest person ever to host the show. For White's episode, Lorne Michaels brought back former cast members Rachel Dratch, Tina Fey, Ana Gasteyer, Amy Poehler, Maya Rudolph and Molly Shannon. The episode garnered its highest ratings in over a year. with a rating of 5.8 in the 18–49 rating, demographic and with 12.1 million viewers overall.",
+        "poster_path": "/r0FFBpCA08x01iarfCzIC3OZLmZ.jpg",
+        "season_number": 35,
+        "vote_average": 6.7
+      },
+      {
+        "air_date": "2010-09-25",
+        "episode_count": 22,
+        "id": 59624,
+        "name": "Season 36",
+        "overview": "Saturday Night Live aired its thirty-sixth season during the 2010–2011 television season on NBC. This season began on September 25, 2010 with former cast member Amy Poehler serving as host and Katy Perry as the musical guest, and ended on May 21, 2011 with Justin Timberlake serving as host and Lady Gaga as musical guest.\n\nPrior to the start of the season, many cast changes occurred. Will Forte, who had been with the show since 2002, announced on August 26, 2010 that he would be leaving the show. Featured player Jenny Slate was let go from the show after only one season. Abby Elliott and Bobby Moynihan were promoted to repertory status, becoming the first featured players to be promoted since 2006.\n\nThe show hired four new cast members: Chicago improvisers Vanessa Bayer and Paul Brittain from ImprovOlympic; stand-up comic/impressionist Jay Pharoah; and comedic actor Taran Killam of The Groundlings, who, like Jeff Richards was a former cast member on SNL's rival sketch show, MADtv.\n\nThis season also debuted a new animated feature voiced by former SNL cast members, called \"Greetings from American America\", created by former SNL head writer Fred Wolf.",
+        "poster_path": "/5aa4guLukhpEVMqhw3Qw7iSGZrU.jpg",
+        "season_number": 36,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": "2011-09-24",
+        "episode_count": 22,
+        "id": 59625,
+        "name": "Season 37",
+        "overview": "Saturday Night Live aired its thirty-seventh season during the 2011–2012 television season on NBC. The season officially began on September 24, 2011 with host Alec Baldwin, who returned to host for a record sixteenth time and with musical guest Radiohead and ended on May 19, 2012 with host and musical guest Mick Jagger.\n\nThe season began with minimal changes to the cast, as everyone from the prior year returned. The only major change that occurred was Nasim Pedrad being upgraded from being a featured player to repertory status.\n\nKate McKinnon joined the cast midseason, as a featured player for the last 5 episodes of the season, making her debut on April 7, 2012. McKinnon's addition was announced March 28, 2012. McKinnon is SNL's first openly gay cast member hired since Terry Sweeney in 1985, and the show's first openly gay female cast member.\n\nThis would be the final season for seven-year vets Andy Samberg and Kristen Wiig, both cast members since 2005. As well, Abby Elliott, who had been a cast member since 2008, would be let go from the show after four seasons. Second year featured player Paul Brittain also exited abruptly halfway through the season, making his final appearance on January 14, 2012.",
+        "poster_path": "/t6MqLJdGr5VlK9twFQ53QA0LEKV.jpg",
+        "season_number": 37,
+        "vote_average": 6.6
+      },
+      {
+        "air_date": "2012-09-15",
+        "episode_count": 21,
+        "id": 59626,
+        "name": "Season 38",
+        "overview": "Saturday Night Live aired its thirty-eighth season during the 2012–2013 television season on NBC. The season officially began on September 15, 2012, with host Seth MacFarlane and musical guest Frank Ocean. The season came to a close on May 18, 2013 with host Ben Affleck and musical guest Kanye West.\n\nPrior to the start of the season, many cast changes occurred. Andy Samberg and Kristen Wiig, both cast members since 2005, decided not to return following the end of the previous season. As well, prior to the start of the season, Abby Elliott, who had been a cast member since 2008, was let go after four seasons on the show. Vanessa Bayer, Taran Killam and Jay Pharoah were upgraded to repertory status.\n\nTo fill the void, the show hired three new cast members: Chicago improvisers Aidy Bryant, Tim Robinson, and Cecily Strong as the replacements. According to the official press release, \"Bryant trained at the iO Chicago, Annoyance Theatre and she was also part of the ensemble that performed on the Second City E.T.C Stage. Robinson also trained at the The Second City, he performed on their Mainstage and was also part of their National Touring Company. Like Robinson, Strong has also performed as part of the National Touring Company and trained at the iO Theater\".",
+        "poster_path": "/szn36eT1sXMv88DsE0NZyd3CMo1.jpg",
+        "season_number": 38,
+        "vote_average": 6.6
+      },
+      {
+        "air_date": "2013-09-28",
+        "episode_count": 21,
+        "id": 59587,
+        "name": "Season 39",
+        "overview": "Saturday Night Live premiered its thirty-ninth season during the 2013–14 television season on NBC. The season officially began on September 28, 2013, with host Tina Fey and musical guest Arcade Fire, and concluded on May 17, 2014, with host Andy Samberg and musical guest St. Vincent.",
+        "poster_path": "/bS5gcI3Cm6GdFgPyArNITWfLnLz.jpg",
+        "season_number": 39,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2014-09-27",
+        "episode_count": 21,
+        "id": 62862,
+        "name": "Season 40",
+        "overview": "Saturday Night Live premiered its fortieth season during the 2014–15 television season on NBC. The season premiered on September 27, 2014, with host Chris Pratt and musical guest Ariana Grande, and former cast member Darrell Hammond as the show's new announcer, replacing Don Pardo, who had died in August. The premiere included an interstitial photograph of Pardo. Pardo had been the announcer for SNL since it premiered in 1975, with the exception of season seven and season 21, episode 14, where Hammond took his place. This season also saw the death of former cast member Jan Hooks, who died from cancer two weeks into the season.",
+        "poster_path": "/ip75Fm4IZ2eqrHJi5MiIzTAhX9K.jpg",
+        "season_number": 40,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": "2015-10-03",
+        "episode_count": 21,
+        "id": 71005,
+        "name": "Season 41",
+        "overview": "",
+        "poster_path": "/zvzwZhvFAfwMpTcuYm7fauouQrP.jpg",
+        "season_number": 41,
+        "vote_average": 6.7
+      },
+      {
+        "air_date": "2016-10-01",
+        "episode_count": 21,
+        "id": 80376,
+        "name": "Season 42",
+        "overview": "",
+        "poster_path": "/r8Ph9ZDvUlEq89bVocYsVtialAU.jpg",
+        "season_number": 42,
+        "vote_average": 7.1
+      },
+      {
+        "air_date": "2017-09-30",
+        "episode_count": 21,
+        "id": 93489,
+        "name": "Season 43",
+        "overview": "",
+        "poster_path": "/wXVRWnxDEiEUsnrSmeka3NE8GaM.jpg",
+        "season_number": 43,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": "2018-09-29",
+        "episode_count": 21,
+        "id": 109757,
+        "name": "Season 44",
+        "overview": "",
+        "poster_path": "/lxGkJiECDoygL4l9CzX7ukVhp9u.jpg",
+        "season_number": 44,
+        "vote_average": 6.3
+      },
+      {
+        "air_date": "2019-09-28",
+        "episode_count": 18,
+        "id": 131233,
+        "name": "Season 45",
+        "overview": "",
+        "poster_path": "/gSkis9vlk1Gfs9cUX7WzaL8A9iB.jpg",
+        "season_number": 45,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2020-10-03",
+        "episode_count": 20,
+        "id": 164624,
+        "name": "Season 46",
+        "overview": "",
+        "poster_path": "/2Cju4eaD8ZFjyfIDUb5VWI4uKoO.jpg",
+        "season_number": 46,
+        "vote_average": 4.1
+      },
+      {
+        "air_date": "2021-10-02",
+        "episode_count": 21,
+        "id": 210415,
+        "name": "Season 47",
+        "overview": "",
+        "poster_path": "/eAEKLGonqhIom8F3tkpbxcKxg9o.jpg",
+        "season_number": 47,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2022-10-01",
+        "episode_count": 18,
+        "id": 304448,
+        "name": "Season 48",
+        "overview": "",
+        "poster_path": "/sHGuKFjIBisPk8cvtCZTDVktYfs.jpg",
+        "season_number": 48,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2023-10-14",
+        "episode_count": 20,
+        "id": 359435,
+        "name": "Season 49",
+        "overview": "",
+        "poster_path": "/74QkM94ur8vhJiMiqaPCqkQeBYl.jpg",
+        "season_number": 49,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2024-09-28",
+        "episode_count": 21,
+        "id": 407588,
+        "name": "Season 50",
+        "overview": "",
+        "poster_path": "/3tNe7zmqUyvvF5YSyYCeDSb98Fq.jpg",
+        "season_number": 50,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2025-10-04",
+        "episode_count": 20,
+        "id": 467372,
+        "name": "Season 51",
+        "overview": "",
+        "poster_path": "/s1cZBqbMwAF3w8S3Yo0j5nr2Yuo.jpg",
+        "season_number": 51,
+        "vote_average": 4
+      },
+      {
+        "air_date": "2026-09-26",
+        "episode_count": 20,
+        "id": 533391,
+        "name": "Season 52",
+        "overview": "",
+        "poster_path": "/udqHK9Gpdt34cic3W3VLqgJBlXI.jpg",
+        "season_number": 52,
+        "vote_average": 5.4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Live from New York, it's Saturday Night!",
+    "type": "Scripted",
+    "vote_average": 6.894,
+    "vote_count": 549,
+    "external_ids": {
+      "imdb_id": "tt0072562",
+      "freebase_mid": "/m/039cq4",
+      "freebase_id": "/en/saturday_night_live",
+      "tvdb_id": 76177,
+      "tvrage_id": 5098,
+      "wikidata_id": "Q13979",
+      "facebook_id": "snl",
+      "instagram_id": "nbcsnl",
+      "twitter_id": "nbcsnl"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "A late-night live television sketch comedy and variety show created by Lorne Michaels. The show's comedy sketches, which parody contemporary culture and politics, are performed by a large and varying cast of repertory and newer cast members. Each episode is hosted by a celebrity guest, who usually delivers an opening monologue and performs in sketches with the cast, and features performances by a musical guest.",
+            "homepage": "",
+            "tagline": "Live from New York, it's Saturday Night!"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Eine von Lorne Michaels entwickelte Live-Sketch-Comedy- und Varieté-Sendung, die spätabends ausgestrahlt wird. Die Comedy-Sketche, die aktuelle Kultur und Politik parodieren, werden von einem großen, wechselnden Ensemble aus etablierten und neuen Darstellern aufgeführt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "A népszerű színészeket és humoristákat felvonultató szkeccs-műsor igazi sziporkázó humorával bevéste magát a televíziózás történetébe.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "O programa humorístico \"Saturday Night Live\" conquistou o público americano pela irreverência, pelo humor corrosivo e por ter se tornado um verdadeiro celeiro para novos talentos da arte de fazer rir. O programa foi indicado mais de 50 vezes para o Emmy, ganhando, no mínimo, 15 prêmios durante todos esses anos no ar. E, ao que tudo indica, vai continuar por muito mais tempo do que alguém poderia imaginar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Saturday Night Live es un show televisivo nocturno estadounidense, emitido en vivo, que revolucionó la televisión en los años 70 con su combinación de sketches, comedia, variedad, actores, músicos, e invitados especiales. Ha sido una cantera generadora de talentos muy fuerte de varios guinistas, actores, escritores, productores y cantantes. Creado por Lorne Michaels y desarrollado por Dick Ebersol, el programa fue estrenado por la cadena de televisión NBC. Durante más de 30 años, el programa ha presentado personajes locos, situaciones humorísticamente extrañas, parodias de los presidentes y políticos de turno, sarcásticas burlas a celebridades contemporáneas de la música y del cine, y shows musicales en vivo. Su reparto se compone de miembros repertorios, también conocidos como The Not Ready for Prime-Time Players (el nombre del reparto original del programa, que viene a significar «La Compañía No Apta para las Horas de Máxima Audiencia»), y nuevos miembros quienes se conocen como The Featured Players («La Compañía Destacada»).",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Субботним вечером в прямом эфире",
+            "overview": "Популярное телешоу, транслируемое американским телеканалом NBC, собирающее у экранов телевизоров вот уже который десяток лет всю семью.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een late-night live televisie sketch comedy en variété show gemaakt door Lorne Michaels. De komische sketches van de show, die een parodie zijn op de hedendaagse cultuur en politiek, worden uitgevoerd door een grote en wisselende cast van repertoire- en nieuwere castleden. Elke aflevering wordt gepresenteerd door een beroemde gast, die meestal een openingsmonoloog geeft en optreedt in sketches met de cast, en bevat optredens van een muzikale gast.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Saturday Night Live est une émission de divertissement retransmise en direct depuis le Studio 8H du GE Building au Rockefeller Center de New York. Diffusé le samedi soir sur la chaîne NBC, le programme se compose de sketches, de parodies et de performances musicales. Il s'agit de l'un des programmes phares de la télévision américaine, qui a permis l'émergence de nombreuses stars de la comédie lors des trente dernières années.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Sâmbătă noaptea în direct",
+            "overview": "În direct de la New York, e Sâmbătă noaptea! De 40 de ani, această frază marchează începutul uneia dintre cele mai inovatoare emisiuni de comedie.",
+            "homepage": "",
+            "tagline": "În direct din New York, e Sâmbătă noaptea!"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Saturday Night Live é um programa semanal de comédia do canal NBC que é transmitido praticamente todos os sábados à noite desde sua estréia em 11 de outubro de 1975. Trata-se de um dos mais duradouros programas de entretenimento da história da televisão norte-americana. A cada semana, o elenco é incrementado por um convidado especial e uma apresentação musical.\n\nO programa tem sido o trampolim para a carreira da maioria dos astros de humor norte-americano nos últimos trinta anos.  Vai ao ar no Brasil pela Sony Entertainment Television. ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Show trwa nieprzerwanie od 1975 roku. Wielu popularnych komików, jak Dan Aykroyd, John Belushi, Chevy Chase, Bill Murray, Eddie Murphy, Martin Short, Damon Wayans, Joan Cusack, Robert Downey jr, Conan O'Brien, Mike Myers, Ben Stiller, Adam Sandler, Chris Rock, Rob Schneider, rozpoczynało karierę w tym programie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "週六夜現場",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "На живо в събота вечер",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "סאטרדיי נייט לייב",
+            "overview": "סאטרדיי נייט לייב היא תוכנית מערכונים קומית המשודרת כמעט בכל מוצאי שבת ברשת אן-בי-סי האמריקאית מאז 1975, בשידור חי והיא אחת התוכניות הוותיקות ביותר בטלוויזיה האמריקאית.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Суботнього вечора в прямому ефірі",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "周六夜现场",
+            "overview": "《周六夜现场》是美国一档于周六深夜时段直播的喜剧小品类综艺节目。节目由洛恩·迈克尔斯创立，并由迪克·埃伯索尔发展。节目于1975年10月11日在全国广播公司首播，原名《NBC的周末夜》。节目由一系列讽刺恶搞当下政治和文化的喜剧小品组成，每期一位主持及一组音乐嘉宾，与固定卡司共同出演小品，固定卡司众多且不断更新。",
+            "homepage": "",
+            "tagline": "来自纽约的现场直播，周六夜现场！"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Saturday Night Live",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Večerná oceňovaná komediálna sketch a varieté show vytvorená Lorneom Michaelsom. Sketche v programe parodujú súčasnú kultúru a politiku, a sú hrané veľkým množstvom rôznych hercov. Každá epizóda je vedená celebritou, ktorá zvyčajne povie monológ na začiatku programu a hrá v sketchoch s obsadením, objaví sa taktiež hudobný hosť.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "برنامج منوعات تلفزيوني أمريكي مباشر يُقدم عروضاً كوميدية ومحاكاة ساخرة للسياسة والثقافة المعاصرة، يؤديها طاقم كبير من الممثلين، كل حلقة يقدمها ضيف من المشاهير ويقدم المونولوج الإفتتاحي مع طاقم البرنامج، كما تقدم عروضاً موسيقيةً مباشرة يؤديها الضيف الموسيقي لكل حلقة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Saturday Night Live",
+            "overview": "Noční živě vysílaná televizní komediální a varietní show, kterou vytvořil Lorne Michaels. Komediální skeče, které parodují současnou kulturu a politiku, předvádí početné a různorodé obsazení složené z členů repertoáru i novějších herců. Každou epizodu uvádí slavný host, který obvykle přednese úvodní monolog a vystupuje ve skečích společně s herci, a vystoupí v ní hudební host.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "サタデー・ナイト・ライブ",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Sátira galardonada con premios Emmy que revolucionó la televisión con sus `sketches' y reparto siempre cambiante de actores y cómicos quienes luego llegaron a la fama. Por mencionar a unos pocos, Eddie Murphy, Dana Carvey, Chevy Chase, Bill Murray, Dan Aykroyd, Al Franken y Mike Myers. Desde su estreno, con la rendición memorable del tema musical de `Mighty Mouse' por Andy Kaufman, hasta la interpretación de John Belushi como un `Samurai', el programa cambió la imagen de la TV una vez por todas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "\"Tämä on suorana New Yorkissa kuvattu Saturday Night!\" Kuuluisa lause on 40 vuoden ajan kuultu erään maailman merkittävimmän sketsiohjelman alussa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Subotom navečer uživo",
+            "overview": "Subotom navečer uživo iz New Yorka! Ova slavna rečenica već 40 g. znak je da počinje emisija s najboljim i najinovativnijim skečevima svih vremena.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BD",
+          "iso_639_1": "bn",
+          "name": "বাংলা",
+          "english_name": "Bengali",
+          "data": {
+            "name": "স্যাটারডে নাইট লাইভ",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "پخش زنده شنبه شب",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "შაბათ ღამეს პირდაპირ ეთერში",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AM",
+          "iso_639_1": "hy",
+          "name": "",
+          "english_name": "Armenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sSAX59Kf01lBRkBW4UcIL4kIoIm.jpg",
+          "vote_average": 7.542,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1xDaEBxDnilYUTwHFaMu5Gh0x2I.jpg",
+          "vote_average": 6.722,
+          "vote_count": 9,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bfg3COqQzmaZqqaqmCruKoyjk72.jpg",
+          "vote_average": 4.3,
+          "vote_count": 15,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yYaxXMbobcB7PIM6XljZZk2x4FQ.jpg",
+          "vote_average": 4.218,
+          "vote_count": 23,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/m5k30me2pdEUgXgb4R8AFIAObai.jpg",
+          "vote_average": 4.12,
+          "vote_count": 21,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rABCxOL7WRUpNB0rNgcabuy0vTA.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/roodFg7dLdTvEIT9X4f9jwMtc0J.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wsfIB9NyqLwztoPupinjN0V61We.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bNvY9d6Spd76zF6gwgmUxWFuvU5.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cqwCEdIckpwx9oNd2MombFdG8wS.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v8Ni1kv2AcVDkXfLKLYVgKvGetW.jpg",
+          "vote_average": 1.13,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1687,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pROhrGzFdNhNIro3YJd0f08OyVJ.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sbDjMBEMTcY0JXZE88A35ADODuy.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hkK0EUqsQnglNWrACDyvTxMN3o6.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qZBHdHsSWja0A4GjmaAh2tlEQQt.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lVLtUrerxHKlZbew5muj1wygumM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5LnmSdwRg2FmjD4nC0F0n7yGe9B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8tKQBrmYj2K0Z0jzDrySGnd9oMZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u6uxu9DEBrCNkywkvnAxhgd61W8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mW3SreL3cWhMRo7Z3d4RRoltUZG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 970,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3YRi3URgTB7enN58wGNXHaBX5hd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1724
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ef3IE7DZPL0UOuCxDx5RUTptJLM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.959,
+          "height": 603,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4KQ5l62J6hgOXYGFd0hrWDh4TBb.png",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 1784
+        },
+        {
+          "aspect_ratio": 2.439,
+          "height": 1297,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k4lFQt51GjtK5PoxCU67bB1RTXP.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3163
+        },
+        {
+          "aspect_ratio": 1.957,
+          "height": 1292,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3pVKohGVUUsFzKDnq4T6NYxf2n0.png",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2529
+        },
+        {
+          "aspect_ratio": 2.447,
+          "height": 1247,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rDzUJFzxMROXwlBBs2GK3vT2dsN.png",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 3051
+        },
+        {
+          "aspect_ratio": 1.63,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p7y5gW1JqePKQTrpmkiRFnH6fUX.png",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2117
+        },
+        {
+          "aspect_ratio": 1.63,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l7MamXYLKx392pwwS29ztY9zmeV.png",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2117
+        },
+        {
+          "aspect_ratio": 3.087,
+          "height": 1294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q5q20gR03DbquFdU3Tz2QU4YPGr.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3995
+        },
+        {
+          "aspect_ratio": 2.433,
+          "height": 252,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mKJ5XKcteSo8IBMVnv0CLkiE3x7.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 613
+        },
+        {
+          "aspect_ratio": 19,
+          "height": 16,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/exNS8w1KD1xwurPvNKB8srRKpeL.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 304
+        },
+        {
+          "aspect_ratio": 19.49,
+          "height": 51,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vLQlZqWmp09lzrVucWmfzk6KwYU.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 994
+        },
+        {
+          "aspect_ratio": 1.478,
+          "height": 1256,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3zVHGCqmH0iMGyhT5U5OhGM86og.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1856
+        },
+        {
+          "aspect_ratio": 11.164,
+          "height": 55,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qa9y5ZSWtaPSg8wwh1VNKS9rxcK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 614
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s1cZBqbMwAF3w8S3Yo0j5nr2Yuo.jpg",
+          "vote_average": 10,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/74QkM94ur8vhJiMiqaPCqkQeBYl.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sHGuKFjIBisPk8cvtCZTDVktYfs.jpg",
+          "vote_average": 4.616,
+          "vote_count": 31,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dUarLANS82FgBOHjRnJw42FB1z4.jpg",
+          "vote_average": 4.458,
+          "vote_count": 25,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iecMwr0L6kt64qeyyeYUxBjuQ4G.jpg",
+          "vote_average": 4.386,
+          "vote_count": 22,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bfiBW2qtdPEdcDOhYGNiP8XX8ok.jpg",
+          "vote_average": 3.788,
+          "vote_count": 26,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ly4NFIIxkkxbJV2QDbxaEy1Ucam.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1980,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/thHrO52ST56nS1excTDrAJHKKFH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1320
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AsrtUzEzMv6i0JUgOM63NdgfeX7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d01uqzYOYcAUvye3pQZ0lv8HLku.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7rA6AYsu6eks6NUB1cC9GqVwIkO.jpg",
+          "vote_average": 3.034,
+          "vote_count": 15,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jx2BiinT3yQ2J4aQv3DBmalsibO.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b0lkiP8xe62tu2qXMIiTssl6tpr.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/auS99AfI07m2ovGUSocHPWcpwaT.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lgTsd9mLvkdwMQgLGHpEQb6ocfv.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oQNWuf04bi8W5NkManFLskXqont.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7RIgACIpb5t64NCc5rc58CSQANJ.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2gQzVBTi9KBVIgDTbZCbLN56f3G.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/duzCaEMFECDkWBJwdn6lngZaa0x.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xZPxKpaG8NgzX0aIBaLIqYzRUU1.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oc0BLM3vSkauydXThPD7AEhVTYh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u9vaCpMhemiZRJe8vMR80K7mhYz.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oExURDUmNvSRNK1kU6BvvHU46dc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1763,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9Jzl7bZZTZBG2VeiGly3GD1T8sB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1175
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/747wPtTgt2fN5at2FB7G9wnX479.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jFhl1xijMMaJUwi2dxIRCeSPVll.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dTsWE8j18jlyneCKWNLUmfiTJDh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/to9oIl0xWIErwiVRp4I4EBTZRQB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rNzGTwPlpY0mPzZDixxN0vTTYnF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/45Ex3rtrKhcIylI2i6MEzf1w5ZI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tz7Ex1YuzyNwgZXjc647A0LeZpD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/olMosv9WSyHf5x9IMtQkHkCrsft.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4RaOvNd0MobnP2iKPu7gbUEIjvd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fbul7BP3trcPILlQ2xMCaJfHN55.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,931 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"bdbc1e542f29fe716afc4525554d4a85\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/sCn3qAUCbDOcPJcNvjdq7z06Eg2.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2023-01-12",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://www.nbc.com/the-traitors",
+    "id": 215943,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-29",
+    "last_episode_to_air": {
+      "id": 7841793,
+      "name": "Playing Chess",
+      "overview": "",
+      "vote_average": 1,
+      "vote_count": 1,
+      "air_date": "2026-11-05",
+      "episode_number": 9,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 42,
+      "season_number": 5,
+      "show_id": 215943,
+      "still_path": "/mlWo8Clv8NGaLkV4Q1023zeKCzf.jpg"
+    },
+    "name": "The Traitors",
+    "next_episode_to_air": {
+      "id": 7841794,
+      "name": "The Sun, the Moon and the Truth",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-12",
+      "episode_number": 10,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 215943,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "NBC",
+        "origin_country": "US"
+      },
+      {
+        "id": 3353,
+        "logo_path": "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png",
+        "name": "Peacock",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 60,
+    "number_of_seasons": 6,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "The Traitors",
+    "overview": "Hosted by award-winning actor Alan Cumming at an ancient castle set deep in the Scottish Highlands, contestants work together on a series of exhilarating missions to build a prize fund worth up to $250,000. Hidden amongst the Faithful are the Traitors, whose goal is to eliminate the Faithful and claim the prize for themselves.",
+    "popularity": 18.6702,
+    "poster_path": "/ulYR2NMKwnWoRWiw3KnFpaT2qjj.jpg",
+    "production_companies": [
+      {
+        "id": 23779,
+        "logo_path": "/tNHrNHJeKkPQa9itpccf8e5iaQS.png",
+        "name": "Studio Lambert",
+        "origin_country": "US"
+      },
+      {
+        "id": 311302,
+        "logo_path": null,
+        "name": "Studio Lambert North",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-01-12",
+        "episode_count": 11,
+        "id": 319332,
+        "name": "Season 1",
+        "overview": "Twenty of America’s most cunning contestants, a mix of famous faces and everyday Americans, play the ultimate murder mystery game. Hosted by award-winning actor Alan Cumming at an ancient castle in Scotland, they will work together on exhilarating missions to build a prize fund worth up to $250,000. But hidden amongst the Faithful contestants are the Traitors, whose goal is to eliminate the Faithful and claim the prize for themselves. Under the cover of darkness, the Traitors will murder the Faithful one by one in a treacherous spree while the players try to uncover the Traitors and banish them from the game. If the Faithful contestants banish all the Traitors, they will share the prize fund, but if a Traitor makes it to the end, they will steal all the money.",
+        "poster_path": "/qQpioYqYhhMBqErCawYmbgzpAig.jpg",
+        "season_number": 1,
+        "vote_average": 6.3
+      },
+      {
+        "air_date": "2024-01-12",
+        "episode_count": 12,
+        "id": 368900,
+        "name": "Season 2",
+        "overview": "Season 2 raises the stakes with an all-celebrity cast, adding layers of pre-existing rivalries and relationships to the game. With new challenges and settings, the season delivers heightened drama and strategic gameplay, as wells as some twists as the faithfuls and traitors clash.",
+        "poster_path": "/nGE7GJy2Uxu9l612LpuVjcy50ka.jpg",
+        "season_number": 2,
+        "vote_average": 5.9
+      },
+      {
+        "air_date": "2025-01-09",
+        "episode_count": 12,
+        "id": 397412,
+        "name": "Season 3",
+        "overview": "Season 3 continues the thrilling competition with an all-celebrity cast, filmed at Ardross Castle in the Scottish Highlands. This season introduces unique twists and challenges, as contestants navigate alliances and betrayals in their quest for victory.",
+        "poster_path": "/9Yhs5qPYa1cbWsmD3ysrPpltRBU.jpg",
+        "season_number": 3,
+        "vote_average": 5.1
+      },
+      {
+        "air_date": "2026-01-08",
+        "episode_count": 12,
+        "id": 460608,
+        "name": "Season 4",
+        "overview": "In its most treacherous season yet, The Traitors returns to Ardross Castle, where a fresh lineup of reality heavyweights descend into a game of secrets, sabotage, and psychological warfare. Host Alan Cumming presides over every twist with theatrical menace as Faithfuls hunt for hidden Traitors and Traitors quietly pick them off one by one. Alliances crumble, paranoia surges, and one shocking mid-season moment threatens to upend the entire game.",
+        "poster_path": "/xWK9tLH2UGgzuAI6P3cHeTKopfj.jpg",
+        "season_number": 4,
+        "vote_average": 4.5
+      },
+      {
+        "air_date": "2026-09-16",
+        "episode_count": 12,
+        "id": 544799,
+        "name": "New Blood",
+        "overview": "Set at an ancient castle set deep in the Scottish Highlands, everyday Americans work together on a series of exhilarating missions to build a prize fund worth up to $250,000. Hidden amongst the Faithful are the Traitors, whose goal is to eliminate the Faithful and claim the prize for themselves. Under the cover of darkness, the Traitors murder the Faithful one by one in a treacherous spree while the Faithful try to uncover the Traitors and banish them from the game. If the Faithful contestants banish all the Traitors, they will share the prize fund, but if a Traitor (or Traitors) makes it to the end, they will steal all the money.",
+        "poster_path": "/1iEhpzcHwuvPcqtt9tkUAX1hxqx.jpg",
+        "season_number": 5,
+        "vote_average": 1.8
+      },
+      {
+        "air_date": null,
+        "episode_count": 1,
+        "id": 544970,
+        "name": "Season 6",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 6,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Ordinary people. Extraordinary deceit.",
+    "type": "Reality",
+    "vote_average": 6.3,
+    "vote_count": 74,
+    "external_ids": {
+      "imdb_id": "tt15557874",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 428163,
+      "tvrage_id": null,
+      "wikidata_id": "Q116449538",
+      "facebook_id": null,
+      "instagram_id": "thetraitorsus",
+      "twitter_id": "TheTraitorsUS"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Hosted by award-winning actor Alan Cumming at an ancient castle set deep in the Scottish Highlands, contestants work together on a series of exhilarating missions to build a prize fund worth up to $250,000. Hidden amongst the Faithful are the Traitors, whose goal is to eliminate the Faithful and claim the prize for themselves.",
+            "homepage": "",
+            "tagline": "Ordinary people. Extraordinary deceit."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Zrádci USA",
+            "overview": "Tento netradiční soutěžní seriál, který moderuje Alan Cumming, je psychologickým dobrodružstvím, v němž jde o zradu a podvod. Dvacet soutěžících (včetně hvězd reality show) se setkává, aby společně splnili řadu úkolů s cílem získat finanční odměnu. Háček? Tři ze soutěžících označovaných jako \"zrádci\" vymyslí plán, jak ukrást výhru ostatním soutěžícím označovaným jako \"věrní\".",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "No derradeiro jogo de mistério e assassinato, 20 jogadores trabalham juntos em missões emocionantes para ganhar um prêmio de até US$ 250.000.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "The Traitors - Az árulók US",
+            "overview": "A versenyzők a játékban egy fenséges kastélyba költöznek, és csapatként dolgoznak egy sor drámai és kihívást jelentő küldetés teljesítésén, hogy pénzt keressenek a nyereményalapba. Egyes versenyzők árulók, mások hűségesek.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "天黑請睜眼 (美國版)",
+            "overview": "23位參賽者中，暗藏5位叛徒。有人偽裝忠誠，有人默默設局。只要一個眼神、一句話，就能讓隊友走上出局之路……為了拿到高額獎金，他們必須先看穿謊言、守住祕密、並活到最後。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "叛徒：美版",
+            "overview": "改编自荷兰原创电视真人秀节目《叛徒》。一群美国选手齐聚一处与世隔绝的庄园，参与一场充满欺骗与猜疑的心理博弈。他们通过团队挑战累积奖金，而隐藏其中的叛徒则暗中淘汰忠诚者，试图瞒过所有人并赢得奖金。忠诚者必须识破叛徒的身份，并在被逐一淘汰前将其驱逐出局。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "הבוגדים",
+            "overview": "הגרסה האמריקנית של פרנצ’ייז ריאליטי-תחרותי שנולד במקור בהולנד. אותה מנחה אלן קאמינג והיא מאגדת בתוכה 20 מתמודדים, שמגיעים לטירה סקוטית עתיקה להתחרות על פרס כספי של רבע מיליון דולר.  על מנת לזכות בפרס הם צריכים לבצע משימות שונות ומגוונות, חלקן אקסטרימיות, משעשעות או מפחידות – כל משימה כזו מוסיפה סכום כסף לפרס הגדול שיוענק למי שיגיע לגמר. אלא שבדרך לשם הם יצטרכו למצוא מי מהם הם – הבוגדים.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Veinte de los concursantes más astutos de Estados Unidos, participan en el aclamado juego de misterio y asesinato. Deberán trabajar juntos en misiones estimulantes para construir un fondo de premios valorado hasta en 250 000 dólares.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Les Traîtres (États-Unis)",
+            "overview": "Présentée par Alan Cumming, cette émission de téléréalité réunit des personnalités du monde du divertissement dans un château situé au cœur des Highlands écossais pour un jeu de stratégie inspiré d'une enquête criminelle. Les candidats participent à une série d'épreuves afin de constituer une cagnotte pouvant atteindre 250 000 dollars, tandis que des « traîtres », secrètement désignés parmi les « loyaux », éliminent progressivement les autres participants dans l'espoir de remporter l'intégralité des gains.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "The Traitors USA",
+            "overview": "Uczestnicy The Traitors USA przenoszą się do majestatycznego zamku, gdzie czekają na nich niezwykłe zadania, a za każdą dobrze wykonaną misję dostaną nagrodę.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "天黑請睜眼 (美國版)",
+            "overview": "23 位參賽者中，暗藏 5 位叛徒。有人偽裝忠誠，有人默默設局。只要一個眼神、一句話，就能讓隊友走上出局之路……為了拿到高額獎金，他們必須先看穿謊言、守住秘密、並活到最後。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Forræder USA",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yI8FMu5NevP9Fpu3mdw8UR6OtQe.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sCn3qAUCbDOcPJcNvjdq7z06Eg2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1027,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/akY5bMj3g76EOaliNLdOJI9kBPb.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1825
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kFqYsRHNIokQx24Ai11kO3ClBsa.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/trzsWWofPQ9i2vRmLcnJV80pkd9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pGCXBorl5QlOS0USqSbRCSo62BC.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qyAKNQwCRZp5frpir0qP67AuaAq.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gwRmzfjhiIVo2VCogC5lkNdR17n.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gct6WyjPGSsp4m7Brg8jqxIvrS6.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2u9x8UYEmUodMMkFZolBHQL3wQn.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ihDWg4thBeQCE65BFu8iafNWKq0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9VCCQjDg29DZGrX9s2WE1u4YSyR.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yq8w2oI2sDohgI73FOAsWrHjl2F.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mnv6o1XQf8amEzFlgEDho28meXe.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4oQSL2GvCXwQ5qCPuIJ6iojDtbO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tvSE1hKErHrXayPCAkynwycJwZR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ut6ZcfTfycO9cTpjhPxOpQ9oeZD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pwMjBMNx1nh5Tfe9Jn8fbRcpdSQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fHSbQvjH5cxJuxOnQm5P5KnsgkH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ntA2DOxdDCFcYC1khtOUXEeL3GG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mvcSBzKhM1WaXQb0NCbxFYXEl8h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3IHU9b2rRiX3k7IBPLrCSVHp73L.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8pPAAnN9cz8jgu9v4wC8yYr1cY8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.325,
+          "height": 539,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/znX5X9HQQPRUNL1EIKAcrCjX5jd.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1792
+        },
+        {
+          "aspect_ratio": 3.316,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/24soB1rhbHSuqlLsg7PDFGqI74.png",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 4307
+        },
+        {
+          "aspect_ratio": 2.894,
+          "height": 1298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iStNUcgFEDnjZhvGUs618Xt05ck.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3757
+        },
+        {
+          "aspect_ratio": 2.81,
+          "height": 630,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1zOD9ncPRY281iHyIx7ybrAC81W.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1770
+        },
+        {
+          "aspect_ratio": 2.632,
+          "height": 684,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2LMMNsqcZ6yRkVXBj6VT6tt6txZ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1800
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eaCY3Gg1fZ716XtZcuDhltZY2Ns.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ulYR2NMKwnWoRWiw3KnFpaT2qjj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8NuGZtzAGtNV8DnIOPR3r0R4xWP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xWK9tLH2UGgzuAI6P3cHeTKopfj.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vC2rx8TQWKBNaY1tnUGI9Mc0010.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oMIloqADH11XG9BmI5LIZ0Ui1xB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vBzL2Hc5pBS8clGZKVPtZGTfAl0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w2lgOXcVF9qDhHqPo0Q1USjdLv7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yMcqVyVbEtoXN7E9XxyrbDrvi1S.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8h4I6wzhZoUPpRtFPEz3MaJiabG.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dmPArzw6znRHWsqyc5fM1uTmsBF.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9Yhs5qPYa1cbWsmD3ysrPpltRBU.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qQpioYqYhhMBqErCawYmbgzpAig.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oF3vjDBZ80v7ICetMOGTaialr5S.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lk1EQ3mMy5wXe8xp4WTm3OjxHTZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x56s48QWZGUNKcfH5YjBsoateW0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tSgXiDdm5E5hl4Z99LZj0B80XAH.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sfWRtiKI6XYJhvjCrgSAzb1TkYV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kqYAK82PR2urEt3WD3Oty3MoCB7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qf2diXOW2PvcuAX8jT7zBQX4Ci9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hxvAzaYQJ7l1hUSedzVOzkmnFeA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 627
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1576,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vziznM2wA14DX1Gjie680d30tMX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1051
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p9fa55BGc4SoAjKqzHF9YtCH2Ir.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zkAk64ua0DJZlxULTaGW98Pxr6p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bSGxkPkjSDCm7TrgqAYbLeWDrQ1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        }
+      ]
+    }
+  }
+}

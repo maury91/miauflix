@@ -1,0 +1,488 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10814",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"454b86c0e281062d7bcc9fb11b785d73\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/w6F8pr3bYBlr9LRCM4sIgfto5g3.jpg",
+    "created_by": [
+      {
+        "id": 1251333,
+        "credit_id": "6ac2e98ea943fe32132a6100",
+        "name": "Morwyn Brebner",
+        "original_name": "Morwyn Brebner",
+        "gender": 1,
+        "profile_path": "/pixaVJdrXlRc2XivK7eaFPVzjnw.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-08-07",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://www.usanetwork.com/series/anna-pigeon-1786158359207",
+    "id": 291350,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-09",
+    "last_episode_to_air": {
+      "id": 7260245,
+      "name": "SOS",
+      "overview": "With winter settling over the deserted park, Anna must answer a dangerous SOS call alone.",
+      "vote_average": 8.3,
+      "vote_count": 5,
+      "air_date": "2026-10-09",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 291350,
+      "still_path": "/c72riD82iNfExeen4p1ONUfgLdy.jpg"
+    },
+    "name": "Anna Pigeon",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 9345,
+        "logo_path": "/ekM7Zc2kDx7lYQypykmgIcn6dWu.png",
+        "name": "USA Network",
+        "origin_country": "CA"
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "CA"
+    ],
+    "original_language": "en",
+    "original_name": "Anna Pigeon",
+    "overview": "Anna Pigeon flees city life for the solitude of America's stunning national parks following a devastating loss; while Anna tries to outrun her demons, her focus turns to solving crimes that have taken place within national park grounds.",
+    "popularity": 7.6269,
+    "poster_path": "/iLhi3wqsLOdHB61vySJRm7y09XS.jpg",
+    "production_companies": [
+      {
+        "id": 32205,
+        "logo_path": "/dQmrjj3YjGoXlulrQu6IHPf5Vmj.png",
+        "name": "Cineflix Productions",
+        "origin_country": "CA"
+      },
+      {
+        "id": 231830,
+        "logo_path": null,
+        "name": "December Films",
+        "origin_country": "CA"
+      },
+      {
+        "id": 22778,
+        "logo_path": "/7LryUALIkPHEG0NnyRGcuRtYVhe.png",
+        "name": "SEVEN24 Films",
+        "origin_country": "CA"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-08-07",
+        "episode_count": 10,
+        "id": 456167,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/mxqjyn1sNvS9FeRNQ4ZBxjiUnG1.jpg",
+        "season_number": 1,
+        "vote_average": 7.4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Solving crime is second nature.",
+    "type": "Scripted",
+    "vote_average": 7.136,
+    "vote_count": 22,
+    "external_ids": {
+      "imdb_id": "tt36937503",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 463597,
+      "tvrage_id": null,
+      "wikidata_id": "Q135990617",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Anna Pigeon flees city life for the solitude of America's stunning national parks following a devastating loss; while Anna tries to outrun her demons, her focus turns to solving crimes that have taken place within national park grounds.",
+            "homepage": "",
+            "tagline": "Solving crime is second nature."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "",
+            "overview": "Ана Пиджън е бивша жителка на големия град, която става рейнджър, след като една опустошителна загуба променя завинаги траекторията на живота ѝ. Докато Ана се опитва да избяга от демоните си, вниманието ѝ се насочва към разкриването на престъпления, извършени на територията на националните паркове, независимо от това кой или какво се изпречва на пътя ѝ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Anna Pigeon is een voormalig stadsmeisje dat parkwachter werd nadat een ingrijpend verlies haar leven voorgoed veranderde. Terwijl Anna probeert haar demonen te ontvluchten, richt ze zich op het oplossen van misdaden die zich binnen de grenzen van het nationale park hebben afgespeeld, ongeacht wie of wat haar in de weg staat.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Anna Pigeon is een voormalig stadsmeisje dat parkwachter werd nadat een ingrijpend verlies haar leven voorgoed veranderde. Terwijl Anna probeert haar demonen te ontvluchten, richt ze zich op het oplossen van misdaden die zich binnen de grenzen van het nationale park hebben afgespeeld, ongeacht wie of wat haar in de weg staat.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Anna Pigeon je bivša stanovnica grada koja je postala čuvarica nacionalnog parka nakon što je zbog razornog gubitka zauvijek promijenila smjer svog života. Dok Anna pokušava pobjeći od svojih demona, njezin se fokus usmjerava na rješavanje zločina počinjenih na područjima nacionalnih parkova, bez obzira na to tko ili što joj se nađe na putu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Anna Pigeonová je bývalá měšťačka, která se stala strážkyní parku poté, co zničující ztráta navždy změnila směr jejího života. Zatímco se Anna snaží utéct svým démonům, zaměří se na řešení zločinů, k nimž došlo na území národního parku, bez ohledu na to, kdo nebo co jí stojí v cestě.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Анна Пиджон",
+            "overview": "Пережив личную трагедию, Анна отказалась от городской суеты и выбрала путь рейнджера в национальном парке. Но теперь, ей приходится сталкиваться с браконьерами и нелегальными добытчиками редких растений. Каждый новый случай - это вызов, требующий выдержки и смекалки.",
+            "homepage": "",
+            "tagline": "«Охраняя природу»"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "林间鸽踪",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Anna Pigeon, autrefois citadine, a trouvé refuge dans la nature après une tragédie personnelle qui a bouleversé sa vie. Devenue garde forestière, elle sillonne les parcs nationaux des États-Unis, où elle tente d’apaiser ses démons intérieurs en se consacrant à la résolution de crimes souvent aussi sauvages que les paysages qui les entourent. Rien ne l’arrête, pas même les terrains les plus hostiles ou les vérités les plus dérangeantes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "Anna Pigeon parkőr személyes tragédia után hagyta ott a városi életet. Fájdalmát a nemzeti parkokban elkövetett bűncselekmények felderítésébe fekteti, és minden akadály ellenére eltökélt az ügyek megoldására.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "A guarda florestal Anna Pigeon deixou a vida na cidade após uma tragédia pessoal. Agora, ela canaliza sua dor para investigar crimes em parques nacionais, determinada a resolver casos apesar de quaisquer obstáculos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "A trama acompanha Anna Pigeon, uma antiga citadina que, depois de sofrer uma perda devastadora, muda radicalmente de vida e torna-se guarda-florestal. Enquanto tenta escapar aos seus próprios demónios, Anna começa a investigar crimes cometidos dentro dos parques nacionais, usando a sua experiência, instinto e determinação para chegar à verdade, mesmo quando isso significa enfrentar pessoas ou situações que dificultam a investigação.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "林間鴿蹤",
+            "overview": "主角安娜·皮金原本是都市人。她在丈夫遇害後，前往國家公園擔任護林員來撫平傷痛，卻不斷捲入園區的凶殺案並追查真相。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η Άννα Πίτζον αφήνει τη ζωή της πόλης επιλέγοντας τη μοναξιά των εκπληκτικών εθνικών πάρκων της Αμερικής μετά από μια καταστροφική απώλεια. Ενώ η Άννα προσπαθεί να ξεπεράσει τους δαίμονές της, η εστίασή της στρέφεται στην επίλυση εγκλημάτων που έχουν λάβει χώρα στους χώρους του εθνικού πάρκου.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w6F8pr3bYBlr9LRCM4sIgfto5g3.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wPXTBdO4gvczVmYxjRi7pFqotgw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vQSlZbILE2v2fuwD3sNsCp3hZ83.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2w23nL4AktqDiFHU1hBOl6OMevR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.846,
+          "height": 208,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kCX1khYxaBHGokifxMTTxIngySV.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 592
+        },
+        {
+          "aspect_ratio": 2.853,
+          "height": 701,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rkXcRchmpy6nPMnJLiQGdBscs6K.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iLhi3wqsLOdHB61vySJRm7y09XS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qQ7nkSvxqFyILu0h2q0hNI6bZTi.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/btJj2nyLvTAkpwmn6VYxFbny3bU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cw934MhMJDLbsdwcugisUr9PMJw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cA2NyvzIqjeAOXYlxtWcQWGSRZ8.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l0sbmOGftWTiDGresoukB7UGNuN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kkONdA9Yo2sbP1wnQvy0Z04MBqY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1512,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oJQNLMopCrdddPkxD7HXvyoneZn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1008
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1403,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9qOWbND9vSgWM7hJaSEEXSj3v1U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 935
+        }
+      ]
+    }
+  }
+}

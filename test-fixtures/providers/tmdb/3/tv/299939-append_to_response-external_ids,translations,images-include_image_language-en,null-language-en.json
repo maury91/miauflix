@@ -1,0 +1,1326 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"51d62145243e8b4c3a6f5a3e52c90245\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gaew60NXUxok3Vmls7gkAT7lYW0.jpg",
+    "created_by": [
+      {
+        "id": 59595,
+        "credit_id": "6a72173cf1be1a3deda280fb",
+        "name": "Ian Brennan",
+        "original_name": "Ian Brennan",
+        "gender": 2,
+        "profile_path": "/vTlp8Ho8imcf3IB03dqp9S1HmXC.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-09-17",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://www.netflix.com/title/82068293",
+    "id": 299939,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-17",
+    "last_episode_to_air": {
+      "id": 7639098,
+      "name": "Carnival",
+      "overview": "As the burden of her monstrous legacy threatens to pull her under, Lizzie searches for meaning — and a way to move forward.",
+      "vote_average": 7,
+      "vote_count": 17,
+      "air_date": "2026-09-17",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 66,
+      "season_number": 1,
+      "show_id": 299939,
+      "still_path": "/5Lxg9bKya1K89hh7MUYC2uVqNzc.jpg"
+    },
+    "name": "Monster: The Lizzie Borden Story",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Netflix",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Monster: The Lizzie Borden Story",
+    "overview": "Trapped in a cruel Victorian-era household, Lizzie Borden kills her parents in a gory ax murder that shocks the nation.",
+    "popularity": 31.1824,
+    "poster_path": "/57XScX1aYtKi1LvHYFQLPUxVhTG.jpg",
+    "production_companies": [
+      {
+        "id": 19328,
+        "logo_path": "/2AdkrU1av4fDGw0Zaf68XH4YcqC.png",
+        "name": "Ryan Murphy Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 182831,
+        "logo_path": null,
+        "name": "Prospect Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-09-17",
+        "episode_count": 8,
+        "id": 473542,
+        "name": "Miniseries",
+        "overview": "When the repressed daughter of a wealthy New England family and her rebellious maid find themselves trapped in a house built on humiliation and cruelty, they escape into a fantasy of sex, power, and revenge. The gruesome unsolved murders that follow don't just shock the world — they give birth to an icon who refuses to live imprisoned in a cage, choosing instead to forge her own legend: shocking, monstrous, and gloriously free.",
+        "poster_path": "/57XScX1aYtKi1LvHYFQLPUxVhTG.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Miniseries",
+    "vote_average": 7.037,
+    "vote_count": 245,
+    "external_ids": {
+      "imdb_id": "",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": null,
+      "tvrage_id": null,
+      "wikidata_id": "",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Trapped in a cruel Victorian-era household, Lizzie Borden kills her parents in a gory ax murder that shocks the nation.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Monstre : L'Histoire de Lizzie Borden",
+            "overview": "Prisonnière d'une cruelle famille victorienne, Lizzie Borden massacre ses parents à la hache dans un crime sanglant qui choque toute une nation.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "괴물: 리지 보든 이야기",
+            "overview": "빅토리아 시대, 모진 가정 환경 속에 갇혀 자란 리지 보든. 결국, 도끼로 부모를 잔혹하게 살해해 미국 전역을 충격에 빠뜨린다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "מפלצת: הסיפור של ליזי בורדן",
+            "overview": "ליזי בורדן, הלכודה בבית אכזרי בתקופה הוויקטוריאנית, הורגת את הוריה בגרזן, והרצח העקוב מדם מזעזע את האומה כולה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Monster: La storia di Lizzie Borden",
+            "overview": "Intrappolata in una crudele famiglia dell'epoca vittoriana, Lizzie Borden uccide i genitori a colpi d'ascia in un efferato duplice omicidio che sconvolge l'intera nazione.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Lizzie Borden voelt zich opgesloten in een wreed huishouden in het Victoriaanse tijdperk. Het land is geschokt als ze haar ouders op bloederige wijze met een bijl vermoordt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Deze serie vertelt het verhaal van Lizzie Borden, de beruchte vrouw uit Massachusetts die in 1892 werd beschuldigd van de gruwelijke bijlmoorden op haar vader en stiefmoeder.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Potwór: Historia Lizzie Borden",
+            "overview": "Przytłoczona życiem w okrutnej wiktoriańskiej rodzinie Lizzie Borden w wyjątkowo brutalny sposób morduje swoich rodziców. Jej czyn wstrząsa całym krajem.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Monstro: A História de Lizzie Borden",
+            "overview": "Presa em um lar cruel da era vitoriana, Lizzie Borden mata os pais em um crime sangrento que abala o país.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Чудовисько: Історія Ліззі Борден",
+            "overview": "Ліззі Борден, яка виросла в жорстокій сім’ї у Вікторіанську епоху, безжально вбиває своїх батьків сокирою та приголомшує цілу країну.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Monstrum: Priča o Lizzie Borden",
+            "overview": "Zarobljena u okrutnom kućanstvu viktorijanskog doba, Lizzie Borden sjekirom počini krvavo ubojstvo svojih roditelja koje šokira cijelu zemlju.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Monster: Die Geschichte von Lizzie Borden",
+            "overview": "Eingesperrt in ihrem tyrannischen Zuhause im viktorianischen Neuengland ermordet Lizzie Borden ihre Eltern auf brutalste Weise und versetzt das ganze Land in Aufruhr.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Monstruo: La historia de Lizzie Borden",
+            "overview": "Atrapada en un hogar cruel de la era victoriana, Lizzie Borden mata a sus padres de forma grotesca con un hacha, en un homicidio que conmocionó a la nación.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "怪物：丽兹·波顿的故事",
+            "overview": "被困于维多利亚时代残酷家庭的丽兹·波顿用斧头残忍杀害了自己的父母，此案震惊全国。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Monstruo: La historia de Lizzie Borden",
+            "overview": "Atrapada en un hogar victoriano marcado por la crueldad, Lizzie Borden mata brutalmente a sus padres a hachazos y conmociona a todo el país.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Monstro: A História de Lizzie Borden",
+            "overview": "Presa numa família cruel da era vitoriana, Lizzie Borden assassina os pais com um machado, num crime sangrento que choca todo o país.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Monstrum: Příběh Lizzie Borden",
+            "overview": "Na konci 19. století se věčně utlačovaná Lizzie Borden cítí doma jako ve vězení. Brutálně proto zavraždí svoje rodiče sekerou a vyrazí tím celé zemi dech.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Monstre. La història de Lizzie Borden",
+            "overview": "Atrapada en una llar victòria marcada per la crueltat, Lizzie Borden mata brutalment els seus pares a destralades i commociona tot el país.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Canavar: Lizzie Borden'ın Hikâyesi",
+            "overview": "Viktorya döneminde, acımasız bir ailenin içinde kısılı kalan Lizzie Borden, ebeveynlerini baltayla vahşice öldürerek tüm ülkeyi şaşkına çevirir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Монстр: История Лиззи Борден",
+            "overview": "Лиззи Борден — заложница своей жестокой викторианской семьи — убивает родителей топором. Это кровавое преступление потрясает всю страну.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الوحش: قصة ليزي بوردن",
+            "overview": "تحت وطأة حياة أسرية قاسية في العصر الفيكتوري، تتخلص \"ليزي بوردن\" من والديها في جريمة قتل دموية بالفأس تهزّ البلاد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الوحش: قصة ليزي بوردن",
+            "overview": "تحت وطأة حياة أسرية قاسية في العصر الفيكتوري، تتخلص \"ليزي بوردن\" من والديها في جريمة قتل دموية بالفأس تهزّ البلاد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "怪物：莉齐·博登的故事",
+            "overview": "被困于维多利亚时代残酷家庭的莉齐·博登用斧头残忍杀害了自己的父母，此案震惊全国。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "怪物：麗茲波頓的故事",
+            "overview": "維多利亞時代，麗茲波頓受殘酷的家庭束縛，最後持斧血腥殺害雙親，震驚全國。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Monster: Historien om Lizzie Borden",
+            "overview": "Lizzie Borden er fanget i en grusom victoriansk husstand og dræber sine forældre i et blodigt øksemord, der chokerer nationen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Monstre : L'histoire de Lizzie Borden",
+            "overview": "Coincée dans une demeure de l'époque victorienne, Lizzie Borden tue ses parents lors d'un meurtre à la hache sanglant qui a bouleversé la nation.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "怪物：麗茲波頓的故事",
+            "overview": "維多利亞時代，麗茲波頓受殘酷的家庭束縛，最後持斧血腥殺害雙親，震驚全國。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Hirviö: Lizzie Bordenin tarina",
+            "overview": "Viktoriaanisen ajan julman kodin kourissa elävä Lizzie Borden tappaa vanhempansa verisesti kirveellä ja järkyttää koko kansakuntaa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Szörnyeteg: A Lizzie Borden-sztori",
+            "overview": "A kegyetlen viktoriánus háztartásban raboskodó Lizzie Borden brutális baltás gyilkosságot követ el szülei ellen, mely az egész országot megrázza.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "मॉन्स्टर: लिज़ी बोर्डन की खौफ़नाक कहानी",
+            "overview": "विक्टोरियन काल के एक ज़ालिम परिवार में फंसी लिज़ी बोर्डन अपने माता-पिता की कुल्हाड़ी से मारकर खौफ़नाक तरीके से हत्या कर देती है। यह वारदात पूरे देश को हिलाकर रख देती है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Terjebak dalam rumah tangga era Victoria yang kejam, Lizzie Borden membunuh orang tuanya dalam sebuah pembantaian brutal dengan kapak yang mengguncang seisi negeri.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Monster: Historien om Lizzie Borden",
+            "overview": "Lizzie Borden var fanget i et forferdelig hjem under viktoriatiden, og drepte foreldrene sine på en måte som sjokkerte en hel nasjon.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "モンスター: リジー・ボーデンの物語",
+            "overview": "19世紀末、厳格な家庭で窮屈に生きていたリジー・ボーデン。やがて両親が斧で惨殺される凄惨な事件が起こり、国中に衝撃が走る。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Lizzie Borden hidup bersama keluarga kejam pada era Victoria, kemudian membunuh ibu bapanya dengan kapak dalam satu pembunuhan ngeri yang menggemparkan seluruh negara.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Monstru: Povestea lui Lizzie Borden",
+            "overview": "Captivă într-o casă plină de cruzime din epoca victoriană, Lizzie Borden își ucide părinții cu toporul, într-o crimă sângeroasă care șochează națiunea.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Quái vật: Câu chuyện về Lizzie Borden",
+            "overview": "Mắc kẹt trong một gia đình hà khắc thời Victoria, Lizzie Borden đã sát hại bố mẹ mình trong vụ án mạng đẫm máu bằng rìu, khiến cả nước bàng hoàng.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "Nakulong sa malupit na buhay sa Victorian era, pinatay ni Lizzie Borden ang mga magulang niya gamit ang palakol sa isang madugong krimeng yumanig sa buong bansa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ปีศาจ: เรื่องราวของลิซซี่ บอร์เดน",
+            "overview": "ลิซซี่ บอร์เดนติดอยู่ในครอบครัวแสนโหดร้ายในยุควิกตอเรีย ก่อนจะลงมือฆ่าพ่อแม่ของเธอด้วยขวานอย่างโหดเหี้ยม จนทำให้คนทั้งประเทศต้องตกตะลึง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Monster: Berättelsen om Lizzie Borden",
+            "overview": "När den dysfunktionella viktorianska familjen blir för outhärdlig dödar Lizzie Borden sina föräldrar i ett yxmord som skakar en hel nation.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Чудовище: Историята на Лизи Бордън",
+            "overview": "Заклещена в жестоко домакинство от викторианската епоха, Лизи Бордън убива родителите си в кърваво убийство с брадва, което шокира нацията.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "مونسٹر: لیزی بورڈن کی ہلاکت خیز کہانی",
+            "overview": "وکٹورین دور کے ایک ظالم خاندان میں گھری ہوئی، لیزی بورڈن کلہاڑی کے وار سے اپنے والدین کو بے دردی سے قتل کر دیتی ہے—ایک ایسا جرم جس سے پوری قوم میں سنسنی پھیل جاتی ہے۔",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Τέρας: Η Ιστορία της Λίζι Μπόρντεν",
+            "overview": "Παγιδευμένη σε ένα σκληρό βικτωριανό σπίτι, η Λίζι Μπόρντεν σκοτώνει τους γονείς της με ένα τσεκούρι, σε μια φρικιαστική δολοφονία που συγκλονίζει το έθνος.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "هیولا: داستان لیزی بوردن",
+            "overview": "لیزی بوردن که در خانه‌ای بی‌رحم در دوران ویکتوریا گرفتار شده است، والدینش را طی یک قتل فجیع با تبر به کام مرگ می‌فرستد؛ جنایتی که سراسر کشور را شوکه می‌کند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Monstras: Lizės Borden istorija",
+            "overview": "Dokumentinis kriminalinis serialas nagrinėja vieną mįslingiausių ir garsiausių XIX amžiaus Pabaigos Amerikos nusikaltimų – 1892 m. įvykdytą dvigubą Bordenų šeimos nužudymą takeliu. Serialas gilinasi į Lizės Borden teismo procesą, visuomenės reakciją, mįslingus įrodymus bei tamsiąsias šeimos paslaptis, kurios iki šiol kursto nesibaigiančias teorijas ir diskusijas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gaew60NXUxok3Vmls7gkAT7lYW0.jpg",
+          "vote_average": 7.19,
+          "vote_count": 7,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/m97hzwX4ZmkMVB6Drky8fwg635n.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1406,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1V4qYjjNNhldd3fQLUuTnzXRPmJ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mtxP1MsB452DeSe2eAuNsqnJQWf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3JVjgaqfX5MhxxHKpGWz05QV7Dz.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hcoKwpW6W5jPIlIRop6dVab1XpR.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.775,
+          "height": 1398,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pL6DTyi8tjUAOxOOnGntsWMgBo3.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2482
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1143,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tH0Y4Qru4UGH2aYPvVqLqKJEtbM.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2032
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wUKhZKFXhAx1SfCxvxbCbfOPLlN.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v4f5GQadFtg3M7DsCJfxZwGJPtv.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dAo6MRb52pcTYh7ssvRCh2n7xYt.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6TqGlDimRIK2wLt361lgIe9Q5LB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y288doPf137ifkZHVzGGIIKHBoj.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tIsg8Gw3SewQYoXTnBsYNyYAXOi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aelD2O3BninBnww6ydAelcCyWbi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/31nXvDuBbMHXmr03l9YO6SEKqh9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/feKEHFtJesGBYLQMfB5Wp9hpmqk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sSs0AnQfHLIqQou0OUEmsXpSKuP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zl6h5l9dxfTHdOqVCdVhxiVYjk9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qQoBCDUbO3pv8PGGlU974FQl4fY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/41uKxTU7l4B0z2ko0SAYDYqyUrN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b4ldonKaIXWe4px5jgP31VXA22p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sdU5muDls4QNtrgS5sYiXFPXB8b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tcI1HEio6yBZExRQvn8Pm92oE2O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pTV2dspvwk5Sb2F1o3KxfQ6twhU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r7EyKkSsg2fc8zBrcZaUzdih30s.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1669,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kLBh8IthAdvW9VAsRbpXHIienco.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2967
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tf3NbI8Vf3RWSHtfsrEltZCTnDi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7glhEZjQYgCKndHfAtTL76Nu6n7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.292,
+          "height": 24,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ieyQiTGojX0osFVhDsg7D5L1ET2.svg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 103
+        },
+        {
+          "aspect_ratio": 4.164,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7MC098mWeXl2b8xWGjyfyRn4g1u.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1624
+        },
+        {
+          "aspect_ratio": 4.292,
+          "height": 24,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vw3VLBmY6rK68nm6AQaM6l8Qda9.svg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 103
+        },
+        {
+          "aspect_ratio": 4.164,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uTQrN2E9ulajgC6nN3JbjjSIjFl.png",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1624
+        },
+        {
+          "aspect_ratio": 2.518,
+          "height": 407,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fyr5SgLKsfpOTlSsXRwyoDYZNN7.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1025
+        },
+        {
+          "aspect_ratio": 13.154,
+          "height": 253,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hGiu7BQSC4DEEOFtGRZ2iDjIxaU.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3328
+        },
+        {
+          "aspect_ratio": 4.164,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yaV1D2FBIcBrchLdySZvSzDfHiK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1624
+        },
+        {
+          "aspect_ratio": 13.154,
+          "height": 253,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uwKnfFN8L8ucqWj6HiHBNtyuG0B.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3328
+        },
+        {
+          "aspect_ratio": 13.154,
+          "height": 253,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iqESTBnERDKRcWIQZPBWY9Z6mWs.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3328
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/57XScX1aYtKi1LvHYFQLPUxVhTG.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 1126
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lrVEDofp5TsosG03hwoHyd0z8yE.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7bNEsXjfjid5nhM0Wf4Z7kX0u9R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mtVR3vG0xqHZkIu6eWevIK6M9NO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xfC8BSp1iE4Rfqhe4AysIsz0lLJ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1126
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wc8PRZycwITPX0MUy1nmE7yH9Sb.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iJ2akGZtnmPEihHsAljijPw0MSH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rxNxAoJlQVt7CDWo3Nu4SsRkXgK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2cwaRjDb8r2XdpRhHkYwuEkHRzZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2ifagSmPf5ZKUZsbl6JtyFCtLjA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rzlyBTVxpbP5uqCAsrkZnNH0uTc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sk34Vl6zVKBBWFj1WHoKVVePjXr.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lmETS8SeEFWTMPKZMZ4zui4CwR3.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7xndvkSGr7SQ68J4tjClHXowWyi.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vFo7018B8iEYxIjANorppGLIIb9.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h0eBW4udwWzwOEHrcvHdn2wUbBK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1125
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nfzrRoOYn7vdxHzdUQ6vk3Lxbka.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wdjx04TLHiHwFpdUnohF7XXIXtX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fZbDK2Zds28PNVjXbJkQLCd64V6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pi35MVwR6cl3pMono2va1cF0fR1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1dc8t9zxB6FZ5G9EFniesMe1zcm.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hrccgXUAUfXUVP3BvdqKjLRnmww.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1112,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aReMKYZtRnCnwZopqgGpPeoCMew.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 741
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dEYnuVs3mO0KEI04a1yDt24YA6E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f9fIsf5rjdbmjyGcyzYf09m2A7D.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1125
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q6yNXB9CRM1YVBNRlHgzKwETa8t.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eYpjRr9WaoWld1iFdpAvwHcagDq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

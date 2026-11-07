@@ -1,0 +1,1576 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16866",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f722d35b910602731cc3e06c69bf9b05\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/MaQ7hbNsiJ30p14UgRdEnXDGMH.jpg",
+    "created_by": [
+      {
+        "id": 5552,
+        "credit_id": "54a53a9cc3a3680b27011ba0",
+        "name": "Stephen McFeely",
+        "original_name": "Stephen McFeely",
+        "gender": 2,
+        "profile_path": "/hkn9D5L8TguJUmv8fXy5sHyMEtq.jpg"
+      },
+      {
+        "id": 5551,
+        "credit_id": "54a53a92c3a3682f210145ce",
+        "name": "Christopher Markus",
+        "original_name": "Christopher Markus",
+        "gender": 2,
+        "profile_path": "/7ooPNp0gnURxYkSSKF2etH7wpZP.jpg"
+      }
+    ],
+    "episode_run_time": [
+      43
+    ],
+    "first_air_date": "2015-01-06",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://www.disneyplus.com/browse/entity-e4cbebda-a890-4e99-9a29-40d2162f7d46",
+    "id": 61550,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2016-03-01",
+    "last_episode_to_air": {
+      "id": 1165525,
+      "name": "Hollywood Ending",
+      "overview": "Peggy needs Howard Stark to eliminate Zero Matter as they are faced with a mission none of them could come back from.",
+      "vote_average": 6.99,
+      "vote_count": 52,
+      "air_date": "2016-03-01",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "210",
+      "runtime": 42,
+      "season_number": 2,
+      "show_id": 61550,
+      "still_path": "/ylGaVxAjqkjTEygsNTyVJcuL2l.jpg"
+    },
+    "name": "Marvel's Agent Carter",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2,
+        "logo_path": "/2uy2ZWcplrSObIyt4x0Y9rkG6qO.png",
+        "name": "ABC",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 18,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Marvel's Agent Carter",
+    "overview": "It's 1946, and peace has dealt Peggy Carter a serious blow as she finds herself marginalized when the men return home from fighting abroad. Working for the covert SSR (Strategic Scientific Reserve), Peggy must balance doing administrative work and going on secret missions for Howard Stark all while trying to navigate life as a single woman in America, in the wake of losing the love of her life - Steve Rogers.",
+    "popularity": 16.9714,
+    "poster_path": "/7kqIsjjDMZA5GRMH5VCdQYZJqc6.jpg",
+    "production_companies": [
+      {
+        "id": 19366,
+        "logo_path": "/vOH8dyQhLK01pg5fYkgiS31jlFm.png",
+        "name": "ABC Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 38679,
+        "logo_path": "/v2y3LuLxYtW36hvLa8IDGQk3Oql.png",
+        "name": "Marvel Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 92828,
+        "logo_path": null,
+        "name": "Fazekas & Butters",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2015-01-06",
+        "episode_count": 8,
+        "id": 63213,
+        "name": "Season 1",
+        "overview": "Years before Agent Phil Coulson and his S.H.I.E.L.D. team swore to protect those who cannot protect themselves from threats they cannot conceive, there was Agent Peggy Carter, who pledged the same oath but lived in a different time, when women weren't recognized as being as smart or as tough as their male counterparts. But no one should ever underestimate Peggy.",
+        "poster_path": "/gqyjmfFOrKY8iouNTXWj9KW7cC5.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2016-01-19",
+        "episode_count": 10,
+        "id": 71006,
+        "name": "Season 2",
+        "overview": "Dedicated to the fight against new Atomic Age threats in the wake of World War II, Peggy must now journey from New York City to Los Angeles and she's about to find out that the bright lights of the post-war Hollywood mask a more sinister threat to everyone she is sworn to protect.",
+        "poster_path": "/h3yPRRiWZk6HrFD2oo3xqpLt6bc.jpg",
+        "season_number": 2,
+        "vote_average": 7.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Canceled",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.52,
+    "vote_count": 2080,
+    "external_ids": {
+      "imdb_id": "tt3475734",
+      "freebase_mid": "/m/010hjjcg",
+      "freebase_id": null,
+      "tvdb_id": 281485,
+      "tvrage_id": 38412,
+      "wikidata_id": "Q16860023",
+      "facebook_id": "AgentCarterTV",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Agent Carter",
+            "overview": "Siamo nel 1946 e la pace ha dato un duro colpo a Peggy Carter che si ritrova emarginata quando gli uomini tornano a casa dopo i combattimenti oltreoceano. Lavorando per la SSR (Strategic Scientific Reserve), Peggy deve trovare un nuovo equilibrio tra il lavoro amministrativo e andare in missioni segrete insieme a Howard Stark; tutto mentre dovrà avere a che fare con essere una donna single in America dopo aver recentemente perso l’amore della sua vita, Steve Rogers.\n\nNonostante il responso positivo da parte della critica, la serie ha subito un costante calo di telespettatori, e il 12 maggio 2016 è stata ufficialmente cancellata dalla ABC.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "It's 1946, and peace has dealt Peggy Carter a serious blow as she finds herself marginalized when the men return home from fighting abroad. Working for the covert SSR (Strategic Scientific Reserve), Peggy must balance doing administrative work and going on secret missions for Howard Stark all while trying to navigate life as a single woman in America, in the wake of losing the love of her life - Steve Rogers.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "New York, 1946: Top-Agentin Peggy Carter hat noch immer mit dem Verlust von Steve Rogers alias Captain America zu kämpfen. Zudem wird sie seit Ende des Krieges nur noch mit anspruchslosen Verwaltungsaufgaben betreut - bis ihr alter Bekannter Howard Stark auftaucht und durch den Verkauf von hochentwickelten tödlichen Waffen in Schwierigkeiten gerät. Nun muss Peggy mit Hilfe von Edwin Jarvis als geheime Doppelagentin arbeiten, um eine Massenvernichtung zu verhindern und Starks Namen reinzuwaschen. Danach macht sich Peggy nach Hollywood auf, um einen rätselhaften Fall zu lösen: in einem gefrorenen See wurde eine Leiche entdeckt... während einer Hitzewelle! Schließlich stellt sich heraus, dass (das Unternehmen) Isodyne Energy hinter dem mysteriösen Phänomen steckt. Beim Aufdecken der Verschwörung wird auch eine Substanz gefunden, die für das Leben, wir es bisher kennen, eine tödliche Bedrohung darstellt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Marvel's Agent Carter",
+            "overview": "1946 yılındaki barış ortamı yurt dışından eve dönen askerler arasında kendini marjinalleşmiş bulan Agent Carter'a bir darbe indiriyor. Gizli SSR için çalışan Peggy, kötü adamları alt etmek için sahada olmayı tercih ederken kendini idari işler yaparken buluyor. Ayrıca hayatının aşkı Captain America'yı kaybetmenin ardından bekar bir kadın olarak hayatını yönlendirmeye çalışıyor. Eski dost Howard Stark, kendisini en ölümcül silahlarının çalınmasına izin vermekle suçlanmış bulduğunda, sorumluları bulmak ve adını temize çıkarmak için Peggy ile iletişime geçer.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Marvel's Agent Carter",
+            "overview": "Píše se rok 1946 a nastanuvší mír uštědřil Peggy Carter silnou ránu, když je nyní zatlačována do pozadí muži vracejícími se z války za oceánem. Při práci pro tajnou organizaci SSR (Strategické a vědecké rezervy) tak musí Peggy vybalancovat své administrativní povinnosti s plněním tajných misí pro Howarda Starka.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "特工卡特",
+            "overview": "1946年，佩吉·卡特在战略科学储备局执行秘密任务，一边调查霍华德·斯塔克被陷害的案件，一边应对来自敌人和机构内部的威胁。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Agent Carter",
+            "overview": "En 1946, à la suite de la Seconde Guerre mondiale, la paix n’a pas aidé Peggy Carter qui se retrouve marginalisée après que les hommes sont rentrés du combat. Alors qu’elle travaille pour le SSR (Strategic Scientific Reserve), Peggy doit trouver un équilibre entre un poste administratif et des missions secrètes qu’elle effectue pour Howard Stark, tout en tentant de vivre sa vie de femme célibataire dans l’Amérique des années 1940, après avoir perdu l’homme de sa vie, Steve Rogers alias Captain America.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Agente Carter",
+            "overview": "1946. La paz ha significado un revés para la agente Carter al verse marginada cuando los hombres vuelven del extranjero. Trabajando como agente secreta en la R.C.E., Peggy se ve haciendo trabajo administrativo cuando preferiría pasar a la acción y luchar contra los malos. Al mismo tiempo, busca la manera de apañárselas como mujer soltera tras haber perdido al amor de su vida, Steve Rogers. Cuando un viejo amigo, Howard Stark, es acusado injustamente de vender sus armas más letales, se pone en contacto con Peggy para encontrar a los responsables y limpiar su nombre.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Agentka Carter",
+            "overview": "Fabuła „Marvel’s Agent Carter” rozgrywać się będzie w 1946 roku. Serial opowie historię Peggy Carter, która zostaje wysłana na sekretną misje przez Howarda Starka i jednocześnie stara się zapomnieć o stracie miłości swojego życia, czyli Kapitana Ameryki.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Πράκτορας Κάρτερ",
+            "overview": "Βρισκόμαστε στο 1946 και το τέλος του πολέμου που είχε σαν αποτέλεσμα τον παραγκωνισμό της Πέγκι Κάρτερ. Δουλεύοντας για την μυστική υπηρεσία SSR, πρέπει να ισορροπήσει ανάμεσα στη δουλειά γραφείου και τις μυστικές αποστολές για λογαριασμό του Χάουαρντ Στάρκ, ενώ προσπαθεί να ξεπεράσει το χαμό του έρωτα της, του Κάπτεν Αμέρικα.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Agente Carter",
+            "overview": "Em 1946, a Agente Carter vê a paz interrompida quando se vê marginalizada no regresso dos homens a casa. A trabalhar para a organização secreta RCE (Reserva Científica Estratégica), Peggy é destacada para trabalho administrativo, quando preferia estar em campo, a capturar bandidos. Ao mesmo tempo, tenta viver a vida como mulher solteira, após perder o amor da vida dela, o Capitão América. Quando Howard Stark, um conhecido de longa data, se vê detido por colocar no mercado as suas armas mais mortíferas, entra em contato com Peggy para encontrar os responsáveis e limpar o nome dele.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Агент Картер",
+            "overview": "В 1946 году мир нанес Пегги серьезный удар, когда она оказывается в неудобном для нее положении с возвращением домой мужчин со сражений за границей. Работая на секретную организацию СНР (Стратегический Научный Резерв), Пегги должна найти баланс между административной работой и секретными миссиями для Говарда Старка, одновременно пытаясь жить нормальной жизнью одинокой женщины в Америке после утраты любви всей ее жизни — Стива Роджерса.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Carter ügynök",
+            "overview": "Egy Marvel-univerzumban játszódó sorozat az Amerika kapitány-sztorikból ismert Peggy Carter főszereplésével. 1946-ban járunk, az ügynöknő pedig a hazatérő katonák érkezésével partvonalra kerül. Miközben hivatalosan adminisztratív munkát végez, titokban Howard Stark megbízásából titkos küldetéseken vesz részt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "에이전트 카터",
+            "overview": "캡틴 아메리카를 잃었다. 그러나 페기 카터는 영웅의 여인만이 아니었으니! 첩보 조직에 합류해 차별을 딛고 눈부시게 활약하는 그녀. 또 하나의 위대한 영웅을 목도하라.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Marvels Agent Carter",
+            "overview": "Radeći za SSR, Pegi Karter mora da balansira između administrativnog posla i tajnih misija koje obavlja za Hauard Starka. Pokušaće i da obnovi svoj život jer joj je nedavno preminula njena najveća ljubav, Stiv Rodžers.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Het is 1946, en de vrede heeft Peggy Carter een behoorlijke dreun uitgedeeld als ze zich tussen mannen die terugkeren van oorlogsgevechten in het buitenland bevindt. Werkend voor het geheime SSR (Strategic Scientific Reserve) moet Peggy haar administratieve werk doen alsook geheime missies voor Howard Stark volbrengen terwijl ze probeert haar leven als alleenstaande vrouw in Amerika staande te houden vlak na het verlies van grote liefde (Steve Rogers).",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "1946. Peggy arbejder for det hemmelige SSR (Strategic Scientific Reserve) og ender med at lave administrativt arbejde, selvom hun hellere ville få ram på skurke ude i felten.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "הסוכנת קרטר",
+            "overview": "השנה היא 1946, והשלום, שזה עתה נכנס לתוקפו, פגע קשות בפגי קרטר שמוצאת את עצמה בשוליים, כשהגברים חוזרים מהלחימה בחו\"ל. בתור מי שעברה כסוכנת שטח עבור הסוכנות הסמויה אס-אס-אר, היא תקועה כעת בתפקיד פקידותי ומתרגלת להיותה רווקה. כאשר מכר מן העבר, האוורד סטארק, מופלל בכך שמכר את הנשק הקטלני שלו לכל המרבה במחיר, הוא יוצר קשר עם פגי, האדם היחיד בו הוא בוטח, כדי שתאתר את האחראים להפללתו, תיפטר מהנשק ותנקה את שמו.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Marvel - Agente Carter",
+            "overview": "Depois de perder o Capitão América, amor de sua vida, Peggy Carter entra para uma sociedade de combate ao crime e recebe as mais perigosas missões.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "المحققة كارتر",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Marvel - Agent Carter",
+            "overview": "En 1946, à la suite de la Seconde Guerre mondiale, la paix n’a pas aidé Peggy Carter qui se retrouve marginalisée après que les hommes sont rentrés du combat. Alors qu’elle travaille pour le SSR (Strategic Scientific Reserve), Peggy doit trouver un équilibre entre un poste administratif et des missions secrètes qu’elle effectue pour Howard Stark, tout en tentant de vivre sa vie de femme célibataire dans l’Amérique des années 1940, après avoir perdu l’homme de sa vie, Steve Rogers alias Captain America.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Je rok 1946 a mier priniesol Peggy Carter silný úder, keď sa zrazu ocitá na okraji spoločnosti počas toho, ako sa muži vracajú z vojny za oceánom. Pri práci pre tajnú organizáciu SSR (Strategické a vedecké rezervy) tak musí Peggy skĺbiť svoje administratívne povinnosti s plnením tajných misií pre Howarda Starka. A to všetko ako slobodná žena v Amerike, ktorá práve stratila lásku svojho života - Stevea Rogersa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "卡特探員",
+            "overview": "第二次世界大戰期間，美國隊長和戰略科學儲備部順利擊敗了九頭蛇。兩年後，二次大戰結束，而SSR吸納了德國的科學家，和其他精英人士組成了一個新組織神盾局，美國隊長的女友佩姬卡特和東尼史塔克的父親霍華史塔克成為神盾局的創始人。\n\n本作主要講述佩姬卡特在美國隊長失蹤後，繼續以神盾局特工的身分拯救世界，並描述了神盾局在創始期間的發展。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Агент Картер",
+            "overview": "Історія Пеггі Картер. У 1946 році світ завдав Пеггі серйозний удар, коли вона виявляється в незручному для неї положенні з поверненням додому чоловіків з боїв за кордоном. Працюючи на секретну організацію СНР (Стратегічний Науковий Резерв), Пеггі повинна знайти баланс між адміністративною роботою і секретними місіями для Говарда Старка, одночасно намагаючись жити нормальним життям самотньої жінки в Америці після втрати любові всього її життя - Стіва Роджерса.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Агент Картър",
+            "overview": "1945г. Пеги Картър е в тежко положение, когато след края на войната мъжете започват да се завръщат от фронта. Работейки за Ар Ес Ес (Стратегически научен отдел), Пеги трябва да балансира между административната работа и участието и в тайни мисии.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "År 1946. Peggy arbetar för det hemliga SSR – Strategic Scientific Reserve - och får syssla med administration när hon hellre skulle vara ute på fältet och fånga bovar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Agente Carter",
+            "overview": "En 1946, Peggy Carter debe equilibrar su rutinario trabajo de oficina que hace para la Reserva Científica Estratégico con ayudar secretamente a Howard Stark, que se ha visto involucrado en una trama de suministro de armas letales para el mejor postor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "エージェント・カーター",
+            "overview": "『エージェント・カーター』（Marvel's Agent Carter, またはAgent Carter）は、クリストファー・マルクスとスティーヴン・マクフィーリーが映画『キャプテン・アメリカ/ザ・ファースト・アベンジャー』と『キャプテン・アメリカ/ウィンター・ソルジャー』、並びに短編映画『エージェント・カーター』に触発されてABCで企画したアメリカ合衆国のテレビドラマである。 マーベル・シネマティック・ユニバースに属する映画作品群と世界観を共有している。\n\nシリーズは映画に引き続いてヘイリー・アトウェルが演じるマーベル・コミックのキャラクターのペギー・カーターが中心となり、1940年代のアメリカで独身女性として生涯を過ごそうとした際にハワード・スタークの秘密任務に赴く彼女が描かれる。シリーズでは彼女の他にもマーベル・シネマティック・ユニバース出身のキャラクターが登場する。製作はABCスタジオとマーベル・テレビジョンが務め、タラ・バターズとミシェル・ファゼカスがショーランナーを務める。\n\n第1シーズンは2015年1月6日から2月24日までに全8話、第2シーズンは2016年1月19日から2016年3月1日までに全10話が、いずれも『エージェント・オブ・シールド』の休止期間中に放送された。シリーズは批評家には高評価されたものの視聴率が伸び悩み、2016年5月12日にABCより第2シーズン限りでの終了が発表された。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Agentė Karter",
+            "overview": "1946-aisiais Strateginio-mokslinio Rezervo (SMR) darbuotoja Pegė Karter praranda aukštas pareigas ir nuo šiol paskiriama dirbti sekretore. Howard'as Stark'as įtariamas išdavyste. todėl jis kartu su Pege paslapčia sutaria išsiaiškinti šį atvejį ir padėti jam atstatyti gerą vardą. šiai porelei padės Howard'o liokajus Edwin'as Jarvis.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สายลับสาวกู้โลก",
+            "overview": "เพ็กกี้ คาร์เตอร์ หวานใจกัปตันอเมริกา กลับมาปฏิบัติงานในองค์กรลับเอสเอสอาร์อีกครั้งในปี 1946 แต่แทนที่เธอจะได้ออกภาคสนามไปไล่ล่าคนร้าย เธอกลับต้องมาทำงานธุรการแทน แต่นั่นก็หยุดเธอไม่ได้",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "აგენტი კარტერი",
+            "overview": "1946 წელი, ომის შემდგომი ამერიკა. პეგი კარტერი თავს გრძნობს ზედმეტად, ის მთელ დღეებს უინტერესო დოკუმენტების გადარჩევაში ატარებს. ყველაფერი იცვლება, როდესაც მას მიმართავს ძველი ნაცნობი ჰოვარდ სტარკი, რომელიც სთხოვს ბოროტმოქმედთა პოვნას და დასჯას...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "مأمور کارتر مارول",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Radnja pratiti Peggy Carter u 1946. godini kako započinje svoju karijeru tajne agentice. Budući da se događa poslije prvog filma Kapetana Amerike: The First Avenger,Peggy će nakon gubitka svoje ljubavi, Steve Rogersa (Chris Evans), pokušati uskladiti svoj privatni i poslovni život u kojem obavlja tajne misije za Howarda Starka...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "",
+            "overview": "မာဗယ်ရဲ့ တခြားစကြဝဠာတစ်ခုမှာ ပထမဆုံးစူပါဟီးရိုး ကပ္ပတိန်ကာတာဖြစ်ခဲ့တဲ့ အေးဂျင့်ပက်ဂီကာတာရဲ့ ကိုယ်ပိုင်ဇာတ်လမ်းတွဲပဲဖြစ်ပါတယ်ဗျ။ ကမ္ဘာစစ်ကြီးပြီးသွားတဲ့အချိန်မှာ ပက်ဂီကာတာဟာ အက်စ်အက်စ်အာရ်ဆိုတဲ့ လျှို့ဝှက်ထောက်လှမ်းရေး အေဂျင်စီတစ်ခုမှာ အေးဂျင့်တစ်ယောက်အဖြစ်နဲ့ တာဝန်ဆက်ထမ်းဆောင်ခဲ့ပါတယ်။ စစ်ကြီးထဲမှာတုန်းက ကပ္ပတိန်အမေရိကနဲ့ ဘေးချင်းယှဉ်ပြီးတိုက်ခိုက်ခဲ့တဲ့အထိ အရည်အချင်းရှိခဲ့ပေမဲ့ ဖိုဝါဒီတွေ လွှမ်းမိုးနေတဲ့ စစ်ပြီးခေတ်မှာတော့ အေးဂျင့်ကာတာဟာ အရည်အချင်းတွေ ထုတ်ပြခွင့်မရဘဲ ရုံးအတွက် ဖုန်းလက်ခံပေးတာ၊ နေ့လယ်စာမှာပေးတာ စတဲ့အလုပ်တွေသာ လုပ်နေရပြီး အေးဂျင့်တစ်ယောက်ဖြစ်ပေမဲ့ အတွင်းရေးမှူးသာသာ သဘောထား၊ ဆက်ဆံခံနေခဲ့ရပါတယ်။ တစ်နေ့မှာတော့ လက်နက်တွေကို တရားမဝင်ရောင်းချမိတာကြောင့် နိုင်ငံတော်သစ္စာဖောက်မှုနဲ့ အစွပ်စွဲခံထားရတဲ့ မိတ်ဆွေဟောင်းဖြစ်သူ ဟောင်းဝဒ်စတာ့ခ်တစ်ယောက် သူ့ရဲ့နာမည်ကို ပြန်ဆယ်ပေးဖို့အတွက် အေးဂျင့်ကာတာကို အကူအညီတောင်းလာတဲ့အခါမှာတော့ အရည်အချင်းပြခွင့်မရသေးတဲ့ အေးဂျင့်ကာတာအတွက် အခြေအနေတွေဟာ အပြောင်းအလဲကြီး ပြောင်းလဲခဲ့ရပါတော့တယ်။",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Đặc Vụ Carter",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "New York, 1946: Top-Agentin Peggy Carter hat noch immer mit dem Verlust von Steve Rogers alias Captain America zu kämpfen. Zudem wird sie seit Ende des Krieges nur noch mit anspruchslosen Verwaltungsaufgaben betreut - bis ihr alter Bekannter Howard Stark auftaucht und durch den Verkauf von hochentwickelten tödlichen Waffen in Schwierigkeiten gerät. Nun muss Peggy mit Hilfe von Edwin Jarvis als geheime Doppelagentin arbeiten, um eine Massenvernichtung zu verhindern und Starks Namen reinzuwaschen. Danach macht sich Peggy nach Hollywood auf, um einen rätselhaften Fall zu lösen: in einem gefrorenen See wurde eine Leiche entdeckt... während einer Hitzewelle! Schließlich stellt sich heraus, dass (das Unternehmen) Isodyne Energy hinter dem mysteriösen Phänomen steckt. Beim Aufdecken der Verschwörung wird auch eine Substanz gefunden, die für das Leben, wir es bisher kennen, eine tödliche Bedrohung darstellt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Agentti Carter",
+            "overview": "Vuosi 1946, New York. Toinen maailmansota on juuri käyty ja natsit voitettu. Agentti Steve Rogers, alias Kapteeni Amerikka, on kadonnut ja oletettavasti kuollut. Häntä suremaan jäänyt tyttöystävä, Peggy Carter, työskentelee S.H.I.E.L.D:iä edeltäneessä tiedustelupalvelu S.S.R:ssä (Strategic Scientific Reserve). S.S.R:ssä työskentelee lähinnä sovinisteja. Niinpä Carterin työtehtävänsä sisältävät lähinnä kahvinkeittoa, ruokatilausten ottamista ja arkistointia. Carterin tylsä elämä saa päätöksensä vanhan ystävän, Howard Starkin muodossa. Peggy ryhtyy normaalin sihteerin työnsä ohella suorittamaan Howard Starkin antamia salaisia tehtäviä. Starkin vaarallisempia keksintöjä myydään mustassa pörssissä, joten luonnolisesti häntä syytetään maanpetoksesta. Avukseen Carter saa Howard Starkin hovimestarin, Edwin Jarvisin.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "En action-eventyrlig serie som følger Peggy Carter når hun går undercover for å jobbe for Howard Stark mens hun også holder en rutinejob hos Strategic Scientific Reserve.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "特工 Carter",
+            "overview": "1946 年，當人們從國外回到國內時，和平給了特工卡達一擊，她逐漸發現自己被邊緣化了。佩姬在 SSR（戰略科學儲備部）做行政工作，但其實她更想出去外面執勤，捉拿壞人。同時，隨著佩姬失去了她的摯愛美國隊長，她正嘗試著回到單身生活。當佩姬的舊朋友侯活史達發現他自己被誣陷發放了他最致命的武器時，侯活聯絡佩姬，讓佩姬找出那些誣陷他的人並洗刷他的汙名。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Agentka Carter",
+            "overview": "V seriji \"Agentka Carter,\" ki jo igra Hayley Atwell iz \"Stotnik Amerika\", spremljamo zgodbo o Peggy Carter. Smo leta 1946 in mir za Peggy Carter pomeni velik udarec, saj se čuti odveč, ko se možje, ki so se borili v tujini, vrnejo domov. Dela za skrivno vojaško organizacijo SSR (Strategic Scientific Reserve) in Peggy mora nekako uskladiti pisarniško delo in skrivne naloge za Howarda Starka, poleg tega se mora znajti kot ameriška samska ženska, ki je pravkar izgubila ljubezen svojega življenja, Steva Rogersa. Serija je nastala po navdihu filmov \"Prvi maščevalec: Stotnik Amerika:\", \"Stotnik Amerika: Zimski vojak\" in kratkega filma \"Marvel One-Shot: Agentka Carter\".",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "Anul 1946. Peggy Lucrează pentru RSS sub acoperire (Reserve Științifice Strategice) și face o activitate administrativă, deși preferă să fie pe teren și să-i prindă pe băieții răi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6oDTpqIvHa9a7kkn79uEOpx7V9X.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oeIpXukhV78iecb1ybS92tkQbHx.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/MaQ7hbNsiJ30p14UgRdEnXDGMH.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aIdxAi84WwU2kWQafYbI6tAzDhs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ryksnIn006p7lsd83L9Za20TePv.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dQsUmDJWy7tYEz2aZZdXAcTpcYk.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ykRvMFCDOexErivy97E1ZwwOiqR.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2AY4bzrdw7KZPjDsGyp7tSJHL3D.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2AAEniWxnhNBQMXI8zigeEbRIxZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aOIboWMPaDYMJWSJ2xa4jUF7imJ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1406,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o1aZMdAB2haWSQ6Tuc8OLnUUIEQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2500
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y8vQFL1FHCAZnYdV3sctHCJF1A6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5j4Bb8WmD7g82XJLoF3GdpIf1wz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6atLLN806JFECxLNlrUorIy9mug.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/acpIH5dCjMZpXLwmCE5Tgkz2f2i.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o9AbOvf4Zmige1VdAJ77U5E8rOe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/16baDSwKOD3F4D1qw3246J3EcE0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xz4VahOoCEZydxxMlIHcTwu3HPT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u2eTSHNSavxI9NJZpZe62xf0YWL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9b84q8NqPfFzayX1eXGQDHYGqic.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dgq1Cv9l6BBzzJhPPEqkWC9tse3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dTddqaILzXLT6i3ZOHCgpumKJNC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gulMoIz4ZlSOfByp26DJkgHzRgq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hSLqqDdShNQXKN88AZqOkZExJ87.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dGj0ILWbC9NMjbY1Hm4JbQKrzi9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tqIYCiMp9a3p3DmtIpIAafuR6r3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yO9By8SVcEElKc1YVXaxwKzJuZE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yRilEJMEST0H08bOTA4OwetAotI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yqBkg96dngEtAturKClXBkM2taJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nBwac80UKzwfCwrUISrKunGQCpZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4saF2mKU1J2yfECGZjR1dOQ3OWO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4vJHLM2LacO5mzcMTkfJ2BPd2FJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fUp1xXWMAigRY5tczIUXO8ylRNW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wwkulcRQD8rGOJj4p3UsujSmfFB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pIHkTiKzzFdvJAuBHiPHC748qz3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y5Zfnzqw13YMcVuPIT2nviGNMZ5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wkhFuugtyS360geiRz76KyEN2pP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2mTCeiflFDhG2nsck9klBj1R1pe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iPCArK7PbQHp7DvyX4JNmOLYh0w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1380,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/agT7msCZYtsGaAKMewoZNGdlv5K.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2453
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xTT0KbQvmz3pqcy91Tcc5Cs8aZI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1380,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8SO0UiqRrboJ0Th1ostpkJNFjkk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2453
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1380,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fd321OWQKC5MC5p1SopF3DvLHLd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2453
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1380,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2iPjGMtDgqM8tyb30JKhc48jOTC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2453
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1230,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vwYDagFmyefXaJyRfbkNmshdFcy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2187
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1380,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8YOxc2hSycmMZNxghX3zj59D1aA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2453
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Sb0diRwURPzhFVmcpXcJmgaHFZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.472,
+          "height": 809,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AuqqrmHFrZRCPPrORx0j7n8JgZv.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 2.466,
+          "height": 1300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hkaQygt07uFF5jBBXyGCANp5wqj.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3206
+        },
+        {
+          "aspect_ratio": 2.508,
+          "height": 384,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/82xo6WzJpOr2sTyw4BH7bqAu7kx.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 963
+        },
+        {
+          "aspect_ratio": 2.508,
+          "height": 384,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dGMMmpvmBbJ45pv5iCdqeNDTkkv.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 963
+        },
+        {
+          "aspect_ratio": 2.801,
+          "height": 714,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gK0n79B5w5lO3DTf4icfdMol4yd.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 3.578,
+          "height": 559,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1tHeYHjxzfW0wjtOGMpRgtrREnl.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 3.677,
+          "height": 872,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7GiaIdrkORhkXxjjuOCvQHhNK6I.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3206
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7kqIsjjDMZA5GRMH5VCdQYZJqc6.jpg",
+          "vote_average": 5.844,
+          "vote_count": 16,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fe79VYyLp5ZBstpJ4oukpuUT3B.jpg",
+          "vote_average": 5.25,
+          "vote_count": 14,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yUV0l4Kzned4zZmOw4LpzZkGrG8.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/493ws0tqsn537Fg1SwewyGiYdaf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/auf10kXCXhCPHWEWqLwvjgekbzZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eVzBG9eTVxvYts7nvYz7g6moKqL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7uJwekon5udCSYhU2ND9hExi4St.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7hmn1cWfhmxgqbKfYYWEgpRomP8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nmp4peB1nI26GquabhqPRC6osaa.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zC62MkaLEEhptGHJsIdyHP96e5n.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4KRC0JUSfrkd4TPNFKWTRSfIjBa.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Y30TnBtGT4C7RI3nruPaIGGSkZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3WmRmvpryZ4GrLBELLvQdixK58Y.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wzyUFnOQRdQ4d4q3lbpex5qqImD.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hZlr8Ynm8HqJB2gpvtAAgccbzSl.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tDfw2UxJ8TwS89AmQg0xDTbKDTF.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zIQKBN7UbQMiah8BSkJ8Qaa9spT.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a66HXUUJdxm6qHK294fx6ZsBpPN.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1365,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wRBNRFpK2zW1SZXJlc01Xx1Hntf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 910
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xIq3kYDMW7DnT3jugg9k5G3FGr1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/meA70b52GPSVRTxlbrcuvuHbvvY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sYFu6qjEb0sFrqYZW80KXDSLAxc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6V7y0Lb2RIbxnb90YbXm8Ke8388.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h0QUWPSS53ko7C8x8FKP1vTq4mo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dNqavVFFye4wAf15NL3dUPe3Z25.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x4D41oaFuegrIVmZqrAC36iv3A3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4kIZQVJbkDq2AYHWDZwjjhPtV9S.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b86G9LgAZtKyIqjpOnjv1TxCOca.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sk7zsPvT5maodem5zVXZBfOU8dP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1536
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g8QClbIad3Q1AToU9hHqYxtKx0l.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cOonODn3TLrr4yqBFyId8Umw4Jt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bI4wjwCZEMAx8p2OhEgAsbciiuZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fDhhpV4EygdhUmEAzJ4cJtmG0zQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sK1T3Sm4Z4uHYwjrJDQcim8AEG8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7AFl9CX5BAGYK4l81jHrNHXnSDl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hnZyzkdSA1JM9fBw7b4neWnB6f5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.647,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oTa3zCrqap6SJCQnrR1v2TezCv9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 621
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,883 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22069",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ea4f6cb7764361bd75a09c3439eb1fa4\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5NmmaK9dt38UXOwzPC2t9yR3HTv.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-04-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://tongari-anime.com",
+    "id": 196950,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-06-29",
+    "last_episode_to_air": {
+      "id": 7099610,
+      "name": "Forbidden Magic",
+      "overview": "Trapped in the Serpentback Cave, Agott, Richeh, and Euini face a terrifying threat from a Brimmed Cap witch.",
+      "vote_average": 8.2,
+      "vote_count": 12,
+      "air_date": "2026-06-29",
+      "episode_number": 13,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 196950,
+      "still_path": "/7kyQxkRLm9AnEPnVL6lTSW4tTdE.jpg"
+    },
+    "name": "Witch Hat Atelier",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 13,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "とんがり帽子のアトリエ",
+    "overview": "In a world where only witches can cast magic, they must avoid being seen by ordinary people while casting. While Coco does her chores, she daydreams of becoming a witch. When a young witch named Qifrey visits her village, Coco uncovers the “absolute secret,” becomes Qifrey’s apprentice, and begins her studies. This is the story of children who encounter despair, yet reach out toward hope.",
+    "popularity": 11.4914,
+    "poster_path": "/78m1Tv3suHmUryTI9VNPwKLKjHZ.jpg",
+    "production_companies": [
+      {
+        "id": 55938,
+        "logo_path": "/ku5PUEwBjUx8XaYikgaXRVLIMbb.png",
+        "name": "avex pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 189810,
+        "logo_path": "/9iZClXWd6qYG4UCQbexGF2m1XRm.png",
+        "name": "BUG FILMS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 120469,
+        "logo_path": "/bm5DrqAdNW3dlHsCTUntcmGkLhV.png",
+        "name": "Twin Engine",
+        "origin_country": "JP"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-04-06",
+        "episode_count": 13,
+        "id": 286507,
+        "name": "Season 1",
+        "overview": "Coco, a young dressmaker's daughter who accidentally turns her mother to stone with forbidden magic and becomes the apprentice of the skilled witch Qifrey to learn the craft and undo the tragedy.",
+        "poster_path": "/78m1Tv3suHmUryTI9VNPwKLKjHZ.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "No one can ever know — the witch's absolute secret.",
+    "type": "Scripted",
+    "vote_average": 8.685,
+    "vote_count": 213,
+    "external_ids": {
+      "imdb_id": "tt32550889",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 418666,
+      "tvrage_id": null,
+      "wikidata_id": "Q113033067",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "tongari_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "In a world where only witches can cast magic, they must avoid being seen by ordinary people while casting. While Coco does her chores, she daydreams of becoming a witch. When a young witch named Qifrey visits her village, Coco uncovers the “absolute secret,” becomes Qifrey’s apprentice, and begins her studies. This is the story of children who encounter despair, yet reach out toward hope.",
+            "homepage": "",
+            "tagline": "No one can ever know — the witch's absolute secret."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "「魔法」――、それは世界に溢れていて人々の生活を豊かにする、なくてはならない便利な“奇跡”。けれど、 “魔法をかけることが出来るのは魔法使いだけ”。魔法をかける瞬間を見てはならないのがこの世界の掟。小さな村で母親の手伝いをしながら暮らす少女・ココは、それでも幼い頃から魔法使いへの憧れを抱き続けていた。ある日、村を訪れた魔法使いの青年・キーフリーが魔法を使うところを覗き見てしまい、大きな秘密を知ることになる。\n\nそれは、特別な道具で魔法陣を描けば、本当は誰にでも魔法が使えるという、魔法使い達が隠した「絶対の秘密」だった――。壮麗で幻想的な世界の裏に影を落とす、大人達が口を閉ざした魔法の歴史。「知らざる者ふつうの子 」として生まれ、キーフリーの弟子として魔法を学ぶことになったココは、アトリエの仲間と共に探求と成長を重ねていく中で、秘密多き魔法使いの世界へと足を踏み入れていく。――これは、絶望を知り、希望へと手を伸ばす、子供たちの物語。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Atelier spiczastych kapeluszy",
+            "overview": "Koko, córka krawcowej zafascynowana magią, przez lata sądziła, że nigdy nie spełni swojego marzenia o zostaniu czarodziejką. Wszystko zmienia się po spotkaniu z Qifreyem, które prowadzi ją do świata zaklęć, niebezpiecznych prób i tajemniczego sabatu stojącego za zakazaną magią.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ательє чаклунських капелюхів",
+            "overview": "Коко змалку зачудовувалася магією. На жаль, чаклувати можуть лише обрані, ті, що від народження володіють магією. Одного разу селище, в якому мешкає дівчинка, відвідує чаклун на ім’я Кіфлі. Коко потайки спостерігає за тим, як він чаклує, і довідується про справжню природу магії. Вона пригадала, що багато років тому один таємничий незнайомець подарував їй книгу з магії та чорнильне перо для відтворення магічних фігур. Дівчинка потайки починає вчитися чаклувати, але це призводить до трагічних подій… Зрештою, прагнучи виправити свою помилку, Коко стає ученицею чаклуна Кіфлі й відкриває світ, про існування якого досі навіть не здогадувалася!",
+            "homepage": "",
+            "tagline": "Ніхто й ніколи не повинен дізнатися — про абсолютну таємницю чаклунів."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "A pequena Coco mora com a mãe em um vilarejo e sempre sonhou em se tornar uma bruxa. Mas dizem que apenas aqueles que nasceram com o dom da magia podem se tornar bruxos... Ela já havia desistido de seu sonho, quando, então, Coco viu o bruxo Qifrey lançar uma magia e descobriu um segredo!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "Coco es una niña que vive en un pequeño pueblo y que siempre ha soñado con convertirse en maga. Pero haber nacido sin aptitud mágica significaba que nunca podría convertirse en maga y nunca podría presenciar la chispa de la magia. Renunció a su sueño. Pero un día, un mago viajero llamado Qifrey llegó a su pueblo, y ella tuvo la oportunidad de verlo realizar magia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Atelier of Witch Hat",
+            "overview": "In einer Welt, in der nur Magier Magie wirken können und dabei von gewöhnlichen Menschen nicht beobachtet werden dürfen, träumt das Mädchen Coco davon, selbst eine Magierin zu werden. Als der Magier Qifrey ihr Dorf besucht, erfährt sie das streng gehütete Geheimnis der Magier und wird sein Lehrling. Dies ist die Geschichte von Kindern, die Verzweiflung erfahren und nach Hoffnung greifen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "魔法帽的工作室",
+            "overview": "一名出身小村莊的少女．可可，自幼便對魔法師憧憬不已。\n\n然而，除了註定生為魔法師的人，其他人既無法成為魔法師，也不能目睹施展魔法的瞬間……\n\n因此她放棄了成為魔法師的夢想。沒想到在某天，可可撞見了造訪村莊的魔法師．奇夫利使用魔法的模樣——\n\n這是降臨在嚮往當魔法師的少女身上，絕望與希望的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "L'Atelier des Sorciers",
+            "overview": "Coco a toujours été fascinée par la magie, mais seuls les sorciers la pratiquent à l'abri des regards. Un jour, lorsqu’un sorcier nommé Kieffrey arrive dans son village, Coco découvre le secret absolu de la magie, mais commet également un acte irréparable. Elle devient alors l’apprentie de Kieffrey qui l’emmène dans un monde dont elle ne soupçonnait pas l’existence…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een wereld waar iedereen wonderen zoals toverspreuken en draken als vanzelfsprekend beschouwt, heeft Coco een simpele droom: ze wil een heks worden. Maar iedereen weet dat tovenaars geboren worden, niet gemaakt, en Coco is niet geboren met een magische gave. Berustend in haar niet-magische leven, staat Coco op het punt haar droom om heks te worden op te geven... tot de dag dat ze Qifrey ontmoet, een mysterieuze, reizende tovenaar. Nadat ze Qifrey in het geheim magie ziet uitvoeren op een manier die ze nog nooit eerder heeft gezien, ontdekt Coco al snel dat wat iedereen 'weet' misschien niet de waarheid is, en dat haar magische droom wellicht dichterbij is dan ze dacht...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "In een wereld waar iedereen wonderen zoals toverspreuken en draken als vanzelfsprekend beschouwt, heeft Coco een simpele droom: ze wil een heks worden. Maar iedereen weet dat tovenaars geboren worden, niet gemaakt, en Coco is niet geboren met een magische gave. Berustend in haar niet-magische leven, staat Coco op het punt haar droom om heks te worden op te geven... tot de dag dat ze Qifrey ontmoet, een mysterieuze, reizende tovenaar. Nadat ze Qifrey in het geheim magie ziet uitvoeren op een manier die ze nog nooit eerder heeft gezien, ontdekt Coco al snel dat wat iedereen 'weet' misschien niet de waarheid is, en dat haar magische droom wellicht dichterbij is dan ze dacht...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "尖帽子的魔法工房",
+            "overview": "　　生活在一个偏远村庄的少女可可一直渴望成为一名魔法师，但是这个世界只有出生就是魔法师的人才能成为魔法师。在一次偶然事故中，可可不小心看到了魔法师奇夫利施展魔法的过程，发现了魔法的真相。于是可可便临摹起了自己还是孩童时一位自称魔法师的神秘男子卖给她的一本绘本，不料却用出了强大而危险的禁忌魔法，将自己的母亲与房子都变成了石头。发现了自己不小心将魔法真相泄露而返回寻找可可的奇夫利看到禁忌魔法所造成的惨状，决心将她收为自己的徒弟，解开「绘本」之谜，帮助她将自己的母亲恢复原状。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "魔法帽的工作室",
+            "overview": "一名出身小村莊的少女．可可，自幼便對魔法師憧憬不已。然而，除了註定生為魔法師的人，其他人既無法成為魔法師，也不能目睹施展魔法的瞬間……因此她放棄了成為魔法師的夢想。沒想到在某天，可可撞見了造訪村莊的魔法師．奇夫利使用魔法的模樣。這是降臨在嚮往當魔法師的少女身上，絕望與希望的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Ателье колдовских колпаков",
+            "overview": "Коко всю жизнь грезила о магии, но в её мире это закрытое искусство, доступное лишь избранным с рождения. Всё меняется, когда девочка случайно узнает главный секрет чародеев: магия — это не врождённый дар, а мастерство рисования магических знаков. Однако невинное любопытство оборачивается трагедией, и теперь Коко должна стать ученицей колдуна Кифлия, чтобы исправить содеянное.\n\nВ стенах его ателье юной героине предстоит не только освоить филигранное искусство черчения заклинаний, но и столкнуться с тёмной стороной магического сообщества. Это история о том, как искренняя мечта и упорный труд бросают вызов строгим канонам, в то время как за гранью привычного мира уже сгущаются тени запретных знаний.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "고깔모자의 아틀리에",
+            "overview": "마법사로 태어난 사람이 아니면 마법을 쓸 수 없는 세계. 하지만 평범한 소녀였던 코코가 마법을 쓰는 방법을 알아 버리고, 세상을 뒤바꿀 수 있는 싸움의 한복판에 서게 된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "จอมเวทฝึกหัดกับหมวกมหัศจรรย์",
+            "overview": "ในโลกที่เวทมนตร์ขึ้นอยู่กับสายเลือด โคโค่ค้นพบวิธีซึ่งอาจทำให้เธอเป็นแม่มดได้อีกทาง แต่กลับเข้าไปพัวพันกับการต่อสู้ที่อาจเปลี่ยนแปลงสังคมไปอย่างสิ้นเชิง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "Koko es una niña que vive en un pequeño pueblo y que siempre ha soñado con convertirse en maga. Pero haber nacido sin aptitud mágica significaba que nunca podría convertirse en maga y nunca podría presenciar la chispa de la magia. Renunció a su sueño. Pero un día, un mago viajero llamado Kiefley llegó a su pueblo, y ella tuvo la oportunidad de verlo realizar magia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "Coco è una ragazza che vive in un piccolo villaggio e sogna di diventare una maga. Purtroppo però, ciò è impossibile per chi non è in grado di usare la magia sin dalla nascita quindi la ragazza si vede costretta ad abbandonare il suo sogno. Un giorno però, un mago fa visita al suo villaggio...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Atelier Mũ Phù Thủy Nhọn",
+            "overview": "Trong thế giới nơi chỉ phù thủy mới có thể dùng ma thuật, họ phải tránh bị người thường nhìn thấy khi niệm phép. Trong lúc làm việc nhà, Coco mơ mộng trở thành phù thủy. Khi phù thủy trẻ Qifrey ghé thăm làng, Coco khám phá ra \"bí mật tuyệt đối\", trở thành đệ tử của Qifrey và bắt đầu tu học. Đây là câu chuyện về những đứa trẻ chạm mặt tuyệt vọng, nhưng vẫn vươn tay về phía hy vọng.",
+            "homepage": "",
+            "tagline": "Không ai được phép biết — bí mật tuyệt đối của phù thủy."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ورشة ذوي القبعات",
+            "overview": "في عالمٍ يُعد فيه السحر هبةً تولد مع البعض فقط، تحلم 'كوكو' الفتاة القروية البسيطة بأن تصبح ساحرة، رغم علمها باستحالة ذلك. لكن حياتها تنقلب رأساً على عقب عندما تكتشف بالصدفة السر الحقيقي وراء إلقاء التعاويذ؛ وهو أن السحر يُرسم ولا يُورث. بعد حادثة مأساوية تسببت بها جهلها بالقواعد، يقرر الساحر 'كيفري' اتخاذها تلميذة له. تبدأ كوكو رحلتها في 'المرسم' لتعلم فن رسم السحر، في قصة تمزج بين بهجة الاكتشاف ومرارة اليأس والسعي نحو الأمل",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Cadı Şapkası Atölyesi",
+            "overview": "Yalnızca cadıların büyü yapabildiği bir dünyada, büyü yaparken sıradan insanlar tarafından görülmekten kaçınmaları gerekir. Coco ev işlerini yaparken bir yandan da cadı olmanın hayalini kurar. Qifrey adında genç bir cadı köyünü ziyaret ettiğinde Coco \"mutlak sırrı\" ortaya çıkarır, Qifrey'in çırağı olur ve çalışmalarına başlar. Bu, umutsuzluğa kapılan ama yine de umuda uzanan çocukların hikayesi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "L'Atelier dels Barrets Punxeguts",
+            "overview": "La Coco, filla d'una humil modista, sempre ha estat fascinada per la màgia i les bruixes i bruixots que la practiquen, malgrat les estrictes precaucions que prenen per a amagar els seus mètodes a la gent.\n\nQuan la Coco aprofita una oportunitat d'or per a espiar el bruixot Qifrey, s'adona que el seu llibre d'imatges preferit era en realitat un llibre de màgia. Emocionada, comença immediatament a provar-ne els diversos encanteris. Malauradament, degut a la seva inexperiència, provoca un desastre a casa seva i segella la seva mare amb un encanteri.\n\nEn Qifrey la rescata just a temps i decideix acollir-la en el seu atelier com a aprenenta. A partir de llavors, la Coco començarà a aprendre els secrets de la màgia, per tal de poder un dia salvar la seva mare.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "Coco, fiica modestă a unei croitorese, este fascinată de magie, deși aceasta este ținută secretă de vrăjitoare. Când îl urmărește pe vrăjitorul Qifrey, descoperă că o carte aparent obișnuită este de fapt una de magie și începe să folosească vrăji pe cont propriu, provocând un dezastru. Salvată de Qifrey, acesta decide să o ia ca ucenică, văzând în ea o posibilă cale de a găsi o grupare periculoasă care folosește magie interzisă. Pentru asta, Coco trebuie să-și îmbunătățească abilitățile și să învețe să lucreze alături de ceilalți ucenici.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "آتلیه کلاه جادوگر",
+            "overview": "در دنیایی که فقط جادوگران می‌توانند جادو کنند، باید هنگام جادو کردن از دیده شدن توسط مردم عادی اجتناب کنند. در حالی که کوکو کارهای خانه‌اش را انجام می‌دهد، رویای جادوگر شدن را در سر می‌پروراند. وقتی جادوگر جوانی به نام قِفری از روستای او بازدید می‌کند، کوکو «راز مطلق» را کشف می‌کند، شاگرد قِفری می‌شود و تحصیلاتش را آغاز می‌کند. این داستان کودکانی است که با ناامیدی روبرو می‌شوند، اما به سوی امید دست دراز می‌کنند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "אטלייה כובע המכשפה",
+            "overview": "קוקו, בתו הצנועה של תופרת, תמיד הייתה מוקסמת מקסם ומהמכשפות שמבצעות אותו, למרות הזהירות הקפדנית שהן נוקטות כדי להסתיר את שיטותיהן מהציבור. עם זאת, כאשר קוקו מנצלת הזדמנות זהב לרגל אחרי המכשפה המיומנת קיפרי, היא מגלה שספר התמונות האהוב עליה היה למעשה ספר קסמים מוסווה כל הזמן הזה! בהתרגשותה, היא מיד מתחילה לנסות את הלחשים השונים. כאשר לחש גורם לאסון בביתה, קיפרי מציל אותה בדיוק בזמן ומחליט לאמן אותה, כשהוא מבין שהיא הרמז הראשון שמצא שיכול לעזור לו לאתר את כובעי השוליים—קבוצה מסוכנת של כופרים שמבצעים ניסויים בקסם אסור לשינוי גוף ומפיצים חפצי קסם בקרב פשוטי העם. אבל לפני שקוקו וקיפרי יוכלו להתמודד עם כובעי השוליים, היא תצטרך לשפר את כישורי הקסם שלה וללמוד להסתדר עם שאר התלמידים של קיפרי.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Witch Hat Atelier",
+            "overview": "Egy olyan világban, ahol csak a boszorkányok képesek varázsolni, ügyelniük kell arra, hogy a hétköznapi emberek ne lássák őket varázslás közben. Miközben Coco a mindennapi teendőit végzi, arról álmodozik, hogy egyszer ő is boszorkány lesz. Amikor egy fiatal boszorkány, Qifrey, ellátogat a falujába, Coco felfedezi az „abszolút titkot”. Ennek hatására Qifrey tanítványa lesz, és megkezdi boszorkányi tanulmányait.\n\nEz azoknak a gyermekeknek a története, akik szembenéznek a kétségbeeséssel, mégis a remény felé nyújtják a kezüket.",
+            "homepage": "",
+            "tagline": "Soha senki nem tudhatja meg — a boszorkányok abszolút titkát."
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5NmmaK9dt38UXOwzPC2t9yR3HTv.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uKDv7KsYGX0D5IIbeH9R1NSyf3g.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vOqU1fPiSzTLjaJhdVjWNtPwTt8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7zSko8MBo8UxJi2fPwglXFz7gV.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2sWlmOiqdorxi9gFBdvn387uoSG.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A3LWweARdmmkyy6dTkn9BuXvwCM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8yTIQ18sa4mcLx4diyjsalDOVkb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6hZxa9qr6vs9pjBpuC6J2OfD14S.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k6vLOVol11imfMMo4Na4qnuNElp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t367qgPxelXZKccoVJAWAlvsgkq.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cGMr1EdPehLQKS6guIRrMtXrXqp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1288,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aTfDA56Wyzlp1RjkJ5TxAsGECbN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2288
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y3dVSmz75MI4yX7Fyib8GY8aswB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.33,
+          "height": 515,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zr13I75ky1xxop8NOVbN4QNrn5j.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 7.828,
+          "height": 128,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jQA1MGyWg69JkBWYBSKAPmpa2pM.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1002
+        },
+        {
+          "aspect_ratio": 2.336,
+          "height": 274,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7ElK0RENr4nvtOeuW7imnLsJ6Ob.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 7.372,
+          "height": 137,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1G0h4qMn4Souo4kDTPgxciYLvS9.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1010
+        },
+        {
+          "aspect_ratio": 2.28,
+          "height": 307,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sJfaUe1wn9qYth5xEkd5b1iK5gd.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 700
+        },
+        {
+          "aspect_ratio": 2.326,
+          "height": 1087,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g2SdSlqHB0CXkor1SpaKqNs0Qk8.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2528
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/78m1Tv3suHmUryTI9VNPwKLKjHZ.jpg",
+          "vote_average": 7.19,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2444,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fwy3iEqdCywgvaEWnYuBpsgVAzt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1728
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3XP1d9c3FRD6vypb1F9mrtbUD74.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2543,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2UaeNqmbSO02Rz3T0hOacnHr7i6.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2543,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kGFAWBb2nXdxt652VjWZNYg4kI9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 1695
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l7EMuIU0xpqlV4NEYMgrvZDRHQq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wraCsl632li139bKAdyqAp6MX8q.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2543,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/FE7g7DyOHD2oRxRXV2WXI7UtNl.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2545,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z8nFIuawkHUHyau2INrxxNcYxKv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1039,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wDu8r20BZnD2nARreMjAa7uMWTk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.762,
+          "height": 966,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yVvDMD2domrp9PFwU1VvpHotVhe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.754,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A062yZemFYegvNid3HUbMfecewd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 679
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 981,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ir4rtRu65hxmx1WsmAp03DnYMQL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1040,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zz6wZCuIbgZhxTy7F2UmGku5NUt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.722,
+          "height": 1019,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/furEqknERroakJowFVmJ17PMAk6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1088,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k7yhqPuDsFQn4OTkR0RkgO5Wji8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 725
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 910,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oTobZYQBedbXctQg4BfHdq3Lkej.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 606
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cL7DY4A96nKfqOcOXKzzk4DTwNm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 1422,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xMPNhsJStroACqZLqp7oBhXnFJ9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1621,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7Aszf9wnjAdAr9qgm4op8CJT8Q5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        }
+      ]
+    }
+  }
+}

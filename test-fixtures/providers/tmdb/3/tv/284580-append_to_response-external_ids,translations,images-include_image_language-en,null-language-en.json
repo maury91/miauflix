@@ -1,0 +1,563 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18497",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"fa08d363a9d96fdd4cd91c313b5ca610\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dANKBnapgjG7QmXeRZ6xQg8czX0.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-09",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://toaru-project.com/item/",
+    "id": 284580,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-06",
+    "last_episode_to_air": {
+      "id": 7928507,
+      "name": "Infiltration",
+      "overview": "Hanano infiltrates a secure building to get the information ITEM needs.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-06",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 284580,
+      "still_path": "/w8z00Chw5cPcDbkYPSVEMvqZL5D.jpg"
+    },
+    "name": "A Certain Dark Item",
+    "next_episode_to_air": {
+      "id": 7928508,
+      "name": "Colosseum.",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-13",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 284580,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 173,
+        "logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 11,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "とある暗部の少女共棲",
+    "overview": "In Academy City, psychic powers promise a brighter future. But beneath the city's peaceful surface lurks a merciless dark side. ITEM, an elite team of four girls with deadly abilities, carries out dangerous missions that can never see the light of day. When a fifth girl enters their lives, ITEM is drawn deeper into a world of violence, brutality, and moral corruption.",
+    "popularity": 8.23,
+    "poster_path": "/tAGKNFINnkQM73WbLFdQ7CvRdNN.jpg",
+    "production_companies": [
+      {
+        "id": 11884,
+        "logo_path": "/tHzHPSKdmLT5zCdqFbcmHzZvRIc.png",
+        "name": "J.C.STAFF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3627,
+        "logo_path": "/pBfPYpzg5o3EoBPfrFKzTRi8MGr.png",
+        "name": "Warner Bros. Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 69968,
+        "logo_path": "/cN8Qhl29ZrmWYgkYTS6CDhPK0A5.png",
+        "name": "NBCUniversal Entertainment Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 10038,
+        "logo_path": "/nCueXKwYIEXrZ5ofqSJBO1YcmRr.png",
+        "name": "Square Enix",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      },
+      {
+        "id": 17981,
+        "logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162614,
+        "logo_path": "/xmP3OMWSfARsUB15rlZyv6yjhsE.png",
+        "name": "Straight Edge",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-09",
+        "episode_count": 11,
+        "id": 442939,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/4xlLvgDOumCt0ejdfEiZiTqD6Ma.jpg",
+        "season_number": 1,
+        "vote_average": 10
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 10,
+    "vote_count": 2,
+    "external_ids": {
+      "imdb_id": "tt41295083",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 460309,
+      "tvrage_id": null,
+      "wikidata_id": "Q132449749",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "toaru_project"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "麦野沈利がリーダーを務める暗部組織『アイテム』が主人公の物語。 とあるシリーズのソーシャルゲーム『とある魔術の禁書目録 幻想収束』の3.5周年直前生放送にてサプライズ発表された。とあるシリーズの外伝では珍しく鎌池和馬が直接描く。イラストはニリツ。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ไอเทม ปฏิบัติการลับด้านมืด",
+            "overview": "ช่วง 1 ปีก่อนภาค Index เรื่องราวของกลุ่ม ITEM กลุ่มสาว 4 คนที่อาศัยในเมืองแห่งการศึกษา คอยรับงานเพื่อจัดการปัญหาด้านมืดของเมือง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "ITEM - Những Cô Gái Cộng Sinh Ở Thế Giới Ngầm",
+            "overview": "Ở Thành Phố Học Viện, siêu năng lực hứa hẹn một tương lai tươi sáng hơn. Nhưng bên dưới bề mặt yên bình của thành phố ẩn náu một mặt tối tàn nhẫn. ITEM, đội tinh nhuệ gồm bốn cô gái với năng lực chết người, thực hiện những nhiệm vụ nguy hiểm không bao giờ được thấy ánh sáng. Khi cô gái thứ năm bước vào cuộc đời họ, ITEM bị cuốn sâu hơn vào thế giới bạo lực, tàn bạo và suy đồi đạo đức.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Toaru Anbu no ITEM",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Toaru Anbu no Item",
+            "overview": "En Ciudad Academia, donde las habilidades sobrenaturales forman parte de la ciencia cotidiana, la paz de la ciudad se mantiene gracias a una fuerza invisible: el lado oscuro. Entre los agentes secretos se encuentra ITEM, una unidad de élite de cuatro miembros. Con las habilidades de rastreo de Rikou Takitsubo, la pericia en explosivos de Frenda Seivelun, la defensa impenetrable de Saiai Kinuhata y el poder abrumador de Shizuri Mugino, una de las siete espers de Nivel 5 de Ciudad Academia, se mueven por los bajos fondos de la ciudad, llevando a cabo misiones secretas que nunca llegan a los titulares. A medida que se desarrolla su última misión, el equipo actúa con precisión, sin saber que sus acciones están preparando el terreno para una tragedia que pondrá a prueba sus lazos de confianza, amistad y supervivencia en la implacable oscuridad de Ciudad Academia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "A Certain Dark Item",
+            "overview": "Na Cidade Academia, um time de elite de garotas parte em missões mortais pelo lado sombrio da cidade.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "某暗部的少女共栖",
+            "overview": "位于东京西部的巨大的“学园都市”，这座总人口达230万的城市中，学生比例约占八成。为了开发学生的超能力，这里实施着特殊的课程体系能力，从“无能力(Level0)”到“超能力(Level5)”，共分为六个等级进行评定。这是一所拥有远超世间常识的科学技术，让每个人都能获得科学能力、安全生活的梦幻般教育机构——在这份和平的表象之下，存在着名为“暗部”的组织，他们专门接手那些永远无法见光的“脏活”。“道具(Item)”是由四名少女组成的精锐部队：能够自由操控氮气，构筑铁壁防御的绢旗最爱；善用爆炸物与陷阱，将战场玩弄于股掌之间的芙兰达·塞维伦；能够读取并追踪能力者所释放的微弱力量的泷壶理后；在学园都市中仅有的七位“超能力者(Level5)”之一的麦野沉利。出现在她们面前的第五位少女，这份相遇将“道具”引向了新的黑暗深渊……这是一个描绘暴力、不义与背德交织，一群相当特立独行的超能力少女们的日常、羁绊，以及那深邃无边的“黑暗”的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "暗部共生少女",
+            "overview": "位於東京西部的巨大「學園都市」，在這座人口多達 230 萬，其中約八成都是學生的城市，實施著為開發超能力而設計的特殊課程，學生們的能力從「無能力（Level 0）」到「超能力（Level 5）」被劃分為六個等級。這是個擁有遠遠超越世間常識的科學技術，任何人都被賦予科學能力，能夠安全生活，宛如夢一般的教育機構。然而在和平的背後，卻存在著承接那些絕不能公諸於世的骯髒工作的「暗部」組織。「道具（ITEM）」── 由四名少女組成的精銳部隊。能夠自由操縱氮氣、負責鐵壁般防禦的絹旗最愛。運用爆裂物與陷阱，將戰場玩弄於股掌之間的芙蘭達·塞維倫。能夠感應能力者發出的微弱力量，藉此追蹤目標的瀧壺理后。以及學園都市僅有七人的「超能力者（Level 5）」之一的麥野沈利。而她們的面前出現了「第五位」少女，與她的相遇使「道具」踏入新的黑暗。這是描寫一群相當與眾不同的能力者少女，她們充斥著暴力、殘酷與悖德的日常及情誼，以及那深不見底的「黑暗」的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "暗部共生少女",
+            "overview": "位於東京西部的巨大「學園都市」，在這座人口多達230萬，其中約八成都是學生的城市，實施著為開發超能力而設計的特殊課程，學生們的能力從「無能力（Level 0）」到「超能力（Level 5）」被劃分為六個等級。這是個擁有遠遠超越世間常識的科學技術，任何人都被賦予科學能力，能夠安全生活，宛如夢一般的教育機構。然而在和平的背後，卻存在著承接那些絕不能公諸於世的骯髒工作的「暗部」組織。「道具（ITEM）」── 由四名少女組成的精銳部隊。能夠自由操縱氮氣、負責鐵壁般防禦的絹旗最愛。運用爆裂物與陷阱，將戰場玩弄於股掌之間的芙蘭達·塞維倫。能夠感應能力者發出的微弱力量，藉此追蹤目標的瀧壺理后。以及學園都市僅有七人的「超能力者（Level 5）」之一的麥野沈利。而她們的面前出現了「第五位」少女，與她的相遇使「道具」踏入新的黑暗。這是描寫一群相當與眾不同的能力者少女，她們充斥著暴力、殘酷與悖德的日常及情誼，以及那深不見底的「黑暗」的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "어떤 암부의 소녀공서",
+            "overview": "도쿄 서부에 위치한 거대한 '학원도시'.\n\n총인구 230만 명에 달하며 그중 약 80%를 학생이 차지하는 이 도시에서는 초능력 개발을 위한 특수 커리큘럼이 실시되어, 학생들의 능력은 '무능력(레벨 0)'부터 '초능력(레벨 5)'까지 6단계로 평가받고 있었다.\n\n세상의 상식을 아득히 뛰어넘는 과학기술을 자랑하며, 누구나 과학적인 능력을 부여받아 안전하게 살아갈 수 있는 꿈같은 교육 기관―― 그 평화의 이면에는 결코 겉으로 드러나지 않는 궂은일을 도맡는 '암부' 조직이 존재한다.\n\n'아이템'―― 네 명의 소녀로 구성된 정예 부대.\n\n질소를 자유자재로 다루며 철벽 방어를 담당하는 키누하타 사이아이.\n\n폭발물과 트랩을 구사해 전장을 농락하는 프렌다 세이베른.\n\n능력자가 발하는 미약한 힘을 감지해 추적하는 타키츠보 리코.\n\n그리고 학원도시에 단 7명밖에 없는 '초능력자(레벨 5)'의 일원, 무기노 시즈리.\n\n그런 그녀들 앞에 나타난 '다섯 번째' 소녀.\n\n그녀와의 만남이 '아이템'을 새로운 어둠으로 이끌게 되는데――.\n\n이것은 폭력과 비도(非道), 배덕으로 얼룩진, 꽤나 별난 능력자 소녀들의 일상과 유대, 그리고 깊고 깊은 '어둠'을 그리는 이야기.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "A Certain Dark Item",
+            "overview": "In Academy City, psychic powers promise a brighter future. But beneath the city's peaceful surface lurks a merciless dark side. ITEM, an elite team of four girls with deadly abilities, carries out dangerous missions that can never see the light of day. When a fifth girl enters their lives, ITEM is drawn deeper into a world of violence, brutality, and moral corruption.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Некий Теневой Item",
+            "overview": "Это история об отряде из Тени Академграда, который называют Item. Группа девушек — Мугино Шидзури, Такицубо Рико, Френда Сейвелун и Кинухата Сайаи — берущихся за то, что обычным людям и в кошмарах не снилось.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "A Certain Dark Item",
+            "overview": "La Cité Académique est un lieu où le meilleur de la science et de la technologie sont rassemblés tout en favorisant le développement des capacités surnaturelles. Derrière cette atmosphère en apparence paisible et séduisante, se cache ce que l'on appelle le « côté obscur ». Les filles connues sous le nom de code « Item » font partie de ce groupe d'élite, composé de spécialistes dans divers domaines et dirigé par Mugino Shizuri, une esper de niveau 5. Lorsqu'un nouveau membre les rejoint, le groupe se retrouve impliqué dans une histoire de conspiration qui se trame dans les souterrains de la ville…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "A Certain Dark Item",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Определен тъмен предмет",
+            "overview": "В Академ Сити, психическите сили обещават по-светло бъдеще. Но под мирната повърхност на града се крие безмилостна тъмна страна. ITEM, елитен екип от четири момичета със смъртоносни способности, изпълнява опасни мисии, които никога няма да видят бял свят. Когато пето момиче влиза в живота им, ITEM е погълната още по-дълбоко в свят на насилие, бруталност и морална поквара.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In Academy City beloven paranormale krachten een betere toekomst. Maar onder het vredige oppervlak van de stad schuilt een genadeloze donkere kant. ITEM, een eliteteam van vier meisjes met dodelijke vaardigheden, voert gevaarlijke missies uit die nooit het daglicht kunnen zien. Wanneer een vijfde meisje hun leven binnenkomt, wordt ITEM dieper meegezogen in een wereld van geweld, brutaliteit en morele corruptie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dANKBnapgjG7QmXeRZ6xQg8czX0.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/37xSbB8Hj87wYiKBcnXZSG3vv9U.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1077,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kHknqxwWkCIPraICgh85RuTIGzh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1914
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1067,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1Tu09xcWwg1dsqaJa7So3NCHHxN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1896
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8NR4DpPSWtClZvo42GHyaTumopI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1070,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/piEIWjQ7KmwqoV3aYpJXeVyamvk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1903
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1078,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fJm6AwhDOJCyf44QTyun6PCR0ba.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1916
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1071,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mVgHPNeIJmnqOHtyALLwPAB7eji.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1904
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.5,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zh985WBkorXUcM1CXS03e2AkUx1.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1536
+        },
+        {
+          "aspect_ratio": 1.447,
+          "height": 255,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7Sx19Ojm8IjFGhr87nCP1O0MIgE.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 369
+        },
+        {
+          "aspect_ratio": 1.426,
+          "height": 1022,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yaWGnmb3v2GXo7huxPcLzcJgzB6.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1457
+        },
+        {
+          "aspect_ratio": 1.447,
+          "height": 255,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fjbMqhKX1vaPL7eEjw20MpBQcit.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 369
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lUeLWmfZP3sNrAdLvnsNp65dvM5.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6XN24q28Hl67ffmlUTdAFCCceMx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tAGKNFINnkQM73WbLFdQ7CvRdNN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

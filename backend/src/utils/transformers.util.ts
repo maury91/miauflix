@@ -28,6 +28,7 @@ export const providerSourceToEntity = (
     quality: providerSource.quality,
     size: providerSource.size,
     videoCodec: providerSource.videoCodec,
+    languages: providerSource.language ?? null,
     broadcasters: providerSource.broadcasters,
     watchers: providerSource.watchers,
     // The sources service reports an unknown upload date as the Unix epoch; scoring treats a

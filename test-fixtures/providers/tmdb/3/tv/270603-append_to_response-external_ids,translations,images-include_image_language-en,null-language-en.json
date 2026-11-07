@@ -1,0 +1,759 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9162",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1f0446101be29aac6727aad999f91f77\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rQmzx7qyoK5YiXJHnv0jdgVlKyl.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-07-03",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://sh-anime.shochiku.co.jp/jukishi-anime",
+    "id": 270603,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-23",
+    "last_episode_to_air": {
+      "id": 7445350,
+      "name": "Empress of the Angler Clan",
+      "overview": "Elymas is challenged to a fishing contest by the leader of the Sea Dragon’s Fang angler clan.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-06",
+      "episode_number": 19,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 270603,
+      "still_path": "/laeTCgKUSR2UYC2S1eGjuStmYA0.jpg"
+    },
+    "name": "The Exiled Heavy Knight Knows How to Game the System",
+    "next_episode_to_air": {
+      "id": 7445351,
+      "name": "Magic Swordsman Hilde",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-13",
+      "episode_number": 20,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 270603,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 896,
+        "logo_path": "/qfUzYnpnN5bnd2bqGUH0OlAMell.png",
+        "name": "Tulip Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1559,
+        "logo_path": "/ihcrBmZYwCmT3YZ7ykNmFgtj2oA.png",
+        "name": "SBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2460,
+        "logo_path": "/34sNEcsgcTAuDidRMrgxdfNyVjL.png",
+        "name": "BSN",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2461,
+        "logo_path": "/b4Ivxqz6UY0EogjYc09Y22ctC6F.png",
+        "name": "tys",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2462,
+        "logo_path": "/7zXfwh5ZhFqvdOWgWX80weU6Sqb.png",
+        "name": "NBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3658,
+        "logo_path": "/sJwRsE1lfMwAwYZi1OtRfn7V03t.png",
+        "name": "HBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3705,
+        "logo_path": "/6vOG1oEihq6eStEzPnOGal2AIV9.png",
+        "name": "RKK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3969,
+        "logo_path": "/nhCsLIGjzIIp6jIFCdHN0cQEzjP.png",
+        "name": "i-Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3970,
+        "logo_path": "/9coKtCf4jSNCdSqGveVFyzvjrZt.png",
+        "name": "SBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3971,
+        "logo_path": "/zoFgqDe0v8svSA01yExlhcG1Bss.png",
+        "name": "IBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3972,
+        "logo_path": "/rL2IlndcEiQnIbym5EoSEM7rGlx.png",
+        "name": "BSS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3973,
+        "logo_path": "/dh4E8hGvqD9Xqu51kbqUU06UKbt.png",
+        "name": "MRO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3974,
+        "logo_path": "/yMQxsmGs88q54bslmcSeXlmpObC.png",
+        "name": "OBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3975,
+        "logo_path": "/6ACZlk44MWsIIwYHxjRGXGKlpRb.png",
+        "name": "TUF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3977,
+        "logo_path": "/sGMMrdCmptaLLwJX7CsXTDaduLO.png",
+        "name": "RSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3978,
+        "logo_path": "/zOz9LK6WWLUWGuG0fthzDzCIXlA.png",
+        "name": "TUY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3979,
+        "logo_path": "/6oIE2LmtONObnw5wtFO4IIXwgkb.png",
+        "name": "tbc",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4748,
+        "logo_path": "/o5Hlt7ZXJPEm4Qrx2Pl2rtc9A5y.png",
+        "name": "RKB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4792,
+        "logo_path": "/8kzeHaKeW3gZubs3cqlGWFvfJI7.png",
+        "name": "KUTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4859,
+        "logo_path": "/fhQU8sGOoV877wDfHmPZftKldvE.png",
+        "name": "RBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6171,
+        "logo_path": "/vxemHAgdzVCbvAFcO84MWg2wnXC.png",
+        "name": "UTY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6172,
+        "logo_path": "/mKslL0MTHHt9ukugWOv3Vh8Tn0E.png",
+        "name": "RCC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6173,
+        "logo_path": "/92bKXaygjtTwAbX4AH2UnLJN2Xe.png",
+        "name": "MRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6174,
+        "logo_path": "/aawphEBuBGT9RVP6xG3BZV8NOCw.png",
+        "name": "ATV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6175,
+        "logo_path": "/fVUs2F2qTjOzJ9oP0jeqtpZEAai.png",
+        "name": "MBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 201,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 26,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "追放された転生重騎士はゲーム知識で無双する",
+    "overview": "Born into a prestigious family of master swordsmen, Elymas Edvaughn's future shatters when he awakens the so-called \"defective\" Heavy Knight class. Disowned and cast out, he regains memories of another life—and realizes this world mirrors a VR game he once mastered. Armed with knowledge no one else possesses, he sets out to rewrite his fate and prove the strength of the \"weakest\" class.",
+    "popularity": 22.7115,
+    "poster_path": "/bADzMfofNWYdxLnlqNuMkO6du34.jpg",
+    "production_companies": [
+      {
+        "id": 7759,
+        "logo_path": "/jZ6PgJimkzmKkqpunlaBgEkLPjv.png",
+        "name": "GoHands",
+        "origin_country": "JP"
+      },
+      {
+        "id": 192,
+        "logo_path": "/93eAKlnQecDdMtucfOprzcjMw9V.png",
+        "name": "Shochiku",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 201118,
+        "logo_path": "/c9bIdqwzoXQamAMyRv5mhIoZLnY.png",
+        "name": "MUSE",
+        "origin_country": "TW"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3363,
+        "logo_path": "/sj3vD7n63bTCih7bcf6GnWvRf1Q.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      },
+      {
+        "iso_3166_1": "TW",
+        "name": "Taiwan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-07-03",
+        "episode_count": 26,
+        "id": 416915,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/bADzMfofNWYdxLnlqNuMkO6du34.jpg",
+        "season_number": 1,
+        "vote_average": 7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.179,
+    "vote_count": 39,
+    "external_ids": {
+      "imdb_id": "tt33334216",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 453028,
+      "tvrage_id": null,
+      "wikidata_id": "Q128758407",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "jukishi_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "Als Spross eines noblen Hauses wird Elymas Edvaughn verstoßen, als ihm die Klasse „Schwerer Ritter“ zugeteilt wird, die als unnütz und mangelhaft gilt. Doch Erinnerungen an ein vorheriges Leben lassen ihn erkennen, dass diese Welt Gemeinsamkeiten mit einem VR-Spiel aufweist, das er einst meisterte. Gewappnet mit exklusivem Wissen beweist er, dass die „schwächste“ Klasse Großes zu leisten vermag.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "Elma Edvaughn nasceu em uma família prestigiosa de mestres espadachins, mas seu futuro se despedaça quando ele desperta a chamada classe \"falha\" de Cavaleiro Pesado. Deserdado e banido, ele recupera as memórias de outra vida. Munido de um conhecimento que ninguém mais possui, ele parte para reescrever seu destino e provar a força da classe \"mais fraca\".",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "Born into a prestigious family of master swordsmen, Elymas Edvaughn's future shatters when he awakens the so-called \"defective\" Heavy Knight class. Disowned and cast out, he regains memories of another life—and realizes this world mirrors a VR game he once mastered. Armed with knowledge no one else possesses, he sets out to rewrite his fate and prove the strength of the \"weakest\" class.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "＜重騎士＞――それは守り特化で敵の攻撃を引き付けて味方を守るクラスである。だが、他の防御クラスと比べても性能に応用が利かず、攻撃性能が低すぎてレベルもまともに上げられない。それゆえに――”不遇”を超えた\"欠陥\"クラスといわれていた。代々＜剣聖＞の血筋であるエドヴァン伯爵家に生まれたエルマは、跡継ぎとして大切な儀式である＜加護の儀＞で”欠陥”クラスといわれる＜重騎士＞を発現し、次期当主の座も奪われ不当に追放されてしまう。しかし、その際に前世の記憶を取り戻し、この世界が生前にやり込んでいたVR対応オンラインゲーム＜マジックワールド＞と全く同じであることに気がついた。そして、エルマは知っていた。＜重騎士＞こそが、最強のクラスであることを・・・！伯爵家を追放され一人の冒険者となったエルマは、生前の知識をフル活用し、この世界の効率的な攻略を始めるのだった。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "El día de su Bendición Divina, Elymas, heredero de una familia de espadachines, es exiliado tras elegir la clase \"defectuosa\" de Caballero Pesado. Sin embargo, gracias a sus recuerdos de otra vida, sabe que esta es en realidad la más poderosa. Ahora, usará su conocimiento para dominar el mundo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "Nacido en el seno de una prestigiosa familia de maestros de la espada, el futuro de Elymas Edvaughn se hace añicos cuando despierta la clase de Caballero Pesado, considerada \"defectuosa\". Tras ser repudiado y desterrado, recupera de pronto los recuerdos de otra vida y se da cuenta de que este mundo es idéntico a un videojuego de realidad virtual que llegó a dominar por completo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "遭到流放的轉生重騎士憑藉遊戲知識大開無雙",
+            "overview": "〈重騎士〉──\n\n這是專精防守，吸引敵人攻擊並保護同伴的職業。\n\n然而，和其他防禦職業相比，兼任其他工作的能力較差，\n\n攻擊能力也弱到甚至無法正常提升等級。\n\n因此──是公認比「冷門」還悽慘的「缺陷」職業。\n\n埃爾瑪生於代代繼〈劍聖〉血脈的艾德梵伯爵家，\n\n身為繼承人，卻在重要儀式〈祝福儀式〉上顯現出人稱「缺陷」職業的〈重騎士〉，\n\n不僅被奪走下任家主的位子，還慘遭流放。\n\n然而就在此時，他找回了前世的記憶，\n\n並意識到這個世界，與他前世沉迷不已的虛擬實境線上遊戲《魔法世界》一模一樣。\n\n而且，埃爾瑪非常清楚。\n\n＜重騎士＞，才是最強的職業……！\n\n被伯爵家流放而成為一名冒險者的埃爾瑪，\n\n決定充份活用前世的知識，在這個世界展開高效率攻略。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "추방당한 전생 중기사는 게임 지식으로 무쌍한다",
+            "overview": "<중기사>―― 그것은 방어에 특화되어 적의 공격을 끌어당겨 아군을 지키는 클래스다. 하지만 다른 방어 클래스와 비교해도 성능의 활용도가 낮고, 공격 성능이 너무 떨어져 레벨조차 제대로 올릴 수 없다. 그렇기에 '불우함'을 넘어 '결함' 클래스라 불려 왔다. 대대로 <검성>의 혈통인 에드반 백작가에서 태어난 엘마는, 후계자로서 치러야 할 중요한 의식인 <가호의 의식>에서 결함 클래스라 불리는 <중기사>로 각성하고, 차기 당주의 자리마저 빼앗긴 채 부당하게 추방당하고 만다. 하지만 그 순간 전생의 기억을 되찾았고, 이 세계가 생전에 몰두했던 VR 온라인 게임 <매직 월드>와 완전히 동일하다는 사실을 깨닫는다. 그리고 엘마는 알고 있었다. <중기사>야말로 최강의 클래스라는 것을...! 백작가에서 쫓겨나 홀로 모험자가 된 엘마는 전생의 지식을 풀가동하여, 이 세계를 효율적으로 공략하기 시작한다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "遭到流放的轉生重騎士憑藉遊戲知識大開無雙",
+            "overview": "〈重騎士〉──\n\n這是專精防守，吸引敵人攻擊並保護同伴的職業。\n\n然而，和其他防禦職業相比，兼任其他工作的能力較差，\n\n攻擊能力也弱到甚至無法正常提升等級。\n\n因此──是公認比「冷門」還悽慘的「缺陷」職業。\n\n埃爾瑪生於代代繼〈劍聖〉血脈的艾德梵伯爵家，\n\n身為繼承人，卻在重要儀式〈祝福儀式〉上顯現出人稱「缺陷」職業的〈重騎士〉，\n\n不僅被奪走下任家主的位子，還慘遭流放。\n\n然而就在此時，他找回了前世的記憶，\n\n並意識到這個世界，與他前世沉迷不已的虛擬實境線上遊戲《魔法世界》一模一樣。\n\n而且，埃爾瑪非常清楚。\n\n＜重騎士＞，才是最強的職業……！\n\n被伯爵家流放而成為一名冒險者的埃爾瑪，\n\n決定充份活用前世的知識，在這個世界展開高效率攻略。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "遭到流放的转生重骑士凭借游戏知识大开无双",
+            "overview": "“重骑士”这是一种专门负责防守的职业，其职责是吸引敌人的攻击，从而保护同伴。不过，与其他防御型职业相比，重骑士在承担其他任务方面的能力较弱，攻击力也低得可怜，甚至无法正常升级。因此，重骑士可被视为比“冷门职业”还要糟糕的“缺陷职业”。埃尔玛出生于世代继承着“剑圣”血脉的艾德梵伯爵家族。作为继承人，他在重要的仪式“祝福仪式”上却暴露出了被称为“缺陷职业”的“重骑士”身份。因此，他不仅被剥夺了继承人的地位，还被流放了。然而就在这时，他记起了前世的记忆，意识到这个世界与他前世沉迷不已的虚拟现实游戏《魔法世界》简直一模一样。而且，埃尔玛非常清楚——“重骑士”，才是最强的职业……！被伯爵家流放而成为冒险者的埃尔玛，决定充分利用前世的知识，在这个世界展开高效的冒险之旅！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Elymas komt uit een geslacht van zwaardmeesters en zou zijn vader opvolgen. Hij geeft echter de voorkeur aan de 'Heavy Knight' en verliest zo niet alleen zijn status als toekomstig hoofd van het huishouden, maar wordt ook verbannen.\n\nMaar Elymas wist wel beter: dit is de wereld van het spel dat hij eerder had gespeeld, en de klasse van de Zware Ridder is onovertroffen in kracht...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Kỵ Sĩ Trọng Giáp Bị Lưu Đày Biết Cách 'Hack' Hệ Thống",
+            "overview": "Sinh ra trong gia đình kiếm sĩ bậc thầy danh giá, tương lai của Elymas Edvaughn tan vỡ khi cậu thức tỉnh class 'Trọng Kỵ Sĩ' bị coi là 'lỗi'. Bị từ mặt và trục xuất, cậu lấy lại ký ức kiếp khác — và nhận ra thế giới này giống hệt một game VR mà cậu từng làm chủ. Với kiến thức không ai có được, cậu lên đường viết lại số phận và chứng minh sức mạnh của class 'yếu nhất'.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "Issu d’une prestigieuse famille de maîtres épéistes, Elymas Edvaughn est renié et banni lorsqu’il s’affirme en tant que “Chevalier Lourd”, une classe inférieure et complètement dénigrée. En réalité, le monde d’Elymas est similaire à celui d’un jeu qu’il maîtrisait dans une autre vie. Et il sait parfaitement que les Chevaliers Lourds sont en fait les plus puissants…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "Elymas używa wiedzy z poprzedniego życia, aby dowieść, że jest do czegoś zdolny.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Изгнанный реинкарнированный тяжёлый рыцарь не имеет себе равных в знаниях игры",
+            "overview": "Во время Церемонии благословения пятнадцатилетний Э́льма получает класс \"Тяжёлый рыцарь\", который в его благородной семье мастеров меча считается бесполезным. Разочарованный отец немедленно лишает парня титула преемника и выставляет на улицу без единого гроша. Окружающие уверены, что изгнанник обречён на жалкое существование, ведь выбранная профессия сильно уступает другим в базовых характеристиках.\n\nОднако никто не подозревает, что Э́льма — реинкарнатор, а этот мир в точности копирует его любимую видеоигру. Парень прекрасно знает скрытые механики, таблицы урона и идеальные билды, о которых местные жители даже не догадываются. Используя геймерский опыт, Эльма решает выжать из якобы \"бесполезного\" класса максимум, превратить своего рыцаря в несокрушимую имбу и показать бывшей семье, как сильно они просчитались.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เกิดใหม่เป็นอัศวินเกราะหนักผู้ถูกขับไล่แต่ใช้ความรู้จากเกมจนไร้เทียมทาน",
+            "overview": "เอลม่า บุตรของตระกูลนักดาบศักดิ์สิทธิ์ แต่เมื่ออายุ 15 ปี คนในตระกูลพบว่าเขามีความสามารถเป็นคลาสที่ไม่มีฝีมืออย่างอัศวินเกราะหนัก ไม่เหมาะที่จะสืบทอดตระกูล ทำให้โดนไล่จากตระกูล แต่เอลม่าผู้กลับชาติมาเกิดใหม่ในโลกของเกมนั้น ทราบดีว่าเป็นคลาสที่แข็งแกร่งสุด จึงเริ่มออกเดินทางและใช้ความรู้ที่มีเพื่อแสดงให้คนอื่นในโลกนี้ได้เห็น",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Kesatria Kelas Berat Tereinkarnasi yang Diasingkan Jadi Tanpa Tanding Dengan Pengetahuan Gimnya",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Exiled Heavy Knight Knows How to Game the System",
+            "overview": "Nato in una prestigiosa famiglia di maestri spadaccini, il futuro di Elymas Edvaughn va in frantumi quando risveglia la classe del \"Cavaliere Pesante\", considerata da tutti difettosa. Rinnegato e cacciato di casa, il ragazzo recupera improvvisamente i ricordi di una vita precedente, rendendosi conto che questo mondo è identico a un gioco in realtà virtuale che un tempo dominava. Armato di conoscenze che nessun altro possiede, Elymas parte per riscrivere il proprio destino e dimostrare la vera forza della classe considerata \"la più debole\".",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Elymas komt uit een geslacht van zwaardmeesters en zou zijn vader opvolgen. Hij geeft echter de voorkeur aan de 'Heavy Knight' en verliest zo niet alleen zijn status als toekomstig hoofd van het huishouden, maar wordt ook verbannen.\n\nMaar Elymas wist wel beter: dit is de wereld van het spel dat hij eerder had gespeeld, en de klasse van de Zware Ridder is onovertroffen in kracht...",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rQmzx7qyoK5YiXJHnv0jdgVlKyl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sNfKWE1bXZE6wUh0xXpWxMr9DNy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fPkGYEIldhxYORVKTyDnJlIPKU3.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hpYBHySjASaM2cCI1uVvTNfGCLM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3Ku9HXFDzpohlL2rgGSOugeNP0a.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lJJpL0ZtFa1fkudBAkyWBcjT8Zc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.047,
+          "height": 579,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cViYa926pHMY1d1u5jkJkgmMugH.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1185
+        },
+        {
+          "aspect_ratio": 2.048,
+          "height": 289,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pwlVxhX2ReQPXK4vu64vQROAmCY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 592
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bADzMfofNWYdxLnlqNuMkO6du34.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1V8TGvaNViWNlECB52WxUGdh5Vf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 530
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1302,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lJJFpigp0U7ae4szm5xGFOHjoCm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 920
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2827,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rO1riUCT84W88K9N6KzYr1iFwlX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wdpEnRmVwMpBjajvpzSYjwken7b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1634,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8fjzyHd67TaPUnbn8gsK12VbQjP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1089
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1634,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n7h92kJVgSP017dQMeLRFXtx3ZW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1089
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hjmqYRCMNSApZmCDJKnarVmalHL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

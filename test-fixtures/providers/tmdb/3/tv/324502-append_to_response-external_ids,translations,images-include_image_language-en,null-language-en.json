@@ -1,0 +1,539 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5905",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"cb884b453f3530d70bbe4be43f16f921\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/745xqHbiUWwO51TM60MXRCR4Onm.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-02",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://tempal-anime.net",
+    "id": 324502,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-06",
+    "last_episode_to_air": {
+      "id": 7874236,
+      "name": "First Boss Raid",
+      "overview": "Grid goes with Khan to visit his son's grave. He gets a new job quest: to learn \"Pagma's Sword Dance.\"",
+      "vote_average": 6.5,
+      "vote_count": 2,
+      "air_date": "2026-11-06",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 324502,
+      "still_path": "/vnY6aKuYvkPcsUY3dKjvrlvbUnj.jpg"
+    },
+    "name": "Overgeared",
+    "next_episode_to_air": {
+      "id": 7892208,
+      "name": "Episode 7",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 7,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 324502,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "テムパル～アイテムの力～",
+    "overview": "Escape everyday life in SATISFY, a VR game where players earn real-world fame and fortune. One player, Grid, can't seem to catch a break in the game or in real life. That all changes when a challenging quest leads him to becoming the heir to a legendary blacksmith. His stats are reset to zero, but he's leveling up and crafting some seriously god-tier goods.",
+    "popularity": 17.0016,
+    "poster_path": "/94GLmulA9qVGsuo9kLpVKi01E2Z.jpg",
+    "production_companies": [
+      {
+        "id": 11884,
+        "logo_path": "/tHzHPSKdmLT5zCdqFbcmHzZvRIc.png",
+        "name": "J.C.STAFF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Pony Canyon",
+        "origin_country": "JP"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      },
+      {
+        "id": 303882,
+        "logo_path": null,
+        "name": "REDICE STUDIO",
+        "origin_country": "KR"
+      },
+      {
+        "id": 210441,
+        "logo_path": "/kRGq6Eo3OgwnuLxijYYUIRpeCj9.png",
+        "name": "Kakao piccoma",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      },
+      {
+        "id": 95809,
+        "logo_path": "/5ac8LhghlxYKbPSwbXJkgrNfjGF.png",
+        "name": "EGG FIRM",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      },
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-02",
+        "episode_count": 12,
+        "id": 520449,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/94GLmulA9qVGsuo9kLpVKi01E2Z.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.4,
+    "vote_count": 9,
+    "external_ids": {
+      "imdb_id": "tt43691353",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 478752,
+      "tvrage_id": null,
+      "wikidata_id": "Q140041688",
+      "facebook_id": null,
+      "instagram_id": "tempal_anime",
+      "twitter_id": "tempal_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Overgeared",
+            "overview": "Youngwoo Shin é um fracassado na vida real, fazendo bicos para mal conseguir pagar suas dívidas. Até sua família o considera um viciado em videogame sem esperança. Mas quando ele entra no popularíssimo jogo de realidade virtual Satisfy, Youngwoo se transforma em Grid, o Guerreiro… que também é terrivelmente medíocre. Tudo muda quando ele encontra um tomo contendo o conhecimento perdido de um ferreiro lendário. O problema é que usá-lo reinicia todos os seus níveis! Para sobreviver depois de ser forçado a recomeçar do zero, Grid precisará aprimorar suas habilidades e reunir aliados confiáveis… ou não! Quem precisa disso quando se tem equipamentos divinos?!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "世界中で20億人がプレイする大人気VRゲーム〈SATISFY〉。ゲーム内で得た富や名声が現実にも影響を及ぼすこの世界で、長嶺 巧は「グリード」として、冴えない日々からの人生逆転を狙っていた。ある日、グリードは高難度クエストの果てに、レジェンダリー・アイテムを入手し、伝説の鍛冶職人〈ファグマの末裔〉へと転職。レベルはマイナス、裸同然の状態からの再スタートとなるが……。「強いアイテムが手に入らないなら、作ればいい！」強欲で打算的、それでいて妙な根気と情の深さを持つグリードが、アイテム制作の力を武器に、〈SATISFY〉を大きく揺るがしていく。持たざる者が伝説を作る、成り上がりファンタジー、開幕!!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Overgeared",
+            "overview": "Escape everyday life in SATISFY, a VR game where players earn real-world fame and fortune. One player, Grid, can't seem to catch a break in the game or in real life. That all changes when a challenging quest leads him to becoming the heir to a legendary blacksmith. His stats are reset to zero, but he's leveling up and crafting some seriously god-tier goods.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Overgeared",
+            "overview": "Olvídate de la rutina con SATISFY, el juego de realidad virtual donde ganas fama y dinero reales. A Grid jamás le sonríe la suerte, ni dentro ni fuera del juego, pero todo da un vuelco cuando una ardua misión lo convierte en el heredero de un herrero legendario. Sus estadísticas vuelven a cero, sí, pero ahora sube de nivel sin freno y forja un equipo digno de los dioses.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Overgeared",
+            "overview": "Entfliehe dem Alltag in Satisfy, einem VR-Game, in dem Spieler echten Ruhm und Reichtum erhalten. Ein Player, Grid, komm weder im Game noch im echten Leben zur Ruhe. Doch alles ändert sich, als eine schwierige Quest dafür sorgt, dass er der Nachfolger eines legendären Schmieds wird. Seine Werte fallen zurück auf null, aber er levelt auf und stellt einige wirklich gottgleiche Waren her.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "装备我最强",
+            "overview": "　　全世界有20亿人游玩的超人气VR游戏《SATISFY》。\n\n　　在这个游戏内获得的财富与名声也会影响现实世界的背景下，\n\n　　长岭巧以玩家名“贪婪”为名，目标是摆脱平淡无奇的日常，实现人生逆袭。\n\n　　某天，贪婪在完成一项超高难度任务后，\n\n　　获得了传说级道具，并转职成为传说中的锻造工匠“法格玛的后裔”。\n\n　　虽然等级归零、装备几乎等于全裸，一切要从头开始——但……\n\n　　“既然打不到强力的装备，那就自己造！”\n\n　　贪婪既贪婪又工于算计，却也有着古怪的毅力和重情义的一面。\n\n　　他凭借制作装备的力量，开始剧烈撼动《SATISFY》的世界。\n\n　　一无所有者创造传说，\n\n　　逆袭成王幻想剧，开幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "템빨 ~아이템의 힘~",
+            "overview": "전 세계 20억 명이 플레이하는 초인기 가상현실 VR 게임 ＜SATISFY＞.\n\n게임 안에서 얻은 부와 명성이 현실 세계에도 고스란히 영향을 미치는 이 세계에서,\n\n신영우는 '그리드'라는 닉네임으로 찌질한 루저 인생을 한 방에 역전시킬 기회를 노리고 있었다.\n\n어느 날, 그리드는 극악의 난이도를 자랑하는 퀘스트 끝에 신화급 아이템을 손에 넣고,\n\n전설의 대장장이 ＜파그마의 후예＞로 전직하게 된다.\n\n레벨은 마이너스, 실오라기 하나 걸치지 않은 맨몸 상태에서 강제 재출발을 하게 되는데…….\n\n\"좋은 아이템이 안 나오면, 직접 만들면 되잖아!\"\n\n탐욕스럽고 계산적이지만, 묘한 근성과 깊은 정을 지닌 그리드가 아이템 제작 능력을 무기로 ＜SATISFY＞의 생태계를 뒤흔들기 시작한다.\n\n가진 것 없는 흙수저가 전설을 써 내려가는, 짜릿한 버스 버스터 판타지 개막!!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Overgeared",
+            "overview": "Shin Young Woo est ce qu'on appelle un loser « IRL », un bon à rien « dans la vraie vie » : il enchaîne les petits boulots et peine à rembourser ses dettes. Quand il se connecte au jeu VR « SATISFY », jeu de réalité virtuelle auquel il est accro, ce n'est pas plus glorieux : Young Woo devient « Grid », un guerrier au niveau terriblement médiocre… Jusqu'au jour où il tombe sur un livre regroupant l'ensemble des connaissances du plus légendaire des forgerons ! Mais en activant cet artefact, les statistiques durement acquises de Grid retombent à zéro… Sauf que ses nouvelles capacités vont lui permettre de se forger un équipement de tout premier ordre, pour espérer devenir un héros, un vrai !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "تمبال: قوة الأدوات",
+            "overview": "شين يونغ وو، المعروف داخل اللعبة باسم «غريد»، شاب سيئ الحظ في حياته ولاعب ضعيف في لعبة الواقع الافتراضي الشهيرة «ساتيسفاي». تتغير حياته عندما يعثر على غرض نادر يمنحه فئة أسطورية استثنائية تُعرف باسم «خليفة باغما». وبفضل هذه القوة، يصبح حدادًا بارعًا قادرًا على صناعة أسلحة فريدة وارتداء أقوى المعدات في اللعبة. يقرر غريد استغلال قدراته الجديدة لتحقيق الشهرة والثروة، لكنه سرعان ما يجذب الأنظار ويشعل الفوضى من حوله. ومع ازدياد نفوذه، يكتشف أن طريق الأسطورة مليء بالمخاطر، وأن الشهرة التي حلم بها قد تكون لها عواقب لم يتوقعها.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Во всеоружии: Сила артефактов",
+            "overview": "В реальной жизни Шин Ёну — бездельник, любящий видеоигры и кое-как сводящий концы с концами. Даже его собственная семья считает его безнадежным.\n\nА когда он заходит в популярную виртуальную игру Satisfy, Ёну становится воином с ником Грид, который тоже до боли посредственен. Но всё меняется, когда он натыкается на книгу, содержащую утраченные знания легендарного кузнеца. Вот только проблема в том, что при её использовании все его уровни сбрасываются!\n\nЧтобы выжить после такого перезапуска, нашему герою придётся отточить свои навыки и собрать надежных союзников... или нет! Ведь кому все это нужно, когда ты наряжен в предметы божественного уровня?!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Ontsnap aan het dagelijkse leven in SATISFY, een VR-game waarin spelers echte roem en fortuin verdienen. Eén speler, Grid, lijkt geen pauze te kunnen nemen in het spel of in het echte leven. Dat verandert allemaal wanneer een uitdagende zoektocht ertoe leidt dat hij de erfgenaam wordt van een legendarische smid. Zijn statistieken worden teruggezet op nul, maar hij gaat een level omhoog en maakt een aantal serieuze goederen van goddelijke kwaliteit.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Преоборудван",
+            "overview": "Избягайте от ежедневието в SATISFY, VR игра, в която играчите печелят истинска слава и богатство. Един играч, Грид, сякаш не може да намери късмет нито в играта, нито в реалния живот. Всичко това се променя, когато предизвикателна мисия го води до това да стане наследник на легендарен ковач. Статистиките му са нулирани до нула, но той вдига нива и създава наистина божествени стоки.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "裝備仔",
+            "overview": "無論是現實世界還是遊戲世界中，他都是最底層的存在！\n\n然而鹹魚翻身的機會終於來了！\n\n只要能夠找到遊戲中的最強裝備，就能獲得超20億玩家中唯一一個成為傳說中最強職業電競選手的機會！\n\n他能否在假想現實遊戲世界中創造新的傳奇，成功脫離如同噩夢般的悲慘人生呢？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Overgeared",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Overgeared",
+            "overview": "Lasciati alle spalle la vita di tutti i giorni in SATISFY, un gioco VR in cui i giocatori possono ottenere fama e ricchezza anche nel mondo reale. Grid, uno dei giocatori, sembra non riuscire a trovare pace né nel gioco né nella vita vera. Tutto cambia quando una missione impegnativa lo porta a diventare l'erede di un leggendario fabbro: le sue statistiche vengono azzerate, ma lui inizia a salire di livello e a forgiare oggetti di qualità divina.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Fuja do quotidiano em SATISFY, um jogo de RV onde os jogadores ganham fama e fortuna no mundo real. Um dos jogadores, o Grid, parece não ter sorte nem no jogo nem na vida real. Tudo isso muda quando uma missão desafiante o leva a tornar-se o herdeiro de um ferreiro lendário. As suas estatísticas são repostas a zero, mas ele está a subir de nível e a criar itens verdadeiramente de nível divino.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Overgeared",
+            "overview": "Olvídate de la rutina con SATISFY, el juego de realidad virtual donde ganas fama y dinero reales. A Grid jamás le sonríe la suerte, ni dentro ni fuera del juego, pero todo da un vuelco cuando una ardua misión lo convierte en el heredero de un herrero legendario. Sus estadísticas vuelven a cero, sí, pero ahora sube de nivel sin freno y forja un equipo digno de los dioses.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "裝備仔",
+            "overview": "無論是現實世界還是遊戲世界中，他都是最底層的存在！\n\n然而鹹魚翻身的機會終於來了！\n\n只要能夠找到遊戲中的最強裝備，就能獲得超 20 億玩家中唯一一個成為傳說中最強職業電競選手的機會！\n\n他能否在假想現實遊戲世界中創造新的傳奇，成功脫離如同噩夢般的悲慘人生呢？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Ontsnap aan het dagelijkse leven in SATISFY, een VR-game waarin spelers echte roem en fortuin verdienen. Eén speler, Grid, lijkt geen pauze te kunnen nemen in het spel of in het echte leven. Dat verandert allemaal wanneer een uitdagende zoektocht ertoe leidt dat hij de erfgenaam wordt van een legendarische smid. Zijn statistieken worden teruggezet op nul, maar hij gaat een level omhoog en maakt een aantal serieuze goederen van goddelijke kwaliteit.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thợ Rèn Huyền Thoại",
+            "overview": "Thoát khỏi cuộc sống đời thường trong SATISFY, tựa game VR nơi người chơi kiếm được danh vọng và tiền bạc ngoài đời thực. Một game thủ tên Grid chẳng gặp may chút nào, cả trong game lẫn ngoài đời. Mọi chuyện thay đổi khi một nhiệm vụ khó nhằn đưa anh trở thành người thừa kế của một thợ rèn huyền thoại. Chỉ số của anh bị reset về 0, nhưng anh đang lên cấp và chế tạo những món đồ thần cấp thực thụ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Overgeared เจ้าแห่งยุทธภัณฑ์",
+            "overview": "โชคชะตาของกริดพลิกผันเมื่อเขากลายเป็นผู้สืบทอดช่างตีเหล็กในตำนาน จนสเตตัสทั้งหมดถูกรีเซตกลับไปเป็นศูนย์",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lGQcgSV9pplIduzSwXctUKAkt9L.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3839
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/745xqHbiUWwO51TM60MXRCR4Onm.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y599yjmKJoPEVGgUTyuHgixRbmV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6x0crOma7INCMH1YmrHkYVPtuA2.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.218,
+          "height": 284,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ki2DwqPbI2LcWeOQrq7dtaDIHFB.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1198
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/94GLmulA9qVGsuo9kLpVKi01E2Z.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2566,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iOPh7CR2EJpjVQU4EJMbIRu5NL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1711
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2565,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lmAKhEKjdHysXWpC8Ne9gemWcAG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1710
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hPNHcZqbZu4oiLMTHA7KOGMWZBJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}
