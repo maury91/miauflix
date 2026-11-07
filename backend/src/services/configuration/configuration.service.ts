@@ -66,6 +66,10 @@ type ConfigurationReadView = {
   value is written to the JSON file on first boot so it survives restarts.
  */
 
+/** A remote service's own VPN opt-out, which defaults to the deployment-wide DISABLE_VPN_CHECK. */
+const isServiceVpnCheckKey = (key: string): boolean =>
+  key !== 'DISABLE_VPN_CHECK' && key.endsWith('_DISABLE_VPN_CHECK');
+
 export class ConfigurationService {
   /** Post-transform computed values — what get() returns. Populated by precomputeValues(). */
   private _computedValues: Partial<EnvironmentVariableTypes> = {};
@@ -199,22 +203,18 @@ export class ConfigurationService {
       });
       this._variableGroups.set(key, group.id);
     }
-    // The source service inherits the existing VPN opt-out on its first configuration.
-    // Seed its default before normal resolution so an explicit service value still wins.
-    const sourcesVpnKey = 'SOURCES_DISABLE_VPN_CHECK' as VariableName;
-    if (
-      serviceName === 'SOURCES' &&
-      keys.has(sourcesVpnKey) &&
-      !this._rawValues.has(sourcesVpnKey)
-    ) {
-      const info = this._variablesInfo.get(sourcesVpnKey)!;
-      this._variablesInfo.set(sourcesVpnKey, {
-        ...info,
-        password: false,
-        defaultValue: this._rawValues.get('DISABLE_VPN_CHECK') ?? 'false',
-      });
+    // Each service's VPN check (SOURCES_DISABLE_VPN_CHECK, MEDIA_LOAD_DISABLE_VPN_CHECK) follows
+    // the deployment-wide DISABLE_VPN_CHECK until it is set itself. Only an env var or a saved value
+    // counts as set: storing the inherited default would freeze it, and a later DISABLE_VPN_CHECK
+    // change would no longer reach the service. Snapshots resolve the fallback when they are built.
+    for (const key of keys) {
+      if (isServiceVpnCheckKey(key) && !this._rawValues.has(key) && process.env[key])
+        this._rawValues.set(key, process.env[key]);
     }
-    this.autoConfigureDefaults(keys, false);
+    this.autoConfigureDefaults(
+      [...keys].filter(key => !isServiceVpnCheckKey(key)),
+      false
+    );
     for (const key of keys) {
       const raw = this._rawValues.get(key);
       if (raw === undefined) continue;
@@ -269,16 +269,18 @@ export class ConfigurationService {
     const variables = schema.groups.flatMap(group => group.variables);
     const rawValues = this.readRawValues();
     const values = Object.fromEntries(
-      variables.map(item => [
-        item.key,
-        overrides[item.key] ??
-          rawValues.get(item.key as VariableName) ??
-          (serviceName === 'SOURCES' && item.key === 'SOURCES_DISABLE_VPN_CHECK'
-            ? rawValues.get('DISABLE_VPN_CHECK')
-            : undefined) ??
-          item.defaultValue ??
-          '',
-      ])
+      variables.map(item => {
+        const own = overrides[item.key] ?? rawValues.get(item.key as VariableName);
+        if (isServiceVpnCheckKey(item.key) && !own)
+          return [
+            item.key,
+            overrides.DISABLE_VPN_CHECK ||
+              rawValues.get('DISABLE_VPN_CHECK') ||
+              item.defaultValue ||
+              'false',
+          ];
+        return [item.key, own ?? item.defaultValue ?? ''];
+      })
     );
     if (variables.some(item => item.required && !values[item.key])) return undefined;
     return values;
@@ -770,7 +772,7 @@ export class ConfigurationService {
       const status = instance.getStatus();
       switch (status.status) {
         case 'ready':
-          result[key] = { status: 'ready' };
+          result[key] = status.vpn ? { status: 'ready', vpn: status.vpn } : { status: 'ready' };
           break;
         case 'degraded': {
           const missingVars = status.missingVars;
@@ -1256,7 +1258,20 @@ export class ConfigurationService {
 
       const results: TestConfigsResult['services'] = [];
       const localGroups = [...groups.keys()].filter(isServiceName);
-      const remoteGroups = [...groups.keys()].filter(group => !isServiceName(group));
+      // A new DISABLE_VPN_CHECK reaches the remote services that inherit it, as if their own
+      // VPN setting had changed.
+      const vpnDefaultChanged =
+        'DISABLE_VPN_CHECK' in overrides &&
+        rawSnapshot.get('DISABLE_VPN_CHECK') !== overrides.DISABLE_VPN_CHECK;
+      const inheritingGroups = vpnDefaultChanged
+        ? this.vpnCheckInheritors(candidateRaw).map(({ group }) => group)
+        : [];
+      const remoteGroups = [
+        ...new Set([
+          ...[...groups.keys()].filter(group => !isServiceName(group)),
+          ...inheritingGroups,
+        ]),
+      ];
       for (const groupName of groups.keys()) {
         const localService = isServiceName(groupName) ? groupName : undefined;
         const group = configurationGroups[groupName];
@@ -1414,7 +1429,7 @@ export class ConfigurationService {
           groupEntries.some(({ key, value }) => rawSnapshot.get(key as VariableName) !== value)
         )
         .map(([groupName]) => groupName);
-      const changedGroupSet = new Set(changedGroups);
+      const changedGroupSet = new Set([...changedGroups, ...inheritingGroups]);
 
       this._rawValues = candidateRaw;
       this._computedValues = candidateComputed;
@@ -1526,6 +1541,20 @@ export class ConfigurationService {
     save: boolean
   ): Promise<SaveConfigsResult | TestConfigsResult> {
     return this.runRemoteGroupConfigAction(groupName, entries, save);
+  }
+
+  /** Remote services whose own VPN opt-out is unset, so they follow DISABLE_VPN_CHECK. */
+  private vpnCheckInheritors(
+    rawValues: ReadonlyMap<VariableName, string>
+  ): { serviceName: ServiceName; group: string }[] {
+    return [...this._dynamicVariableNames.entries()].flatMap(([serviceName, keys]) =>
+      [...keys]
+        .filter(key => isServiceVpnCheckKey(key) && !rawValues.get(key))
+        .flatMap(key => {
+          const group = this._variableGroups.get(key);
+          return group ? [{ serviceName, group }] : [];
+        })
+    );
   }
 
   private remoteConsumersForGroup(groupName: string): ServiceName[] {
@@ -1782,6 +1811,7 @@ export class ConfigurationService {
       }
 
       // Save values and collect services whose keys actually changed
+      const vpnDefaultBefore = this._rawValues.get('DISABLE_VPN_CHECK');
       const changedServices = new Set<ServiceName>();
       const invalidKeys: string[] = [];
       for (const { key, value } of entries) {
@@ -1802,6 +1832,10 @@ export class ConfigurationService {
       }
       if (invalidKeys.length > 0) {
         return { success: false, invalidKeys };
+      }
+      if (vpnDefaultBefore !== this._rawValues.get('DISABLE_VPN_CHECK')) {
+        for (const { serviceName } of this.vpnCheckInheritors(this._rawValues))
+          changedServices.add(serviceName);
       }
 
       // Restart each affected service
@@ -1832,9 +1866,14 @@ export class ConfigurationService {
         'missingVars' in status ? (status.missingVars ?? []) : []
       )
     );
-    return buildAllConfigs(this._rawValues).map(entry =>
-      missingVars.has(entry.key) ? { ...entry, value: '', hasValue: false } : entry
-    );
+    const vpnDefault = this._rawValues.get('DISABLE_VPN_CHECK') || 'false';
+    return buildAllConfigs(this._rawValues).map(entry => {
+      if (missingVars.has(entry.key)) return { ...entry, value: '', hasValue: false };
+      // An unset service VPN check shows the DISABLE_VPN_CHECK value it follows.
+      if (isServiceVpnCheckKey(entry.key) && !entry.hasValue)
+        return { ...entry, value: vpnDefault, hasValue: true };
+      return entry;
+    });
   }
 
   private findVariableInfo(variableName: VariableName): {

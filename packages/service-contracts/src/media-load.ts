@@ -8,7 +8,12 @@ export interface SwarmCounts {
   incomplete: number;
 }
 
-export type SwarmStatsError = 'invalid_hash' | 'scrape_timeout' | 'scrape_unavailable';
+/** `vpn_required`: the service's VPN check is on and its connection is not protected. */
+export type SwarmStatsError =
+  | 'invalid_hash'
+  | 'scrape_timeout'
+  | 'scrape_unavailable'
+  | 'vpn_required';
 
 /**
  * Engine failures, as the backend's `ErrorWithStatus` codes. `unknown_source` means the service
@@ -26,7 +31,8 @@ export type MediaLoadError =
   | 'timeout'
   | 'torrent_closed'
   | 'torrent_not_ready'
-  | 'unknown_source';
+  | 'unknown_source'
+  | 'vpn_required';
 
 /** What the engine needs to fetch a source. Encrypted at rest by the service. */
 export interface SourceDescriptor {

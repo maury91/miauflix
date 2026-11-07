@@ -1657,6 +1657,47 @@ describe('StorageService', () => {
       expect(reconciled?.allocatedBytes).toBe(0);
       expect(reconciled?.reservedBytes).toBe(storage.reservedBytes);
     });
+
+    it('preserves a reservation when a queued admission adds a live claim', async () => {
+      const { storageService } = setupTest();
+      const source = await createSource(database);
+      const params = {
+        sourceId: source.id,
+        location: '/path/that/does/not/exist',
+        size: 1_000,
+        reservedBytes: 1_000,
+      };
+      await storageService.createStorage(params);
+
+      await Promise.all([
+        storageService.createStorage({
+          ...params,
+          claim: { path: 'movie.mkv', input: { kind: 'playback', ownerKey: 'stream' } },
+        }),
+        storageService.releaseReservation(source.id),
+      ]);
+
+      expect((await storageService.getStorageBySource(source.id))?.reservedBytes).toBe(1_000);
+      expect(await storageService.getClaimedPaths(source.id)).toEqual(['movie.mkv']);
+    });
+
+    it('charges a released storage only what it holds on disk', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestContentSource(movie.id);
+      await storageService.createStorage({
+        sourceId: source.id,
+        location: '/path/that/does/not/exist',
+        size: 1_000,
+        reservedBytes: 1_000,
+      });
+      expect(await storageService.getChargedStorageUsage()).toBe(1_000n);
+
+      await storageService.releaseReservation(source.id);
+
+      expect((await storageService.getStorageBySource(source.id))?.reservedBytes).toBe(0);
+      expect(await storageService.getChargedStorageUsage()).toBe(0n);
+    });
   });
 
   it('records the admission claim with the row so a concurrent admission cannot evict it', async () => {

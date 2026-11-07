@@ -7,7 +7,6 @@ import { sources } from '@miauflix/service-contracts';
 import { Database } from 'bun:sqlite';
 import { expect, it, spyOn } from 'bun:test';
 
-import { SourcesConfigService } from '../src/config/config.service';
 import { Store } from '../src/db/store';
 import { isInternalHost } from '../src/http/destination';
 import { type Fetch, HttpClient } from '../src/http/http-client';
@@ -24,7 +23,6 @@ import {
 import { resolveHashes } from '../src/providers/torrent-hash';
 import { TorznabProvider } from '../src/providers/torznab/torznab';
 import { createSourcesService } from '../src/service';
-import { VpnGuard } from '../src/vpn/vpn-guard';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
 import { idTitle, useProviders } from './providers';
 
@@ -198,24 +196,6 @@ it('cancels a paused search during shutdown without waiting for its consumer', a
   } finally {
     await s.close();
   }
-});
-
-it('does not cache caller cancellation as a failed VPN check', async () => {
-  let calls = 0;
-  const config = new SourcesConfigService();
-  const http = new HttpClient(
-    { timeout: () => 1000, flareSolverr: () => '' },
-    fixtureFetch(() => {
-      calls++;
-      return Response.json({ protected: true });
-    })
-  );
-  const vpn = new VpnGuard(config, http);
-  const controller = new AbortController();
-  controller.abort();
-  await expect(vpn.isProtected(controller.signal)).rejects.toBeDefined();
-  expect(await vpn.isProtected()).toBe(true);
-  expect(calls).toBe(1);
 });
 
 it('blocks private, special-use and IPv4-mapped IPv6 destinations', () => {

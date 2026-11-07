@@ -73,4 +73,10 @@ export const migrations: string[] = [
     PRIMARY KEY (storageId, at)
   ) WITHOUT ROWID;
   CREATE INDEX idx_transfer_sample_at ON transfer_sample (at);`,
+  // Downloads nobody claims kept reserving their full size, so a new download evicted finished
+  // ones to make room for space that was never going to be used: charge them what is on disk.
+  `UPDATE storage SET reservedBytes = 0
+    WHERE reservedBytes > allocatedBytes
+      AND activeStreams = 0
+      AND NOT EXISTS (SELECT 1 FROM storage_file_claim c WHERE c.storageId = storage.id);`,
 ];

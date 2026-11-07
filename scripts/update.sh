@@ -9,7 +9,7 @@ set -euo pipefail
 REPO_RAW="https://raw.githubusercontent.com/maury91/miauflix"
 FILES_REF="${MIAUFLIX_FILES_REF:-main}"
 # Compose files published in the repository; anything else in COMPOSE_FILE is yours and left alone
-UPSTREAM_FILES="docker-compose.yml docker-compose.vpn.yml docker-compose.https.yml docker-compose.flaresolverr.yml docker-compose.tracing.yml Caddyfile"
+UPSTREAM_FILES="docker-compose.yml docker-compose.vpn.yml docker-compose.all-in-one.yml docker-compose.https.yml docker-compose.flaresolverr.yml docker-compose.tracing.yml Caddyfile"
 HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-360}"
 # Present while a replaced Caddyfile still waits for Caddy to be recreated, so a failed run retries it
 CADDY_PENDING=".update-caddy-recreate-pending"
