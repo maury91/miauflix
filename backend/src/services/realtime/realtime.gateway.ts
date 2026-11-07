@@ -10,6 +10,10 @@ import type { ProgressRequest } from '@routes/progress.types';
 import type { AuthService } from '@services/auth/auth.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type {
+  PlaybackPiecesService,
+  PlaybackPiecesUpdate,
+} from '@services/playback/playback-pieces.service';
+import type {
   PlaybackDeliveryUpdate,
   PlaybackSessionService,
   PlaybackSourceAttempt,
@@ -116,8 +120,10 @@ export class RealtimeGateway {
           Pick<PlaybackSessionService, 'onDeliveryUpdate'>)
       | null,
     private readonly search: RealtimeSearchChannel,
-    availability: Pick<SourceAvailabilityService, 'onChange'>
+    availability: Pick<SourceAvailabilityService, 'onChange'>,
+    private readonly pieces: Pick<PlaybackPiecesService, 'latestFor' | 'onRanges'> | null = null
   ) {
+    this.removePiecesListener = pieces?.onRanges(update => this.deliverPieces(update)) ?? null;
     this.removeDeliveryListener =
       playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;
     this.removeAttemptListener =
@@ -165,11 +171,13 @@ export class RealtimeGateway {
     this.removeArtworkListener?.();
     this.removeArtworkStreamReadyListener?.();
     this.removeDeliveryListener?.();
+    this.removePiecesListener?.();
     this.removeAttemptListener?.();
     this.removeAvailabilityListener?.();
   }
 
   private readonly removeDeliveryListener: (() => void) | null;
+  private readonly removePiecesListener: (() => void) | null;
   private readonly removeAttemptListener: (() => void) | null;
   private readonly removeAvailabilityListener: () => void;
   private removeArtworkListener: (() => void) | null = null;
@@ -340,6 +348,8 @@ export class RealtimeGateway {
       state.clientId = message.clientId;
       clearTimeout(state.authTimer);
       this.send(state, { type: 'ready', v: 1 });
+      for (const update of this.pieces?.latestFor(state.userId, state.sessionId) ?? [])
+        this.sendPieces(state, update);
     } catch {
       state.socket.close(1008, 'Authentication failed');
     }
@@ -378,6 +388,25 @@ export class RealtimeGateway {
         });
       }
     }
+  }
+
+  /** Downloaded parts of a played file go to every tab of the session that started it. */
+  private deliverPieces(update: PlaybackPiecesUpdate): void {
+    for (const client of this.clients) {
+      if (
+        client.userId === update.userId &&
+        (!update.sessionId || client.sessionId === update.sessionId)
+      )
+        this.sendPieces(client, update);
+    }
+  }
+
+  private sendPieces(client: ClientState, update: PlaybackPiecesUpdate): void {
+    this.send(client, {
+      type: 'playback-pieces',
+      playbackId: update.playbackId,
+      ranges: update.ranges,
+    });
   }
 
   /** Which candidate source a viewer's starting playback is trying, for that session only. */
