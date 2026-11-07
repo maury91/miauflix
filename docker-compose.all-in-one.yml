@@ -1,0 +1,31 @@
+# Run every Miauflix service in one container (miauflix-services) instead of three, to save memory
+# and processes. Usage: add it to COMPOSE_FILE in .env, e.g.
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.all-in-one.yml
+# Guide: docs/setup/docker-setup.md#one-container-for-all-services
+#
+# Without the VPN only: source search and media load would leave the VPN too. With
+# docker-compose.vpn.yml, keep the separate containers. Uses the same data volume as them, so you
+# can switch back and forth.
+
+services:
+  miauflix:
+    environment:
+      BUNQUEUE_HOST: miauflix-services
+      CATALOG_SERVICE_URL: http://miauflix-services:3001
+      LIST_SERVICE_URL: http://miauflix-services:3002
+      SOURCES_SERVICE_URL: http://miauflix-services:3003
+      MEDIA_LOAD_SERVICE_URL: http://miauflix-services:3004
+    depends_on: !reset
+      miauflix-services:
+        condition: service_healthy
+
+  miauflix-services:
+    profiles: !reset [] # Defined, but off, in docker-compose.yml
+
+  # Replaced by miauflix-services
+  miauflix-catalog-services:
+    profiles: [split]
+  miauflix-sources:
+    profiles: [split]
+  miauflix-media-load:
+    profiles: [split]

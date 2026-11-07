@@ -364,6 +364,14 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
   }
 
   private toLocalStatus(remote: ServiceStatus): ServiceInstanceStatus {
+    const vpn = remote.details?.vpn;
+    const status = this.toLocalState(remote);
+    return vpn === 'disabled' || vpn === 'protected' || vpn === 'unprotected'
+      ? { ...status, vpn }
+      : status;
+  }
+
+  private toLocalState(remote: ServiceStatus): ServiceInstanceStatus {
     if (remote.state === 'ready') return { status: 'ready' };
     if (remote.state === 'degraded')
       return {

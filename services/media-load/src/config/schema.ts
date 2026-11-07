@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 
 import type { ConfigVariable, ServiceConfigSchema } from '@miauflix/contract';
+import { vpnConfigVariables } from '@miauflix/vpn-guard';
 
 /** Scrape trackers: well-known UDP trackers that answer multi-hash scrapes. */
 export const DEFAULT_SCRAPE_TRACKERS = [
@@ -60,6 +61,7 @@ export const createMediaLoadConfigSchema = (
       name: 'Media load',
       description: 'Torrent engine: downloads, encrypted storage and tracker scrapes.',
       variables: [
+        ...vpnConfigVariables('MEDIA_LOAD'),
         text({
           key: 'CONTENT_DOWNLOAD_LIMIT',
           description: 'Download limit for peer-to-peer client',

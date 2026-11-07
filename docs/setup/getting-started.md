@@ -36,17 +36,17 @@ npm run config-only:docker
 
 The wizard detects missing settings, offers connection tests, and saves application configuration in the persistent data directory. You can skip it and enter settings from the browser after the first start. With the [prebuilt images](docker-setup.md#prebuilt-images), browser setup is the simplest path. Keep the application and services data volumes across container recreation.
 
-The default production Compose topology runs the List Service inside the combined `miauflix-services` container. The development topology uses a separate `list-service` container. Configure Trakt credentials to use its lists and synchronization, or dismiss the optional setup prompt to continue browsing without them. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
+The default production Compose topology runs the List Service inside the `miauflix-catalog-services` container (or `miauflix-services` with `docker-compose.all-in-one.yml`). The development topology uses a separate `list-service` container. Configure Trakt credentials to use its lists and synchronization, or dismiss the optional setup prompt to continue browsing without them. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
 
 #### 2. Set up the VPN
 
-The optional VPN Compose file routes the stack through NordVPN with [gluetun](https://github.com/qdm12/gluetun), whose firewall also acts as a kill switch. Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then save your private key to `.env`:
+The optional VPN Compose file routes source search (`miauflix-sources`), the torrent engine (`miauflix-media-load`) and FlareSolverr through NordVPN with [gluetun](https://github.com/qdm12/gluetun), whose firewall also acts as a kill switch. The backend and the catalog services stay on your normal connection. Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then save your private key to `.env`:
 
 ```bash
 scripts/nordvpn-key.sh
 ```
 
-Miauflix currently detects only NordVPN and refuses to search for sources when no VPN is detected, because torrents would go out from your real IP. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env`, but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
+Source search and the torrent engine each run their own VPN check (currently NordVPN only): without a VPN, source search refuses to search and the torrent engine disconnects from peers and trackers, because they would see your real IP. Files already downloaded still play. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env` (the default of both checks; `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK` set one service), but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
 
 #### 3. [Optional] Set up HTTPS and domain name
 

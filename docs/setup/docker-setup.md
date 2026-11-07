@@ -21,28 +21,28 @@ On first boot the `miauflix` logs show `Starting in degraded mode`: that's expec
 
 > **Security:** `docker-compose.yml` sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
 
-> **VPN:** Miauflix won't search for sources until it detects a VPN, because peers would see your real IP. Set one up as described in [Using a VPN](#using-a-vpn), or [opt out](#running-without-a-vpn) if you accept the risk.
+> **VPN:** Source search and the torrent engine each check for a VPN: until they detect one, source search won't search and the torrent engine stays disconnected from peers, because they would see your real IP. Set one up as described in [Using a VPN](#using-a-vpn), or [opt out](#running-without-a-vpn) if you accept the risk.
 
 ### Combining compose files
 
 Every deployment starts from `docker-compose.yml`, and each feature is one more file on top of it. Download the ones you want next to `docker-compose.yml` and list them all in `COMPOSE_FILE` in a `.env` file in the same folder, so plain `docker compose` commands use them together (on Windows, separate them with `;` instead of `:`). `docker-compose.yml` must come first, because later files override earlier ones (listed after `docker-compose.https.yml`, it would turn the unauthenticated admin setup back on); the feature files can follow in any order.
 
-| File                                                                       | Adds                                                                              |
-| -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| [`docker-compose.vpn.yml`](../../docker-compose.vpn.yml)                   | NordVPN for all traffic, see [Using a VPN](#using-a-vpn)                          |
-| [`docker-compose.https.yml`](../../docker-compose.https.yml)               | HTTPS for your domain with Caddy, see [HTTPS with a domain](#https-with-a-domain) |
-| [`docker-compose.flaresolverr.yml`](../../docker-compose.flaresolverr.yml) | [FlareSolverr](flaresolverr.md) for sources behind Cloudflare                     |
-| [`docker-compose.tracing.yml`](../../docker-compose.tracing.yml)           | [Tracing](../development/tracing.md) to Jaeger, UI on `localhost:16686`           |
-| [`docker-compose.build.yml`](../../docker-compose.build.yml)               | Builds the images from a clone, see [Building from source](#building-from-source) |
+| File                                                                       | Adds                                                                                                  |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [`docker-compose.vpn.yml`](../../docker-compose.vpn.yml)                   | NordVPN for source search and torrents, see [Using a VPN](#using-a-vpn)                               |
+| [`docker-compose.all-in-one.yml`](../../docker-compose.all-in-one.yml)     | Every service in one container, see [One container for all services](#one-container-for-all-services) |
+| [`docker-compose.https.yml`](../../docker-compose.https.yml)               | HTTPS for your domain with Caddy, see [HTTPS with a domain](#https-with-a-domain)                     |
+| [`docker-compose.flaresolverr.yml`](../../docker-compose.flaresolverr.yml) | [FlareSolverr](flaresolverr.md) for sources behind Cloudflare                                         |
+| [`docker-compose.tracing.yml`](../../docker-compose.tracing.yml)           | [Tracing](../development/tracing.md) to Jaeger, UI on `localhost:16686`                               |
+| [`docker-compose.build.yml`](../../docker-compose.build.yml)               | Builds the images from a clone, see [Building from source](#building-from-source)                     |
 
 For example, a VPS behind HTTPS and the VPN, with FlareSolverr:
 
 ```bash
 COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml:docker-compose.flaresolverr.yml
-MIAUFLIX_UPSTREAM=vpn:3000 # with the VPN, Caddy reaches Miauflix through the VPN container
 ```
 
-`docker compose config --services` lists the services the combination runs. FlareSolverr and Jaeger are defined, switched off, in `docker-compose.yml`: that way the VPN file can move them into the VPN's network whichever files you list.
+`docker compose config --services` lists the services the combination runs. FlareSolverr is defined, switched off, in `docker-compose.yml`: that way the VPN file can move it into the VPN's network whichever files you list.
 
 ### Open it to your local network
 
@@ -86,11 +86,10 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
    ```
 
-   `COMPOSE_FILE` lets plain `docker compose` commands use both files (see [Combining compose files](#combining-compose-files)). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files and point Caddy at the VPN container, which owns Miauflix's network:
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files (see [Combining compose files](#combining-compose-files)). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files. The backend stays outside the VPN, so nothing else changes (a `MIAUFLIX_UPSTREAM=vpn:3000` line left from older instructions is ignored and can be removed):
 
    ```bash
    COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml
-   MIAUFLIX_UPSTREAM=vpn:3000
    ```
 
 4. Start it and read the generated admin credentials:
@@ -106,15 +105,18 @@ The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a
 
 ### Published images
 
-| Image                                    | Contents                                                                                        |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend                                                      |
-| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog, lists, source search, and the torrent engine (media-load) in one image |
-| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                                                                |
-| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                                                                 |
-| `ghcr.io/maury91/miauflix-sources`       | Source-search service on its own                                                                |
-| `ghcr.io/maury91/miauflix-media-load`    | Torrent engine (downloads, encrypted storage, tracker scrapes) on its own                       |
-| `ghcr.io/maury91/miauflix-tv-pairing`    | TV server-discovery pairing service                                                             |
+| Image                                       | Contents                                                                                                 |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `ghcr.io/maury91/miauflix`                  | Main backend, also serves the web frontend                                                               |
+| `ghcr.io/maury91/miauflix-catalog-services` | Bunqueue, media catalog, and lists: talks to TMDB and Trakt only, no VPN needed                          |
+| `ghcr.io/maury91/miauflix-sources`          | Source search on its own; checks its own VPN connection                                                  |
+| `ghcr.io/maury91/miauflix-media-load`       | Torrent engine (downloads, encrypted storage, tracker scrapes) on its own; checks its own VPN connection |
+| `ghcr.io/maury91/miauflix-services`         | All of the above but the backend in one container, to save resources                                     |
+| `ghcr.io/maury91/miauflix-media-catalog`    | Media catalog service on its own                                                                         |
+| `ghcr.io/maury91/miauflix-list-service`     | List (Trakt) service on its own                                                                          |
+| `ghcr.io/maury91/miauflix-tv-pairing`       | TV server-discovery pairing service                                                                      |
+
+`miauflix-services`, `miauflix-catalog-services`, `miauflix-sources` and `miauflix-media-load` are built from the same base (`services/Dockerfile`) and differ only in the services they contain. Each runs the services its command names, so any container of them can run any subset it contains, for example `command: [sources, media-load]` on `miauflix-services`. They keep each service's data in its own directory (`SOURCES_DATA_DIR`, `MEDIA_LOAD_DATA_DIR`, ...), so containers on one host can share a data volume, and the healthcheck covers just the services the container runs. Source search and media load each check their own connection against NordVPN, so they can run on different hosts, each behind its own VPN; point the backend at them with `SOURCES_SERVICE_URL` and `MEDIA_LOAD_SERVICE_URL`.
 
 All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauflix/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 
@@ -122,9 +124,9 @@ To test a branch before merging, open **Actions → CI Pipeline → Run workflow
 
 ### Using a VPN
 
-Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default Miauflix refuses to search for sources until it detects a NordVPN connection.
+Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default source search and media load refuse to work until each detects a NordVPN connection.
 
-[`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes Miauflix and its services through NordVPN with [gluetun](https://github.com/qdm12/gluetun). Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP.
+[`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes everything that reaches indexers, trackers and peers through NordVPN with [gluetun](https://github.com/qdm12/gluetun): the `miauflix-sources` and `miauflix-media-load` containers and FlareSolverr. Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP. The backend and `miauflix-catalog-services` only talk to your browser, TMDB and Trakt, so they stay on the normal network.
 
 1. Get a NordVPN access token: sign in at [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard), pick **NordVPN** in the left sidebar, then **Get Access Token** → **Generate New Token**. (It is not under "Manual setup".)
 2. Download the VPN file and the key helper next to `docker-compose.yml`:
@@ -147,7 +149,7 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
    NORDVPN_COUNTRIES=Netherlands # optional, comma-separated list of countries to connect to (default: any)
    ```
 
-   If you [set up HTTPS](#https-with-a-domain) or use other files, keep them in the list too, and with HTTPS and `MIAUFLIX_UPSTREAM=vpn:3000` from that section instead, or Caddy drops out of your `docker compose` commands.
+   If you [set up HTTPS](#https-with-a-domain) or use other files, keep them in the list too, or they drop out of your `docker compose` commands.
 
 5. Start it:
 
@@ -155,9 +157,9 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
    docker compose up -d
    ```
 
-The `vpn` service owns the network, so Miauflix's port is published from it. `MIAUFLIX_LISTEN_ADDRESS` (see [Open it to your local network](#open-it-to-your-local-network)) applies to the `vpn` service's port mapping instead. FlareSolverr and Jaeger, when their files are listed, share the VPN's network too. Gluetun connects to NordVPN's P2P servers and passes Miauflix's VPN check as soon as the tunnel is up; `http://localhost:3000/api/status` reports it under `vpn`.
+The `vpn` service owns the network of source search and media load; the backend reaches them through it (`vpn:3003` and `vpn:3004`), and Miauflix's port stays published by the `miauflix` container as without the VPN. FlareSolverr, when its file is listed, shares the VPN's network too. Gluetun connects to NordVPN's P2P servers. Source search and media load each check that their own connection is NordVPN-protected, and refuse searches, tracker scrapes and downloads until it is. `http://localhost:3000/api/status` shows each one's check as `vpn` (`protected`, `unprotected` or `disabled`) under `services.SOURCES` and `services.MEDIA_LOAD`.
 
-To check the connection, compare the address the container uses with your own:
+To check the connection, compare the address source search and media load use with your own:
 
 ```bash
 docker compose exec vpn wget -qO- https://ipinfo.io/ip
@@ -165,11 +167,21 @@ docker compose exec vpn wget -qO- https://ipinfo.io/ip
 
 #### Running without a VPN
 
-If you accept that peers see your real IP (for example while trying Miauflix on a laptop), add `DISABLE_VPN_CHECK=true` to a `.env` file next to `docker-compose.yml`. Don't do this on a server.
+If you accept that peers see your real IP (for example while trying Miauflix on a laptop), add `DISABLE_VPN_CHECK=true` to a `.env` file next to `docker-compose.yml`. Don't do this on a server. It is the default of each service's own setting, `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK`, which you can also change on the configuration page.
+
+### One container for all services
+
+By default the catalog, source search and media load run in three containers, so that only the last two need the VPN. Without a VPN you can run them all in one `miauflix-services` container instead, which saves memory and processes. Add the file to `COMPOSE_FILE` in `.env`:
+
+```bash
+COMPOSE_FILE=docker-compose.yml:docker-compose.all-in-one.yml
+```
+
+It uses the same data volume, so you can switch either way and run `docker compose up -d --remove-orphans`. Don't combine it with `docker-compose.vpn.yml`: source search and media load would leave the VPN, and their VPN checks would stop them.
 
 ## Building From Source
 
-`docker-compose.build.yml` builds the `miauflix` and `miauflix-services` images from a clone of the repository instead of pulling them. Everything else works as with the prebuilt images, including the other files in [Combining compose files](#combining-compose-files).
+`docker-compose.build.yml` builds the `miauflix`, `miauflix-catalog-services`, `miauflix-sources` and `miauflix-media-load` images (and `miauflix-services` with `docker-compose.all-in-one.yml`) from a clone of the repository instead of pulling them. Everything else works as with the prebuilt images, including the other files in [Combining compose files](#combining-compose-files).
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
@@ -190,7 +202,7 @@ docker compose down --remove-orphans
 docker compose -f docker-compose.yml run --rm --no-deps --entrypoint sh -v ./data:/source-data:ro miauflix \
   -c 'cp -a /source-data/. /usr/src/app/data/'
 # List service (Trakt) and catalog data
-docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/source-data:ro miauflix-services \
+docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/source-data:ro miauflix-catalog-services \
   -c 'set -e; mkdir -p /app/data/list-service /app/data/catalog
       cp -a /source-data/list-service/. /app/data/list-service/
       if [ -d /source-data/media-catalog ]; then cp -a /source-data/media-catalog/. /app/data/catalog/; else cp -a /source-data/catalog.db* /app/data/catalog/; fi
@@ -227,10 +239,13 @@ services:
 ### Main Services
 
 - **miauflix**: Node.js API server and static-asset frontend host
-- **miauflix-services**: Bunqueue, media catalog, list service, and source service in one container
+- **miauflix-catalog-services**: Bunqueue, media catalog, and list service; never behind the VPN
+- **miauflix-sources**: Source search; behind the VPN with `docker-compose.vpn.yml`
+- **miauflix-media-load**: Torrent engine and downloads; behind the VPN with `docker-compose.vpn.yml`
+- **miauflix-services** (`docker-compose.all-in-one.yml`): the three above in one container
 - **autoheal**: Restarts the backend when its healthcheck fails (see [Health checks and automatic restarts](#health-checks-and-automatic-restarts))
 - **watchtower**: Updates the Miauflix containers when a new image is published (not with `docker-compose.build.yml`)
-- **vpn** (`docker-compose.vpn.yml`): [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN; the other services share its network
+- **vpn** (`docker-compose.vpn.yml`): [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN; `miauflix-sources`, `miauflix-media-load` and FlareSolverr share its network
 - **caddy** (`docker-compose.https.yml`): HTTPS reverse proxy with automatic Let's Encrypt certificates
 - **flaresolverr** (`docker-compose.flaresolverr.yml`): Cloudflare bypass proxy for protected content sources, see the [FlareSolverr Configuration Guide](flaresolverr.md)
 - **jaeger** (`docker-compose.tracing.yml`): Collects OpenTelemetry traces, see [Tracing](../development/tracing.md)
@@ -314,7 +329,7 @@ For common bootstrap and deployment variables, see the [Environment Variables Gu
 ### Important Volumes
 
 - **`miauflix_data`**: Backend database and settings
-- **`miauflix_services_data`**: Media catalog, list service (Trakt), source search, and Bunqueue data
+- **`miauflix_services_data`**: Media catalog, list service (Trakt), source search, media load, and Bunqueue data. Both service containers mount it; each service keeps its own directory
 - **`./downloads`** (or `DOWNLOADS_HOST_PATH`): Downloaded content
 - **`caddy_data`** (`docker-compose.https.yml`): Certificates
 
@@ -324,12 +339,12 @@ Docker prefixes volume names with the project name, by default the folder name: 
 
 ```bash
 # Backup essential data (with Miauflix stopped)
-docker compose stop miauflix miauflix-services
+docker compose stop miauflix miauflix-catalog-services miauflix-sources miauflix-media-load
 docker compose run --rm --no-deps --entrypoint tar -v "$PWD":/backup miauflix \
   -czf /backup/miauflix-data.tar.gz -C /usr/src/app/data .
-docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup miauflix-services \
+docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup miauflix-catalog-services \
   -czf /backup/miauflix-services-data.tar.gz -C /app/data .
-docker compose start miauflix-services miauflix
+docker compose start miauflix-catalog-services miauflix-sources miauflix-media-load miauflix
 ```
 
 Keep `.env` with the backups for deployment settings and any explicitly supplied secrets. The data volumes contain saved application configuration and generated encryption keys; retain them together. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauflix can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).

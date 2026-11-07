@@ -57,7 +57,7 @@ Administrators can manage providers and definition repositories through Settings
 
 ### Media load service
 
-The media-load service is the torrent engine. It runs WebTorrent, keeps the encrypted downloads and their storage records and claims, and serves verified byte ranges that the backend proxies to players and FFmpeg. It also answers tracker scrapes, batching concurrent requests into multi-hash scrapes (`SCRAPE_TRACKERS`). The backend names sources by id and sends each one's descriptor. Playback sessions, FFmpeg and subtitles stay in the backend. In Docker it runs in the services container with the downloads volume, so with the VPN layer its peer and tracker traffic uses the tunnel.
+The media-load service is the torrent engine. It runs WebTorrent, keeps the encrypted downloads and their storage records and claims, and serves verified byte ranges that the backend proxies to players and FFmpeg. It also answers tracker scrapes, batching concurrent requests into multi-hash scrapes (`SCRAPE_TRACKERS`). The backend names sources by id and sends each one's descriptor. Playback sessions, FFmpeg and subtitles stay in the backend. In Docker it runs in its own `miauflix-media-load` container with the downloads volume (or inside `miauflix-services` with the all-in-one layout), so with the VPN layer its peer and tracker traffic uses the tunnel. Its own VPN check also fences the engine while the connection is unprotected: no peers, announces or new torrents, while stored files stay readable.
 
 ### Remote contracts and configuration
 
@@ -130,12 +130,13 @@ Implementation: [backend job handlers](../../backend/src/services/background-job
 The default Compose deployment contains:
 
 - **`miauflix`:** Node.js backend and built frontend, published on port 3000 with a localhost-only default binding.
-- **`miauflix-services`:** the Bunqueue broker and catalog, list, and source services, with persistent service data.
+- **`miauflix-catalog-services`:** the Bunqueue broker and the catalog and list services (TMDB, Trakt).
+- **`miauflix-sources`** and **`miauflix-media-load`:** source search and the torrent engine, everything that reaches indexers, trackers, and peers. The service containers share the persistent service-data volume; `docker-compose.all-in-one.yml` runs all three service containers as one `miauflix-services` container instead.
 - **Supporting containers:** scheduled image updates and unhealthy-application recovery.
 
-Optional Compose files add Caddy HTTPS, Gluetun/NordVPN routing, FlareSolverr, and Jaeger tracing. HTTPS terminates at Caddy in the supplied HTTPS setup. Internal services should remain on the trusted application network rather than being exposed as public browser APIs.
+Optional Compose files add Caddy HTTPS, Gluetun/NordVPN routing, FlareSolverr, and Jaeger tracing. Only `miauflix-sources`, `miauflix-media-load` and FlareSolverr run inside the Gluetun network; the backend and catalog services do not need the VPN. HTTPS terminates at Caddy in the supplied HTTPS setup. Internal services should remain on the trusted application network rather than being exposed as public browser APIs.
 
-VPN detection checks whether the outbound connection is recognized as NordVPN-protected. The Gluetun deployment supplies the tunnel and firewall; application status checks and a network kill switch are different mechanisms. VPN checks can be explicitly disabled in configuration.
+VPN detection runs in each service that reaches the swarm or indexers (`@miauflix/vpn-guard`, used by sources and media-load): each checks whether its own outbound connection is recognized as NordVPN-protected, refuses that work while it is not, and reports the result as `details.vpn` in its status, which the backend shows per service in `/api/status`. They can therefore run on different hosts. The Gluetun deployment supplies the tunnel and firewall; application status checks and a network kill switch are different mechanisms. VPN checks can be explicitly disabled in configuration.
 
 The backend has process-local playback and torrent state alongside its local SQLite database. The split service design does not by itself provide load-balanced, stateless backend replicas. The supplied deployment runs one application instance.
 

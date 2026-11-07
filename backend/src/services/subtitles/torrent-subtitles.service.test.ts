@@ -85,10 +85,33 @@ describe('torrent subtitle matching', () => {
       getMediaFiles: async () => layout(['Show.S01E02.mkv', 'Show.S01E02.en.srt']),
     } as never);
     const runner = service as unknown as { run: () => Promise<string> };
-    jest.spyOn(runner, 'run').mockRejectedValue(new Error('Missing FFmpeg'));
-    expect(await service.discover(target())).toMatchObject([
+    jest.useFakeTimers();
+    const run = jest.spyOn(runner, 'run').mockRejectedValue(new Error('Missing FFmpeg'));
+    const discovered = service.discover(target());
+    await jest.advanceTimersByTimeAsync(3_000);
+    expect(run).toHaveBeenCalledTimes(2);
+    jest.useRealTimers();
+    expect(await discovered).toMatchObject([
       { provider: 'torrent', fileId: '7:Show.S01E02.mkv:torrent:Show.S01E02.en.srt' },
     ]);
+    service.close();
+  });
+
+  it('probes once more a moment after a failed probe', async () => {
+    const service = new TorrentSubtitlesService({
+      prepareSubtitleFiles: async () => {},
+      getMediaFiles: async () => layout(['Show.S01E02.mkv']),
+    } as never);
+    const runner = service as unknown as { run: () => Promise<string> };
+    jest.useFakeTimers();
+    jest
+      .spyOn(runner, 'run')
+      .mockRejectedValueOnce(new Error('Subtitle extraction failed'))
+      .mockResolvedValueOnce(JSON.stringify({ streams: [{ index: 2, codec_name: 'subrip' }] }));
+    const discovered = service.discover(target());
+    await jest.advanceTimersByTimeAsync(3_000);
+    jest.useRealTimers();
+    expect(await discovered).toMatchObject([{ provider: 'embedded', streamIndex: 2 }]);
     service.close();
   });
 

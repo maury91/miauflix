@@ -4,7 +4,8 @@
 #
 # This is the base of every deployment. Add features by listing more files in COMPOSE_FILE (in a
 # .env file next to the compose files; on Windows separate them with ; instead of :), any order:
-#   docker-compose.vpn.yml           route everything through NordVPN (gluetun)
+#   docker-compose.vpn.yml           route source search and torrents through NordVPN (gluetun)
+#   docker-compose.all-in-one.yml    run every service in one container (no VPN), to save resources
 #   docker-compose.https.yml         HTTPS for a domain with Caddy
 #   docker-compose.flaresolverr.yml  FlareSolverr for Cloudflare-protected sources
 #   docker-compose.tracing.yml       OpenTelemetry tracing to Jaeger
@@ -20,22 +21,25 @@ services:
       - '${MIAUFLIX_LISTEN_ADDRESS:-127.0.0.1}:3000:3000'
     environment:
       DATA_DIR: /usr/src/app/data
-      # Where media-load (in miauflix-services) keeps downloads; the backend pushes it there.
+      # Where media-load keeps downloads; the backend pushes it there.
       DOWNLOAD_PATH: /usr/src/app/downloads
-      BUNQUEUE_HOST: miauflix-services
+      BUNQUEUE_HOST: miauflix-catalog-services
       BUNQUEUE_PORT: 6789
-      CATALOG_SERVICE_URL: http://miauflix-services:3001
-      LIST_SERVICE_URL: http://miauflix-services:3002
-      SOURCES_SERVICE_URL: http://miauflix-services:3003
-      MEDIA_LOAD_SERVICE_URL: http://miauflix-services:3004
+      CATALOG_SERVICE_URL: http://miauflix-catalog-services:3001
+      LIST_SERVICE_URL: http://miauflix-catalog-services:3002
+      # docker-compose.vpn.yml moves these two into the VPN's network: then they are vpn:3003/3004
+      SOURCES_SERVICE_URL: http://miauflix-sources:3003
+      MEDIA_LOAD_SERVICE_URL: http://miauflix-media-load:3004
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: ${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-true} # create the admin from the browser
-      # Without a VPN, Miauflix refuses to search for sources: torrents would go out from your real IP.
+      # Without a VPN, source search and media load refuse to work: they would reach sites, trackers
+      # and peers from your real IP. Each checks its own connection; this is their default.
       # Add docker-compose.vpn.yml (strongly recommended, required on anything internet-facing), see
       # docs/setup/docker-setup.md#using-a-vpn. To accept the risk and run without one, put
       # DISABLE_VPN_CHECK=true in a .env file next to this file.
       DISABLE_VPN_CHECK: ${DISABLE_VPN_CHECK:-false}
-      # Only used once docker-compose.flaresolverr.yml / docker-compose.tracing.yml turn them on;
-      # docker-compose.vpn.yml points them at 127.0.0.1, since they then share the VPN's network.
+      # Only used once docker-compose.flaresolverr.yml / docker-compose.tracing.yml turn them on.
+      # FlareSolverr is used by source search: docker-compose.vpn.yml points it at 127.0.0.1, since
+      # it then shares the VPN's network with the source service.
       FLARESOLVERR_URL: http://flaresolverr:8191
       OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
       DEBUG: ${DEBUG:-}
@@ -47,21 +51,50 @@ services:
     volumes:
       - miauflix_data:/usr/src/app/data
     depends_on:
-      miauflix-services:
+      miauflix-catalog-services:
+        condition: service_healthy
+      miauflix-sources:
+        condition: service_healthy
+      miauflix-media-load:
         condition: service_healthy
     restart: unless-stopped
     labels:
       com.centurylinklabs.watchtower.enable: 'true'
       autoheal: 'true'
 
-  # Bunqueue, media catalog, lists, source search and media load (the torrent engine and its
-  # downloads) in one container.
-  miauflix-services:
-    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-services:${MIAUFLIX_VERSION:-latest}
+  # Bunqueue, media catalog (TMDB) and lists (Trakt). Reaches only those APIs: never needs the VPN.
+  miauflix-catalog-services:
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-catalog-services:${MIAUFLIX_VERSION:-latest}
     init: true
     environment:
       LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
       CATALOG_DISABLE_BACKGROUND_TASKS: ${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
+    volumes:
+      # Shared by the service containers: each service keeps its own directory in it.
+      - miauflix_services_data:/app/data
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+
+  # Source search: reaches indexer websites. docker-compose.vpn.yml runs it inside the VPN.
+  miauflix-sources:
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-sources:${MIAUFLIX_VERSION:-latest}
+    init: true
+    environment:
+      SOURCES_DATA_DIR: /app/data/sources
+    volumes:
+      - miauflix_services_data:/app/data
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+
+  # Media load, the torrent engine and its downloads: reaches trackers and peers.
+  # docker-compose.vpn.yml runs it inside the VPN.
+  miauflix-media-load:
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-media-load:${MIAUFLIX_VERSION:-latest}
+    init: true
+    environment:
+      MEDIA_LOAD_DATA_DIR: /app/data/media-load
     volumes:
       - miauflix_services_data:/app/data
       # Same path the backend used, so storage recorded before media-load ran the engine resolves.
@@ -70,8 +103,25 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: 'true'
 
+  # Bunqueue, media catalog, lists, source search and media load in one container. Off until
+  # docker-compose.all-in-one.yml turns it on (and the three containers above off).
+  miauflix-services:
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-services:${MIAUFLIX_VERSION:-latest}
+    profiles: [all-in-one]
+    init: true
+    environment:
+      LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
+      CATALOG_DISABLE_BACKGROUND_TASKS: ${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
+    volumes:
+      - miauflix_services_data:/app/data
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+
   # Off until docker-compose.flaresolverr.yml turns it on. Defined here so that
-  # docker-compose.vpn.yml can move it into the VPN's network whatever the file order.
+  # docker-compose.vpn.yml can move it into the VPN's network whatever the file order: it fetches
+  # source websites for source search.
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     profiles: [flaresolverr]
