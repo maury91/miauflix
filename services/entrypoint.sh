@@ -13,8 +13,10 @@ if [[ $(id -u) -eq 0 ]]; then
       [[ -n "$other_owner" ]]; } &&
       ! chown -R bunqueue:bunqueue "$downloads"; then
       echo "Could not change ownership of $downloads; checking access as bunqueue" >&2
+      # Links are skipped, as chown -R skips them: media-load never creates any, and a stray one
+      # to something read-only must not stop the services.
       su-exec bunqueue:bunqueue /bin/bash -o pipefail -c '
-        find "$1" -mindepth 1 -print0 | while IFS= read -r -d "" entry; do
+        find "$1" -mindepth 1 ! -type l -print0 | while IFS= read -r -d "" entry; do
           if [[ -d "$entry" && ! ( -r "$entry" && -w "$entry" && -x "$entry" ) ]] ||
             [[ -f "$entry" && ! ( -r "$entry" && -w "$entry" ) ]]; then
             printf "bunqueue cannot use download: %q\n" "$entry" >&2

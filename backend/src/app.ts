@@ -363,7 +363,18 @@ try {
 
   // Error handling middleware - must be added first
   app.onError((err, c) => {
-    logger.error('App', `An error occured: ${err.name}: ${err.message}`);
+    const expected =
+      err instanceof ServiceNotConfiguredError ||
+      err instanceof AuthError ||
+      err instanceof InvalidTokenError ||
+      err instanceof LoginError ||
+      err instanceof RoleError;
+    // Stream and QR paths carry secret tokens: keep their shape, not their value.
+    const where = `${c.req.method} ${c.req.path.replace(/[A-Za-z0-9_-]{24,}/g, ':token')}`;
+    // Unexpected errors carry their stack, so the request and the code that threw can be found.
+    if (expected) logger.error('App', `An error occured on ${where}: ${err.name}: ${err.message}`);
+    else
+      logger.error('App', `An error occured on ${where}: ${err.name}: ${err.message}`, err.stack);
 
     if (err instanceof ServiceNotConfiguredError) {
       return c.json(

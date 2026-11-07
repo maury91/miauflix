@@ -1528,6 +1528,8 @@ describe('DownloadService', () => {
       await service.sweepExpiredClaims();
 
       expect(service.client.remove).toHaveBeenCalledWith(torrent, { destroyStore: false });
+      // Nothing grows it any more: it stops reserving its full size.
+      expect(mockStorageService.releaseReservation).toHaveBeenCalledWith(7);
     });
 
     it('still detaches the other sources when one fails during a sweep', async () => {

@@ -666,6 +666,7 @@ export class DownloadService {
       for (const id of sourceIds) {
         this.pausedSources.delete(id);
         this.pausedForPlayback.delete(id);
+        await this.storageService.releaseReservation(id);
       }
       logger.info('DownloadService', `Detached unclaimed torrent for source ${sourceId}`);
     });

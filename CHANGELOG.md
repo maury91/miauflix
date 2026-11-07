@@ -14,6 +14,9 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- When playback switches away from a source that stopped working, that source stops downloading instead of competing with the new one for bandwidth
+- Starting a large download no longer deletes finished downloads to make room: downloads you only previewed or stopped no longer hold on to their full size
+- Audio and embedded subtitles are checked again shortly after a check fails, for example right after playback switches source, instead of staying unavailable for the rest of the session
 - Signing in a TV by scanning its QR code works again: the phone no longer keeps asking you to sign in
 - On Samsung TVs, Who's watching now shows the profiles' animated 3D Plushies, and the editor draws them too; Home's sidebar shows your Plushie in 3D (still) on every device
 - On Samsung TVs, the profile and notifications panels and the episode list are laid out properly again (the profile panel no longer shows giant icons running off the screen), and the profile editor's shape and fabric pictures fill their tiles

@@ -804,6 +804,19 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     return this.storageRepository.findBySourceId(sourceId);
   }
 
+  /**
+   * Drop a storage's reservation once its torrent is detached: a download nobody claims no longer
+   * grows, so it is charged what it holds on disk instead of its full size. A new claim reserves
+   * again before it downloads.
+   */
+  async releaseReservation(sourceId: number): Promise<void> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
+    if (!storage || !storage.reservedBytes) return;
+    const allocatedBytes =
+      (await this.measureAllocatedBytes(storage.location)) ?? storage.allocatedBytes ?? 0;
+    await this.storageRepository.releaseReservation(storage.id, allocatedBytes);
+  }
+
   async setPlaybackActive(sourceId: number, active: boolean): Promise<boolean> {
     const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return false;
