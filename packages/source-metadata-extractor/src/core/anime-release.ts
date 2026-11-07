@@ -31,8 +31,12 @@ const PACK = /\b(?:batch|complete|bd ?box|season ?pack|全集)\b/i;
 const TECHNICAL =
   /\b(?:\d{3,4}p|\d{3,4}x\d{3,4}|[xh]\.?26[45]|hevc|avc|av1|aac(?:\s?\d\.\d)?|flac|opus|ddp?\s?\d\.\d|10 ?bits?|8 ?bits?|hi10p?|web(?:-?dl|rip)?|bd(?:rip)?|blu-?ray|dual[ -]audio|multi[ -]subs?)\b/gi;
 
-/** Reads season markers, episode numbers and ranges from an anime release or file name. */
-export function parseAnimeRelease(name: string): AnimeRelease {
+/**
+ * Reads season markers, episode numbers and ranges from an anime release or file name. Known
+ * `titles` are taken out before numbers are read, so a title ending in a number ("Mob Psycho
+ * 100", "86", "Kaiju No. 8") is not taken for an episode.
+ */
+export function parseAnimeRelease(name: string, titles: readonly string[] = []): AnimeRelease {
   const base = name.replace(/\.(?:mkv|mp4|avi|webm|m4v)$/i, '');
   const pairs = [...base.matchAll(/\bS(\d{1,2})[ ._-]?E(\d{1,4})(?!\d)/gi)].map(m => ({
     season: Number(m[1]),
@@ -55,7 +59,7 @@ export function parseAnimeRelease(name: string): AnimeRelease {
     .trim();
   // Inside brackets only as a fallback: "(Season 1) (Batch)", but not "(Season 2 - Title)" first.
   const season = seasonOf(text) ?? seasonOf(base.replace(/[[\]()【】]/g, ' ')) ?? pairs[0]?.season;
-  const rest = text.replace(SEASON_MARKERS, ' ');
+  const rest = withoutTitles(text, titles).replace(SEASON_MARKERS, ' ');
   let range: [number, number] | undefined;
   const ranges = [
     // The end of a range is only looked at, so "Part 2 - 01 ~ 10" still finds "01 ~ 10".
@@ -84,7 +88,10 @@ export function parseAnimeRelease(name: string): AnimeRelease {
     : (num(rest.match(/\s-\s(\d{1,4})(?:v\d)?(?:\s|$)/)) ??
       num(rest.match(/\b(?:ep(?:isode)?|e)\.? ?(\d{1,4})(?:v\d)?\b/i)) ??
       num(rest.match(/#(\d{1,4})\b/)) ??
-      (pairs.length ? undefined : num(rest.match(/\s(\d{1,4})(?:v\d)?$/))));
+      // A trailing number is the episode, unless it ends the title ("Kaiju No. 8 [BD]").
+      (pairs.length || TITLE_NUMBER.test(rest)
+        ? undefined
+        : num(rest.match(/(?:^|\s)(\d{1,4})(?:v\d)?$/))));
   const year = num(base.match(/[[(]((?:19|20)\d{2})[\])]/));
   return {
     season,
@@ -95,6 +102,24 @@ export function parseAnimeRelease(name: string): AnimeRelease {
     pack: PACK.test(base) || (season !== undefined && !episode && !range && !pairs.length),
     extra: EXTRA.test(base),
   };
+}
+
+/** A number that belongs to the title: "Part 2", "No. 8", "Cour 2", "Vol. 3". */
+const TITLE_NUMBER = /\b(?:part|no|cour|vol)\.?\s*\d{1,4}(?:v\d)?$/i;
+
+/** Read like the release text: dots and underscores are spaces. */
+const normalizeTitle = (title: string) => title.replace(/[_.]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+/** Takes known titles out of the text, longest first, as whole words. */
+function withoutTitles(text: string, titles: readonly string[]): string {
+  let result = text;
+  for (const title of [...titles].map(normalizeTitle).sort((a, b) => b.length - a.length)) {
+    if (!title) continue;
+    const escaped = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    result = result.replace(new RegExp(`(^|\\s)${escaped}(?=\\s|$)`, 'i'), '$1 ');
+  }
+  // Leading space kept: " - 05" still reads as an episode after its title.
+  return result.replace(/\s+/g, ' ');
 }
 
 const SEASON_MARKERS =

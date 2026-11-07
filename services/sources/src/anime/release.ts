@@ -20,7 +20,7 @@ export function matchAnimeRelease(
 ): AnimeMatch | null {
   const episode = anime.episode;
   if (!episode) return null;
-  const release = parseAnimeRelease(name);
+  const release = parseAnimeRelease(name, anime.titles);
   if (release.extra) return null;
   // Each numbering an anime release may use, with the season it is counted in.
   const numberings: { season: number | undefined; episode: number | undefined }[] = [

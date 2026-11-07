@@ -292,6 +292,22 @@ it('searches by AniDB episode id first, then by the entry titles', () => {
       v => v.query.q
     )
   ).toEqual(['Sorcery Academy S01E19', 'Sorcery Academy S01', 'Sorcery Academy Season 1']);
+  // A general indexer with an anime category keeps its TV search and id queries, and adds the
+  // entry's main title with the episode numbers.
+  expect(
+    variantsFor(
+      animeProvider({ movie: [], tv: ['q', 'tvdbid', 'season', 'ep'], anime: ['q'] }),
+      { ...request, media: { ...request.media, tvdbId: 4242 } },
+      secondCour
+    ).map(v => v.query)
+  ).toEqual([
+    { kind: 'tv', tvdbid: 4242, season: 1, ep: 19 },
+    { kind: 'tv', q: 'Majutsu Gakuen 2nd Season 07' },
+    { kind: 'tv', q: 'Majutsu Gakuen 2nd Season 19' },
+    { kind: 'tv', q: 'Sorcery Academy S01E19' },
+    { kind: 'tv', q: 'Sorcery Academy S01' },
+    { kind: 'tv', q: 'Sorcery Academy Season 1' },
+  ]);
 });
 
 it('reports anime matches in TMDB numbering, with the other numberings for packs', () => {

@@ -63,6 +63,22 @@ describe('parseAnimeRelease', () => {
     expect(parsed).toMatchObject(expected);
   });
 
+  it('does not take a number ending the title for the episode', () => {
+    expect(parseAnimeRelease('[Group] Kaiju No. 8 [BD 1080p]').episode).toBeUndefined();
+    expect(parseAnimeRelease('[Group] Shingeki no Kyojin Part 2 [BD]').episode).toBeUndefined();
+    // Known titles are taken out first, whatever number they end with.
+    const titles = ['Mob Psycho 100', '86', 'Kaiju No. 8'];
+    for (const name of ['[Group] Mob Psycho 100 [BD]', '[Group] 86 [Batch]', 'Kaiju_No._8 [BD]'])
+      expect(parseAnimeRelease(name, titles).episode).toBeUndefined();
+    expect(parseAnimeRelease('[Group] 86 [Batch]', titles).pack).toBe(true);
+    expect(parseAnimeRelease('[SubsPlease] Mob Psycho 100 - 05 (1080p)', titles).episode).toBe(5);
+    expect(parseAnimeRelease('[Group] 86 - 11 [1080p]', titles).episode).toBe(11);
+    expect(parseAnimeRelease('Mob Psycho 100 III 05', titles)).toMatchObject({
+      season: 3,
+      episode: 5,
+    });
+  });
+
   it('does not take years for ranges', () => {
     expect(parseAnimeRelease('Some Show (2019-2021) - 05').range).toBeUndefined();
   });

@@ -705,17 +705,25 @@ describe('DownloadService', () => {
 
     it('retries the seeding restore when the network returns before the failure is seen', async () => {
       const { service, mockStorageService } = setupTest();
-      // Let the constructor's init settle so it does not overwrite the status set below.
-      for (let i = 0; i < 10; i++) await new Promise(resolve => setImmediate(resolve));
       const internals = service as unknown as {
         restoreCompletedDownloads: () => Promise<void>;
         addTorrentWithLock: () => Promise<Torrent>;
         _initStatus: { status: string };
       };
+      // The constructor's init runs its own restore pass; let it finish first.
+      for (let i = 0; i < 100 && internals._initStatus.status === 'initializing'; i++)
+        await new Promise(resolve => setImmediate(resolve));
+      for (let i = 0; i < 10; i++) await new Promise(resolve => setImmediate(resolve));
       internals._initStatus = { status: 'ready' };
       const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
-      mockStorageService.getStoragesWithCompletion.mockResolvedValueOnce([storage]);
-      mockStorageService.getStoragesWithCompletion.mockResolvedValue([]);
+      // Only the passes this test starts are counted, whenever init's own pass runs.
+      let counting = false;
+      let passes = 0;
+      mockStorageService.getStoragesWithCompletion.mockImplementation(async () => {
+        if (!counting) return [];
+        passes++;
+        return passes === 1 ? [storage] : [];
+      });
       mockStorageService.getStorageBySource.mockResolvedValue(storage);
       // The VPN drops and comes back before the failed add reaches the restore loop.
       jest.spyOn(internals, 'addTorrentWithLock').mockImplementation(async () => {
@@ -725,9 +733,10 @@ describe('DownloadService', () => {
       });
       jest.spyOn(logger, 'warn').mockImplementation(() => undefined);
 
+      counting = true;
       await internals.restoreCompletedDownloads();
 
-      expect(mockStorageService.getStoragesWithCompletion).toHaveBeenCalledTimes(2);
+      expect(passes).toBe(2);
     });
   });
 

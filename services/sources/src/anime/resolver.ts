@@ -141,6 +141,7 @@ export class AnimeResolver {
 
   /** ani.zip's mapping of one AniList entry, cached: longer once it has finished airing. */
   private async read(anilistId: number, signal: AbortSignal): Promise<AniZip> {
+    if (!this.url) throw new Error('ani.zip lookups are turned off');
     const key = `anizip:${anilistId}`;
     const cached = this.store.animeCache<AniZip>(key);
     if (cached) return cached;

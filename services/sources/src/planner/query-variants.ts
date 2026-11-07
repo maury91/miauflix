@@ -7,6 +7,7 @@ export interface Variant {
   matchedBy: MatchedBy;
 }
 const pad = (n: number) => String(n).padStart(2, '0');
+const ANIME_IDS: readonly Param[] = ['anidbEid', 'anidbAid', 'anilistId'];
 
 export function variantsFor(
   provider: Provider,
@@ -14,12 +15,15 @@ export function variantsFor(
   anime?: AnimeContext | null
 ): Variant[] {
   const isAnime = !!(request.media.isAnime || anime);
-  const kind =
-    isAnime && provider.caps.anime.length
-      ? 'anime'
-      : request.media.kind === 'movie'
-        ? 'movie'
-        : 'tv';
+  const regular = request.media.kind === 'movie' ? 'movie' : 'tv';
+  // Anime search is for providers built for it (anime ids, or nothing but anime). A general
+  // indexer that also has an anime category keeps its movie/TV search and its id queries; the
+  // anime-style title queries below are added to it.
+  const animeSearch =
+    isAnime &&
+    provider.caps.anime.length > 0 &&
+    (provider.caps.anime.some(p => ANIME_IDS.includes(p)) || !provider.caps[regular].length);
+  const kind = animeSearch ? 'anime' : regular;
   const caps = provider.caps[kind];
   if (!caps.length) return [];
   const result: Variant[] = [];
@@ -56,11 +60,15 @@ export function variantsFor(
     const titles = new Set(
       [request.media.title, request.media.originalTitle].filter((v): v is string => !!v)
     );
-    if (kind === 'anime') {
+    if (isAnime && provider.caps.anime.length) {
       // Release names use the romaji or English title of the entry, then the episode number:
       // "[Group] Jujutsu Kaisen 2nd Season - 07". A search for "<title> 07" finds them with or
       // without a season marker; the absolute number covers groups that count on ("- 31").
-      const animeTitles = new Set([...(anime?.titles ?? []), request.media.title]);
+      // A general indexer gets the entry's main title only, to keep its request count down.
+      const animeTitles = [...new Set([...(anime?.titles ?? []), request.media.title])].slice(
+        0,
+        animeSearch ? undefined : 1
+      );
       for (const title of animeTitles) {
         if (request.media.kind === 'movie') {
           result.push({ query: { kind, q: title }, matchedBy: 'title' });
