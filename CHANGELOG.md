@@ -2,7 +2,7 @@
 
 What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHANGELOG.md).
 
-## Unreleased
+## 2026-11-08 v0.2.0 Anime and improved subs
 
 ### New
 
