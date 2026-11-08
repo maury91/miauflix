@@ -374,6 +374,49 @@ describe('PlayerView', () => {
     expect(seek).toHaveFocus();
   });
 
+  it('reaches Skip intro with the arrows, between the video and the seek bar', async () => {
+    createSession.mockReturnValue({
+      unwrap: () =>
+        Promise.resolve({
+          ...session,
+          delivery: {
+            mode: 'direct' as const,
+            audioCodec: null,
+            durationSeconds: 1469,
+            introStartSeconds: 114,
+            introEndSeconds: 204,
+            mimeType: 'video/mp4',
+          },
+        }),
+    });
+    render(<PlayerView playable={playable} title="Episode 1" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Episode 1')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 1469 });
+    fireEvent.durationChange(video);
+    const seek = screen.getByRole('slider', { name: 'Seek' });
+    await waitFor(() => expect(seek).toBeEnabled());
+    video.currentTime = 150;
+    fireEvent.timeUpdate(video);
+    const controls = screen.getByLabelText('Playback controls');
+    const press = (key: string) =>
+      fireEvent.keyDown(document.activeElement ?? document.body, { key });
+    act(() => controls.focus());
+
+    press('ArrowDown');
+    const skip = screen.getByRole('button', { name: 'Skip intro' });
+    expect(skip).toHaveFocus();
+    press('ArrowDown');
+    expect(seek).toHaveFocus();
+    press('ArrowUp');
+    expect(skip).toHaveFocus();
+    fireEvent.click(skip);
+    expect(video.currentTime).toBe(204);
+    fireEvent.timeUpdate(video);
+    // The button is gone; the focus returns to the video so the remote keeps working.
+    expect(screen.queryByRole('button', { name: 'Skip intro' })).not.toBeInTheDocument();
+    expect(controls).toHaveFocus();
+  });
+
   it('plays and pauses with the remote media keys', async () => {
     createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
     render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
@@ -792,9 +835,13 @@ describe('PlayerView', () => {
     expect(screen.queryByText(/Filename match/)).not.toBeInTheDocument();
     const prototype = window.HTMLTrackElement.prototype;
     const descriptor = Object.getOwnPropertyDescriptor(prototype, 'track');
+    const cueListeners = new Set<() => void>();
     const textTrack = {
       mode: 'disabled',
       cues: [{ startTime: 10, endTime: 12, text: 'Preview word' }],
+      activeCues: [] as { text: string }[],
+      addEventListener: (_type: string, listener: () => void) => cueListeners.add(listener),
+      removeEventListener: (_type: string, listener: () => void) => cueListeners.delete(listener),
     };
     Object.defineProperty(prototype, 'track', { configurable: true, get: () => textTrack });
     try {
@@ -803,13 +850,16 @@ describe('PlayerView', () => {
       expect(track?.getAttribute('src')).toMatch(
         /\/api\/subtitles\/tracks\/candidate-1\?streamingKey=streaming-key$/
       );
-      expect(textTrack.mode).toBe('showing');
+      // The player draws the cues itself, so the browser's renderer stays hidden
+      expect(textTrack.mode).toBe('hidden');
       fireEvent.load(track!);
-      expect(textTrack.cues[0]).toMatchObject({
-        snapToLines: false,
-        line: 75,
-        lineAlign: 'end',
-      });
+      expect(screen.queryByTestId('subtitle-caption')).toBeNull();
+      textTrack.activeCues = [textTrack.cues[0]];
+      act(() => cueListeners.forEach(listener => listener()));
+      expect(screen.getByTestId('subtitle-caption')).toHaveTextContent('Preview word');
+      textTrack.activeCues = [];
+      act(() => cueListeners.forEach(listener => listener()));
+      expect(screen.queryByTestId('subtitle-caption')).toBeNull();
       fireEvent.click(screen.getByRole('button', { name: /Adjust subtitle timing/ }));
       expect(screen.getByText('Preview word')).toBeInTheDocument();
       expect(screen.getByLabelText('Now')).toBeInTheDocument();
@@ -1090,6 +1140,121 @@ describe('PlayerView', () => {
     } finally {
       vi.unstubAllGlobals();
     }
+  });
+
+  it('skips credits to the scene after them, then counts down to the next episode', async () => {
+    const nextEpisode = {
+      playable: { kind: 'episode' as const, showMediaId: 9001, seasonNumber: 1, episodeNumber: 2 },
+      title: 'Episode 2',
+    };
+    const currentSession = {
+      ...session,
+      episodeMatchKind: 'single' as const,
+      delivery: {
+        mode: 'direct' as const,
+        audioCodec: null,
+        durationSeconds: 1469,
+        creditsStartSeconds: 1331,
+        creditsEndSeconds: 1421,
+        mimeType: 'video/mp4',
+      },
+    };
+    const nextSession = { ...session, streamingKey: 'next-key', streamUrl: '/api/stream/next-key' };
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(currentSession) })
+      .mockReturnValue({ unwrap: () => Promise.resolve(nextSession) });
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, body: { cancel: vi.fn() } }));
+    try {
+      const onPlayNext = vi.fn();
+      render(
+        <PlayerView
+          playable={playable}
+          title="Episode 1"
+          onBack={vi.fn()}
+          nextEpisode={nextEpisode}
+          onPlayNext={onPlayNext}
+        />
+      );
+      const video = (await screen.findByLabelText('Episode 1')) as HTMLVideoElement;
+      await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+      video.currentTime = 1331;
+      fireEvent.timeUpdate(video);
+      expect(screen.getByRole('button', { name: 'Skip credits (5s)' })).toBeInTheDocument();
+      // The credits do not end the episode, and the next-episode prompt waits for the scene.
+      expect(screen.queryByRole('button', { name: /Play next episode/ })).not.toBeInTheDocument();
+      video.currentTime = 1336;
+      fireEvent.timeUpdate(video);
+      expect(video.currentTime).toBe(1421);
+      expect(onPlayNext).not.toHaveBeenCalled();
+      fireEvent.seeked(video);
+      fireEvent.timeUpdate(video);
+      expect(screen.queryByRole('button', { name: /Skip credits/ })).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Play next episode (48s)' })).toBeInTheDocument();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('offers to skip the intro while it plays, without skipping on its own', async () => {
+    createSession.mockReturnValue({
+      unwrap: () =>
+        Promise.resolve({
+          ...session,
+          episodeMatchKind: 'single' as const,
+          delivery: {
+            mode: 'direct' as const,
+            audioCodec: null,
+            durationSeconds: 1469,
+            introStartSeconds: 114,
+            introEndSeconds: 204,
+            mimeType: 'video/mp4',
+          },
+        }),
+    });
+    render(<PlayerView playable={playable} title="Episode 1" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Episode 1')) as HTMLVideoElement;
+    await waitFor(() => expect(video.src).toContain('/api/stream/'));
+    video.currentTime = 100;
+    fireEvent.timeUpdate(video);
+    expect(screen.queryByRole('button', { name: 'Skip intro' })).not.toBeInTheDocument();
+    video.currentTime = 150;
+    fireEvent.timeUpdate(video);
+    video.currentTime = 190;
+    fireEvent.timeUpdate(video);
+    // No countdown: it stays until pressed or the intro ends.
+    expect(video.currentTime).toBe(190);
+    fireEvent.click(screen.getByRole('button', { name: 'Skip intro' }));
+    expect(video.currentTime).toBe(204);
+    fireEvent.timeUpdate(video);
+    expect(screen.queryByRole('button', { name: 'Skip intro' })).not.toBeInTheDocument();
+  });
+
+  it('lets the credits play when asked', async () => {
+    createSession.mockReturnValue({
+      unwrap: () =>
+        Promise.resolve({
+          ...session,
+          episodeMatchKind: 'single' as const,
+          delivery: {
+            mode: 'direct' as const,
+            audioCodec: null,
+            durationSeconds: 1469,
+            creditsStartSeconds: 1331,
+            creditsEndSeconds: 1421,
+            mimeType: 'video/mp4',
+          },
+        }),
+    });
+    render(<PlayerView playable={playable} title="Episode 1" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Episode 1')) as HTMLVideoElement;
+    await waitFor(() => expect(video.src).toContain('/api/stream/'));
+    video.currentTime = 1332;
+    fireEvent.timeUpdate(video);
+    fireEvent.click(screen.getByRole('button', { name: 'Watch credits' }));
+    video.currentTime = 1340;
+    fireEvent.timeUpdate(video);
+    expect(video.currentTime).toBe(1340);
+    expect(screen.queryByRole('button', { name: /Skip credits/ })).not.toBeInTheDocument();
   });
 });
 

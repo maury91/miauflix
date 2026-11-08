@@ -22,7 +22,7 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 - Pause, seek, change volume, and enter fullscreen.
 - Resume where you left off with Continue watching.
 - Prepare and automatically move to the next episode.
-- Skip credits using available chapter information or an end-of-episode countdown.
+- Skip chapter-marked intros manually; skip credits to a chapter-marked scene after them, or continue to the next episode with a countdown.
 - **Planned:** choose quality from Watch Now and see the highest available quality more clearly.
 - **Planned:** correctly handle two or more episodes combined in one video.
 - **Planned:** better detection of credits and scenes during or after them.
@@ -34,6 +34,7 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 - Keep compatible sound and video unchanged when repackaging a file for playback.
 - Play H.265/HEVC on compatible devices, or optionally convert it for other devices.
 - Find subtitles embedded in a video or included beside it in the torrent.
+- Show ASS/SSA styling, positioned signs, karaoke, and attached fonts in supported browsers, with plain captions on TVs and as a fallback.
 - Search OpenSubtitles for movie subtitles when configured.
 - Choose subtitle languages and adjust subtitles that appear too early or too late.
 - Remember subtitle preferences for an account and title.

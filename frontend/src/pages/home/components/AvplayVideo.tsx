@@ -3,6 +3,8 @@ import type { SubtitleCue } from '@features/player/lib/vtt';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import { SubtitleCaption } from './SubtitleCaption';
+
 import type { AVPlay } from '@/types/tizen';
 
 /** AVPlay draws in this element's area, below the page. */
@@ -12,28 +14,6 @@ const VideoPlane = styled.object`
   left: 0;
   width: 100%;
   height: 100%;
-`;
-
-/** Placed like the `<video>` element's captions: above the controls. */
-const Caption = styled.div`
-  position: absolute;
-  bottom: 25%;
-  left: 50%;
-  z-index: 1;
-  max-width: 80%;
-  transform: translateX(-50%);
-  text-align: center;
-  pointer-events: none;
-
-  span {
-    padding: 0.1em 0.35em;
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    font-size: 4.5vh;
-    line-height: 1.35;
-    white-space: pre-line;
-    -webkit-box-decoration-break: clone;
-  }
 `;
 
 export type PlayerMediaHandler = (event: { currentTarget: PlayerMedia }) => void;
@@ -62,6 +42,10 @@ interface AvplayVideoProps extends PlayerMediaEvents {
   'aria-label': string;
   subtitleCues: SubtitleCue[];
   subtitleOffset: number;
+  /** Pixels the open player controls cover at the bottom; captions sit above them. */
+  subtitleRaise?: number;
+  /** A loaded font family for captions, from the release. */
+  subtitleFontFamily?: string;
 }
 
 /**
@@ -116,6 +100,8 @@ export function AvplayVideo({
   'aria-label': label,
   subtitleCues,
   subtitleOffset,
+  subtitleRaise = 0,
+  subtitleFontFamily,
   ...handlers
 }: AvplayVideoProps) {
   const [media] = useState(() => new AvplayMedia(avplay));
@@ -168,9 +154,12 @@ export function AvplayVideo({
     <>
       <VideoPlane ref={planeRef} type="application/avplayer" aria-label={label} />
       {caption && (
-        <Caption aria-live="off" data-testid="avplay-caption">
-          <span>{caption.text}</span>
-        </Caption>
+        <SubtitleCaption
+          text={caption.text}
+          raise={subtitleRaise}
+          fontFamily={subtitleFontFamily}
+          data-testid="avplay-caption"
+        />
       )}
     </>
   );

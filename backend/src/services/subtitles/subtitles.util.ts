@@ -100,3 +100,73 @@ function formatVttTime(milliseconds: number): string {
   const millis = value % 1000;
   return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(millis).padStart(3, '0')}`;
 }
+
+const MAX_ASS_BYTES = 8 * 1024 * 1024;
+const MAX_ASS_EVENTS = 50_000;
+
+/** `H:MM:SS.cc` to milliseconds. */
+function parseAssTime(value: string): number | null {
+  const match = value.trim().match(/^(\d{1,2}):(\d{2}):(\d{2})[.,](\d{1,3})$/);
+  if (!match) return null;
+  const fraction = Number(match[4].padEnd(3, '0'));
+  return ((Number(match[1]) * 60 + Number(match[2])) * 60 + Number(match[3])) * 1000 + fraction;
+}
+
+/**
+ * Normalize an ASS/SSA document for a full renderer: a script header, its styles, and only
+ * `Dialogue` events (comments are dropped). `keep` filters events by their start and end.
+ * Embedded fonts and graphics sections are dropped; fonts are served on their own.
+ */
+function normalizeAss(input: string, keep?: (start: number, end: number) => boolean): string {
+  const source = input.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
+  if (Buffer.byteLength(source) > MAX_ASS_BYTES) throw new Error('Subtitle file is too large');
+  if (!/^\s*\[script info\]/i.test(source)) throw new Error('Invalid ASS header');
+  const lines: string[] = [];
+  let section = '';
+  let format: string[] | null = null;
+  let events = 0;
+  for (const line of source.split('\n')) {
+    const trimmed = line.trim();
+    if (/^\[.*\]$/.test(trimmed)) {
+      section = trimmed.toLowerCase();
+      if (section !== '[fonts]' && section !== '[graphics]') lines.push(trimmed);
+      continue;
+    }
+    if (section === '[fonts]' || section === '[graphics]') continue;
+    if (section !== '[events]') {
+      lines.push(line);
+      continue;
+    }
+    if (/^format\s*:/i.test(trimmed)) {
+      format = trimmed
+        .slice(trimmed.indexOf(':') + 1)
+        .split(',')
+        .map(field => field.trim().toLowerCase());
+      lines.push(trimmed);
+      continue;
+    }
+    if (!/^dialogue\s*:/i.test(trimmed) || !format) continue;
+    const fields = trimmed.slice(trimmed.indexOf(':') + 1).split(',');
+    const start = parseAssTime(fields[format.indexOf('start')] ?? '');
+    const end = parseAssTime(fields[format.indexOf('end')] ?? '');
+    if (start === null || end === null || end < start) continue;
+    if (keep && !keep(start, end)) continue;
+    if (++events > MAX_ASS_EVENTS) throw new Error('Subtitle file contains too many events');
+    lines.push(trimmed);
+  }
+  if (!format) throw new Error('ASS file has no events format');
+  return `${lines.join('\n').trimEnd()}\n`;
+}
+
+/** A whole ASS/SSA file, normalized for the renderer. */
+export function toAss(input: string): string {
+  return normalizeAss(input);
+}
+
+/** An ASS document keeping only the events that overlap the original-media clock window. */
+export function assWindow(input: string, startSeconds: number, endSeconds: number): string {
+  return normalizeAss(
+    input,
+    (start, end) => end > startSeconds * 1000 && start < endSeconds * 1000
+  );
+}

@@ -77,7 +77,6 @@ TV season and episode navigation, subtitles, and Jackett/Prowlarr integration ar
 
 - A quality picker beside Watch Now
 - Correct handling of multiple episodes combined in one video
-- Account creation screens, profile editing, and profile selection
 - Interface translations and language preferences
 - Subtitle translation and language-learning tools
 - VPN diagnostics and exit-server controls in Settings

@@ -83,17 +83,55 @@ const Panel = styled.div`
   display: grid;
   gap: 0.7rem;
   box-sizing: border-box;
-  width: min(26rem, 90vw);
+  width: min(32rem, 90vw);
   min-width: 0;
-  max-height: 70vh;
+  max-height: min(70vh, 42rem);
   overflow: auto;
   color-scheme: dark;
   padding: 1rem;
   border: 1px solid ${PALETTE.background.border};
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   background: ${PALETTE.background.surface2};
   color: ${PALETTE.text.primary};
   box-shadow: 0 0.5rem 2rem #0009;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+  button {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+    border-radius: 0.5rem;
+    font-weight: 500;
+  }
+  button:hover {
+    background: #ffffff12;
+  }
+  button[aria-pressed='true'] {
+    background: #ffffff18;
+    box-shadow: inset 3px 0 ${PALETTE.color.brand};
+  }
+  button:focus-visible {
+    outline: 2px solid ${PALETTE.color.brand};
+    outline-offset: -2px;
+  }
+  small {
+    display: block;
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  h3 {
+    margin: 0.6rem 0 0.35rem;
+    padding: 0 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
   label {
     display: grid;
     min-width: 0;
@@ -345,6 +383,7 @@ export function SubtitleMenu({
             <>
               {audioTracks && audioTracks.length > 1 && onSelectAudioTrack && (
                 <div role="group" aria-label="Audio language" style={{ display: 'grid' }}>
+                  <h3>Audio</h3>
                   {audioTracks.map(track => (
                     <Button
                       key={track.index}
@@ -357,6 +396,7 @@ export function SubtitleMenu({
                   ))}
                 </div>
               )}
+              <h3>Subtitle preferences</h3>
               <Button
                 type="button"
                 data-language="true"
@@ -386,6 +426,7 @@ export function SubtitleMenu({
                 {loading ? 'Searching…' : 'Find subtitles'}
               </Button>
               <div role="group" aria-label="Subtitle tracks" style={{ display: 'grid' }}>
+                <h3>Subtitles</h3>
                 <Button type="button" aria-pressed={!selectedId} onClick={() => onSelect(null)}>
                   Off
                 </Button>

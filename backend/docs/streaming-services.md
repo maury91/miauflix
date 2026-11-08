@@ -37,7 +37,13 @@ The audio stream endpoint accepts a start time and selected track; seeking or sw
 
 ## Subtitles
 
-Local subtitle discovery covers embedded text tracks and matching SRT/VTT/ASS/SSA files in the torrent. Selected text is converted and sanitized as WebVTT. Embedded delivery uses overlapping two-minute windows, refreshed during playback and after seeks. Subtitle selection and timing are per account/title.
+Local subtitle discovery covers embedded text tracks and matching SRT/VTT/ASS/SSA files in the torrent. WebVTT remains the default delivery format. Candidates mark local ASS/SSA tracks as `styled`; requesting `format=ass` preserves headers, styles, and Dialogue events, dropping event comments and embedded Fonts/Graphics sections. Embedded delivery uses overlapping two-minute windows, aligned to minute boundaries on the original media clock and refreshed during playback and after seeks. Sidecars are delivered whole. Subtitle selection and timing are per account/title.
+
+The browser loads JASSUB on demand for styled tracks when workers, WebAssembly, and transferable OffscreenCanvas are available. Renderer failure falls back to WebVTT. The Tizen build excludes JASSUB. Plain browser and AVPlay captions share `SubtitleCaption`, moving above open controls; styled rendering fits the subtitle picture between the header and control bar without changing the video.
+
+Embedded ASS/SSA candidates expose `embeddedFonts` when the video has font attachments. `/font` selects the dialogue style's matching attached font for plain captions; `/fonts` lists `{ fonts: [{ id, names }] }`, and `/fonts/:fontId` serves an attachment for styled rendering. Only parsed TrueType/OpenType fonts are served. Extraction is bounded to 32 MiB per font and 96 MiB per styled font set; the in-memory font-set cache is also bounded to 96 MiB. Partial sets expire after 30 seconds so a transient read can be retried. Separate torrent font files are not loaded. The browser renders immediately with bundled Liberation Sans while fonts arrive; it does not request local font access or remote font lookups.
+
+Track and font requests revalidate the candidate against a live streaming grant for the same source, user, and title, including cache hits. Responses use private, no-store caching. Track delivery is limited to 5 requests per second, dialogue-font and font-list requests to 1 each, and individual styled-font requests to 10.
 
 OpenSubtitles is optional and requires its configured API key. Search currently applies to movies with an IMDb ID; episodes can use local subtitle tracks. Image-based PGS/VobSub conversion is not implemented.
 
@@ -45,22 +51,29 @@ OpenSubtitles is optional and requires its configured API key. Search currently 
 
 Torrent pieces are stored encrypted. Downloads can keep seeding for a configured period, then detach while retaining local files. Storage budgets and file claims control reclamation; active playback is protected. Administrators can inspect storage and remove inactive downloads.
 
-Per-account progress supports resume and Continue watching. TV playback can prefetch and advance to the next episode, using named credits chapters or a final-90-second countdown. This is not scene-aware credits detection; combined multi-episode videos and improved credits/post-credit analysis remain in [ToDo.md](../../ToDo.md).
+Per-account progress supports resume and Continue watching. Episode playback can prefetch and advance to the next episode, using named credits chapters (including anime ED/Ending/Outro in the second half) or a final-90-second countdown. Delivery exposes `creditsStartSeconds` and, when a later content chapter exists, `creditsEndSeconds`. Preview, eyecatch, logo, sponsor, and end-card chapters do not count as that content. With a post-credits target the player offers a five-second Skip credits countdown and a Watch credits cancellation; next-episode continuation starts no earlier than that target.
+
+Opening chapters expose `introStartSeconds` and `introEndSeconds` for a manual Skip intro prompt. They must start in the first half, end at a following non-opening chapter before the video ends, and last at most five minutes. Skip actions share the player's seek path, including restarting converted delivery. These are chapter-based decisions; combined multi-episode videos and scene-aware credits/post-credit analysis remain in [ToDo.md](../../ToDo.md).
+
+Audio inspection lists streams without dumping attachment data, then reads only the first video's extradata separately. This avoids attached fonts overflowing the probe output cap and losing audio, duration, and chapter information.
 
 ## Route summary
 
 Paths below are mounted under `/api`. Stream grants authorize media delivery separately from API JWT authentication.
 
-| Method and path                                               | Purpose                                                        |
-| ------------------------------------------------------------- | -------------------------------------------------------------- |
-| `POST /api/playback/sessions`                                 | Authenticated playback preparation/session creation            |
-| `PUT /api/preload/intents/:clientId`                          | Authenticated preload-intent update                            |
-| `DELETE /api/preload/intents/:clientId`                       | Authenticated preload-intent cleanup                           |
-| `GET /api/stream/:token`                                      | Direct video delivery with byte ranges                         |
-| `GET /api/stream/:token/audio`                                | Remuxed/converted delivery, with validated start/track options |
-| `POST /api/stream/:token/prefetch`                            | Best-effort next-episode prefetch for an episode grant         |
-| `POST /api/subtitles/search`                                  | Authenticated subtitle lookup for the user's streaming key     |
-| `GET /api/subtitles/tracks/:candidateId?streamingKey=&start=` | Authorized WebVTT track/window delivery                        |
+| Method and path                                                       | Purpose                                                                         |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `POST /api/playback/sessions`                                         | Authenticated playback preparation/session creation                             |
+| `PUT /api/preload/intents/:clientId`                                  | Authenticated preload-intent update                                             |
+| `DELETE /api/preload/intents/:clientId`                               | Authenticated preload-intent cleanup                                            |
+| `GET /api/stream/:token`                                              | Direct video delivery with byte ranges                                          |
+| `GET /api/stream/:token/audio`                                        | Remuxed/converted delivery, with validated start/track options                  |
+| `POST /api/stream/:token/prefetch`                                    | Best-effort next-episode prefetch for an episode grant                          |
+| `POST /api/subtitles/search`                                          | Authenticated subtitle lookup for the user's streaming key                      |
+| `GET /api/subtitles/tracks/:candidateId?streamingKey=&start=&format=` | Authorized track/window delivery (`vtt` default; `ass` for styled local tracks) |
+| `GET /api/subtitles/tracks/:candidateId/font?streamingKey=`           | Matching attached dialogue font, or 404                                         |
+| `GET /api/subtitles/tracks/:candidateId/fonts?streamingKey=`          | Attached font IDs and names for styled rendering                                |
+| `GET /api/subtitles/tracks/:candidateId/fonts/:fontId?streamingKey=`  | One attached font by listed ID                                                  |
 
 See the [playback request schema](../src/routes/playback.types.ts) and [route registration](../src/routes/index.ts) for exact contracts. Rate-limit values passed to the factory are requests per second; do not interpret `rateLimitGuard(60)` as 60 requests per minute.
 
