@@ -3,6 +3,8 @@
 export interface FontAttachment {
   streamIndex: number;
   filename: string;
+  /** Bytes, when the container reports it. */
+  size?: number;
 }
 
 export interface SubtitleStyle {
@@ -21,6 +23,8 @@ export interface FontNames {
 
 /** Largest font served; CJK fonts reach tens of megabytes. */
 export const MAX_FONT_BYTES = 32 * 1024 * 1024;
+/** All fonts read for one track, for a full ASS renderer. */
+export const MAX_TRACK_FONT_BYTES = 96 * 1024 * 1024;
 /** Fonts tried per track before giving up. */
 export const MAX_FONT_ATTEMPTS = 24;
 

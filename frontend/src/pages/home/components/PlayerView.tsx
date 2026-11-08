@@ -4,6 +4,7 @@ import {
   useCreateSessionMutation,
   useSearchSubtitlesMutation,
 } from '@features/player/api/playback.api';
+import { assRendererSupported, useAssSubtitles } from '@features/player/lib/ass-subtitles';
 import { playbackAudioCapabilities } from '@features/player/lib/audio-language';
 import { startAudioPlayback } from '@features/player/lib/audio-playback';
 import {
@@ -293,8 +294,11 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
 
   const sessionSubtitleStorageKey = useRef<string | null>(null);
   const videoRef = useRef<PlayerMedia | null>(null);
+  /** The same element as `videoRef`, for effects that attach to it (the ASS renderer). */
+  const [mediaElement, setMediaElement] = useState<PlayerMedia | null>(null);
   const setMedia = useCallback((media: PlayerMedia | null) => {
     videoRef.current = media;
+    setMediaElement(media);
   }, []);
   const resumeApplied = useRef(false);
   const latestProgress = useRef<{
@@ -670,12 +674,37 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const selectedSubtitle = subtitleCandidates.find(
     candidate => candidate.id === selectedSubtitleId
   );
+  const subtitleTrackUrl = selectedSubtitle
+    ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}`
+    : null;
+  /** A styled track whose renderer failed falls back to WebVTT captions. */
+  const [assFailedId, setAssFailedId] = useState<string | null>(null);
+  const usesAss =
+    !!selectedSubtitle?.styled &&
+    assFailedId !== selectedSubtitle.id &&
+    mediaElement instanceof HTMLVideoElement &&
+    assRendererSupported();
+  const handleAssCues = useCallback((cues: SubtitleTimingCue[]) => setSubtitleCues(cues), []);
+  const handleAssError = useCallback(() => {
+    setAssFailedId(selectedSubtitleId);
+    setSubtitleCues([]);
+  }, [selectedSubtitleId]);
+  useAssSubtitles({
+    video: usesAss ? (mediaElement as HTMLVideoElement) : null,
+    trackUrl: usesAss ? subtitleTrackUrl : null,
+    streamingKey: session?.streamingKey ?? '',
+    windowed: selectedSubtitle?.provider === 'embedded',
+    windowStart: subtitleWindow,
+    offset: subtitleOffset,
+    onCues: handleAssCues,
+    onError: handleAssError,
+  });
   const subtitleUrl =
-    selectedSubtitle && session
-      ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}?streamingKey=${encodeURIComponent(session.streamingKey)}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`
+    selectedSubtitle && session && !usesAss
+      ? `${subtitleTrackUrl}?streamingKey=${encodeURIComponent(session.streamingKey)}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`
       : null;
   const subtitleFontFamily = useSubtitleFont(
-    selectedSubtitle?.embeddedFonts && session
+    selectedSubtitle?.embeddedFonts && session && !usesAss
       ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}/font?streamingKey=${encodeURIComponent(session.streamingKey)}`
       : null
   );

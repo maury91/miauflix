@@ -6,6 +6,7 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import { SubtitleAccessError } from '@services/subtitles/subtitles.service';
 
 import type { Deps } from './common.types';
+import type { SubtitleFontListResponse } from './subtitles.types';
 import { subtitleSearchRequestSchema } from './subtitles.types';
 
 export const createSubtitleRoutes = ({
@@ -44,6 +45,44 @@ export const createSubtitleRoutes = ({
         }
       }
     )
+    .get('/tracks/:candidateId/fonts', rateLimitGuard(1), async context => {
+      const { candidateId } = context.req.param();
+      const streamingKey = context.req.query('streamingKey');
+      if (!/^[A-Za-z0-9_-]{8,128}$/.test(candidateId) || !streamingKey)
+        return context.json({ error: 'Fonts are unavailable' }, 404);
+      try {
+        const fonts: SubtitleFontListResponse = {
+          fonts: await subtitlesService.getFonts(candidateId, streamingKey),
+        };
+        return context.json(fonts, 200, {
+          'cache-control': 'private, no-store',
+          'referrer-policy': 'no-referrer',
+        });
+      } catch (error) {
+        if (error instanceof SubtitleAccessError)
+          return context.json({ error: 'Fonts are unavailable' }, 404);
+        return context.json({ error: 'Fonts could not be loaded' }, 502);
+      }
+    })
+    .get('/tracks/:candidateId/fonts/:fontId', rateLimitGuard(10), async context => {
+      const { candidateId, fontId } = context.req.param();
+      const streamingKey = context.req.query('streamingKey');
+      if (!/^[A-Za-z0-9_-]{8,128}$/.test(candidateId) || !/^\d{1,5}$/.test(fontId) || !streamingKey)
+        return context.text('Font is unavailable', 404);
+      try {
+        const font = await subtitlesService.getFontFile(candidateId, streamingKey, Number(fontId));
+        if (!font) return context.text('Font is unavailable', 404);
+        return context.body(new Uint8Array(font.data), 200, {
+          'content-type': font.format === 'otf' ? 'font/otf' : 'font/ttf',
+          'cache-control': 'private, no-store',
+          'referrer-policy': 'no-referrer',
+          'x-content-type-options': 'nosniff',
+        });
+      } catch (error) {
+        if (error instanceof SubtitleAccessError) return context.text('Font is unavailable', 404);
+        return context.text('Font could not be loaded', 502);
+      }
+    })
     .get('/tracks/:candidateId/font', rateLimitGuard(1), async context => {
       const { candidateId } = context.req.param();
       const streamingKey = context.req.query('streamingKey');
@@ -73,10 +112,18 @@ export const createSubtitleRoutes = ({
       const start = context.req.query('start') ?? '0';
       if (!/^\d{1,6}$/.test(start) || Number(start) > 7 * 24 * 3600)
         return context.text('Invalid subtitle position', 400);
+      const format = context.req.query('format') ?? 'vtt';
+      if (format !== 'vtt' && format !== 'ass') return context.text('Invalid subtitle format', 400);
       try {
-        const body = await subtitlesService.getTrack(candidateId, streamingKey, Number(start));
+        const body = await subtitlesService.getTrack(
+          candidateId,
+          streamingKey,
+          Number(start),
+          format
+        );
         return context.body(body, 200, {
-          'content-type': 'text/vtt; charset=utf-8',
+          'content-type':
+            format === 'ass' ? 'text/x-ssa; charset=utf-8' : 'text/vtt; charset=utf-8',
           'cache-control': 'private, no-store',
           'referrer-policy': 'no-referrer',
           'x-content-type-options': 'nosniff',

@@ -26,6 +26,8 @@ Miauflix automatically looks for text subtitles embedded inside a video and matc
 
 The server converts selected local text subtitles into WebVTT for the player. This works without an OpenSubtitles account or API key, for movies and episodes. Subtitles stored as pictures, including PGS and VobSub, are not currently converted.
 
+In the browser, styled ASS and SSA subtitles, which most anime releases use, are drawn in full instead: signs translated in place, positions, colours, karaoke effects and the fonts the release carries. They are drawn where their authors placed them, so they stay put while the player controls are open. The TV app, and browsers that cannot run the renderer, show these subtitles as plain text in the release's dialogue font.
+
 ## OpenSubtitles search
 
 For movies, Miauflix can search OpenSubtitles for additional subtitles when the administrator configures an API key. The movie needs an IMDb identifier for this search. OpenSubtitles search for TV episodes is not implemented; episodes can still use the local subtitle options described above.

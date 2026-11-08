@@ -20,6 +20,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - The player's progress bar shows which parts of the video are already downloaded, updated every second
 - Subtitles sit lower on the screen, as outlined text without a black box, and move up out of the way while the player controls are open
 - Anime subtitles are drawn in the font the release ships for them, when the video carries it
+- **Styled subtitles**: in the browser, ASS/SSA subtitles (most anime releases) are now shown as their authors made them: signs translated in place, positions, colours, karaoke and every font the release ships. TVs keep the plain subtitles
 - **Skip intro**: a "Skip intro" button appears while a video's opening plays, when the file marks it with a chapter ("Intro", "Opening", "OP"); it never skips on its own. On a TV, press Down from the video to select it (it turns white), then OK. "Skip credits" and "Play next episode" are reached the same way
 - When a scene follows the credits ("Post-Credits", an epilogue after the anime ending), the player offers to skip the credits and jumps to the scene after 5 seconds; "Watch credits" keeps them. The next-episode countdown waits until that scene
 - media-load records each download's speed, peers and total bytes received and sent (not shown in the app yet)

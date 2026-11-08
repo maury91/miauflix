@@ -117,6 +117,26 @@ integration('torrent and embedded subtitle delivery', () => {
     }
   }, 30_000);
 
+  it('delivers styled tracks as ASS, windowed for embedded tracks and whole for sidecars', async () => {
+    const { source, service } = setupTest();
+    try {
+      const [embedded, sidecarTrack] = await service.discover(source);
+      expect(embedded.styled).toBe(true);
+      expect(sidecarTrack.styled).toBe(true);
+      const windowed = await service.getAssTrack(source, embedded, 60);
+      expect(windowed).toMatch(/^\[Script Info\]/);
+      expect(windowed).toContain('[V4+ Styles]');
+      expect(windowed).toMatch(/Dialogue: 0,0:01:10\.00,0:01:12\.00,[^\n]*After seek/);
+      expect(windowed).not.toContain('First cue');
+      expect(windowed).not.toContain('Distant cue');
+      const whole = await service.getAssTrack(source, sidecarTrack);
+      expect(whole).toContain('First cue');
+      expect(whole).toContain('Distant cue');
+    } finally {
+      service.close();
+    }
+  }, 30_000);
+
   it('keeps the original clock after seeking and bounds extraction to the nearby window', async () => {
     const { source, service } = setupTest();
     try {
@@ -239,6 +259,18 @@ integration('fonts attached to a release', () => {
       expect(font?.data.equals(fonts.bold)).toBe(true);
       // The track itself still converts, attachments and all.
       expect(await service.getTrack(target, track)).toContain('First cue');
+      expect(await service.getAssTrack(target, track)).toMatch(
+        /Style: Sign,Sign Display,[\s\S]*Dialogue: 0,0:00:01\.00,0:00:03\.00,Default,[^\n]*First cue/
+      );
+      // A full renderer gets every attached font, by the names it looks them up with.
+      const { fonts: all, complete } = await service.getFonts(target, track);
+      expect(complete).toBe(true);
+      expect(all.map(font => font.names[0])).toEqual([
+        'sign display',
+        'miauflix sans',
+        'miauflix sans',
+      ]);
+      expect(all[2].data.equals(fonts.bold)).toBe(true);
     } finally {
       service.close();
     }

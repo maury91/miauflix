@@ -26,6 +26,13 @@ export interface SubtitleCandidateDto {
   filenameSimilarity: number | null;
   /** The release carries fonts for this track; its dialogue font may be fetched. */
   embeddedFonts?: boolean;
+  /** ASS/SSA: `?format=ass` returns the track as-is for a full renderer. */
+  styled?: boolean;
+}
+
+/** Fonts attached to a styled track; each is fetched from `fonts/:id`. */
+export interface SubtitleFontListResponse {
+  fonts: Array<{ id: number; names: string[] }>;
 }
 
 export interface SubtitleSearchResponse {
