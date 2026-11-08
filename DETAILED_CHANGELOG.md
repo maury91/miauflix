@@ -2,7 +2,7 @@
 
 Every change in full, for developers and self-hosters. The short version for users is in [CHANGELOG.md](CHANGELOG.md).
 
-## Unreleased
+## 2026-11-08 v0.2.0 Anime and improved subs
 
 ### Features
 
