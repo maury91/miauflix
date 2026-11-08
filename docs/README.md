@@ -28,8 +28,6 @@ Welcome to the Miauflix documentation! This guide helps you find the right infor
 - **Service and data flows?** See [Architecture Diagrams](architecture/diagrams.md)
 - **Technical details?** See [Backend Documentation](../backend/docs/)
 
-
-
 ## Documentation Structure
 
 ```

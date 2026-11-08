@@ -21,6 +21,7 @@ Visual evidence artifact: https://github.com/maury91/miauflix/actions/runs/37339
 
 The offline details voting step was skipped after details preparation failed; its current result is unverified.
 
+## Review triage
 
 GitHub reports 23 review threads: 17 resolved and 6 unresolved. The latest review contains seven actionable findings in those six threads (one thread contains two findings), plus four nitpicks. Findings were checked against the current code rather than accepted from their suggested patches.
 
