@@ -3,6 +3,8 @@ import {
   AudioPlaybackError,
   AudioPlaybackService,
   deliveryFromProbe,
+  explicitCredits,
+  explicitIntro,
 } from './audio-playback.service';
 
 describe('audio playback delivery', () => {
@@ -291,5 +293,129 @@ describe('audio playback delivery', () => {
     ]);
     expect(args).toContain('delay_moov+frag_keyframe+default_base_moof');
     expect(args).not.toContain('libx264');
+  });
+});
+
+describe('credits chapters', () => {
+  const chapters = (...titles: Array<[number, string]>) => ({
+    chapters: titles.map(([start, title]) => ({ start_time: String(start), tags: { title } })),
+  });
+
+  it('recognizes end-credits chapter titles', () => {
+    expect(explicitCredits(chapters([0, 'Intro'], [5400, 'End Credits']), 5600)).toEqual({
+      start: 5400,
+    });
+    expect(explicitCredits(chapters([0, 'Chapter 1'], [600, 'Credits']), 700)).toEqual({
+      start: 600,
+    });
+  });
+
+  it('ends the episode at an anime ED when only a preview follows it', () => {
+    expect(
+      explicitCredits(
+        chapters(
+          [0, 'Prologue'],
+          [90, 'Opening'],
+          [180, 'Part A'],
+          [720, 'Part B'],
+          [1290, 'Ending'],
+          [1380, 'Preview']
+        ),
+        1420
+      )
+    ).toEqual({ start: 1290 });
+    expect(
+      explicitCredits(chapters([0, 'Part A'], [1300, 'ED'], [1390, 'Next Episode Preview']), 1420)
+    ).toEqual({ start: 1300 });
+  });
+
+  it('resumes at a scene after the credits, past any preview in between', () => {
+    // Tokyo Revengers S4E4 (DSNP WEB-DL) chapters
+    expect(
+      explicitCredits(
+        chapters(
+          [0, 'Prologue'],
+          [114.031, 'Intro'],
+          [203.954, 'Part1'],
+          [1331.038, 'Credits'],
+          [1421.002, 'Post-Credits']
+        ),
+        1469.051
+      )
+    ).toEqual({ start: 1331.038, end: 1421.002 });
+    expect(
+      explicitCredits(
+        chapters([0, 'Part A'], [1200, 'Ending'], [1290, 'Preview'], [1320, 'Epilogue']),
+        1420
+      )
+    ).toEqual({ start: 1200, end: 1320 });
+  });
+
+  it('never skips opening credits, the opening, or files without credits', () => {
+    expect(
+      explicitCredits(chapters([0, 'Credits'], [60, 'Part A'], [1300, 'Part B']), 1420)
+    ).toBeUndefined();
+    expect(explicitCredits(chapters([0, 'Opening'], [90, 'Part A']), 1420)).toBeUndefined();
+    expect(explicitCredits({})).toBeUndefined();
+  });
+
+  it('orders chapters by start time', () => {
+    expect(
+      explicitCredits(chapters([1380, 'Preview'], [0, 'Part A'], [1290, 'Ending']), 1420)
+    ).toEqual({ start: 1290 });
+  });
+
+  it('finds the opening, joining consecutive opening chapters', () => {
+    // Tokyo Revengers S4E4 (DSNP WEB-DL) chapters
+    expect(
+      explicitIntro(
+        chapters(
+          [0, 'Prologue'],
+          [114.031, 'Intro'],
+          [203.954, 'Part1'],
+          [1331.038, 'Credits'],
+          [1421.002, 'Post-Credits']
+        ),
+        1469.051
+      )
+    ).toEqual({ start: 114.031, end: 203.954 });
+    expect(
+      explicitIntro(chapters([0, 'OP'], [60, 'Opening Credits'], [90, 'Part A']), 1420)
+    ).toEqual({ start: 0, end: 90 });
+  });
+
+  it('ignores openings without an end, too long, or in the second half', () => {
+    expect(explicitIntro(chapters([0, 'Part A'], [100, 'Opening']), 1420)).toBeUndefined();
+    expect(explicitIntro(chapters([0, 'Intro'], [900, 'Part A']), 1420)).toBeUndefined();
+    expect(
+      explicitIntro(chapters([0, 'Part A'], [1000, 'Intro'], [1090, 'Part B']), 1420)
+    ).toBeUndefined();
+    expect(explicitIntro({})).toBeUndefined();
+  });
+
+  it('exposes the resume point on the delivery', () => {
+    const delivery = deliveryFromProbe(
+      {
+        format: { duration: '1469.051' },
+        chapters: chapters(
+          [0, 'Prologue'],
+          [114, 'Intro'],
+          [204, 'Part1'],
+          [1331, 'Credits'],
+          [1421, 'Post-Credits']
+        ).chapters,
+        streams: [
+          { codec_type: 'video', codec_name: 'h264', extradata: '\n00000000: 0164 0028 ffe1 00ab' },
+          { codec_type: 'audio', codec_name: 'aac' },
+        ],
+      },
+      { supportedAudioCodecs: ['aac'] }
+    );
+    expect(delivery).toMatchObject({
+      creditsStartSeconds: 1331,
+      creditsEndSeconds: 1421,
+      introStartSeconds: 114,
+      introEndSeconds: 204,
+    });
   });
 });

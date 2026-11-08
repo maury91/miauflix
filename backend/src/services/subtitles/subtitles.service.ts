@@ -13,13 +13,31 @@ import type { StreamService } from '@services/stream/stream.service';
 
 import { filenameSimilarity } from './subtitle-matching';
 import { toWebVtt } from './subtitles.util';
-import type { TorrentSubtitle, TorrentSubtitlesService } from './torrent-subtitles.service';
+import type {
+  ExtractedFont,
+  SubtitleFont,
+  TorrentSubtitle,
+  TorrentSubtitlesService,
+} from './torrent-subtitles.service';
 
 const API_BASE = 'https://api.opensubtitles.com/api/v1';
 const MAX_CANDIDATES = 500;
 const MAX_CACHED_TRACK_BYTES = 32 * 1024 * 1024;
 const MAX_CACHED_TRACKS = 256;
 const MAX_TRACK_BYTES = 2 * 1024 * 1024;
+const MAX_CACHED_FONTS = 4;
+/** Every attached font of a few recent tracks, for the full ASS renderer. */
+const MAX_CACHED_FONT_SET_BYTES = 96 * 1024 * 1024;
+/** How long a partial font read is reused before the attachments are read again. */
+const PARTIAL_FONT_SET_TTL_MS = 30_000;
+
+export type SubtitleTrackFormat = 'ass' | 'vtt';
+
+/** An attached font a renderer can request by any of its names. */
+export interface SubtitleFontInfo {
+  id: number;
+  names: string[];
+}
 
 export interface SubtitleCandidate {
   id: string;
@@ -32,6 +50,10 @@ export interface SubtitleCandidate {
   trusted: boolean;
   match: 'file' | 'release' | 'title';
   filenameSimilarity: number | null;
+  /** The release carries fonts for this track; its dialogue font may be fetched. */
+  embeddedFonts?: boolean;
+  /** ASS/SSA: the track can also be fetched as ASS, for a full renderer. */
+  styled?: boolean;
 }
 
 export interface SubtitleSearchResult {
@@ -107,6 +129,16 @@ export class SubtitlesService {
   private readonly tracks = new Map<string, { body: string; bytes: number }>();
   private cachedTrackBytes = 0;
   private readonly pendingTracks = new Map<string, Promise<string>>();
+  /** Fonts by track, null when the release has no font for it; a few playbacks' worth. */
+  private readonly fonts = new Map<string, SubtitleFont | null>();
+  private readonly pendingFonts = new Map<string, Promise<SubtitleFont | null>>();
+  /** Every attached font by track, for the ASS renderer; bounded by total bytes. */
+  private readonly fontSets = new Map<
+    string,
+    { fonts: ExtractedFont[]; bytes: number; expiresAt?: number }
+  >();
+  private cachedFontSetBytes = 0;
+  private readonly pendingFontSets = new Map<string, Promise<ExtractedFont[]>>();
 
   constructor(
     private readonly config: ConfigService,
@@ -158,6 +190,8 @@ export class SubtitlesService {
           trusted: false,
           match: 'file',
           filenameSimilarity: track.provider === 'torrent' ? 100 : null,
+          embeddedFonts: !!track.fonts?.length,
+          ...(track.styled ? { styled: true } : {}),
         };
         this.candidates.set(candidate.id, {
           candidate,
@@ -359,7 +393,8 @@ export class SubtitlesService {
     }
   }
 
-  async getTrack(candidateId: string, streamingKey: string, startSeconds = 0): Promise<string> {
+  /** The candidate, revalidated against a live grant for the same source, user and title. */
+  private async authorizedCandidate(candidateId: string, streamingKey: string) {
     let record = this.candidates.get(candidateId);
     if (record && record.streamingKey !== streamingKey) {
       this.removeCandidate(candidateId);
@@ -413,6 +448,8 @@ export class SubtitlesService {
                   trusted: false,
                   match: 'file',
                   filenameSimilarity: track.provider === 'torrent' ? 100 : null,
+                  embeddedFonts: !!track.fonts?.length,
+                  ...(track.styled ? { styled: true } : {}),
                 },
                 fileId: track.fileId,
                 local: track,
@@ -444,11 +481,27 @@ export class SubtitlesService {
       if (record) this.removeCandidate(candidateId);
       throw new SubtitleAccessError('Subtitle is unavailable');
     }
+    return { record, resolved };
+  }
+
+  /**
+   * The track as WebVTT, or as ASS for a styled local track. Embedded tracks are read in
+   * windows around `startSeconds`.
+   */
+  async getTrack(
+    candidateId: string,
+    streamingKey: string,
+    startSeconds = 0,
+    format: SubtitleTrackFormat = 'vtt'
+  ): Promise<string> {
+    const { record, resolved } = await this.authorizedCandidate(candidateId, streamingKey);
 
     if (!Number.isSafeInteger(startSeconds) || startSeconds < 0 || startSeconds > 7 * 24 * 3600)
       throw new SubtitleAccessError('Invalid subtitle position');
+    if (format === 'ass' && !record.local?.styled)
+      throw new SubtitleAccessError('Subtitle is unavailable as ASS');
     const window = record.local?.provider === 'embedded' ? Math.floor(startSeconds / 60) * 60 : 0;
-    const key = `${record.sourceId}:${record.playableKey}:${record.candidate.provider}:${record.fileId}${record.local?.provider === 'embedded' ? `:${window}` : ''}`;
+    const key = `${record.sourceId}:${record.playableKey}:${record.candidate.provider}:${record.fileId}:${format}${record.local?.provider === 'embedded' ? `:${window}` : ''}`;
     const cached = this.tracks.get(key);
     if (cached) {
       this.tracks.delete(key);
@@ -463,7 +516,9 @@ export class SubtitlesService {
         ? Promise.resolve().then(() => {
             if (resolved.target.source.id !== record.sourceId)
               throw new SubtitleAccessError('Playback source is unavailable');
-            return this.torrentSubtitles.getTrack(resolved.target, record.local!, window);
+            return format === 'ass'
+              ? this.torrentSubtitles.getAssTrack(resolved.target, record.local!, window)
+              : this.torrentSubtitles.getTrack(resolved.target, record.local!, window);
           })
         : this.loadStoredTrack(record.fileId as number)
     )
@@ -480,6 +535,102 @@ export class SubtitlesService {
         this.pendingTracks.delete(key);
       });
     this.pendingTracks.set(key, loading);
+    return loading;
+  }
+
+  /** The attached font the track's dialogue style uses, or null when the release has none. */
+  async getFont(candidateId: string, streamingKey: string): Promise<SubtitleFont | null> {
+    const { record, resolved } = await this.authorizedCandidate(candidateId, streamingKey);
+    const local = record.local;
+    if (!local?.fonts?.length) return null;
+    if (resolved.target.source.id !== record.sourceId)
+      throw new SubtitleAccessError('Playback source is unavailable');
+    const key = `${record.sourceId}:${record.playableKey}:${record.fileId}`;
+    if (this.fonts.has(key)) {
+      const cached = this.fonts.get(key) ?? null;
+      this.fonts.delete(key);
+      this.fonts.set(key, cached);
+      return cached;
+    }
+    const pending = this.pendingFonts.get(key);
+    if (pending) return pending;
+    const loading = this.torrentSubtitles
+      .getFont(resolved.target, local)
+      .then(({ font, complete }) => {
+        // A miss after a failed read may be transient: try again next time.
+        if (!font && !complete) return null;
+        this.fonts.set(key, font);
+        while (this.fonts.size > MAX_CACHED_FONTS)
+          this.fonts.delete(this.fonts.keys().next().value!);
+        return font;
+      })
+      .finally(() => this.pendingFonts.delete(key));
+    this.pendingFonts.set(key, loading);
+    return loading;
+  }
+
+  /** The fonts the release attaches to a styled track, by the names a renderer looks up. */
+  async getFonts(candidateId: string, streamingKey: string): Promise<SubtitleFontInfo[]> {
+    const fonts = await this.loadFontSet(candidateId, streamingKey);
+    return fonts.map(font => ({ id: font.streamIndex, names: font.names }));
+  }
+
+  /** One attached font of a styled track, by the id `getFonts` lists. */
+  async getFontFile(
+    candidateId: string,
+    streamingKey: string,
+    fontId: number
+  ): Promise<SubtitleFont | null> {
+    const fonts = await this.loadFontSet(candidateId, streamingKey);
+    const font = fonts.find(item => item.streamIndex === fontId);
+    return font ? { data: font.data, format: font.format } : null;
+  }
+
+  private async loadFontSet(candidateId: string, streamingKey: string): Promise<ExtractedFont[]> {
+    const { record, resolved } = await this.authorizedCandidate(candidateId, streamingKey);
+    const local = record.local;
+    if (!local?.styled || !local.fonts?.length) return [];
+    if (resolved.target.source.id !== record.sourceId)
+      throw new SubtitleAccessError('Playback source is unavailable');
+    // Every styled track of a video shares its attachments.
+    const key = `${record.sourceId}:${record.playableKey}:${local.videoFilePath ?? ''}`;
+    const cached = this.fontSets.get(key);
+    if (cached && (cached.expiresAt === undefined || cached.expiresAt > Date.now())) {
+      this.fontSets.delete(key);
+      this.fontSets.set(key, cached);
+      return cached.fonts;
+    }
+    const pending = this.pendingFontSets.get(key);
+    if (pending) return pending;
+    const loading = this.torrentSubtitles
+      .getFonts(resolved.target, local)
+      .then(({ fonts, complete }) => {
+        const bytes = fonts.reduce((total, font) => total + font.data.length, 0);
+        // An expired partial read is replaced by this one.
+        const previous = this.fontSets.get(key);
+        if (previous?.expiresAt !== undefined && previous.expiresAt <= Date.now()) {
+          this.cachedFontSetBytes -= previous.bytes;
+          this.fontSets.delete(key);
+        }
+        if (bytes <= MAX_CACHED_FONT_SET_BYTES && !this.fontSets.has(key)) {
+          // A partial read may be transient: reuse it briefly, so the renderer's per-font
+          // requests share it, then read the attachments again.
+          this.fontSets.set(key, {
+            fonts,
+            bytes,
+            ...(complete ? {} : { expiresAt: Date.now() + PARTIAL_FONT_SET_TTL_MS }),
+          });
+          this.cachedFontSetBytes += bytes;
+          while (this.cachedFontSetBytes > MAX_CACHED_FONT_SET_BYTES && this.fontSets.size > 1) {
+            const oldest = this.fontSets.keys().next().value!;
+            this.cachedFontSetBytes -= this.fontSets.get(oldest)?.bytes ?? 0;
+            this.fontSets.delete(oldest);
+          }
+        }
+        return fonts;
+      })
+      .finally(() => this.pendingFontSets.delete(key));
+    this.pendingFontSets.set(key, loading);
     return loading;
   }
 
