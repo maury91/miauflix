@@ -314,10 +314,18 @@ export class TorrentSubtitlesService {
    * The attached font the track's dialogue style names, closest in weight and slant.
    * Null when the track has no styled header or the release does not carry that font.
    */
-  async getFont(target: PlaybackTarget, track: TorrentSubtitle): Promise<SubtitleFont | null> {
+  /**
+   * The best matching attached font, or null. `complete` is false when an attachment could not be
+   * read, so a null result may only be transient and should not be remembered.
+   */
+  async getFont(
+    target: PlaybackTarget,
+    track: TorrentSubtitle
+  ): Promise<{ font: SubtitleFont | null; complete: boolean }> {
     if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
       throw new Error('Subtitle track belongs to another video');
-    if (track.provider !== 'embedded' || !track.fonts?.length) return null;
+    if (track.provider !== 'embedded' || !track.fonts?.length)
+      return { font: null, complete: true };
     const header = await this.run(target, 'ffmpeg', [
       '-map',
       `0:${track.streamIndex}`,
@@ -333,8 +341,9 @@ export class TorrentSubtitlesService {
       'pipe:1',
     ]);
     const style = dialogueStyle(header);
-    if (!style) return null;
+    if (!style) return { font: null, complete: true };
     let best: { font: SubtitleFont; score: number } | null = null;
+    let complete = true;
     for (const attachment of orderFontAttachments(track.fonts, style.fontName).slice(
       0,
       MAX_FONT_ATTEMPTS
@@ -351,6 +360,7 @@ export class TorrentSubtitlesService {
           filename: attachment.filename,
           error: error instanceof Error ? error.message : error,
         });
+        complete = false;
         continue;
       }
       const names = readFontNames(data);
@@ -363,7 +373,7 @@ export class TorrentSubtitlesService {
         if (score === 2) break;
       }
     }
-    return best?.font ?? null;
+    return { font: best?.font ?? null, complete };
   }
 
   /** Run FFmpeg/FFprobe over one decrypted file; sidecars are read whole instead of windowed. */

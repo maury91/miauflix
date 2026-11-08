@@ -509,8 +509,8 @@ export class SubtitlesService {
     if (resolved.target.source.id !== record.sourceId)
       throw new SubtitleAccessError('Playback source is unavailable');
     const key = `${record.sourceId}:${record.playableKey}:${record.fileId}`;
-    const cached = this.fonts.get(key);
-    if (cached) {
+    if (this.fonts.has(key)) {
+      const cached = this.fonts.get(key) ?? null;
       this.fonts.delete(key);
       this.fonts.set(key, cached);
       return cached;
@@ -519,7 +519,9 @@ export class SubtitlesService {
     if (pending) return pending;
     const loading = this.torrentSubtitles
       .getFont(resolved.target, local)
-      .then(font => {
+      .then(({ font, complete }) => {
+        // A miss after a failed read may be transient: try again next time.
+        if (!font && !complete) return null;
         this.fonts.set(key, font);
         while (this.fonts.size > MAX_CACHED_FONTS)
           this.fonts.delete(this.fonts.keys().next().value!);

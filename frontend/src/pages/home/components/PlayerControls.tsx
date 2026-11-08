@@ -463,7 +463,8 @@ export function PlayerControls({
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
   }, [shown, notice]);
-  useEffect(() => () => onInsetRef.current?.(0), []);
+  // A layout cleanup, so a replaced (keyed) instance resets before its successor measures.
+  useLayoutEffect(() => () => onInsetRef.current?.(0), []);
   const percent = duration > 0 ? Math.min(100, Math.max(0, (position / duration) * 100)) : 0;
 
   return (

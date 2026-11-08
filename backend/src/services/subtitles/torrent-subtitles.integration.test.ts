@@ -234,7 +234,7 @@ integration('fonts attached to a release', () => {
         'MiauflixSans-regular.ttf',
         'MiauflixSans-bold.ttf',
       ]);
-      const font = await service.getFont(target, track);
+      const { font } = await service.getFont(target, track);
       expect(font?.format).toBe('ttf');
       expect(font?.data.equals(fonts.bold)).toBe(true);
       // The track itself still converts, attachments and all.
