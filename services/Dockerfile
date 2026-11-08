@@ -25,9 +25,20 @@ COPY services/media-load/package.json services/media-load/package.json
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 # The base image sets NODE_ENV=production; the build needs dev dependencies (TypeScript types),
 # which the `npm prune --omit=dev` below removes again.
-RUN npm ci --ignore-scripts --include=dev
+# Retried: npm ci fails outright on a transient registry or GitHub download error.
+RUN for attempt in 1 2 3; do \
+      npm ci --ignore-scripts --include=dev && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
+    done
 # media-load's tracker client loads WebRTC; fetch node-datachannel's prebuilt (musl) binary.
-RUN npm rebuild node-datachannel
+# The npm cache keeps the downloaded binary (_prebuilds), so it is fetched from GitHub once.
+RUN --mount=type=cache,target=/root/.npm \
+    for attempt in 1 2 3; do \
+      npm rebuild node-datachannel && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "node-datachannel download failed (attempt $attempt), retrying"; sleep 20; \
+    done
 
 COPY packages/source-metadata-extractor packages/source-metadata-extractor
 COPY packages/contract packages/contract

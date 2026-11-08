@@ -1,11 +1,11 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
     "lib": ["ESNext"],
+    "types": ["bun-types", "jest"],
     "target": "ES2022",
-    "module": "ES2022",
+    "module": "ESNext",
     "composite": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "moduleDetection": "force",
     "allowJs": true,
     "resolveJsonModule": true,
@@ -13,8 +13,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "../dist/backend",
     "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
@@ -37,12 +37,5 @@
     }
   },
   "include": ["src/**/*", "src/types/webtorrent.d.ts"],
-  "exclude": ["node_modules", "dist"],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node",
-    "transpileOnly": true,
-    "logError": true,
-    "require": ["tsconfig-paths/register"]
-  }
+  "exclude": ["node_modules", "dist"]
 }

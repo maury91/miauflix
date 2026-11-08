@@ -1,9 +1,13 @@
 # Development image used by docker-compose.dev.yml. Source directories are
 # bind-mounted at runtime; dependencies remain in the Linux container.
+FROM oven/bun:1.4.0 AS bun-runtime
+
 FROM node:22-slim
+# The backend runs on Bun; npm installs the workspaces and runs the frontend.
+COPY --from=bun-runtime /usr/local/bin/bun /usr/local/bin/bun
 
 # glibc gives every thread its own malloc arena and rarely returns freed memory; with
-# native work on many threads (crypto/sqlite in Node, libvips/WASM in Bun) RSS only grows.
+# native work on many threads (crypto/sqlite, libvips/WASM) RSS only grows.
 ENV MALLOC_ARENA_MAX=2
 
 WORKDIR /usr/src/app
@@ -27,7 +31,13 @@ COPY services/media-load/package.json ./services/media-load/
 # Some workspace packages have prepare scripts that require their source. The
 # source is copied after dependency installation, so skip those scripts here.
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
-RUN --mount=type=cache,target=/root/.npm npm ci
+# Retried: npm ci fails outright on a transient registry or GitHub download error.
+RUN --mount=type=cache,target=/root/.npm \
+    for attempt in 1 2 3; do \
+      npm ci && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
+    done
 
 COPY packages/ ./packages/
 RUN npm run build:libs

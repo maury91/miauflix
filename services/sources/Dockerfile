@@ -21,7 +21,12 @@ COPY services/sources/package.json services/sources/package.json
 COPY services/media-load/package.json services/media-load/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
-RUN npm ci --ignore-scripts
+# Retried: npm ci fails outright on a transient registry or GitHub download error.
+RUN for attempt in 1 2 3; do \
+      npm ci --ignore-scripts && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
+    done
 
 COPY packages/source-metadata-extractor packages/source-metadata-extractor
 COPY packages/contract packages/contract

@@ -114,10 +114,9 @@ services:
       - ./.env:/usr/src/app/.env
       # Keep generated backend client files from the image available to Vite.
       - ./backend/src:/usr/src/app/backend/src
-      - ./backend/loader.js:/usr/src/app/backend/loader.js:ro
+      - ./backend/bunfig.toml:/usr/src/app/backend/bunfig.toml:ro
       - ./backend/package.json:/usr/src/app/backend/package.json:ro
       - ./backend/tsconfig.json:/usr/src/app/backend/tsconfig.json:ro
-      - ./backend/tsconfig.app.json:/usr/src/app/backend/tsconfig.app.json:ro
       - ./backend/tsconfig.client.json:/usr/src/app/backend/tsconfig.client.json:ro
       - ./data:/usr/data
 

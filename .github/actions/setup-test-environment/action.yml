@@ -33,7 +33,14 @@ runs:
     - name: Install dependencies
       if: steps.node-modules-cache.outputs.cache-hit != 'true'
       shell: bash
-      run: npm ci
+      # Install scripts that download from GitHub Releases (node-datachannel) can time out.
+      run: |
+        for attempt in 1 2 3; do
+          npm ci && exit 0
+          echo "npm ci failed (attempt $attempt), retrying"
+          sleep 20
+        done
+        exit 1
 
     # npm ci runs workspace prepare scripts (e.g. a package's tsc); replay
     # them when node_modules came from the cache so their outputs still exist.

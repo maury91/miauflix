@@ -1,7 +1,5 @@
-import type { IncomingMessage, Server as HttpServer } from 'node:http';
-
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
-import WebSocket, { WebSocketServer } from 'ws';
+import type { Server, ServerWebSocket, WebSocketHandler } from 'bun';
 
 import type { ConfigService } from '@mytypes/configuration';
 import type { MediaIntentRef, PreloadIntentRequest, ReachableIntent } from '@routes/playable.types';
@@ -31,6 +29,22 @@ import type { RealtimeSearchChannel, SearchClient } from './realtime.search';
 const MAX_MAP_SIDE = 11;
 const MAX_MAP_CELLS = MAX_MAP_SIDE * MAX_MAP_SIDE;
 const AUTH_TIMEOUT_MS = 5_000;
+const MAX_PAYLOAD_BYTES = 64 * 1024;
+const REALTIME_PATH = '/api/realtime';
+/** `WebSocket.OPEN` */
+const OPEN = 1;
+
+/** What the gateway keeps on each Bun socket: the upgrade request's cookies, then the client. */
+export interface RealtimeSocketData {
+  cookie: string;
+  state?: ClientState;
+}
+
+/** The part of a Bun `ServerWebSocket` the gateway uses. */
+export type RealtimeSocket = Pick<
+  ServerWebSocket<RealtimeSocketData>,
+  'close' | 'data' | 'readyState' | 'send'
+>;
 const MAX_ARTWORK_SUBSCRIPTIONS = 5_000;
 const ARTWORK_BATCH_SIZE = 50;
 
@@ -66,8 +80,8 @@ type ProgressMessage = ProgressRequest & {
 };
 
 interface ClientState {
-  socket: WebSocket;
-  request: IncomingMessage;
+  socket: RealtimeSocket;
+  cookie: string;
   userId: string;
   sessionId: string;
   clientId: string;
@@ -95,7 +109,6 @@ interface RealtimeEvent {
  * Progress is persisted through the same service used by the HTTP route.
  */
 export class RealtimeGateway {
-  private readonly server = new WebSocketServer({ noServer: true, maxPayload: 64 * 1024 });
   private readonly clients = new Set<ClientState>();
   private readonly onPreparationChange = (event: RealtimeEvent) => {
     for (const client of this.clients) {
@@ -131,9 +144,6 @@ export class RealtimeGateway {
     this.removeAvailabilityListener = availability.onChange(change =>
       this.deliverAvailability(change)
     );
-    this.server.on('connection', (socket: WebSocket, request: IncomingMessage) => {
-      this.accept(socket, request);
-    });
     this.preload.onChange(this.onPreparationChange);
     this.removeArtworkListener = this.catalog.onArtwork(update => this.deliverArtwork(update));
     this.removeArtworkStreamReadyListener = this.catalog.onArtworkStreamReady(() => {
@@ -149,24 +159,45 @@ export class RealtimeGateway {
     });
   }
 
-  attach(httpServer: HttpServer): void {
-    httpServer.on('upgrade', (request, socket, head) => {
-      const url = new URL(request.url ?? '/', 'http://localhost');
-      if (url.pathname !== '/api/realtime') return;
-      if (!this.isAllowedOrigin(request.headers.origin)) {
-        socket.destroy();
-        return;
-      }
-      this.server.handleUpgrade(request, socket, head, client => {
-        this.server.emit('connection', client, request);
-      });
-    });
+  /** Bun.serve's handlers for the sockets {@link upgrade} accepted. */
+  readonly websocket: WebSocketHandler<RealtimeSocketData> = {
+    maxPayloadLength: MAX_PAYLOAD_BYTES,
+    open: socket => {
+      socket.data.state = this.accept(socket);
+    },
+    message: (socket, data) => {
+      const state = socket.data.state;
+      if (state) void this.handleMessage(state, data.toString());
+    },
+    close: socket => {
+      if (socket.data.state) this.remove(socket.data.state);
+    },
+  };
+
+  /** Whether `request` asks to open a realtime socket; Bun.serve passes those to {@link upgrade}. */
+  handles(request: Request): boolean {
+    return (
+      new URL(request.url).pathname === REALTIME_PATH &&
+      request.headers.get('upgrade')?.toLowerCase() === 'websocket'
+    );
+  }
+
+  /** Opens a realtime socket. Bun.serve sends no response for an upgraded request (`undefined`). */
+  upgrade(
+    request: Request,
+    server: Pick<Server<RealtimeSocketData>, 'upgrade'>
+  ): Response | undefined {
+    if (!this.isAllowedOrigin(request.headers.get('origin') ?? undefined))
+      return new Response(null, { status: 403 });
+    const data: RealtimeSocketData = { cookie: request.headers.get('cookie') ?? '' };
+    return server.upgrade(request, { data })
+      ? undefined
+      : new Response('WebSocket upgrade failed', { status: 400 });
   }
 
   close(): void {
     for (const client of this.clients) client.socket.close(1001, 'Server shutting down');
     this.clients.clear();
-    this.server.close();
     this.preload.offChange(this.onPreparationChange);
     this.removeArtworkListener?.();
     this.removeArtworkStreamReadyListener?.();
@@ -183,10 +214,10 @@ export class RealtimeGateway {
   private removeArtworkListener: (() => void) | null = null;
   private removeArtworkStreamReadyListener: (() => void) | null = null;
 
-  private accept(socket: WebSocket, request: IncomingMessage): void {
+  private accept(socket: RealtimeSocket): ClientState {
     const state: ClientState = {
       socket,
-      request,
+      cookie: socket.data.cookie,
       userId: '',
       sessionId: '',
       clientId: '',
@@ -206,9 +237,7 @@ export class RealtimeGateway {
       },
     };
     this.clients.add(state);
-    socket.on('message', data => this.handleMessage(state, data.toString()));
-    socket.on('close', () => this.remove(state));
-    socket.on('error', () => this.remove(state));
+    return state;
   }
 
   private async handleMessage(state: ClientState, raw: string): Promise<void> {
@@ -335,7 +364,7 @@ export class RealtimeGateway {
     const cookieName = `${this.config.get('ACCESS_TOKEN_COOKIE_NAME') ?? '__at'}_${message.session}`;
     // The TV app has no cookies for the backend and sends its access token in the message
     const token =
-      this.cookies(state.request.headers.cookie ?? '')[cookieName] ??
+      this.cookies(state.cookie)[cookieName] ??
       (typeof message.accessToken === 'string' ? message.accessToken : undefined);
     if (!token) {
       state.socket.close(1008, 'Authentication failed');
@@ -559,7 +588,7 @@ export class RealtimeGateway {
   }
 
   private send(state: ClientState, message: object): void {
-    if (state.socket.readyState === WebSocket.OPEN) state.socket.send(JSON.stringify(message));
+    if (state.socket.readyState === OPEN) state.socket.send(JSON.stringify(message));
   }
 
   private remove(state: ClientState): void {

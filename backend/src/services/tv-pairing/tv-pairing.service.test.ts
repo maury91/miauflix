@@ -153,6 +153,14 @@ describe('TvPairingService', () => {
     expect(service.addresses()).toEqual(['http://192.168.1.50:8080']);
   });
 
+  it('detects the addresses when TV_PAIRING_ADDRESSES is unset', () => {
+    // The configuration returns '' for an unset variable with a transform, not undefined
+    const { service } = setupTest({ TV_PAIRING_ADDRESSES: '' }, true);
+    service.noteHost('192.168.1.20:3000', LAN_PEER);
+
+    expect(service.addresses()).toEqual(['http://192.168.1.20:3000']);
+  });
+
   it('sends nothing while turned off', async () => {
     const { service, fetchMock } = setupTest({ TV_PAIRING_ENABLED: false });
 

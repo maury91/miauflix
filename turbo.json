@@ -2,23 +2,8 @@
   "$schema": "https://v2-9-6.turborepo.dev/schema.json",
   "globalDependencies": ["tsconfig.json"],
   "tasks": {
-    "@miauflix/backend#build": {
-      "dependsOn": ["^build"],
-      "inputs": [
-        "src/**/*.ts",
-        "src/**/*.tsx",
-        "tsconfig*.json",
-        "loader.js",
-        "babel.config.js",
-        "package.json",
-        "!src/**/*.{test,spec}.{ts,tsx}",
-        "!src/{__test-utils__,__mocks__}/**"
-      ],
-      "outputs": ["../dist/backend/**"],
-      "cache": true
-    },
     "@miauflix/backend#build:client": {
-      "dependsOn": ["@miauflix/backend#build", "^build"],
+      "dependsOn": ["^build"],
       "inputs": [
         "src/client.ts",
         "src/routes/**/*.ts",
@@ -28,6 +13,7 @@
         "src/services/**/*.service.ts",
         "src/services/**/*.api.ts",
         "src/types/**/*.ts",
+        "client-types/**",
         "tsconfig*.json",
         "package.json",
         "!src/**/*.{test,spec}.{ts,tsx}",
@@ -132,6 +118,8 @@
         "tests/fixtures/**/*",
         "jest.config.*",
         "jest.setup.ts",
+        "test.setup.ts",
+        "bunfig.toml",
         "vitest.config.*",
         "setupTests.ts",
         "babel.config.js",

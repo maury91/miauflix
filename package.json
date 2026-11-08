@@ -126,5 +126,6 @@
     "backend-e2e",
     "packages/*",
     "services/*"
-  ]
+  ],
+  "license": "PolyForm-Noncommercial-1.0.0"
 }

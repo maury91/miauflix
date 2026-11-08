@@ -19,9 +19,9 @@ export interface RequestOptions<B = false> {
   timeout?: number;
   headers?: Record<string, string>;
   method?: string;
-  body?: BodyInit;
+  body?: RequestInit['body'];
   signal?: AbortSignal;
-  redirect?: RequestRedirect;
+  redirect?: RequestInit['redirect'];
   asBuffer?: B;
   maxResponseBytes?: number;
 }
