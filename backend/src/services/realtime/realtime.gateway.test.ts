@@ -1,10 +1,24 @@
-import { EventEmitter } from 'node:events';
-
 import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
 import type { PlaybackPiecesUpdate } from '@services/playback/playback-pieces.service';
 import type { PlaybackDeliveryUpdate } from '@services/playback/playback-session.service';
 
-import { RealtimeGateway } from './realtime.gateway';
+import { RealtimeGateway, type RealtimeSocketData } from './realtime.gateway';
+
+/** A Bun `ServerWebSocket` stand-in opened on the gateway; `emit` delivers a message or a close. */
+const openSocket = (gateway: RealtimeGateway, cookie = '') => {
+  const socket = {
+    data: { cookie } as RealtimeSocketData,
+    readyState: 1,
+    send: jest.fn(),
+    close: jest.fn(),
+    emit(event: 'close' | 'message', raw = '') {
+      if (event === 'message') void gateway.websocket.message(socket as never, raw);
+      else void gateway.websocket.close?.(socket as never, 1000, '');
+    },
+  };
+  void gateway.websocket.open?.(socket as never);
+  return socket;
+};
 
 const setupTest = async () => {
   const preload = {
@@ -28,13 +42,7 @@ const setupTest = async () => {
     { handles: () => false } as never,
     { onChange: () => () => undefined } as never
   );
-  const socket = Object.assign(new EventEmitter(), {
-    readyState: 1,
-    send: jest.fn(),
-    close: jest.fn(),
-  });
-  const server = (gateway as unknown as { server: EventEmitter }).server;
-  server.emit('connection', socket, { headers: { cookie: '__at_session=fixture-token' } });
+  const socket = openSocket(gateway, '__at_session=fixture-token');
   socket.emit(
     'message',
     JSON.stringify({ type: 'authenticate', session: 'session', clientId: 'client' })
@@ -119,13 +127,7 @@ describe('RealtimeGateway playback delivery', () => {
       { onChange: () => () => undefined } as never
     );
     const connect = async (session: string) => {
-      const socket = Object.assign(new EventEmitter(), {
-        readyState: 1,
-        send: jest.fn(),
-        close: jest.fn(),
-      });
-      const server = (gateway as unknown as { server: EventEmitter }).server;
-      server.emit('connection', socket, { headers: { cookie: `__at_${session}=fixture-token` } });
+      const socket = openSocket(gateway, `__at_${session}=fixture-token`);
       socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));
       await Promise.resolve();
       return socket;
@@ -189,13 +191,7 @@ describe('RealtimeGateway playback pieces', () => {
       pieces
     );
     const connect = async (session: string) => {
-      const socket = Object.assign(new EventEmitter(), {
-        readyState: 1,
-        send: jest.fn(),
-        close: jest.fn(),
-      });
-      const server = (gateway as unknown as { server: EventEmitter }).server;
-      server.emit('connection', socket, { headers: { cookie: `__at_${session}=fixture-token` } });
+      const socket = openSocket(gateway, `__at_${session}=fixture-token`);
       socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));
       await Promise.resolve();
       return socket;
@@ -243,13 +239,7 @@ describe('RealtimeGateway search routing', () => {
       search as never,
       { onChange: () => () => undefined } as never
     );
-    const socket = Object.assign(new EventEmitter(), {
-      readyState: 1,
-      send: jest.fn(),
-      close: jest.fn(),
-    });
-    const server = (gateway as unknown as { server: EventEmitter }).server;
-    server.emit('connection', socket, { headers: { cookie: '__at_session=fixture-token' } });
+    const socket = openSocket(gateway, '__at_session=fixture-token');
     socket.emit(
       'message',
       JSON.stringify({ type: 'authenticate', session: 'session', clientId: 'client' })
@@ -308,14 +298,8 @@ describe('RealtimeGateway TV app authentication', () => {
 
   it('authenticates with the access token sent in the message', async () => {
     const { gateway, verifyAccessToken } = setupGateway(true);
-    const socket = Object.assign(new EventEmitter(), {
-      readyState: 1,
-      send: jest.fn(),
-      close: jest.fn(),
-    });
+    const socket = openSocket(gateway);
     try {
-      const server = (gateway as unknown as { server: EventEmitter }).server;
-      server.emit('connection', socket, { headers: {} });
       socket.emit(
         'message',
         JSON.stringify({

@@ -187,7 +187,7 @@ describe('BackgroundJobService', () => {
   it('preserves runAfter delays for bulk jobs', async () => {
     const service = setupTest();
     const now = 1_700_000_000_000;
-    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(now);
+    jest.setSystemTime(now);
 
     await service.enqueueBulk([
       {
@@ -208,7 +208,6 @@ describe('BackgroundJobService', () => {
       expect.objectContaining({ opts: expect.objectContaining({ delay: 5_000 }) }),
       expect.objectContaining({ opts: expect.objectContaining({ delay: 0 }) }),
     ]);
-    nowSpy.mockRestore();
   });
 
   it('translates a readable schedule definition into Bunqueue repeat options', async () => {

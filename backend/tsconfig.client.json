@@ -6,7 +6,9 @@
     "module": "ES2022",
     "target": "ES2022",
     "composite": false,
-    "declaration": false
+    "declaration": false,
+    "types": ["node", "bun"],
+    "typeRoots": ["./client-types", "../node_modules/@types"]
   },
   "include": ["src/client.ts"],
   "exclude": ["node_modules", "dist"]

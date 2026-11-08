@@ -20,9 +20,20 @@ COPY services/sources/package.json services/sources/package.json
 COPY services/media-load/package.json services/media-load/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
-RUN npm ci --ignore-scripts
+# Retried: npm ci fails outright on a transient registry or GitHub download error.
+RUN for attempt in 1 2 3; do \
+      npm ci --ignore-scripts && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
+    done
 # bittorrent-tracker and WebTorrent load WebRTC; fetch node-datachannel's prebuilt binary.
-RUN npm rebuild node-datachannel
+# The npm cache keeps the downloaded binary (_prebuilds), so it is fetched from GitHub once.
+RUN --mount=type=cache,target=/root/.npm \
+    for attempt in 1 2 3; do \
+      npm rebuild node-datachannel && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "node-datachannel download failed (attempt $attempt), retrying"; sleep 20; \
+    done
 
 COPY packages/source-metadata-extractor packages/source-metadata-extractor
 COPY packages/contract packages/contract

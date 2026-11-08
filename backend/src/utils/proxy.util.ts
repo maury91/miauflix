@@ -1,5 +1,5 @@
-import { getConnInfo } from '@hono/node-server/conninfo';
 import type { Context } from 'hono';
+import { getConnInfo } from 'hono/bun';
 
 // Header name for the reverse proxy secret
 const PROXY_SECRET_HEADER = 'x-reverse-proxy-secret';

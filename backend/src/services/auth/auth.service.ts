@@ -1,4 +1,4 @@
-import { compare, hash } from 'bcrypt';
+import { password as bunPassword } from 'bun';
 import { randomBytes } from 'crypto';
 import type { Context } from 'hono';
 import { deleteCookie } from 'hono/cookie';
@@ -42,6 +42,25 @@ import { toUserDto } from './user-dto.util';
 
 /** How many of the sessions a device holds `/auth/sessions` validates: one per profile on a shared TV. */
 export const MAX_LISTED_SESSIONS = 8;
+
+/** bcrypt only reads this many bytes of a password. */
+const BCRYPT_MAX_PASSWORD_BYTES = 72;
+
+const hashPassword = (password: string): Promise<string> =>
+  bunPassword.hash(password, { algorithm: 'bcrypt', cost: 10 });
+
+/**
+ * Bun pre-hashes passwords longer than bcrypt's 72 bytes, while the `bcrypt` package used before
+ * truncated them. A hash made that way still matches its password's first 72 bytes.
+ */
+const verifyPassword = async (password: string, passwordHash: string): Promise<boolean> => {
+  if (await bunPassword.verify(password, passwordHash)) return true;
+  const bytes = new TextEncoder().encode(password);
+  return (
+    bytes.length > BCRYPT_MAX_PASSWORD_BYTES &&
+    bunPassword.verify(bytes.subarray(0, BCRYPT_MAX_PASSWORD_BYTES), passwordHash)
+  );
+};
 
 export interface AuthResult {
   accessToken: string;
@@ -178,7 +197,7 @@ export class AuthService {
     if (!this.allowCreateAdminOnFirstRun) {
       return null;
     }
-    const passwordHash = await hash(password, 10);
+    const passwordHash = await hashPassword(password);
     const newUser = await this.userRepository.createAdminIfNone({
       email,
       passwordHash,
@@ -217,7 +236,7 @@ export class AuthService {
       throw new UserAlreadyExistsError();
     }
 
-    const passwordHash = await hash(password, 10);
+    const passwordHash = await hashPassword(password);
 
     const newUser = await this.userRepository.create({
       email,
@@ -248,7 +267,7 @@ export class AuthService {
     const user = await this.userRepository.findByEmail(email);
     if (!user) return null;
 
-    const isValid = await compare(password, user.passwordHash);
+    const isValid = await verifyPassword(password, user.passwordHash);
     return isValid ? user : null;
   }
 

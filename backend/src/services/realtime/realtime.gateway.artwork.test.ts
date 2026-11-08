@@ -1,7 +1,4 @@
-import type { IncomingMessage } from 'node:http';
-
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
-import WebSocket from 'ws';
 
 import type { ConfigService } from '@mytypes/configuration';
 import type { AuthService } from '@services/auth/auth.service';
@@ -143,8 +140,8 @@ describe('RealtimeGateway artwork subscriptions', () => {
 
 function clientState(send: jest.Mock) {
   return {
-    socket: { readyState: WebSocket.OPEN, send, close: jest.fn() },
-    request: {} as IncomingMessage,
+    socket: { data: { cookie: '' }, readyState: 1, send, close: jest.fn() },
+    cookie: '',
     userId: 'user-1',
     sessionId: 'session-1',
     clientId: 'client-1',

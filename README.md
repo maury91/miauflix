@@ -4,7 +4,7 @@
 
 **The self-hosted streaming service that meows!**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial-blue.svg)](LICENSE)
 [![CI Status](https://github.com/maury91/miauflix/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker-ready-blue)](docs/setup/docker-setup.md#prebuilt-images)
 
@@ -93,7 +93,9 @@ Miauflix doesn't host or distribute any content. It's a tool for streaming media
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+This project is source available under the [PolyForm Noncommercial License 1.0.0](LICENSE). You may use, modify, and share it for permitted noncommercial purposes. Commercial use requires separate permission from the relevant rights holders. See the license for its full terms, including permitted organizational uses.
+
+This license applies to project-owned code and original materials. Third-party libraries, assets, and catalog artwork retain their own licenses and rights. It does not revoke licenses already granted for earlier versions, including earlier MIT-licensed copies.
 
 <div align="center">
   <sub>Built with 😻 by the Miauflix team</sub>

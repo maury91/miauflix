@@ -12,7 +12,7 @@ declare module 'hono' {
 }
 
 // Mock the getConnInfo function
-jest.mock('@hono/node-server/conninfo', () => ({
+jest.mock('hono/bun', () => ({
   getConnInfo: jest.fn((context: Context) => {
     // Use the context's own connInfo property that we've set up in our mocks
     return context.connInfo;

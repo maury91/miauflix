@@ -1,8 +1,7 @@
-import { getConnInfo } from '@hono/node-server/conninfo';
-import { serveStatic } from '@hono/node-server/serve-static';
 import { httpInstrumentationMiddleware } from '@hono/otel';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
+import { getConnInfo, serveStatic } from 'hono/bun';
 
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
@@ -84,7 +83,7 @@ function peerAddress(c: Context): string | undefined {
   try {
     return getConnInfo(c).remote.address;
   } catch {
-    // Not served by the Node server (e.g. app.request in tests)
+    // Not served by Bun.serve (e.g. app.request in tests)
     return undefined;
   }
 }

@@ -110,8 +110,10 @@ export class TvPairingService {
   }
 
   private configuredAddresses(): string[] | null {
-    const configured = (this.configurationService.get('TV_PAIRING_ADDRESSES') ?? [])
-      .map((address: string) => address.trim().replace(/\/+$/, ''))
+    const value: unknown = this.configurationService.get('TV_PAIRING_ADDRESSES');
+    // Unset, the configuration returns '' (empty values skip the transform), not a list
+    const configured = (Array.isArray(value) ? (value as string[]) : [])
+      .map(address => address.trim().replace(/\/+$/, ''))
       .filter(Boolean);
     return configured.length ? configured : null;
   }
