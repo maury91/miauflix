@@ -4,6 +4,7 @@ import {
   useCreateSessionMutation,
   useSearchSubtitlesMutation,
 } from '@features/player/api/playback.api';
+import { assRendererSupported, useAssSubtitles } from '@features/player/lib/ass-subtitles';
 import { playbackAudioCapabilities } from '@features/player/lib/audio-language';
 import { startAudioPlayback } from '@features/player/lib/audio-playback';
 import {
@@ -17,6 +18,7 @@ import {
   readMediaSubtitles,
   saveMediaSubtitles,
 } from '@features/player/lib/media-subtitles';
+import { useSubtitleFont } from '@features/player/lib/subtitle-font';
 import { parseVtt, type SubtitleCue } from '@features/player/lib/vtt';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
 import { saveProgressWithRealtime } from '@features/realtime/realtime.middleware';
@@ -51,6 +53,7 @@ import {
   type PlaybackStatus,
 } from './playback-copy';
 import { PlayerControls, PlayerHeader } from './PlayerControls';
+import { SubtitleCaption } from './SubtitleCaption';
 import type { SubtitleTimingCue } from './SubtitleTiming';
 
 import BellIcon from '~icons/mdi/bell-ring-outline';
@@ -149,6 +152,22 @@ const NextEpisodePrompt = styled.div`
   background: rgba(0, 0, 0, 0.82);
 `;
 
+/** Netflix-style: a plain button at the bottom right, above the controls, with no countdown. */
+const SkipIntroButton = styled(BackButton)`
+  position: fixed;
+  z-index: 6;
+  right: 4vw;
+  bottom: 16vh;
+  background: rgba(0, 0, 0, 0.82);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+
+  /* Selected with the remote: filled, so it reads from across the room. */
+  &:focus {
+    background: #fff;
+    color: #000;
+  }
+`;
+
 const NextEpisodeButton = styled(BackButton)`
   background: ${PALETTE.color.interactive};
 `;
@@ -228,6 +247,10 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const nextTransitioned = useRef<string | null>(null);
   const suppressCreditAfterSeek = useRef(false);
   const [nextCountdown, setNextCountdown] = useState<number | null>(null);
+  /** Seconds before the credits are skipped to the scene after them; null while not offered. */
+  const [skipCountdown, setSkipCountdown] = useState<number | null>(null);
+  const skipDismissed = useRef(false);
+  const [inIntro, setInIntro] = useState(false);
   const nextEpisodeKey = nextEpisode
     ? `${nextEpisode.playable.kind === 'movie' ? `m:${nextEpisode.playable.mediaId}` : `e:${nextEpisode.playable.showMediaId}:${nextEpisode.playable.seasonNumber}:${nextEpisode.playable.episodeNumber}`}`
     : null;
@@ -250,6 +273,16 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const [subtitleOffset, setSubtitleOffset] = useState(0);
   const [subtitleWindow, setSubtitleWindow] = useState(0);
   const [subtitleCues, setSubtitleCues] = useState<SubtitleTimingCue[]>([]);
+  /** The native track's current line, drawn by `SubtitleCaption` rather than the browser. */
+  const [nativeCaption, setNativeCaption] = useState('');
+  /** Pixels the open player controls cover at the bottom; captions sit above them. */
+  const [controlsInset, setControlsInset] = useState(0);
+  /** Pixels the open header covers at the top; styled subtitles are drawn below it. */
+  const [headerInset, setHeaderInset] = useState(0);
+  const subtitleInsets = useMemo(
+    () => ({ top: headerInset, bottom: controlsInset }),
+    [headerInset, controlsInset]
+  );
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<PlaybackStatus>('checking');
   const [attempt, setAttempt] = useState(0);
@@ -267,8 +300,11 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
 
   const sessionSubtitleStorageKey = useRef<string | null>(null);
   const videoRef = useRef<PlayerMedia | null>(null);
+  /** The same element as `videoRef`, for effects that attach to it (the ASS renderer). */
+  const [mediaElement, setMediaElement] = useState<PlayerMedia | null>(null);
   const setMedia = useCallback((media: PlayerMedia | null) => {
     videoRef.current = media;
+    setMediaElement(media);
   }, []);
   const resumeApplied = useRef(false);
   const latestProgress = useRef<{
@@ -411,6 +447,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     const hasCreditsMarker =
       !suppressCreditAfterSeek.current &&
       creditsStart !== undefined &&
+      session.delivery?.creditsEndSeconds === undefined &&
       Number.isFinite(creditsStart) &&
       creditsStart > 0 &&
       creditsStart < duration;
@@ -418,7 +455,14 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     if (hasCreditsMarker) {
       if (video.currentTime >= creditsStart!) remaining = 5 - (video.currentTime - creditsStart!);
     } else {
-      const threshold = duration <= 90 ? 0 : duration - 90;
+      // With a scene after the credits, the countdown waits for it instead of covering the credits.
+      const creditsEnd = session.delivery?.creditsEndSeconds;
+      const threshold = Math.max(
+        duration <= 90 ? 0 : duration - 90,
+        creditsEnd !== undefined && Number.isFinite(creditsEnd) && creditsEnd < duration
+          ? creditsEnd
+          : 0
+      );
       if (video.currentTime >= threshold) remaining = duration - video.currentTime;
     }
     if (remaining === null) {
@@ -440,6 +484,9 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     nextTransitioned.current = null;
     suppressCreditAfterSeek.current = false;
     setNextCountdown(null);
+    skipDismissed.current = false;
+    setSkipCountdown(null);
+    setInIntro(false);
   }, [playable, nextEpisodeKey]);
 
   useEffect(() => {
@@ -487,6 +534,23 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     );
   }, [subtitleOffset]);
 
+  const syncNativeCaption = useCallback(() => {
+    const active = subtitleTrackRef.current?.track.activeCues;
+    setNativeCaption(
+      active
+        ? Array.from(active)
+            .map(cue => {
+              const vttCue = cue as VTTCue;
+              return typeof vttCue.getCueAsHTML === 'function'
+                ? (vttCue.getCueAsHTML().textContent ?? '')
+                : (vttCue.text ?? '');
+            })
+            .filter(Boolean)
+            .join('\n')
+        : ''
+    );
+  }, []);
+
   const handleSubtitleLoaded = useCallback(() => {
     const cues = subtitleTrackRef.current?.track.cues;
     if (cues)
@@ -494,10 +558,6 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
         Array.from(cues).map(cue => {
           const original = cueTimes.current.get(cue) ?? { start: cue.startTime, end: cue.endTime };
           const vttCue = cue as VTTCue;
-          // Keep the entire caption above the playback controls and screen edge.
-          vttCue.snapToLines = false;
-          vttCue.line = 75;
-          vttCue.lineAlign = 'end';
           const text =
             typeof vttCue.getCueAsHTML === 'function'
               ? (vttCue.getCueAsHTML().textContent ?? '')
@@ -620,10 +680,41 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const selectedSubtitle = subtitleCandidates.find(
     candidate => candidate.id === selectedSubtitleId
   );
+  const subtitleTrackUrl = selectedSubtitle
+    ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}`
+    : null;
+  /** A styled track whose renderer failed falls back to WebVTT captions. */
+  const [assFailedId, setAssFailedId] = useState<string | null>(null);
+  const usesAss =
+    !!selectedSubtitle?.styled &&
+    assFailedId !== selectedSubtitle.id &&
+    mediaElement instanceof HTMLVideoElement &&
+    assRendererSupported();
+  const handleAssCues = useCallback((cues: SubtitleTimingCue[]) => setSubtitleCues(cues), []);
+  const handleAssError = useCallback(() => {
+    setAssFailedId(selectedSubtitleId);
+    setSubtitleCues([]);
+  }, [selectedSubtitleId]);
+  useAssSubtitles({
+    video: usesAss ? (mediaElement as HTMLVideoElement) : null,
+    trackUrl: usesAss ? subtitleTrackUrl : null,
+    streamingKey: session?.streamingKey ?? '',
+    windowed: selectedSubtitle?.provider === 'embedded',
+    windowStart: subtitleWindow,
+    offset: subtitleOffset,
+    insets: subtitleInsets,
+    onCues: handleAssCues,
+    onError: handleAssError,
+  });
   const subtitleUrl =
-    selectedSubtitle && session
-      ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}?streamingKey=${encodeURIComponent(session.streamingKey)}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`
+    selectedSubtitle && session && !usesAss
+      ? `${subtitleTrackUrl}?streamingKey=${encodeURIComponent(session.streamingKey)}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`
       : null;
+  const subtitleFontFamily = useSubtitleFont(
+    selectedSubtitle?.embeddedFonts && session && !usesAss
+      ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}/font?streamingKey=${encodeURIComponent(session.streamingKey)}`
+      : null
+  );
   const hasProgress = !!progress.data;
   const selectedAudio = session?.delivery?.audioTracks?.find(
     track => track.index === audioTrackIndex
@@ -641,6 +732,79 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       : undefined;
   // Converted audio is fed to a <video> element through Media Source Extensions
   const playsInAvplay = !!avplay && !audioDelivery;
+
+  /** Converted audio restarts the conversion at the new position; anything else seeks itself. */
+  const seekConvertedAudio = useCallback(
+    (position: number) => {
+      const autoplay = audioPreparing.current ? audioSeek.autoplay : !videoRef.current?.paused;
+      resumeApplied.current = true;
+      audioPreparing.current = true;
+      setPendingPosition(position);
+      setAudioSeek(previous => ({ position, autoplay, revision: previous.revision + 1 }));
+    },
+    [audioSeek.autoplay]
+  );
+
+  const seekTo = useCallback(
+    (position: number) => {
+      const video = videoRef.current;
+      if (!video) return;
+      if (audioDelivery) seekConvertedAudio(position);
+      else video.currentTime = position;
+    },
+    [audioDelivery, seekConvertedAudio]
+  );
+
+  const skipCredits = useCallback(() => {
+    const creditsEnd = session?.delivery?.creditsEndSeconds;
+    setSkipCountdown(null);
+    if (creditsEnd === undefined) return;
+    skipDismissed.current = true;
+    seekTo(creditsEnd);
+  }, [seekTo, session]);
+
+  const skipIntro = useCallback(() => {
+    const introEnd = session?.delivery?.introEndSeconds;
+    setInIntro(false);
+    if (introEnd !== undefined) seekTo(introEnd);
+  }, [seekTo, session]);
+
+  /** Show "Skip intro" while the opening plays. */
+  const updateIntroSkip = useCallback(() => {
+    const video = videoRef.current;
+    const start = session?.delivery?.introStartSeconds;
+    const end = session?.delivery?.introEndSeconds;
+    setInIntro(
+      !!video &&
+        start !== undefined &&
+        end !== undefined &&
+        video.currentTime >= start &&
+        // The last second is not worth a skip.
+        video.currentTime < end - 1
+    );
+  }, [session]);
+
+  /** Offer to skip credits that a scene follows, and skip them after a short countdown. */
+  const updateCreditsSkip = useCallback(() => {
+    const video = videoRef.current;
+    const creditsStart = session?.delivery?.creditsStartSeconds;
+    const creditsEnd = session?.delivery?.creditsEndSeconds;
+    if (
+      !video ||
+      creditsStart === undefined ||
+      creditsEnd === undefined ||
+      skipDismissed.current ||
+      suppressCreditAfterSeek.current ||
+      video.currentTime < creditsStart ||
+      video.currentTime >= creditsEnd
+    ) {
+      setSkipCountdown(null);
+      return;
+    }
+    const remaining = 5 - (video.currentTime - creditsStart);
+    if (remaining <= 0) skipCredits();
+    else setSkipCountdown(Math.ceil(remaining));
+  }, [session, skipCredits]);
   /** The selected subtitle's cues, drawn over AVPlay, which has no `<track>`. */
   const [avplayCues, setAvplayCues] = useState<SubtitleCue[]>([]);
 
@@ -736,6 +900,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     // Track load/error events do not bubble; subscribe to the native element.
     track.addEventListener('load', handleSubtitleLoaded);
     track.addEventListener('error', failed);
+    const textTrack = track.track;
+    textTrack.addEventListener?.('cuechange', syncNativeCaption);
     if (track.readyState === 2) handleSubtitleLoaded();
     const previewTimer = window.setInterval(() => {
       if (track.readyState === 3) window.clearInterval(previewTimer);
@@ -748,15 +914,26 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       window.clearInterval(previewTimer);
       track.removeEventListener('load', handleSubtitleLoaded);
       track.removeEventListener('error', failed);
+      textTrack.removeEventListener?.('cuechange', syncNativeCaption);
+      setNativeCaption('');
     };
-  }, [selectedSubtitle, handleSubtitleLoaded, subtitleWindow]);
+  }, [selectedSubtitle, handleSubtitleLoaded, syncNativeCaption, subtitleWindow]);
 
   useEffect(() => {
     const track = subtitleTrackRef.current;
     if (!track) return;
-    track.track.mode = selectedSubtitle ? 'showing' : 'disabled';
+    // Hidden still tracks the active cues; the player draws them itself
+    track.track.mode = selectedSubtitle ? 'hidden' : 'disabled';
     if (selectedSubtitle) applySubtitleOffset();
-  }, [applySubtitleOffset, selectedSubtitle, subtitleOffset, audioSeek, audioTrackIndex]);
+    syncNativeCaption();
+  }, [
+    applySubtitleOffset,
+    syncNativeCaption,
+    selectedSubtitle,
+    subtitleOffset,
+    audioSeek,
+    audioTrackIndex,
+  ]);
 
   const failSource = useCallback(() => {
     const key = JSON.stringify(playable);
@@ -949,11 +1126,15 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       const creditsStart = session?.delivery?.creditsStartSeconds;
       suppressCreditAfterSeek.current =
         creditsStart !== undefined && event.currentTarget.currentTime >= creditsStart;
+      if (creditsStart !== undefined && event.currentTarget.currentTime < creditsStart)
+        skipDismissed.current = false;
       setSubtitleWindow(
         Math.floor(Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60) *
           60
       );
       updateNextCountdown();
+      updateCreditsSkip();
+      updateIntroSkip();
     },
     onTimeUpdate: (event: { currentTarget: PlayerMedia }) => {
       if (audioPreparing.current) return;
@@ -974,6 +1155,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       );
       readProgressSnapshot();
       updateNextCountdown();
+      updateCreditsSkip();
+      updateIntroSkip();
     },
     onCanPlay: () => {
       if (!audioPreparing.current) setStatus('ready');
@@ -1061,6 +1244,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               autoPlay
               subtitleCues={selectedSubtitle ? avplayCues : []}
               subtitleOffset={subtitleOffset}
+              subtitleRaise={controlsInset}
+              subtitleFontFamily={subtitleFontFamily}
               {...mediaEvents}
             />
           ) : (
@@ -1079,7 +1264,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
                   key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitleWindow : 0}`}
                   ref={node => {
                     subtitleTrackRef.current = node;
-                    if (node) node.track.mode = 'showing';
+                    if (node) node.track.mode = 'hidden';
                   }}
                   kind="subtitles"
                   srcLang={selectedSubtitle.language}
@@ -1090,25 +1275,58 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               )}
             </Video>
           )}
-          {nextEpisode && nextCountdown !== null && (
-            <NextEpisodePrompt role="group" aria-label="Next episode">
-              <NextEpisodeButton type="button" onClick={playNextEpisode}>
-                Play next episode ({nextCountdown}s)
-              </NextEpisodeButton>
-              <BackButton
-                type="button"
-                onClick={() => {
-                  nextDismissed.current = nextEpisodeKey;
-                  setNextCountdown(null);
-                }}
-              >
-                Stay
-              </BackButton>
-            </NextEpisodePrompt>
+          {!playsInAvplay && selectedSubtitle && nativeCaption && (
+            <SubtitleCaption
+              text={nativeCaption}
+              raise={controlsInset}
+              fontFamily={subtitleFontFamily}
+              data-testid="subtitle-caption"
+            />
           )}
           <PlayerControls
             // The controls listen to one media element; a switch to converted audio replaces it
             key={playsInAvplay ? 'avplay' : 'video'}
+            prompts={
+              <>
+                {inIntro && (
+                  <SkipIntroButton type="button" onClick={skipIntro}>
+                    Skip intro
+                  </SkipIntroButton>
+                )}
+                {skipCountdown !== null && (
+                  <NextEpisodePrompt role="group" aria-label="Credits">
+                    <NextEpisodeButton type="button" onClick={skipCredits}>
+                      Skip credits ({skipCountdown}s)
+                    </NextEpisodeButton>
+                    <BackButton
+                      type="button"
+                      onClick={() => {
+                        skipDismissed.current = true;
+                        setSkipCountdown(null);
+                      }}
+                    >
+                      Watch credits
+                    </BackButton>
+                  </NextEpisodePrompt>
+                )}
+                {skipCountdown === null && nextEpisode && nextCountdown !== null && (
+                  <NextEpisodePrompt role="group" aria-label="Next episode">
+                    <NextEpisodeButton type="button" onClick={playNextEpisode}>
+                      Play next episode ({nextCountdown}s)
+                    </NextEpisodeButton>
+                    <BackButton
+                      type="button"
+                      onClick={() => {
+                        nextDismissed.current = nextEpisodeKey;
+                        setNextCountdown(null);
+                      }}
+                    >
+                      Stay
+                    </BackButton>
+                  </NextEpisodePrompt>
+                )}
+              </>
+            }
             videoRef={videoRef}
             preparing={status !== 'ready'}
             onBack={onBack}
@@ -1125,6 +1343,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             onSelectSubtitle={handleSubtitleSelect}
             onSubtitleOffsetChange={handleSubtitleOffsetChange}
             subtitlePreferencesKey={currentUser?.id ?? null}
+            onControlsInsetChange={setControlsInset}
+            onHeaderInsetChange={setHeaderInset}
             downloadedRanges={downloadedRanges}
             durationSeconds={audioDelivery?.durationSeconds}
             pendingPosition={pendingPosition}
@@ -1158,23 +1378,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               setAudioTrackIndex(index);
               setAudioSeek(previous => ({ position, autoplay, revision: previous.revision + 1 }));
             }}
-            onSeek={
-              audioDelivery
-                ? position => {
-                    const autoplay = audioPreparing.current
-                      ? audioSeek.autoplay
-                      : !videoRef.current?.paused;
-                    resumeApplied.current = true;
-                    audioPreparing.current = true;
-                    setPendingPosition(position);
-                    setAudioSeek(previous => ({
-                      position,
-                      autoplay,
-                      revision: previous.revision + 1,
-                    }));
-                  }
-                : undefined
-            }
+            onSeek={audioDelivery ? seekConvertedAudio : undefined}
           />
           <VideoStatus $ready={status === 'ready'} role="status" aria-live="polite">
             {statusMessage}

@@ -44,6 +44,8 @@ const setupTest = (directory: string) => {
   const torrentSubtitles = {
     discover: jest.fn().mockResolvedValue([]),
     getTrack: jest.fn().mockResolvedValue('WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nLocal cue\n'),
+    getAssTrack: jest.fn().mockResolvedValue('[Script Info]\n[Events]\nFormat: Start, End, Text\n'),
+    getFonts: jest.fn(),
   };
   const service = new SubtitlesService(
     config as never,
@@ -146,6 +148,111 @@ describe('subtitle ranking and durable downloads', () => {
     await expect(service.getTrack(candidate.id, 'streaming-key', -1)).rejects.toThrow(
       'Invalid subtitle position'
     );
+  });
+
+  it('serves styled tracks as ASS with every attached font, sharing one font read', async () => {
+    const { service, torrentSubtitles, config } = setupTest(directory);
+    config.get.mockReturnValue(undefined);
+    const fonts = [
+      { streamIndex: 4, names: ['sign display'], data: Buffer.from('sign'), format: 'ttf' },
+      { streamIndex: 5, names: ['miauflix sans'], data: Buffer.from('sans'), format: 'otf' },
+    ];
+    torrentSubtitles.getFonts.mockResolvedValue({ fonts, complete: true });
+    torrentSubtitles.discover.mockResolvedValue([
+      {
+        fileId: '9:embedded:2',
+        provider: 'embedded',
+        streamIndex: 2,
+        language: 'en',
+        release: 'Signs & Songs',
+        hearingImpaired: false,
+        styled: true,
+        videoFilePath: 'Movie.mkv',
+        fonts: [
+          { streamIndex: 4, filename: 'Sign.ttf' },
+          { streamIndex: 5, filename: 'Sans.otf' },
+        ],
+      },
+      {
+        fileId: '9:torrent:Movie.en.srt',
+        provider: 'torrent',
+        language: 'en',
+        release: 'Movie.en.srt',
+        hearingImpaired: false,
+        path: 'Movie.en.srt',
+      },
+    ]);
+    const { candidates } = await service.search('streaming-key', 'user', 'en', false, false, true);
+    expect(candidates.map(candidate => candidate.styled)).toEqual([true, undefined]);
+    const [styled, plain] = candidates;
+
+    expect(await service.getTrack(styled.id, 'streaming-key', 65, 'ass')).toContain(
+      '[Script Info]'
+    );
+    expect(torrentSubtitles.getAssTrack).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ streamIndex: 2 }),
+      60
+    );
+    // The VTT and ASS forms of one window are cached apart.
+    await service.getTrack(styled.id, 'streaming-key', 65);
+    expect(torrentSubtitles.getTrack).toHaveBeenCalledTimes(1);
+    await expect(service.getTrack(plain.id, 'streaming-key', 0, 'ass')).rejects.toThrow(
+      'Subtitle is unavailable as ASS'
+    );
+
+    const [list, file] = await Promise.all([
+      service.getFonts(styled.id, 'streaming-key'),
+      service.getFontFile(styled.id, 'streaming-key', 5),
+    ]);
+    expect(list).toEqual([
+      { id: 4, names: ['sign display'] },
+      { id: 5, names: ['miauflix sans'] },
+    ]);
+    expect(file).toEqual({ data: Buffer.from('sans'), format: 'otf' });
+    expect(await service.getFontFile(styled.id, 'streaming-key', 9)).toBeNull();
+    expect(await service.getFonts(plain.id, 'streaming-key')).toEqual([]);
+    expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(1);
+  });
+
+  it('reuses a partial font read briefly, then reads the fonts again', async () => {
+    const { service, torrentSubtitles, config } = setupTest(directory);
+    config.get.mockReturnValue(undefined);
+    const now = jest.spyOn(Date, 'now');
+    const partial = [
+      { streamIndex: 4, names: ['sign display'], data: Buffer.from('sign'), format: 'ttf' },
+    ];
+    torrentSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: false });
+    torrentSubtitles.discover.mockResolvedValue([
+      {
+        fileId: '9:embedded:2',
+        provider: 'embedded',
+        streamIndex: 2,
+        language: 'en',
+        release: 'Full',
+        hearingImpaired: false,
+        styled: true,
+        fonts: [{ streamIndex: 4, filename: 'Sign.ttf' }],
+      },
+    ]);
+    const { candidates } = await service.search('streaming-key', 'user', 'en', false, false, true);
+    const id = candidates[0].id;
+    now.mockReturnValue(1_000);
+    expect(await service.getFonts(id, 'streaming-key')).toEqual([
+      { id: 4, names: ['sign display'] },
+    ]);
+    now.mockReturnValue(20_000);
+    expect(await service.getFontFile(id, 'streaming-key', 4)).toMatchObject({ format: 'ttf' });
+    expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(1);
+
+    // Past 30 seconds the attachments are read again; a complete read then stays cached.
+    torrentSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: true });
+    now.mockReturnValue(31_001);
+    await service.getFonts(id, 'streaming-key');
+    now.mockReturnValue(10_000_000);
+    await service.getFonts(id, 'streaming-key');
+    expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(2);
+    now.mockRestore();
   });
 
   it('ranks by the main video filename, ahead of provider popularity and trust', async () => {

@@ -105,9 +105,20 @@ it('stores a finished probe and serves later sessions from it without running ff
   await expect(first.knownDelivery(target(1))).resolves.toBeNull();
   const inspected = first.inspect(target(1));
   await settle();
-  children[0].stdout.end(JSON.stringify(probe));
+  // Stream listing first, without data; then only the video header is dumped.
+  const listing = {
+    ...probe,
+    streams: probe.streams.map(({ extradata: _extradata, ...stream }) => stream),
+  };
+  children[0].stdout.end(JSON.stringify(listing));
   children[0].emit('close', 0);
+  await settle();
+  children[1].stdout.end(JSON.stringify({ streams: [{ extradata: probe.streams[0].extradata }] }));
+  children[1].emit('close', 0);
   await expect(inspected).resolves.toMatchObject({ mode: 'audio-transcode' });
+  const args = jest.mocked(spawn).mock.calls.map(call => call[1] as string[]);
+  expect(args[0]).not.toContain('-show_data');
+  expect(args[1]).toEqual(expect.arrayContaining(['-select_streams', 'v:0', '-show_data']));
   expect(store.save).toHaveBeenCalledWith(1, 'movie.mkv', JSON.stringify(probe));
   await expect(first.knownDelivery(target(1))).resolves.toMatchObject({ mode: 'audio-transcode' });
 
@@ -118,5 +129,5 @@ it('stores a finished probe and serves later sessions from it without running ff
     durationSeconds: 120.5,
   });
   await expect(restarted.inspect(target(1))).resolves.toMatchObject({ mode: 'audio-transcode' });
-  expect(children).toHaveLength(1);
+  expect(children).toHaveLength(2);
 });
