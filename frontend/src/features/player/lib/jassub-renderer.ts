@@ -56,6 +56,8 @@ export async function createAssRenderer(
     modernWasmWorkerUrl,
   });
   // JASSUB sizes and places its canvas from the picture's box; fit that box between the insets.
+  // `_getElementBoundingBox` is JASSUB's private method: `jassub` is pinned to an exact version,
+  // so check this override still matches its `resize()` before updating it.
   let insets = { top: 0, bottom: 0 };
   const pictureBox = instance._getElementBoundingBox.bind(instance);
   instance._getElementBoundingBox = (element, videoWidth, videoHeight) => {

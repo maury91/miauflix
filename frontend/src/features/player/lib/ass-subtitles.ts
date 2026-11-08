@@ -83,6 +83,22 @@ export function assCues(format: string[], lines: string[]): AssCue[] {
 }
 
 const FONT_CONCURRENCY = 3;
+const RATE_LIMIT_ATTEMPTS = 3;
+const RATE_LIMIT_DELAY_MS = 1000;
+
+/**
+ * Fetch with the API's credentials, waiting and retrying (a few times) while the server answers
+ * 429: font routes are rate limited per second, and a large release or a quick track change
+ * can trip them. Any other response is returned as it is.
+ */
+export async function fetchRateLimited(url: string, signal: AbortSignal): Promise<Response> {
+  for (let attempt = 1; ; attempt++) {
+    const response = await fetch(url, { credentials: API_CREDENTIALS, signal });
+    if (response.status !== 429 || attempt >= RATE_LIMIT_ATTEMPTS) return response;
+    await new Promise(resolve => setTimeout(resolve, RATE_LIMIT_DELAY_MS * attempt));
+    signal.throwIfAborted();
+  }
+}
 
 /**
  * Download the release's attached fonts, handing each to `onFont` as it arrives. Failures leave
@@ -94,30 +110,18 @@ async function loadFonts(
   signal: AbortSignal,
   onFont: (font: Uint8Array) => void
 ): Promise<void> {
-  const response = await fetch(`${trackUrl}/fonts?${query}`, {
-    credentials: API_CREDENTIALS,
-    signal,
-  });
+  const response = await fetchRateLimited(`${trackUrl}/fonts?${query}`, signal);
   if (!response.ok) return;
   const { fonts } = (await response.json()) as SubtitleFontListResponse;
   const queue = [...fonts];
   const next = async (): Promise<void> => {
     const font = queue.shift();
     if (!font) return;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      const file = await fetch(`${trackUrl}/fonts/${font.id}?${query}`, {
-        credentials: API_CREDENTIALS,
-        signal,
-      });
-      if (file.ok) {
-        const data = new Uint8Array(await file.arrayBuffer());
-        signal.throwIfAborted();
-        onFont(data);
-        break;
-      }
-      // Requests are rate limited per second; a large release can trip it.
-      if (file.status !== 429) break;
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    const file = await fetchRateLimited(`${trackUrl}/fonts/${font.id}?${query}`, signal);
+    if (file.ok) {
+      const data = new Uint8Array(await file.arrayBuffer());
+      signal.throwIfAborted();
+      onFont(data);
     }
     return next();
   };

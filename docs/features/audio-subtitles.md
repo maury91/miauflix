@@ -26,7 +26,9 @@ Miauflix automatically looks for text subtitles embedded inside a video and matc
 
 The server converts selected local text subtitles into WebVTT for the player. This works without an OpenSubtitles account or API key, for movies and episodes. Subtitles stored as pictures, including PGS and VobSub, are not currently converted.
 
-In the browser, styled ASS and SSA subtitles, which most anime releases use, are drawn in full instead: signs translated in place, positions, colours, karaoke effects and the fonts the release carries. While the player controls are open, the whole subtitle picture shrinks into the space between them, so neither signs nor dialogue are covered. The TV app, and browsers that cannot run the renderer, show these subtitles as plain text in the release's dialogue font.
+In the browser, styled ASS and SSA subtitles, which most anime releases use, are drawn in full instead: signs translated in place, positions, colours, karaoke effects and the fonts the release carries. While the player controls are open, the whole subtitle picture shrinks into the space between them, so neither signs nor dialogue are covered. The TV app, browsers without the required rendering support, and tracks whose renderer fails use plain WebVTT captions instead. These can use the release's dialogue font when it is attached to the video and can be loaded; otherwise they use the app's font. Font files beside separate subtitle files are not loaded.
+
+Plain captions use white outlined text without a black box, near the bottom of the screen. They move above the player controls when those controls open, in both the browser and Samsung player. Styled browser subtitles begin with a bundled fallback font and switch to the attached fonts as they load. The renderer does not request access to your local fonts or look up fonts online.
 
 ## OpenSubtitles search
 
@@ -49,5 +51,7 @@ Automatic subtitle translation and language-learning subtitles are also planned.
 - [Audio inspection and conversion](../../backend/src/services/playback/audio-playback.service.ts)
 - [Local subtitle discovery](../../backend/src/services/subtitles/torrent-subtitles.service.ts)
 - [OpenSubtitles integration](../../backend/src/services/subtitles/subtitles.service.ts)
+- [Styled browser subtitle rendering](../../frontend/src/features/player/lib/ass-subtitles.ts)
+- [Shared plain captions](../../frontend/src/pages/home/components/SubtitleCaption.tsx)
 - [Subtitle controls](../../frontend/src/pages/home/components/SubtitleMenu.tsx)
 - [Audio language matching](../../frontend/src/features/player/lib/audio-language.ts)

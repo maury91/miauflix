@@ -1,4 +1,4 @@
-import { assCues, assEvents } from './ass-subtitles';
+import { assCues, assEvents, fetchRateLimited } from './ass-subtitles';
 
 const track = [
   '[Script Info]',
@@ -26,5 +26,37 @@ describe('ASS events', () => {
     expect(assCues(format, lines)).toEqual([
       { start: 70, end: 72.5, text: 'Hello, there\nfriend' },
     ]);
+  });
+});
+
+describe('rate-limited font requests', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it('waits and retries on 429, then returns the final answer', async () => {
+    vi.useFakeTimers();
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(null, { status: 429 }))
+      .mockResolvedValueOnce(new Response('{"fonts":[]}', { status: 200 }));
+    vi.stubGlobal('fetch', fetch);
+    const signal = new AbortController().signal;
+    const pending = fetchRateLimited('/fonts', signal);
+    await vi.advanceTimersByTimeAsync(1000);
+    expect((await pending).ok).toBe(true);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(fetch).toHaveBeenLastCalledWith('/fonts', expect.objectContaining({ signal }));
+  });
+
+  it('gives up after three rate-limited answers', async () => {
+    vi.useFakeTimers();
+    const fetch = vi.fn().mockImplementation(async () => new Response(null, { status: 429 }));
+    vi.stubGlobal('fetch', fetch);
+    const pending = fetchRateLimited('/fonts', new AbortController().signal);
+    await vi.advanceTimersByTimeAsync(3000);
+    expect((await pending).status).toBe(429);
+    expect(fetch).toHaveBeenCalledTimes(3);
   });
 });
