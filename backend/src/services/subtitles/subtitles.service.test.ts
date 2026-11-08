@@ -215,10 +215,14 @@ describe('subtitle ranking and durable downloads', () => {
     expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(1);
   });
 
-  it('reads the fonts again after a partial read', async () => {
+  it('reuses a partial font read briefly, then reads the fonts again', async () => {
     const { service, torrentSubtitles, config } = setupTest(directory);
     config.get.mockReturnValue(undefined);
-    torrentSubtitles.getFonts.mockResolvedValue({ fonts: [], complete: false });
+    const now = jest.spyOn(Date, 'now');
+    const partial = [
+      { streamIndex: 4, names: ['sign display'], data: Buffer.from('sign'), format: 'ttf' },
+    ];
+    torrentSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: false });
     torrentSubtitles.discover.mockResolvedValue([
       {
         fileId: '9:embedded:2',
@@ -232,9 +236,23 @@ describe('subtitle ranking and durable downloads', () => {
       },
     ]);
     const { candidates } = await service.search('streaming-key', 'user', 'en', false, false, true);
-    expect(await service.getFonts(candidates[0].id, 'streaming-key')).toEqual([]);
-    await service.getFonts(candidates[0].id, 'streaming-key');
+    const id = candidates[0].id;
+    now.mockReturnValue(1_000);
+    expect(await service.getFonts(id, 'streaming-key')).toEqual([
+      { id: 4, names: ['sign display'] },
+    ]);
+    now.mockReturnValue(20_000);
+    expect(await service.getFontFile(id, 'streaming-key', 4)).toMatchObject({ format: 'ttf' });
+    expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(1);
+
+    // Past 30 seconds the attachments are read again; a complete read then stays cached.
+    torrentSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: true });
+    now.mockReturnValue(31_001);
+    await service.getFonts(id, 'streaming-key');
+    now.mockReturnValue(10_000_000);
+    await service.getFonts(id, 'streaming-key');
     expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(2);
+    now.mockRestore();
   });
 
   it('ranks by the main video filename, ahead of provider popularity and trust', async () => {

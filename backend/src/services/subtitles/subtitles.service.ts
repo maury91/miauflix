@@ -28,6 +28,8 @@ const MAX_TRACK_BYTES = 2 * 1024 * 1024;
 const MAX_CACHED_FONTS = 4;
 /** Every attached font of a few recent tracks, for the full ASS renderer. */
 const MAX_CACHED_FONT_SET_BYTES = 96 * 1024 * 1024;
+/** How long a partial font read is reused before the attachments are read again. */
+const PARTIAL_FONT_SET_TTL_MS = 30_000;
 
 export type SubtitleTrackFormat = 'ass' | 'vtt';
 
@@ -131,7 +133,10 @@ export class SubtitlesService {
   private readonly fonts = new Map<string, SubtitleFont | null>();
   private readonly pendingFonts = new Map<string, Promise<SubtitleFont | null>>();
   /** Every attached font by track, for the ASS renderer; bounded by total bytes. */
-  private readonly fontSets = new Map<string, { fonts: ExtractedFont[]; bytes: number }>();
+  private readonly fontSets = new Map<
+    string,
+    { fonts: ExtractedFont[]; bytes: number; expiresAt?: number }
+  >();
   private cachedFontSetBytes = 0;
   private readonly pendingFontSets = new Map<string, Promise<ExtractedFont[]>>();
 
@@ -590,7 +595,7 @@ export class SubtitlesService {
     // Every styled track of a video shares its attachments.
     const key = `${record.sourceId}:${record.playableKey}:${local.videoFilePath ?? ''}`;
     const cached = this.fontSets.get(key);
-    if (cached) {
+    if (cached && (cached.expiresAt === undefined || cached.expiresAt > Date.now())) {
       this.fontSets.delete(key);
       this.fontSets.set(key, cached);
       return cached.fonts;
@@ -600,11 +605,21 @@ export class SubtitlesService {
     const loading = this.torrentSubtitles
       .getFonts(resolved.target, local)
       .then(({ fonts, complete }) => {
-        // A partial read may be transient: serve it, but read again next time.
-        if (!complete) return fonts;
         const bytes = fonts.reduce((total, font) => total + font.data.length, 0);
+        // An expired partial read is replaced by this one.
+        const previous = this.fontSets.get(key);
+        if (previous?.expiresAt !== undefined && previous.expiresAt <= Date.now()) {
+          this.cachedFontSetBytes -= previous.bytes;
+          this.fontSets.delete(key);
+        }
         if (bytes <= MAX_CACHED_FONT_SET_BYTES && !this.fontSets.has(key)) {
-          this.fontSets.set(key, { fonts, bytes });
+          // A partial read may be transient: reuse it briefly, so the renderer's per-font
+          // requests share it, then read the attachments again.
+          this.fontSets.set(key, {
+            fonts,
+            bytes,
+            ...(complete ? {} : { expiresAt: Date.now() + PARTIAL_FONT_SET_TTL_MS }),
+          });
           this.cachedFontSetBytes += bytes;
           while (this.cachedFontSetBytes > MAX_CACHED_FONT_SET_BYTES && this.fontSets.size > 1) {
             const oldest = this.fontSets.keys().next().value!;
