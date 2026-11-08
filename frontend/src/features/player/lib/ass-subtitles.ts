@@ -134,6 +134,8 @@ interface Options {
   windowStart: number;
   /** The player's subtitle delay, in seconds. */
   offset: number;
+  /** Pixels the open controls cover at the top and bottom; 0 while they are hidden. */
+  insets: { top: number; bottom: number };
   onCues: (cues: AssCue[]) => void;
   onError: () => void;
 }
@@ -149,6 +151,7 @@ export function useAssSubtitles({
   windowed,
   windowStart,
   offset,
+  insets,
   onCues,
   onError,
 }: Options): boolean {
@@ -261,6 +264,11 @@ export function useAssSubtitles({
   useEffect(() => {
     renderer.current?.setTimeOffset(-offset);
   }, [offset, active]);
+
+  // Open controls shrink the area subtitles are drawn in, rather than covering them.
+  useEffect(() => {
+    renderer.current?.setInsets(insets.top, insets.bottom);
+  }, [insets.top, insets.bottom, active]);
 
   return active;
 }

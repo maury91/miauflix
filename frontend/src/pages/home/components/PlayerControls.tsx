@@ -234,6 +234,7 @@ export function PlayerControls({
   onSelectAudioTrack,
   downloadedRanges,
   onControlsInsetChange,
+  onHeaderInsetChange,
   prompts,
 }: {
   videoRef: RefObject<PlayerMedia | null>;
@@ -265,6 +266,8 @@ export function PlayerControls({
    * subtitles move above them.
    */
   onControlsInsetChange?: (pixels: number) => void;
+  /** Pixels the visible header (back button, logo) covers at the top, 0 while it is hidden. */
+  onHeaderInsetChange?: (pixels: number) => void;
   /**
    * Prompts over the video ("Skip intro", "Skip credits", next episode). They are drawn inside the
    * controls so the remote reaches them: a level of their own between the video and the seek bar.
@@ -447,14 +450,22 @@ export function PlayerControls({
   const controls = useRef<HTMLDivElement>(null);
   const onInsetRef = useRef(onControlsInsetChange);
   onInsetRef.current = onControlsInsetChange;
+  const onHeaderInsetRef = useRef(onHeaderInsetChange);
+  onHeaderInsetRef.current = onHeaderInsetChange;
   // From the bottom of the player to the top of the bar's content, past its fade-in padding
   useLayoutEffect(() => {
     const measure = (): void => {
       const content = controls.current?.firstElementChild;
-      const bottom = overlay.current?.getBoundingClientRect().bottom;
+      const area = overlay.current?.getBoundingClientRect();
       onInsetRef.current?.(
-        shown && content && bottom !== undefined
-          ? Math.max(0, Math.round(bottom - content.getBoundingClientRect().top))
+        shown && content && area
+          ? Math.max(0, Math.round(area.bottom - content.getBoundingClientRect().top))
+          : 0
+      );
+      const header = overlay.current?.querySelector('header');
+      onHeaderInsetRef.current?.(
+        shown && header && area
+          ? Math.max(0, Math.round(header.getBoundingClientRect().bottom - area.top))
           : 0
       );
     };
@@ -464,7 +475,13 @@ export function PlayerControls({
     return () => window.removeEventListener('resize', measure);
   }, [shown, notice]);
   // A layout cleanup, so a replaced (keyed) instance resets before its successor measures.
-  useLayoutEffect(() => () => onInsetRef.current?.(0), []);
+  useLayoutEffect(
+    () => () => {
+      onInsetRef.current?.(0);
+      onHeaderInsetRef.current?.(0);
+    },
+    []
+  );
   const percent = duration > 0 ? Math.min(100, Math.max(0, (position / duration) * 100)) : 0;
 
   return (

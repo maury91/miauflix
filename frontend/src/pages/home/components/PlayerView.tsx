@@ -277,6 +277,12 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const [nativeCaption, setNativeCaption] = useState('');
   /** Pixels the open player controls cover at the bottom; captions sit above them. */
   const [controlsInset, setControlsInset] = useState(0);
+  /** Pixels the open header covers at the top; styled subtitles are drawn below it. */
+  const [headerInset, setHeaderInset] = useState(0);
+  const subtitleInsets = useMemo(
+    () => ({ top: headerInset, bottom: controlsInset }),
+    [headerInset, controlsInset]
+  );
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<PlaybackStatus>('checking');
   const [attempt, setAttempt] = useState(0);
@@ -696,6 +702,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     windowed: selectedSubtitle?.provider === 'embedded',
     windowStart: subtitleWindow,
     offset: subtitleOffset,
+    insets: subtitleInsets,
     onCues: handleAssCues,
     onError: handleAssError,
   });
@@ -1337,6 +1344,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             onSubtitleOffsetChange={handleSubtitleOffsetChange}
             subtitlePreferencesKey={currentUser?.id ?? null}
             onControlsInsetChange={setControlsInset}
+            onHeaderInsetChange={setHeaderInset}
             downloadedRanges={downloadedRanges}
             durationSeconds={audioDelivery?.durationSeconds}
             pendingPosition={pendingPosition}

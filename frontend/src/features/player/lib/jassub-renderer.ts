@@ -10,6 +10,8 @@ import modernWasmWorkerUrl from 'jassub/dist/wasm/jassub-worker-modern.js?url';
 import modernWasmUrl from 'jassub/dist/wasm/jassub-worker-modern.wasm?url';
 import workerUrl from 'jassub/dist/worker/worker.js?worker&url';
 
+import { fitBetweenInsets } from './subtitle-insets';
+
 export interface AssRenderer {
   /** Add `Dialogue` lines to the loaded track. */
   addEvents(lines: string): void;
@@ -17,6 +19,11 @@ export interface AssRenderer {
   addFonts(fonts: Uint8Array[]): Promise<void>;
   /** Seconds added to the subtitle clock: the player's subtitle delay, negated. */
   setTimeOffset(seconds: number): void;
+  /**
+   * Pixels the player's controls cover at the top and bottom. The subtitles are drawn into the
+   * picture's area between them, scaled down whole, so nothing is pushed off screen or hidden.
+   */
+  setInsets(top: number, bottom: number): void;
   destroy(): void;
 }
 
@@ -48,6 +55,15 @@ export async function createAssRenderer(
     modernWasmUrl,
     modernWasmWorkerUrl,
   });
+  // JASSUB sizes and places its canvas from the picture's box; fit that box between the insets.
+  let insets = { top: 0, bottom: 0 };
+  const pictureBox = instance._getElementBoundingBox.bind(instance);
+  instance._getElementBoundingBox = (element, videoWidth, videoHeight) => {
+    const box = pictureBox(element, videoWidth, videoHeight);
+    if (!insets.top && !insets.bottom) return box;
+    const container = (element.offsetParent as HTMLElement | null)?.clientHeight;
+    return fitBetweenInsets(box, container ?? window.innerHeight, insets.top, insets.bottom);
+  };
   try {
     await instance.ready;
   } catch (error) {
@@ -64,6 +80,11 @@ export async function createAssRenderer(
     },
     setTimeOffset: seconds => {
       instance.timeOffset = seconds;
+      void instance.resize(true);
+    },
+    setInsets: (top, bottom) => {
+      if (top === insets.top && bottom === insets.bottom) return;
+      insets = { top, bottom };
       void instance.resize(true);
     },
     destroy: () => void instance.destroy(),
