@@ -175,6 +175,8 @@ export default defineConfig({
   css: tizenBuild ? { postcss: { plugins: [legacyChromiumPostcss()] } } : undefined,
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion()),
+    // A literal, so the TV bundle drops browser-only code such as the ASS renderer
+    __TIZEN_BUILD__: JSON.stringify(tizenBuild),
     // Build-time configuration for access token storage
     __ACCESS_TOKEN_STORAGE_MODE__: JSON.stringify(
       process.env.TOKEN_STORAGE_MODE === 'session' ? 'session' : 'memory'
@@ -256,10 +258,9 @@ export default defineConfig({
           }),
         ]),
   ],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
+  // JASSUB (the ASS subtitle renderer) runs a module worker that imports its WebAssembly glue
+  // at runtime, so its worker is emitted as an ES module.
+  worker: { format: 'es' },
 
   build: {
     outDir: tizenBuild ? '../dist/frontend-tizen' : '../dist/frontend',

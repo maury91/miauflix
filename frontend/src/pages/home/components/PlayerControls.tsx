@@ -6,7 +6,15 @@ import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { Spinner } from '@shared/ui/spinner/Spinner';
-import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  type ReactNode,
+  type RefObject,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 
 import { type AudioTrack, SubtitleMenu } from './SubtitleMenu';
@@ -225,6 +233,9 @@ export function PlayerControls({
   selectedAudioTrackIndex,
   onSelectAudioTrack,
   downloadedRanges,
+  onControlsInsetChange,
+  onHeaderInsetChange,
+  prompts,
 }: {
   videoRef: RefObject<PlayerMedia | null>;
   preparing?: boolean;
@@ -250,6 +261,18 @@ export function PlayerControls({
   onSelectAudioTrack?: (index: number) => void;
   /** Downloaded parts of the file, drawn under the watched part; null when unknown. */
   downloadedRanges?: DownloadedRanges | null;
+  /**
+   * Pixels the visible controls cover at the bottom of the player, 0 while they are hidden;
+   * subtitles move above them.
+   */
+  onControlsInsetChange?: (pixels: number) => void;
+  /** Pixels the visible header (back button, logo) covers at the top, 0 while it is hidden. */
+  onHeaderInsetChange?: (pixels: number) => void;
+  /**
+   * Prompts over the video ("Skip intro", "Skip credits", next episode). They are drawn inside the
+   * controls so the remote reaches them: a level of their own between the video and the seek bar.
+   */
+  prompts?: ReactNode;
 }) {
   const [paused, setPaused] = useState(true);
   const [mediaReady, setMediaReady] = useState(false);
@@ -347,7 +370,7 @@ export function PlayerControls({
 
   /**
    * What a remote moves through, top to bottom: the header (Back), the video itself (the
-   * overlay, where Left and Right seek), the seek bar and the row of buttons.
+   * overlay, where Left and Right seek), any prompt, the seek bar and the row of buttons.
    */
   const controlsIn = (selector: string) =>
     Array.from(overlay.current?.querySelectorAll<HTMLElement>(selector) ?? []).filter(
@@ -357,6 +380,7 @@ export function PlayerControls({
     [
       controlsIn('header button:not(:disabled)'),
       overlay.current ? [overlay.current] : [],
+      controlsIn('[data-player-prompts] button:not(:disabled)'),
       controlsIn('input[aria-label="Seek"]:not(:disabled)'),
       controlsIn(
         '[data-control-row] button:not(:disabled), [data-control-row] input:not(:disabled)'
@@ -413,6 +437,51 @@ export function PlayerControls({
     },
   });
   const shown = visible || paused;
+  const promptsRef = useRef<HTMLDivElement>(null);
+  const promptFocused = useRef(false);
+  // A prompt that held the focus can vanish (the intro ends): give the focus back to the video
+  // so the remote keeps working.
+  useLayoutEffect(() => {
+    if (!promptFocused.current || promptsRef.current?.contains(document.activeElement)) return;
+    promptFocused.current = false;
+    const active = document.activeElement;
+    if (!active || active === document.body) overlay.current?.focus({ preventScroll: true });
+  });
+  const controls = useRef<HTMLDivElement>(null);
+  const onInsetRef = useRef(onControlsInsetChange);
+  onInsetRef.current = onControlsInsetChange;
+  const onHeaderInsetRef = useRef(onHeaderInsetChange);
+  onHeaderInsetRef.current = onHeaderInsetChange;
+  // From the bottom of the player to the top of the bar's content, past its fade-in padding
+  useLayoutEffect(() => {
+    const measure = (): void => {
+      const content = controls.current?.firstElementChild;
+      const area = overlay.current?.getBoundingClientRect();
+      onInsetRef.current?.(
+        shown && content && area
+          ? Math.max(0, Math.round(area.bottom - content.getBoundingClientRect().top))
+          : 0
+      );
+      const header = overlay.current?.querySelector('header');
+      onHeaderInsetRef.current?.(
+        shown && header && area
+          ? Math.max(0, Math.round(header.getBoundingClientRect().bottom - area.top))
+          : 0
+      );
+    };
+    measure();
+    if (!shown) return;
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [shown, notice]);
+  // A layout cleanup, so a replaced (keyed) instance resets before its successor measures.
+  useLayoutEffect(
+    () => () => {
+      onInsetRef.current?.(0);
+      onHeaderInsetRef.current?.(0);
+    },
+    []
+  );
   const percent = duration > 0 ? Math.min(100, Math.max(0, (position / duration) * 100)) : 0;
 
   return (
@@ -432,12 +501,25 @@ export function PlayerControls({
       aria-label="Playback controls"
     >
       <PlayerHeader onBack={onBack} visible={shown} />
+      <div
+        ref={promptsRef}
+        data-player-prompts=""
+        onFocus={() => {
+          promptFocused.current = true;
+        }}
+        onBlur={event => {
+          // A removed button blurs with nowhere to go; that case is handled above.
+          if (event.relatedTarget) promptFocused.current = false;
+        }}
+      >
+        {prompts}
+      </div>
       {paused && !loading && (
         <CenterPlay type="button" aria-label="Resume playback" onClick={toggle}>
           <PlayIcon aria-hidden="true" />
         </CenterPlay>
       )}
-      <Controls $visible={shown}>
+      <Controls ref={controls} $visible={shown}>
         {notice && <p role="alert">{notice}</p>}
         <Seek>
           <Track $percent={percent} $ranges={downloadedRanges} />

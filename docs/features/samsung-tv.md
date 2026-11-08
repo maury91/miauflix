@@ -14,6 +14,10 @@ The code includes compatibility adaptations aimed at older TV browsers, includin
 
 Browse cards, open details, select seasons and episodes, and operate the player using arrow keys and the remote's confirmation and Back buttons. Supported media keys, such as play, pause, rewind, and fast-forward, are registered with Tizen. Search and subtitle menus also support remote navigation.
 
+Player prompts for Skip intro, Skip credits, and the next episode are reachable by pressing Down from the video, then OK to activate the focused button. If a focused prompt disappears, focus returns to the video.
+
+Subtitles use plain outlined captions that move above the open controls. Embedded ASS/SSA tracks can use an attached dialogue font when available, but the TV build does not include the browser's styled ASS renderer.
+
 ## Native Samsung playback
 
 On Tizen, Miauflix can use Samsung's native AVPlay player. This lets compatible videos use the TV's own playback capabilities, including supported H.264/H.265 video and several audio formats, with audio-track switching.

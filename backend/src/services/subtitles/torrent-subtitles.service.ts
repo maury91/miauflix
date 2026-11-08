@@ -1,5 +1,7 @@
 import { type ChildProcess, spawn } from 'node:child_process';
-import { posix } from 'node:path';
+import { mkdtemp, open, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join, posix } from 'node:path';
 
 import { logger } from '@logger';
 
@@ -11,11 +13,26 @@ import { withFile } from '@services/playback/playback-target';
 import { collectStderr } from '@services/playback/stderr-tail';
 import { openTorrentInput, PROBE_SIZE_BYTES } from '@services/playback/torrent-input';
 
-import { toWebVtt, webVttWindow } from './subtitles.util';
+import type { FontAttachment, FontNames } from './subtitle-fonts';
+import {
+  dialogueStyle,
+  fontMatch,
+  isFontAttachment,
+  MAX_FONT_ATTEMPTS,
+  MAX_FONT_BYTES,
+  MAX_TRACK_FONT_BYTES,
+  orderFontAttachments,
+  readFontNames,
+} from './subtitle-fonts';
+import { assWindow, toAss, toWebVtt, webVttWindow } from './subtitles.util';
 
 const MAX_BYTES = 2 * 1024 * 1024;
+/** Typeset ASS (signs, karaoke, vector drawings) runs far larger than plain dialogue. */
+const MAX_ASS_BYTES = 8 * 1024 * 1024;
 const TEXT_CODECS = new Set(['subrip', 'ass', 'ssa', 'webvtt', 'mov_text', 'text']);
+const STYLED_CODECS = new Set(['ass', 'ssa']);
 const EXTENSIONS = new Set(['.srt', '.vtt', '.ass', '.ssa']);
+const STYLED_EXTENSIONS = new Set(['.ass', '.ssa']);
 
 export interface TorrentSubtitle {
   fileId: string;
@@ -26,6 +43,21 @@ export interface TorrentSubtitle {
   path?: string;
   videoFilePath?: string;
   streamIndex?: number;
+  /** The track is ASS/SSA, so it can be delivered as-is for a full renderer. */
+  styled?: boolean;
+  /** Fonts attached to the video, for a styled (ASS/SSA) embedded track. */
+  fonts?: FontAttachment[];
+}
+
+export interface SubtitleFont {
+  data: Buffer;
+  format: 'otf' | 'ttf';
+}
+
+/** An attached font read from the release, with the names a renderer looks it up by. */
+export interface ExtractedFont extends SubtitleFont {
+  streamIndex: number;
+  names: FontNames['names'];
 }
 
 const languageNames = new Map<string, string>();
@@ -104,12 +136,24 @@ export function matchingSubtitleFiles(
         path: file.path,
         language,
         release: posix.basename(file.path),
+        ...(STYLED_EXTENSIONS.has(posix.extname(file.path).toLowerCase()) ? { styled: true } : {}),
         hearingImpaired: parts.some(
           part => part !== languageToken && ['sdh', 'cc', 'hi'].includes(part)
         ),
       },
     ];
   });
+}
+
+interface RunOptions {
+  sidecar?: boolean;
+  startSeconds?: number;
+  speculative?: boolean;
+  signal?: AbortSignal;
+  /** Options placed before the input. */
+  inputArgs?: string[];
+  maxBytes?: number;
+  binary?: boolean;
 }
 
 /** Text subtitle discovery/extraction through decrypted, verified torrent ranges. */
@@ -190,10 +234,9 @@ export class TorrentSubtitlesService {
         target,
         'ffprobe',
         [
-          '-select_streams',
-          's',
+          // Attachments are listed too, without their data: they are the release's fonts.
           '-show_entries',
-          'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
+          'stream=index,codec_type,codec_name,extradata_size:stream_tags=language,title,filename,mimetype:stream_disposition=hearing_impaired',
           '-of',
           'json',
         ],
@@ -212,20 +255,41 @@ export class TorrentSubtitlesService {
     const probe = JSON.parse(body) as {
       streams?: Array<{
         index: number;
+        codec_type?: string;
         codec_name: string;
-        tags?: { language?: string; title?: string };
+        extradata_size?: number;
+        tags?: { language?: string; title?: string; filename?: string; mimetype?: string };
         disposition?: { hearing_impaired?: number };
       }>;
     };
-    return (probe.streams ?? [])
+    const streams = (probe.streams ?? []).filter(
+      stream => Number.isSafeInteger(stream.index) && stream.index >= 0
+    );
+    const fonts = streams
       .filter(
         stream =>
-          Number.isSafeInteger(stream.index) &&
-          stream.index >= 0 &&
+          stream.codec_type === 'attachment' &&
+          isFontAttachment(stream.tags?.filename, stream.tags?.mimetype)
+      )
+      .slice(0, 200)
+      .map(stream => ({
+        streamIndex: stream.index,
+        filename: stream.tags?.filename ?? '',
+        ...(Number.isSafeInteger(stream.extradata_size) && stream.extradata_size! > 0
+          ? { size: stream.extradata_size }
+          : {}),
+      }));
+    return streams
+      .filter(
+        stream =>
+          (stream.codec_type === undefined || stream.codec_type === 'subtitle') &&
           TEXT_CODECS.has(stream.codec_name)
       )
       .slice(0, 30)
       .map(stream => ({
+        ...(STYLED_CODECS.has(stream.codec_name)
+          ? { styled: true, ...(fonts.length > 0 ? { fonts } : {}) }
+          : {}),
         fileId: `embedded:${stream.index}`,
         provider: 'embedded',
         streamIndex: stream.index,
@@ -242,14 +306,7 @@ export class TorrentSubtitlesService {
     track: TorrentSubtitle,
     startSeconds = 0
   ): Promise<string> {
-    if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
-      throw new Error('Subtitle track belongs to another video');
-    const sidecar = track.provider === 'torrent';
-    if (sidecar) {
-      const layout = await this.downloads.getMediaFiles(target);
-      if (!matchingSubtitleFiles(layout, target.filePath).some(file => file.path === track.path))
-        throw new Error('Subtitle file no longer matches this video');
-    }
+    const sidecar = await this.checkTrack(target, track);
     const args = [
       '-map',
       track.provider === 'embedded' ? `0:${track.streamIndex}` : '0:s:0',
@@ -270,7 +327,197 @@ export class TorrentSubtitlesService {
       : toWebVtt(body);
   }
 
+  /**
+   * A styled track as ASS, for a full renderer: signs, positioning and typesetting survive.
+   * Embedded tracks keep the original media clock and only the events near `startSeconds`.
+   */
+  async getAssTrack(
+    target: PlaybackTarget,
+    track: TorrentSubtitle,
+    startSeconds = 0
+  ): Promise<string> {
+    if (!track.styled) throw new Error('Subtitle track is not styled');
+    const sidecar = await this.checkTrack(target, track);
+    const body = await this.run(
+      sidecar ? withFile(target, track.path!) : target,
+      'ffmpeg',
+      [
+        '-map',
+        track.provider === 'embedded' ? `0:${track.streamIndex}` : '0:s:0',
+        '-vn',
+        '-an',
+        '-c:s',
+        'copy',
+        '-f',
+        'ass',
+        'pipe:1',
+      ],
+      { sidecar, startSeconds, maxBytes: MAX_ASS_BYTES }
+    );
+    return track.provider === 'embedded'
+      ? assWindow(body, startSeconds, startSeconds + 120)
+      : toAss(body);
+  }
+
+  /**
+   * Every font the release attaches, read in one pass, with the names a renderer asks for.
+   * `complete` is false when the attachments could not all be read, so a short list may be
+   * transient and should not be remembered.
+   */
+  async getFonts(
+    target: PlaybackTarget,
+    track: TorrentSubtitle
+  ): Promise<{ fonts: ExtractedFont[]; complete: boolean }> {
+    if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
+      throw new Error('Subtitle track belongs to another video');
+    if (track.provider !== 'embedded' || !track.fonts?.length) return { fonts: [], complete: true };
+    let budget = MAX_TRACK_FONT_BYTES;
+    const selected = track.fonts.filter(font => {
+      if (font.size === undefined) return true;
+      if (font.size > MAX_FONT_BYTES || font.size > budget) return false;
+      budget -= font.size;
+      return true;
+    });
+    if (!selected.length) return { fonts: [], complete: true };
+    const directory = await mkdtemp(join(tmpdir(), 'miauflix-fonts-'));
+    try {
+      let complete = true;
+      try {
+        await this.run(target, 'ffmpeg', ['-t', '0', '-f', 'null', '-'], {
+          // Each attachment goes to a file named by its stream index, never by the release.
+          inputArgs: selected.flatMap(font => [
+            `-dump_attachment:${font.streamIndex}`,
+            join(directory, String(font.streamIndex)),
+          ]),
+          binary: true,
+        });
+      } catch (error) {
+        logger.debug('TorrentSubtitlesService', 'Font attachments could not all be read', {
+          error: error instanceof Error ? error.message : error,
+        });
+        complete = false;
+      }
+      const fonts: ExtractedFont[] = [];
+      let total = 0;
+      for (const attachment of selected) {
+        let data: Buffer;
+        try {
+          const file = await open(join(directory, String(attachment.streamIndex)), 'r');
+          try {
+            const { size } = await file.stat();
+            if (size > MAX_FONT_BYTES || total + size > MAX_TRACK_FONT_BYTES) continue;
+            data = await file.readFile();
+          } finally {
+            await file.close();
+          }
+        } catch {
+          complete = false;
+          continue;
+        }
+        const names = readFontNames(data);
+        if (!names) continue;
+        total += data.length;
+        fonts.push({
+          streamIndex: attachment.streamIndex,
+          data,
+          format: names.format,
+          names: names.names,
+        });
+      }
+      return { fonts, complete };
+    } finally {
+      await rm(directory, { recursive: true, force: true });
+    }
+  }
+
+  /** The track still belongs to the target video; true when it is a sidecar file. */
+  private async checkTrack(target: PlaybackTarget, track: TorrentSubtitle): Promise<boolean> {
+    if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
+      throw new Error('Subtitle track belongs to another video');
+    const sidecar = track.provider === 'torrent';
+    if (sidecar) {
+      const layout = await this.downloads.getMediaFiles(target);
+      if (!matchingSubtitleFiles(layout, target.filePath).some(file => file.path === track.path))
+        throw new Error('Subtitle file no longer matches this video');
+    }
+    return sidecar;
+  }
+
+  /**
+   * The best matching attached font, or null. `complete` is false when an attachment could not be
+   * read, so a null result may only be transient and should not be remembered.
+   */
+  async getFont(
+    target: PlaybackTarget,
+    track: TorrentSubtitle
+  ): Promise<{ font: SubtitleFont | null; complete: boolean }> {
+    if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
+      throw new Error('Subtitle track belongs to another video');
+    if (track.provider !== 'embedded' || !track.fonts?.length)
+      return { font: null, complete: true };
+    const header = await this.run(target, 'ffmpeg', [
+      '-map',
+      `0:${track.streamIndex}`,
+      '-vn',
+      '-an',
+      '-c:s',
+      'copy',
+      // The header only: no events are read.
+      '-t',
+      '0',
+      '-f',
+      'ass',
+      'pipe:1',
+    ]);
+    const style = dialogueStyle(header);
+    if (!style) return { font: null, complete: true };
+    let best: { font: SubtitleFont; score: number } | null = null;
+    let complete = true;
+    for (const attachment of orderFontAttachments(track.fonts, style.fontName).slice(
+      0,
+      MAX_FONT_ATTEMPTS
+    )) {
+      let data: Buffer;
+      try {
+        data = await this.run(target, 'ffmpeg', ['-t', '0', '-f', 'null', '-'], {
+          inputArgs: [`-dump_attachment:${attachment.streamIndex}`, 'pipe:1'],
+          maxBytes: MAX_FONT_BYTES,
+          binary: true,
+        });
+      } catch (error) {
+        logger.debug('TorrentSubtitlesService', 'Font attachment could not be read', {
+          filename: attachment.filename,
+          error: error instanceof Error ? error.message : error,
+        });
+        complete = false;
+        continue;
+      }
+      const names = readFontNames(data);
+      const score = names ? fontMatch(names, style) : null;
+      if (names && score !== null && (!best || score > best.score)) {
+        best = {
+          font: { data, format: names.format },
+          score,
+        };
+        if (score === 2) break;
+      }
+    }
+    return { font: best?.font ?? null, complete };
+  }
+
   /** Run FFmpeg/FFprobe over one decrypted file; sidecars are read whole instead of windowed. */
+  private run(
+    input: PlaybackTarget,
+    program: 'ffmpeg' | 'ffprobe',
+    args: string[],
+    options: RunOptions & { binary: true }
+  ): Promise<Buffer>;
+  private run(
+    input: PlaybackTarget,
+    program: 'ffmpeg' | 'ffprobe',
+    args: string[],
+    options?: RunOptions
+  ): Promise<string>;
   private async run(
     input: PlaybackTarget,
     program: 'ffmpeg' | 'ffprobe',
@@ -280,13 +527,11 @@ export class TorrentSubtitlesService {
       startSeconds = 0,
       speculative = false,
       signal,
-    }: {
-      sidecar?: boolean;
-      startSeconds?: number;
-      speculative?: boolean;
-      signal?: AbortSignal;
-    } = {}
-  ): Promise<string> {
+      inputArgs = [],
+      maxBytes = MAX_BYTES,
+      binary = false,
+    }: RunOptions = {}
+  ): Promise<Buffer | string> {
     signal?.throwIfAborted();
     if (this.closed || this.active >= 2) throw new Error('Subtitle preparation is busy');
     this.active++;
@@ -328,6 +573,7 @@ export class TorrentSubtitlesService {
               '-nostdin',
               ...common,
               ...(sidecar ? [] : ['-ss', String(Math.max(0, startSeconds - 10)), '-copyts']),
+              ...inputArgs,
               '-i',
               opened.url,
               ...(sidecar ? [] : ['-to', String(startSeconds + 120)]),
@@ -343,7 +589,7 @@ export class TorrentSubtitlesService {
       let failure: Error | undefined;
       process.stdout!.on('data', (chunk: Buffer) => {
         bytes += chunk.length;
-        if (bytes > MAX_BYTES) {
+        if (bytes > maxBytes) {
           failure = new Error('Subtitle output is too large');
           process.kill('SIGKILL');
         } else chunks.push(chunk);
@@ -368,7 +614,8 @@ export class TorrentSubtitlesService {
               )
         );
       });
-      return Buffer.concat(chunks).toString('utf8');
+      const output = Buffer.concat(chunks);
+      return binary ? output : output.toString('utf8');
     } finally {
       if (timeout) clearTimeout(timeout);
       if (child) this.processes.delete(child);

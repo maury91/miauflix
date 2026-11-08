@@ -31,6 +31,11 @@ export interface PlaybackDelivery {
   durationSeconds: number;
   /** Start time from an explicit end-credits chapter tag, when one exists. */
   creditsStartSeconds?: number;
+  /** Where a post-credits scene starts: the credits are skipped to it instead of ending. */
+  creditsEndSeconds?: number;
+  /** The opening (an "Intro"/"Opening"/"OP" chapter), which the player offers to skip. */
+  introStartSeconds?: number;
+  introEndSeconds?: number;
   mimeType: string;
   audioTracks?: PlaybackAudioTrack[];
   defaultAudioTrackIndex?: number;
@@ -76,13 +81,101 @@ interface ProbeResult {
   }>;
 }
 
-function explicitCreditsStart(probe: ProbeResult): number | undefined {
-  const chapter = probe.chapters?.find(item => {
-    const title = item.tags?.title?.trim().toLowerCase();
-    return title && /^(?:closing\s+credits|end\s+credits|credits(?:\s+roll)?)$/.test(title);
-  });
-  const start = Number(chapter?.start_time);
-  return Number.isFinite(start) && start >= 0 ? start : undefined;
+/** Chapter titles that mark end credits, including the anime ED. */
+const CREDITS_CHAPTER =
+  /^(?:(?:closing|end(?:ing)?)\s+credits|credits(?:\s+roll)?|ed\d*|ending(?:\s+(?:song|theme))?|outro)$/;
+/** What may follow the credits without being part of the episode itself. */
+const AFTER_CREDITS_CHAPTER =
+  /^(?:(?:next\s+(?:episode\s+)?)?preview|next\s+time|eye\s*catch|logo|sponsors?|end\s*card)$/;
+
+/** Chapter titles that mark the opening sequence, including the anime OP. */
+const INTRO_CHAPTER =
+  /^(?:intro|opening(?:\s+(?:song|theme|credits|titles))?|op\d*|title\s+sequence|main\s+titles)$/;
+/** Longer "intros" are mislabelled episode content and are not offered for skipping. */
+const MAX_INTRO_SECONDS = 5 * 60;
+
+function chapterTitle(chapter: { tags?: { title?: string } }): string {
+  return (chapter.tags?.title ?? '').trim().toLowerCase();
+}
+
+export interface CreditsChapters {
+  start: number;
+  /** Where the episode carries on after the credits (a post-credits scene); unset when it ends. */
+  end?: number;
+}
+
+/**
+ * End credits from chapter titles: the first credits chapter in the second half of the video.
+ * When the episode goes on after them (anime often keeps a scene after the ED), `end` is where
+ * it resumes; previews and end cards in between are skipped with the credits.
+ */
+export function explicitCredits(
+  probe: Pick<ProbeResult, 'chapters'>,
+  durationSeconds = 0
+): CreditsChapters | undefined {
+  const chapters = (probe.chapters ?? [])
+    .map(chapter => ({ start: Number(chapter.start_time), title: chapterTitle(chapter) }))
+    .filter(chapter => Number.isFinite(chapter.start) && chapter.start >= 0)
+    .sort((left, right) => left.start - right.start);
+  const index = chapters.findIndex(
+    chapter =>
+      CREDITS_CHAPTER.test(chapter.title) &&
+      // Opening credits are never skipped.
+      (!(durationSeconds > 0) || chapter.start >= durationSeconds / 2)
+  );
+  if (index === -1) return undefined;
+  const resume = chapters
+    .slice(index + 1)
+    .find(
+      chapter => !CREDITS_CHAPTER.test(chapter.title) && !AFTER_CREDITS_CHAPTER.test(chapter.title)
+    );
+  const start = chapters[index].start;
+  return resume &&
+    resume.start > start &&
+    (!(durationSeconds > 0) || resume.start < durationSeconds)
+    ? { start, end: resume.start }
+    : { start };
+}
+
+/**
+ * The opening from chapter titles: the first intro chapter in the first half of the video, up
+ * to the next chapter that is not part of it.
+ */
+export function explicitIntro(
+  probe: Pick<ProbeResult, 'chapters'>,
+  durationSeconds = 0
+): { start: number; end: number } | undefined {
+  const chapters = (probe.chapters ?? [])
+    .map(chapter => ({ start: Number(chapter.start_time), title: chapterTitle(chapter) }))
+    .filter(chapter => Number.isFinite(chapter.start) && chapter.start >= 0)
+    .sort((left, right) => left.start - right.start);
+  const index = chapters.findIndex(
+    chapter =>
+      INTRO_CHAPTER.test(chapter.title) &&
+      (!(durationSeconds > 0) || chapter.start < durationSeconds / 2)
+  );
+  if (index === -1) return undefined;
+  const start = chapters[index].start;
+  const end = chapters.slice(index + 1).find(chapter => !INTRO_CHAPTER.test(chapter.title))?.start;
+  if (end === undefined || end <= start || end - start > MAX_INTRO_SECONDS) return undefined;
+  if (durationSeconds > 0 && end >= durationSeconds) return undefined;
+  return { start, end };
+}
+
+function chapterFields(
+  probe: ProbeResult,
+  durationSeconds: number
+): Pick<
+  PlaybackDelivery,
+  'creditsEndSeconds' | 'creditsStartSeconds' | 'introEndSeconds' | 'introStartSeconds'
+> {
+  const credits = explicitCredits(probe, durationSeconds);
+  const intro = explicitIntro(probe, durationSeconds);
+  return {
+    ...(credits ? { creditsStartSeconds: credits.start } : {}),
+    ...(credits?.end !== undefined ? { creditsEndSeconds: credits.end } : {}),
+    ...(intro ? { introStartSeconds: intro.start, introEndSeconds: intro.end } : {}),
+  };
 }
 
 function nativeHevcContainer(formatName: string | undefined): 'matroska' | 'mp4' | undefined {
@@ -226,7 +319,7 @@ export function deliveryFromProbe(
       videoCodec: video.codec_name === 'hevc' ? 'hevc' : 'h264',
       audioCodec,
       durationSeconds,
-      creditsStartSeconds: explicitCreditsStart(probe),
+      ...chapterFields(probe, durationSeconds),
       mimeType: '',
       audioTracks,
       defaultAudioTrackIndex,
@@ -251,7 +344,7 @@ export function deliveryFromProbe(
     audioTracks,
     defaultAudioTrackIndex,
     durationSeconds,
-    creditsStartSeconds: explicitCreditsStart(probe),
+    ...chapterFields(probe, durationSeconds),
     mimeType: audio?.mimeType ?? `video/mp4; codecs="${videoCodec}, mp4a.40.2"`,
   };
 }
@@ -428,74 +521,110 @@ export class AudioPlaybackService {
     });
     const input = await openTorrentInput(this.mediaLoad, target, speculative);
     try {
-      signal?.throwIfAborted();
-      if (this.closed || this.processes.size >= 4)
-        throw new AudioPlaybackError('Audio preparation is busy. Retry shortly.');
-      const child = spawn(
-        'ffprobe',
+      const result = (await this.runProbe(
+        input.url,
         [
-          '-v',
-          'error',
-          '-rw_timeout',
-          '30000000',
-          '-protocol_whitelist',
-          'http,tcp',
-          '-format_whitelist',
-          'matroska,webm,mov,avi,asf,flv,ogg,mp3',
-          // Container headers carry everything inspected; the 5 MB default waits on extra pieces.
-          '-probesize',
-          String(PROBE_SIZE_BYTES),
           '-show_streams',
           '-show_format',
-          '-show_data',
           '-show_entries',
-          'stream=codec_type,codec_name,extradata,channels:stream_tags=language,title:stream_disposition=default:chapter=start_time:chapter_tags=title:format=duration,format_name',
-          '-of',
-          'json',
-          input.url,
+          'stream=codec_type,codec_name,channels:stream_tags=language,title:stream_disposition=default:chapter=start_time:chapter_tags=title:format=duration,format_name',
         ],
-        { stdio: ['ignore', 'pipe', 'pipe'] }
-      );
-      this.processes.add(child);
-      const cancel = () => {
-        this.processes.delete(child);
-        child.kill('SIGKILL');
-        void input.close();
-      };
-      signal?.addEventListener('abort', cancel, { once: true });
-      let body = '';
-      child.stdout.on('data', chunk => {
-        body += chunk.toString();
-        if (body.length > 1024 * 1024) child.kill('SIGKILL');
-      });
-      const stderr = collectStderr(child.stderr);
-      const timeout = setTimeout(() => child.kill('SIGKILL'), 45_000);
-      timeout.unref();
-      try {
-        await new Promise<void>((resolve, reject) => {
-          child.once('error', () =>
-            reject(new AudioPlaybackError('FFmpeg is unavailable. Install FFmpeg on the backend.'))
-          );
-          child.once('close', code =>
-            code === 0
-              ? resolve()
-              : reject(
-                  new AudioPlaybackError(
-                    'The source audio could not be inspected. Retry playback.',
-                    503,
-                    stderr() || `ffprobe exited with ${code}`
-                  )
-                )
-          );
-        });
-        return JSON.parse(body) as ProbeResult;
-      } finally {
-        clearTimeout(timeout);
-        signal?.removeEventListener('abort', cancel);
-        this.processes.delete(child);
+        signal,
+        input.close
+      )) as ProbeResult;
+      // Only the video header is dumped: fonts attached to anime releases are streams too, and
+      // dumping their data would run to megabytes.
+      const video = result.streams?.find(stream => stream.codec_type === 'video');
+      if (video) {
+        const data = (await this.runProbe(
+          input.url,
+          ['-select_streams', 'v:0', '-show_data', '-show_entries', 'stream=extradata'],
+          signal,
+          input.close
+        )) as ProbeResult;
+        const extradata = data.streams?.[0]?.extradata;
+        if (extradata) video.extradata = extradata;
       }
+      return result;
     } finally {
       await input.close();
+    }
+  }
+
+  private async runProbe(
+    url: string,
+    args: string[],
+    signal: AbortSignal | undefined,
+    closeInput: () => Promise<void>
+  ): Promise<unknown> {
+    signal?.throwIfAborted();
+    if (this.closed || this.processes.size >= 4)
+      throw new AudioPlaybackError('Audio preparation is busy. Retry shortly.');
+    const child = spawn(
+      'ffprobe',
+      [
+        '-v',
+        'error',
+        '-rw_timeout',
+        '30000000',
+        '-protocol_whitelist',
+        'http,tcp',
+        '-format_whitelist',
+        'matroska,webm,mov,avi,asf,flv,ogg,mp3',
+        // Container headers carry everything inspected; the 5 MB default waits on extra pieces.
+        '-probesize',
+        String(PROBE_SIZE_BYTES),
+        ...args,
+        '-of',
+        'json',
+        url,
+      ],
+      { stdio: ['ignore', 'pipe', 'pipe'] }
+    );
+    this.processes.add(child);
+    const cancel = () => {
+      this.processes.delete(child);
+      child.kill('SIGKILL');
+      void closeInput();
+    };
+    signal?.addEventListener('abort', cancel, { once: true });
+    let body = '';
+    let failure: string | undefined;
+    child.stdout.on('data', chunk => {
+      body += chunk.toString();
+      if (body.length > 1024 * 1024) {
+        failure = 'ffprobe output is too large';
+        child.kill('SIGKILL');
+      }
+    });
+    const stderr = collectStderr(child.stderr);
+    const timeout = setTimeout(() => {
+      failure = 'ffprobe timed out';
+      child.kill('SIGKILL');
+    }, 45_000);
+    timeout.unref();
+    try {
+      await new Promise<void>((resolve, reject) => {
+        child.once('error', () =>
+          reject(new AudioPlaybackError('FFmpeg is unavailable. Install FFmpeg on the backend.'))
+        );
+        child.once('close', code =>
+          code === 0 && !failure
+            ? resolve()
+            : reject(
+                new AudioPlaybackError(
+                  'The source audio could not be inspected. Retry playback.',
+                  503,
+                  failure ?? (stderr() || `ffprobe exited with ${code}`)
+                )
+              )
+        );
+      });
+      return JSON.parse(body);
+    } finally {
+      clearTimeout(timeout);
+      signal?.removeEventListener('abort', cancel);
+      this.processes.delete(child);
     }
   }
 
