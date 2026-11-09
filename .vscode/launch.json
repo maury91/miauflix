@@ -5,21 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "type": "bun",
       "request": "launch",
-      "name": "Debug Backend (Node)",
+      "name": "Debug Backend (Bun)",
       "program": "${workspaceFolder}/backend/src/app.ts",
-      "runtimeArgs": [
-        "--env-file",
-        ".env",
-        "--experimental-specifier-resolution=node",
-        "--loader",
-        "./backend/loader.js"
-      ],
-      "cwd": "${workspaceFolder}",
-      "autoAttachChildProcesses": true,
-      "skipFiles": ["<node_internals>/**"],
-      "outFiles": ["${workspaceFolder}/backend/dist/**/*.js"]
+      "runtimeArgs": ["--env-file=.env"],
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

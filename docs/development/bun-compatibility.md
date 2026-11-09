@@ -13,7 +13,7 @@ Miauflix originally ran on Bun and moved to Node.js in `a2f8046c` ("Move from Bu
 | `fs-native-extensions`, `utf-8-validate` | —              | ✅            | Native addons load fine                                            |
 | `node-datachannel` (WebRTC)              | —              | ✅            | Loads on linux/arm64 (2026-11-05); needs `trustedDependencies`     |
 | TypeORM + SQLite (`sqlite3`)             | 0.3.27 / 5.1.7 | ✅            | Columns typed with a type alias need an explicit `type` (below)    |
-| Backend test suite                       | —              | ✅            | `bun test` with a Jest compatibility preload (below)               |
+| Backend test suite                       | —              | ✅            | `bun test --isolate` with a Jest compatibility preload (below)     |
 | Full backend                             | —              | ✅            | Since 2026-11-08; runs its sources, not a `bun build` bundle       |
 
 ### Rechecked 2026-11-05: WebTorrent 3.0.21 on linux/arm64
