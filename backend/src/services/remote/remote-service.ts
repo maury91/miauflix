@@ -13,7 +13,6 @@ import {
   type ServiceStatus,
   type Transport,
 } from '@miauflix/contract';
-import WebSocket from 'ws';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
@@ -79,7 +78,6 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     this.connection = connect({
       url: () => this.connectedUrl,
       timeoutMs: () => this.timeoutMs(),
-      WebSocket: WebSocket as unknown as typeof globalThis.WebSocket,
       // Signs `bytes` URLs; the service learns it on every connection.
       ticketKey: randomBytes(32).toString('base64url'),
     });
@@ -181,7 +179,6 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     const probe = connect({
       url,
       timeoutMs: this.timeoutMs(),
-      WebSocket: WebSocket as unknown as typeof globalThis.WebSocket,
     });
     try {
       await probe.ready(this.timeoutMs());

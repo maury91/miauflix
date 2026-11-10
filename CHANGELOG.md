@@ -25,9 +25,11 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - When a scene follows the credits ("Post-Credits", an epilogue after the anime ending), the player offers to skip the credits and jumps to the scene after 5 seconds; "Watch credits" keeps them. The next-episode countdown waits until that scene
 - media-load records each download's speed, peers and total bytes received and sent (not shown in the app yet)
 - Services can be laid out freely: catalog, source search and media load each have their own image (`miauflix-catalog-services`, `miauflix-sources`, `miauflix-media-load`), and `miauflix-services` still runs them all in one container (`docker-compose.all-in-one.yml`). With the VPN only source search, media load and FlareSolverr go through it now; the backend and the catalog no longer do. Source search and media load each check their own VPN connection, so they can run on other servers, and the status page shows each one's check. Without a VPN, media load disconnects from peers and trackers and only plays what is already downloaded. Update your compose files with `./update.sh --files`; `MIAUFLIX_UPSTREAM=vpn:3000` is no longer needed
+- The main server now runs on Bun instead of Node.js, like the other services. Nothing to change in your setup; existing accounts and data keep working
 
 ### Fixes
 
+- TVs on your network can find the server again when no TV pairing addresses are set: the announcement failed with an error instead of using the detected addresses
 - Anime releases that carry their own fonts (most fansubs) could not be inspected, so the next-episode countdown, audio conversion and track choice never kicked in; their "Ending" chapter now also starts the next-episode countdown
 - Playback could fail to start with a server error ("could not load any of its sources"); it plays again
 - An episode's first play waits for at most one slow download lookup instead of one per candidate, so it starts sooner

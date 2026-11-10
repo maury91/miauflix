@@ -127,7 +127,7 @@ function extractSourceMetadata(
 
 ## License
 
-MIT License - see LICENSE file for details.
+[PolyForm Noncommercial License 1.0.0](LICENSE). Permitted noncommercial use, modification, and sharing are allowed; commercial use requires separate permission. Earlier MIT-licensed versions retain their original license.
 
 ## Contributing
 

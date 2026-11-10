@@ -62,7 +62,7 @@ export class StorageFileClaim {
   @Column({ type: 'text', name: 'k', transformer: encryptedText({ deterministic: true }) })
   path: string;
 
-  @Column({ length: 16 })
+  @Column({ type: 'varchar', length: 16 })
   kind: ClaimKind;
 
   @Column({ length: 128 })

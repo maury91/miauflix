@@ -29,7 +29,7 @@ export class BackgroundJob {
   @Column({ type: 'text' })
   payload: string;
 
-  @Column({ default: 'pending' })
+  @Column({ type: 'varchar', default: 'pending' })
   status: BackgroundJobStatus;
 
   @Column({ type: 'int', default: 0 })

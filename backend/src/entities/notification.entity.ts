@@ -39,7 +39,7 @@ export class Notification {
   @Column({ length: 40 })
   dedupeKey: string;
 
-  @Column({ length: 40 })
+  @Column({ type: 'varchar', length: 40 })
   type: NotificationType;
 
   @Column({ length: 8 })

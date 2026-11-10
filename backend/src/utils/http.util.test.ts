@@ -74,7 +74,7 @@ describe('bodyInitToString', () => {
   });
 
   it('should return empty string for unsupported types', () => {
-    const result = bodyInitToString(new Blob(['test']) as unknown as BodyInit);
+    const result = bodyInitToString(new Blob(['test']) as unknown as RequestInit['body']);
     expect(result).toBe('');
   });
 });

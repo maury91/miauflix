@@ -43,16 +43,14 @@ jest.mock('jose', () => ({
   }),
 }));
 
-// Mock bcrypt
-jest.mock('bcrypt', () => ({
-  compare: jest.fn(),
-  hash: jest.fn().mockResolvedValue('hashed-password'),
-}));
-
 // Mock proxy utility
 jest.mock('@utils/proxy.util', () => ({
   getRealClientIp: jest.fn().mockReturnValue('192.168.1.1'),
 }));
+
+// The lowest bcrypt cost keeps hashing fast
+const bcryptHash = (password: Uint8Array | string) =>
+  Bun.password.hash(password, { algorithm: 'bcrypt', cost: 4 });
 
 // Mock JWT secret for testing
 const jwtSecret = 'test-jwt-secret-key-for-hmac-sha256';
@@ -137,15 +135,11 @@ describe('AuthService', () => {
       const mockUser = {
         id: 'user-123',
         email: 'test@example.com',
-        passwordHash: '$2b$10$example.hash',
+        passwordHash: await bcryptHash('password'),
         role: UserRole.USER,
       } as User;
 
       mockUserRepository.findByEmail.mockResolvedValue(mockUser);
-
-      // Mock bcrypt compare to return true
-      const bcrypt = jest.requireMock('bcrypt');
-      bcrypt.compare.mockResolvedValue(true);
 
       const result = await authService.validateUser('test@example.com', 'password');
 
@@ -157,19 +151,34 @@ describe('AuthService', () => {
       const mockUser = {
         id: 'user-123',
         email: 'test@example.com',
-        passwordHash: '$2b$10$example.hash',
+        passwordHash: await bcryptHash('password'),
         role: UserRole.USER,
       } as User;
 
       mockUserRepository.findByEmail.mockResolvedValue(mockUser);
 
-      // Mock bcrypt compare to return false
-      const bcrypt = jest.requireMock('bcrypt');
-      bcrypt.compare.mockResolvedValue(false);
-
       const result = await authService.validateUser('test@example.com', 'wrong-password');
 
       expect(result).toBeNull();
+    });
+
+    it('accepts a long password hashed by the bcrypt package, which read its first 72 bytes', async () => {
+      // 'é' is 2 bytes in UTF-8: the bcrypt package hashed only the first 36 of them.
+      const password = 'é'.repeat(40);
+      const legacyHash = await bcryptHash(new TextEncoder().encode(password).subarray(0, 72));
+      mockUserRepository.findByEmail.mockResolvedValue({
+        id: 'user-123',
+        email: 'test@example.com',
+        passwordHash: legacyHash,
+        role: UserRole.USER,
+      } as User);
+
+      await expect(authService.validateUser('test@example.com', password)).resolves.toMatchObject({
+        id: 'user-123',
+      });
+      await expect(
+        authService.validateUser('test@example.com', 'é'.repeat(35))
+      ).resolves.toBeNull();
     });
 
     it('should return null for non-existent user', async () => {

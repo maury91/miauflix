@@ -1,8 +1,5 @@
 import 'reflect-metadata';
 
-import type { Server as HttpServer } from 'node:http';
-
-import { serve } from '@hono/node-server';
 import { logger } from '@logger';
 
 import { Database } from '@database/database';
@@ -284,7 +281,7 @@ try {
   }
   scheduleCoordinator.start(!disableBackgroundTasks);
 
-  const httpServer: { current?: ReturnType<typeof serve> } = {};
+  const httpServer: { current?: ReturnType<typeof Bun.serve> } = {};
   let shutdownPromise: Promise<void> | undefined;
 
   // Graceful shutdown handlers. Stop accepting new work first, then drain
@@ -296,7 +293,8 @@ try {
 
       let drained = Promise.resolve();
       if (httpServer.current) {
-        drained = new Promise<void>(resolve => httpServer.current!.close(() => resolve()));
+        // Stops listening at once; resolves when the in-flight requests have finished.
+        drained = httpServer.current.stop();
       }
       realtimeGateway.close();
       playbackPiecesService.close();
@@ -407,20 +405,20 @@ try {
   });
 
   const port = configurationService.getOrThrow('PORT');
-  httpServer.current = serve({ fetch: app.fetch, port });
-  // The default Hono adapter above creates an HTTP/1 server, which is the
-  // upgrade-capable variant used by the realtime gateway.
-  const runningServer = httpServer.current as HttpServer;
-  realtimeGateway.attach(runningServer);
-  runningServer.on('error', err => {
-    logger.error('App', `Server error: ${err}`);
-    serverService._status = { status: 'error', errorMessage: err.message, error: err };
+  httpServer.current = Bun.serve({
+    port,
+    // Bun closes a connection after this many idle seconds (default 10). A stream can wait
+    // longer than that for its first pieces, so allow the maximum.
+    idleTimeout: 255,
+    fetch: (request, server) =>
+      realtimeGateway.handles(request)
+        ? realtimeGateway.upgrade(request, server)
+        : app.fetch(request, server),
+    websocket: realtimeGateway.websocket,
   });
-  runningServer.on('listening', () => {
-    logger.info('App', `Server is listening on http://localhost:${port}`);
-    serverService._status = { status: 'ready' };
-    tvPairingService.start();
-  });
+  logger.info('App', `Server is listening on http://localhost:${port}`);
+  serverService._status = { status: 'ready' };
+  tvPairingService.start();
 } catch (error) {
   logger.error('App', `Error during application startup: `, error);
   process.exit(1);
