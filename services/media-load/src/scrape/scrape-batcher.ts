@@ -1,4 +1,5 @@
 import type { SwarmCounts, SwarmStatsError } from '@miauflix/service-contracts';
+import { redactSourceIdentifiers } from '@miauflix/service-contracts';
 import { Client as BTClient } from 'bittorrent-tracker';
 
 /** A scrape failure; `code` is the contract error code. */
@@ -14,7 +15,7 @@ export class ScrapeError extends Error {
 
 /** Tracker errors are expected (dead trackers); print them only when DEBUG is set. */
 const debug = (message: string) => {
-  if (process.env.DEBUG) console.debug(`[media-load] ${message}`);
+  if (process.env.DEBUG) console.debug(`[media-load] ${redactSourceIdentifiers(message)}`);
 };
 
 export interface ScrapeBatcherOptions {

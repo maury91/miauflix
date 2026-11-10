@@ -111,6 +111,20 @@ export const createMediaLoadConfigSchema = (
           numberOptions: { min: 0, integer: true },
         },
         {
+          key: 'STORAGE_PAD_FILE_SIZES',
+          description:
+            'Pad downloaded files on disk to a rounded size, filled with random bytes, so their exact sizes cannot be matched to known torrents. Files grow by at most about 3% (files under 64 KiB take 64 KiB). Applies to downloads started since encryption version 2; turning it off leaves padded files readable.',
+          booleanStateDescriptions: {
+            true: 'File sizes padded',
+            false: 'Exact file sizes',
+          },
+          example: 'true',
+          defaultValue: 'true',
+          required: false,
+          inputType: 'boolean',
+          advanced: true,
+        },
+        {
           key: 'DISABLE_DISCOVERY',
           description: 'Disable DHT for peer-to-peer client',
           booleanStateDescriptions: {
@@ -149,7 +163,8 @@ export const createMediaLoadConfigSchema = (
         }),
         text({
           key: 'DOWNLOAD_SALT',
-          description: 'Salt for generating secure storage paths (32+ character random string)',
+          description:
+            'No longer used: new download folders get random names. Kept so existing configurations still load',
           example: 'your-32-character-random-salt-string',
           defaultValue: 'miauflix-download-cache-salt-2024-secure-random-string',
           required: false,

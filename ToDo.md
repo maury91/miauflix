@@ -38,6 +38,16 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 
 - [ ] Add an option in settings (gluetun service) to check the VPN tunnel's bandwidth, and to choose the country or exit node. Miauflix shares gluetun's network, so it can reach gluetun's control server at `127.0.0.1:8000` (`/v1/vpn/status`, `/v1/publicip/ip`; changing settings needs an entry in gluetun's `/gluetun/auth/config.toml`). Measure the tunnel apart from the torrents: latency and failure rate of the VPN IP checks plus a small download test, so a bad exit server can be told apart from a weak swarm.
 
+## Storage privacy
+
+See [Downloads, storage, and privacy](docs/features/storage-privacy.md#planned-external-database).
+
+- [ ] Optional external database (for example AWS RDS PostgreSQL) for everything that links downloads to torrents: media-load's records (layouts with their per-download salts, source descriptors) and the backend's sources table. The server then keeps only the master key and unreadable files.
+- [ ] Encrypt what is stored there with the server's master key, so a dump of the external database is unreadable on its own.
+- [ ] Optional locked boot: the master key is stored encrypted and unlocked by a passphrase given at startup (command line or UI), so a stopped server's disk holds nothing usable.
+- [ ] Re-encrypt downloads from before per-download keys, or offer to delete them.
+- [ ] Redact source identifiers in media-load's crash output (it has no uncaught-error handler).
+
 ## Language
 
 - [ ] Add support for i18n

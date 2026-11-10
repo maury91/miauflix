@@ -1,9 +1,9 @@
 /*! fs-chunk-store with MANDATORY AES-256-CTR encryption. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /*! This version requires an encryption key and always encrypts data using AES-256-CTR mode for random access. */
-import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'crypto';
+import { createCipheriv, createHash, createHmac, randomBytes } from 'crypto';
 import getFileRegex from 'filename-reserved-regex';
 import fs from 'fs';
-import { mkdir, rm } from 'fs/promises';
+import { mkdir, open as openFile, rm, stat } from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import RAF from 'random-access-file';
@@ -38,6 +38,25 @@ interface StorageFile {
   offset?: number;
 }
 
+/**
+ * How chunk contents are encrypted. Stored with each source's layout (absent there means 1), so
+ * files written by an older version stay readable.
+ *
+ * 1: the configured key for every store, and a counter block holding only the chunk index. Every
+ *    store reuses one keystream, and neighbouring chunks overlap theirs. Kept to read old files.
+ * 2: two random values per store, kept with its layout: `contentSalt` gives the store its own key
+ *    (HMAC of the configured key), and `filenameSalt` its own file names (HMAC over the whole path).
+ *    Neither comes from the info hash, so the disk cannot be matched against known torrents even
+ *    with the configured key. The counter block is the chunk's byte offset in 16-byte blocks, so
+ *    no two positions share keystream.
+ */
+export type EncryptionVersion = 1 | 2;
+
+/** The version new stores are written with. */
+export const CURRENT_ENCRYPTION_VERSION: EncryptionVersion = 2;
+
+const AES_BLOCK = 16;
+
 export interface EncryptedStorageOptions {
   name?: string;
   addUID?: boolean;
@@ -45,8 +64,57 @@ export interface EncryptedStorageOptions {
   files?: StorageFile[];
   length?: number;
   encryptionKey: Buffer | string;
-  filenameSalt?: string; // Salt used for deterministic filename generation
+  /** Required: guessing wrong makes existing files unreadable. */
+  encryptionVersion: EncryptionVersion;
+  /** Salt for the deterministic file names; required, and random per store, from version 2. */
+  filenameSalt?: string;
+  /** Version 2: the random per-store value the content key is derived from. */
+  contentSalt?: string;
+  /**
+   * Version 2: pad each file on disk to `paddedLength` with random bytes when first opened.
+   * Not recorded anywhere: padding never changes what is read, so it can be turned on or off.
+   */
+  padFiles?: boolean;
 }
+
+/** Files up to this size all take this much space on disk (version 2). */
+const MIN_PADDED_LENGTH = 64 * 1024;
+const PADDING_WRITE_SIZE = 1024 * 1024;
+
+/**
+ * The size a padded version 2 file takes on disk: Padmé padding (Nikitin et al., "Reducing
+ * Metadata Leakage from Encrypted Files and Communication with PURBs", 2019). The length is
+ * rounded up so only about log2(log2(length)) significant bits remain: at most 3.2% larger above
+ * 64 KiB (1.6% from 4 GiB), and every smaller file takes 64 KiB. Encrypted files otherwise keep
+ * their exact length, and a torrent's file sizes are close to unique, so the sizes on disk alone
+ * could identify it.
+ */
+export const paddedLength = (length: number): number => {
+  if (length <= MIN_PADDED_LENGTH) return MIN_PADDED_LENGTH;
+  const exponent = Math.floor(Math.log2(length));
+  const significantBits = Math.floor(Math.log2(exponent)) + 1;
+  const step = 2 ** (exponent - significantBits);
+  return Math.ceil(length / step) * step;
+};
+
+/**
+ * Fill [from, to) of a file with random bytes, creating it if needed and keeping what is there.
+ * Random rather than a hole, so allocated blocks do not give the length away either.
+ */
+async function writePadding(filePath: string, from: number, to: number): Promise<void> {
+  const handle = await openFile(filePath, fs.constants.O_RDWR | fs.constants.O_CREAT, 0o600);
+  try {
+    for (let position = from; position < to; position += PADDING_WRITE_SIZE) {
+      const bytes = randomBytes(Math.min(PADDING_WRITE_SIZE, to - position));
+      await handle.write(bytes, 0, bytes.length, position);
+    }
+  } finally {
+    await handle.close();
+  }
+}
+
+/** A random salt for a new version 2 store. */
+export const randomStoreSalt = (): string => randomBytes(32).toString('hex');
 
 interface ChunkTarget {
   from: number;
@@ -81,6 +149,17 @@ function generateDeterministicFilename(
     .substring(0, 24);
 }
 
+/**
+ * Version 2 file names: an HMAC under the security key over the whole path, so files sharing a
+ * name in different folders of one torrent stay apart (version 1 used the base name only).
+ */
+function keyedFilename(filePath: string, encryptionKey: Buffer, salt: string): string {
+  return createHmac('sha256', encryptionKey)
+    .update(`miauflix-chunk-store-v2-name:${salt}\0${filePath}`, 'utf8')
+    .digest('hex')
+    .substring(0, 24);
+}
+
 let TMP: string;
 try {
   TMP = fs.statSync('/tmp') && '/tmp';
@@ -99,7 +178,14 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
   public closed: boolean;
   public readonly lastChunkLength?: number;
   public readonly lastChunkIndex?: number;
+  public readonly encryptionVersion: EncryptionVersion;
+  /** The salts this store was opened with, so a layout built from it records the same ones. */
+  public readonly filenameSalt?: string;
+  public readonly contentSalt?: string;
+  public readonly padFiles: boolean;
   private readonly encryptionKey: Buffer;
+  /** The key chunk contents are encrypted with: the configured one (v1) or one per store (v2). */
+  private readonly contentKey: Buffer;
 
   constructor(chunkLength: number, opts: EncryptedStorageOptions) {
     this.chunkLength = Number(chunkLength);
@@ -122,6 +208,24 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
       throw new Error('Encryption key must be a string or Buffer');
     }
 
+    if (opts.encryptionVersion !== 1 && opts.encryptionVersion !== 2) {
+      throw new Error(`Unsupported encryption version: ${String(opts.encryptionVersion)}`);
+    }
+    this.encryptionVersion = opts.encryptionVersion;
+    if (this.encryptionVersion >= 2 && (!opts.filenameSalt || !opts.contentSalt)) {
+      // Per-store salts keep keys and names unique; a shared default would bring reuse back.
+      throw new Error('Encryption version 2 requires per-store filenameSalt and contentSalt');
+    }
+    this.filenameSalt = opts.filenameSalt;
+    this.contentSalt = opts.contentSalt;
+    this.padFiles = Boolean(opts.padFiles) && this.encryptionVersion !== 1;
+    this.contentKey =
+      this.encryptionVersion === 1
+        ? this.encryptionKey
+        : createHmac('sha256', this.encryptionKey)
+            .update(`miauflix-chunk-store-v2-content:${opts.contentSalt}`, 'utf8')
+            .digest();
+
     const filenameSalt = opts.filenameSalt || 'encrypted-chunk-store-filename-salt';
     this.name = opts.name || path.join('fs-chunk-store', randomBytes(20).toString('hex'));
     this.addUID = opts.addUID;
@@ -139,6 +243,18 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
 
           await mkdir(path.dirname(file.path), { recursive: true });
           if (this.closed) throw new Error('Storage is closed');
+          // With padding on, files are padded before first use, so the size on disk never shows
+          // the exact length, not even mid-download. Data never reaches the padding: chunks stop at
+          // the file's length.
+          if (this.padFiles && Number.isFinite(file.length) && file.length > 0) {
+            const target = paddedLength(file.length);
+            const size = await stat(file.path).then(
+              entry => entry.size,
+              () => 0
+            );
+            if (size < target) await writePadding(file.path, Math.max(size, file.length), target);
+            if (this.closed) throw new Error('Storage is closed');
+          }
           return new RAF(file.path);
         })();
         // A failed open is not cached, so the next call retries.
@@ -214,11 +330,14 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
             }
           }
 
-          const filename = generateDeterministicFilename(
-            path.basename(file.path!),
-            this.encryptionKey,
-            filenameSalt
-          );
+          const filename =
+            this.encryptionVersion === 1
+              ? generateDeterministicFilename(
+                  path.basename(file.path!),
+                  this.encryptionKey,
+                  filenameSalt
+                )
+              : keyedFilename(file.path!, this.encryptionKey, filenameSalt);
           let newPath = '';
 
           if (this.path) {
@@ -292,17 +411,34 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
   }
 
   /**
-   * Encrypts a buffer for a specific chunk index using CTR mode for random access
+   * The counter block a chunk starts at, and how many bytes of that block precede the chunk.
+   * CTR is symmetric, so this serves both directions.
    */
+  private counterFor(chunkIndex: number): { iv: Buffer; skip: number } {
+    const iv = Buffer.alloc(16);
+    if (this.encryptionVersion === 1) {
+      iv.writeUInt32BE(chunkIndex, 12);
+      return { iv, skip: 0 };
+    }
+    const offset = BigInt(chunkIndex) * BigInt(this.chunkLength);
+    const block = offset / BigInt(AES_BLOCK);
+    iv.writeBigUInt64BE(block >> 64n, 0);
+    iv.writeBigUInt64BE(block & 0xffffffffffffffffn, 8);
+    return { iv, skip: Number(offset % BigInt(AES_BLOCK)) };
+  }
+
+  /** Encrypts or decrypts (CTR is its own inverse) a chunk read from its start. */
+  private transformChunk(buffer: Buffer, chunkIndex: number): Buffer {
+    const { iv, skip } = this.counterFor(chunkIndex);
+    const cipher = createCipheriv('aes-256-ctr', this.contentKey, iv);
+    // A chunk starting mid-block continues that block's keystream.
+    if (skip) cipher.update(Buffer.alloc(skip));
+    return Buffer.concat([cipher.update(buffer), cipher.final()]);
+  }
+
   private encryptBuffer(buffer: Buffer, chunkIndex: number): Buffer {
     try {
-      // Generate a deterministic IV/nonce based on chunk index for CTR mode
-      // This ensures we can decrypt any chunk independently
-      const iv = Buffer.alloc(16);
-      iv.writeUInt32BE(chunkIndex, 12); // Put chunk index in last 4 bytes
-
-      const cipher = createCipheriv('aes-256-ctr', this.encryptionKey, iv);
-      return Buffer.concat([cipher.update(buffer), cipher.final()]);
+      return this.transformChunk(buffer, chunkIndex);
     } catch (error) {
       throw new Error(
         `Encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
@@ -310,17 +446,9 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
     }
   }
 
-  /**
-   * Decrypts a buffer for a specific chunk index using CTR mode for random access
-   */
   private decryptBuffer(buffer: Buffer, chunkIndex: number): Buffer {
     try {
-      // Generate the same deterministic IV/nonce based on chunk index
-      const iv = Buffer.alloc(16);
-      iv.writeUInt32BE(chunkIndex, 12); // Put chunk index in last 4 bytes
-
-      const decipher = createDecipheriv('aes-256-ctr', this.encryptionKey, iv);
-      return Buffer.concat([decipher.update(buffer), decipher.final()]);
+      return this.transformChunk(buffer, chunkIndex);
     } catch (error) {
       throw new Error(
         `Decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`

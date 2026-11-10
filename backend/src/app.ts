@@ -53,14 +53,14 @@ import { initializeInstrumentation } from './instrumentation';
 import { createRoutes } from './routes';
 
 // Enhanced error handling
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise);
-  console.error('Reason:', reason);
+process.on('unhandledRejection', reason => {
+  // Through the logger, which redacts source identifiers from the reason.
+  logger.error('App', 'Unhandled Rejection', reason);
   // Don't exit, keep the server running
 });
 
 process.on('uncaughtException', error => {
-  console.error('Uncaught Exception:', error);
+  logger.error('App', 'Uncaught Exception', error);
   // Don't exit, keep the server running
 });
 

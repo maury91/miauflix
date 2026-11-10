@@ -75,7 +75,8 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 
 ## [Storage and privacy](features/storage-privacy.md)
 
-- Store downloaded video in encrypted form and protect selected sensitive application data.
+- Store downloaded video encrypted with a key per download, under random names, padded to rounded sizes, so the disk does not show what was downloaded.
+- Keep torrent identifiers out of the logs.
 - Control torrent connection, download, upload, and seeding limits.
 - Keep downloaded files after seeding ends so they can be played again.
 - Automatically free storage while protecting active playback.

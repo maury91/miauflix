@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { randomBytes } from 'node:crypto';
 
 import type {
   ClaimRequest,
@@ -13,8 +13,13 @@ import parseTorrent from 'parse-torrent';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
-import type { EncryptedStorageOptions } from '../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
-import EncryptedChunkStore from '../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
+import EncryptedChunkStore, {
+  CURRENT_ENCRYPTION_VERSION,
+  type EncryptedStorageOptions,
+  type EncryptionVersion,
+  paddedLength,
+  randomStoreSalt,
+} from '../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
 import { ErrorWithStatus } from '../lib/errors';
 import { logger } from '../lib/logger';
 import type { PieceRange, StorageService } from '../storage/storage.service';
@@ -84,6 +89,45 @@ const findEncryptedStore = (store: unknown): EncryptedChunkStore | null => {
     if (layer instanceof EncryptedChunkStore) return layer;
   }
   return null;
+};
+
+/**
+ * The encryption version a source's chunks are (or will be) written with. A saved layout knows;
+ * without one, verified pieces predate layouts and so versions (v1), and nothing stored means a
+ * fresh start with the current version.
+ */
+export const storageEncryptionVersion = (
+  storage: Pick<Storage, 'downloadedPieces' | 'encryptedLayout'>
+): EncryptionVersion => {
+  if (storage.encryptedLayout) return storage.encryptedLayout.encryptionVersion ?? 1;
+  return storage.downloadedPieces?.some(byte => byte !== 0) ? 1 : CURRENT_ENCRYPTION_VERSION;
+};
+
+/**
+ * How a source's store is opened: its version and salts. A saved layout keeps them; a version 1
+ * store derives its name salt from the source hash; a new version 2 store gets random salts,
+ * which reach its layout through the live store (`createEncryptedLayout`).
+ */
+export const storeEncryptionOptions = (
+  storage: Pick<Storage, 'downloadedPieces' | 'encryptedLayout'>,
+  sourceHash: string
+): Pick<EncryptedStorageOptions, 'contentSalt' | 'encryptionVersion' | 'filenameSalt'> => {
+  const version = storageEncryptionVersion(storage);
+  if (version === 1) return { encryptionVersion: 1, filenameSalt: `download-${sourceHash}` };
+  const layout = storage.encryptedLayout;
+  if (layout) {
+    if (!layout.contentSalt) throw new Error('Encrypted layout is missing its content salt');
+    return {
+      encryptionVersion: version,
+      filenameSalt: layout.filenameSalt,
+      contentSalt: layout.contentSalt,
+    };
+  }
+  return {
+    encryptionVersion: version,
+    filenameSalt: randomStoreSalt(),
+    contentSalt: randomStoreSalt(),
+  };
 };
 
 const MAX_SIDECAR_BYTES = 2 * 1024 * 1024;
@@ -540,11 +584,15 @@ export class DownloadService {
     torrent: Torrent,
     sourceHash = torrent.infoHash
   ): EncryptedStorageLayout {
+    // The live store knows how its chunks are encrypted; v1 is left implicit (absent means 1).
+    const store = findEncryptedStore((torrent as unknown as { store?: unknown }).store);
+    const v2 = store && store.encryptionVersion !== 1 ? store : null;
     return {
+      ...(v2 ? { encryptionVersion: v2.encryptionVersion, contentSalt: v2.contentSalt } : {}),
       storeName: `${torrent.name} - ${torrent.infoHash.slice(0, 8)}`,
-      // EncryptedChunkStore was opened with the provider's source hash. Keep
-      // that exact value because filename derivation is case-sensitive.
-      filenameSalt: `download-${sourceHash}`,
+      // Version 1 stores were opened with the provider's source hash. Keep that exact value
+      // because filename derivation is case-sensitive. Version 2 salts are random.
+      filenameSalt: v2?.filenameSalt ?? `download-${sourceHash}`,
       pieceLength: torrent.pieceLength,
       files: torrent.files.map(file => ({
         path: file.path,
@@ -827,7 +875,9 @@ export class DownloadService {
         name: layout.storeName,
         files: layout.files.map(file => ({ ...file })),
         encryptionKey: this.config.getOrThrow('SOURCE_SECURITY_KEY'),
+        encryptionVersion: layout.encryptionVersion ?? 1,
         filenameSalt: layout.filenameSalt,
+        contentSalt: layout.contentSalt,
       });
     await store.removeFiles(paths);
     logger.info(
@@ -885,6 +935,8 @@ export class DownloadService {
     layout: EncryptedStorageLayout,
     sourceHash: string
   ): EncryptedStorageLayout {
+    // Only version 1 names derive from the source hash; version 2 salts are random and fixed.
+    if ((layout.encryptionVersion ?? 1) !== 1) return layout;
     const filenameSalt = `download-${sourceHash}`;
     return layout.filenameSalt === filenameSalt ? layout : { ...layout, filenameSalt };
   }
@@ -1117,7 +1169,7 @@ export class DownloadService {
         try {
           await this.client.remove(temporaryTorrent.infoHash, { destroyStore: true });
         } catch (error) {
-          logger.debug('DownloadService', `Failed to remove metadata torrent ${hash}`, error);
+          logger.debug('DownloadService', 'Failed to remove a metadata torrent', error);
         }
       };
       const reject = (error: unknown) => {
@@ -1159,7 +1211,7 @@ export class DownloadService {
           }
         );
       } catch (error: unknown) {
-        console.error(`Error adding data source`, error);
+        logger.error('DownloadService', 'Error adding data source', error);
         reject(new ErrorWithStatus(`Error adding file to client`, 'add_error'));
       }
     });
@@ -1197,7 +1249,7 @@ export class DownloadService {
 
       await this.storageService.createStorage({
         sourceId: source.id,
-        location: this.generateStoragePath(source.hash),
+        location: this.generateStoragePath(),
         size: source.size || 0,
         downloadedPieces: new Uint8Array(0),
         totalPieces: 0,
@@ -1400,7 +1452,7 @@ export class DownloadService {
     if (known) return known;
     await this.storageService.createStorage({
       sourceId: source.id,
-      location: this.generateStoragePath(source.hash),
+      location: this.generateStoragePath(),
       size: source.size || 0,
       downloadedPieces: new Uint8Array(0),
       totalPieces: 0,
@@ -1458,9 +1510,14 @@ export class DownloadService {
     const uniquePaths = [...new Set(paths)];
     const files = uniquePaths.map(filePath => layout.files.find(file => file.path === filePath));
     if (files.some(file => !file)) return { bytes: source.size || 0, known: false };
-    const contentBytes = files.reduce((total, file) => total + (file?.length ?? 0), 0);
+    // Padded files take their padded size on disk. v1 files are never padded; a layout without a
+    // version may also be a new download's .torrent, so the estimate assumes padding there.
+    const pad =
+      this.config.getOrThrow('STORAGE_PAD_FILE_SIZES') && (layout.encryptionVersion ?? 2) !== 1;
+    const onDisk = (length: number) => (pad && length > 0 ? paddedLength(length) : length);
+    const contentBytes = files.reduce((total, file) => total + onDisk(file?.length ?? 0), 0);
     const boundaryBytes = layout.pieceLength * 2 * uniquePaths.length;
-    const packBytes = layout.files.reduce((total, file) => total + file.length, 0);
+    const packBytes = layout.files.reduce((total, file) => total + onDisk(file.length), 0);
     return {
       bytes: Math.max(1, Math.min(packBytes, contentBytes + boundaryBytes)),
       known: true,
@@ -1728,17 +1785,16 @@ export class DownloadService {
    * Generate secure storage path for a torrent hash
    * Uses salted hash to prevent hash exposure in file paths
    */
-  private generateStoragePath(hash: string): string {
+  /**
+   * Directory of a new storage: random, so nothing on disk can be matched to a torrent. It was
+   * once hashed from the info hash with `DOWNLOAD_SALT` (public by default), which let anyone
+   * holding the disk check for a given torrent. A storage keeps the location recorded when it
+   * was created, so older directories stay where they are.
+   */
+  private generateStoragePath(): string {
     const storageDir = this.config.getOrThrow('DOWNLOAD_PATH');
-    const salt = this.config.getOrThrow('DOWNLOAD_SALT');
-
-    // Create a salted hash to prevent hash exposure
-    const downloadDir = createHash('sha256')
-      .update(hash + salt)
-      .digest('hex')
-      .substring(0, 16); // Use first 16 characters for shorter paths
-
-    return `${storageDir}/${downloadDir}`;
+    // 16 hex characters, the format storage import accepts
+    return `${storageDir}/${randomBytes(8).toString('hex')}`;
   }
 
   /**
@@ -1746,10 +1802,11 @@ export class DownloadService {
    */
   private async addTorrent(
     { magnetLink, hash, file }: Pick<ContentSource, 'file' | 'hash' | 'magnetLink'>,
-    { location, downloadedPieces }: Pick<Storage, 'downloadedPieces' | 'location'>,
+    storage: Pick<Storage, 'downloadedPieces' | 'encryptedLayout' | 'location'>,
     priority = 1,
     timeout: number = 30000
   ): Promise<Torrent> {
+    const { location, downloadedPieces } = storage;
     return new Promise((resolve, reject) => {
       try {
         // Also covers a torrent already in the client: it is fenced, so it would never progress.
@@ -1763,7 +1820,8 @@ export class DownloadService {
           priority,
           storeOpts: {
             encryptionKey: this.config.getOrThrow('SOURCE_SECURITY_KEY'),
-            filenameSalt: `download-${hash}`,
+            ...storeEncryptionOptions(storage, hash),
+            padFiles: this.config.getOrThrow('STORAGE_PAD_FILE_SIZES'),
           },
         };
 
@@ -1811,14 +1869,14 @@ export class DownloadService {
                 return;
               }
             }
-            logger.error('DownloadService', `Error adding torrent ${hash}:`, error);
+            logger.error('DownloadService', 'Error adding torrent:', error);
             reject(error);
           };
 
           temporaryTorrent.on('error', onError);
         } catch (error) {
           // The only case I could find where it throws here is when the client is destroyed
-          logger.error('DownloadService', `Error adding torrent ${hash}:`, error);
+          logger.error('DownloadService', 'Error adding torrent:', error);
           reject(error);
         }
       } catch (error) {
@@ -1829,7 +1887,7 @@ export class DownloadService {
 
   private async addTorrentWithLock(
     source: Pick<ContentSource, 'file' | 'hash' | 'magnetLink'>,
-    storage: Pick<Storage, 'downloadedPieces' | 'location'>,
+    storage: Pick<Storage, 'downloadedPieces' | 'encryptedLayout' | 'location'>,
     priority = 1
   ): Promise<Torrent> {
     const key = source.hash.toLowerCase();
