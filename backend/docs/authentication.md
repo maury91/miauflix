@@ -12,7 +12,7 @@ For available account controls and planned UI, see [Accounts and your personal c
 - The session-slot limit is configurable. When a login reaches the limit, the oldest refresh-token record by last access is removed to make room.
 - API middleware requires `X-Session-Id` to select the request's session and access token. A Bearer token alone does not establish the middleware's session context.
 
-Defaults and configuration names are defined in [auth configuration](../src/services/auth/auth.configuration.ts). Passwords are hashed with bcrypt; account roles are `user` and `admin`.
+Defaults and configuration names are defined in [auth configuration](../src/services/auth/auth.configuration.ts). Passwords are hashed with bcrypt (`Bun.password`); account roles are `user` and `admin`.
 
 ## Browser transport
 

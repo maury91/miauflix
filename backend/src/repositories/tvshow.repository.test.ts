@@ -161,12 +161,16 @@ describe('TVShowRepository season snapshots', () => {
       await gate;
       throw new Error('unrelated rollback');
     });
-    const rejected = expect(transaction).rejects.toThrow('unrelated rollback');
+    // Not `expect(transaction).rejects`: Bun waits for the promise there, before the gate opens.
+    const rejected = transaction.then(
+      () => undefined,
+      (error: unknown) => error
+    );
     await entered;
     const stage = lists.stagePage(list.id, 'kept', 0, [{ mediaType: 'tv', mediaId: 901 }]);
     await new Promise(resolve => setTimeout(resolve, 10));
     release();
-    await rejected;
+    expect(await rejected).toHaveProperty('message', 'unrelated rollback');
     await stage;
     expect(await lists.countItems(list.id, 'kept')).toBe(1);
   });
@@ -189,7 +193,11 @@ describe('TVShowRepository season snapshots', () => {
       await gate;
       throw new Error('rollback');
     });
-    const rejected = expect(transaction).rejects.toThrow('rollback');
+    // Not `expect(transaction).rejects`: Bun waits for the promise there, before the gate opens.
+    const rejected = transaction.then(
+      () => undefined,
+      (error: unknown) => error
+    );
     await entered;
     const save = database.getRepository(MediaListItem).save({
       listId: list.id,
@@ -200,7 +208,7 @@ describe('TVShowRepository season snapshots', () => {
     });
     await new Promise(resolve => setTimeout(resolve, 10));
     release();
-    await rejected;
+    expect(await rejected).toHaveProperty('message', 'rollback');
     await save;
     expect(await lists.countItems(list.id, 'kept')).toBe(1);
   });

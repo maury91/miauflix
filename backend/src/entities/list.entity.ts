@@ -37,7 +37,7 @@ export class MediaListItem {
   generation: string;
   @Column()
   position: number;
-  @Column()
+  @Column({ type: 'varchar' })
   mediaType: MediaListItemType;
   @Column({ name: 'tmdbId' })
   mediaId: number;

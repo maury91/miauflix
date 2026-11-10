@@ -1,0 +1,3 @@
+[test]
+# The Jest compatibility layer first: the setup and the manual mocks use the global `jest`.
+preload = ["./src/__test-utils__/bun-jest.preload.ts", "./src/test.setup.ts"]

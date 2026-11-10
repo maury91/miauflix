@@ -3,7 +3,7 @@
  * @param body BodyInit to convert (string, URLSearchParams, FormData, etc.)
  * @returns String representation of the body. Returns empty string for null/undefined, files, or unsupported types.
  */
-export function bodyInitToString(body: BodyInit | null | undefined): string {
+export function bodyInitToString(body: RequestInit['body'] | undefined): string {
   if (!body) {
     return '';
   }
@@ -37,14 +37,13 @@ export function bodyInitToString(body: BodyInit | null | undefined): string {
  */
 export async function parseResponseBody<T>(response: Response): Promise<T | string> {
   const contentType = response.headers.get('content-type');
+  // A body can only be read once: read it as text, then try JSON.
+  const text = await response.text();
+  if (contentType && !contentType.toLowerCase().includes('application/json')) return text;
   try {
-    if (!contentType || contentType.toLowerCase().includes('application/json')) {
-      return await response.json();
-    } else {
-      return await response.text();
-    }
+    return JSON.parse(text) as T;
   } catch {
-    return await response.text();
+    return text;
   }
 }
 

@@ -4,16 +4,15 @@
   "main": "src/app.ts",
   "types": "./dist/client/index.d.ts",
   "scripts": {
-    "start": "node --env-file-if-exists ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
-    "start:prod": "node --env-file-if-exists ../.env dist/app.js",
-    "dev": "node --watch --env-file-if-exists ../.env --experimental-specifier-resolution=node --loader ./loader.js src/app.ts",
+    "start": "bun --env-file=../.env src/app.ts",
+    "start:prod": "bun --env-file=../.env src/app.ts",
+    "dev": "bun --watch --env-file=../.env src/app.ts",
     "config": "npm start -- --config",
     "config-only": "npm start -- --only-config",
-    "build": "tsc --project tsconfig.app.json && tsc-alias -p tsconfig.app.json --resolve-full-paths",
-    "build:client": "mkdir -p dist/client && dts-bundle-generator ./src/client.ts -o dist/client/index.d.ts --external-imports hono --no-check && tsc --project tsconfig.client.json && mv dist/client/client.js dist/client/index.js && test -f dist/client/index.js",
+    "build:client": "mkdir -p dist/client && dts-bundle-generator --project tsconfig.client.json ./src/client.ts -o dist/client/index.d.ts --external-imports hono --no-check && tsc --project tsconfig.client.json && mv dist/client/client.js dist/client/index.js && test -f dist/client/index.js",
     "check:ts": "tsc --noEmit",
     "lint": "eslint src/",
-    "test": "jest"
+    "test": "bun test --isolate"
   },
   "exports": {
     ".": {
@@ -25,7 +24,6 @@
     "hono": "4.10.6"
   },
   "dependencies": {
-    "@hono/node-server": "1.19.6",
     "@hono/otel": "1.0.1",
     "@hono/zod-validator": "0.7.4",
     "@inquirer/prompts": "7.8.2",
@@ -42,7 +40,6 @@
     "@opentelemetry/sdk-node": "0.208.0",
     "@opentelemetry/sdk-trace-node": "2.2.0",
     "@opentelemetry/semantic-conventions": "1.38.0",
-    "bcrypt": "6.0.0",
     "bunqueue-client": "0.1.9",
     "cache-manager": "7.2.9",
     "cacheable": "2.5.0",
@@ -60,20 +57,20 @@
     "typeorm": "0.3.27",
     "uuid": "13.0.0",
     "whatwg-url": "14.2.0",
-    "ws": "8.18.3",
     "zod": "4.1.12"
   },
   "devDependencies": {
-    "@babel/preset-env": "7.28.5",
     "@faker-js/faker": "10.1.0",
-    "@swc-node/register": "1.11.1",
-    "@tsconfig/node22": "22.0.5",
-    "@types/bcrypt": "6.0.0",
+    "@sinonjs/fake-timers": "13.0.5",
     "@types/debug": "4.1.12",
+    "@types/jest": "30.0.0",
+    "@types/sinonjs__fake-timers": "15.0.1",
     "@types/streamx": "2.9.5",
-    "@types/ws": "^8.18.2",
-    "dts-bundle-generator": "9.5.1",
-    "nodemon": "3.1.10"
+    "bun-types": "^1.4.0",
+    "dts-bundle-generator": "9.5.1"
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "bun": ">=1.4.0"
+  }
 }

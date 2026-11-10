@@ -1,6 +1,6 @@
 # Bun Compatibility
 
-Miauflix originally ran on Bun and moved to Node.js in `a2f8046c` ("Move from Bun to Node.js, implement magnet service"). This page tracks what still blocks moving back, so the migration can be picked up once Bun catches up.
+Miauflix originally ran on Bun and moved to Node.js in `a2f8046c` ("Move from Bun to Node.js, implement magnet service"). The services moved back first; the backend followed on 2026-11-08 (see [The backend on Bun](#the-backend-on-bun-2026-11-08)). WebTorrent, now in the media-load service, still runs without uTP.
 
 ## Status (checked 2026-10-24)
 
@@ -12,9 +12,9 @@ Miauflix originally ran on Bun and moved to Node.js in `a2f8046c` ("Move from Bu
 | `node:dgram` (DHT)                       | —              | ⚠️            | Works, but hostnames on `udp4` sockets may resolve to IPv6 (below) |
 | `fs-native-extensions`, `utf-8-validate` | —              | ✅            | Native addons load fine                                            |
 | `node-datachannel` (WebRTC)              | —              | ✅            | Loads on linux/arm64 (2026-11-05); needs `trustedDependencies`     |
-| TypeORM + SQLite                         | —              | ❓ Not tested |                                                                    |
-| Jest test suite                          | —              | ❓ Not tested | Would likely need porting to `bun test` or running Jest on Node    |
-| Full backend                             | —              | ❓ Not tested | Only WebTorrent was tested, in a standalone script                 |
+| TypeORM + SQLite (`sqlite3`)             | 0.3.27 / 5.1.7 | ✅            | Columns typed with a type alias need an explicit `type` (below)    |
+| Backend test suite                       | —              | ✅            | `bun test --isolate` with a Jest compatibility preload (below)     |
+| Full backend                             | —              | ✅            | Since 2026-11-08; runs its sources, not a `bun build` bundle       |
 
 ### Rechecked 2026-11-05: WebTorrent 3.0.21 on linux/arm64
 
@@ -118,10 +118,35 @@ setTimeout(() => process.exit(1), 90_000);
 - `bun smoke.mjs` — if it streams 4 MB without the `uv_timer_init` panic, the blocker is gone.
 - `UTP=0 bun smoke.mjs` — workaround path; should already pass.
 
-## Migration checklist (once unblocked)
+## The backend on Bun (2026-11-08)
+
+The backend runs on Bun 1.4.0 in development, tests and the Docker image. What changed, and what Bun does differently:
+
+- **Server.** `Bun.serve` replaces `@hono/node-server`; `serveStatic` and `getConnInfo` come from `hono/bun`. Bun closes idle connections after 10 s by default, so `idleTimeout` is 255 s (the maximum): a stream may wait that long for its first pieces. Shutdown awaits `server.stop()`.
+- **Realtime WebSocket.** Bun's own WebSockets replace `ws`: `Bun.serve` passes `/api/realtime` upgrades to `RealtimeGateway.upgrade()` and the sockets to its `websocket` handlers. A refused origin now gets a 403 response (the socket used to be dropped). Remote services use the global `WebSocket`.
+- **Passwords.** `Bun.password` (bcrypt, cost 10) replaces the `bcrypt` package and verifies its hashes. Bun pre-hashes passwords longer than bcrypt's 72 bytes where the package truncated them, so a failed check retries with the first 72 bytes: users who chose such a password can still sign in.
+- **Decorator metadata.** Bun compiles each file on its own, so a column typed with a type alias (`status: BackgroundJobStatus`) gets `Object` as its design type, which TypeORM rejects at startup (`tsc` resolved the alias to `String`). Such columns now name their type (`type: 'varchar'`, the type `String` mapped to, so the schema is unchanged): `BackgroundJob.status`, `MediaListItem.mediaType`, `Notification.type` and `StorageFileClaim.kind`.
+- **No bundle.** `bun build` compiles modules reached through tsconfig `paths` (`@entities/...`) with standard decorators instead of the legacy ones `experimentalDecorators` asks for, and TypeORM's decorators then crash. The same file imported by a relative path is compiled correctly, and `bun run` handles both. So the image runs `backend/src/app.ts`, and the backend has no `build` script.
+- **Client types.** `dts-bundle-generator` 9.5.1 fails on `bun-types` (`Cannot find symbol for node "TextEncoderEncodeIntoResult"`), so `tsconfig.client.json` builds the client types with Node's types and a stub of the `bun` module (`backend/client-types/bun`).
+- **Response bodies.** `new Response('text')` has no `content-type` header under Bun. `parseResponseBody` used to read such a body as JSON, then again as text after the JSON failed, which throws (under Node too); it now reads the text once and tries JSON on it.
+
+### Tests
+
+`bun test --isolate` runs the backend suite (about 6 s for 95 files). `backend/src/__test-utils__/bun-jest.preload.ts` gives the tests the Jest behaviour they were written for:
+
+- Manual mocks in `src/__mocks__` stand in for their module in every test, as Jest does for module names, unless the test calls `jest.unmock()` or imports the module by a relative path.
+- Bun runs `jest.mock()` where it is written, after the imports. The preload reads the test file (`Bun.main`) and applies its top-level `jest.mock('module')` (no factory) and `jest.unmock('module')` calls first. A `jest.mock()` with a factory still runs in place; Bun updates the bindings of modules that already imported it.
+- `jest.mock('module')` without a manual mock builds an automatic mock (functions and class methods become `jest.fn()`, each instance with its own method mocks, as in Jest). A factory returning a function or a plain object also becomes the default export, as with Jest's CommonJS interop.
+- `jest.requireActual()` (a `?actual` query string loads a mocked file again, unmocked), `jest.requireMock()`, `jest.mocked()`.
+- Fake timers are `@sinonjs/fake-timers` 13 (Jest 30's), with the async variants, which Bun lacks. `process.nextTick` and `queueMicrotask` are never faked.
+- Bun binds `jest` in a test file to its own object unless the file imports from `bun:test`, so a loader plugin prefixes test files with an import of the test globals (on their first line, keeping line numbers).
+
+Two Bun behaviours tests have to work around:
+
+- `expect(promise).rejects` (and `.resolves`) waits for the promise where it is written: one kept to be awaited later blocks the test.
+- `jest.spyOn(Date, 'now')` returns a spy without installing it while fake timers replace `Date`; use `jest.setSystemTime()`.
+
+## Migration checklist (for the media-load service, once uTP is unblocked)
 
 1. Re-run the smoke test with uTP enabled.
-2. Boot the full backend on Bun (`bun backend/src/app.ts` or equivalent) and exercise login, source search and `/api/stream/:token`.
-3. Verify TypeORM/SQLite and `node-datachannel` under Bun.
-4. Decide on the test runner (keep Jest on Node, or port to `bun test`).
-5. Update `backend.Dockerfile`, CI workflows, and `.husky/pre-commit` (all switched from Bun to Node in `a2f8046c`).
+2. Turn uTP back on in `services/media-load/src/engine/download.service.ts` and compare peers and speed with TCP only.

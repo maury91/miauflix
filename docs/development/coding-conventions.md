@@ -23,7 +23,7 @@ Domain error files live in `backend/src/errors/`. **Never throw `new Error(...)`
 
 ### Testing
 
-- **Unit tests**: Jest tests beside code (`*.test.ts` in `backend/src/`)
+- **Unit tests**: tests beside code (`*.test.ts` in `backend/src/`), run with `npm run test:backend` from the root (`bun test --isolate` in `backend/`; without `--isolate` the Jest compatibility preload can't apply each file's mocks) using the Jest API
 - **E2E tests**: Docker‑based suite in `backend-e2e/`
 
 ### Naming Rules

@@ -9,3 +9,7 @@ Contributions are welcome and appreciated!
 5. Open a pull request with a clear description of the change.
 
 Tests run without network access, using recorded fixtures. See the [CI/CD Guide](docs/development/ci-cd-guide.md) for details.
+
+## License
+
+New contributions are offered under the repository’s [PolyForm Noncommercial License 1.0.0](LICENSE). Keep third-party copyright and license notices intact.

@@ -8,7 +8,7 @@ Miauflix uses an npm workspace monorepo structure:
 
 ```text
 miauflix/
-├── backend/                        # Node.js TypeScript backend (API, streaming, serves the frontend)
+├── backend/                        # TypeScript backend on Bun (API, streaming, serves the frontend)
 │   ├── src/
 │   │   ├── services/               # Business logic services
 │   │   ├── routes/                 # HTTP route handlers
@@ -42,8 +42,8 @@ miauflix/
 
 ### Prerequisites
 
-- Node.js 22 or later (`nvm use` picks the pinned version)
-- [Bun](https://bun.sh/) (runs the catalog, list, and source services)
+- Node.js 22 or later (`nvm use` picks the pinned version): npm, the frontend and its tooling
+- [Bun](https://bun.sh/) 1.4 or later: runs the backend and the catalog, list, source and media-load services
 - Docker and Docker Compose (for full stack testing)
 - Git
 
