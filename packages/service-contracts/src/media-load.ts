@@ -78,6 +78,13 @@ export interface EncryptedStorageLayout {
   filenameSalt: string;
   pieceLength: number;
   files: Array<{ path: string; length: number; offset: number }>;
+  /** How the stored chunks are encrypted; absent means 1, the scheme before versions existed. */
+  encryptionVersion?: 1 | 2;
+  /**
+   * Version 2: the random value the content key is derived from (`filenameSalt` is random too).
+   * Without both, the files cannot be read: they exist only here.
+   */
+  contentSalt?: string;
 }
 
 /** A source's state as its viewers experience it, for judging the swarm. */

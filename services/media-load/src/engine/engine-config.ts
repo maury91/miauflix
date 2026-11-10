@@ -8,11 +8,11 @@ export interface EngineSettings {
   CONTENT_CONNECTION_BUDGET: number;
   CONTENT_SEED_DURATION_SECONDS: number;
   DISABLE_DISCOVERY: boolean;
+  STORAGE_PAD_FILE_SIZES: boolean;
   STATIC_TRACKERS: string[];
   BEST_TRACKERS_DOWNLOAD_URL: string;
   BLACKLISTED_TRACKERS_DOWNLOAD_URL: string;
   DOWNLOAD_PATH: string;
-  DOWNLOAD_SALT: string;
   STORAGE_THRESHOLD: bigint;
   STORAGE_PLAYBACK_RESERVE: bigint;
   /** Delivered with `attach`, never as a setting. */
@@ -67,9 +67,10 @@ export const parseEngineSettings = (
     if (value.length < minLength) invalid.push(key);
     return value;
   };
-  const flag = (key: string): boolean => {
-    const value = (values[key] ?? 'false').trim().toLowerCase();
+  const flag = (key: string, fallback = false): boolean => {
+    const value = (values[key] ?? '').trim().toLowerCase();
     if (!['true', 'false', '1', '0', 'yes', 'no', ''].includes(value)) invalid.push(key);
+    if (value === '') return fallback;
     return ['true', '1', 'yes'].includes(value);
   };
   const settings: EngineSettings = {
@@ -79,6 +80,8 @@ export const parseEngineSettings = (
     CONTENT_CONNECTION_BUDGET: integer('CONTENT_CONNECTION_BUDGET', 1),
     CONTENT_SEED_DURATION_SECONDS: integer('CONTENT_SEED_DURATION_SECONDS', 0),
     DISABLE_DISCOVERY: flag('DISABLE_DISCOVERY'),
+    // On unless turned off: a value the host left out must not drop the padding.
+    STORAGE_PAD_FILE_SIZES: flag('STORAGE_PAD_FILE_SIZES', true),
     STATIC_TRACKERS: (values.STATIC_TRACKERS ?? '')
       .split(',')
       .map(item => item.trim())
@@ -86,7 +89,6 @@ export const parseEngineSettings = (
     BEST_TRACKERS_DOWNLOAD_URL: text('BEST_TRACKERS_DOWNLOAD_URL'),
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: text('BLACKLISTED_TRACKERS_DOWNLOAD_URL'),
     DOWNLOAD_PATH: text('DOWNLOAD_PATH', 1),
-    DOWNLOAD_SALT: text('DOWNLOAD_SALT', 32),
     STORAGE_THRESHOLD: size('STORAGE_THRESHOLD', 50n * UNITS.GB),
     STORAGE_PLAYBACK_RESERVE: size('STORAGE_PLAYBACK_RESERVE', 0n),
     SOURCE_SECURITY_KEY: securityKey,

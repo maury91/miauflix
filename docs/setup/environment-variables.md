@@ -54,10 +54,12 @@ MEDIA_LOAD_SERVICE_URL=http://miauflix-media-load:3004 # http://vpn:3004 with do
 These settings belong to this service's `MEDIA_LOAD` group. The backend keeps the stored or environment value and pushes it to the service, so set them where you set the backend's:
 
 - the download settings: `CONTENT_DOWNLOAD_LIMIT`, `CONTENT_UPLOAD_LIMIT`, `CONTENT_CONNECTION_LIMIT`, `CONTENT_CONNECTION_BUDGET`, `CONTENT_SEED_DURATION_SECONDS` and `DISABLE_DISCOVERY`
-- the storage settings: `STORAGE_THRESHOLD`, `STORAGE_PLAYBACK_RESERVE`, `DOWNLOAD_PATH` and `DOWNLOAD_SALT`
+- the storage settings: `STORAGE_THRESHOLD`, `STORAGE_PLAYBACK_RESERVE`, `DOWNLOAD_PATH` and `STORAGE_PAD_FILE_SIZES` (`DOWNLOAD_SALT` is no longer used)
 - the trackers: `STATIC_TRACKERS`, `BEST_TRACKERS_DOWNLOAD_URL`, `BLACKLISTED_TRACKERS_DOWNLOAD_URL` and `SCRAPE_TRACKERS` (comma-separated UDP or HTTP announce URLs, advanced)
 
 Limits and storage thresholds apply at once. The connection settings, `DISABLE_DISCOVERY` and the tracker lists apply when the service restarts.
+
+`STORAGE_PAD_FILE_SIZES` (default `true`, advanced) pads every downloaded file on disk to a rounded size filled with random bytes. This reduces what file sizes give away rather than preventing a match: many torrents share each rounded size, but a padded size can still be compared with a torrent's padded sizes, and a size that is already round stays exactly as it was. Files over 64 KiB grow by at most about 3%; files under 64 KiB all take 64 KiB, so many small files can cost far more than 3%. The setting is read when a torrent is added: new downloads are padded from the start, and a current-version download already on disk is padded the next time its torrent is added again (resumed, seeded again or re-downloaded). Files only read from disk keep their size. Downloads from before the per-download encryption keys are never padded. Turning it off leaves padded files readable.
 
 `DOWNLOAD_PATH` is a path inside the services container. The Compose files mount the downloads folder (`DOWNLOADS_HOST_PATH`) there at `/usr/src/app/downloads`. The standalone media-load image defaults to `/app/data/downloads` inside its data volume when the backend has no configured download path.
 

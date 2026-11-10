@@ -103,7 +103,7 @@ export class SourceMetadataFileService {
   ): Promise<Buffer | null> {
     logger.info(
       'DataResolver',
-      `Converting URI link with identifier: ${hash.substring(0, 6)}-redacted-${preferIdle ? ' (preferring idle services)' : ''}`
+      `Resolving source metadata${preferIdle ? ' (preferring idle services)' : ''}`
     );
     if (this.concurrency === 0) {
       logger.debug('DataResolver', 'Background metadata resolution is disabled');
@@ -139,7 +139,7 @@ export class SourceMetadataFileService {
       if (!retry) {
         logger.warn(
           'SourceMetadataFileService',
-          `Metadata lookup for ${normalizedHash} skipped: both lookup slots are busy`
+          'Metadata lookup skipped: both lookup slots are busy'
         );
         return Promise.resolve(null);
       }

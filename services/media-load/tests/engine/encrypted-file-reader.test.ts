@@ -6,64 +6,71 @@ import EncryptedChunkStore from '../../src/chunk-stores/encrypted-chunk-store/en
 import { EncryptedFileReader } from '../../src/engine/encrypted-file-reader';
 
 describe('EncryptedFileReader', () => {
-  it('reads encrypted byte ranges across file and piece boundaries', async () => {
-    const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
-    const key = 'reader-test-key';
-    const storeName = 'torrent - abcdef12';
-    const filenameSalt = 'download-a'.repeat(5);
-    const plaintext = Buffer.from('ABCDEFGHIJK');
-    const files = [
-      { path: 'extra.bin', length: 3, offset: 0 },
-      { path: 'folder/movie.mkv', length: 7, offset: 3 },
-      { path: 'tail.bin', length: 1, offset: 10 },
-    ];
-    const writer = new EncryptedChunkStore(4, {
-      path: location,
-      name: storeName,
-      files,
-      encryptionKey: key,
-      filenameSalt,
-    });
-    try {
-      for (let index = 0; index < 3; index += 1) {
-        const piece = plaintext.subarray(index * 4, Math.min(plaintext.length, (index + 1) * 4));
+  it.each([1, 2] as const)(
+    'reads encrypted byte ranges across file and piece boundaries (v%i)',
+    async version => {
+      const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
+      const key = 'reader-test-key';
+      const storeName = 'torrent - abcdef12';
+      const filenameSalt = 'download-a'.repeat(5);
+      const plaintext = Buffer.from('ABCDEFGHIJK');
+      const files = [
+        { path: 'extra.bin', length: 3, offset: 0 },
+        { path: 'folder/movie.mkv', length: 7, offset: 3 },
+        { path: 'tail.bin', length: 1, offset: 10 },
+      ];
+      const writer = new EncryptedChunkStore(4, {
+        path: location,
+        name: storeName,
+        files,
+        encryptionKey: key,
+        encryptionVersion: version,
+        ...(version === 2 ? { contentSalt: 'content-salt' } : {}),
+        filenameSalt,
+      });
+      try {
+        for (let index = 0; index < 3; index += 1) {
+          const piece = plaintext.subarray(index * 4, Math.min(plaintext.length, (index + 1) * 4));
+          await new Promise<void>((resolve, reject) => {
+            writer.put(index, piece, error => (error ? reject(error) : resolve()));
+          });
+        }
+      } finally {
         await new Promise<void>((resolve, reject) => {
-          writer.put(index, piece, error => (error ? reject(error) : resolve()));
+          writer.close(error => (error ? reject(error) : resolve()));
         });
       }
-    } finally {
-      await new Promise<void>((resolve, reject) => {
-        writer.close(error => (error ? reject(error) : resolve()));
-      });
-    }
 
-    const reader = new EncryptedFileReader(
-      location,
-      {
-        storeName,
-        filenameSalt,
-        pieceLength: 4,
-        files,
-      },
-      'folder/movie.mkv',
-      key
-    );
-    try {
-      const output: Buffer[] = [];
-      for (let position = 3; position < 10; ) {
-        const pieceIndex = Math.floor(position / 4);
-        const pieceOffset = position % 4;
-        const piece = await reader.readPiece(pieceIndex);
-        const bytes = piece.subarray(pieceOffset, Math.min(piece.length, pieceOffset + 2));
-        output.push(bytes);
-        position += bytes.length;
+      const reader = new EncryptedFileReader(
+        location,
+        {
+          storeName,
+          filenameSalt,
+          pieceLength: 4,
+          files,
+          // Old layouts carry no version: absent must keep meaning 1.
+          ...(version === 2 ? { encryptionVersion: 2 as const, contentSalt: 'content-salt' } : {}),
+        },
+        'folder/movie.mkv',
+        key
+      );
+      try {
+        const output: Buffer[] = [];
+        for (let position = 3; position < 10; ) {
+          const pieceIndex = Math.floor(position / 4);
+          const pieceOffset = position % 4;
+          const piece = await reader.readPiece(pieceIndex);
+          const bytes = piece.subarray(pieceOffset, Math.min(piece.length, pieceOffset + 2));
+          output.push(bytes);
+          position += bytes.length;
+        }
+        expect(Buffer.concat(output)).toEqual(plaintext.subarray(3, 10));
+      } finally {
+        await reader.close();
+        await rm(location, { recursive: true, force: true });
       }
-      expect(Buffer.concat(output)).toEqual(plaintext.subarray(3, 10));
-    } finally {
-      await reader.close();
-      await rm(location, { recursive: true, force: true });
     }
-  });
+  );
 
   it('closes only file handles that were opened', async () => {
     const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
@@ -77,6 +84,7 @@ describe('EncryptedFileReader', () => {
       name: storeName,
       files,
       encryptionKey: 'reader-test-key',
+      encryptionVersion: 1,
       filenameSalt: 'download-partial',
     });
     try {
@@ -142,6 +150,7 @@ describe('EncryptedFileReader', () => {
       name: 'movie - abcdef12',
       files,
       encryptionKey: key,
+      encryptionVersion: 1,
       filenameSalt: `download-${sourceHash}`,
     });
     try {
