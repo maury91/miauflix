@@ -65,6 +65,28 @@ describe('redactLogArgument', () => {
     expect(redacted.detail).toBe('hash [redacted]');
   });
 
+  it('redacts extra error field names', () => {
+    const error = Object.assign(new Error('failed'), { [`peer-${HEX}`]: 1 });
+    const redacted = redactLogArgument(error) as unknown as Record<string, unknown>;
+    expect(Object.keys(redacted).join(' ')).not.toContain(HEX);
+    expect(redacted['peer-[redacted]']).toBe(1);
+  });
+
+  it('survives a throwing getter, without leaking the original fields', () => {
+    const error = new Error(`failed ${HEX}`);
+    Object.defineProperty(error, 'detail', {
+      enumerable: true,
+      get: () => {
+        throw new Error('boom');
+      },
+    });
+    Object.assign(error, { status: `s ${HEX}` });
+    const redacted = redactLogArgument(error) as Error & Record<string, unknown>;
+    expect(redacted.message).toBe('failed [redacted]');
+    expect(redacted.fields).toBe('[unloggable value]');
+    expect(JSON.stringify({ ...redacted })).not.toContain(HEX);
+  });
+
   it('redacts objects through JSON, keeping them valid', () => {
     expect(redactLogArgument({ hash: HEX, magnet: `"${MAGNET}"`, id: 7 })).toEqual({
       hash: '[redacted]',
