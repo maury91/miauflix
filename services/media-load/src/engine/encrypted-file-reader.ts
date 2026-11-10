@@ -35,7 +35,9 @@ export class EncryptedFileReader {
       name: layout.storeName,
       files: layout.files,
       encryptionKey,
+      encryptionVersion: layout.encryptionVersion ?? 1,
       filenameSalt: layout.filenameSalt,
+      contentSalt: layout.contentSalt,
     });
   }
 

@@ -58,7 +58,6 @@ afterEach(async () => {
 const ENGINE_VALUES = {
   ...new MediaLoadConfigService().defaults(),
   DOWNLOAD_PATH: downloads,
-  DOWNLOAD_SALT: TEST_SETTINGS.DOWNLOAD_SALT,
   DISABLE_DISCOVERY: 'true',
   MEDIA_LOAD_DISABLE_VPN_CHECK: 'true',
 };

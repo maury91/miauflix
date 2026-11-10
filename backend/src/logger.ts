@@ -1,3 +1,4 @@
+import { redactLogArgument, redactSourceIdentifiers } from '@miauflix/service-contracts';
 import debugModule from 'debug';
 
 import { getTraceContextString } from '@utils/trace-context';
@@ -12,11 +13,17 @@ const print = (severity: Severity, service: string, message: string, ...metadata
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(5, 22);
   const traceContext = getTraceContextString();
-  const formattedMessage = `[${timestamp}] [${service}]${traceContext} ${message}`;
+  // Info hashes and magnet links never reach the logs (see redactSourceIdentifiers).
+  const formattedMessage = `[${timestamp}] [${service}]${traceContext} ${redactSourceIdentifiers(message)}`;
   // Only stringify metadata if it exists
-  const metadataFormatted = metadata.map(m =>
-    typeof m === 'undefined' ? '' : m instanceof Error ? m : ` ${JSON.stringify(m, null, 2)}`
-  );
+  const metadataFormatted = metadata.map(raw => {
+    const m = redactLogArgument(raw);
+    return typeof m === 'undefined'
+      ? ''
+      : m instanceof Error
+        ? m
+        : ` ${JSON.stringify(m, null, 2)}`;
+  });
 
   switch (severity) {
     case 'debug':

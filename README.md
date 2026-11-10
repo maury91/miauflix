@@ -17,7 +17,7 @@ Miauflix is a streaming service you run yourself. Browse movies and TV shows wit
 - ⚡ **Prepares playback ahead**: background preloading and media inspection reduce waiting; startup depends on the source, connection, and conversion needed
 - 🔎 **Finds sources for you**: searches multiple providers and chooses a source for your device
 - 📺 **Made for the couch**: full remote-control navigation, and sign in on a TV by scanning a QR code
-- 🔐 **Account and privacy controls**: administrator-created accounts, encrypted downloads and selected sensitive records, and VPN checks
+- 🔐 **Account and privacy controls**: administrator-created accounts, VPN checks, and downloads stored so the disk does not show what they are: encrypted with a key per download, random file and folder names, optional size padding
 - 🔗 **Personal viewing**: watchlists, ratings, Continue watching, and optional Trakt watchlist and playback sync
 - 🐳 **One command to run**: prebuilt images for `amd64` and `arm64`, configured from the browser
 
@@ -80,6 +80,7 @@ TV season and episode navigation, subtitles, and Jackett/Prowlarr integration ar
 - Interface translations and language preferences
 - Subtitle translation and language-learning tools
 - VPN diagnostics and exit-server controls in Settings
+- Keeping the database that links downloads to torrents on an external server (such as AWS RDS), so a copy of the server's disk cannot be read on its own
 
 See the [Feature Guide](docs/features.md) for how these plans differ from available features. The task list does not promise delivery dates.
 

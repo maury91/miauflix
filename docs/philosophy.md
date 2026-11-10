@@ -20,6 +20,8 @@ Catalog, list, and source services have separate ownership and versioned communi
 
 Downloaded torrent pieces and selected sensitive application fields are encrypted at rest. The application needs its encryption keys while running, so someone with root access to the host could also obtain those keys and read the data. This is not whole-database encryption or protection against a fully compromised host. Persistent keys must be kept with the data they protect.
 
+The goal on a rented server is narrower and practical: an automated scan of its disk or logs should find nothing that identifies a download. Each download has its own key and random names, file sizes can be padded, and logs leave out torrent identifiers. What links files to torrents is the encrypted database next to the master key; a planned option moves that database to an external server so that neither half is readable alone. See [what the disk shows](features/storage-privacy.md#what-the-disk-shows).
+
 HTTPS protects traffic between a device and the server. The optional Gluetun/NordVPN deployment routes outbound traffic through a VPN and supplies a network firewall; application VPN checks are a separate safeguard. A VPN does not replace HTTPS, and encrypted storage does not make torrent traffic anonymous.
 
 Miauflix uses administrator-created accounts rather than open self-registration. The first administrator is created during setup; additional account creation exists in the API, while its management screen remains planned. Password and QR-code login identify a Miauflix account. Connecting Trakt is separate from signing in to Miauflix.

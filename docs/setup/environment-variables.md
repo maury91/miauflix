@@ -54,10 +54,12 @@ MEDIA_LOAD_SERVICE_URL=http://miauflix-media-load:3004 # http://vpn:3004 with do
 These settings belong to this service's `MEDIA_LOAD` group. The backend keeps the stored or environment value and pushes it to the service, so set them where you set the backend's:
 
 - the download settings: `CONTENT_DOWNLOAD_LIMIT`, `CONTENT_UPLOAD_LIMIT`, `CONTENT_CONNECTION_LIMIT`, `CONTENT_CONNECTION_BUDGET`, `CONTENT_SEED_DURATION_SECONDS` and `DISABLE_DISCOVERY`
-- the storage settings: `STORAGE_THRESHOLD`, `STORAGE_PLAYBACK_RESERVE`, `DOWNLOAD_PATH` and `DOWNLOAD_SALT`
+- the storage settings: `STORAGE_THRESHOLD`, `STORAGE_PLAYBACK_RESERVE`, `DOWNLOAD_PATH` and `STORAGE_PAD_FILE_SIZES` (`DOWNLOAD_SALT` is no longer used)
 - the trackers: `STATIC_TRACKERS`, `BEST_TRACKERS_DOWNLOAD_URL`, `BLACKLISTED_TRACKERS_DOWNLOAD_URL` and `SCRAPE_TRACKERS` (comma-separated UDP or HTTP announce URLs, advanced)
 
 Limits and storage thresholds apply at once. The connection settings, `DISABLE_DISCOVERY` and the tracker lists apply when the service restarts.
+
+`STORAGE_PAD_FILE_SIZES` (default `false`, advanced) pads every downloaded file on disk to a rounded size filled with random bytes, so the exact sizes cannot be matched to known torrents. Files grow by at most about 3%, and files under 64 KiB take 64 KiB. It applies to downloads started after it is turned on, and to files of such downloads opened again later; downloads from before the per-download encryption keys are never padded. Turning it off leaves padded files readable.
 
 `DOWNLOAD_PATH` is a path inside the services container. The Compose files mount the downloads folder (`DOWNLOADS_HOST_PATH`) there at `/usr/src/app/downloads`. The standalone media-load image defaults to `/app/data/downloads` inside its data volume when the backend has no configured download path.
 
