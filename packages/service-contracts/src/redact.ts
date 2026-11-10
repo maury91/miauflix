@@ -34,13 +34,19 @@ export const redactLogArgument = (value: unknown, depth = 0): unknown => {
     copy.stack = value.stack === undefined ? undefined : redactSourceIdentifiers(value.stack);
     if (value.cause !== undefined && depth < 5)
       copy.cause = redactLogArgument(value.cause, depth + 1);
-    // Extra fields such as `status`, redacted the same way; the ones above are already handled.
-    for (const [key, field] of Object.entries(value)) {
-      if (key === 'name' || key === 'message' || key === 'stack' || key === 'cause') continue;
-      (copy as unknown as Record<string, unknown>)[key] =
-        depth < 5 ? redactLogArgument(field, depth + 1) : '[unloggable value]';
+    // Extra fields such as `status`, redacted the same way (keys too); the ones above are already
+    // handled. A throwing getter drops the extra fields rather than the whole log line.
+    const extra: Record<string, unknown> = {};
+    try {
+      for (const [key, field] of Object.entries(value)) {
+        if (key === 'name' || key === 'message' || key === 'stack' || key === 'cause') continue;
+        extra[redactSourceIdentifiers(key)] =
+          depth < 5 ? redactLogArgument(field, depth + 1) : '[unloggable value]';
+      }
+    } catch {
+      return Object.assign(copy, { fields: '[unloggable value]' });
     }
-    return copy;
+    return Object.assign(copy, extra);
   }
   if (value !== null && typeof value === 'object') {
     try {
