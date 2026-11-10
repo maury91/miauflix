@@ -67,9 +67,10 @@ export const parseEngineSettings = (
     if (value.length < minLength) invalid.push(key);
     return value;
   };
-  const flag = (key: string): boolean => {
-    const value = (values[key] ?? 'false').trim().toLowerCase();
+  const flag = (key: string, fallback = false): boolean => {
+    const value = (values[key] ?? '').trim().toLowerCase();
     if (!['true', 'false', '1', '0', 'yes', 'no', ''].includes(value)) invalid.push(key);
+    if (value === '') return fallback;
     return ['true', '1', 'yes'].includes(value);
   };
   const settings: EngineSettings = {
@@ -79,7 +80,8 @@ export const parseEngineSettings = (
     CONTENT_CONNECTION_BUDGET: integer('CONTENT_CONNECTION_BUDGET', 1),
     CONTENT_SEED_DURATION_SECONDS: integer('CONTENT_SEED_DURATION_SECONDS', 0),
     DISABLE_DISCOVERY: flag('DISABLE_DISCOVERY'),
-    STORAGE_PAD_FILE_SIZES: flag('STORAGE_PAD_FILE_SIZES'),
+    // On unless turned off: a value the host left out must not drop the padding.
+    STORAGE_PAD_FILE_SIZES: flag('STORAGE_PAD_FILE_SIZES', true),
     STATIC_TRACKERS: (values.STATIC_TRACKERS ?? '')
       .split(',')
       .map(item => item.trim())

@@ -55,6 +55,16 @@ describe('redactLogArgument', () => {
     expect(error.message).toContain(HEX);
   });
 
+  it('keeps extra error fields, redacted', () => {
+    const error = Object.assign(new Error('failed'), {
+      status: 'add_error',
+      detail: `hash ${HEX}`,
+    });
+    const redacted = redactLogArgument(error) as Error & { status: string; detail: string };
+    expect(redacted.status).toBe('add_error');
+    expect(redacted.detail).toBe('hash [redacted]');
+  });
+
   it('redacts objects through JSON, keeping them valid', () => {
     expect(redactLogArgument({ hash: HEX, magnet: `"${MAGNET}"`, id: 7 })).toEqual({
       hash: '[redacted]',

@@ -6,8 +6,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
-- New downloads are encrypted more securely on disk. Each download gets its own random key and random file and folder names, so a copy of the disk can no longer be checked for a given torrent, or decrypted with knowledge of one file. Downloads you already have stay readable as they are. The `DOWNLOAD_SALT` setting is no longer used
-- New setting `STORAGE_PAD_FILE_SIZES` (off by default): pads downloaded files with random bytes so their sizes on disk cannot be matched to known torrents, for at most about 3% more space
+- New downloads are encrypted more securely on disk. Each download gets its own random key and random file and folder names, so a copy of the disk can no longer be checked for a given torrent by name or key, or decrypted with knowledge of one file. File sizes can still match known torrents unless they are padded (on by default, see below). Downloads you already have stay readable as they are. The `DOWNLOAD_SALT` setting is no longer used
+- Downloaded files are padded with random bytes so their sizes on disk cannot be matched to known torrents. Files over 64 KiB grow by at most about 3%; smaller files all take 64 KiB, which can be many times their size. Set `STORAGE_PAD_FILE_SIZES=false` to turn it off
 - Logs no longer show which torrents were downloaded: info hashes, magnet links and movie titles next to their sources are left out, and anything that still looks like an info hash or magnet link is replaced with `[redacted]`
 
 ### Documentation

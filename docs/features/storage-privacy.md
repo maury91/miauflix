@@ -15,23 +15,33 @@ Encryption depends on keeping the server's keys safe. It does not mean every dat
 Miauflix is built to run on a rented server (a VPS). The aim is that an automated scan of that server's disk finds nothing that identifies a download, without someone first studying how Miauflix works. For each download started with the current version:
 
 - **Its own random key.** Each download gets two random values when it starts. One gives it its own encryption key, derived from the server's master key (`SOURCE_SECURITY_KEY`); the other names its files. Neither comes from the torrent, so knowing a torrent's info hash does not tell you where its files are or how to decrypt them, even with the master key.
-- **Random names.** The download's folder has a random name, and each file's name is a keyed hash of its path. Nothing on disk carries a torrent name, info hash, or file name.
+- **Random names.** The download's folder has a random name, and each file's name is a keyed hash of its path. Nothing on disk carries a torrent name, info hash, or file name. Names alone do not hide a download: file sizes can still be matched to known torrents, which is what size padding covers.
 - **No shared encryption.** Every byte position in a download is encrypted differently, and no two downloads share a key, so knowing one file's content does not help decrypt another.
-- **Optional size padding.** Encrypted files otherwise keep their exact size, and a torrent's file sizes are close to unique. With `STORAGE_PAD_FILE_SIZES` on (off by default), each file is padded with random bytes to a rounded size, for at most about 3% more space. See [Environment Variables](../setup/environment-variables.md).
-- **Clean logs.** Logs name downloads by an internal number. Anything that looks like an info hash or magnet link, including inside library errors, is replaced with `[redacted]`. `docker logs` keeps logs on the server, so this matters as much as the files.
+- **Size padding.** Encrypted files otherwise keep their exact size, and a torrent's file sizes are close to unique. Each file is padded with random bytes to a rounded size: files over 64 KiB grow by at most about 3%, and smaller files all take 64 KiB. `STORAGE_PAD_FILE_SIZES=false` turns it off, and then sizes can identify downloads despite the random names. See [Environment Variables](../setup/environment-variables.md).
+- **Clean logs.** Logs name downloads by an internal number. In everything written through Miauflix's loggers, anything that looks like an info hash or magnet link, including inside library errors, is replaced with `[redacted]`. `docker logs` keeps logs on the server, so this matters as much as the files. Output that bypasses the loggers is not redacted: media-load's crash output (an uncaught error printed by the runtime), and the torrent libraries' own debug output when `DEBUG=*` is set.
 
-What still links downloads to torrents is media-load's database: each download's random values, its file list and name, and its source (info hash, magnet link, `.torrent` file), all encrypted with the master key. The backend's database holds the sources too. Today both live on the same server as the master key, so someone holding a full copy of the disk can decrypt everything. That takes knowing this project, which is the line this design draws: it keeps a server from being flagged by generic scanning, not from an investigation that already targets it.
+What still links downloads to torrents is media-load's database: each download's random values, its file list and name, and its source (info hash, magnet link, `.torrent` file), all encrypted with the master key. The same database also keeps each file's exact length and offset, the piece length and the total size unencrypted, since storage accounting needs them; these are exact even when the files on disk are padded. The backend's database holds the sources too. Today both live on the same server as the master key, so someone holding a full copy of the disk can decrypt everything. That takes knowing this project, which is the line this design draws: it keeps a server from being flagged by generic scanning, not from an investigation that already targets it.
 
 ### Limits
 
 - **Older downloads keep the earlier scheme.** Downloads started before per-download keys use one key for every download and folder names that can be computed from the info hash. They stay readable as they are, until they are deleted or cleaned up.
 - **The running server holds the keys in memory.** A provider that snapshots a running machine's memory gets them.
-- **Still visible:** how many files a download has and, with padding, their rounded sizes; and how much space downloads use in total.
+- **Still visible on disk:** how many files a download has and, with padding, their rounded sizes; and how much space downloads use in total. While a download is incomplete, on filesystems that support sparse files, the gap between unwritten data and the padding can show a file's original length.
+- **Still visible in the database:** exact file lengths and offsets, piece length and total size, unencrypted, next to the encrypted records.
 - **The network side is separate.** Torrent traffic, tracker requests, and source searches go through the [VPN](#vpn-checks-and-nordvpn-deployment); without it, peers see the server's IP.
 
 ### Keeping the master key off the disk
 
-Miauflix saves `SOURCE_SECURITY_KEY` in its `config.json` on first start. When it is passed as an environment variable instead, Miauflix uses it without saving it, so the key exists on the server only while the containers run. See [Secrets set in `.env`](../setup/docker-setup.md#secrets-set-in-env). On its own this does not hide anything, since the database next to it is encrypted with that same key, but it is half of the planned external database below.
+Miauflix saves `SOURCE_SECURITY_KEY` in its `config.json` on first start. When it is passed as an environment variable instead, Miauflix uses it without saving it. See [Secrets set in `.env`](../setup/docker-setup.md#secrets-set-in-env).
+
+That alone does not take the key off the disk:
+
+- **A copy saved earlier stays in `config.json`.** Passing the variable does not remove it.
+- **A key in `.env` is on the disk too**, in the file Compose reads it from.
+
+To keep the key off the server, remove the local copies securely and supply the same key from outside the server each time it starts, for example from a secrets manager or by hand. Keep a secure backup of it elsewhere: without it, downloads and encrypted records cannot be read.
+
+Even then, this does not hide anything on its own, since the database next to it is encrypted with that same key, but it is half of the planned external database below.
 
 ## Reusing downloads and seeding
 
@@ -71,11 +81,11 @@ A country can already be configured in the Docker VPN setup; the planned feature
 
 The [storage privacy tasks](../../ToDo.md#storage-privacy) plan an optional external database, such as AWS RDS. Everything in media-load's database, and the backend's sources, would live there instead of on the server. The two halves would then each be useless alone:
 
-| Where                 | What it holds                                                               | Alone, it reveals                                                          |
-| --------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| The server            | The master key and the encrypted files, with random names                   | Nothing: keys and names come from random values that are not on the server |
-| The external database | Each download's random values and its source, encrypted with the master key | Nothing: the master key is not there                                       |
-| Both                  | Everything                                                                  | Which torrents were downloaded, and their content                          |
+| Where                 | What it holds                                                               | Alone, it reveals                                                                                            |
+| --------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| The server            | The master key and the encrypted files, with random names                   | Nothing, as long as file sizes are padded: keys and names come from random values that are not on the server |
+| The external database | Each download's random values and its source, encrypted with the master key | Nothing: the master key is not there                                                                         |
+| Both                  | Everything                                                                  | Which torrents were downloaded, and their content                                                            |
 
 Deleting a download's record in the external database makes its files unreadable for good. Wiping the database does the same for every download.
 
