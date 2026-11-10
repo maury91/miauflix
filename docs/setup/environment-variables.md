@@ -59,7 +59,7 @@ These settings belong to this service's `MEDIA_LOAD` group. The backend keeps th
 
 Limits and storage thresholds apply at once. The connection settings, `DISABLE_DISCOVERY` and the tracker lists apply when the service restarts.
 
-`STORAGE_PAD_FILE_SIZES` (default `false`, advanced) pads every downloaded file on disk to a rounded size filled with random bytes, so the exact sizes cannot be matched to known torrents. Files grow by at most about 3%, and files under 64 KiB take 64 KiB. It applies to downloads started after it is turned on, and to files of such downloads opened again later; downloads from before the per-download encryption keys are never padded. Turning it off leaves padded files readable.
+`STORAGE_PAD_FILE_SIZES` (default `true`, advanced) pads every downloaded file on disk to a rounded size filled with random bytes, so the exact sizes cannot be matched to known torrents. Files over 64 KiB grow by at most about 3%; files under 64 KiB all take 64 KiB, so many small files can cost far more than 3%. The setting is read when a torrent is added: new downloads are padded from the start, and a current-version download already on disk is padded the next time its torrent is added again (resumed, seeded again or re-downloaded). Files only read from disk keep their size. Downloads from before the per-download encryption keys are never padded. Turning it off leaves padded files readable.
 
 `DOWNLOAD_PATH` is a path inside the services container. The Compose files mount the downloads folder (`DOWNLOADS_HOST_PATH`) there at `/usr/src/app/downloads`. The standalone media-load image defaults to `/app/data/downloads` inside its data volume when the backend has no configured download path.
 
