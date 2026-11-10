@@ -33,6 +33,7 @@ const writePack = async (location: string, layout: EncryptedStorageLayout, bytes
     name: layout.storeName,
     files: layout.files,
     encryptionKey: ENCRYPTION_KEY,
+    encryptionVersion: layout.encryptionVersion ?? 1,
     filenameSalt: layout.filenameSalt,
   });
   try {
@@ -268,6 +269,7 @@ describe('DownloadService reclaiming one file of a pack', () => {
       name: layout.storeName,
       files: layout.files.map(file => ({ ...file })),
       encryptionKey: ENCRYPTION_KEY,
+      encryptionVersion: layout.encryptionVersion ?? 1,
       filenameSalt: layout.filenameSalt,
     });
     const torrent = {

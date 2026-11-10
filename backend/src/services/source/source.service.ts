@@ -304,18 +304,11 @@ export class SourceService {
           },
         ])
       );
-      logger.debug(
-        'SourceService',
-        `Saved ${createdSources.length} sources for movie ${movie.id} (${movie.title})`
-      );
+      logger.debug('SourceService', `Saved ${createdSources.length} sources for movie ${movie.id}`);
       return { directory: 'sources', sources: createdSources };
     } catch (error) {
       await this.movieRepository.markSourceSearchAttempt(movie.id);
-      logger.error(
-        'SourceService',
-        `Error searching sources for movie ${movie.id} (${movie.title}):`,
-        error
-      );
+      logger.error('SourceService', `Error searching sources for movie ${movie.id}:`, error);
     }
   }
 

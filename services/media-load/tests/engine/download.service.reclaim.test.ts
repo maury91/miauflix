@@ -109,6 +109,7 @@ describe('reclaiming files of a pack', () => {
       name: layout.storeName,
       files: layout.files.map(file => ({ ...file })),
       encryptionKey: ENCRYPTION_KEY,
+      encryptionVersion: layout.encryptionVersion ?? 1,
       filenameSalt: layout.filenameSalt,
     });
     try {

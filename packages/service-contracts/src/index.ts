@@ -2,4 +2,5 @@ export * from './catalog.js';
 export * from './lists.js';
 export * from './media-load.js';
 export * from './profiles.js';
+export * from './redact.js';
 export * from './sources.js';
