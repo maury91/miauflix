@@ -125,6 +125,14 @@ export const SearchResults: FC<SearchResultsProps> = ({
           />
         </Message>
       )}
+      {results.length > 0 && (status === 'error' || error != null) && (
+        <Message role="status">
+          <ErrorNotice
+            error={error}
+            fallback="Part of this search failed. Try again in a moment."
+          />
+        </Message>
+      )}
       {status === 'loading' && !results.length && <Message role="status">Searching…</Message>}
       {status === 'ready' && !results.length && <Message role="status">No titles found.</Message>}
       {results.length > 0 && (

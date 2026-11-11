@@ -713,7 +713,8 @@ export const CategoryRow = memo(
       return (
         <RowContainer>
           {title}
-          <State role="alert">
+          {/* Polite, and only on screen: prefetched rows failing is not urgent. */}
+          <State role={visible ? 'status' : undefined}>
             <ErrorNotice error={current.error} fallback="Failed to load content." />
           </State>
         </RowContainer>

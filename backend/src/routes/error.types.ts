@@ -16,6 +16,6 @@ export interface ApiErrorBody {
   needsConfiguration?: boolean;
   service?: string;
   serviceName?: string;
-  /** The underlying error message of an unexpected failure; only sent to signed-in users. */
+  /** The raw message behind a failure whose text is not meant for users; sent to admins only. */
   detail?: string;
 }

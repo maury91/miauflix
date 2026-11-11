@@ -7,6 +7,8 @@ export interface ErrorPresentation {
   hint?: string;
   /** Matches the `[error <id>]` line in the server logs. */
   errorId?: string;
+  /** The raw server-side message; the server only sends it to admins. */
+  detail?: string;
   /** Whether more detail was written to the browser console. */
   inConsole: boolean;
 }
@@ -57,6 +59,7 @@ export function presentError(error: unknown, fallback: string): ErrorPresentatio
     return {
       message: body.message,
       hint: body.hint,
+      ...(body.detail ? { detail: body.detail } : {}),
       // A fixable problem is explained by its hint; an id only helps for the rest.
       errorId: body.needsConfiguration ? undefined : body.errorId,
       inConsole: true,

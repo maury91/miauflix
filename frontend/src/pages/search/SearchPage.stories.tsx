@@ -80,7 +80,7 @@ export const CatalogNotConfigured: Story = {
   ],
 };
 
-/** An unexpected failure: the error id to look for in the server logs. */
+/** An unexpected failure: the error id to look for in the server logs, and (admins) the cause. */
 export const SearchFailed: Story = {
   decorators: [
     withSearchState({
@@ -92,9 +92,10 @@ export const SearchFailed: Story = {
         success: false,
         status: 500,
         code: 'service_internal',
-        error: 'TMDB API error: (502) Bad Gateway',
-        message: 'TMDB API error: (502) Bad Gateway',
+        error: 'A backend service failed unexpectedly.',
+        message: 'A backend service failed unexpectedly.',
         errorId: '3f9a1c07',
+        detail: 'TMDB API error: (502) Bad Gateway',
       },
     }),
   ],

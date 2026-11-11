@@ -15,6 +15,7 @@ import {
 } from '@miauflix/contract';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
+import { ServiceUnavailableError } from '@errors/service-unavailable.error';
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import type { ServiceName } from '@services/configuration/configuration.types';
@@ -404,12 +405,13 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     const serviceName = this.descriptor.serviceName;
     const notConfigured = (reason?: string) => new ServiceNotConfiguredError(serviceName, reason);
     const mapError = (error: unknown): never => {
-      if (
-        error instanceof ContractError &&
-        (error.code === 'not_configured' || error.code === 'unavailable')
-      )
+      if (error instanceof ContractError) {
         // The service's own message says why (e.g. TMDB rejected the token).
-        throw notConfigured(error.message !== error.code ? error.message : undefined);
+        const reason = error.message !== error.code ? error.message : undefined;
+        if (error.code === 'not_configured') throw notConfigured(reason);
+        // Not connected, or rate limited upstream: settings will not fix it.
+        if (error.code === 'unavailable') throw new ServiceUnavailableError(serviceName, reason);
+      }
       throw error;
     };
     return {

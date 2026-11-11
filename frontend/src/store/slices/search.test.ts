@@ -141,4 +141,69 @@ describe('search slice', () => {
     expect(failed.error).toEqual(error);
     expect(reduce(failed, searchActions.searchStarted({ requestId: 6, page: 1 })).error).toBeNull();
   });
+
+  it('keeps the results and records the error when a later page or the details fail', () => {
+    const error = {
+      success: false as const,
+      status: 500,
+      code: 'internal',
+      error: 'Something went wrong on the server.',
+      message: 'Something went wrong on the server.',
+      errorId: 'abcd1234',
+    };
+    const page = (requestId: number, pageNumber: number) =>
+      searchActions.serverMessage({
+        type: 'search-results',
+        requestId,
+        page: pageNumber,
+        totalPages: 3,
+        totalResults: 60,
+        results: [
+          {
+            _type: 'movie',
+            mediaId: pageNumber,
+            title: `Dune ${pageNumber}`,
+            overview: '',
+            poster: '',
+            backdrop: '',
+            releaseDate: '2021-01-01',
+            rating: 8,
+          },
+        ],
+      });
+    const loaded = reduce(
+      initialSearchState,
+      searchActions.queryChanged('dune'),
+      searchActions.searchStarted({ requestId: 7, page: 1 }),
+      page(7, 1)
+    );
+
+    const detailsFailed = reduce(
+      loaded,
+      searchActions.serverMessage({
+        type: 'search-error',
+        requestId: 7,
+        message: 'search-failed',
+        error,
+      })
+    );
+    expect(detailsFailed).toMatchObject({ status: 'ready', error });
+    expect(detailsFailed.results).toHaveLength(1);
+
+    const nextPageFailed = reduce(
+      loaded,
+      searchActions.searchStarted({ requestId: 8, page: 2 }),
+      searchActions.serverMessage({
+        type: 'search-error',
+        requestId: 8,
+        message: 'search-failed',
+        error,
+      })
+    );
+    expect(nextPageFailed).toMatchObject({ status: 'ready', moreRequestId: null, error });
+    expect(nextPageFailed.results).toHaveLength(1);
+
+    const retried = reduce(nextPageFailed, searchActions.searchStarted({ requestId: 9, page: 2 }));
+    expect(retried.error).toBeNull();
+  });
 });

@@ -118,6 +118,7 @@ export const searchSlice = createSlice({
         state.error = null;
       } else {
         state.moreRequestId = action.payload.requestId;
+        state.error = null;
       }
     },
     serverMessage(state, action: PayloadAction<SearchServerMessage>) {
@@ -150,9 +151,12 @@ export const searchSlice = createSlice({
       } else if (message.type === 'search-details') {
         for (const item of message.items) state.details[searchResultKey(item)] = item;
       } else if (message.requestId === state.moreRequestId) {
+        // The pages already shown stay usable; the failure is shown beside them.
         state.moreRequestId = null;
+        state.error = message.error ?? null;
       } else if (message.requestId === state.requestId) {
-        state.status = 'error';
+        // After its results arrived, only the details lookup can fail: keep the results usable.
+        if (state.status !== 'ready') state.status = 'error';
         state.error = message.error ?? null;
       }
     },

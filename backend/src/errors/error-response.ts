@@ -6,6 +6,7 @@ import { HTTPException } from 'hono/http-exception';
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import { AppError } from '@errors/base.error';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
+import { ServiceUnavailableError } from '@errors/service-unavailable.error';
 import type { ApiErrorBody } from '@routes/error.types';
 import { services } from '@services/configuration/configuration.consts';
 
@@ -37,14 +38,20 @@ const configurationHint = (service: string): string =>
   `An admin needs to configure ${serviceDisplayName(service)} in Settings → Configuration.`;
 
 /**
- * Maps anything thrown while handling a request to the status and body sent back. Messages of
- * unexpected errors are not shown as the main text (they can be internal), but signed-in users
- * receive them as `detail`.
+ * Maps anything thrown while handling a request to the status and body sent back. Only messages
+ * written for users are the main text; unexpected errors get a fixed text, and their own message
+ * stays in the server log next to the error id. With `includeDetail` (admins) that message is
+ * also sent as `detail`, since it can name internal paths or upstream responses.
  */
 export const describeError = (
   error: unknown,
-  { errorId, authenticated }: { errorId: string; authenticated: boolean }
+  { errorId, includeDetail = false }: { errorId: string; includeDetail?: boolean }
 ): DescribedError => {
+  const detail = (): Partial<ApiErrorBody> => {
+    if (!includeDetail) return {};
+    const raw = error instanceof Error ? error.message : typeof error === 'string' ? error : '';
+    return raw ? { detail: raw } : {};
+  };
   const make = (
     status: number,
     code: string,
@@ -73,6 +80,21 @@ export const describeError = (
       }
     );
   }
+  if (error instanceof ServiceUnavailableError) {
+    const serviceName = serviceDisplayName(error.service);
+    return make(
+      503,
+      'service_unavailable',
+      error.reason
+        ? `${serviceName} is unavailable: ${error.reason}`
+        : `${serviceName} is unavailable.`,
+      {
+        service: error.service,
+        serviceName,
+        hint: `Try again in a moment. If it keeps failing, check that the ${serviceName} service is running.`,
+      }
+    );
+  }
   if (error instanceof AuthError || error instanceof InvalidTokenError)
     return make(401, error.code, 'Authentication required');
   if (error instanceof LoginError) return make(401, error.code, 'Invalid credentials');
@@ -87,16 +109,14 @@ export const describeError = (
     if (error.code === 'timeout')
       return make(status, 'service_timeout', 'A backend service took too long to answer.', {
         hint: 'Try again in a moment.',
-        ...(authenticated && { detail: error.message }),
+        ...detail(),
       });
-    // A service's own message is meant for its caller (e.g. "TMDB API error: (502) Bad Gateway").
+    // Any other service message may carry internal details: only the log and `detail` get it.
     return make(
       status,
       `service_${error.code}`,
-      error.message && error.message !== error.code && error.message !== 'Internal service error'
-        ? error.message
-        : 'A backend service failed unexpectedly.',
-      {},
+      'A backend service failed unexpectedly.',
+      detail(),
       false
     );
   }
@@ -104,14 +124,15 @@ export const describeError = (
   if (error instanceof HTTPException)
     return make(error.status, `http_${error.status}`, error.message || 'Request failed');
 
+  // The type/code says what failed; the message stays in the log (by error id) and `detail`.
   if (error instanceof AppError)
-    return make(500, `${error.type}/${error.code}`, error.message, {}, false);
+    return make(
+      500,
+      `${error.type}/${error.code}`,
+      'Something went wrong on the server.',
+      detail(),
+      false
+    );
 
-  return make(
-    500,
-    'internal',
-    'Something went wrong on the server.',
-    authenticated && error instanceof Error && error.message ? { detail: error.message } : {},
-    false
-  );
+  return make(500, 'internal', 'Something went wrong on the server.', detail(), false);
 };
