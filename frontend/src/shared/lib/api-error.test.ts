@@ -40,4 +40,11 @@ describe('presentError', () => {
       inConsole: false,
     });
   });
+
+  it('passes on the raw detail the server sends to admins', () => {
+    expect(presentError({ ...body, detail: 'SQLITE_BUSY' }, 'Failed')).toMatchObject({
+      detail: 'SQLITE_BUSY',
+      errorId: 'abcd1234',
+    });
+  });
 });

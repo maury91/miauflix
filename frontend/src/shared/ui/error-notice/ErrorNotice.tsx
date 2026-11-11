@@ -30,11 +30,16 @@ export type ErrorNoticeProps = Omit<HTMLAttributes<HTMLSpanElement>, 'children'>
  * Inherits the surrounding font so it fits rows, panels and full-page states alike.
  */
 export function ErrorNotice({ error, fallback, children, ...props }: ErrorNoticeProps) {
-  const { message, hint, errorId, inConsole } = presentError(error, fallback);
+  const { message, hint, errorId, detail, inConsole } = presentError(error, fallback);
   return (
     <span {...props}>
       <Line>{message}</Line>
       {hint && <Secondary>{hint}</Secondary>}
+      {detail && (
+        <Secondary>
+          Server error: <code>{detail}</code>
+        </Secondary>
+      )}
       {errorId ? (
         <Secondary>
           Error id <code>{errorId}</code> (find it in the server logs). More details in the browser

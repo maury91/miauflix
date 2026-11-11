@@ -34,6 +34,8 @@ const recentEntrySchema = z.object({
 
 export interface SearchClient {
   userId: string;
+  /** Admins also receive the raw message of a failure. */
+  isAdmin?: boolean;
   send(message: SearchServerMessage): void;
 }
 
@@ -126,9 +128,12 @@ export class RealtimeSearchChannel {
       client.send({ type: 'search-details', requestId, items });
     } catch (error) {
       const errorId = newErrorId();
-      // Realtime clients are always signed in.
-      const { body, expected } = describeError(error, { errorId, authenticated: true });
-      const line = `[error ${errorId}] Search failed: ${body.code}: ${body.detail ?? body.message}`;
+      const { body, expected } = describeError(error, {
+        errorId,
+        includeDetail: client.isAdmin === true,
+      });
+      const reason = error instanceof Error ? error.message : String(error);
+      const line = `[error ${errorId}] Search failed: ${body.code}: ${reason}`;
       if (expected) logger.warn('RealtimeSearch', line);
       else logger.error('RealtimeSearch', line, error);
       if (state.latestKey === key)

@@ -197,7 +197,7 @@ describe('RealtimeSearchChannel', () => {
         error: expect.objectContaining({
           status: 500,
           code: 'internal',
-          detail: 'catalog down',
+          message: 'Something went wrong on the server.',
           errorId: expect.stringMatching(/^[0-9a-f]{8}$/),
         }),
       },
@@ -225,6 +225,21 @@ describe('RealtimeSearchChannel', () => {
           message: 'Media Catalog is not working: TMDB rejected the API access token (401).',
           hint: expect.stringContaining('TMDB'),
         }),
+      }),
+    ]);
+  });
+
+  it('sends the raw failure to admins only', async () => {
+    const { channel, search, sent } = setupTest();
+    const admin: SearchClient = { userId: 'admin', isAdmin: true, send: m => sent.push(m) };
+    search.run.mockRejectedValueOnce(new Error('catalog down'));
+
+    channel.handle(admin, { type: 'search', requestId: 5, query: 'Dune', page: 1 });
+    await flush();
+
+    expect(sent).toEqual([
+      expect.objectContaining({
+        error: expect.objectContaining({ code: 'internal', detail: 'catalog down' }),
       }),
     ]);
   });

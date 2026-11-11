@@ -3,11 +3,11 @@ import { ContractError } from '@miauflix/contract';
 import { AuthError } from '@errors/auth.errors';
 import { MediaError } from '@errors/media.errors';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
+import { ServiceUnavailableError } from '@errors/service-unavailable.error';
 
 import { describeError, newErrorId } from './error-response';
 
-const describe_ = (error: unknown, authenticated = true) =>
-  describeError(error, { errorId: 'abcd1234', authenticated });
+const describe_ = (error: unknown) => describeError(error, { errorId: 'abcd1234' });
 
 describe('describeError', () => {
   it('generates short hex error ids', () => {
@@ -42,35 +42,75 @@ describe('describeError', () => {
     expect(expected).toBe(true);
   });
 
-  it('passes on a service message and maps contract codes to statuses', () => {
+  it('reports an unavailable service without asking to configure it', () => {
+    const { status, body } = describe_(
+      new ServiceUnavailableError('CATALOG', 'TMDB is rate limiting requests, try again shortly.')
+    );
+    expect(status).toBe(503);
+    expect(body).toMatchObject({
+      code: 'service_unavailable',
+      message: 'Media Catalog is unavailable: TMDB is rate limiting requests, try again shortly.',
+      service: 'CATALOG',
+    });
+    expect(body.needsConfiguration).toBeUndefined();
+    expect(body.hint).not.toContain('configure');
+  });
+
+  it('maps contract codes to statuses without passing on service messages', () => {
     expect(
       describe_(new ContractError('internal', 'TMDB API error: (502) Bad Gateway'))
     ).toMatchObject({
       status: 500,
-      body: { code: 'service_internal', message: 'TMDB API error: (502) Bad Gateway' },
+      expected: false,
+      body: { code: 'service_internal', message: 'A backend service failed unexpectedly.' },
     });
-    expect(describe_(new ContractError('internal', 'Internal service error')).body.message).toBe(
-      'A backend service failed unexpectedly.'
-    );
-    expect(describe_(new ContractError('timeout', 'slow')).status).toBe(504);
+    expect(describe_(new ContractError('timeout', 'slow'))).toMatchObject({
+      status: 504,
+      body: { code: 'service_timeout', message: 'A backend service took too long to answer.' },
+    });
     expect(describe_(new ContractError('not_found', 'Movie 1 not found')).status).toBe(404);
   });
 
-  it('uses the type/code of application errors', () => {
+  it('uses the type/code of application errors and keeps their message out', () => {
     const { status, body } = describe_(new MediaError('List x not found', 'list_not_found'));
     expect(status).toBe(500);
-    expect(body).toMatchObject({ code: 'media/list_not_found', message: 'List x not found' });
+    expect(body).toMatchObject({
+      code: 'media/list_not_found',
+      message: 'Something went wrong on the server.',
+    });
   });
 
-  it('hides unexpected messages from anonymous callers only', () => {
-    const error = new Error('SQLITE_BUSY: database is locked');
-    expect(describe_(error, false).body).toMatchObject({
+  it('never sends the message of an unexpected error', () => {
+    const { body, expected } = describe_(new Error('ENOENT: /data/avatars/x.png'));
+    expect(body).toMatchObject({
       status: 500,
       code: 'internal',
       message: 'Something went wrong on the server.',
     });
-    expect(describe_(error, false).body.detail).toBeUndefined();
-    expect(describe_(error, true).body.detail).toBe('SQLITE_BUSY: database is locked');
-    expect(describe_(error).expected).toBe(false);
+    expect(JSON.stringify(body)).not.toContain('ENOENT');
+    expect(expected).toBe(false);
+  });
+
+  it('sends the raw message as detail only when asked (admins)', () => {
+    const error = new Error('ENOENT: /data/avatars/x.png');
+    const forAdmin = describeError(error, { errorId: 'abcd1234', includeDetail: true }).body;
+    expect(forAdmin).toMatchObject({
+      message: 'Something went wrong on the server.',
+      detail: 'ENOENT: /data/avatars/x.png',
+    });
+    expect(
+      describeError(new ContractError('internal', 'TMDB API error: (502) Bad Gateway'), {
+        errorId: 'abcd1234',
+        includeDetail: true,
+      }).body.detail
+    ).toBe('TMDB API error: (502) Bad Gateway');
+    expect(describe_(error).body.detail).toBeUndefined();
+    // Messages already meant for users need no detail.
+    expect(
+      describeError(new ServiceNotConfiguredError('CATALOG'), {
+        errorId: 'abcd1234',
+        includeDetail: true,
+      }).body.detail
+    ).toBeUndefined();
   });
 });

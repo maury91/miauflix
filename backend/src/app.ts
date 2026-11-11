@@ -5,6 +5,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
 import { Database } from '@database/database';
 import { MigrationService } from '@database/migrations/migration.service';
+import { UserRole } from '@entities/user.entity';
 import { describeError, newErrorId } from '@errors/error-response';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import { MediaRatingRepository } from '@repositories/media-rating.repository';
@@ -356,8 +357,13 @@ try {
   // Error handling middleware - must be added first
   app.onError((err, c) => {
     const errorId = newErrorId();
-    const authenticated = Boolean((c as { get(key: string): unknown }).get('sessionInfo'));
-    const { status, body, expected } = describeError(err, { errorId, authenticated });
+    const role = (c as { get(key: string): { user?: { role?: string } } | undefined }).get(
+      'sessionInfo'
+    )?.user?.role;
+    const { status, body, expected } = describeError(err, {
+      errorId,
+      includeDetail: role === UserRole.ADMIN,
+    });
     // Stream and QR paths carry secret tokens: keep their shape, not their value.
     const where = `${c.req.method} ${c.req.path.replace(/[A-Za-z0-9_-]{24,}/g, ':token')}`;
     const line = `[error ${errorId}] ${status} on ${where}: ${err.name}: ${err.message}`;
