@@ -303,6 +303,7 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
             <SearchResults
               heading={heading}
               status={search.status}
+              error={search.error}
               results={search.results}
               details={search.details}
               totalResults={search.totalResults}

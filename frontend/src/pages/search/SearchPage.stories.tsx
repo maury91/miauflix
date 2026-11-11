@@ -55,3 +55,47 @@ export const NoResults: Story = {
     withSearchState({ ...initialSearchState, query: 'zzzz', status: 'ready', requestId: 1 }),
   ],
 };
+
+/** The catalog cannot search: the message says what an admin has to fix. */
+export const CatalogNotConfigured: Story = {
+  decorators: [
+    withSearchState({
+      ...initialSearchState,
+      query: 'Dune',
+      status: 'error',
+      requestId: 1,
+      error: {
+        success: false,
+        status: 503,
+        code: 'service_not_configured',
+        error: 'Media Catalog is not configured.',
+        message: 'Media Catalog is not configured.',
+        errorId: '3f9a1c07',
+        needsConfiguration: true,
+        service: 'CATALOG',
+        serviceName: 'Media Catalog',
+        hint: 'An admin needs to configure TMDB: Settings → Configuration → Media Catalog (TMDB access token).',
+      },
+    }),
+  ],
+};
+
+/** An unexpected failure: the error id to look for in the server logs. */
+export const SearchFailed: Story = {
+  decorators: [
+    withSearchState({
+      ...initialSearchState,
+      query: 'Dune',
+      status: 'error',
+      requestId: 1,
+      error: {
+        success: false,
+        status: 500,
+        code: 'service_internal',
+        error: 'TMDB API error: (502) Bad Gateway',
+        message: 'TMDB API error: (502) Bad Gateway',
+        errorId: '3f9a1c07',
+      },
+    }),
+  ],
+};

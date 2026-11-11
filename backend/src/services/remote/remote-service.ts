@@ -402,13 +402,14 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
   /** Data-plane calls fail fast with `ServiceNotConfiguredError` while the service is not ready. */
   private gatedTransport(transport: Transport): Transport {
     const serviceName = this.descriptor.serviceName;
-    const notConfigured = () => new ServiceNotConfiguredError(serviceName);
+    const notConfigured = (reason?: string) => new ServiceNotConfiguredError(serviceName, reason);
     const mapError = (error: unknown): never => {
       if (
         error instanceof ContractError &&
         (error.code === 'not_configured' || error.code === 'unavailable')
       )
-        throw notConfigured();
+        // The service's own message says why (e.g. TMDB rejected the token).
+        throw notConfigured(error.message !== error.code ? error.message : undefined);
       throw error;
     };
     return {

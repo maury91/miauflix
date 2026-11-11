@@ -112,7 +112,33 @@ describe('search slice', () => {
       searchActions.serverMessage({ type: 'search-genres', items: [{ key: '18', name: 'Drama' }] })
     );
     expect(state.status).toBe('error');
+    expect(state.error).toBeNull();
     expect(state.recents).toHaveLength(1);
     expect(state.genres).toEqual([{ key: '18', name: 'Drama' }]);
+  });
+
+  it('keeps the server explanation of a failed search until the next one starts', () => {
+    const error = {
+      success: false as const,
+      status: 503,
+      code: 'service_not_configured',
+      error: 'Media Catalog is not configured.',
+      message: 'Media Catalog is not configured.',
+      errorId: 'abcd1234',
+      needsConfiguration: true,
+    };
+    const failed = reduce(
+      initialSearchState,
+      searchActions.queryChanged('dune'),
+      searchActions.searchStarted({ requestId: 5, page: 1 }),
+      searchActions.serverMessage({
+        type: 'search-error',
+        requestId: 5,
+        message: 'search-failed',
+        error,
+      })
+    );
+    expect(failed.error).toEqual(error);
+    expect(reduce(failed, searchActions.searchStarted({ requestId: 6, page: 1 })).error).toBeNull();
   });
 });
