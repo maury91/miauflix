@@ -1,6 +1,7 @@
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type { SearchClientMessage } from '@miauflix/backend';
 import type { Middleware } from '@reduxjs/toolkit';
+import { reportApiError } from '@shared/lib/api-error';
 import { searchActions, type SearchState } from '@store/slices/search';
 
 export const SEARCH_DEBOUNCE_MS = 250;
@@ -37,7 +38,13 @@ export const searchMiddleware: Middleware = api => {
 
   return next => action => {
     const result = next(action);
-    if (searchActions.queryChanged.match(action)) {
+    if (
+      searchActions.serverMessage.match(action) &&
+      action.payload.type === 'search-error' &&
+      action.payload.error
+    ) {
+      reportApiError('Search failed', action.payload.error);
+    } else if (searchActions.queryChanged.match(action)) {
       cancelDebounce();
       if (searchState().query.trim()) {
         debounceTimer = setTimeout(() => {

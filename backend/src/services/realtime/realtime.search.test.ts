@@ -1,3 +1,4 @@
+import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { SearchServerMessage } from '@routes/search.types';
 import type { SearchService } from '@services/search/search.service';
 
@@ -188,6 +189,43 @@ describe('RealtimeSearchChannel', () => {
     channel.handle(client, { type: 'search', requestId: 3, query: 'Dune', page: 1 });
     await flush();
 
-    expect(sent).toEqual([{ type: 'search-error', requestId: 3, message: 'search-failed' }]);
+    expect(sent).toEqual([
+      {
+        type: 'search-error',
+        requestId: 3,
+        message: 'search-failed',
+        error: expect.objectContaining({
+          status: 500,
+          code: 'internal',
+          detail: 'catalog down',
+          errorId: expect.stringMatching(/^[0-9a-f]{8}$/),
+        }),
+      },
+    ]);
+  });
+
+  it('says which service to configure when the catalog is not configured', async () => {
+    const { channel, search, client, sent } = setupTest();
+    search.run.mockRejectedValueOnce(
+      new ServiceNotConfiguredError('CATALOG', 'TMDB rejected the API access token (401).')
+    );
+
+    channel.handle(client, { type: 'search', requestId: 4, query: 'Dune', page: 1 });
+    await flush();
+
+    expect(sent).toEqual([
+      expect.objectContaining({
+        type: 'search-error',
+        requestId: 4,
+        error: expect.objectContaining({
+          status: 503,
+          code: 'service_not_configured',
+          needsConfiguration: true,
+          service: 'CATALOG',
+          message: 'Media Catalog is not working: TMDB rejected the API access token (401).',
+          hint: expect.stringContaining('TMDB'),
+        }),
+      }),
+    ]);
   });
 });

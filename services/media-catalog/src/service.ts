@@ -1,4 +1,4 @@
-import { defineService, type Service, type ServiceStatus } from '@miauflix/contract';
+import { ContractError, defineService, type Service, type ServiceStatus } from '@miauflix/contract';
 import {
   catalog as catalogContract,
   type CatalogStatusDetails,
@@ -9,6 +9,7 @@ import { sql } from 'drizzle-orm';
 
 import type { CatalogDatabase } from './db/database';
 import { episodes, movies, seasons, syncState, tvShows } from './db/schema';
+import { ProviderError } from './provider/provider';
 import { HttpError } from './errors';
 import { logger } from './logger';
 import type { ServiceContext } from './service-context';
@@ -68,13 +69,32 @@ const buildStatus = ({ config, db }: ServiceContext): ServiceStatus => {
 const isNotFound = (error: unknown): boolean => error instanceof HttpError && error.status === 404;
 
 /**
+ * TMDB failures reach the backend with the reason, not as a bare `internal`: rejected
+ * credentials are a configuration problem the admin can fix, the rest say what TMDB answered.
+ */
+export const mapProviderError = (error: unknown): ContractError | undefined => {
+  if (!(error instanceof ProviderError)) return undefined;
+  if (error.status === 401 || error.status === 403)
+    return new ContractError(
+      'not_configured',
+      `TMDB rejected the API access token (${error.status}). Check the TMDB token in the Media Catalog settings.`
+    );
+  if (error.status === undefined && /timed out/i.test(error.message))
+    return new ContractError('timeout', error.message);
+  if (error.status === 429)
+    return new ContractError('unavailable', 'TMDB is rate limiting requests, try again shortly.');
+  return new ContractError('internal', error.message);
+};
+
+/**
  * Builds the media-catalog service. The data plane (`context.catalog`) attaches later, after a
  * successful configuration apply; data methods are rejected as `not_configured` until then.
  */
 export const createCatalogService = (context: ServiceContext): Service => {
   const { config, db } = context;
   const catalog = (): NonNullable<ServiceContext['catalog']> => {
-    if (!context.catalog) throw new Error('Catalog data plane is not attached');
+    if (!context.catalog)
+      throw new ContractError('not_configured', 'Catalog data plane is not attached');
     return context.catalog;
   };
 
@@ -91,6 +111,7 @@ export const createCatalogService = (context: ServiceContext): Service => {
     status: () => buildStatus(context),
     ready: () => config.state === 'ready' && context.catalog !== null,
     onError: (method, error) => logger.error(SCOPE, `Unexpected failure in ${method}`, error),
+    mapError: mapProviderError,
     onStop: () => {
       if (interval) clearInterval(interval);
       interval = undefined;

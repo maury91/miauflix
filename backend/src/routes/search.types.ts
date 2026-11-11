@@ -1,5 +1,7 @@
 import type { SearchGenreKey } from '@miauflix/service-contracts';
 
+import type { ApiErrorBody } from './error.types';
+
 export type { SearchGenreKey };
 
 /** A title search or a genre shortcut; for genres `query` holds the genre key. */
@@ -66,8 +68,14 @@ export type SearchClientMessage =
 
 /** Realtime messages the server sends in reply. */
 export type SearchServerMessage =
+  | {
+      type: 'search-error';
+      requestId: number;
+      message: 'rate-limited' | 'search-failed';
+      /** Why the search failed, as the API reports errors (absent when rate limited). */
+      error?: ApiErrorBody;
+    }
   | { type: 'search-details'; requestId: number; items: SearchResultDetailDto[] }
-  | { type: 'search-error'; requestId: number; message: string }
   | { type: 'search-genres'; items: SearchGenreDto[] }
   | { type: 'search-recents'; items: SearchRecentDto[] }
   | (SearchPageDto & { type: 'search-results'; requestId: number });

@@ -36,6 +36,41 @@ describe('authenticatedRequest', () => {
     expect(refreshPost).not.toHaveBeenCalled();
   });
 
+  it('keeps the server error body of a failed request and logs 5xx failures', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const body = {
+      success: false,
+      status: 503,
+      code: 'service_not_configured',
+      error: 'Media Catalog is not configured.',
+      message: 'Media Catalog is not configured.',
+      errorId: 'abcd1234',
+      needsConfiguration: true,
+      hint: 'Configure TMDB',
+    };
+    const requestFn = vi.fn().mockResolvedValue(jsonResponse(503, body));
+
+    await expect(
+      authenticatedRequest({ requestFn, session: 'one', errorContext: 'Request failed' })
+    ).resolves.toEqual({
+      error: { status: 503, data: 'Media Catalog is not configured.', details: body },
+    });
+    expect(consoleError).toHaveBeenCalledWith(expect.stringContaining('abcd1234'), body);
+    consoleError.mockRestore();
+  });
+
+  it('reads `message` when an error body has no `error`', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const requestFn = vi
+      .fn()
+      .mockResolvedValue(jsonResponse(500, { success: false, message: 'Disk full', status: 500 }));
+
+    await expect(
+      authenticatedRequest({ requestFn, session: 'one', errorContext: 'Request failed' })
+    ).resolves.toEqual({ error: { status: 500, data: 'Disk full' } });
+    consoleError.mockRestore();
+  });
+
   it('accepts successful empty responses', async () => {
     const requestFn = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
 

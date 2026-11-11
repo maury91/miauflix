@@ -59,6 +59,12 @@ export interface ServiceOptions {
   onStop?: () => void | Promise<void>;
   /** Unexpected failures (anything but a `ContractError`), which reach callers as `internal`. */
   onError?: (method: string, error: unknown) => void;
+  /**
+   * Turns a known non-contract failure (e.g. an upstream API rejecting the credentials) into the
+   * `ContractError` callers receive, so they get a meaningful code and message instead of
+   * `internal`. Mapped failures are still reported through `onError`.
+   */
+  mapError?: (error: unknown) => ContractError | undefined;
 }
 
 /** One side of a control-plane connection, as provided by the server adapter. */
@@ -231,8 +237,9 @@ export class Service {
 
   /** Converts a thrown value to its wire form, reporting unexpected ones. */
   wireError(method: string, error: unknown): { code: string; message: string } {
-    if (!(error instanceof ContractError)) this.options.onError?.(method, error);
-    return toWireError(error);
+    if (error instanceof ContractError) return toWireError(error);
+    this.options.onError?.(method, error);
+    return toWireError(this.options.mapError?.(error) ?? error);
   }
 
   bytesErrorStatus(method: string, code: string): number {

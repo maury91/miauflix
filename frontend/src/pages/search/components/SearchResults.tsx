@@ -3,7 +3,7 @@ import { MetadataDot, MetadataRating } from '@pages/home/components/metadata.sty
 import { formatRuntime } from '@pages/home/media.utils';
 import { artworkUrl } from '@pages/home/media.utils';
 import { PALETTE } from '@shared/config/constants';
-import { PosterCard } from '@shared/ui';
+import { ErrorNotice, PosterCard } from '@shared/ui';
 import { searchResultKey } from '@store/slices/search';
 import { type FC, Fragment, type ReactNode } from 'react';
 import styled from 'styled-components';
@@ -81,6 +81,8 @@ function resultMeta(result: SearchResultDto, detail: SearchResultDetailDto | und
 interface SearchResultsProps {
   heading: string;
   status: 'error' | 'idle' | 'loading' | 'ready';
+  /** Why the search failed, when it did. */
+  error?: unknown;
   results: SearchResultDto[];
   details: Record<string, SearchResultDetailDto>;
   totalResults: number;
@@ -94,6 +96,7 @@ interface SearchResultsProps {
 export const SearchResults: FC<SearchResultsProps> = ({
   heading,
   status,
+  error,
   results,
   details,
   totalResults,
@@ -115,7 +118,12 @@ export const SearchResults: FC<SearchResultsProps> = ({
         )}
       </Header>
       {status === 'error' && !results.length && (
-        <Message role="alert">Search is unavailable right now. Try again in a moment.</Message>
+        <Message role="alert">
+          <ErrorNotice
+            error={error}
+            fallback="Search is unavailable right now. Try again in a moment."
+          />
+        </Message>
       )}
       {status === 'loading' && !results.length && <Message role="status">Searching…</Message>}
       {status === 'ready' && !results.length && <Message role="status">No titles found.</Message>}

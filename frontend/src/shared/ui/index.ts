@@ -5,6 +5,8 @@ export type { AlertProps } from './alert/Alert';
 export { Alert } from './alert/Alert';
 export type { ButtonColor, ButtonProps } from './button/Button';
 export { Button } from './button/Button';
+export type { ErrorNoticeProps } from './error-notice/ErrorNotice';
+export { ErrorNotice } from './error-notice/ErrorNotice';
 export type { InputProps, SelectProps } from './form-controls/FormControls';
 export { FieldLabel, Input, Select } from './form-controls/FormControls';
 export { LoadingIndicator } from './loading-indicator/LoadingIndicator';

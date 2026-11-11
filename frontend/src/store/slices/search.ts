@@ -1,5 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
+  ApiErrorBody,
   SearchGenreDto,
   SearchGenreKey,
   SearchRecentDto,
@@ -23,6 +24,8 @@ export interface SearchState {
   query: string;
   genre: SearchGenreKey | null;
   status: 'error' | 'idle' | 'loading' | 'ready';
+  /** Why the active search failed, as the server explained it (null when unknown). */
+  error: ApiErrorBody | null;
   /** Request id of the first page of the active search; older answers are ignored. */
   requestId: number;
   /** Request id of the page being appended, if any. */
@@ -45,6 +48,7 @@ export const initialSearchState: SearchState = {
   query: '',
   genre: null,
   status: 'idle',
+  error: null,
   requestId: 0,
   moreRequestId: null,
   results: [],
@@ -63,6 +67,7 @@ export const searchResultKey = (item: { _type: string; mediaId: number }) =>
 
 const clearResults = (state: SearchState) => {
   state.status = 'idle';
+  state.error = null;
   state.moreRequestId = null;
   state.results = [];
   state.page = 0;
@@ -110,6 +115,7 @@ export const searchSlice = createSlice({
         state.requestId = action.payload.requestId;
         state.moreRequestId = null;
         state.status = 'loading';
+        state.error = null;
       } else {
         state.moreRequestId = action.payload.requestId;
       }
@@ -147,6 +153,7 @@ export const searchSlice = createSlice({
         state.moreRequestId = null;
       } else if (message.requestId === state.requestId) {
         state.status = 'error';
+        state.error = message.error ?? null;
       }
     },
     focusChanged(state, action: PayloadAction<SearchFocus>) {

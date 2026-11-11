@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 const searchGenreKeySchema = z.string().regex(SEARCH_GENRE_KEY_PATTERN);
 
+import { describeError, newErrorId } from '@errors/error-response';
 import type { SearchServerMessage } from '@routes/search.types';
 import type { SearchInput, SearchService } from '@services/search/search.service';
 
@@ -124,9 +125,14 @@ export class RealtimeSearchChannel {
       if (state.latestKey !== key) return;
       client.send({ type: 'search-details', requestId, items });
     } catch (error) {
-      logger.warn('RealtimeSearch', 'Search failed', error);
+      const errorId = newErrorId();
+      // Realtime clients are always signed in.
+      const { body, expected } = describeError(error, { errorId, authenticated: true });
+      const line = `[error ${errorId}] Search failed: ${body.code}: ${body.detail ?? body.message}`;
+      if (expected) logger.warn('RealtimeSearch', line);
+      else logger.error('RealtimeSearch', line, error);
       if (state.latestKey === key)
-        client.send({ type: 'search-error', requestId, message: 'search-failed' });
+        client.send({ type: 'search-error', requestId, message: 'search-failed', error: body });
     }
   }
 
