@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
 /**
  * How many data migrations this database has applied (see database/migrations). One row, id 1.
- * Schema changes still come from TypeORM's synchronize; migrations only rewrite data.
+ * Schema changes are schema migrations (database/schema-migrations); these only rewrite data.
  */
 @Entity('migration_version')
 export class MigrationVersion {

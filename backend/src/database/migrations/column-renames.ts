@@ -1,9 +1,9 @@
 import type { DataSource } from 'typeorm';
 
 /**
- * Columns renamed in place, before `synchronize()`: on SQLite, synchronize treats a renamed
- * column as dropped and added and rebuilds the table without it, losing the data. Renaming
- * first keeps the data; it is idempotent, so it runs on every startup.
+ * Columns renamed in place before the last `synchronize()` of a database created before schema
+ * migrations (see upgradeSchema): synchronize treats a renamed column as dropped and added,
+ * losing the data. New renames belong in a schema migration instead.
  */
 export const COLUMN_RENAMES: ReadonlyArray<{ table: string; from: string; to: string }> = [
   // Encrypted columns get names that do not describe them (see EncryptedColumns).

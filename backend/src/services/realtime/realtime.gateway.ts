@@ -23,6 +23,7 @@ import type {
   SourceAvailabilityChange,
   SourceAvailabilityService,
 } from '@services/source/source-availability.service';
+import { KeyedTokenBucket } from '@utils/keyed-token-bucket';
 import { isAllowedOrigin, isTvAppOrigin } from '@utils/origin.util';
 
 import type { RealtimeSearchChannel, SearchClient } from './realtime.search';
@@ -33,6 +34,13 @@ const AUTH_TIMEOUT_MS = 5_000;
 /** How often an authenticated socket's session is checked again (role changes, revocations elsewhere). */
 const SESSION_RECHECK_MS = 60_000;
 const MAX_PAYLOAD_BYTES = 64 * 1024;
+/**
+ * Messages per user, across all of the user's sockets: a burst of 150, then 60 a second. The
+ * web app sends at most about 20 map updates a second (coalesced) plus a focus per key press;
+ * a socket going past this is closed, and a well-behaved client reconnects and resends its state.
+ */
+const MESSAGE_BURST = 150;
+const MESSAGES_PER_SECOND = 60;
 const REALTIME_PATH = '/api/realtime';
 /** `WebSocket.OPEN` */
 const OPEN = 1;
@@ -98,6 +106,8 @@ interface ClientState {
   focusSequence: number;
   progressChain: Promise<void>;
   authTimer: ReturnType<typeof setTimeout>;
+  /** Set by the first `authenticate`; a socket gets one attempt (failure closes it). */
+  authenticating: boolean;
   artworkRefs: Set<string>;
   searchClient: SearchClient;
 }
@@ -115,6 +125,7 @@ interface RealtimeEvent {
  */
 export class RealtimeGateway {
   private readonly clients = new Set<ClientState>();
+  private readonly messageBudget = new KeyedTokenBucket(MESSAGE_BURST, MESSAGES_PER_SECOND);
   private readonly onPreparationChange = (event: RealtimeEvent) => {
     for (const client of this.clients) {
       if (
@@ -267,6 +278,7 @@ export class RealtimeGateway {
       focusSequence: 0,
       progressChain: Promise.resolve(),
       authTimer: setTimeout(() => socket.close(1008, 'Authentication required'), AUTH_TIMEOUT_MS),
+      authenticating: false,
       artworkRefs: new Set<string>(),
       searchClient: {
         get userId() {
@@ -283,6 +295,11 @@ export class RealtimeGateway {
   }
 
   private async handleMessage(state: ClientState, raw: string): Promise<void> {
+    // Before authentication a socket may send only `authenticate`; anything else closes it.
+    if (state.userId && !this.messageBudget.take(state.userId)) {
+      state.socket.close(1008, 'Too many messages');
+      return;
+    }
     let message: unknown;
     try {
       message = JSON.parse(raw);
@@ -295,10 +312,11 @@ export class RealtimeGateway {
       return;
     }
     if (!state.userId) {
-      if (message.type !== 'authenticate') {
+      if (message.type !== 'authenticate' || state.authenticating) {
         state.socket.close(1008, 'Authentication required');
         return;
       }
+      state.authenticating = true;
       await this.authenticate(state, message);
       return;
     }

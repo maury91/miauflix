@@ -7,6 +7,7 @@ import type { ConfigurationService } from '@services/configuration/configuration
 import type { ListClientService } from '@services/list/list-client.service';
 import { listSchedules, tvWatchlistSchedules } from '@services/media/list.schedule';
 import type { ListService } from '@services/media/list.service';
+import { securitySchedules } from '@services/security/security-cleanup';
 import { sourceSchedules } from '@services/source/source.schedule';
 
 import type { BackgroundJobService } from './background-job.service';
@@ -86,7 +87,7 @@ export class ServiceScheduleCoordinator {
       await this.removeCatalogSchedules();
       return;
     }
-    if (!(await this.install(cacheSchedules(this.config), revision))) {
+    if (!(await this.install([...cacheSchedules(this.config), ...securitySchedules()], revision))) {
       await this.removeCatalogSchedules();
       return;
     }
@@ -180,7 +181,11 @@ export class ServiceScheduleCoordinator {
   private async removeAllSchedules(): Promise<void> {
     await this.removeCatalogSchedules();
     await this.removeTVWatchlistSchedules();
-    for (const schedule of [...sourceSchedules(this.config), ...cacheSchedules(this.config)]) {
+    for (const schedule of [
+      ...sourceSchedules(this.config),
+      ...cacheSchedules(this.config),
+      ...securitySchedules(),
+    ]) {
       await this.jobs.removeSchedule(schedule.job, schedule.id);
     }
   }

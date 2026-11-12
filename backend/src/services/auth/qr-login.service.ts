@@ -106,7 +106,7 @@ export class QrLoginService {
     return this.repository.releaseClaim(id, lease);
   }
 
-  async cleanup(): Promise<void> {
-    await this.repository.expireAndDelete(new Date(Date.now() - TTL_MS));
+  async cleanup(): Promise<number> {
+    return this.repository.expireAndDelete(new Date(Date.now() - TTL_MS));
   }
 }

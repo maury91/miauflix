@@ -36,6 +36,7 @@ export function registerBackgroundJobHandlers({
   mediaLoadClient,
   progressService,
   playbackTargets,
+  securityCleanup,
   worker,
 }: {
   backgroundJobs: BackgroundJobService;
@@ -49,6 +50,7 @@ export function registerBackgroundJobHandlers({
   mediaLoadClient: MediaLoadClientService;
   progressService: ProgressService;
   playbackTargets: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
+  securityCleanup: () => Promise<void>;
   worker: BackgroundJobWorker;
 }): void {
   worker.register('list.refresh.plan', {
@@ -423,5 +425,10 @@ export function registerBackgroundJobHandlers({
   worker.register('cache.cleanup', {
     concurrency: 1,
     run: () => cacheService.cleanup(),
+  });
+  worker.register('security.cleanup', {
+    concurrency: 1,
+    leaseMs: 10 * 60 * 1000,
+    run: () => securityCleanup(),
   });
 }

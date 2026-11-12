@@ -15,6 +15,10 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - Logs no longer show which torrents were downloaded: info hashes, magnet links and movie titles next to their sources are left out, and anything that still looks like an info hash or magnet link is replaced with `[redacted]`
 - Server errors now say what went wrong where it went wrong. When search, a title or a Home row fails, the page explains it: a problem an admin can fix says how (for example, search needs TMDB to be configured; admins also see why, such as TMDB rejecting the access token), anything else shows an error id, also written to the browser console, to look up the cause in the server logs. Before, a failed search only said it was unavailable and other failures showed a generic message
 - Search has clearer "no results" and "unavailable" screens: a big message with what to do, a **Clear search** or **Try again** button you can reach with the remote, and the error id and server details tucked under **Technical details**
+- The server no longer slows down or grows its database with every request: requests (video included) no longer wait for their audit log entry to be saved, the database uses WAL, and a daily clean-up deletes expired logins, QR codes and streaming keys, API access log entries after 14 days and other audit entries after 90. The first start after updating deletes the backlog
+- Updates no longer change the database's tables unattended: schema changes now come from explicit migrations, and the server backs the database up to `data/backups` before applying any (it keeps the last 3). The first start after updating backs up and converts the existing database
+- After an unexpected crash the server now exits and Docker restarts it, instead of carrying on in an unknown state
+- The live connection (search, navigation, progress) is now rate-limited per user, so one client can no longer flood the server or the catalog with searches
 
 ### Development
 

@@ -7,9 +7,14 @@ const searchGenreKeySchema = z.string().regex(SEARCH_GENRE_KEY_PATTERN);
 import { describeError, newErrorId } from '@errors/error-response';
 import type { SearchServerMessage } from '@routes/search.types';
 import type { SearchInput, SearchService } from '@services/search/search.service';
+import { KeyedTokenBucket } from '@utils/keyed-token-bucket';
 
-const SEARCH_WINDOW_MS = 1_000;
-const MAX_SEARCHES_PER_WINDOW = 10;
+/**
+ * Search messages each reach the catalog service or the database, so they are limited per user
+ * (across all of the user's sockets): a burst of 10, then 5 a second.
+ */
+const SEARCH_BURST = 10;
+const SEARCHES_PER_SECOND = 5;
 
 const searchMessageSchema = z
   .object({
@@ -42,8 +47,6 @@ export interface SearchClient {
 interface SearchState {
   /** Identity of the latest search; responses for any other search are dropped. */
   latestKey: string | null;
-  windowStart: number;
-  windowCount: number;
 }
 
 /**
@@ -53,11 +56,14 @@ interface SearchState {
  */
 export class RealtimeSearchChannel {
   private readonly states = new WeakMap<SearchClient, SearchState>();
+  private readonly limits: KeyedTokenBucket;
 
   constructor(
     private readonly search: SearchService,
-    private readonly now: () => number = Date.now
-  ) {}
+    now: () => number = Date.now
+  ) {
+    this.limits = new KeyedTokenBucket(SEARCH_BURST, SEARCHES_PER_SECOND, now);
+  }
 
   handles(type: string): boolean {
     return (
@@ -71,6 +77,10 @@ export class RealtimeSearchChannel {
 
   /** Returns false when the message is malformed. */
   handle(client: SearchClient, message: Record<string, unknown>): boolean {
+    if (message.type !== 'search' && !this.limits.take(client.userId)) {
+      // Nothing to answer with; the client asks again when it needs the list.
+      return true;
+    }
     if (message.type === 'search-recents') {
       void this.sendRecents(client);
       return true;
@@ -99,7 +109,7 @@ export class RealtimeSearchChannel {
     const { requestId, query, genre, page, commit } = parsed.data;
     const language = parsed.data.language ?? 'en';
     const state = this.state(client);
-    if (!this.allow(state)) {
+    if (!this.limits.take(client.userId)) {
       client.send({ type: 'search-error', requestId, message: 'rate-limited' });
       return true;
     }
@@ -166,20 +176,10 @@ export class RealtimeSearchChannel {
     }
   }
 
-  private allow(state: SearchState): boolean {
-    const now = this.now();
-    if (now - state.windowStart >= SEARCH_WINDOW_MS) {
-      state.windowStart = now;
-      state.windowCount = 0;
-    }
-    state.windowCount++;
-    return state.windowCount <= MAX_SEARCHES_PER_WINDOW;
-  }
-
   private state(client: SearchClient): SearchState {
     let state = this.states.get(client);
     if (!state) {
-      state = { latestKey: null, windowStart: 0, windowCount: 0 };
+      state = { latestKey: null };
       this.states.set(client, state);
     }
     return state;

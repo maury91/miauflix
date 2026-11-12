@@ -4,6 +4,9 @@ legacy
 plan
 /output
 
+# AI Tools
+.claude
+
 # Dependencies
 node_modules
 
