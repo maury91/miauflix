@@ -1,11 +1,12 @@
 import type { EncryptedStorageLayout } from '../../src/storage/types';
-import { mockEngineModules, testConfig } from '../helpers/engine';
+import { mockEngineModules } from '../helpers/engine';
 
 mockEngineModules();
 
-const { DownloadService, storageEncryptionVersion, storeEncryptionOptions } = await import(
+const { storageEncryptionVersion, storeEncryptionOptions } = await import(
   '../../src/engine/download.service'
 );
+const { randomStorageLocation } = await import('../../src/engine/download/layout');
 
 const layout = (encryptionVersion?: 1 | 2): EncryptedStorageLayout => ({
   storeName: 'movie - abcdef12',
@@ -88,16 +89,9 @@ describe('storeEncryptionOptions', () => {
 });
 
 describe('storage directory names', () => {
-  const generate = (
-    DownloadService.prototype as unknown as {
-      generateStoragePath: (this: unknown) => string;
-    }
-  ).generateStoragePath;
-  const config = testConfig({ DOWNLOAD_PATH: '/downloads' });
-
   it('are random, in the 16-hex format storage import accepts', () => {
-    const first = generate.call({ config });
-    const second = generate.call({ config });
+    const first = randomStorageLocation('/downloads');
+    const second = randomStorageLocation('/downloads');
     expect(first).toMatch(/^\/downloads\/[a-f0-9]{16}$/);
     expect(second).not.toBe(first);
   });

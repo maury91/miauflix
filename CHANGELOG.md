@@ -19,6 +19,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - Updates no longer change the database's tables unattended: schema changes now come from explicit migrations, and the server backs the database up to `data/backups` before applying any (it keeps the last 3). The first start after updating backs up and converts the existing database
 - After an unexpected crash the server now exits and Docker restarts it, instead of carrying on in an unknown state
 - The live connection (search, navigation, progress) is now rate-limited per user, so one client can no longer flood the server or the catalog with searches
+- Setup: `--only-config` now exits with an error when a required setting is still missing, the setup check reports every failing service at once, and pressing Enter at a password prompt keeps the saved password. The player resumes where you left off even when the stream reports its length late
 
 ### Development
 

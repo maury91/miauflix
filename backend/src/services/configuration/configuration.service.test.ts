@@ -5,6 +5,7 @@ import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/config
 import { RemoteService } from '@services/remote/remote-service';
 
 import { ConfigurationService } from './configuration.service';
+import type { ConfigurationStore } from './configuration.store';
 
 const clearEnvironmentVariable = jest.requireActual('../../../test-utils/environment')
   .clearEnvironmentVariable as (name: string) => () => void;
@@ -814,7 +815,7 @@ describe('ConfigurationService web configuration actions', () => {
       });
     }
     const saveConfigFile = jest
-      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
       .mockResolvedValue(undefined);
 
     const result = await configuration.testAndSaveConfigs([
@@ -853,7 +854,7 @@ describe('ConfigurationService web configuration actions', () => {
       applyConfiguration: apply,
     });
     const saveConfigFile = jest
-      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
       .mockResolvedValue(undefined);
 
     const result = await configuration.testAndSaveConfigs([
@@ -894,7 +895,7 @@ describe('ConfigurationService web configuration actions', () => {
       applyConfiguration: jest.fn().mockResolvedValue({ success: true }),
     });
     jest
-      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
       .mockResolvedValue(undefined);
 
     const result = await configuration.testAndSaveConfigs([
@@ -1019,7 +1020,7 @@ describe('ConfigurationService web configuration actions', () => {
     });
     registerCatalogProvider(configuration, testConfiguration, applyConfiguration);
     const saveConfigFile = jest
-      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
       .mockResolvedValue(undefined);
 
     const result = await configuration.testAndSaveConfigs([
@@ -1127,7 +1128,7 @@ describe('ConfigurationService web configuration actions', () => {
       clearConfiguration,
     });
     const saveConfigFile = jest
-      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
       .mockResolvedValueOnce(undefined)
       .mockRejectedValueOnce(new Error('disk restore failed'));
 
@@ -1267,7 +1268,7 @@ describe('sources service configuration extraction', () => {
       });
     }
     jest
-      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
       .mockResolvedValue(undefined);
 
     const result = await configuration.testAndSaveConfigs([
@@ -1320,7 +1321,7 @@ describe('sources service configuration extraction', () => {
       reload,
     });
     jest
-      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
       .mockResolvedValue(undefined);
 
     await configuration.updateConfigs([{ key: 'DISABLE_VPN_CHECK', value: 'true' }]);
