@@ -184,6 +184,8 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
   }, [panelActions, search.results.length, search.status, setFocus]);
 
   const retrySearch = () => {
+    // The panel goes away while it runs; focus the results, or Try again, once it is done.
+    focusResultsWhenReady.current = true;
     setFocus({ zone: 'state', index: 0 });
     dispatch(searchActions.retryRequested());
   };

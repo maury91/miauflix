@@ -136,7 +136,23 @@ describe('SearchPage', () => {
     expect(document.activeElement).toBe(retry);
     fireEvent.keyDown(retry, { key: 'Enter' });
     expect(store.getState().search.status).toBe('loading');
-    expect(store.getState().search.requestId).toBeGreaterThan(requestId);
+    const retryId = store.getState().search.requestId;
+    expect(retryId).toBeGreaterThan(requestId);
+
+    // When the retry works, focus moves to its results.
+    act(() => {
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-results',
+          requestId: retryId,
+          page: 1,
+          totalPages: 1,
+          totalResults: searchStateFixture.results.length,
+          results: searchStateFixture.results,
+        })
+      );
+    });
+    expect(store.getState().search.focus).toEqual({ zone: 'results', index: 0 });
   });
 
   it('offers to clear a search without results', () => {

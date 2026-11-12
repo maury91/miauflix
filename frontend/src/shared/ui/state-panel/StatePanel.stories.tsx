@@ -52,7 +52,7 @@ export const Unavailable: Story = {
         { label: 'Error id', value: <code>3f9a1c07</code> },
       ],
       note: 'Search the server logs (docker logs) for the error id; the browser console has the full response.',
-      toggle: { focused: false },
+      toggle: {},
     },
   },
 };
