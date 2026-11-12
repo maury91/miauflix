@@ -222,7 +222,8 @@ describe('RealtimeSearchChannel', () => {
           code: 'service_not_configured',
           needsConfiguration: true,
           service: 'CATALOG',
-          message: 'Media Catalog is not working: TMDB rejected the API access token (401).',
+          // The service's reason is for admins; others get the fixed text and the hint.
+          message: 'Media Catalog is not configured.',
           hint: expect.stringContaining('TMDB'),
         }),
       }),
