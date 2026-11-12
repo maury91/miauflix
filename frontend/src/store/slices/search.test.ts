@@ -117,6 +117,19 @@ describe('search slice', () => {
     expect(state.genres).toEqual([{ key: '18', name: 'Drama' }]);
   });
 
+  it('drops the previous query results when the new query fails', () => {
+    const state = reduce(
+      initialSearchState,
+      searchActions.queryChanged('dune'),
+      searchActions.searchStarted({ requestId: 1, page: 1 }),
+      page(1, [result(1), result(2)]),
+      searchActions.queryChanged('alien'),
+      searchActions.searchStarted({ requestId: 2, page: 1 }),
+      searchActions.serverMessage({ type: 'search-error', requestId: 2, message: 'search-failed' })
+    );
+    expect(state).toMatchObject({ status: 'error', results: [], totalResults: 0, page: 0 });
+  });
+
   it('keeps the server explanation of a failed search until the next one starts', () => {
     const error = {
       success: false as const,

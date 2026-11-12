@@ -168,7 +168,11 @@ export const searchSlice = createSlice({
         state.error = message.error ?? null;
       } else if (message.requestId === state.requestId) {
         // After its results arrived, only the details lookup can fail: keep the results usable.
-        if (state.status !== 'ready') state.status = 'error';
+        // Before that, any results shown belong to the previous query: drop them.
+        if (state.status !== 'ready') {
+          clearResults(state);
+          state.status = 'error';
+        }
         state.error = message.error ?? null;
       }
     },
