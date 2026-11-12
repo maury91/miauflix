@@ -16,6 +16,8 @@ export interface SearchZoneCounts {
   popular: number;
   recents: number;
   results: number;
+  /** Actions of the no-results / error panel, stacked vertically (0 when results show). */
+  state?: number;
 }
 
 const at = (zone: SearchZone, index: number): SearchFocus => ({ zone, index });
@@ -45,6 +47,12 @@ function enterKeyboard(
   );
 }
 
+/** The results row, or the panel shown in its place; null when neither is there. */
+function resultsArea(counts: SearchZoneCounts, index: number): SearchFocus | null {
+  if (counts.results) return at('results', Math.min(index, counts.results - 1));
+  return counts.state ? at('state', 0) : null;
+}
+
 /** First available zone of the right column, starting at the one beside the keyboard row. */
 function rightColumnFrom(
   start: 'popular' | 'recents' | 'results',
@@ -53,8 +61,21 @@ function rightColumnFrom(
 ): SearchFocus | null {
   const zones = ['popular', 'recents', 'results'] as const;
   const ordered = [...zones.slice(zones.indexOf(start)), ...zones.slice(0, zones.indexOf(start))];
-  const zone = ordered.find(candidate => counts[candidate] > 0);
-  return zone ? at(zone, Math.min(index, counts[zone] - 1)) : null;
+  for (const zone of ordered) {
+    if (zone === 'results') {
+      const area = resultsArea(counts, index);
+      if (area) return area;
+    } else if (counts[zone] > 0) return at(zone, Math.min(index, counts[zone] - 1));
+  }
+  return null;
+}
+
+/** Up out of the results area: the recents, else the popular row, else the search box. */
+function aboveResults(counts: SearchZoneCounts, index: number): SearchFocus {
+  if (counts.recents) return at('recents', Math.min(index, counts.recents - 1));
+  if (!counts.popular) return at('input', 0);
+  const lastRowStart = Math.floor((counts.popular - 1) / POPULAR_COLUMNS) * POPULAR_COLUMNS;
+  return at('popular', Math.min(lastRowStart + index, counts.popular - 1));
 }
 
 function moveKeyboard(
@@ -138,7 +159,7 @@ export function moveSearchFocus(
       if (row < lastRow)
         return at('popular', Math.min(index + POPULAR_COLUMNS, counts.popular - 1));
       if (counts.recents) return at('recents', Math.min(column, counts.recents - 1));
-      return counts.results ? at('results', Math.min(column, counts.results - 1)) : null;
+      return resultsArea(counts, column);
     }
     case 'recents':
       if (direction === 'left')
@@ -150,18 +171,19 @@ export function moveSearchFocus(
         const lastRowStart = Math.floor((counts.popular - 1) / POPULAR_COLUMNS) * POPULAR_COLUMNS;
         return at('popular', Math.min(lastRowStart + index, counts.popular - 1));
       }
-      return counts.results ? at('results', Math.min(index, counts.results - 1)) : null;
+      return resultsArea(counts, index);
     case 'results':
       if (direction === 'left')
         return index === 0 ? keyboardBeside(4, lastKey) : at('results', index - 1);
       if (direction === 'right')
         return index < counts.results - 1 ? at('results', index + 1) : null;
-      if (direction === 'up') {
-        if (counts.recents) return at('recents', Math.min(index, counts.recents - 1));
-        if (!counts.popular) return at('input', 0);
-        const lastRowStart = Math.floor((counts.popular - 1) / POPULAR_COLUMNS) * POPULAR_COLUMNS;
-        return at('popular', Math.min(lastRowStart + index, counts.popular - 1));
-      }
+      if (direction === 'up') return aboveResults(counts, index);
+      return null;
+    case 'state':
+      if (direction === 'left') return keyboardBeside(4, lastKey);
+      if (direction === 'down')
+        return index < (counts.state ?? 0) - 1 ? at('state', index + 1) : null;
+      if (direction === 'up') return index > 0 ? at('state', index - 1) : aboveResults(counts, 0);
       return null;
   }
 }
@@ -169,8 +191,13 @@ export function moveSearchFocus(
 /** Keep a remembered focus valid after the zones' contents changed. */
 export function clampSearchFocus(focus: SearchFocus, counts: SearchZoneCounts): SearchFocus {
   if (focus.zone === 'keyboard') return at('keyboard', Math.min(focus.index, KEYBOARD_SPACE));
-  if (focus.zone === 'popular' || focus.zone === 'recents' || focus.zone === 'results') {
-    const count = counts[focus.zone];
+  if (
+    focus.zone === 'popular' ||
+    focus.zone === 'recents' ||
+    focus.zone === 'results' ||
+    focus.zone === 'state'
+  ) {
+    const count = counts[focus.zone] ?? 0;
     return count ? at(focus.zone, Math.min(focus.index, count - 1)) : at('keyboard', 0);
   }
   return focus;

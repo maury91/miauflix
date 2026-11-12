@@ -16,27 +16,31 @@ describe('presentError', () => {
     expect(presentError({ status: 500, data: body.message, details: body }, 'Failed')).toEqual({
       message: 'Something went wrong on the server.',
       hint: undefined,
+      code: 'internal',
       errorId: 'abcd1234',
+      needsConfiguration: false,
       inConsole: true,
     });
   });
 
-  it('shows how to fix a configuration problem instead of an id', () => {
+  it('marks a configuration problem and keeps its hint', () => {
     expect(
       presentError(
         { ...body, status: 503, needsConfiguration: true, hint: 'Configure TMDB' },
         'Failed'
       )
-    ).toMatchObject({ hint: 'Configure TMDB', errorId: undefined });
+    ).toMatchObject({ hint: 'Configure TMDB', needsConfiguration: true, errorId: 'abcd1234' });
   });
 
   it('falls back when the server sent nothing usable', () => {
     expect(presentError({ status: 500, data: 'Request failed' }, 'Failed to load')).toEqual({
       message: 'Failed to load',
+      needsConfiguration: false,
       inConsole: true,
     });
     expect(presentError(null, 'Failed to load')).toEqual({
       message: 'Failed to load',
+      needsConfiguration: false,
       inConsole: false,
     });
   });

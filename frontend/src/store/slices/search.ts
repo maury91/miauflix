@@ -11,8 +11,18 @@ import type {
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { clearAuth, setSession } from '@store/slices/auth';
 
-/** `back` is the back button on the page's rail. */
-export type SearchZone = 'back' | 'input' | 'keyboard' | 'popular' | 'recents' | 'results';
+/**
+ * `back` is the back button on the page's rail; `state` holds the actions of the no-results or
+ * error panel shown instead of results (the main action, then "Technical details").
+ */
+export type SearchZone =
+  | 'back'
+  | 'input'
+  | 'keyboard'
+  | 'popular'
+  | 'recents'
+  | 'results'
+  | 'state';
 
 export interface SearchFocus {
   zone: SearchZone;
@@ -101,6 +111,8 @@ export const searchSlice = createSlice({
     },
     /** Explicit submit (search key / Enter); the middleware sends it immediately. */
     submitted() {},
+    /** Runs the current search again after it failed, without recording it as recent. */
+    retryRequested() {},
     nextPageRequested() {},
     resultOpened(_state, _action: PayloadAction<SearchResultDto>) {},
     recentsRequested() {},
