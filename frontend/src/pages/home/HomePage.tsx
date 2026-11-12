@@ -7,6 +7,7 @@ import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
+import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
 import { useAppSelector } from '@store/hooks';
 import {
   selectAvailableSessions,
@@ -520,7 +521,9 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
           <FullPageState role="status">
             {routeQuery.isError ? (
               <div>
-                <p>Unable to load this title.</p>
+                <p>
+                  <ErrorNotice error={routeQuery.error} fallback="Unable to load this title." />
+                </p>
                 <button type="button" onClick={() => void routeQuery.refetch()}>
                   Retry
                 </button>

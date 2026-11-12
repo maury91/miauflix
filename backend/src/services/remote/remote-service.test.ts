@@ -12,6 +12,7 @@ import {
 } from '@miauflix/contract';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
+import { ServiceUnavailableError } from '@errors/service-unavailable.error';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 
@@ -95,7 +96,14 @@ const startService = async (
   if (majors.includes(1)) service.implement(demoV1, { greet: name => `v1 hello ${name}` });
   if (majors.includes(2))
     service.implement(demo, {
-      hello: ({ name }, ctx) => (name === 'nobody' ? ctx.fail('not_found') : `hello ${name}`),
+      hello: ({ name }, ctx) =>
+        name === 'nobody'
+          ? ctx.fail('not_found')
+          : name === 'busy'
+            ? ctx.fail('unavailable', 'Upstream is rate limiting requests')
+            : name === 'locked'
+              ? ctx.fail('not_configured', 'Upstream rejected the token')
+              : `hello ${name}`,
     });
   if (majors.includes(3)) service.implement(demoV3, { hi: ({ who }) => `hi ${who}` });
   const server = await serve(service, { hostname: '127.0.0.1', port: options.port ?? 0 });
@@ -216,6 +224,20 @@ describe('RemoteService', () => {
 
     const error = await remote.client.hello({ name: 'nobody' }).catch((e: unknown) => e);
     expect(isContractError(error, 'not_found')).toBe(true);
+  });
+
+  it('tells an unavailable service apart from an unconfigured one, keeping its reason', async () => {
+    const { server } = await start();
+    const { remote } = connect(server, { DEMO_TOKEN: 'good' });
+    await remote.initialize();
+    await statusOf(remote, 'ready');
+
+    const busy = await remote.client.hello({ name: 'busy' }).catch((e: unknown) => e);
+    expect(busy).toBeInstanceOf(ServiceUnavailableError);
+    expect(busy).toMatchObject({ reason: 'Upstream is rate limiting requests' });
+    const locked = await remote.client.hello({ name: 'locked' }).catch((e: unknown) => e);
+    expect(locked).toBeInstanceOf(ServiceNotConfiguredError);
+    expect(locked).toMatchObject({ reason: 'Upstream rejected the token' });
   });
 
   it('re-delivers the snapshot when a running service returns to standby', async () => {

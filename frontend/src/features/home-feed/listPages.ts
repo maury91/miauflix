@@ -28,6 +28,8 @@ export interface ListPageView {
   isLoading: boolean;
   isFetching: boolean;
   isError: boolean;
+  /** Why the page failed to load (an `ApiRequestError`), when it did. */
+  error?: unknown;
 }
 
 const NOT_REQUESTED: ListPageView = {
@@ -59,6 +61,7 @@ export const selectListPage = (state: RootState, category: string, page: number)
     isLoading: entry.isLoading && !entry.data,
     isFetching: entry.isLoading,
     isError: entry.isError,
+    error: entry.error,
   };
 };
 

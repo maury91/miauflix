@@ -1,10 +1,14 @@
-import type { RefreshResponse } from '@miauflix/backend';
+import type { ApiErrorBody, RefreshResponse } from '@miauflix/backend';
+import { isApiErrorBody, reportApiError } from '@shared/lib/api-error';
 
 import { backendClient } from './backend-client';
 
 export interface ApiRequestError {
   status: number;
+  /** Human readable message: the server's, or the caller's fallback. */
   data: string;
+  /** The server's error body (code, error id, how to fix it), when it sent one. */
+  details?: ApiErrorBody;
 }
 
 export type ApiRequestResult<T> = { data: T } | { error: ApiRequestError };
@@ -21,14 +25,22 @@ async function parseResponse<T>(
   }
 
   let message = errorContext;
+  let details: ApiErrorBody | undefined;
   try {
-    const body = (await response.json()) as { error?: unknown };
+    const body = (await response.json()) as { error?: unknown; message?: unknown };
     if (typeof body.error === 'string') message = body.error;
+    else if (typeof body.message === 'string') message = body.message;
+    if (isApiErrorBody(body)) details = body;
   } catch {
     // Keep the contextual fallback for empty or non-JSON error responses.
   }
+  if (response.status >= 500) reportApiError(errorContext, details ?? message);
 
-  return { error: { status: response.status, data: message } };
+  return {
+    error: details
+      ? { status: response.status, data: message, details }
+      : { status: response.status, data: message },
+  };
 }
 
 function networkError(error: unknown): ApiRequestError {

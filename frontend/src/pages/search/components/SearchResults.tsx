@@ -3,12 +3,14 @@ import { MetadataDot, MetadataRating } from '@pages/home/components/metadata.sty
 import { formatRuntime } from '@pages/home/media.utils';
 import { artworkUrl } from '@pages/home/media.utils';
 import { PALETTE } from '@shared/config/constants';
-import { PosterCard } from '@shared/ui';
+import { ErrorNotice, PosterCard } from '@shared/ui';
 import { searchResultKey } from '@store/slices/search';
 import { type FC, Fragment, type ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { SectionTitle } from './search.styles';
+import { searchPanelKind } from './searchPanel';
+import { SearchStatePanel } from './SearchStatePanel';
 
 import StarIcon from '~icons/mdi/star';
 
@@ -81,6 +83,8 @@ function resultMeta(result: SearchResultDto, detail: SearchResultDetailDto | und
 interface SearchResultsProps {
   heading: string;
   status: 'error' | 'idle' | 'loading' | 'ready';
+  /** Why the search failed, when it did. */
+  error?: unknown;
   results: SearchResultDto[];
   details: Record<string, SearchResultDetailDto>;
   totalResults: number;
@@ -88,12 +92,22 @@ interface SearchResultsProps {
   onOpen: (index: number) => void;
   onFocusResult: (index: number) => void;
   registerResult: (index: number, element: HTMLButtonElement | null) => void;
+  /** What was searched, for the no-results panel. */
+  query: string;
+  isGenre: boolean;
+  /** Focused action of the no-results / error panel, or null. */
+  panelFocusedIndex: number | null;
+  onFocusPanelAction: (index: number) => void;
+  registerPanelAction: (index: number, element: HTMLButtonElement | null) => void;
+  onRetry: () => void;
+  onClear: () => void;
 }
 
 /** Results row; keeps the previous results visible while a new search is loading. */
 export const SearchResults: FC<SearchResultsProps> = ({
   heading,
   status,
+  error,
   results,
   details,
   totalResults,
@@ -101,24 +115,51 @@ export const SearchResults: FC<SearchResultsProps> = ({
   onOpen,
   onFocusResult,
   registerResult,
+  query,
+  isGenre,
+  panelFocusedIndex,
+  onFocusPanelAction,
+  registerPanelAction,
+  onRetry,
+  onClear,
 }) => {
+  const panel = searchPanelKind(status, results.length);
   const cardPixels =
     typeof window === 'undefined' ? 200 : (window.innerWidth * CARD_WIDTH_VW) / 100;
   return (
     <section aria-label={heading} aria-busy={status === 'loading'}>
-      <Header>
-        <SectionTitle>{heading}</SectionTitle>
-        {status === 'ready' && totalResults > 0 && (
-          <Count>
-            {totalResults} {totalResults === 1 ? 'result' : 'results'}
-          </Count>
-        )}
-      </Header>
-      {status === 'error' && !results.length && (
-        <Message role="alert">Search is unavailable right now. Try again in a moment.</Message>
+      {/* The panel says what happened, so it replaces the heading. */}
+      {!panel && (
+        <Header>
+          <SectionTitle>{heading}</SectionTitle>
+          {status === 'ready' && totalResults > 0 && (
+            <Count>
+              {totalResults} {totalResults === 1 ? 'result' : 'results'}
+            </Count>
+          )}
+        </Header>
+      )}
+      <SearchStatePanel
+        status={status}
+        error={error}
+        query={query}
+        isGenre={isGenre}
+        resultCount={results.length}
+        focusedIndex={panelFocusedIndex}
+        onFocusAction={onFocusPanelAction}
+        registerAction={registerPanelAction}
+        onRetry={onRetry}
+        onClear={onClear}
+      />
+      {results.length > 0 && (status === 'error' || error != null) && (
+        <Message role="status">
+          <ErrorNotice
+            error={error}
+            fallback="Part of this search failed. Try again in a moment."
+          />
+        </Message>
       )}
       {status === 'loading' && !results.length && <Message role="status">Searching…</Message>}
-      {status === 'ready' && !results.length && <Message role="status">No titles found.</Message>}
       {results.length > 0 && (
         <Row>
           {results.map((result, index) => (

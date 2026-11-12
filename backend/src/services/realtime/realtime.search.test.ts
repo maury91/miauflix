@@ -1,3 +1,4 @@
+import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { SearchServerMessage } from '@routes/search.types';
 import type { SearchService } from '@services/search/search.service';
 
@@ -188,6 +189,59 @@ describe('RealtimeSearchChannel', () => {
     channel.handle(client, { type: 'search', requestId: 3, query: 'Dune', page: 1 });
     await flush();
 
-    expect(sent).toEqual([{ type: 'search-error', requestId: 3, message: 'search-failed' }]);
+    expect(sent).toEqual([
+      {
+        type: 'search-error',
+        requestId: 3,
+        message: 'search-failed',
+        error: expect.objectContaining({
+          status: 500,
+          code: 'internal',
+          message: 'Something went wrong on the server.',
+          errorId: expect.stringMatching(/^[0-9a-f]{8}$/),
+        }),
+      },
+    ]);
+  });
+
+  it('says which service to configure when the catalog is not configured', async () => {
+    const { channel, search, client, sent } = setupTest();
+    search.run.mockRejectedValueOnce(
+      new ServiceNotConfiguredError('CATALOG', 'TMDB rejected the API access token (401).')
+    );
+
+    channel.handle(client, { type: 'search', requestId: 4, query: 'Dune', page: 1 });
+    await flush();
+
+    expect(sent).toEqual([
+      expect.objectContaining({
+        type: 'search-error',
+        requestId: 4,
+        error: expect.objectContaining({
+          status: 503,
+          code: 'service_not_configured',
+          needsConfiguration: true,
+          service: 'CATALOG',
+          // The service's reason is for admins; others get the fixed text and the hint.
+          message: 'Media Catalog is not configured.',
+          hint: expect.stringContaining('TMDB'),
+        }),
+      }),
+    ]);
+  });
+
+  it('sends the raw failure to admins only', async () => {
+    const { channel, search, sent } = setupTest();
+    const admin: SearchClient = { userId: 'admin', isAdmin: true, send: m => sent.push(m) };
+    search.run.mockRejectedValueOnce(new Error('catalog down'));
+
+    channel.handle(admin, { type: 'search', requestId: 5, query: 'Dune', page: 1 });
+    await flush();
+
+    expect(sent).toEqual([
+      expect.objectContaining({
+        error: expect.objectContaining({ code: 'internal', detail: 'catalog down' }),
+      }),
+    ]);
   });
 });

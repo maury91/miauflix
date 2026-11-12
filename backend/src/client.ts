@@ -23,6 +23,7 @@ export type {
 // Re-export route DTOs for consumers
 export type * from './routes/auth.types';
 export type * from './routes/config.types';
+export type * from './routes/error.types';
 export type * from './routes/list.types';
 export type * from './routes/media.types';
 export type * from './routes/movie.types';

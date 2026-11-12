@@ -1,5 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
+  ApiErrorBody,
   SearchGenreDto,
   SearchGenreKey,
   SearchRecentDto,
@@ -10,8 +11,18 @@ import type {
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { clearAuth, setSession } from '@store/slices/auth';
 
-/** `back` is the back button on the page's rail. */
-export type SearchZone = 'back' | 'input' | 'keyboard' | 'popular' | 'recents' | 'results';
+/**
+ * `back` is the back button on the page's rail; `state` holds the actions of the no-results or
+ * error panel shown instead of results (the main action, then "Technical details").
+ */
+export type SearchZone =
+  | 'back'
+  | 'input'
+  | 'keyboard'
+  | 'popular'
+  | 'recents'
+  | 'results'
+  | 'state';
 
 export interface SearchFocus {
   zone: SearchZone;
@@ -23,6 +34,8 @@ export interface SearchState {
   query: string;
   genre: SearchGenreKey | null;
   status: 'error' | 'idle' | 'loading' | 'ready';
+  /** Why the active search failed, as the server explained it (null when unknown). */
+  error: ApiErrorBody | null;
   /** Request id of the first page of the active search; older answers are ignored. */
   requestId: number;
   /** Request id of the page being appended, if any. */
@@ -45,6 +58,7 @@ export const initialSearchState: SearchState = {
   query: '',
   genre: null,
   status: 'idle',
+  error: null,
   requestId: 0,
   moreRequestId: null,
   results: [],
@@ -63,6 +77,7 @@ export const searchResultKey = (item: { _type: string; mediaId: number }) =>
 
 const clearResults = (state: SearchState) => {
   state.status = 'idle';
+  state.error = null;
   state.moreRequestId = null;
   state.results = [];
   state.page = 0;
@@ -96,6 +111,8 @@ export const searchSlice = createSlice({
     },
     /** Explicit submit (search key / Enter); the middleware sends it immediately. */
     submitted() {},
+    /** Runs the current search again after it failed, without recording it as recent. */
+    retryRequested() {},
     nextPageRequested() {},
     resultOpened(_state, _action: PayloadAction<SearchResultDto>) {},
     recentsRequested() {},
@@ -110,8 +127,10 @@ export const searchSlice = createSlice({
         state.requestId = action.payload.requestId;
         state.moreRequestId = null;
         state.status = 'loading';
+        state.error = null;
       } else {
         state.moreRequestId = action.payload.requestId;
+        state.error = null;
       }
     },
     serverMessage(state, action: PayloadAction<SearchServerMessage>) {
@@ -144,9 +163,17 @@ export const searchSlice = createSlice({
       } else if (message.type === 'search-details') {
         for (const item of message.items) state.details[searchResultKey(item)] = item;
       } else if (message.requestId === state.moreRequestId) {
+        // The pages already shown stay usable; the failure is shown beside them.
         state.moreRequestId = null;
+        state.error = message.error ?? null;
       } else if (message.requestId === state.requestId) {
-        state.status = 'error';
+        // After its results arrived, only the details lookup can fail: keep the results usable.
+        // Before that, any results shown belong to the previous query: drop them.
+        if (state.status !== 'ready') {
+          clearResults(state);
+          state.status = 'error';
+        }
+        state.error = message.error ?? null;
       }
     },
     focusChanged(state, action: PayloadAction<SearchFocus>) {
