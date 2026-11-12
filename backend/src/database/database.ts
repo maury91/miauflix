@@ -10,31 +10,11 @@ import type {
 } from 'typeorm';
 import { AbstractLogger, DataSource } from 'typeorm';
 
-import { AuditLog } from '@entities/audit-log.entity';
-import { AvailabilityRequest } from '@entities/availability-request.entity';
-import { BackgroundJob } from '@entities/background-job.entity';
 import { ContentSource } from '@entities/content-source.entity';
 import { Episode } from '@entities/episode.entity';
-import { EpisodeSource } from '@entities/episode-source.entity';
-import { MediaList, MediaListItem } from '@entities/list.entity';
-import { MediaProbe } from '@entities/media-probe.entity';
-import { MediaRating } from '@entities/media-rating.entity';
-import { MigrationVersion } from '@entities/migration-version.entity';
 import { Movie } from '@entities/movie.entity';
-import { MovieSource } from '@entities/movie-source.entity';
-import { Notification } from '@entities/notification.entity';
-import { PlaybackGrant } from '@entities/playback-grant.entity';
-import { Progress } from '@entities/progress.entity';
-import { QrLoginRequest } from '@entities/qr-login-request.entity';
-import { RecentSearch } from '@entities/recent-search.entity';
-import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
-import { StorageFile } from '@entities/storage-file.entity';
-import { StorageFileClaim } from '@entities/storage-file-claim.entity';
-import { StreamingKey } from '@entities/streaming-key.entity';
-import { TVShow } from '@entities/tvshow.entity';
-import { User } from '@entities/user.entity';
 import { AuditLogRepository } from '@repositories/audit-log.repository';
 import { ContentSourceRepository } from '@repositories/content-source.repository';
 import { EpisodeSourceRepository } from '@repositories/episode-source.repository';
@@ -54,7 +34,9 @@ import type { ConfigurationService } from '@services/configuration/configuration
 import { EncryptionService } from '@services/encryption/encryption.service';
 import { EncryptedColumns } from '@utils/encrypted-column.util';
 
-import { renameColumns } from './migrations/column-renames';
+import { ENTITIES } from './entities';
+import { schemaMigrations } from './schema-migrations';
+import { SCHEMA_MIGRATIONS_TABLE, upgradeSchema } from './schema-upgrade';
 
 class DatabaseLogger extends AbstractLogger {
   protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {
@@ -121,6 +103,7 @@ const repositoryWrites = new Set<PropertyKey>([
 
 export class Database {
   private readonly dataSource: DataSource;
+  private readonly dataDir: string;
   private transactionQueue: Promise<void> = Promise.resolve();
   private mediaListRepository: MediaListRepository;
   private movieRepository: MovieRepository;
@@ -143,6 +126,7 @@ export class Database {
       configurationService.getOrThrow('SOURCE_SECURITY_KEY')
     );
     const dataDir = configurationService.getOrThrow('DATA_DIR');
+    this.dataDir = dataDir;
     const databasePath = path.resolve(dataDir, 'database.sqlite');
     // Set up static encryption services for entities
     Movie.encryptionService = encryptionService;
@@ -155,35 +139,13 @@ export class Database {
     this.dataSource = new DataSource({
       type: 'sqlite',
       database: databasePath,
-      entities: [
-        Movie,
-        ContentSource,
-        MovieSource,
-        Notification,
-        AvailabilityRequest,
-        TVShow,
-        Season,
-        Episode,
-        EpisodeSource,
-        MediaList,
-        MediaListItem,
-        MediaRating,
-        User,
-        RefreshToken,
-        AuditLog,
-        BackgroundJob,
-        QrLoginRequest,
-        Storage,
-        StorageFile,
-        StorageFileClaim,
-        StreamingKey,
-        Progress,
-        PlaybackGrant,
-        MediaProbe,
-        RecentSearch,
-        MigrationVersion,
-      ],
+      entities: ENTITIES,
+      migrations: schemaMigrations,
+      migrationsTableName: SCHEMA_MIGRATIONS_TABLE,
       synchronize: false,
+      // Readers no longer block on a writer, and a commit appends to the log instead of
+      // rewriting a rollback journal. The setting persists in the database file.
+      enableWAL: true,
       logger: new DatabaseLogger('all'),
       logging: true,
     });
@@ -191,8 +153,7 @@ export class Database {
 
   public async initialize() {
     await this.dataSource.initialize();
-    await renameColumns(this.dataSource);
-    await this.dataSource.synchronize();
+    await upgradeSchema(this.dataSource, this.dataDir);
     this.mediaListRepository = new MediaListRepository(this);
     this.contentSourceRepository = new ContentSourceRepository(this);
     this.episodeSourceRepository = new EpisodeSourceRepository(this);

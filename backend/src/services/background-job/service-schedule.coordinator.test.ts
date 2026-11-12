@@ -72,12 +72,15 @@ describe('ServiceScheduleCoordinator', () => {
     const { coordinator, jobs } = setupTest(true);
     await jest.advanceTimersByTimeAsync(0);
 
-    expect(jobs.schedule).toHaveBeenCalledTimes(10);
+    expect(jobs.schedule).toHaveBeenCalledTimes(11);
     expect(jobs.schedule).toHaveBeenCalledWith(
       expect.objectContaining({ job: 'source.discover', intervalSeconds: 5, runOnStart: true })
     );
     expect(jobs.schedule).toHaveBeenCalledWith(
       expect.objectContaining({ job: 'cache.cleanup', intervalSeconds: 21600, runOnStart: false })
+    );
+    expect(jobs.schedule).toHaveBeenCalledWith(
+      expect.objectContaining({ job: 'security.cleanup', intervalSeconds: 86400, runOnStart: true })
     );
     await coordinator.stop();
   });
@@ -87,7 +90,7 @@ describe('ServiceScheduleCoordinator', () => {
     await jest.advanceTimersByTimeAsync(0);
 
     expect(jobs.schedule).not.toHaveBeenCalled();
-    expect(jobs.removeSchedule).toHaveBeenCalledTimes(9);
+    expect(jobs.removeSchedule).toHaveBeenCalledTimes(10);
     expect(jobs.removeSchedulesByPrefix).toHaveBeenCalledWith('miauflix-list-refresh', 'refresh-');
     expect(jobs.removeScheduleByQueue).toHaveBeenCalledTimes(3);
     await coordinator.stop();

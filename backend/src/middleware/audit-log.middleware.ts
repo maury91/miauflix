@@ -17,8 +17,8 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService): Midd
           return await next();
         }
 
-        // Log the API access
-        await auditLogService.logSecurityEvent({
+        // Queued, not awaited: the request must not wait on the database to be audited.
+        void auditLogService.logSecurityEvent({
           eventType: AuditEventType.API_ACCESS,
           severity: AuditEventSeverity.INFO,
           description: `${context.req.method} ${redactPath(path)}`,

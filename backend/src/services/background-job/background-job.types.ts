@@ -27,6 +27,8 @@ export interface BackgroundJobPayloads {
     mediaId: number;
   };
   'cache.cleanup': Record<string, never>;
+  /** Delete expired auth rows and audit logs past retention. */
+  'security.cleanup': Record<string, never>;
 }
 
 export type AllBackgroundJobPayloads = BackgroundJobPayloads & CatalogJobPayloads;
@@ -62,6 +64,7 @@ export const BACKGROUND_JOB_QUEUES: Record<BackgroundJobName, string> = {
   'watchlist.tv.acquire': 'miauflix-watchlist-downloads',
   'watchlist.sync': 'miauflix-watchlist-sync',
   'cache.cleanup': 'miauflix-maintenance',
+  'security.cleanup': 'miauflix-maintenance',
   'catalog.movie-changes.scan': 'miauflix-catalog-movie-changes',
   'catalog.show-changes.scan': 'miauflix-catalog-show-changes',
   'catalog.season-sync.seed': 'miauflix-catalog-season-sync',
