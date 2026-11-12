@@ -10,8 +10,9 @@ to your Miauflix backend over HTTPS. It targets 2020 TVs (Tizen 5.5, Chromium 69
 ## Build the package
 
 The package is built from a checkout of the repository, even if your server runs the prebuilt
-Docker images. You need Node.js 22 or newer (`.nvmrc` pins the tested version) and `zip`
-(preinstalled on macOS; `sudo apt install zip` on Debian and Ubuntu). From the repository root:
+Docker images. You need Node.js 22 or newer (`.nvmrc` pins the tested version),
+[Bun](https://bun.sh/docs/installation) (the version in `package.json`'s `packageManager`) and
+`zip` (preinstalled on macOS; `sudo apt install zip` on Debian and Ubuntu). From the repository root:
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix

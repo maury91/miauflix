@@ -105,6 +105,13 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'your-secure-random-string',
       transform: transforms.optional(transforms.string({ minLength: 16 })),
     }),
+    SERVICE_TOKEN: variable({
+      description:
+        'Secret shared with the internal services (catalog, lists, sources, media load); each must have the same value',
+      required: false,
+      advanced: true,
+      password: true,
+    }),
     DISABLE_BACKGROUND_TASKS: variable({
       description: 'Disable all background tasks for testing on-demand functionality',
       booleanStateDescriptions: {

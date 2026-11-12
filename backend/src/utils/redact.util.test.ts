@@ -8,6 +8,19 @@ describe('redact', () => {
     expect(redactPath('/api/movies/42')).toBe('/api/movies/42');
   });
 
+  it('masks tokens behind a percent-encoded prefix, as the router decodes it', () => {
+    expect(redactPath('/api/%73tream/abc.def')).toBe('/api/stream/REDACTED');
+    expect(redactPath('/api/%73tream/abc/%E0%A4%A')).toBe('/api/stream/REDACTED/%E0%A4%A');
+    expect(redactPath('/api/movies/%2042')).toBe('/api/movies/%2042');
+  });
+
+  it("masks the web app's QR approval page in a referrer", () => {
+    expect(redactPath('/auth/qr/approval-token')).toBe('/auth/qr/REDACTED');
+    expect(redactUrl('https://m.example/auth/qr/approval-token')).toBe(
+      'https://m.example/auth/qr/REDACTED'
+    );
+  });
+
   it('masks secret query values and keeps the rest', () => {
     expect(redactQuery(new URLSearchParams('streamingKey=secret&start=10&format=vtt'))).toEqual({
       streamingKey: 'REDACTED',

@@ -22,7 +22,7 @@ const openSocket = (gateway: RealtimeGateway, cookie = '') => {
 
 /** An AuthService stand-in: every token is valid for the session it is sent for. */
 const authStub = () => {
-  const listeners = new Set<(revocation: { userId: string; session?: string }) => void>();
+  const listeners = new Set<(revocation: { userId: string; session: string }) => void>();
   const sessions = new Map<string, boolean>();
   return {
     authenticateAccessToken: jest.fn(async (_token: string, sessionId: string) => ({
@@ -37,7 +37,7 @@ const authStub = () => {
         : { userId, sessionId, email: 'user@example.com', role: 'user' }
     ),
     onSessionRevoked: jest.fn(
-      (listener: (revocation: { userId: string; session?: string }) => void) => {
+      (listener: (revocation: { userId: string; session: string }) => void) => {
         listeners.add(listener);
         return () => listeners.delete(listener);
       }

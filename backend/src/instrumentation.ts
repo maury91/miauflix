@@ -26,6 +26,7 @@ import type { ConfigService } from '@mytypes/configuration';
 import { initTracing } from '@utils/tracing.util';
 
 import { FileSpanExporter } from './instrumentation/file-exporter';
+import { redactUrlAttributes } from './instrumentation/redact-url-attributes';
 
 const SYNTHETIC_SCOPE = { name: '@miauflix/backend', version: '1.0.0' };
 
@@ -139,6 +140,20 @@ function wrapWithPeerServiceEnrichment(real: SpanExporter): SpanExporter {
   };
 }
 
+/**
+ * Masks tokens in URL attributes when a span ends, before any exporter (trace files, OTLP) sees
+ * it. Register it before the exporting processors.
+ */
+const urlRedactionProcessor: SpanProcessor = {
+  onStart: () => undefined,
+  onEnd: span => {
+    // A finished span's attributes are a plain object; rewriting them in place keeps the span intact
+    Object.assign(span.attributes, redactUrlAttributes(span.attributes));
+  },
+  forceFlush: () => Promise.resolve(),
+  shutdown: () => Promise.resolve(),
+};
+
 /** Wraps OTLP exporter and logs success/failure when DEBUG=Jaeger */
 function wrapOtlpExporterWithDebugLogging(real: SpanExporter, debugEnabled: boolean): SpanExporter {
   return {
@@ -189,7 +204,7 @@ export function initializeInstrumentation(configService: ConfigService): void {
     // Configure the trace file location - use /tmp for Docker containers
     const traceFile = configService.get('TRACE_DIR');
     const maxTraces = configService.get('TRACE_MAX_TRACES');
-    const spanProcessors: SpanProcessor[] = [];
+    const spanProcessors: SpanProcessor[] = [urlRedactionProcessor];
 
     if (maxTraces !== undefined && maxTraces > 0) {
       const fileExporter = new FileSpanExporter(traceFile, undefined, maxTraces);

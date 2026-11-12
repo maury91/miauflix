@@ -152,11 +152,8 @@ export class RealtimeGateway {
     this.preload.onChange(this.onPreparationChange);
     this.removeRevocationListener = this.authService.onSessionRevoked(revocation => {
       for (const client of this.clients) {
-        if (
-          client.userId === revocation.userId &&
-          (!revocation.session || client.sessionId === revocation.session)
-        )
-          void this.recheckSession(client);
+        if (client.userId === revocation.userId && client.sessionId === revocation.session)
+          client.socket.close(1008, 'Session ended');
       }
     });
     this.sessionRecheckTimer = setInterval(() => {
