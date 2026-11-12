@@ -3,7 +3,7 @@
 FROM oven/bun:1.4.0 AS bun-runtime
 
 FROM node:22-slim
-# The backend runs on Bun; npm installs the workspaces and runs the frontend.
+# The backend runs on Bun; Bun installs the workspaces and npm runs the frontend.
 COPY --from=bun-runtime /usr/local/bin/bun /usr/local/bin/bun
 
 # glibc gives every thread its own malloc arena and rarely returns freed memory; with
@@ -16,27 +16,31 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends python3 make g++ ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
-COPY package.json package-lock.json tsconfig.json turbo.json ./
-COPY backend/package.json ./backend/
-COPY frontend/package.json ./frontend/
-COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
-COPY packages/contract/package.json ./packages/contract/
-COPY packages/service-contracts/package.json ./packages/service-contracts/
-COPY packages/service-configuration/package.json ./packages/service-configuration/
-COPY services/media-catalog/package.json ./services/media-catalog/
-COPY services/list-service/package.json ./services/list-service/
-COPY services/sources/package.json ./services/sources/
-COPY services/media-load/package.json ./services/media-load/
+COPY package.json bun.lock tsconfig.json turbo.json ./
+# Every workspace's manifest: a frozen `bun install` stops when one is missing.
+COPY backend/package.json backend/package.json
+COPY frontend/package.json frontend/package.json
+COPY backend-e2e/package.json backend-e2e/package.json
+COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
+COPY packages/contract/package.json packages/contract/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
+COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
+COPY services/list-service/package.json services/list-service/package.json
+COPY services/media-catalog/package.json services/media-catalog/package.json
+COPY services/media-load/package.json services/media-load/package.json
+COPY services/sources/package.json services/sources/package.json
 
 # Some workspace packages have prepare scripts that require their source. The
 # source is copied after dependency installation, so skip those scripts here.
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
-# Retried: npm ci fails outright on a transient registry or GitHub download error.
-RUN --mount=type=cache,target=/root/.npm \
+# Retried: bun install fails outright on a transient registry or GitHub download error.
+RUN --mount=type=cache,target=/root/.bun/install/cache \
     for attempt in 1 2 3; do \
-      npm ci && break; \
+      bun install --frozen-lockfile && break; \
       [ "$attempt" = 3 ] && exit 1; \
-      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
+      echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
     done
 
 COPY packages/ ./packages/

@@ -43,7 +43,7 @@ The `scripts/env.sh` script orchestrates the entire process for both development
 ### Prerequisites
 
 - Docker and Docker Compose installed
-- Node.js and npm installed
+- Node.js, npm and Bun installed (`bun install` from the repository root)
 - Environment variables configured in root `.env` file
 
 ### Quick Start - Full Test Suite
@@ -244,7 +244,6 @@ The test environment requires the same environment variables as production:
 - `TRAKT_CLIENT_SECRET`: Used by Trakt mock for token validation
 - `TRAKT_REDIRECT_URI`: Redirect URI supplied to the List Service token refresh flow
 - `JWT_SECRET`: Used by backend for authentication
-- `REFRESH_TOKEN_SECRET`: Used by backend for token refresh
 
 ## Log Management
 

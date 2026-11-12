@@ -8,6 +8,7 @@
 
 {$MIAUFLIX_DOMAIN} {
 	encode zstd gzip
+	header Strict-Transport-Security "max-age=31536000"
 	reverse_proxy {$MIAUFLIX_UPSTREAM:miauflix:3000} {
 		header_up X-Reverse-Proxy-Secret {$REVERSE_PROXY_SECRET}
 		flush_interval -1

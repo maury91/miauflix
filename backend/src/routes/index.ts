@@ -1,12 +1,14 @@
 import { httpInstrumentationMiddleware } from '@hono/otel';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
+import { bodyLimit } from 'hono/body-limit';
 import { getConnInfo, serveStatic } from 'hono/bun';
 
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createCorsMiddleware } from '@middleware/cors.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { createSecurityHeadersMiddleware } from '@middleware/security-headers.middleware';
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 import { expandEquivalentOrigins, isTvAppOrigin } from '@utils/origin.util';
 
@@ -29,7 +31,16 @@ import { createStorageRoutes } from './storage.routes';
 import { createStreamRoutes } from './stream.routes';
 import { createSubtitleRoutes } from './subtitles.routes';
 
+/** Request bodies are small JSON; the avatar upload has its own, larger, limit. */
+const MAX_API_BODY_BYTES = 256 * 1024;
+const AVATAR_UPLOAD_PATH = '/api/auth/session/avatar';
+
 function createApiRoutes(deps: Deps) {
+  const limitBody = bodyLimit({
+    maxSize: MAX_API_BODY_BYTES,
+    onError: c => c.json({ error: 'Request body is too large' }, 413),
+  });
+
   const rateLimitGuard = createRateLimitMiddlewareFactory(
     deps.auditLogService,
     deps.configurationService
@@ -38,6 +49,7 @@ function createApiRoutes(deps: Deps) {
   return (
     new Hono()
       .use(httpInstrumentationMiddleware({}))
+      .use((c, next) => (c.req.path === AVATAR_UPLOAD_PATH ? next() : limitBody(c, next)))
       .use(traceContextMiddleware)
       .use(
         createAuthMiddleware(
@@ -98,6 +110,7 @@ export function createRoutes(deps: Deps) {
   );
 
   const app = new Hono()
+    .use(createSecurityHeadersMiddleware(frontendEnabled ? frontendDir : undefined))
     .use(async (c, next) => {
       // The address a browser reached the server at is one a TV on the network can use too
       deps.tvPairingService?.noteHost(c.req.header('host'), peerAddress(c));

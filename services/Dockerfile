@@ -7,37 +7,31 @@ USER root
 RUN apk add --no-cache nodejs npm
 
 WORKDIR /workspace
-COPY package.json package-lock.json turbo.json tsconfig.json ./
+COPY package.json bun.lock turbo.json tsconfig.json ./
+# Every workspace's manifest: a frozen `bun install` stops when one is missing.
 COPY backend/package.json backend/package.json
 COPY frontend/package.json frontend/package.json
 COPY backend-e2e/package.json backend-e2e/package.json
-COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
-COPY packages/contract/package.json packages/contract/package.json
-COPY packages/service-contracts/package.json packages/service-contracts/package.json
-COPY packages/service-configuration/package.json packages/service-configuration/package.json
-COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
 COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
-COPY services/media-catalog/package.json services/media-catalog/package.json
+COPY packages/contract/package.json packages/contract/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
+COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
 COPY services/list-service/package.json services/list-service/package.json
-COPY services/sources/package.json services/sources/package.json
+COPY services/media-catalog/package.json services/media-catalog/package.json
 COPY services/media-load/package.json services/media-load/package.json
+COPY services/sources/package.json services/sources/package.json
 
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 # The base image sets NODE_ENV=production; the build needs dev dependencies (TypeScript types),
-# which the `npm prune --omit=dev` below removes again.
-# Retried: npm ci fails outright on a transient registry or GitHub download error.
-RUN for attempt in 1 2 3; do \
-      npm ci --ignore-scripts --include=dev && break; \
-      [ "$attempt" = 3 ] && exit 1; \
-      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
-    done
-# media-load's tracker client loads WebRTC; fetch node-datachannel's prebuilt (musl) binary.
-# The npm cache keeps the downloaded binary (_prebuilds), so it is fetched from GitHub once.
-RUN --mount=type=cache,target=/root/.npm \
+# which the production reinstall below leaves out again.
+# Retried: bun install fails outright on a transient registry or GitHub download error.
+RUN --mount=type=cache,target=/root/.bun/install/cache \
     for attempt in 1 2 3; do \
-      npm rebuild node-datachannel && break; \
+      NODE_ENV=development bun install --frozen-lockfile --ignore-scripts && break; \
       [ "$attempt" = 3 ] && exit 1; \
-      echo "node-datachannel download failed (attempt $attempt), retrying"; sleep 20; \
+      echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
     done
 
 COPY packages/source-metadata-extractor packages/source-metadata-extractor
@@ -55,8 +49,21 @@ RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/service-contracts && \
     npm run build --workspace @miauflix/service-configuration && \
     npm run build --workspace @miauflix/anime-mapping && \
-    npm run build --workspace @miauflix/vpn-guard && \
-    npm prune --omit=dev --ignore-scripts
+    npm run build --workspace @miauflix/vpn-guard
+# Bun cannot prune: reinstall the services' production dependencies alone.
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    rm -rf node_modules && \
+    bun install --frozen-lockfile --production --ignore-scripts \
+      --filter @miauflix/media-catalog --filter @miauflix/list-service \
+      --filter @miauflix/sources-service --filter @miauflix/media-load-service
+# media-load's tracker client loads WebRTC; fetch node-datachannel's prebuilt (musl) binary.
+# The npm cache keeps the downloaded binary (_prebuilds), so it is fetched from GitHub once.
+RUN --mount=type=cache,target=/root/.npm \
+    for attempt in 1 2 3; do \
+      npm rebuild node-datachannel && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "node-datachannel download failed (attempt $attempt), retrying"; sleep 20; \
+    done
 
 # Shared by every runtime image: the same base, user, data layout and entrypoint. The images only
 # differ in which services they contain and run (CMD), so containers of any of them can share one

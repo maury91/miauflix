@@ -21,11 +21,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun (backend and services)
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
       - name: Setup test environment
         id: setup
         uses: ./.github/actions/setup-test-environment
@@ -66,7 +61,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}-${{ github.sha }}
+          key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'bun.lock') }}-${{ github.sha }}
 
   e2e-tests:
     runs-on: ubuntu-24.04

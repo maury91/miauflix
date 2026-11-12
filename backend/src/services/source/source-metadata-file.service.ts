@@ -5,12 +5,10 @@ import path from 'path';
 import { SourceError } from '@errors/source.errors';
 import type { ConfigService } from '@mytypes/configuration';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
-import type { RequestService } from '@services/request/request.service';
 import type { SourcesClientService } from '@services/sources/sources-client.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
-import { ErrorWithStatus } from './services/error-with-status.util';
 import type { Service, ServiceData, ServiceStats } from './types';
 
 /**
@@ -21,6 +19,13 @@ const generateRequestId = (): string => {
 };
 
 const webTorrentMetadataTimeoutMs = 15_000;
+
+export interface SourceMetadataFileServiceOptions {
+  /** Resolves background metadata from the sources service's cache of metadata files. */
+  sourcesClient?: SourcesClientService;
+  /** Also resolves background metadata over WebTorrent; off in the app (see below). */
+  webTorrentMetadata?: boolean;
+}
 
 /**
  * Service for getting source files from URI links ( or identifier )
@@ -41,26 +46,25 @@ export class SourceMetadataFileService {
   private activeWorkers = 0;
 
   constructor(
-    private readonly metadataFiles: Pick<MediaLoadClientService, 'getSourceMetadataFile'>,
-    _requestService: RequestService,
+    private readonly mediaLoad: Pick<
+      MediaLoadClientService,
+      'getSourceMetadataFile' | 'swarmStats'
+    >,
     private readonly statsService: StatsService,
     private readonly config: ConfigService,
-    enableWebTorrentMetadata = false,
-    enableCacheMetadata = false,
-    sourcesClient?: SourcesClientService,
-    private readonly mediaLoad?: Pick<MediaLoadClientService, 'swarmStats'>
+    { sourcesClient, webTorrentMetadata = false }: SourceMetadataFileServiceOptions = {}
   ) {
-    if (enableWebTorrentMetadata) {
+    if (webTorrentMetadata) {
       this.createService('webTorrent', {
         maxConcurrentRequests: 1,
         shouldVerify: false,
         getSourceMetadata: async (sourceLink: string, hash: string): Promise<Buffer> => {
-          return metadataFiles.getSourceMetadataFile(sourceLink, hash, webTorrentMetadataTimeoutMs);
+          return mediaLoad.getSourceMetadataFile(sourceLink, hash, webTorrentMetadataTimeoutMs);
         },
       });
     }
 
-    if (enableCacheMetadata && sourcesClient) {
+    if (sourcesClient) {
       this.createService('sources', {
         maxConcurrentRequests: 1,
         shouldVerify: true,
@@ -148,7 +152,7 @@ export class SourceMetadataFileService {
       ).then(() => this.getPlaybackTorrentMetadataFile(sourceLink, hash, false));
     }
 
-    const resolution = this.metadataFiles.getSourceMetadataFile(
+    const resolution = this.mediaLoad.getSourceMetadataFile(
       sourceLink,
       normalizedHash,
       webTorrentMetadataTimeoutMs
@@ -163,9 +167,6 @@ export class SourceMetadataFileService {
 
   /** Swarm size from the media-load service's tracker scrapes. */
   public async getStats(hash: string): Promise<{ broadcasters: number; watchers: number }> {
-    if (!this.mediaLoad) {
-      throw new ErrorWithStatus('The media-load service is not connected', 'scrape_unavailable');
-    }
     return this.mediaLoad.swarmStats(hash);
   }
 

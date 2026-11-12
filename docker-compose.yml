@@ -20,6 +20,8 @@ services:
       # docs/setup/docker-setup.md#open-it-to-your-local-network
       - '${MIAUFLIX_LISTEN_ADDRESS:-127.0.0.1}:3000:3000'
     environment:
+      # Shared secret between the backend and the services (unset: no check), see docs
+      SERVICE_TOKEN: ${SERVICE_TOKEN:-}
       DATA_DIR: /usr/src/app/data
       # Where media-load keeps downloads; the backend pushes it there.
       DOWNLOAD_PATH: /usr/src/app/downloads
@@ -67,6 +69,8 @@ services:
     image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-catalog-services:${MIAUFLIX_VERSION:-latest}
     init: true
     environment:
+      # Shared secret between the backend and the services (unset: no check), see docs
+      SERVICE_TOKEN: ${SERVICE_TOKEN:-}
       LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
       CATALOG_DISABLE_BACKGROUND_TASKS: ${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
     volumes:
@@ -81,6 +85,8 @@ services:
     image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-sources:${MIAUFLIX_VERSION:-latest}
     init: true
     environment:
+      # Shared secret between the backend and the services (unset: no check), see docs
+      SERVICE_TOKEN: ${SERVICE_TOKEN:-}
       SOURCES_DATA_DIR: /app/data/sources
     volumes:
       - miauflix_services_data:/app/data
@@ -94,6 +100,8 @@ services:
     image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-media-load:${MIAUFLIX_VERSION:-latest}
     init: true
     environment:
+      # Shared secret between the backend and the services (unset: no check), see docs
+      SERVICE_TOKEN: ${SERVICE_TOKEN:-}
       MEDIA_LOAD_DATA_DIR: /app/data/media-load
     volumes:
       - miauflix_services_data:/app/data
@@ -110,6 +118,8 @@ services:
     profiles: [all-in-one]
     init: true
     environment:
+      # Shared secret between the backend and the services (unset: no check), see docs
+      SERVICE_TOKEN: ${SERVICE_TOKEN:-}
       LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
       CATALOG_DISABLE_BACKGROUND_TASKS: ${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
     volumes:
@@ -123,7 +133,7 @@ services:
   # docker-compose.vpn.yml can move it into the VPN's network whatever the file order: it fetches
   # source websites for source search.
   flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
+    image: ghcr.io/flaresolverr/flaresolverr:v3.5.2
     profiles: [flaresolverr]
     environment:
       LOG_LEVEL: info
@@ -136,7 +146,7 @@ services:
 
   # Off until docker-compose.tracing.yml turns it on, see flaresolverr above.
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.76.0
     profiles: [tracing]
     environment:
       COLLECTOR_OTLP_ENABLED: 'true'

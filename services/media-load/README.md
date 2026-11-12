@@ -7,7 +7,7 @@ Bun service implementing the `media-load` 1.0 contract on port 3004. It is the t
 From the repository root:
 
 ```sh
-npm install
+bun install
 npm run build:libs
 npm run start:media-load
 npm test --workspace @miauflix/media-load-service
@@ -17,6 +17,6 @@ Bootstrap environment: `MEDIA_LOAD_PORT` (3004; an empty or invalid value also m
 
 The backend discovers and pushes the `MEDIA_LOAD` configuration group. `SCRAPE_TRACKERS` (comma-separated announce URLs) lives there; `ws://` and `wss://` entries are ignored. An explicitly empty value means no trackers (swarm stats are unavailable); only a missing key falls back to the defaults. The service is in standby until the backend applies its configuration.
 
-`bittorrent-tracker` loads WebRTC through its WebSocket tracker, so `node-datachannel`'s native binary must be installed. The Docker images run `npm rebuild node-datachannel` after `npm ci --ignore-scripts`.
+`bittorrent-tracker` loads WebRTC through its WebSocket tracker, so `node-datachannel`'s native binary must be installed. The Docker images run `npm rebuild node-datachannel` after `bun install --ignore-scripts`.
 
 Tests mock `bittorrent-tracker` with `mock.module`, so they make no network calls.

@@ -121,7 +121,6 @@ The current source HTTP client uses this URL for definitions that require FlareS
 ```bash
 # JWT secrets (automatically generated if not provided)
 JWT_SECRET=64-character-hex-string
-STREAM_TOKEN_SECRET=64-character-hex-string
 STREAM_KEY_SALT=64-character-hex-string
 ```
 
@@ -177,12 +176,14 @@ ENABLE_FRONTEND=true
 ```bash
 # Security and performance settings
 REVERSE_PROXY_SECRET=your-secure-random-string
+SERVICE_TOKEN=another-long-random-string
 MAXIMUM_CACHE_EMPTY_SPACE=10MB
 DISABLE_BACKGROUND_TASKS=false
 DISABLE_VPN_CHECK=false
 ```
 
 - **REVERSE_PROXY_SECRET**: Shared secret between reverse proxy and backend
+- **SERVICE_TOKEN**: Shared secret between the backend and the internal services (media catalog, lists, sources, media load). When set, a service refuses connections that do not present it; set the same value for the backend and every service. Unset (the default), any client that reaches a service's port can use it. The services listen on all interfaces (`*_HOST`, default `0.0.0.0`), which is fine on the Docker Compose network, where no port is published; when you run them directly on a machine, set `SERVICE_TOKEN` or bind them to `127.0.0.1` (`CATALOG_HOST`, `LIST_SERVICE_HOST`, `SOURCES_HOST`, `MEDIA_LOAD_HOST`)
 - **MAXIMUM_CACHE_EMPTY_SPACE**: Maximum SQLite empty space before cleanup
 - **DISABLE_BACKGROUND_TASKS**: Disable background processing for testing
 - **DISABLE_VPN_CHECK**: Skip VPN detection. When `false` (the default), source search and media load each refuse to work (searches, tracker scrapes, downloads) unless NordVPN reports their own connection as protected. It is the default of their own settings, `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK` (with `SOURCES_KNOWN_VPN_IPS` / `MEDIA_LOAD_KNOWN_VPN_IPS` for a VPN NordVPN does not recognise), which take over once set. Setting it to `true` lets torrents go out from your real IP; don't do this on a server reachable from the internet
@@ -306,7 +307,7 @@ With the VPN overlay, include `docker-compose.vpn.yml` too; the backend stays ou
 **Configuration wizard won't start**
 
 - Ensure you're running from the project root directory
-- Check that all dependencies are installed (`npm install`)
+- Check that all dependencies are installed (`bun install`)
 
 **TMDB API errors**
 

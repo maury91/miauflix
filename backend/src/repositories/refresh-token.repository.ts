@@ -39,6 +39,13 @@ export class RefreshTokenRepository {
     return null;
   }
 
+  /** The session whose token was `token` before its last rotation, if any. */
+  async findByPreviousToken(token: string, session: string): Promise<RefreshToken | null> {
+    const stored = await this.repository.findOne({ where: { session } });
+    if (!stored?.previousTokenHash) return null;
+    return verifyToken(token, stored.previousTokenHash) ? stored : null;
+  }
+
   async findByUser(user: User): Promise<RefreshToken[]> {
     return this.repository.find({
       where: { userId: user.id },
@@ -94,6 +101,8 @@ export class RefreshTokenRepository {
     const newTokenHash = hashToken(newToken);
     const updateFields: Partial<RefreshToken> = {
       tokenHash: newTokenHash,
+      previousTokenHash: existingToken.tokenHash,
+      rotatedAt: new Date(),
       expiresAt,
       lastIpAddress,
       lastAccessedAt: new Date(),

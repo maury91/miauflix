@@ -32,7 +32,6 @@ miauflix/
 │   ├── service-configuration/      # Shared service configuration and the config store
 │   └── source-metadata-extractor/  # Content metadata processing
 ├── test-fixtures/                  # Recorded provider responses and fixture images
-├── nginx/                          # Nginx configuration and certificates
 ├── scripts/                        # Support scripts
 ├── docs/                           # Project documentation
 └── docker-compose*.yml             # Container orchestration
@@ -54,8 +53,8 @@ miauflix/
 git clone <repository-url>
 cd miauflix
 
-# Install all dependencies (uses workspaces)
-npm install
+# Install all dependencies (Bun workspaces, bun.lock)
+bun install
 
 # Run configuration wizard
 npm run config
@@ -69,12 +68,12 @@ npm run dev
 **CRITICAL**: Always use workspace commands from the root directory:
 
 ```bash
-# ✅ CORRECT - Install dependencies from root
-npm install --workspace backend package-name
-npm install --workspace frontend package-name
+# ✅ CORRECT - Bun updates the root bun.lock
+bun add --cwd backend package-name
+bun add --cwd frontend package-name
 
-# ❌ WRONG - Will break workspace resolution
-cd backend && npm install package-name
+# ❌ WRONG - npm ignores bun.lock and writes a package-lock.json
+npm install --workspace backend package-name
 ```
 
 ## Development Commands

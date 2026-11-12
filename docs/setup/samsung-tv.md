@@ -15,7 +15,7 @@ Docker images. You need Node.js 22 or newer (`.nvmrc` pins the tested version) a
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-npm install
+bun install
 npm run package:tizen
 ```
 

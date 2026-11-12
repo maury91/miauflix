@@ -168,6 +168,8 @@ export function createSourcesService(options: SourcesServiceOptions): {
     }
   };
   const service = defineService({
+    // Shared secret every connection must present (SERVICE_TOKEN, unset: no check)
+    token: process.env.SERVICE_TOKEN || undefined,
     info: {
       id: 'sources',
       name: 'Sources',

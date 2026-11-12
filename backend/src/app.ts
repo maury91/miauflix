@@ -102,7 +102,7 @@ try {
   const tvPairingService = new TvPairingService(configurationService);
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
-  const qrLoginService = new QrLoginService(db);
+  const qrLoginService = new QrLoginService(db, configurationService);
   const profileService = new ProfileService(db, configurationService);
   const progressService = new ProgressService(
     db,
@@ -124,13 +124,9 @@ try {
   });
   const magnetService = new SourceMetadataFileService(
     mediaLoadClient,
-    requestService,
     statsService,
     configurationService,
-    false,
-    true,
-    sourcesClientService,
-    mediaLoadClient
+    { sourcesClient: sourcesClientService }
   );
   const sourceService = new SourceService(
     db,

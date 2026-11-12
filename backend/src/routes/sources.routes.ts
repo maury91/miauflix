@@ -44,7 +44,7 @@ const torznabSchema = z.object({
 });
 const repositorySchema = z.object({ url: z.string().url().max(2000) });
 
-/** Maps the service's typed errors to HTTP; anything else is left to the global handler. */
+/** Maps the service's typed errors to HTTP; anything else goes on to the global handler. */
 const failure = (error: unknown) => {
   if (isContractError(error, 'not_found')) return { status: 404 as const, message: error.message };
   if (isContractError(error, 'bad_request'))
@@ -63,100 +63,45 @@ export const createSourcesRoutes = (deps: Deps) => {
   const admin = authGuard(UserRole.ADMIN);
 
   return new Hono()
+    .onError((error, c) => {
+      const mapped = failure(error);
+      if (!mapped) throw error;
+      return c.json({ error: mapped.message }, mapped.status);
+    })
     .get('/providers', rateLimitGuard(10), admin, async c => c.json(await sources.providers()))
-    .put('/providers/order', rateLimitGuard(5), admin, zValidator('json', orderSchema), async c => {
-      try {
-        return c.json(await sources.reorderProviders(c.req.valid('json').ids));
-      } catch (error) {
-        const mapped = failure(error);
-        if (!mapped) throw error;
-        return c.json({ error: mapped.message }, mapped.status);
-      }
-    })
-    .patch(
-      '/providers/:id',
-      rateLimitGuard(10),
-      admin,
-      zValidator('json', updateSchema),
-      async c => {
-        try {
-          return c.json(
-            await sources.updateProvider({ id: c.req.param('id'), ...c.req.valid('json') })
-          );
-        } catch (error) {
-          const mapped = failure(error);
-          if (!mapped) throw error;
-          return c.json({ error: mapped.message }, mapped.status);
-        }
-      }
+    .put('/providers/order', rateLimitGuard(5), admin, zValidator('json', orderSchema), async c =>
+      c.json(await sources.reorderProviders(c.req.valid('json').ids))
     )
-    .get('/definitions', rateLimitGuard(30), admin, zValidator('query', catalogSchema), async c => {
-      try {
-        return c.json(await sources.cardigannDefinitions(c.req.valid('query')));
-      } catch (error) {
-        const mapped = failure(error);
-        if (!mapped) throw error;
-        return c.json({ error: mapped.message }, mapped.status);
-      }
-    })
-    .post('/definitions/sync', rateLimitGuard(5), admin, async c => {
-      try {
-        return c.json(await sources.syncCardigannDefinitions());
-      } catch (error) {
-        const mapped = failure(error);
-        if (!mapped) throw error;
-        return c.json({ error: mapped.message }, mapped.status);
-      }
-    })
+    .patch('/providers/:id', rateLimitGuard(10), admin, zValidator('json', updateSchema), async c =>
+      c.json(await sources.updateProvider({ id: c.req.param('id'), ...c.req.valid('json') }))
+    )
+    .get('/definitions', rateLimitGuard(30), admin, zValidator('query', catalogSchema), async c =>
+      c.json(await sources.cardigannDefinitions(c.req.valid('query')))
+    )
+    .post('/definitions/sync', rateLimitGuard(5), admin, async c =>
+      c.json(await sources.syncCardigannDefinitions())
+    )
     .post(
       '/providers/cardigann',
       rateLimitGuard(3),
       admin,
       zValidator('json', cardigannSchema),
-      async c => {
-        try {
-          return c.json(await sources.addCardigannProvider(c.req.valid('json')), 201);
-        } catch (error) {
-          const mapped = failure(error);
-          if (!mapped) throw error;
-          return c.json({ error: mapped.message }, mapped.status);
-        }
-      }
+      async c => c.json(await sources.addCardigannProvider(c.req.valid('json')), 201)
     )
     .post(
       '/providers/torznab',
       rateLimitGuard(3),
       admin,
       zValidator('json', torznabSchema),
-      async c => {
-        try {
-          return c.json(await sources.addTorznabProvider(c.req.valid('json')), 201);
-        } catch (error) {
-          const mapped = failure(error);
-          if (!mapped) throw error;
-          return c.json({ error: mapped.message }, mapped.status);
-        }
-      }
+      async c => c.json(await sources.addTorznabProvider(c.req.valid('json')), 201)
     )
     .delete('/providers/:id', rateLimitGuard(5), admin, async c => {
-      try {
-        await sources.removeProvider(c.req.param('id'));
-        return c.body(null, 204);
-      } catch (error) {
-        const mapped = failure(error);
-        if (!mapped) throw error;
-        return c.json({ error: mapped.message }, mapped.status);
-      }
+      await sources.removeProvider(c.req.param('id'));
+      return c.body(null, 204);
     })
-    .post('/providers/:id/test', rateLimitGuard(5), admin, async c => {
-      try {
-        return c.json(await sources.testProvider(c.req.param('id')));
-      } catch (error) {
-        const mapped = failure(error);
-        if (!mapped) throw error;
-        return c.json({ error: mapped.message }, mapped.status);
-      }
-    })
+    .post('/providers/:id/test', rateLimitGuard(5), admin, async c =>
+      c.json(await sources.testProvider(c.req.param('id')))
+    )
     .get('/repositories', rateLimitGuard(10), admin, async c =>
       c.json(await sources.repositories())
     )
@@ -165,33 +110,13 @@ export const createSourcesRoutes = (deps: Deps) => {
       rateLimitGuard(3),
       admin,
       zValidator('json', repositorySchema),
-      async c => {
-        try {
-          return c.json(await sources.addRepository(c.req.valid('json').url), 201);
-        } catch (error) {
-          const mapped = failure(error);
-          if (!mapped) throw error;
-          return c.json({ error: mapped.message }, mapped.status);
-        }
-      }
+      async c => c.json(await sources.addRepository(c.req.valid('json').url), 201)
     )
     .delete('/repositories/:id', rateLimitGuard(5), admin, async c => {
-      try {
-        await sources.removeRepository(c.req.param('id'));
-        return c.body(null, 204);
-      } catch (error) {
-        const mapped = failure(error);
-        if (!mapped) throw error;
-        return c.json({ error: mapped.message }, mapped.status);
-      }
+      await sources.removeRepository(c.req.param('id'));
+      return c.body(null, 204);
     })
-    .post('/repositories/:id/refresh', rateLimitGuard(3), admin, async c => {
-      try {
-        return c.json(await sources.refreshRepository(c.req.param('id')));
-      } catch (error) {
-        const mapped = failure(error);
-        if (!mapped) throw error;
-        return c.json({ error: mapped.message }, mapped.status);
-      }
-    });
+    .post('/repositories/:id/refresh', rateLimitGuard(3), admin, async c =>
+      c.json(await sources.refreshRepository(c.req.param('id')))
+    );
 };
