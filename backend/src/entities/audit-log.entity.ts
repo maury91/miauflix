@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum AuditEventType {
   LOGIN = 'LOGIN',
@@ -33,13 +33,14 @@ export enum AuditEventSeverity {
 }
 
 @Entity('audit_logs')
+// Retention deletes by event type and age; the recent-logs view orders by age.
+@Index('IDX_audit_logs_eventType_createdAt', ['eventType', 'createdAt'])
 export class AuditLog {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
     type: 'varchar',
-    length: 25,
     enum: AuditEventType,
     nullable: false,
   })
@@ -47,7 +48,6 @@ export class AuditLog {
 
   @Column({
     type: 'varchar',
-    length: 10,
     enum: AuditEventSeverity,
     default: AuditEventSeverity.INFO,
   })
@@ -68,6 +68,7 @@ export class AuditLog {
   @Column({ nullable: true })
   userEmail: string;
 
+  @Index('IDX_audit_logs_createdAt')
   @CreateDateColumn()
   createdAt: Date;
 }

@@ -40,6 +40,7 @@ import { RealtimeSearchChannel } from '@services/realtime/realtime.search';
 import { RequestService } from '@services/request/request.service';
 import { SearchService } from '@services/search/search.service';
 import { AuditLogService } from '@services/security/audit-log.service';
+import { createSecurityCleanup } from '@services/security/security-cleanup';
 import { SourceMetadataFileService, SourceService } from '@services/source';
 import { SourceAvailabilityService } from '@services/source/source-availability.service';
 import { SourceHealthService } from '@services/source/source-health.service';
@@ -61,8 +62,11 @@ process.on('unhandledRejection', reason => {
 });
 
 process.on('uncaughtException', error => {
-  logger.error('App', 'Uncaught Exception', error);
-  // Don't exit, keep the server running
+  logger.error('App', 'Uncaught Exception, exiting', error);
+  // After an uncaught exception the process state is unknown (half-finished writes, broken
+  // invariants, leaked locks). Exit and let Docker's restart policy start a clean process; the
+  // database is safe to stop at any point (SQLite WAL). Queued audit events (≤1 s) are lost.
+  process.exit(1);
 });
 
 try {
@@ -271,6 +275,12 @@ try {
       mediaLoadClient,
       progressService,
       playbackTargets: playbackTargetService,
+      securityCleanup: createSecurityCleanup({
+        'audit logs': () => auditLogService.cleanupOldLogs(),
+        'QR login requests': () => qrLoginService.cleanup(),
+        'expired refresh tokens': () => db.getRefreshTokenRepository().deleteExpired(),
+        'expired streaming keys': () => db.getStreamingKeyRepository().deleteExpired(),
+      }),
       worker: backgroundWorker,
     });
 
@@ -312,6 +322,7 @@ try {
       await audioPlaybackService.close();
       // After the drain: open streams read through it.
       mediaLoadClient.stop();
+      await auditLogService.close();
       await db.close();
       process.exit(0);
     })();

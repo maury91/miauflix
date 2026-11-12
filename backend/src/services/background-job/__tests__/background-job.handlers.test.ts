@@ -81,6 +81,7 @@ const setupTest = () => {
   registerBackgroundJobHandlers({
     backgroundJobs: { enqueueBulk: jest.fn() } as never,
     cacheService: {} as never,
+    securityCleanup: jest.fn(),
     listService: listService as never,
     listClient: { isReady: () => true } as never,
     magnetService: { getAvailableConcurrency: () => 1 } as never,

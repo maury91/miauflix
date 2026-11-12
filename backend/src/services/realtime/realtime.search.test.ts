@@ -167,7 +167,7 @@ describe('RealtimeSearchChannel', () => {
     expect(search.run).not.toHaveBeenCalled();
   });
 
-  it('rate limits bursts per client', async () => {
+  it('rate limits bursts per user', async () => {
     const { channel, client, sent, advance } = setupTest();
 
     for (let requestId = 1; requestId <= 11; requestId++) {
@@ -180,6 +180,22 @@ describe('RealtimeSearchChannel', () => {
     channel.handle(client, { type: 'search', requestId: 12, query: 'Dune', page: 1 });
     await flush();
     expect(sent.map(message => message.type)).toContain('search-results');
+  });
+
+  it("shares the limit across a user's sockets and counts every search message", () => {
+    const { channel, client, sent, search } = setupTest();
+    const otherSocket: SearchClient = { userId: 'user', send: message => sent.push(message) };
+
+    for (let i = 0; i < 5; i++) channel.handle(client, { type: 'search-genres' });
+    for (let requestId = 1; requestId <= 5; requestId++) {
+      channel.handle(otherSocket, { type: 'search', requestId, query: `q${requestId}`, page: 1 });
+    }
+    expect(search.run).toHaveBeenCalledTimes(5);
+
+    channel.handle(client, { type: 'search-genres' });
+    channel.handle(otherSocket, { type: 'search', requestId: 6, query: 'q6', page: 1 });
+    expect(search.listGenres).toHaveBeenCalledTimes(5);
+    expect(sent).toContainEqual({ type: 'search-error', requestId: 6, message: 'rate-limited' });
   });
 
   it('reports a failed search', async () => {

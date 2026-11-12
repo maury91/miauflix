@@ -30,7 +30,6 @@ export class User {
 
   @Column({
     type: 'varchar',
-    length: 10,
     enum: UserRole,
     default: UserRole.USER,
   })

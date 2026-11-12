@@ -79,7 +79,8 @@ export class QrLoginRequestRepository {
     return !!result.affected;
   }
 
-  async expireAndDelete(before: Date): Promise<void> {
-    await this.repository.delete({ expiresAt: LessThan(before) });
+  async expireAndDelete(before: Date): Promise<number> {
+    const result = await this.repository.delete({ expiresAt: LessThan(before) });
+    return result.affected ?? 0;
   }
 }
