@@ -13,7 +13,12 @@ import type { UserRepository } from '@repositories/user.repository';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 
-import { AuthService, MAX_LISTED_SESSIONS, REFRESH_REUSE_GRACE_MS } from './auth.service';
+import {
+  AuthService,
+  MAX_LISTED_SESSIONS,
+  REFRESH_REUSE_GRACE_MS,
+  SESSION_CHECK_TTL_MS,
+} from './auth.service';
 
 jest.mock('@database/database');
 jest.mock('@services/configuration/configuration.service');
@@ -745,6 +750,28 @@ describe('AuthService', () => {
       settle(liveSession());
 
       await expect(pending).rejects.toThrow(InvalidTokenError);
+    });
+
+    it('refuses an in-flight lookup whose cache entry was replaced before the revocation', async () => {
+      let settleFirst!: (token: ReturnType<typeof liveSession>) => void;
+      mockRefreshTokenRepository.findByUserAndSession
+        .mockReturnValueOnce(new Promise(resolve => (settleFirst = resolve)))
+        .mockReturnValueOnce(new Promise(() => undefined));
+      const now = jest.spyOn(Date, 'now');
+      try {
+        now.mockReturnValue(1_000_000);
+        const first = authService.resolveSession('user-123', 'session-1');
+        // The cached check expires and a second lookup takes its place in the cache
+        now.mockReturnValue(1_000_000 + SESSION_CHECK_TTL_MS + 1);
+        void authService.resolveSession('user-123', 'session-1');
+
+        await authService.revokeSession('user-123', 'session-1');
+        settleFirst(liveSession());
+
+        await expect(first).resolves.toBeNull();
+      } finally {
+        now.mockRestore();
+      }
     });
   });
 

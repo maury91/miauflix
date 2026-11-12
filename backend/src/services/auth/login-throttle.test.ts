@@ -48,11 +48,38 @@ describe('LoginThrottle', () => {
     expect(throttle.begin('a@example.com')).toBe(60);
   });
 
-  it('stays bounded, dropping the oldest accounts first', () => {
-    const { throttle, failOnce } = setupTest(2);
+  it('never drops an active block to track a new account', () => {
+    const { throttle, failOnce, advance } = setupTest(2);
     for (let i = 0; i < 3; i++) failOnce('a@example.com');
+    advance(10_000);
     failOnce('b@example.com');
-    failOnce('c@example.com');
+    // Full of active entries: a new account waits for the oldest window to end
+    expect(throttle.begin('c@example.com')).toBe(50);
+    expect(throttle.begin('a@example.com')).toBe(50);
+    expect(throttle.begin('b@example.com')).toBe(0);
+  });
+
+  it('makes room from expired entries only', () => {
+    const { throttle, failOnce, advance } = setupTest(2);
+    failOnce('a@example.com');
+    advance(30_000);
+    for (let i = 0; i < 3; i++) failOnce('b@example.com');
+    advance(30_000);
+    // a's window has ended, b's block has not
+    expect(throttle.begin('c@example.com')).toBe(0);
+    expect(throttle.begin('b@example.com')).toBe(30);
+  });
+
+  it('keeps the window order when a window restarts', () => {
+    const { throttle, failOnce, advance } = setupTest(2);
+    expect(throttle.begin('a@example.com')).toBe(0);
+    advance(10_000);
+    failOnce('b@example.com');
+    advance(10_000);
+    // a's first failure starts its window after b's, so b is the first to expire
+    throttle.fail('a@example.com');
+    advance(55_000);
+    expect(throttle.begin('c@example.com')).toBe(0);
     expect(throttle.begin('a@example.com')).toBe(0);
   });
 });

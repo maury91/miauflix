@@ -67,6 +67,13 @@ export interface SessionRevocation {
   session: string;
 }
 
+/** A session lookup, cached for `SESSION_CHECK_TTL_MS`; `revoked` is set if its session goes meanwhile. */
+interface SessionCheck {
+  until: number;
+  session: Promise<ActiveSession | null>;
+  revoked?: boolean;
+}
+
 /** bcrypt only reads this many bytes of a password. */
 const BCRYPT_MAX_PASSWORD_BYTES = 72;
 
@@ -124,10 +131,12 @@ export class AuthService {
   private streamingKeyTTL: number;
   private streamingKeySalt: string;
   private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
-  private readonly sessionChecks = new Map<
-    string,
-    { until: number; session: Promise<ActiveSession | null>; revoked?: boolean }
-  >();
+  private readonly sessionChecks = new Map<string, SessionCheck>();
+  /**
+   * Lookups that have not settled yet, by `userId:session`, kept apart from the cache (whose
+   * entries can be replaced or swept) so a revocation reaches every one of them.
+   */
+  private readonly pendingSessionChecks = new Map<string, Set<SessionCheck>>();
   private readonly revocationListeners = new Set<(revocation: SessionRevocation) => void>();
 
   // Configuration
@@ -354,12 +363,11 @@ export class AuthService {
 
   private sessionRevoked(revocation: SessionRevocation): void {
     const key = `${revocation.userId}:${revocation.session}`;
-    const check = this.sessionChecks.get(key);
-    if (check) {
-      // A lookup already in flight must not hand out the session once it settles
-      check.revoked = true;
-      this.sessionChecks.delete(key);
-    }
+    const cached = this.sessionChecks.get(key);
+    if (cached) cached.revoked = true;
+    this.sessionChecks.delete(key);
+    // Lookups already in flight must not hand out the session once they settle
+    for (const check of this.pendingSessionChecks.get(key) ?? []) check.revoked = true;
     for (const listener of this.revocationListeners) listener(revocation);
   }
 
@@ -385,19 +393,25 @@ export class AuthService {
           ? { userId, sessionId, email: token.user.email, role: token.user.role }
           : null
       );
-    const check = { until: now + SESSION_CHECK_TTL_MS, session };
+    const check: SessionCheck = { until: now + SESSION_CHECK_TTL_MS, session };
     this.sessionChecks.set(key, check);
-    return this.unlessRevoked(check).catch(error => {
-      if (this.sessionChecks.get(key) === check) this.sessionChecks.delete(key);
-      throw error;
-    });
+    const pending = this.pendingSessionChecks.get(key) ?? new Set<SessionCheck>();
+    pending.add(check);
+    this.pendingSessionChecks.set(key, pending);
+    return this.unlessRevoked(check)
+      .catch(error => {
+        if (this.sessionChecks.get(key) === check) this.sessionChecks.delete(key);
+        throw error;
+      })
+      .finally(() => {
+        pending.delete(check);
+        if (pending.size === 0 && this.pendingSessionChecks.get(key) === pending)
+          this.pendingSessionChecks.delete(key);
+      });
   }
 
-  /** A cached lookup's result, or null when its session was revoked while it was in flight. */
-  private async unlessRevoked(check: {
-    session: Promise<ActiveSession | null>;
-    revoked?: boolean;
-  }): Promise<ActiveSession | null> {
+  /** A lookup's result, or null when its session was revoked while it was in flight. */
+  private async unlessRevoked(check: SessionCheck): Promise<ActiveSession | null> {
     const session = await check.session;
     return check.revoked ? null : session;
   }
