@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { OnScreenKeyboard } from './components/OnScreenKeyboard';
 import { SearchBox } from './components/SearchBox';
 import { SearchChips } from './components/SearchChips';
+import { searchPanelActionCount } from './components/searchPanel';
 import { SearchResults } from './components/SearchResults';
 import {
   clampSearchFocus,
@@ -83,13 +84,15 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
       })),
     [search.recents]
   );
+  const panelActions = searchPanelActionCount(search.status, search.results.length, search.error);
   const counts = useMemo(
     () => ({
       popular: genres.length,
       recents: recents.length,
       results: search.results.length,
+      state: panelActions,
     }),
-    [genres.length, recents.length, search.results.length]
+    [genres.length, recents.length, search.results.length, panelActions]
   );
   const focus = search.focus;
 
@@ -140,7 +143,7 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
     if (element && document.activeElement !== element) {
       element.focus({ preventScroll: true });
     }
-    if (focus.zone === 'results')
+    if (focus.zone === 'results' || focus.zone === 'state')
       element?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
   }, [elementFor, focus, search.results.length]);
 
@@ -176,7 +179,18 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
     if (!focusResultsWhenReady.current || search.status === 'loading') return;
     focusResultsWhenReady.current = false;
     if (search.status === 'ready' && search.results.length) setFocus({ zone: 'results', index: 0 });
-  }, [search.results.length, search.status, setFocus]);
+    // No results or a failure: focus what to do next (clear, or try again).
+    else if (panelActions) setFocus({ zone: 'state', index: 0 });
+  }, [panelActions, search.results.length, search.status, setFocus]);
+
+  const retrySearch = () => {
+    setFocus({ zone: 'state', index: 0 });
+    dispatch(searchActions.retryRequested());
+  };
+  const clearSearch = () => {
+    dispatch(searchActions.queryChanged(''));
+    setFocus({ zone: 'keyboard', index: 0 });
+  };
 
   const openResult = (index: number) => {
     const result = search.results[index];
@@ -227,6 +241,8 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
       else if (focus.zone === 'popular') selectGenre(focus.index);
       else if (focus.zone === 'recents') selectRecent(focus.index);
       else if (focus.zone === 'results') openResult(focus.index);
+      // The panel's buttons own their behaviour (the details toggle keeps its open state).
+      else if (focus.zone === 'state') elementFor(focus)?.click();
       else if (focus.zone === 'back') onDismiss();
       else return false;
       return true;
@@ -311,6 +327,13 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
               onOpen={openResult}
               onFocusResult={index => setFocus({ zone: 'results', index })}
               registerResult={register('results')}
+              query={search.query}
+              isGenre={search.genre !== null}
+              panelFocusedIndex={focus.zone === 'state' ? focus.index : null}
+              onFocusPanelAction={index => setFocus({ zone: 'state', index })}
+              registerPanelAction={register('state')}
+              onRetry={retrySearch}
+              onClear={clearSearch}
             />
           )}
         </RightColumn>

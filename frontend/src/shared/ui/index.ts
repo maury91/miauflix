@@ -21,6 +21,8 @@ export type { QualityBadgeProps } from './quality-badge/QualityBadge';
 export { QualityBadge } from './quality-badge/QualityBadge';
 export type { SpinnerProps } from './spinner/Spinner';
 export { Spinner } from './spinner/Spinner';
+export type { StatePanelAction, StatePanelDetail, StatePanelProps } from './state-panel/StatePanel';
+export { StatePanel } from './state-panel/StatePanel';
 export type { SwitchProps } from './switch/Switch';
 export { Switch } from './switch/Switch';
 export { PALETTE, SETTINGS_PALETTE } from './tokens';

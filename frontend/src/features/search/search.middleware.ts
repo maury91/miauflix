@@ -59,6 +59,9 @@ export const searchMiddleware: Middleware = api => {
     ) {
       cancelDebounce();
       request(1, true);
+    } else if (searchActions.retryRequested.match(action)) {
+      cancelDebounce();
+      request(1, false);
     } else if (searchActions.nextPageRequested.match(action)) {
       const state = searchState();
       if (state.status === 'ready' && state.moreRequestId === null && state.page < state.totalPages)

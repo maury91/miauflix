@@ -5,8 +5,12 @@ export interface ErrorPresentation {
   message: string;
   /** How to fix it, when it can be fixed (e.g. configure TMDB). */
   hint?: string;
+  /** Stable error code from the server, e.g. `service_not_configured`. */
+  code?: string;
   /** Matches the `[error <id>]` line in the server logs. */
   errorId?: string;
+  /** Fixable by configuring a service; the hint says how. */
+  needsConfiguration: boolean;
   /** The raw server-side message; the server only sends it to admins. */
   detail?: string;
   /** Whether more detail was written to the browser console. */
@@ -60,11 +64,16 @@ export function presentError(error: unknown, fallback: string): ErrorPresentatio
       message: body.message,
       hint: body.hint,
       ...(body.detail ? { detail: body.detail } : {}),
-      // A fixable problem is explained by its hint; an id only helps for the rest.
-      errorId: body.needsConfiguration ? undefined : body.errorId,
+      code: body.code,
+      errorId: body.errorId,
+      needsConfiguration: body.needsConfiguration === true,
       inConsole: true,
     };
   }
   const status = (error as { status?: unknown } | null)?.status;
-  return { message: fallback, inConsole: typeof status === 'number' && status >= 500 };
+  return {
+    message: fallback,
+    needsConfiguration: false,
+    inConsole: typeof status === 'number' && status >= 500,
+  };
 }

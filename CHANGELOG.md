@@ -10,6 +10,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - Downloaded files are padded with random bytes so their sizes on disk cannot be matched to known torrents. Files over 64 KiB grow by at most about 3%; smaller files all take 64 KiB, which can be many times their size. Set `STORAGE_PAD_FILE_SIZES=false` to turn it off
 - Logs no longer show which torrents were downloaded: info hashes, magnet links and movie titles next to their sources are left out, and anything that still looks like an info hash or magnet link is replaced with `[redacted]`
 - Server errors now say what went wrong where it went wrong. When search, a title or a Home row fails, the page explains it: a problem an admin can fix says how (for example, search needs TMDB to be configured, or TMDB rejected the access token), anything else shows an error id to look up in the server logs, with full details in the browser console. Before, a failed search only said it was unavailable and other failures showed a generic message
+- Search has clearer "no results" and "unavailable" screens: a big message with what to do, a **Clear search** or **Try again** button you can reach with the remote, and the error id and server details tucked under **Technical details**
 
 ### Documentation
 
