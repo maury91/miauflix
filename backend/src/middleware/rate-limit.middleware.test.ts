@@ -60,13 +60,27 @@ describe('RateLimiterRegistry', () => {
     expect(registry.get('a', '/x', 0.01)).toBe(slow);
   });
 
-  it('evicts the least recently used limiter past the cap', () => {
-    const registry = new RateLimiterRegistry(() => 0, 2);
-    const a = registry.get('a', '/x', 5);
-    registry.get('b', '/x', 5);
-    registry.get('a', '/x', 5); // a is now the most recent
-    registry.get('c', '/x', 5); // evicts b
+  it('never evicts an active limiter past the cap: new addresses share an overflow limiter', () => {
+    let now = 0;
+    const registry = new RateLimiterRegistry(() => now, 2);
+    const a = registry.get('a', '/x', 1);
+    expect(a.limiter.shouldReject()).toBe(false);
+    expect(a.limiter.shouldReject()).toBe(true); // a is at its limit
+    registry.get('b', '/x', 1);
+
+    const c = registry.get('c', '/x', 1);
+    const d = registry.get('d', '/x', 1);
     expect(registry.size).toBe(2);
-    expect(registry.get('a', '/x', 5)).toBe(a);
+    expect(c).toBe(d); // one shared limiter per route
+    expect(c.limiter.shouldReject()).toBe(false);
+    expect(d.limiter.shouldReject()).toBe(true);
+    // a kept its count instead of getting a fresh allowance.
+    expect(registry.get('a', '/x', 1)).toBe(a);
+    expect(a.limiter.shouldReject()).toBe(true);
+
+    now = 61_000; // everything idle: new addresses get their own limiter again
+    const e = registry.get('e', '/x', 1);
+    expect(e).not.toBe(c);
+    expect(registry.size).toBe(1);
   });
 });

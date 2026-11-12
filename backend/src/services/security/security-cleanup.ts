@@ -21,10 +21,12 @@ export function securitySchedules(): BackgroundJobSchedule[] {
 
 /**
  * Delete what only grows otherwise: audit logs past retention, expired QR login requests,
- * refresh tokens and streaming keys. Each task runs even when another one fails.
+ * refresh tokens and streaming keys. Each task runs even when another one fails; then the job
+ * fails if any did, so the queue retries it (the deletes are safe to repeat).
  */
 export function createSecurityCleanup(tasks: Record<string, () => Promise<number | void>>) {
   return async (): Promise<void> => {
+    const failed: string[] = [];
     for (const [name, task] of Object.entries(tasks)) {
       try {
         const deleted = await task();
@@ -33,7 +35,9 @@ export function createSecurityCleanup(tasks: Record<string, () => Promise<number
         }
       } catch (error) {
         logger.error('SecurityCleanup', `Unable to clean up ${name}`, error);
+        failed.push(name);
       }
     }
+    if (failed.length > 0) throw new Error(`Security cleanup failed for: ${failed.join(', ')}`);
   };
 }

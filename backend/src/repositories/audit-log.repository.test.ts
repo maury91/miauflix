@@ -2,6 +2,7 @@ jest.mock('@logger');
 jest.unmock('@database/database');
 
 import { createTestDatabase } from '@__test-utils__/database.helpers';
+import { logger } from '@logger';
 
 import type { Database } from '@database/database';
 import { AuditEventType } from '@entities/audit-log.entity';
@@ -116,6 +117,32 @@ describe('AuditLogRepository retention', () => {
     expect(error.metadata).toEqual(
       expect.objectContaining({ unserializable: expect.any(String), path: '/api/x' })
     );
+  });
+
+  it('logs a failed query, or a failed audit write, without its parameter values', async () => {
+    const secret = 'victim@example.com';
+    const logged = () =>
+      JSON.stringify([
+        (logger.error as jest.Mock).mock.calls,
+        (logger.warn as jest.Mock).mock.calls,
+      ]);
+
+    await expect(
+      repository['repository'].query('INSERT INTO missing_table VALUES (?)', [secret])
+    ).rejects.toThrow();
+    expect(logged()).toContain('missing_table');
+    expect(logged()).not.toContain(secret);
+
+    const service = new AuditLogService(database, config);
+    jest
+      .spyOn(repository, 'insertMany')
+      .mockImplementation(() =>
+        repository['repository'].query('INSERT INTO missing_table VALUES (?)', [secret])
+      );
+    await service.logSecurityEvent({ eventType: AuditEventType.LOGIN_FAILURE, userEmail: secret });
+    await service.close();
+    expect(logged()).toContain('Unable to write 1 audit events');
+    expect(logged()).not.toContain(secret);
   });
 
   it('uses WAL and indexes createdAt', async () => {

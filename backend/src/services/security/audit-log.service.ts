@@ -2,6 +2,7 @@ import { logger } from '@logger';
 import type { Context } from 'hono';
 
 import type { Database } from '@database/database';
+import { describeDatabaseError } from '@database/safe-error';
 import type { AuditLog } from '@entities/audit-log.entity';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { ConfigService } from '@mytypes/configuration';
@@ -166,7 +167,8 @@ export class AuditLogService {
     }
     this.running = this.drain().finally(() => {
       this.running = null;
-      if (this.flushAgain && !this.waitingForRetry && this.pending.length > 0) {
+      // While closing, close() drives every write itself, so none starts behind its back.
+      if (this.flushAgain && !this.waitingForRetry && !this.closed && this.pending.length > 0) {
         this.flushAgain = false;
         void this.flush();
       }
@@ -194,14 +196,14 @@ export class AuditLogService {
           logger.error(
             'AuditLogService',
             `Unable to write ${this.inFlight.length} audit events after ${MAX_WRITE_ATTEMPTS} attempts; dropped them`,
-            { error }
+            describeDatabaseError(error)
           );
           continue;
         }
         logger.warn(
           'AuditLogService',
           `Unable to write ${this.inFlight.length} audit events; retrying`,
-          { error }
+          describeDatabaseError(error)
         );
         this.pending.unshift(...this.inFlight);
         if (!this.closed) {
@@ -241,6 +243,8 @@ export class AuditLogService {
     for (let attempt = 0; attempt < MAX_WRITE_ATTEMPTS && this.pending.length > 0; attempt++) {
       await this.flush();
     }
+    // No write is running past this point: the database can close.
+    await this.running;
     const unwritten = this.discarded + this.lost + this.pending.length;
     if (unwritten > 0) {
       logger.error('AuditLogService', `Closing with ${unwritten} audit events never written`);

@@ -142,6 +142,33 @@ describe('AuditLogService', () => {
     await expect(service.close()).resolves.toBe(0);
   });
 
+  it('does not return from close() while a replacement write is still running', async () => {
+    jest.useFakeTimers();
+    const { service, repository } = setup();
+    let failFirst!: (error: Error) => void;
+    let finishSecond!: () => void;
+    repository.insertMany
+      .mockImplementationOnce(() => new Promise<void>((_, reject) => (failFirst = reject)))
+      .mockImplementationOnce(() => new Promise<void>(resolve => (finishSecond = resolve)));
+
+    for (let i = 0; i < 5; i++) await service.logSecurityEvent(event);
+    await jest.advanceTimersByTimeAsync(1_000); // first write starts and hangs
+    await service.logSecurityEvent(event);
+    await jest.advanceTimersByTimeAsync(1_000); // its timer asks for another pass
+
+    let closed = false;
+    const closing = service.close().then(() => (closed = true));
+    failFirst(new Error('locked')); // during close: the batch goes back and is retried
+    await jest.advanceTimersByTimeAsync(0);
+    expect(repository.insertMany).toHaveBeenCalledTimes(2);
+    expect(closed).toBe(false); // the retry is still writing
+
+    finishSecond();
+    await closing;
+    const calls = repository.insertMany.mock.calls as unknown as [unknown[]][];
+    expect(calls[1][0]).toHaveLength(6);
+  });
+
   it('applies the shorter retention to API access records only', async () => {
     const { service, repository } = setup();
     await expect(service.cleanupOldLogs({ apiAccessDays: 14, otherDays: 90 })).resolves.toBe(6);

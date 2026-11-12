@@ -40,7 +40,14 @@ import { SCHEMA_MIGRATIONS_TABLE, upgradeSchema } from './schema-upgrade';
 
 class DatabaseLogger extends AbstractLogger {
   protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {
-    const messages = this.prepareLogMessages(logMessage, {
+    // Failed and slow queries are logged without their parameters, which hold the row's values
+    // (audit events, users, file paths); with DEBUG=DATABASE every query still shows them.
+    const scrubbed = (Array.isArray(logMessage) ? logMessage : [logMessage]).map(message =>
+      message.type === 'query-error' || message.type === 'query-slow'
+        ? { ...message, parameters: undefined }
+        : message
+    );
+    const messages = this.prepareLogMessages(scrubbed, {
       highlightSql: true,
     });
 

@@ -10,6 +10,8 @@ const IDLE_MS = 60_000;
 const SWEEP_EVERY_MS = 30_000;
 /** Hard ceiling for floods of distinct addresses within one idle window. */
 const MAX_ENTRIES = 50_000;
+/** While full, idle entries are looked for at most this often. */
+const FULL_SWEEP_EVERY_MS = 1_000;
 /** At most one audit row per address and route per this long while it stays over the limit. */
 const REJECTION_LOG_EVERY_MS = 60_000;
 
@@ -54,9 +56,15 @@ interface LimiterEntry {
   lastRejectionLog: number;
 }
 
-/** Limiters by address and route, dropped once idle and capped in number (oldest use first). */
+/**
+ * Limiters by address and route, dropped once idle (when they hold no request inside their
+ * window, so dropping one never resets a count). Past `maxEntries` an active limiter is never
+ * evicted: new addresses share one overflow limiter per route instead, so a flood of distinct
+ * addresses is still limited (as a whole) and memory stays bounded by the number of routes.
+ */
 export class RateLimiterRegistry {
   private readonly entries = new Map<string, LimiterEntry>();
+  private readonly overflow = new Map<string, LimiterEntry>();
   private lastSweep = 0;
 
   constructor(
@@ -74,31 +82,38 @@ export class RateLimiterRegistry {
 
     const key = `${subject}-${route}`;
     let entry = this.entries.get(key);
-    if (entry) {
-      // Re-insert so iteration order is least recently used first.
-      this.entries.delete(key);
-    } else {
-      entry = {
-        limiter: new RateLimiter(limit, `RateLimitMiddleware:${key}`),
-        lastSeen: now,
-        // Fractional limits have windows longer than a second; never drop one mid-window.
-        idleMs: Math.max(IDLE_MS, Math.ceil(1000 / limit)),
-        lastRejectionLog: -Infinity,
-      };
+    if (!entry && this.entries.size >= this.maxEntries) {
+      if (now - this.lastSweep >= FULL_SWEEP_EVERY_MS) this.sweep(now);
       if (this.entries.size >= this.maxEntries) {
-        const oldest = this.entries.keys().next().value;
-        if (oldest !== undefined) this.entries.delete(oldest);
+        // Routes come from the router's patterns, so this map stays small.
+        entry = this.overflow.get(route) ?? this.create(`overflow-${route}`, limit, now);
+        entry.lastSeen = now;
+        this.overflow.set(route, entry);
+        return entry;
       }
     }
+    entry ??= this.create(key, limit, now);
     entry.lastSeen = now;
     this.entries.set(key, entry);
     return entry;
   }
 
+  private create(key: string, limit: number, now: number): LimiterEntry {
+    return {
+      limiter: new RateLimiter(limit, `RateLimitMiddleware:${key}`),
+      lastSeen: now,
+      // Fractional limits have windows longer than a second; never drop one mid-window.
+      idleMs: Math.max(IDLE_MS, Math.ceil(1000 / limit)),
+      lastRejectionLog: -Infinity,
+    };
+  }
+
   private sweep(now: number): void {
     this.lastSweep = now;
-    for (const [key, entry] of this.entries) {
-      if (now - entry.lastSeen >= entry.idleMs) this.entries.delete(key);
+    for (const map of [this.entries, this.overflow]) {
+      for (const [key, entry] of map) {
+        if (now - entry.lastSeen >= entry.idleMs) map.delete(key);
+      }
     }
   }
 }

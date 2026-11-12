@@ -408,27 +408,33 @@ describe('RealtimeGateway session revocation', () => {
 
 describe('RealtimeGateway message limits', () => {
   it("closes a socket once the user's sockets together send too many messages", async () => {
+    // A frozen clock: no tokens refill while the test runs, however long it takes.
+    const now = jest.spyOn(Date, 'now').mockReturnValue(1_000_000);
     const { gateway, socket } = await setupTest();
-    const other = openSocket(gateway, '__at_session2=fixture-token');
-    other.emit(
-      'message',
-      JSON.stringify({ type: 'authenticate', session: 'session2', clientId: 'client' })
-    );
-    await Promise.resolve();
-
-    const heartbeat = (target: typeof socket, clientSequence: number) =>
-      target.emit(
+    try {
+      const other = openSocket(gateway, '__at_session2=fixture-token');
+      other.emit(
         'message',
-        JSON.stringify({ type: 'interest-heartbeat', clientSequence, visible: false })
+        JSON.stringify({ type: 'authenticate', session: 'session2', clientId: 'client' })
       );
-    for (let i = 1; i <= 75; i++) heartbeat(socket, i);
-    for (let i = 1; i <= 75; i++) heartbeat(other, i);
-    expect(socket.close).not.toHaveBeenCalled();
-    expect(other.close).not.toHaveBeenCalled();
+      await Promise.resolve();
 
-    heartbeat(other, 76);
-    expect(other.close).toHaveBeenCalledWith(1008, 'Too many messages');
-    gateway.close();
+      const heartbeat = (target: typeof socket, clientSequence: number) =>
+        target.emit(
+          'message',
+          JSON.stringify({ type: 'interest-heartbeat', clientSequence, visible: false })
+        );
+      for (let i = 1; i <= 75; i++) heartbeat(socket, i);
+      for (let i = 1; i <= 75; i++) heartbeat(other, i);
+      expect(socket.close).not.toHaveBeenCalled();
+      expect(other.close).not.toHaveBeenCalled();
+
+      heartbeat(other, 76);
+      expect(other.close).toHaveBeenCalledWith(1008, 'Too many messages');
+    } finally {
+      gateway.close();
+      now.mockRestore();
+    }
   });
 
   it('accepts one authentication attempt per socket', async () => {

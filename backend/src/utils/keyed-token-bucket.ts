@@ -17,7 +17,8 @@ export class KeyedTokenBucket {
   constructor(
     private readonly capacity: number,
     private readonly refillPerSecond: number,
-    private readonly now: () => number = Date.now
+    // Read through Date.now at each call, so a test can stub the clock.
+    private readonly now: () => number = () => Date.now()
   ) {
     this.lastSweep = now();
   }
