@@ -43,6 +43,30 @@ import { toUserDto } from './user-dto.util';
 /** How many of the sessions a device holds `/auth/sessions` validates: one per profile on a shared TV. */
 export const MAX_LISTED_SESSIONS = 8;
 
+/**
+ * A rotated refresh token presented again this soon after its rotation is taken for a request
+ * that raced the rotation (two tabs refreshing at once) and only refused; later, the session is
+ * revoked, since only a copy of the token can still be using it.
+ */
+export const REFRESH_REUSE_GRACE_MS = 30_000;
+
+/** How long a session check for an access token is trusted before the database is asked again. */
+export const SESSION_CHECK_TTL_MS = 5_000;
+
+/** Who a valid access token acts as: the session must still exist, and the role is the current one. */
+export interface ActiveSession {
+  userId: string;
+  sessionId: string;
+  email: string;
+  role: UserRole;
+}
+
+/** A session, or every session of a user, was revoked or may have changed. */
+export interface SessionRevocation {
+  userId: string;
+  session?: string;
+}
+
 /** bcrypt only reads this many bytes of a password. */
 const BCRYPT_MAX_PASSWORD_BYTES = 72;
 
@@ -61,6 +85,11 @@ const verifyPassword = async (password: string, passwordHash: string): Promise<b
     bunPassword.verify(bytes.subarray(0, BCRYPT_MAX_PASSWORD_BYTES), passwordHash)
   );
 };
+
+// This is used to prevent enumerating existing emails by checking the response time
+let dummyPasswordHash: Promise<string> | null = null;
+const getDummyPasswordHash = (): Promise<string> =>
+  (dummyPasswordHash ??= hashPassword(randomBytes(16).toString('base64url')));
 
 export interface AuthResult {
   accessToken: string;
@@ -95,6 +124,11 @@ export class AuthService {
   private streamingKeyTTL: number;
   private streamingKeySalt: string;
   private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
+  private readonly sessionChecks = new Map<
+    string,
+    { until: number; session: Promise<ActiveSession | null> }
+  >();
+  private readonly revocationListeners = new Set<(revocation: SessionRevocation) => void>();
 
   // Configuration
   private allowCreateAdminOnFirstRun: boolean;
@@ -265,7 +299,10 @@ export class AuthService {
   @traced('AuthService')
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.userRepository.findByEmail(email);
-    if (!user) return null;
+    if (!user) {
+      await verifyPassword(password, await getDummyPasswordHash());
+      return null;
+    }
 
     const isValid = await verifyPassword(password, user.passwordHash);
     return isValid ? user : null;
@@ -287,7 +324,7 @@ export class AuthService {
     const session = await this.generateSession();
 
     // Generate tokens
-    const accessToken = await this.generateAccessToken(user);
+    const accessToken = await this.generateAccessToken(user, session);
     const opaqueRefreshToken = await this.generateOpaqueRefreshToken(
       user,
       session,
@@ -304,11 +341,69 @@ export class AuthService {
   }
 
   async revokeSession(userId: string, session: string): Promise<boolean> {
-    return this.refreshTokenRepository.deleteByUserAndSession(userId, session);
+    const revoked = await this.refreshTokenRepository.deleteByUserAndSession(userId, session);
+    this.sessionRevoked({ userId, session });
+    return revoked;
+  }
+
+  /** Called when a session (or, without `session`, any of a user's sessions) is revoked. */
+  onSessionRevoked(listener: (revocation: SessionRevocation) => void): () => void {
+    this.revocationListeners.add(listener);
+    return () => this.revocationListeners.delete(listener);
+  }
+
+  private sessionRevoked(revocation: SessionRevocation): void {
+    for (const key of this.sessionChecks.keys()) {
+      if (
+        revocation.session
+          ? key === `${revocation.userId}:${revocation.session}`
+          : key.startsWith(`${revocation.userId}:`)
+      )
+        this.sessionChecks.delete(key);
+    }
+    for (const listener of this.revocationListeners) listener(revocation);
+  }
+
+  /**
+   * The session an access token belongs to, if it still exists: access tokens are revoked with
+   * their session (logout, refresh-token reuse, device slot eviction) instead of living out their
+   * expiry, and the role is read from the user rather than the token. Cached for a few seconds;
+   * revocations in this process clear the cache at once.
+   */
+  async resolveSession(userId: string, sessionId: string): Promise<ActiveSession | null> {
+    const key = `${userId}:${sessionId}`;
+    const now = Date.now();
+    const cached = this.sessionChecks.get(key);
+    if (cached && cached.until > now) return cached.session;
+    if (this.sessionChecks.size > 10_000) {
+      for (const [entry, check] of this.sessionChecks)
+        if (check.until <= now) this.sessionChecks.delete(entry);
+    }
+    const session = this.refreshTokenRepository
+      .findByUserAndSession(userId, sessionId)
+      .then(token =>
+        token?.user && token.expiresAt > new Date()
+          ? { userId, sessionId, email: token.user.email, role: token.user.role }
+          : null
+      );
+    this.sessionChecks.set(key, { until: now + SESSION_CHECK_TTL_MS, session });
+    return session.catch(error => {
+      this.sessionChecks.delete(key);
+      throw error;
+    });
+  }
+
+  /** An access token that is valid, names the session it is sent for, and whose session still exists. */
+  async authenticateAccessToken(token: string, sessionId: string): Promise<ActiveSession> {
+    const payload = await this.verifyAccessToken(token);
+    if (payload.sessionId !== sessionId) throw new InvalidTokenError();
+    const session = await this.resolveSession(payload.userId, sessionId);
+    if (!session) throw new InvalidTokenError();
+    return session;
   }
 
   @traced('AuthService')
-  private async generateAccessToken(user: User): Promise<string> {
+  private async generateAccessToken(user: User, session: string): Promise<string> {
     const now = Math.floor(Date.now() / 1000);
     // Calculate expiration time in seconds (accessTokenTTL is in milliseconds)
     const expirationTime = now + Math.floor(this.accessTokenTTL / 1000);
@@ -317,6 +412,7 @@ export class AuthService {
       userId: user.id,
       email: user.email,
       role: user.role,
+      sid: session,
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt(now)
@@ -343,7 +439,8 @@ export class AuthService {
     const userTokenCount = await this.refreshTokenRepository.countByUser(user.id);
     if (userTokenCount >= this.maxDeviceSlotsPerUser) {
       // Remove oldest token to make room
-      await this.refreshTokenRepository.deleteOldestByUser(user.id);
+      if (await this.refreshTokenRepository.deleteOldestByUser(user.id))
+        this.sessionRevoked({ userId: user.id });
     }
 
     // Create new refresh token (starts new chain)
@@ -375,11 +472,15 @@ export class AuthService {
       }
 
       const { userId, email, role } = payload;
+      // Tokens from before session binding have no `sid`; they are refused and the client refreshes
+      const sessionId = (payload as { sid?: unknown }).sid;
+      if (typeof sessionId !== 'string' || !sessionId) throw new InvalidTokenError();
 
       return {
         userId,
         email,
         role: role as UserRole,
+        sessionId,
       };
     } catch {
       throw new InvalidTokenError();
@@ -391,6 +492,7 @@ export class AuthService {
     const refreshToken = await this.refreshTokenRepository.findByToken(opaqueToken, session);
 
     if (!refreshToken) {
+      await this.detectRefreshTokenReuse(opaqueToken, session);
       throw new InvalidTokenError();
     }
 
@@ -398,6 +500,7 @@ export class AuthService {
     if (refreshToken.expiresAt < new Date()) {
       // Clean up expired token
       await this.refreshTokenRepository.delete(refreshToken.id);
+      this.sessionRevoked({ userId: refreshToken.userId, session });
       throw new InvalidTokenError();
     }
 
@@ -414,10 +517,38 @@ export class AuthService {
         refreshToken.userId,
         refreshToken.session
       );
+      this.sessionRevoked({ userId: refreshToken.userId, session: refreshToken.session });
       throw new InvalidTokenError();
     }
 
     return refreshToken;
+  }
+
+  /**
+   * A refresh token that is no longer the session's current one but was its previous one has been
+   * copied: whoever rotated it holds the session now. Past a short grace for racing refreshes the
+   * session is revoked, so neither copy can be used again.
+   */
+  private async detectRefreshTokenReuse(opaqueToken: string, session: string): Promise<void> {
+    const reused = await this.refreshTokenRepository.findByPreviousToken(opaqueToken, session);
+    if (!reused) return;
+    if (reused.rotatedAt && Date.now() - reused.rotatedAt.getTime() < REFRESH_REUSE_GRACE_MS) {
+      return;
+    }
+    await this.refreshTokenRepository.deleteByUserAndSession(reused.userId, session);
+    this.sessionRevoked({ userId: reused.userId, session });
+    const user = await this.userRepository.findById(reused.userId);
+    await this.auditLogService.logSecurityEvent({
+      eventType: AuditEventType.SUSPICIOUS_ACTIVITY,
+      severity: AuditEventSeverity.CRITICAL,
+      description: 'Refresh token reuse detected - session revoked',
+      userEmail: user?.email,
+      metadata: {
+        originalIssueIp: reused.issueIpAddress,
+        lastIp: reused.lastIpAddress,
+        rotatedAt: reused.rotatedAt?.toISOString(),
+      },
+    });
   }
 
   @traced('AuthService')
@@ -435,7 +566,7 @@ export class AuthService {
       const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
 
       // Generate new access token
-      const newAccessToken = await this.generateAccessToken(refreshToken.user);
+      const newAccessToken = await this.generateAccessToken(refreshToken.user, session);
 
       // Generate new refresh token
       const newOpaqueToken = randomBytes(32).toString('base64url');
@@ -498,6 +629,7 @@ export class AuthService {
 
     // Revoke only the refresh token for this specific session
     await this.refreshTokenRepository.deleteByUserAndSession(refreshToken.userId, session);
+    this.sessionRevoked({ userId: refreshToken.userId, session });
 
     return user;
   }
@@ -602,6 +734,11 @@ export class AuthService {
     return verifiedSessions.filter((session): session is UserSession => session !== null);
   }
 
+  /** Name prefixes of the session cookies (`<prefix>_<session>`). */
+  getSessionCookiePrefixes(): string[] {
+    return [this.cookieName, this.accessTokenCookieName];
+  }
+
   /**
    * Get cookie configuration for refresh tokens
    */
@@ -699,7 +836,10 @@ export class AuthService {
    * Find streaming key in database
    */
   @traced('AuthService')
-  private async findStreamingKey(key: string, userId: string): Promise<StreamingToken | null> {
+  private async findStreamingKey(
+    key: string,
+    userId: string
+  ): Promise<(StreamingToken & { expiresAt: Date }) | null> {
     try {
       const deterministicSalt = generateDeterministicSalt(userId, this.streamingKeySalt);
       const hashToFind = await hashKeyWithSalt(key, deterministicSalt);
@@ -710,6 +850,7 @@ export class AuthService {
         return {
           movieId: streamingKey.movieId,
           userId: streamingKey.userId,
+          expiresAt: streamingKey.expiresAt,
         };
       }
     } catch {
@@ -739,15 +880,11 @@ export class AuthService {
     const { userId, randomKey } = parsed;
 
     // Fallback: Direct database verification with deterministic salt
-    const streamingKey = await this.findStreamingKey(randomKey, userId);
-    if (streamingKey) {
-      // Cache the successful result for future requests
-      this.streamingKeyCache.setWithTTL(
-        key,
-        streamingKey,
-        // Cache until the key expires (or slightly before to be safe)
-        this.streamingKeyTTL * 0.9
-      );
+    const found = await this.findStreamingKey(randomKey, userId);
+    if (found) {
+      const { expiresAt, ...streamingKey } = found;
+      // Cache the successful result until the key itself expires, never past it
+      this.streamingKeyCache.set(key, streamingKey, expiresAt.getTime());
 
       return streamingKey;
     }

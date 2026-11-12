@@ -3,7 +3,9 @@ import type { Context } from 'hono';
 
 import type { Database } from '@database/database';
 import type { QrLoginRequest } from '@entities/qr-login-request.entity';
+import type { ConfigService } from '@mytypes/configuration';
 import type { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
+import { getRealClientIp } from '@utils/proxy.util';
 
 const TTL_MS = 5 * 60 * 1000;
 
@@ -14,7 +16,10 @@ const token = (): string => randomBytes(32).toString('base64url');
 export class QrLoginService {
   private readonly repository: QrLoginRequestRepository;
 
-  constructor(private readonly db: Database) {
+  constructor(
+    private readonly db: Database,
+    private readonly config?: Pick<ConfigService, 'get'>
+  ) {
     this.repository = db.getQrLoginRequestRepository();
   }
 
@@ -34,7 +39,7 @@ export class QrLoginService {
       state: 'pending',
       approvedUserId: null,
       userAgent: context.req.header('user-agent')?.slice(0, 500) ?? null,
-      ipAddress: context.req.header('x-forwarded-for')?.split(',')[0]?.trim() ?? null,
+      ipAddress: this.clientIp(context),
       expiresAt,
       approvedAt: null,
       claimedAt: null,
@@ -47,6 +52,16 @@ export class QrLoginService {
       expiresAt: expiresAt.toISOString(),
       pollInterval: 2,
     };
+  }
+
+  /** X-Forwarded-For only counts when the reverse proxy vouched for it with its secret. */
+  private clientIp(context: Context): string | null {
+    try {
+      return getRealClientIp(context, this.config?.get('REVERSE_PROXY_SECRET') ?? '') || null;
+    } catch {
+      // Not served by Bun.serve (tests): no connection to read
+      return null;
+    }
   }
 
   async getApproval(approvalToken: string): Promise<QrLoginRequest | null> {

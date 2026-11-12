@@ -73,7 +73,6 @@ const setupTest = () => {
   const mockSourceMetadataFileService = new SourceMetadataFileService(
     {} as never,
     {} as never,
-    {} as never,
     mockConfigService
   ) as jest.Mocked<SourceMetadataFileService>;
   mockSourceMetadataFileService.getStats.mockResolvedValue({ broadcasters: 100, watchers: 10 });

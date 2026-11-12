@@ -11,7 +11,7 @@ const setupTest = () => {
   const app = new Hono();
   app.get('/', context =>
     context.json({
-      transport: wantsTokenTransport(context),
+      transport: wantsTokenTransport(context, ['__rt', '__at']),
       access: readAccessToken(context, '__at_s1') ?? null,
       refresh: readRefreshToken(context, '__rt_s1') ?? null,
       pairs: readRefreshTokenPairs(context),
@@ -55,6 +55,21 @@ describe('auth transport', () => {
         'X-Refresh-Token': 'header-refresh',
       })
     ).toMatchObject({ access: 'cookie-access', refresh: 'cookie-refresh' });
+  });
+
+  it('refuses token transport to a request that carries a session cookie', async () => {
+    expect(
+      await read({ 'X-Auth-Transport': 'token', Cookie: 'theme=dark; __rt_s1=cookie-refresh' })
+    ).toMatchObject({ transport: false });
+    expect(
+      await read({ 'X-Auth-Transport': 'token', Cookie: '__at_s2=cookie-access' })
+    ).toMatchObject({ transport: false });
+  });
+
+  it('allows token transport when only unrelated cookies are sent', async () => {
+    expect(await read({ 'X-Auth-Transport': 'token', Cookie: 'theme=dark' })).toMatchObject({
+      transport: true,
+    });
   });
 
   it('ignores an Authorization header that is not a bearer token', async () => {

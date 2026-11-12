@@ -28,4 +28,4 @@ else
 fi
 
 print_status "✅ To apply the changes:"
-print_status "Restart the Nginx container with: docker compose down nginx && docker compose up -d nginx"
+print_status "Recreate the containers with: docker compose up -d"

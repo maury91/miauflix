@@ -109,11 +109,8 @@ jobs:
             // The root version is the app version (the version badge and the images read it).
             const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
             pkg.version = VERSION;
+            // bun.lock does not record the root version, so package.json is the only place.
             fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
-            const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
-            lock.version = VERSION;
-            lock.packages[""].version = VERSION;
-            fs.writeFileSync("package-lock.json", JSON.stringify(lock, null, 2) + "\n");
           '
           git diff --stat
 
@@ -124,7 +121,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md DETAILED_CHANGELOG.md package.json package-lock.json
+          git add CHANGELOG.md DETAILED_CHANGELOG.md package.json
           git commit -m "chore(release): $TAG"
           git tag -a "$TAG" -m "$TAG $TITLE"
           git push --atomic origin HEAD:main "refs/tags/$TAG"

@@ -20,6 +20,36 @@ const openSocket = (gateway: RealtimeGateway, cookie = '') => {
   return socket;
 };
 
+/** An AuthService stand-in: every token is valid for the session it is sent for. */
+const authStub = () => {
+  const listeners = new Set<(revocation: { userId: string; session?: string }) => void>();
+  const sessions = new Map<string, boolean>();
+  return {
+    authenticateAccessToken: jest.fn(async (_token: string, sessionId: string) => ({
+      userId: 'user',
+      sessionId,
+      email: 'user@example.com',
+      role: 'user',
+    })),
+    resolveSession: jest.fn(async (userId: string, sessionId: string) =>
+      sessions.get(sessionId) === false
+        ? null
+        : { userId, sessionId, email: 'user@example.com', role: 'user' }
+    ),
+    onSessionRevoked: jest.fn(
+      (listener: (revocation: { userId: string; session?: string }) => void) => {
+        listeners.add(listener);
+        return () => listeners.delete(listener);
+      }
+    ),
+    /** Ends `session` and tells the gateway, as a logout does. */
+    revoke(userId: string, session: string) {
+      sessions.set(session, false);
+      for (const listener of listeners) listener({ userId, session });
+    },
+  };
+};
+
 const setupTest = async () => {
   const preload = {
     onChange: jest.fn(),
@@ -33,7 +63,7 @@ const setupTest = async () => {
     queueArtwork: jest.fn().mockResolvedValue(undefined),
   };
   const gateway = new RealtimeGateway(
-    { verifyAccessToken: jest.fn().mockResolvedValue({ userId: 'user' }) } as never,
+    authStub() as never,
     { get: jest.fn().mockReturnValue('__at') } as never,
     preload as never,
     {} as never,
@@ -109,7 +139,7 @@ describe('RealtimeGateway playback delivery', () => {
     let deliver: ((event: PlaybackDeliveryUpdate) => void) | undefined;
     const unsubscribe = jest.fn();
     const gateway = new RealtimeGateway(
-      { verifyAccessToken: jest.fn().mockResolvedValue({ userId: 'user' }) } as never,
+      authStub() as never,
       { get: jest.fn().mockReturnValue('__at') } as never,
       { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
       {} as never,
@@ -177,7 +207,7 @@ describe('RealtimeGateway playback pieces', () => {
       ),
     };
     const gateway = new RealtimeGateway(
-      { verifyAccessToken: jest.fn().mockResolvedValue({ userId: 'user' }) } as never,
+      authStub() as never,
       { get: jest.fn().mockReturnValue('__at') } as never,
       { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
       {} as never,
@@ -227,7 +257,7 @@ describe('RealtimeGateway search routing', () => {
       handle: jest.fn((_client: unknown, message: { query?: string }) => !!message.query),
     };
     const gateway = new RealtimeGateway(
-      { verifyAccessToken: jest.fn().mockResolvedValue({ userId: 'user' }) } as never,
+      authStub() as never,
       { get: jest.fn().mockReturnValue('__at') } as never,
       { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
       {} as never,
@@ -268,9 +298,9 @@ describe('RealtimeGateway search routing', () => {
 
 describe('RealtimeGateway TV app authentication', () => {
   const setupGateway = (allowTvApp: boolean, allowNullOrigin = false) => {
-    const verifyAccessToken = jest.fn().mockResolvedValue({ userId: 'user' });
+    const auth = authStub();
     const gateway = new RealtimeGateway(
-      { verifyAccessToken } as never,
+      auth as never,
       {
         get: jest.fn((key: string) =>
           key === 'ALLOW_TV_APP'
@@ -293,11 +323,11 @@ describe('RealtimeGateway TV app authentication', () => {
       { handles: () => false } as never,
       { onChange: () => () => undefined } as never
     );
-    return { gateway, verifyAccessToken };
+    return { gateway, auth };
   };
 
   it('authenticates with the access token sent in the message', async () => {
-    const { gateway, verifyAccessToken } = setupGateway(true);
+    const { gateway, auth } = setupGateway(true);
     const socket = openSocket(gateway);
     try {
       socket.emit(
@@ -310,7 +340,7 @@ describe('RealtimeGateway TV app authentication', () => {
         })
       );
       await new Promise(resolve => setImmediate(resolve));
-      expect(verifyAccessToken).toHaveBeenCalledWith('tv-token');
+      expect(auth.authenticateAccessToken).toHaveBeenCalledWith('tv-token', 'session');
       expect(socket.close).not.toHaveBeenCalled();
       expect(socket.send).toHaveBeenCalledWith(JSON.stringify({ type: 'ready', v: 1 }));
     } finally {
@@ -339,4 +369,39 @@ describe('RealtimeGateway TV app authentication', () => {
       }
     }
   );
+});
+
+describe('RealtimeGateway session revocation', () => {
+  it('closes only the sockets of a revoked session', async () => {
+    const auth = authStub();
+    const gateway = new RealtimeGateway(
+      auth as never,
+      { get: jest.fn().mockReturnValue('__at') } as never,
+      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      {} as never,
+      {
+        onArtwork: jest.fn(() => jest.fn()),
+        onArtworkStreamReady: jest.fn(() => jest.fn()),
+      } as never,
+      null,
+      { handles: () => false } as never,
+      { onChange: () => () => undefined } as never
+    );
+    const connect = async (session: string) => {
+      const socket = openSocket(gateway, `__at_${session}=fixture-token`);
+      socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));
+      await new Promise(resolve => setImmediate(resolve));
+      return socket;
+    };
+    try {
+      const loggedOut = await connect('session');
+      const otherDevice = await connect('other-session');
+      auth.revoke('user', 'session');
+      await new Promise(resolve => setImmediate(resolve));
+      expect(loggedOut.close).toHaveBeenCalledWith(1008, 'Session ended');
+      expect(otherDevice.close).not.toHaveBeenCalled();
+    } finally {
+      gateway.close();
+    }
+  });
 });

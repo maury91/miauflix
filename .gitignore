@@ -41,27 +41,16 @@ frontend/playwright-report*
 *.db
 
 # SSL certificates and keys
-nginx/ssl/*
 *.pem
 *.key
 *.crt
 *.csr
 dhparam.pem
 
-# Nginx configuration
-nginx/conf.d/default.conf
-nginx/conf.d/*.conf.bak
 backend-e2e/.env.test.bak
 
-# Certbot - ignore sensitive directories but keep config files
-nginx/certbot/conf/live/
-nginx/certbot/conf/archive/
-nginx/certbot/conf/renewal/
-nginx/certbot/conf/accounts/
-nginx/certbot/www/.well-known/acme-challenge/
-# Don't ignore these config files
-!nginx/certbot/conf/options-ssl-nginx.conf
-!nginx/certbot/conf/ssl-dhparams.pem
+# Certificates left by the removed nginx/certbot setup
+nginx/
 
 # Logs
 logs
@@ -85,3 +74,6 @@ pids
 *storybook.log
 storybook-static
 .idea
+
+# Bun manages the dependencies (bun.lock); an `npm install` would write this
+package-lock.json

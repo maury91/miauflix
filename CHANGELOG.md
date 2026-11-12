@@ -6,11 +6,23 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- Login is harder to abuse: an account refuses logins for up to 15 minutes after 10 wrong passwords, new accounts need passwords of at least 8 characters, and response times no longer reveal which emails have accounts
+- Logging out, or a stolen refresh token being used, now ends the session everywhere at once: its access tokens stop working and its live connections close. A refresh token used after it was replaced revokes the session
+- The internal services can require a shared secret (`SERVICE_TOKEN`), recommended when running them outside Docker. FlareSolverr and Jaeger images are pinned to a version
+- Security fixes: the audit log no longer stores refresh tokens, stream tokens or streaming keys; script on the web app's page can no longer read a refresh token; responses now carry security headers (a Content Security Policy among them), and the Caddy setup turns on HSTS. Hono and TypeORM are updated for known vulnerabilities
 - New downloads are encrypted more securely on disk. Each download gets its own random key and random file and folder names, so a copy of the disk can no longer be checked for a given torrent by name or key, or decrypted with knowledge of one file. File sizes can still match known torrents unless they are padded (on by default, see below). Downloads you already have stay readable as they are. The `DOWNLOAD_SALT` setting is no longer used
 - Downloaded files are padded with random bytes so their sizes on disk cannot be matched to known torrents. Files over 64 KiB grow by at most about 3%; smaller files all take 64 KiB, which can be many times their size. Set `STORAGE_PAD_FILE_SIZES=false` to turn it off
 - Logs no longer show which torrents were downloaded: info hashes, magnet links and movie titles next to their sources are left out, and anything that still looks like an info hash or magnet link is replaced with `[redacted]`
 - Server errors now say what went wrong where it went wrong. When search, a title or a Home row fails, the page explains it: a problem an admin can fix says how (for example, search needs TMDB to be configured; admins also see why, such as TMDB rejecting the access token), anything else shows an error id, also written to the browser console, to look up the cause in the server logs. Before, a failed search only said it was unavailable and other failures showed a generic message
 - Search has clearer "no results" and "unavailable" screens: a big message with what to do, a **Clear search** or **Try again** button you can reach with the remote, and the error id and server details tucked under **Technical details**
+
+### Development
+
+- Bun now installs the dependencies everywhere (Docker images, CI, local setup): run `bun install` instead of `npm install`. `bun.lock` is the only lockfile; `package-lock.json` is gone
+
+### Removed
+
+- The old nginx/certbot HTTPS setup (`setup-ssl.sh`, the `nginx/` folder and its scripts) and `npm run deploy:frontend`: HTTPS has been set up with Caddy (`docker-compose.https.yml`) for a while. `STREAM_TOKEN_SECRET` was never used and is no longer generated
 
 ### Documentation
 

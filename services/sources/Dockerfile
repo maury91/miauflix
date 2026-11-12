@@ -6,26 +6,28 @@ FROM node:22-slim AS runtime
 COPY --from=bun-runtime /usr/local/bin/bun /usr/local/bin/bun
 
 WORKDIR /workspace
-COPY package.json package-lock.json turbo.json tsconfig.json ./
+COPY package.json bun.lock turbo.json tsconfig.json ./
+# Every workspace's manifest: a frozen `bun install` stops when one is missing.
 COPY backend/package.json backend/package.json
 COPY frontend/package.json frontend/package.json
 COPY backend-e2e/package.json backend-e2e/package.json
-COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
-COPY packages/contract/package.json packages/contract/package.json
-COPY packages/service-contracts/package.json packages/service-contracts/package.json
-COPY packages/service-configuration/package.json packages/service-configuration/package.json
-COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
 COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
+COPY packages/contract/package.json packages/contract/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
+COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
 COPY services/list-service/package.json services/list-service/package.json
-COPY services/sources/package.json services/sources/package.json
-COPY services/media-load/package.json services/media-load/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
+COPY services/media-load/package.json services/media-load/package.json
+COPY services/sources/package.json services/sources/package.json
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
-# Retried: npm ci fails outright on a transient registry or GitHub download error.
-RUN for attempt in 1 2 3; do \
-      npm ci --ignore-scripts && break; \
+# Retried: bun install fails outright on a transient registry or GitHub download error.
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    for attempt in 1 2 3; do \
+      bun install --frozen-lockfile --ignore-scripts && break; \
       [ "$attempt" = 3 ] && exit 1; \
-      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
+      echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
     done
 
 COPY packages/source-metadata-extractor packages/source-metadata-extractor

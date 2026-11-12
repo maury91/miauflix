@@ -19,12 +19,9 @@ const setupTest = (enabled = true) => {
   const remote = { torrentFile: jest.fn().mockResolvedValue(Buffer.from('metadata')) };
   const service = new SourceMetadataFileService(
     download as unknown as MediaLoadClientService,
-    {} as never,
     new StatsService(),
     { getOrThrow: jest.fn() } as unknown as ConfigService,
-    false,
-    enabled,
-    remote as never
+    { sourcesClient: enabled ? (remote as never) : undefined }
   );
   return { service, remote, download };
 };
@@ -49,22 +46,12 @@ describe('SourceMetadataFileService', () => {
   it('gets swarm stats from the media-load service', async () => {
     const swarmStats = jest.fn().mockResolvedValue({ broadcasters: 5, watchers: 1 });
     const service = new SourceMetadataFileService(
-      {} as MediaLoadClientService,
-      {} as never,
+      { swarmStats } as unknown as MediaLoadClientService,
       new StatsService(),
-      { getOrThrow: jest.fn() } as unknown as ConfigService,
-      false,
-      false,
-      undefined,
-      { swarmStats }
+      { getOrThrow: jest.fn() } as unknown as ConfigService
     );
     await expect(service.getStats(hash)).resolves.toEqual({ broadcasters: 5, watchers: 1 });
     expect(swarmStats).toHaveBeenCalledWith(hash);
-  });
-
-  it('reports stats as unavailable without the media-load service', async () => {
-    const { service } = setupTest();
-    await expect(service.getStats(hash)).rejects.toMatchObject({ status: 'scrape_unavailable' });
   });
 
   it('rejects metadata with a different info hash', async () => {

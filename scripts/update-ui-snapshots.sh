@@ -60,7 +60,7 @@ if [[ ${#container_steps[@]} -gt 0 ]]; then
     -v /workspace/frontend/node_modules \
     -w /workspace \
     "$playwright_image" \
-    bash -lc "npm ci --no-audit --no-fund && npm run build:backend && cd frontend${steps}"
+    bash -lc "npx -y bun@1.4.0 install --frozen-lockfile && npm run build:backend && cd frontend${steps}"
 fi
 
 if has_lane e2e; then

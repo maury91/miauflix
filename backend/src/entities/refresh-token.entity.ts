@@ -23,6 +23,16 @@ export class RefreshToken {
   @Index({ unique: true })
   tokenHash: string;
 
+  /**
+   * The hash this session's token had before its last rotation. Presenting that token again
+   * (after `rotatedAt` plus a short grace) means it was copied: the session is revoked.
+   */
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  previousTokenHash: string | null;
+
+  @Column({ type: 'datetime', nullable: true })
+  rotatedAt: Date | null;
+
   @Column()
   expiresAt: Date;
 

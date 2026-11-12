@@ -1,3 +1,7 @@
+jest.mock('@middleware/auth.middleware', () => ({
+  // Every request counts as an admin's: these tests are about the routes' own checks
+  authGuard: () => async (_context: unknown, next: () => Promise<void>) => next(),
+}));
 jest.mock('@middleware/rate-limit.middleware', () => ({
   createRateLimitMiddlewareFactory:
     () => () => async (_context: unknown, next: () => Promise<void>) =>
@@ -22,11 +26,13 @@ const authResult = {
 const setupTest = () => {
   const authService = {
     validateUser: jest.fn().mockResolvedValue(user),
+    createUser: jest.fn(),
     generateTokens: jest.fn().mockResolvedValue(authResult),
     refreshTokens: jest.fn().mockResolvedValue(authResult),
     logout: jest.fn().mockResolvedValue(user),
     clearCookies: jest.fn(),
     getCookieConfig: (session: string) => ({ name: `__rt_${session}` }),
+    getSessionCookiePrefixes: () => ['__rt', '__at'],
     getCookies: jest.fn(() => [
       { name: '__at_session-1', value: 'access-token', path: '/', httpOnly: true },
       { name: '__rt_session-1', value: 'refresh-token', path: '/api/auth/', httpOnly: true },
@@ -36,6 +42,7 @@ const setupTest = () => {
     logLoginAttempt: jest.fn(),
     logTokenRefresh: jest.fn(),
     logTokenInvalidation: jest.fn(),
+    logSuspiciousActivity: jest.fn(),
   };
   const app = new Hono();
   app.onError((error, c) => c.json({ error: error.message }, 401));
@@ -94,6 +101,22 @@ describe('auth routes token transport', () => {
       user,
       tokens: { accessToken: 'access-token', refreshToken: 'refresh-token' },
     });
+  });
+
+  it('sets cookies instead of returning tokens when the refresh token came from a cookie', async () => {
+    const { app, authService } = setupTest();
+    const response = await app.request('/auth/refresh/session-1', {
+      method: 'POST',
+      headers: { 'X-Auth-Transport': 'token', Cookie: '__rt_session-1=cookie-refresh' },
+    });
+    expect(response.status).toBe(200);
+    expect(authService.refreshTokens).toHaveBeenCalledWith(
+      'cookie-refresh',
+      'session-1',
+      expect.anything()
+    );
+    expect(await response.json()).toEqual({ user });
+    expect(response.headers.get('Set-Cookie')).toContain('__rt_session-1=refresh-token');
   });
 
   it('rejects a refresh without a refresh token', async () => {
@@ -189,5 +212,30 @@ describe('auth routes account creation', () => {
       role: UserRole.USER,
     });
     expect(response.status).toBe(409);
+  });
+});
+
+describe('auth routes login hardening', () => {
+  it('refuses logins to an account after 10 failures, even with the right password', async () => {
+    const { app, authService } = setupTest();
+    authService.validateUser.mockResolvedValue(null);
+    for (let i = 0; i < 10; i++) expect((await login(app)).status).toBe(401);
+
+    authService.validateUser.mockResolvedValue(user);
+    const response = await login(app);
+    expect(response.status).toBe(429);
+    expect(Number(response.headers.get('Retry-After'))).toBeGreaterThan(0);
+    expect(authService.validateUser).toHaveBeenCalledTimes(10);
+  });
+
+  it('requires 8 characters for a new account password', async () => {
+    const { app, authService } = setupTest();
+    const response = await app.request('/auth/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'new@example.com', password: 'short', role: UserRole.USER }),
+    });
+    expect(response.status).toBe(400);
+    expect(authService.createUser).not.toHaveBeenCalled();
   });
 });

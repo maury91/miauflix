@@ -132,6 +132,8 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
   const engine = () => runtime.running;
 
   const service = defineService({
+    // Shared secret every connection must present (SERVICE_TOKEN, unset: no check)
+    token: process.env.SERVICE_TOKEN || undefined,
     info: {
       id: 'media-load',
       name: 'Media load',

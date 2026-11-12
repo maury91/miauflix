@@ -1,8 +1,9 @@
-# The backend runs on Bun; npm still installs the workspace dependencies.
+# The backend runs on Bun, and Bun installs the workspace dependencies (bun.lock).
 FROM oven/bun:1.4.0 AS bun-runtime
 
 # --- Dependency manifests (shared by builder and prod-deps) ---
 FROM node:22-slim AS deps-base
+COPY --from=bun-runtime /usr/local/bin/bun /usr/local/bin/bun
 WORKDIR /usr/src/app
 
 # Install build tools (no unnecessary recommends)
@@ -11,22 +12,26 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy root manifests first
-COPY package.json package-lock.json ./
+COPY package.json bun.lock ./
+# Every workspace's manifest: a frozen `bun install` stops when one is missing.
+COPY backend/package.json backend/package.json
+COPY frontend/package.json frontend/package.json
+COPY backend-e2e/package.json backend-e2e/package.json
+COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
+COPY packages/contract/package.json packages/contract/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
+COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
+COPY services/list-service/package.json services/list-service/package.json
+COPY services/media-catalog/package.json services/media-catalog/package.json
+COPY services/media-load/package.json services/media-load/package.json
+COPY services/sources/package.json services/sources/package.json
 COPY tsconfig.json ./
 COPY turbo.json ./
 
 # Create package directories and copy ONLY their package.json files for dependency resolution
 RUN mkdir -p packages/source-metadata-extractor packages/contract packages/service-contracts packages/service-configuration backend frontend services/media-catalog services/list-service services/sources services/media-load
-COPY backend/package.json ./backend/
-COPY frontend/package.json ./frontend/
-COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
-COPY packages/contract/package.json ./packages/contract/
-COPY packages/service-contracts/package.json ./packages/service-contracts/
-COPY packages/service-configuration/package.json ./packages/service-configuration/
-COPY services/media-catalog/package.json ./services/media-catalog/
-COPY services/list-service/package.json ./services/list-service/
-COPY services/sources/package.json ./services/sources/
-COPY services/media-load/package.json ./services/media-load/
 
 # Temporarily remove problematic prepare scripts that require source code
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
@@ -35,25 +40,27 @@ RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json |
 # Keeps devDependencies (TypeScript, Vite, Jest, Storybook, ...) and other
 # workspaces' dependencies out of the runtime image.
 FROM deps-base AS prod-deps
-# Retried: npm ci fails outright on a transient registry or GitHub download error.
-RUN --mount=type=cache,target=/root/.npm \
+# Retried: bun install fails outright on a transient registry or GitHub download error.
+# Packages are hoisted to the root node_modules; the runtime stage also copies backend's own.
+RUN --mount=type=cache,target=/root/.bun/install/cache \
     for attempt in 1 2 3; do \
-      npm ci --omit=dev --workspace backend && break; \
+      bun install --frozen-lockfile --production --filter @miauflix/backend && break; \
       [ "$attempt" = 3 ] && exit 1; \
-      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
-    done
+      echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
+    done && \
+    mkdir -p backend/node_modules
 
 # --- Build Stage ---
 FROM deps-base AS builder
 # Install dependencies with npm cache mount for faster installs. This stage only builds
 # dist/ (the runtime's node_modules come from prod-deps), so install scripts are skipped:
 # some download native binaries from GitHub Releases (node-datachannel), which the build
-# never loads. Retried: npm ci fails outright on a transient registry error.
-RUN --mount=type=cache,target=/root/.npm \
+# never loads. Retried: bun install fails outright on a transient registry error.
+RUN --mount=type=cache,target=/root/.bun/install/cache \
     for attempt in 1 2 3; do \
-      npm ci --ignore-scripts && break; \
+      bun install --frozen-lockfile --ignore-scripts && break; \
       [ "$attempt" = 3 ] && exit 1; \
-      echo "npm ci failed (attempt $attempt), retrying"; sleep 20; \
+      echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
     done
 
 # Copy shared packages first so library builds cache independently
@@ -106,7 +113,7 @@ COPY --from=builder /usr/src/app/packages/service-configuration/package.json /us
 COPY --from=prod-deps /usr/src/app/node_modules /usr/src/app/node_modules
 COPY --from=prod-deps /usr/src/app/backend/node_modules /usr/src/app/backend/node_modules
 COPY --from=builder /usr/src/app/.env /usr/src/app/.env
-# Copy built frontend into public directory to be served by backend (and shared with nginx)
+# Copy built frontend into public directory to be served by backend
 COPY --from=builder /usr/src/app/dist/frontend /usr/src/app/public
 
 # Set default frontend directory for static serving
@@ -116,7 +123,7 @@ ENV FRONTEND_DIR=/usr/src/app/public
 ENV MALLOC_ARENA_MAX=2
 
 # Copy entrypoint script
-COPY backend-e2e/docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY backend/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Create necessary directories and set permissions
