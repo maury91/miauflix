@@ -150,17 +150,18 @@ export class RefreshTokenRepository {
     return this.repository.count({ where: { userId } });
   }
 
-  async deleteOldestByUser(userId: string): Promise<boolean> {
+  /** Deletes the user's least recently used refresh token; returns its session, if one went. */
+  async deleteOldestByUser(userId: string): Promise<string | null> {
     const oldestToken = await this.repository.findOne({
       where: { userId },
       order: { lastAccessedAt: 'ASC' },
-      select: ['id'],
+      select: ['id', 'session'],
     });
 
-    if (!oldestToken) return false;
+    if (!oldestToken) return null;
 
     const result = await this.repository.delete(oldestToken.id);
-    return result.affected ? result.affected > 0 : false;
+    return result.affected ? oldestToken.session : null;
   }
 
   async saveRefreshToken(refreshToken: RefreshToken): Promise<RefreshToken> {

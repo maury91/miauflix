@@ -1,7 +1,7 @@
 /**
- * Strip secrets from request data before it is stored (audit log). Tokens travel in some paths
- * (`/api/stream/<token>`, `/api/auth/qr/<approvalToken>`), query values (`?streamingKey=`) and
- * headers (`X-Refresh-Token`), so only known-safe headers are kept and those spots are masked.
+ * Strip secrets from request data before it is stored (audit log, traces). Tokens travel in some
+ * paths (`/api/stream/<token>`, `/api/auth/qr/<approvalToken>`), query values (`?streamingKey=`)
+ * and headers (`X-Refresh-Token`), so only known-safe headers are kept and those spots are masked.
  */
 
 export const REDACTED = 'REDACTED';
@@ -27,15 +27,37 @@ const LOGGED_HEADERS = new Set([
   'x-session-id',
 ]);
 
-/** Path segments that follow these prefixes are secrets. */
-const SECRET_PATH_SEGMENTS = [/^(\/api\/stream\/)[^/]+/, /^(\/api\/auth\/qr\/)[^/]+/];
+/**
+ * Path segments that follow these prefixes are secrets: API routes, and the web app's QR approval
+ * page (`/auth/qr/<approvalToken>`), which reaches the log as a `Referer`.
+ */
+const SECRET_PATH_SEGMENTS = [/^(\/api\/stream\/)[^/]+/, /^((?:\/api)?\/auth\/qr\/)[^/]+/];
 
 /** Query keys whose values are secrets (`streamingKey`, `token`, `code`, ...). */
 const SECRET_QUERY_KEY = /token|key|secret|password|code|signature|sig$/i;
 
+/**
+ * Like Hono's router, which decodes the path before matching routes (`/api/%73tream/<token>` is a
+ * stream request): `decodeURI`, keeping any escape that doesn't decode.
+ */
+function decodePath(path: string): string {
+  try {
+    return decodeURI(path);
+  } catch {
+    return path.replace(/(?:%[0-9A-Fa-f]{2})+/g, escapes => {
+      try {
+        return decodeURI(escapes);
+      } catch {
+        return escapes;
+      }
+    });
+  }
+}
+
 export function redactPath(path: string): string {
+  const decoded = decodePath(path);
   for (const pattern of SECRET_PATH_SEGMENTS) {
-    if (pattern.test(path)) return path.replace(pattern, `$1${REDACTED}`);
+    if (pattern.test(decoded)) return decoded.replace(pattern, `$1${REDACTED}`);
   }
   return path;
 }

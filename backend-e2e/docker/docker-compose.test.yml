@@ -35,6 +35,9 @@ services:
       - PORT=3000
       - NODE_ENV=test
       - RATE_LIMIT_TEST_MODE=true
+      # Every test file logs in as the same admin in parallel; with the default 5 device slots,
+      # evicted sessions (and with them their access tokens) stop working mid-test. 20 is the maximum.
+      - MAX_DEVICE_SLOTS_PER_USER=20
       - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
       - BUNQUEUE_HOST=miauflix-services
       - BUNQUEUE_PORT=6789

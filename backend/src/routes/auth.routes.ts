@@ -101,7 +101,7 @@ export const createAuthRoutes = ({
         const { email, password } = context.req.valid('json');
 
         // Per account, on top of the per-IP limit: guesses spread over many addresses add up here
-        const retryAfter = loginThrottle.retryAfter(email);
+        const retryAfter = loginThrottle.begin(email);
         if (retryAfter > 0) {
           await auditLogService.logSuspiciousActivity({
             userEmail: email,
@@ -115,9 +115,15 @@ export const createAuthRoutes = ({
           );
         }
 
-        const user = await authService.validateUser(email, password);
+        let user: Awaited<ReturnType<typeof authService.validateUser>>;
+        try {
+          user = await authService.validateUser(email, password);
+        } catch (error) {
+          loginThrottle.release(email);
+          throw error;
+        }
         if (!user) {
-          loginThrottle.recordFailure(email);
+          loginThrottle.fail(email);
           await auditLogService.logLoginAttempt({
             success: false,
             userEmail: email,
@@ -125,7 +131,7 @@ export const createAuthRoutes = ({
           });
           return context.json({ error: 'Invalid credentials' } satisfies ErrorResponse, 401);
         }
-        loginThrottle.recordSuccess(email);
+        loginThrottle.succeed(email);
 
         // Generate tokens
         const authResult = await authService.generateTokens(user, context);

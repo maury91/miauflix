@@ -64,7 +64,7 @@ export interface ActiveSession {
 /** A session, or every session of a user, was revoked or may have changed. */
 export interface SessionRevocation {
   userId: string;
-  session?: string;
+  session: string;
 }
 
 /** bcrypt only reads this many bytes of a password. */
@@ -126,7 +126,7 @@ export class AuthService {
   private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
   private readonly sessionChecks = new Map<
     string,
-    { until: number; session: Promise<ActiveSession | null> }
+    { until: number; session: Promise<ActiveSession | null>; revoked?: boolean }
   >();
   private readonly revocationListeners = new Set<(revocation: SessionRevocation) => void>();
 
@@ -346,20 +346,19 @@ export class AuthService {
     return revoked;
   }
 
-  /** Called when a session (or, without `session`, any of a user's sessions) is revoked. */
+  /** Called when a session is revoked. */
   onSessionRevoked(listener: (revocation: SessionRevocation) => void): () => void {
     this.revocationListeners.add(listener);
     return () => this.revocationListeners.delete(listener);
   }
 
   private sessionRevoked(revocation: SessionRevocation): void {
-    for (const key of this.sessionChecks.keys()) {
-      if (
-        revocation.session
-          ? key === `${revocation.userId}:${revocation.session}`
-          : key.startsWith(`${revocation.userId}:`)
-      )
-        this.sessionChecks.delete(key);
+    const key = `${revocation.userId}:${revocation.session}`;
+    const check = this.sessionChecks.get(key);
+    if (check) {
+      // A lookup already in flight must not hand out the session once it settles
+      check.revoked = true;
+      this.sessionChecks.delete(key);
     }
     for (const listener of this.revocationListeners) listener(revocation);
   }
@@ -374,7 +373,7 @@ export class AuthService {
     const key = `${userId}:${sessionId}`;
     const now = Date.now();
     const cached = this.sessionChecks.get(key);
-    if (cached && cached.until > now) return cached.session;
+    if (cached && cached.until > now) return this.unlessRevoked(cached);
     if (this.sessionChecks.size > 10_000) {
       for (const [entry, check] of this.sessionChecks)
         if (check.until <= now) this.sessionChecks.delete(entry);
@@ -386,11 +385,21 @@ export class AuthService {
           ? { userId, sessionId, email: token.user.email, role: token.user.role }
           : null
       );
-    this.sessionChecks.set(key, { until: now + SESSION_CHECK_TTL_MS, session });
-    return session.catch(error => {
-      this.sessionChecks.delete(key);
+    const check = { until: now + SESSION_CHECK_TTL_MS, session };
+    this.sessionChecks.set(key, check);
+    return this.unlessRevoked(check).catch(error => {
+      if (this.sessionChecks.get(key) === check) this.sessionChecks.delete(key);
       throw error;
     });
+  }
+
+  /** A cached lookup's result, or null when its session was revoked while it was in flight. */
+  private async unlessRevoked(check: {
+    session: Promise<ActiveSession | null>;
+    revoked?: boolean;
+  }): Promise<ActiveSession | null> {
+    const session = await check.session;
+    return check.revoked ? null : session;
   }
 
   /** An access token that is valid, names the session it is sent for, and whose session still exists. */
@@ -439,8 +448,8 @@ export class AuthService {
     const userTokenCount = await this.refreshTokenRepository.countByUser(user.id);
     if (userTokenCount >= this.maxDeviceSlotsPerUser) {
       // Remove oldest token to make room
-      if (await this.refreshTokenRepository.deleteOldestByUser(user.id))
-        this.sessionRevoked({ userId: user.id });
+      const evicted = await this.refreshTokenRepository.deleteOldestByUser(user.id);
+      if (evicted) this.sessionRevoked({ userId: user.id, session: evicted });
     }
 
     // Create new refresh token (starts new chain)

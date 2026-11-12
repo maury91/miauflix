@@ -8,7 +8,9 @@ import { secureHeaders } from 'hono/secure-headers';
 /** `'sha256-…'` sources for the inline `<script>` blocks of the served `index.html`. */
 export function inlineScriptHashes(html: string): string[] {
   const hashes: string[] = [];
-  for (const [, attributes, body] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+  for (const [, attributes, body] of html.matchAll(
+    /<script\b([^>]*)>([\s\S]*?)<\/script\b[^>]*>/gi
+  )) {
     if (/\bsrc\s*=/i.test(attributes)) continue;
     hashes.push(`'sha256-${createHash('sha256').update(body).digest('base64')}'`);
   }

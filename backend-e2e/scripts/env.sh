@@ -430,7 +430,7 @@ else
                 -w /workspace \
                 -e BACKEND_URL="http://127.0.0.1:$PORT" \
                 "$E2E_PLAYWRIGHT_IMAGE" \
-                bash -lc 'npx -y bun@1.4.0 install --frozen-lockfile && cd frontend && npx playwright test --config=playwright.config.e2e.ts --update-snapshots' \
+                bash -lc 'npm install -g bun@1.4.0 && bun install --frozen-lockfile && cd frontend && npx playwright test --config=playwright.config.e2e.ts --update-snapshots' \
                 || FRONTEND_TEST_PASSED=false
         elif [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
             echo "🧪 Running frontend integration tests with snapshot updates..."

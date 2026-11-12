@@ -731,6 +731,21 @@ describe('AuthService', () => {
         InvalidTokenError
       );
     });
+
+    it('refuses a token whose session is revoked while its lookup is in flight', async () => {
+      let settle!: (token: ReturnType<typeof liveSession>) => void;
+      mockRefreshTokenRepository.findByUserAndSession.mockReturnValueOnce(
+        new Promise(resolve => (settle = resolve))
+      );
+      (jwtVerify as jest.Mock).mockResolvedValueOnce(payload('session-1'));
+      const pending = authService.authenticateAccessToken('jwt', 'session-1');
+      await new Promise(resolve => setImmediate(resolve));
+
+      await authService.revokeSession('user-123', 'session-1');
+      settle(liveSession());
+
+      await expect(pending).rejects.toThrow(InvalidTokenError);
+    });
   });
 
   describe('login timing', () => {
