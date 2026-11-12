@@ -1,4 +1,5 @@
 import { ContractError } from '@miauflix/contract';
+import { HTTPException } from 'hono/http-exception';
 
 import { AuthError } from '@errors/auth.errors';
 import { MediaError } from '@errors/media.errors';
@@ -30,9 +31,26 @@ describe('describeError', () => {
     expect(body.hint).toContain('TMDB');
   });
 
-  it('keeps the reason a service reported', () => {
-    const { body } = describe_(new ServiceNotConfiguredError('CATALOG', 'TMDB rejected the token'));
-    expect(body.message).toBe('Media Catalog is not working: TMDB rejected the token');
+  it('gives the reason a service reported to admins only', () => {
+    const error = new ServiceNotConfiguredError('CATALOG', 'TMDB rejected the token');
+    expect(describeError(error, { errorId: 'abcd1234', includeDetail: true }).body.message).toBe(
+      'Media Catalog is not working: TMDB rejected the token'
+    );
+    const { body } = describe_(error);
+    expect(body.message).toBe('Media Catalog is not configured.');
+    expect(JSON.stringify(body)).not.toContain('rejected');
+  });
+
+  it('hides the message of 5xx HTTP exceptions', () => {
+    expect(
+      describe_(new HTTPException(502, { message: 'upstream 10.0.0.3 refused' }))
+    ).toMatchObject({
+      status: 502,
+      body: { code: 'http_502', message: 'Something went wrong on the server.' },
+    });
+    expect(describe_(new HTTPException(403, { message: 'Origin not allowed' })).body.message).toBe(
+      'Origin not allowed'
+    );
   });
 
   it('maps auth errors to 401 with a code', () => {
@@ -43,8 +61,9 @@ describe('describeError', () => {
   });
 
   it('reports an unavailable service without asking to configure it', () => {
-    const { status, body } = describe_(
-      new ServiceUnavailableError('CATALOG', 'TMDB is rate limiting requests, try again shortly.')
+    const { status, body } = describeError(
+      new ServiceUnavailableError('CATALOG', 'TMDB is rate limiting requests, try again shortly.'),
+      { errorId: 'abcd1234', includeDetail: true }
     );
     expect(status).toBe(503);
     expect(body).toMatchObject({

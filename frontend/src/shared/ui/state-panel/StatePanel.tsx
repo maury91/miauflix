@@ -68,6 +68,25 @@ const focusedRing = css`
   box-shadow: 0 0 0 0.16em #ffffff;
 `;
 
+/*
+ * Chromium 69 has no :focus-visible, so :focus draws the ring there. Browsers that have it drop
+ * the ring after a mouse click, unless the page drives focus here ($focused); old ones skip
+ * that rule as invalid.
+ */
+const focusRing = css<{ $focused: boolean }>`
+  &:focus {
+    ${focusedRing}
+  }
+
+  &:focus:not(:focus-visible) {
+    ${({ $focused }) => ($focused ? focusedRing : 'box-shadow: none;')}
+  }
+
+  &:focus-visible {
+    ${focusedRing}
+  }
+`;
+
 const PrimaryAction = styled.button<{ $focused: boolean }>`
   margin-top: 1.4em;
   min-width: 14em;
@@ -83,13 +102,10 @@ const PrimaryAction = styled.button<{ $focused: boolean }>`
   cursor: pointer;
   outline: none;
   ${({ $focused }) => $focused && focusedRing}
+  ${focusRing}
 
   &:hover {
     background: #b8142a;
-  }
-
-  &:focus-visible {
-    ${focusedRing}
   }
 `;
 
@@ -106,10 +122,7 @@ const DetailsToggle = styled.button<{ $focused: boolean }>`
   cursor: pointer;
   outline: none;
   ${({ $focused }) => $focused && focusedRing}
-
-  &:focus-visible {
-    ${focusedRing}
-  }
+  ${focusRing}
 
   > svg {
     width: 1.2em;

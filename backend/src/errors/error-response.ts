@@ -64,14 +64,17 @@ export const describeError = (
     body: { success: false, status, code, error: message, message, errorId, ...extra },
   });
 
+  // A service's reason is its own text, not vetted for every user: only admins (who can act on
+  // it) get it in the message; everyone else gets fixed text, and the log has the reason.
+  const reason = (service: { reason?: string }) => (includeDetail ? service.reason : undefined);
+
   if (error instanceof ServiceNotConfiguredError) {
     const serviceName = serviceDisplayName(error.service);
+    const why = reason(error);
     return make(
       503,
       'service_not_configured',
-      error.reason
-        ? `${serviceName} is not working: ${error.reason}`
-        : `${serviceName} is not configured.`,
+      why ? `${serviceName} is not working: ${why}` : `${serviceName} is not configured.`,
       {
         needsConfiguration: true,
         service: error.service,
@@ -82,12 +85,11 @@ export const describeError = (
   }
   if (error instanceof ServiceUnavailableError) {
     const serviceName = serviceDisplayName(error.service);
+    const why = reason(error);
     return make(
       503,
       'service_unavailable',
-      error.reason
-        ? `${serviceName} is unavailable: ${error.reason}`
-        : `${serviceName} is unavailable.`,
+      why ? `${serviceName} is unavailable: ${why}` : `${serviceName} is unavailable.`,
       {
         service: error.service,
         serviceName,
@@ -122,7 +124,16 @@ export const describeError = (
   }
 
   if (error instanceof HTTPException)
-    return make(error.status, `http_${error.status}`, error.message || 'Request failed');
+    // 5xx messages can come from middleware internals; 4xx ones are written for the client.
+    return error.status >= 500
+      ? make(
+          error.status,
+          `http_${error.status}`,
+          'Something went wrong on the server.',
+          detail(),
+          false
+        )
+      : make(error.status, `http_${error.status}`, error.message || 'Request failed');
 
   // The type/code says what failed; the message stays in the log (by error id) and `detail`.
   if (error instanceof AppError)
