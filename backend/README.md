@@ -6,10 +6,10 @@ See the [feature guide](../docs/features.md) for user-facing capabilities and [T
 
 ## Quick start
 
-Run commands from the repository root; this project uses npm workspaces.
+Run commands from the repository root; this project uses Bun workspaces (`bun.lock`).
 
 ```bash
-npm install
+bun install
 npm run dev
 ```
 

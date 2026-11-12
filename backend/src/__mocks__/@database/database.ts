@@ -135,6 +135,8 @@ const createMockRefreshToken = (overrides: Partial<RefreshToken> = {}): RefreshT
   return {
     id: 'token-123',
     tokenHash: 'mock-token-hash',
+    previousTokenHash: null,
+    rotatedAt: null,
     expiresAt,
     userId: 'user-123',
     session: 'mock-session',
@@ -169,6 +171,7 @@ const createMockUserRepository = (): jest.Mocked<UserRepository> => {
 const createMockRefreshTokenRepository = (): jest.Mocked<RefreshTokenRepository> => {
   return {
     findByToken: jest.fn(() => Promise.resolve(null)),
+    findByPreviousToken: jest.fn(() => Promise.resolve(null)),
     create: jest.fn((tokenData: Partial<RefreshToken> & { token?: string }) => {
       const { token: _omit, ...rest } = tokenData;
       void _omit; // Raw token is hashed in real impl; omitted in mock
@@ -178,7 +181,7 @@ const createMockRefreshTokenRepository = (): jest.Mocked<RefreshTokenRepository>
     isChainExpired: jest.fn(() => Promise.resolve(false)),
     delete: jest.fn(() => Promise.resolve(false)),
     countByUser: jest.fn(() => Promise.resolve(0)),
-    deleteOldestByUser: jest.fn(() => Promise.resolve(false)),
+    deleteOldestByUser: jest.fn(() => Promise.resolve(null)),
     deleteByUserAndSession: jest.fn(() => Promise.resolve(false)),
     findById: jest.fn(() => Promise.resolve(null)),
     findByUser: jest.fn(() => Promise.resolve([])),

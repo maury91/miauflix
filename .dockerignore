@@ -119,7 +119,6 @@ backend/data/
 # -----------------------------------------------------------------------------
 frontend-legacy/
 frontend-lit/
-nginx/
 
 # -----------------------------------------------------------------------------
 # Documentation & misc project planning artefacts

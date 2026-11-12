@@ -11,8 +11,17 @@ export const REFRESH_TOKEN_HEADER = 'X-Refresh-Token';
 /** `session:token` pairs, comma-separated, for listing the sessions a client holds. */
 export const REFRESH_TOKENS_HEADER = 'X-Refresh-Tokens';
 
-export function wantsTokenTransport(context: Context): boolean {
-  return context.req.header(AUTH_TRANSPORT_HEADER) === 'token';
+/**
+ * Whether to return the tokens in the body. Only for requests without session cookies: a browser
+ * holding the HttpOnly cookies must never get them back as readable JSON, or script on the page
+ * (an XSS) could ask for token transport and walk away with a refresh token.
+ */
+export function wantsTokenTransport(context: Context, sessionCookiePrefixes: string[]): boolean {
+  if (context.req.header(AUTH_TRANSPORT_HEADER) !== 'token') return false;
+  const cookies = getCookie(context);
+  return !Object.keys(cookies).some(name =>
+    sessionCookiePrefixes.some(prefix => name.startsWith(`${prefix}_`))
+  );
 }
 
 /** The access token from the session cookie, or else from `Authorization: Bearer`. */

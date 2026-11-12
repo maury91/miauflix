@@ -1,8 +1,9 @@
 import { type MiddlewareHandler } from 'hono';
 
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
-import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
+import { AuthError, InvalidTokenError, RoleError } from '@errors/auth.errors';
 import type { AuditLogService } from '@services/security/audit-log.service';
+import { redactPath } from '@utils/redact.util';
 import { withSpan } from '@utils/tracing.util';
 
 export function createAuditLogMiddleware(auditLogService: AuditLogService): MiddlewareHandler {
@@ -20,37 +21,24 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService): Midd
         await auditLogService.logSecurityEvent({
           eventType: AuditEventType.API_ACCESS,
           severity: AuditEventSeverity.INFO,
-          description: `${context.req.method} ${path}`,
+          description: `${context.req.method} ${redactPath(path)}`,
           context: context,
           metadata: { path },
         });
 
         await next();
 
+        // The response itself comes from the app's onError handler; this only records the error.
         if (context.error) {
-          if (context.error instanceof LoginError) {
-            context.status(401);
-            await auditLogService.logLoginAttempt({
-              success: false,
-              userEmail: context.error.email,
-              context: context,
-            });
-
-            return context.json({ error: 'Unauthorized' }, 401);
-          }
-
           if (context.error instanceof AuthError || context.error instanceof InvalidTokenError) {
-            context.status(401);
             await auditLogService.logUnauthorizedAccess({
               context: context,
               reason: context.error.message,
             });
-
-            return context.json({ error: 'Unauthorized' }, 401);
+            return;
           }
 
           if (context.error instanceof RoleError) {
-            context.status(401);
             await auditLogService.logUnauthorizedAccess({
               context: context,
               reason: context.error.message,
@@ -59,8 +47,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService): Midd
                 role: context.error.role,
               },
             });
-
-            return context.json({ error: 'Unauthorized' }, 401);
+            return;
           }
 
           // Log API errors
@@ -88,7 +75,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService): Midd
           });
         }
       },
-      { path: new URL(context.req.url).pathname, method: context.req.method }
+      { path: redactPath(new URL(context.req.url).pathname), method: context.req.method }
     );
   };
 }

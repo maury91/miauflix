@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@miauflix/backend": "file:../backend",
-    "hono": "4.10.6",
+    "hono": "4.13.18",
     "sqlite3": "5.1.7"
   },
   "type": "module",

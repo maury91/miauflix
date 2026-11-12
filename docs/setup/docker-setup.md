@@ -213,7 +213,7 @@ Keep the same `LIST_SERVICE_ENCRYPTION_KEY` when that variable supplies the list
 
 ### Secrets set in `.env`
 
-Miauflix generates `JWT_SECRET`, `STREAM_TOKEN_SECRET`, `STREAM_KEY_SALT` and `SOURCE_SECURITY_KEY` on first start and saves them in its `config.json`. When one is set as an environment variable instead, Miauflix uses it and deliberately doesn't save it, so it's only known for as long as the variable is passed in.
+Miauflix generates `JWT_SECRET`, `STREAM_KEY_SALT` and `SOURCE_SECURITY_KEY` on first start and saves them in its `config.json`. When one is set as an environment variable instead, Miauflix uses it and deliberately doesn't save it, so it's only known for as long as the variable is passed in.
 
 The base Compose file does not pass these variables; `docker-compose.build.yml` mounts `.env`. When deployment environment variables supply active keys, preserve their exact values. To inspect which generated-key names are persisted without printing their values:
 
@@ -229,7 +229,6 @@ services:
   miauflix:
     environment:
       JWT_SECRET: ${JWT_SECRET:?}
-      STREAM_TOKEN_SECRET: ${STREAM_TOKEN_SECRET:?}
       STREAM_KEY_SALT: ${STREAM_KEY_SALT:?}
       SOURCE_SECURITY_KEY: ${SOURCE_SECURITY_KEY:?}
 ```

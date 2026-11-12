@@ -9,7 +9,7 @@ Search planning applies provider priority, interactive hedging, background budge
 From the repository root:
 
 ```sh
-npm install
+bun install
 npm run build:libs
 npm run start:sources
 npm test --workspace @miauflix/sources-service

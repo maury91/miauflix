@@ -8,12 +8,7 @@ import { ConfigurationService } from './configuration.service';
 const clearEnvironmentVariable = jest.requireActual('../../../test-utils/environment')
   .clearEnvironmentVariable as (name: string) => () => void;
 
-const GENERATED_SECRETS = [
-  'JWT_SECRET',
-  'STREAM_TOKEN_SECRET',
-  'STREAM_KEY_SALT',
-  'SOURCE_SECURITY_KEY',
-] as const;
+const GENERATED_SECRETS = ['JWT_SECRET', 'STREAM_KEY_SALT', 'SOURCE_SECURITY_KEY'] as const;
 
 const restoreEnvironment: Array<() => void> = [];
 let dataDir: string;

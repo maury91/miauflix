@@ -7,12 +7,10 @@ RUN ln -s /usr/local/bin/bun /usr/local/bin/node
 # Update packages
 RUN apt-get update
 
-# Install Node.js and npm for packageManager field support (npm@10.8.1)
-# Note: package.json specifies packageManager: "npm@10.8.1" which requires Corepack
+# Node.js and npm run the frontend tooling and the package.json scripts; Bun installs the
+# dependencies (bun.lock). Corepack stays off: it does not handle packageManager "bun@...".
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g corepack@latest && \
-    corepack enable
+    apt-get install -y nodejs
 
 # Install Git
 RUN apt-get install -y git

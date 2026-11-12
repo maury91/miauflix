@@ -4,7 +4,7 @@ Modern React + Vite client that powers the TV experience. The source tree keeps 
 
 ## Quick Start
 
-- Install dependencies from the repo root: `npm install`
+- Install dependencies from the repo root: `bun install`
 - Start the full stack dev environment: `npm run dev`
 - Frontend-only build: `npm run --workspace @miauflix/frontend build`
 - Unit tests: `npm run --workspace @miauflix/frontend test`

@@ -177,10 +177,6 @@ export default defineConfig({
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion()),
     // A literal, so the TV bundle drops browser-only code such as the ASS renderer
     __TIZEN_BUILD__: JSON.stringify(tizenBuild),
-    // Build-time configuration for access token storage
-    __ACCESS_TOKEN_STORAGE_MODE__: JSON.stringify(
-      process.env.TOKEN_STORAGE_MODE === 'session' ? 'session' : 'memory'
-    ),
   },
   plugins: [
     // Phase 0 Bootstrap: Simplified plugin configuration

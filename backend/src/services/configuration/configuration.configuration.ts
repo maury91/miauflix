@@ -15,6 +15,15 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'http://localhost:3000,https://myapp.com',
       transform: transforms.stringArray(),
     }),
+    CSP_IMAGE_ORIGINS: variable({
+      description:
+        'Extra origins the web app may load artwork from (comma-separated, e.g. a self-hosted TMDB image mirror); image.tmdb.org is always allowed',
+      required: false,
+      advanced: true,
+      defaultValue: '',
+      example: 'https://images.example.com',
+      transform: transforms.stringArray(),
+    }),
     ALLOW_TV_APP: variable({
       description:
         'Accept requests from the Samsung TV app, which runs from local files (origin file://, which web pages cannot send) and signs in with bearer tokens instead of cookies',
@@ -104,6 +113,13 @@ export const serverConfigurationDefinition = serviceConfiguration({
       defaultValue: '',
       example: 'your-secure-random-string',
       transform: transforms.optional(transforms.string({ minLength: 16 })),
+    }),
+    SERVICE_TOKEN: variable({
+      description:
+        'Secret shared with the internal services (catalog, lists, sources, media load); each must have the same value',
+      required: false,
+      advanced: true,
+      password: true,
     }),
     DISABLE_BACKGROUND_TASKS: variable({
       description: 'Disable all background tasks for testing on-demand functionality',

@@ -33,7 +33,7 @@ describe('RealtimeGateway artwork subscriptions', () => {
       artworkSnapshot: async (refs: MediaRef[]) => refs.map(updateFor),
       queueArtwork: async () => 1,
     } as unknown as CatalogClientService;
-    const auth = {} as AuthService;
+    const auth = { onSessionRevoked: () => () => undefined } as unknown as AuthService;
     const config = { get: () => undefined } as unknown as ConfigService;
     const preload = {
       onChange: () => undefined,
@@ -103,7 +103,7 @@ describe('RealtimeGateway artwork subscriptions', () => {
       onArtworkStreamReady: () => () => undefined,
     } as unknown as CatalogClientService;
     const gateway = new RealtimeGateway(
-      {} as AuthService,
+      { onSessionRevoked: () => () => undefined } as unknown as AuthService,
       { get: () => undefined } as unknown as ConfigService,
       { onChange: () => undefined, offChange: () => undefined } as unknown as PreloadIntentService,
       {} as ProgressService,

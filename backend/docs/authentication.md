@@ -6,7 +6,7 @@ For available account controls and planned UI, see [Accounts and your personal c
 
 ## Tokens and sessions
 
-- Access tokens are signed with HS256 and include user identity and role. Their default lifetime is 15 minutes.
+- Access tokens are signed with HS256 and include user identity, role and their session (`sid`). Their default lifetime is 15 minutes. A token is only accepted for the session it names (`X-Session-Id`, or the realtime `authenticate` message's `session`), and only while that session's refresh token still exists: every authenticated request checks it (cached for five seconds, cleared at once when this server revokes the session). The role used is the account's current one, not the one in the token. Tokens without `sid` (issued before this check) are refused, and clients refresh.
 - Refresh tokens are random 256-bit opaque values. The database stores token hashes, with one active token row per session. Their default lifetime is seven days, with a default maximum chain age of 30 days.
 - Each successful login creates a fresh, random session identifier. It is not a deterministic device fingerprint and does not reuse a fixed user/device session ID.
 - The session-slot limit is configurable. When a login reaches the limit, the oldest refresh-token record by last access is removed to make room.
@@ -63,6 +63,8 @@ The Tizen app runs from local files and cannot rely on the backend's browser coo
 
 Refresh responses include `{ user, tokens }` and use the session already named in the request path. Ordinary browser responses omit `tokens`.
 
+A request that carries any session cookie (`<REFRESH_TOKEN_COOKIE_NAME>_*` or `<ACCESS_TOKEN_COOKIE_NAME>_*`) never gets `tokens`, even with `X-Auth-Transport: token`: the backend sets cookies instead. Otherwise script on the web app's page could trade the HttpOnly refresh cookie for a readable refresh token.
+
 | Request             | Headers used by the TV client                            |
 | ------------------- | -------------------------------------------------------- |
 | Protected API       | `X-Session-Id` and `Authorization: Bearer <accessToken>` |
@@ -78,25 +80,27 @@ Implementation: [transport readers](../src/utils/auth-transport.util.ts), [TV au
 
 All routes below are mounted under `/api/auth`. `UserDto` contains `id`, `email`, nullable `displayName`, `role`, `avatar` (the profile's Plushie look; generated with the editor's Surprise me generator when an account is created without one, and for older accounts by a data migration, so it is only `null` for a record the migration has not reached yet) and nullable `avatarVersion` (changes when a new avatar picture is saved; `null` when there is none, or after a look change until its new picture is saved).
 
-| Method and path          | Authentication/input                                                           | Successful behavior                                                                                                                                      |
-| ------------------------ | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /setup`             | No existing session required                                                   | Returns `{ available }` for first-admin setup                                                                                                            |
-| `POST /setup`            | `{ email, password }`; password minimum eight characters                       | Creates the initial admin only while setup is available, then returns login data                                                                         |
-| `POST /login`            | `{ email, password }`                                                          | Returns `{ session, user }` and delivers tokens using the selected transport                                                                             |
-| `POST /refresh/:session` | Session refresh cookie or `X-Refresh-Token`                                    | Rotates refresh token, issues a new access token, returns `{ user }` plus TV tokens when requested                                                       |
-| `POST /logout/:session`  | Session refresh cookie or `X-Refresh-Token`                                    | Revokes that refresh session, clears both browser cookies, returns `{ message }`                                                                         |
-| `GET /sessions`          | Refresh cookies or `X-Refresh-Tokens`                                          | Returns valid presented sessions as `{ session, user }[]`                                                                                                |
-| `GET /session`           | Valid access token and `X-Session-Id`                                          | Returns `{ id: sessionId, user }`                                                                                                                        |
-| `POST /users`            | Admin access token/session; `{ email, password, role, displayName?, avatar? }` | Creates a `user` or `admin` account and returns its user data; 409 when the email is taken                                                               |
-| `PATCH /session/profile` | Valid access token and `X-Session-Id`; `{ displayName?, avatar? }`             | Updates the session's own profile name and look (a look can be replaced, not removed: `null` is a 400) and returns its user data                         |
-| `PUT /session/avatar`    | Valid access token and `X-Session-Id`; `image/png` body, at most 1 MB          | Stores the profile's pre-rendered avatar picture (`DATA_DIR/avatars/<userId>.png`)                                                                       |
-| `GET /avatars/:userId`   | Valid access token and `X-Session-Id`                                          | Returns a profile's avatar picture, or 404 when it has none. With `?v=<avatarVersion>` it may be cached for good; without it the browser must revalidate |
+| Method and path          | Authentication/input                                                                                              | Successful behavior                                                                                                                                      |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /setup`             | No existing session required                                                                                      | Returns `{ available }` for first-admin setup                                                                                                            |
+| `POST /setup`            | `{ email, password }`; password minimum eight characters                                                          | Creates the initial admin only while setup is available, then returns login data                                                                         |
+| `POST /login`            | `{ email, password }`; 429 with `Retry-After` after 10 failures in 15 minutes                                     | Returns `{ session, user }` and delivers tokens using the selected transport                                                                             |
+| `POST /refresh/:session` | Session refresh cookie or `X-Refresh-Token`                                                                       | Rotates refresh token, issues a new access token, returns `{ user }` plus TV tokens when requested                                                       |
+| `POST /logout/:session`  | Session refresh cookie or `X-Refresh-Token`                                                                       | Revokes that refresh session, clears both browser cookies, returns `{ message }`                                                                         |
+| `GET /sessions`          | Refresh cookies or `X-Refresh-Tokens`                                                                             | Returns valid presented sessions as `{ session, user }[]`                                                                                                |
+| `GET /session`           | Valid access token and `X-Session-Id`                                                                             | Returns `{ id: sessionId, user }`                                                                                                                        |
+| `POST /users`            | Admin access token/session; `{ email, password, role, displayName?, avatar? }`, password minimum eight characters | Creates a `user` or `admin` account and returns its user data; 409 when the email is taken                                                               |
+| `PATCH /session/profile` | Valid access token and `X-Session-Id`; `{ displayName?, avatar? }`                                                | Updates the session's own profile name and look (a look can be replaced, not removed: `null` is a 400) and returns its user data                         |
+| `PUT /session/avatar`    | Valid access token and `X-Session-Id`; `image/png` body, at most 1 MB                                             | Stores the profile's pre-rendered avatar picture (`DATA_DIR/avatars/<userId>.png`)                                                                       |
+| `GET /avatars/:userId`   | Valid access token and `X-Session-Id`                                                                             | Returns a profile's avatar picture, or 404 when it has none. With `?v=<avatarVersion>` it may be cached for good; without it the browser must revalidate |
 
 The refresh route performs token rotation. Use `/session` to validate the access token or `/sessions` to discover the refresh sessions presented by the client. Session discovery checks at most eight presented tokens (one per profile on a shared TV), rather than listing every device ever used by the account.
 
 Authentication routes have endpoint-specific rate limits. User creation is guarded by the administrator role; refresh, logout, and session discovery validate their presented refresh credentials rather than requiring a current access JWT.
 
-Logout revokes the refresh session and removes browser cookies. It does not implement a denylist that immediately invalidates every copy of an already issued access JWT; such a token still has its own expiry.
+Logout revokes the refresh session and removes browser cookies. Access tokens of that session stop working with it (see Tokens and sessions), and realtime sockets of the session are closed (`1008 Session ended`). Sockets also recheck their session every minute, which catches revocations made by another server process and follows role changes.
+
+Login is also limited per account: after 10 failed attempts within 15 minutes (counted from the first), the account refuses logins, even with the right password, until those 15 minutes are over. A successful login clears the count. This is kept in memory, on top of the per-IP limit of one attempt per second. An unknown email costs the same bcrypt check as a wrong password, so response times do not tell which accounts exist. Every request body under `/api` is capped at 256 KiB, except the avatar upload (1 MB).
 
 ## QR login
 
@@ -114,6 +118,8 @@ Implementation: [QR service](../src/services/auth/qr-login.service.ts) and [QR r
 ## Refresh rotation and lifetime
 
 The refresh repository locates the session and verifies the presented token against its stored hash. Successful renewal replaces that hash through a conditional update that matches the old hash, user, and session. A stale or competing update cannot replace the new token and is treated as a failed renewal.
+
+The session also keeps the hash of its previous token and when it was rotated. When that previous token is presented again more than 30 seconds after the rotation, it can only be a copy (whoever rotated it holds the session now), so the session is revoked for both holders and a critical audit event is recorded. Within those 30 seconds it is only refused, since two tabs refreshing at once look the same.
 
 Refresh lifetime and chain age are different limits. Renewal moves the token's expiry forward but does not reset the original session creation time used for the maximum chain age. Expired sessions are rejected. Token rotation and suspicious renewal behavior are recorded through the security audit service.
 
@@ -155,7 +161,7 @@ These are the current authentication setting names and defaults, rather than a r
 
 Generated secrets are persisted by the configuration system so they survive restarts. Preserve the server's persistent data and keys. See [configuration bootstrap](../src/services/configuration/configuration.service.ts) and [HTTPS deployment](../../docker-compose.https.yml).
 
-Streaming uses separate settings and credentials, including `STREAM_TOKEN_EXPIRATION`, `STREAM_TOKEN_SECRET`, and `STREAM_KEY_SALT`. Video access is not authenticated by putting an ordinary API JWT in the stream URL. See [Streaming Services](streaming-services.md) and the [stream route](../src/routes/stream.routes.ts).
+Streaming uses separate settings and credentials, including `STREAM_TOKEN_EXPIRATION` and `STREAM_KEY_SALT`. Video access is not authenticated by putting an ordinary API JWT in the stream URL. See [Streaming Services](streaming-services.md) and the [stream route](../src/routes/stream.routes.ts).
 
 ## Current UI boundaries
 

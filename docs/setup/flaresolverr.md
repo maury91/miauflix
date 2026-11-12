@@ -51,7 +51,7 @@ docker run -d \
   -e LOG_LEVEL=info \
   -e LOG_HTML=false \
   -e CAPTCHA_SOLVER=none \
-  ghcr.io/flaresolverr/flaresolverr:latest
+  ghcr.io/flaresolverr/flaresolverr:v3.5.2
 ```
 
 Then set the Sources configuration URL to an address reachable from the Sources service. `localhost` inside a container means that container, not the host or another container.

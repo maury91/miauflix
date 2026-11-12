@@ -1,5 +1,6 @@
 import { PLUSHIE_KINDS } from '@miauflix/service-contracts';
 import type { Context } from 'hono';
+import { jwtVerify } from 'jose';
 
 import { Database } from '@database/database';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
@@ -12,7 +13,12 @@ import type { UserRepository } from '@repositories/user.repository';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 
-import { AuthService, MAX_LISTED_SESSIONS } from './auth.service';
+import {
+  AuthService,
+  MAX_LISTED_SESSIONS,
+  REFRESH_REUSE_GRACE_MS,
+  SESSION_CHECK_TTL_MS,
+} from './auth.service';
 
 jest.mock('@database/database');
 jest.mock('@services/configuration/configuration.service');
@@ -614,6 +620,170 @@ describe('AuthService', () => {
       expect(mockUserRepository.createAdminIfNone).toHaveBeenCalledWith(
         expect.objectContaining({ role: UserRole.ADMIN, avatar: generatedLook })
       );
+    });
+  });
+
+  describe('refresh token reuse', () => {
+    const rotated = (rotatedAgoMs: number) =>
+      ({
+        id: 'token-123',
+        userId: 'user-123',
+        session: 'session-1',
+        issueIpAddress: '10.0.0.1',
+        lastIpAddress: '10.0.0.2',
+        rotatedAt: new Date(Date.now() - rotatedAgoMs),
+      }) as RefreshToken;
+
+    it('revokes the session when a rotated token comes back after the grace period', async () => {
+      mockRefreshTokenRepository.findByToken.mockResolvedValue(null);
+      mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(
+        rotated(REFRESH_REUSE_GRACE_MS + 1_000)
+      );
+      const revoked = jest.fn();
+      authService.onSessionRevoked(revoked);
+
+      await expect(authService.verifyOpaqueRefreshToken('old-token', 'session-1')).rejects.toThrow(
+        InvalidTokenError
+      );
+
+      expect(mockRefreshTokenRepository.deleteByUserAndSession).toHaveBeenCalledWith(
+        'user-123',
+        'session-1'
+      );
+      expect(revoked).toHaveBeenCalledWith({ userId: 'user-123', session: 'session-1' });
+      expect(mockAuditLogService.logSecurityEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          eventType: AuditEventType.SUSPICIOUS_ACTIVITY,
+          severity: AuditEventSeverity.CRITICAL,
+          description: 'Refresh token reuse detected - session revoked',
+        })
+      );
+    });
+
+    it('only refuses a rotated token that races its rotation', async () => {
+      mockRefreshTokenRepository.findByToken.mockResolvedValue(null);
+      mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(rotated(1_000));
+
+      await expect(authService.verifyOpaqueRefreshToken('old-token', 'session-1')).rejects.toThrow(
+        InvalidTokenError
+      );
+
+      expect(mockRefreshTokenRepository.deleteByUserAndSession).not.toHaveBeenCalled();
+    });
+
+    it('does nothing more for a token the session never had', async () => {
+      mockRefreshTokenRepository.findByToken.mockResolvedValue(null);
+      mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(null);
+
+      await expect(authService.verifyOpaqueRefreshToken('unknown', 'session-1')).rejects.toThrow(
+        InvalidTokenError
+      );
+
+      expect(mockRefreshTokenRepository.deleteByUserAndSession).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('access tokens and sessions', () => {
+    const payload = (sid?: string) => ({
+      payload: { userId: 'user-123', email: 'test@example.com', role: 'user', sid },
+    });
+    const liveSession = () =>
+      ({
+        userId: 'user-123',
+        session: 'session-1',
+        expiresAt: new Date(Date.now() + 60_000),
+        user: { email: 'test@example.com', role: UserRole.ADMIN },
+      }) as RefreshToken;
+
+    it('accepts a token for its own live session, with the role from the user', async () => {
+      (jwtVerify as jest.Mock).mockResolvedValueOnce(payload('session-1'));
+      mockRefreshTokenRepository.findByUserAndSession.mockResolvedValue(liveSession());
+
+      await expect(authService.authenticateAccessToken('jwt', 'session-1')).resolves.toEqual({
+        userId: 'user-123',
+        sessionId: 'session-1',
+        email: 'test@example.com',
+        role: UserRole.ADMIN,
+      });
+    });
+
+    it('refuses a token sent for another session', async () => {
+      (jwtVerify as jest.Mock).mockResolvedValueOnce(payload('session-1'));
+
+      await expect(authService.authenticateAccessToken('jwt', 'session-2')).rejects.toThrow(
+        InvalidTokenError
+      );
+    });
+
+    it('refuses a token from before session binding', async () => {
+      (jwtVerify as jest.Mock).mockResolvedValueOnce(payload());
+
+      await expect(authService.authenticateAccessToken('jwt', 'session-1')).rejects.toThrow(
+        InvalidTokenError
+      );
+    });
+
+    it('refuses a token whose session was revoked, at once', async () => {
+      mockRefreshTokenRepository.findByUserAndSession.mockResolvedValue(liveSession());
+      (jwtVerify as jest.Mock).mockResolvedValueOnce(payload('session-1'));
+      await authService.authenticateAccessToken('jwt', 'session-1');
+
+      mockRefreshTokenRepository.findByUserAndSession.mockResolvedValue(null);
+      await authService.revokeSession('user-123', 'session-1');
+
+      (jwtVerify as jest.Mock).mockResolvedValueOnce(payload('session-1'));
+      await expect(authService.authenticateAccessToken('jwt', 'session-1')).rejects.toThrow(
+        InvalidTokenError
+      );
+    });
+
+    it('refuses a token whose session is revoked while its lookup is in flight', async () => {
+      let settle!: (token: ReturnType<typeof liveSession>) => void;
+      mockRefreshTokenRepository.findByUserAndSession.mockReturnValueOnce(
+        new Promise(resolve => (settle = resolve))
+      );
+      (jwtVerify as jest.Mock).mockResolvedValueOnce(payload('session-1'));
+      const pending = authService.authenticateAccessToken('jwt', 'session-1');
+      await new Promise(resolve => setImmediate(resolve));
+
+      await authService.revokeSession('user-123', 'session-1');
+      settle(liveSession());
+
+      await expect(pending).rejects.toThrow(InvalidTokenError);
+    });
+
+    it('refuses an in-flight lookup whose cache entry was replaced before the revocation', async () => {
+      let settleFirst!: (token: ReturnType<typeof liveSession>) => void;
+      mockRefreshTokenRepository.findByUserAndSession
+        .mockReturnValueOnce(new Promise(resolve => (settleFirst = resolve)))
+        .mockReturnValueOnce(new Promise(() => undefined));
+      const now = jest.spyOn(Date, 'now');
+      try {
+        now.mockReturnValue(1_000_000);
+        const first = authService.resolveSession('user-123', 'session-1');
+        // The cached check expires and a second lookup takes its place in the cache
+        now.mockReturnValue(1_000_000 + SESSION_CHECK_TTL_MS + 1);
+        void authService.resolveSession('user-123', 'session-1');
+
+        await authService.revokeSession('user-123', 'session-1');
+        settleFirst(liveSession());
+
+        await expect(first).resolves.toBeNull();
+      } finally {
+        now.mockRestore();
+      }
+    });
+  });
+
+  describe('login timing', () => {
+    it('spends a password check on an unknown email too', async () => {
+      const verify = jest.spyOn(Bun.password, 'verify');
+      mockUserRepository.findByEmail.mockResolvedValue(null);
+
+      await authService.validateUser('nobody@example.com', 'password');
+
+      expect(verify).toHaveBeenCalled();
+      verify.mockRestore();
     });
   });
 });

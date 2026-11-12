@@ -39,6 +39,13 @@ export class RefreshTokenRepository {
     return null;
   }
 
+  /** The session whose token was `token` before its last rotation, if any. */
+  async findByPreviousToken(token: string, session: string): Promise<RefreshToken | null> {
+    const stored = await this.repository.findOne({ where: { session } });
+    if (!stored?.previousTokenHash) return null;
+    return verifyToken(token, stored.previousTokenHash) ? stored : null;
+  }
+
   async findByUser(user: User): Promise<RefreshToken[]> {
     return this.repository.find({
       where: { userId: user.id },
@@ -94,6 +101,8 @@ export class RefreshTokenRepository {
     const newTokenHash = hashToken(newToken);
     const updateFields: Partial<RefreshToken> = {
       tokenHash: newTokenHash,
+      previousTokenHash: existingToken.tokenHash,
+      rotatedAt: new Date(),
       expiresAt,
       lastIpAddress,
       lastAccessedAt: new Date(),
@@ -141,17 +150,18 @@ export class RefreshTokenRepository {
     return this.repository.count({ where: { userId } });
   }
 
-  async deleteOldestByUser(userId: string): Promise<boolean> {
+  /** Deletes the user's least recently used refresh token; returns its session, if one went. */
+  async deleteOldestByUser(userId: string): Promise<string | null> {
     const oldestToken = await this.repository.findOne({
       where: { userId },
       order: { lastAccessedAt: 'ASC' },
-      select: ['id'],
+      select: ['id', 'session'],
     });
 
-    if (!oldestToken) return false;
+    if (!oldestToken) return null;
 
     const result = await this.repository.delete(oldestToken.id);
-    return result.affected ? result.affected > 0 : false;
+    return result.affected ? oldestToken.session : null;
   }
 
   async saveRefreshToken(refreshToken: RefreshToken): Promise<RefreshToken> {

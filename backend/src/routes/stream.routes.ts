@@ -4,6 +4,7 @@ import { Quality } from '@miauflix/source-metadata-extractor';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
+import { InvalidTokenError } from '@errors/auth.errors';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
@@ -178,33 +179,14 @@ export const createStreamRoutes = ({
               return context.json({ error: error.message } satisfies ErrorResponse, 410);
             }
           }
-          console.error('Failed to stream content:', error);
-
-          if (error && typeof error === 'object' && 'message' in error) {
-            const errorMessage = error.message as string;
-            if (errorMessage.includes('Invalid token')) {
-              return context.json(
-                { error: 'Invalid or expired streaming key' } satisfies ErrorResponse,
-                401
-              );
-            }
-            if (errorMessage.includes('stream_timeout')) {
-              return context.json(
-                {
-                  error: 'Stream loading timeout',
-                } satisfies ErrorResponse,
-                504
-              );
-            }
-            if (errorMessage.includes('no_files')) {
-              return context.json(
-                { error: 'No video files found in torrent' } satisfies ErrorResponse,
-                404
-              );
-            }
+          if (error instanceof InvalidTokenError) {
+            return context.json(
+              { error: 'Invalid or expired streaming key' } satisfies ErrorResponse,
+              401
+            );
           }
-
-          return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);
+          // The global error handler logs it and maps service errors (timeouts, ...) to a status.
+          throw error;
         }
       }
     );

@@ -37,14 +37,14 @@ export const createAuthMiddleware = (
 
         if (token) {
           try {
-            const payload = await authService.verifyAccessToken(token);
+            const session = await authService.authenticateAccessToken(token, sessionId);
 
             c.set('sessionInfo', {
               sessionId,
               user: {
-                id: payload.userId,
-                email: payload.email,
-                role: payload.role as UserRole,
+                id: session.userId,
+                email: session.email,
+                role: session.role,
               },
             });
           } catch {

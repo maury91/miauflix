@@ -121,7 +121,6 @@ The current source HTTP client uses this URL for definitions that require FlareS
 ```bash
 # JWT secrets (automatically generated if not provided)
 JWT_SECRET=64-character-hex-string
-STREAM_TOKEN_SECRET=64-character-hex-string
 STREAM_KEY_SALT=64-character-hex-string
 ```
 
@@ -171,18 +170,21 @@ ENABLE_FRONTEND=true
 - **DATA_DIR**: Directory for storing application data
 - **FRONTEND_DIR**: Path to static frontend files (for production)
 - **ENABLE_FRONTEND**: Whether to serve the frontend interface
+- **CSP_IMAGE_ORIGINS**: Extra origins the web app may load artwork from, besides `https://image.tmdb.org` (comma-separated origins, e.g. `https://images.example.com`; default: none). The Content Security Policy blocks images from any other host, so set this when the catalog serves TMDB images from a mirror. Entries that are not a bare origin are ignored
 
 #### Security & Performance
 
 ```bash
 # Security and performance settings
 REVERSE_PROXY_SECRET=your-secure-random-string
+SERVICE_TOKEN=another-long-random-string
 MAXIMUM_CACHE_EMPTY_SPACE=10MB
 DISABLE_BACKGROUND_TASKS=false
 DISABLE_VPN_CHECK=false
 ```
 
 - **REVERSE_PROXY_SECRET**: Shared secret between reverse proxy and backend
+- **SERVICE_TOKEN**: Shared secret between the backend and the internal services (media catalog, lists, sources, media load). When set, a service refuses connections that do not present it; set the same value for the backend and every service. Unset (the default), any client that reaches a service's port can use it. The services listen on all interfaces (`*_HOST`, default `0.0.0.0`), which is fine on the Docker Compose network, where no port is published; when you run them directly on a machine, set `SERVICE_TOKEN` or bind them to `127.0.0.1` (`CATALOG_HOST`, `LIST_SERVICE_HOST`, `SOURCES_HOST`, `MEDIA_LOAD_HOST`). The token is sent when the connection opens, encrypted only when the service URL is `https://` (the connection is then `wss://`); with an `http://` URL, as on the Compose network, anyone who can watch the traffic between the backend and a service can read it, so use `http://` only on a network you trust
 - **MAXIMUM_CACHE_EMPTY_SPACE**: Maximum SQLite empty space before cleanup
 - **DISABLE_BACKGROUND_TASKS**: Disable background processing for testing
 - **DISABLE_VPN_CHECK**: Skip VPN detection. When `false` (the default), source search and media load each refuse to work (searches, tracker scrapes, downloads) unless NordVPN reports their own connection as protected. It is the default of their own settings, `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK` (with `SOURCES_KNOWN_VPN_IPS` / `MEDIA_LOAD_KNOWN_VPN_IPS` for a VPN NordVPN does not recognise), which take over once set. Setting it to `true` lets torrents go out from your real IP; don't do this on a server reachable from the internet
@@ -306,7 +308,7 @@ With the VPN overlay, include `docker-compose.vpn.yml` too; the backend stays ou
 **Configuration wizard won't start**
 
 - Ensure you're running from the project root directory
-- Check that all dependencies are installed (`npm install`)
+- Check that all dependencies are installed (`bun install`)
 
 **TMDB API errors**
 

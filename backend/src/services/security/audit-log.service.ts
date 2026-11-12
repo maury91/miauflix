@@ -7,6 +7,7 @@ import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { ConfigService } from '@mytypes/configuration';
 import type { AuditLogRepository } from '@repositories/audit-log.repository';
 import { getRealClientIp } from '@utils/proxy.util';
+import { redactHeaders, redactPath, redactQuery } from '@utils/redact.util';
 
 export class AuditLogService {
   private repository: AuditLogRepository;
@@ -16,19 +17,6 @@ export class AuditLogService {
     private readonly config: ConfigService
   ) {
     this.repository = db.getAuditLogRepository();
-  }
-
-  private filterSensitiveHeaders(headers: Headers): Record<string, string> {
-    const sensitiveHeaders = ['authorization', 'cookie', 'x-reverse-proxy-secret'];
-    const filteredHeaders: Record<string, string> = {};
-    headers.forEach((value, key) => {
-      if (sensitiveHeaders.includes(key.toLowerCase())) {
-        filteredHeaders[key] = 'REDACTED';
-      } else {
-        filteredHeaders[key] = value;
-      }
-    });
-    return filteredHeaders;
   }
 
   /**
@@ -56,10 +44,11 @@ export class AuditLogService {
         metadata: {
           ...(context && {
             method: context.req.method,
-            query: Object.fromEntries(new URL(context.req.url).searchParams),
-            headers: this.filterSensitiveHeaders(context.req.raw.headers),
+            query: redactQuery(new URL(context.req.url).searchParams),
+            headers: redactHeaders(context.req.raw.headers),
           }),
           ...metadata,
+          ...(typeof metadata?.path === 'string' && { path: redactPath(metadata.path) }),
         },
         ipAddress,
         userAgent,
