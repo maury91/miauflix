@@ -286,6 +286,8 @@ export const createListService = (
   };
 
   const service: Service = defineService({
+    // Shared secret every connection must present (SERVICE_TOKEN, unset: no check)
+    token: process.env.SERVICE_TOKEN || undefined,
     info: {
       id: 'list-service',
       name: 'List Service',

@@ -1,7 +1,7 @@
 {
   "name": "miauflix",
   "version": "0.2.0",
-  "packageManager": "npm@10.8.1",
+  "packageManager": "bun@1.4.0",
   "cache": true,
   "scripts": {
     "build:backend": "turbo run build build:client --filter=@miauflix/backend...",
@@ -12,7 +12,6 @@
     "config-only": "npm run start:backend -- --only-config",
     "config-only:docker": "./scripts/docker-config.sh",
     "config": "npm run start:backend -- --config",
-    "deploy:frontend": "./scripts/deploy-frontend.sh",
     "package:tizen": "./scripts/package-tizen.sh",
     "install:tizen": "./scripts/install-tizen.sh",
     "generate:icons": "node scripts/generate-icons.mjs",
@@ -127,5 +126,10 @@
     "packages/*",
     "services/*"
   ],
-  "license": "PolyForm-Noncommercial-1.0.0"
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "trustedDependencies": [
+    "esbuild",
+    "node-datachannel",
+    "sqlite3"
+  ]
 }

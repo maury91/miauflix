@@ -101,6 +101,8 @@ export const createCatalogService = (context: ServiceContext): Service => {
   let interval: ReturnType<typeof setInterval> | undefined;
 
   const service = defineService({
+    // Shared secret every connection must present (SERVICE_TOKEN, unset: no check)
+    token: process.env.SERVICE_TOKEN || undefined,
     info: {
       id: 'media-catalog',
       name: 'Media Catalog',

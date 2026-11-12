@@ -24,6 +24,7 @@ import type { ServiceName } from '@services/configuration/configuration.types';
  * The previous major of the contract and how to serve the current client on top of it, so this
  * backend still works (possibly degraded) with a service one major behind.
  */
+
 export interface PreviousMajor<C extends Contract, P extends Contract = Contract> {
   contract: P;
   adapt: (client: Client<P>) => Client<C>;
@@ -78,6 +79,8 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     // The live connection follows the saved URL only (reload() moves it), never a draft overlay.
     this.connection = connect({
       url: () => this.connectedUrl,
+      // Shared secret the services check on every connection (SERVICE_TOKEN, unset: no check)
+      token: this.serviceToken(),
       timeoutMs: () => this.timeoutMs(),
       // Signs `bytes` URLs; the service learns it on every connection.
       ticketKey: randomBytes(32).toString('base64url'),
@@ -179,6 +182,7 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     }
     const probe = connect({
       url,
+      token: this.serviceToken(),
       timeoutMs: this.timeoutMs(),
     });
     try {
@@ -202,6 +206,12 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
   }
 
   /* ---------- discovery ---------- */
+
+  /** The secret shared with the internal services (`SERVICE_TOKEN`; unset: no check). */
+  private serviceToken(): string | undefined {
+    const token = this.configuration.getDynamic('SERVICE_TOKEN');
+    return typeof token === 'string' && token ? token : undefined;
+  }
 
   private timeoutMs(): number {
     return Number(this.configuration.getDynamic(this.descriptor.timeoutKey) ?? DEFAULT_TIMEOUT_MS);

@@ -11,5 +11,4 @@ public
 *.png
 *.lock
 *.sqlite
-nginx
 .prettierignore

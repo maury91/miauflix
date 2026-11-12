@@ -30,6 +30,8 @@ import type { RealtimeSearchChannel, SearchClient } from './realtime.search';
 const MAX_MAP_SIDE = 11;
 const MAX_MAP_CELLS = MAX_MAP_SIDE * MAX_MAP_SIDE;
 const AUTH_TIMEOUT_MS = 5_000;
+/** How often an authenticated socket's session is checked again (role changes, revocations elsewhere). */
+const SESSION_RECHECK_MS = 60_000;
 const MAX_PAYLOAD_BYTES = 64 * 1024;
 const REALTIME_PATH = '/api/realtime';
 /** `WebSocket.OPEN` */
@@ -148,6 +150,16 @@ export class RealtimeGateway {
       this.deliverAvailability(change)
     );
     this.preload.onChange(this.onPreparationChange);
+    this.removeRevocationListener = this.authService.onSessionRevoked(revocation => {
+      for (const client of this.clients) {
+        if (client.userId === revocation.userId && client.sessionId === revocation.session)
+          client.socket.close(1008, 'Session ended');
+      }
+    });
+    this.sessionRecheckTimer = setInterval(() => {
+      for (const client of this.clients) if (client.userId) void this.recheckSession(client);
+    }, SESSION_RECHECK_MS);
+    this.sessionRecheckTimer.unref?.();
     this.removeArtworkListener = this.catalog.onArtwork(update => this.deliverArtwork(update));
     this.removeArtworkStreamReadyListener = this.catalog.onArtworkStreamReady(() => {
       for (const client of this.clients) {
@@ -208,6 +220,29 @@ export class RealtimeGateway {
     this.removePiecesListener?.();
     this.removeAttemptListener?.();
     this.removeAvailabilityListener?.();
+    this.removeRevocationListener();
+    clearInterval(this.sessionRecheckTimer);
+  }
+
+  private readonly removeRevocationListener: () => void;
+  private readonly sessionRecheckTimer: ReturnType<typeof setInterval>;
+
+  /**
+   * Closes a socket whose session was logged out or revoked, and follows the user's current role.
+   * The socket was authenticated once, at connect; this keeps that from outliving the session.
+   */
+  private async recheckSession(client: ClientState): Promise<void> {
+    if (!client.userId) return;
+    try {
+      const session = await this.authService.resolveSession(client.userId, client.sessionId);
+      if (!session) {
+        client.socket.close(1008, 'Session ended');
+        return;
+      }
+      client.isAdmin = session.role === UserRole.ADMIN;
+    } catch {
+      // A database hiccup is not a revocation; the next check decides
+    }
   }
 
   private readonly removeDeliveryListener: (() => void) | null;
@@ -378,9 +413,10 @@ export class RealtimeGateway {
       return;
     }
     try {
-      const payload = await this.authService.verifyAccessToken(token);
-      state.userId = payload.userId;
-      state.isAdmin = payload.role === UserRole.ADMIN;
+      // The token must belong to this session, and the session must still exist
+      const session = await this.authService.authenticateAccessToken(token, message.session);
+      state.userId = session.userId;
+      state.isAdmin = session.role === UserRole.ADMIN;
       state.sessionId = message.session;
       state.clientId = message.clientId;
       clearTimeout(state.authTimer);

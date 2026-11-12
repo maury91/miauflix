@@ -8,6 +8,7 @@ import { InvalidTokenError, UserAlreadyExistsError } from '@errors/auth.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import type { AuthResult, AuthService } from '@services/auth/auth.service';
+import { LoginThrottle } from '@services/auth/login-throttle';
 import { toUserDto } from '@services/auth/user-dto.util';
 import { readRefreshToken, wantsTokenTransport } from '@utils/auth-transport.util';
 import { setCookies } from '@utils/setCookies.util';
@@ -29,7 +30,8 @@ function deliverTokens(
   authService: AuthService,
   { accessToken, refreshToken, ...authResult }: AuthResult
 ): { tokens?: AuthTokens } {
-  if (wantsTokenTransport(context)) return { tokens: { accessToken, refreshToken } };
+  if (wantsTokenTransport(context, authService.getSessionCookiePrefixes()))
+    return { tokens: { accessToken, refreshToken } };
   setCookies(context, authService.getCookies({ accessToken, refreshToken, ...authResult }));
   return {};
 }
@@ -41,6 +43,7 @@ export const createAuthRoutes = ({
   qrLoginService,
 }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
+  const loginThrottle = new LoginThrottle();
 
   return new Hono()
     .get('/setup', rateLimitGuard(0.5), async context => {
@@ -97,8 +100,30 @@ export const createAuthRoutes = ({
       async context => {
         const { email, password } = context.req.valid('json');
 
-        const user = await authService.validateUser(email, password);
+        // Per account, on top of the per-IP limit: guesses spread over many addresses add up here
+        const retryAfter = loginThrottle.begin(email);
+        if (retryAfter > 0) {
+          await auditLogService.logSuspiciousActivity({
+            userEmail: email,
+            context,
+            description: 'Login refused: too many failed attempts for this account',
+          });
+          context.header('Retry-After', String(retryAfter));
+          return context.json(
+            { error: 'Too many failed login attempts. Try again later.' } satisfies ErrorResponse,
+            429
+          );
+        }
+
+        let user: Awaited<ReturnType<typeof authService.validateUser>>;
+        try {
+          user = await authService.validateUser(email, password);
+        } catch (error) {
+          loginThrottle.release(email);
+          throw error;
+        }
         if (!user) {
+          loginThrottle.fail(email);
           await auditLogService.logLoginAttempt({
             success: false,
             userEmail: email,
@@ -106,6 +131,7 @@ export const createAuthRoutes = ({
           });
           return context.json({ error: 'Invalid credentials' } satisfies ErrorResponse, 401);
         }
+        loginThrottle.succeed(email);
 
         // Generate tokens
         const authResult = await authService.generateTokens(user, context);
@@ -199,7 +225,7 @@ export const createAuthRoutes = ({
         'json',
         z.object({
           email: z.email(),
-          password: z.string().min(1),
+          password: z.string().min(8),
           role: z.enum(UserRole),
           displayName: displayNameSchema.optional(),
           avatar: avatarLookSchema.optional(),

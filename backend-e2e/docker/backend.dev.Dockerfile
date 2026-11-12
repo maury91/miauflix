@@ -2,7 +2,7 @@
 FROM oven/bun:1.4.0 AS bun-runtime
 
 FROM node:22-slim
-# The backend runs on Bun; npm installs the workspaces and builds the shared packages.
+# The backend runs on Bun; Bun installs the workspaces and npm builds the shared packages.
 COPY --from=bun-runtime /usr/local/bin/bun /usr/local/bin/bun
 
 # Set working directory
@@ -14,18 +14,29 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy package files and build config
-COPY package.json package-lock.json turbo.json tsconfig.json ./
-COPY backend/package.json backend/tsconfig.json ./backend/
-COPY frontend/package.json ./frontend/
-COPY services/media-catalog/package.json ./services/media-catalog/
-COPY services/list-service/package.json ./services/list-service/
+COPY package.json bun.lock turbo.json tsconfig.json ./
+# Every workspace's manifest: a frozen `bun install` stops when one is missing.
+COPY backend/package.json backend/package.json
+COPY frontend/package.json frontend/package.json
+COPY backend-e2e/package.json backend-e2e/package.json
+COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
+COPY packages/contract/package.json packages/contract/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
+COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
+COPY services/list-service/package.json services/list-service/package.json
+COPY services/media-catalog/package.json services/media-catalog/package.json
+COPY services/media-load/package.json services/media-load/package.json
+COPY services/sources/package.json services/sources/package.json
+COPY backend/tsconfig.json ./backend/
 
 # Copy the packages that backend depends on
 COPY packages/ ./packages/
 
-# Install dependencies with npm cache mount
-RUN --mount=type=cache,target=/root/.npm \
-    npm install
+# Install dependencies with a Bun cache mount
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile
 
 # Build workspace packages that backend depends on
 RUN npm run build:libs
@@ -36,7 +47,7 @@ COPY backend/ ./backend/
 COPY .env ./backend
 
 # Create entrypoint script to handle dynamic user permissions like LinuxServer.io
-COPY backend-e2e/docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY backend/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Create necessary directories

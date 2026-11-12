@@ -13,13 +13,6 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       required: true,
       skipUserInteraction: true,
     }),
-    STREAM_TOKEN_SECRET: variable({
-      description: 'Secret key for streaming token signing',
-      example: 'a-random-streaming-secret-key',
-      defaultValue: () => randomBytes(32).toString('hex'),
-      required: true,
-      skipUserInteraction: true,
-    }),
     STREAM_TOKEN_EXPIRATION: variable({
       description:
         'Expiration time for streaming tokens (format: number + unit, e.g., 6h, 30m, 2d)',

@@ -71,8 +71,8 @@ This builds the images from the checkout and starts the backend with its service
 #### Frontend Development
 
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (needs Bun: https://bun.sh)
+bun install
 
 # Start with hot reload (recommended for development)
 npm run start:frontend
