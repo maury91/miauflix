@@ -15,8 +15,14 @@ interface Entry {
  * An attempt is reserved by `begin` before the password is checked, so concurrent requests can't
  * all pass the check before any failure is counted: failures plus attempts in flight never exceed
  * `maxFailures`. Every `begin` that returns 0 must be followed by `fail`, `succeed` or `release`.
+ *
+ * At most `maxEntries` accounts are tracked, and only expired entries make room: an account's
+ * block is never dropped for a new email. While every slot holds an active entry, logins for
+ * accounts not tracked yet are refused until the oldest window ends, so filling the map can delay
+ * other accounts' logins but never lifts a block.
  */
 export class LoginThrottle {
+  /** Ordered by `windowStart`: an entry whose window restarts moves to the end. */
   private readonly entries = new Map<string, Entry>();
 
   constructor(
@@ -30,9 +36,8 @@ export class LoginThrottle {
   begin(email: string): number {
     const key = this.key(email);
     const entry = this.current(key) ?? this.insert(key);
-    if (entry.failures >= this.maxFailures) {
-      return Math.max(1, Math.ceil((entry.windowStart + this.windowMs - this.now()) / 1000));
-    }
+    if (!entry) return this.secondsUntilFree();
+    if (entry.failures >= this.maxFailures) return this.secondsLeft(entry);
     // Attempts in flight could each still fail: wait for them before allowing more.
     if (entry.failures + entry.pending >= this.maxFailures) return 1;
     entry.pending++;
@@ -42,9 +47,10 @@ export class LoginThrottle {
   /** The reserved attempt failed the password check. */
   fail(email: string): void {
     const key = this.key(email);
-    const entry = this.current(key) ?? this.insert(key);
+    // `begin` reserved this attempt, so its entry exists unless its window ran out meanwhile
+    const entry = this.current(key) ?? this.start(key);
     entry.pending = Math.max(0, entry.pending - 1);
-    if (entry.failures === 0) entry.windowStart = this.now();
+    if (entry.failures === 0) this.restartWindow(key, entry);
     entry.failures++;
   }
 
@@ -76,28 +82,54 @@ export class LoginThrottle {
     const entry = this.entries.get(key);
     if (entry && this.expired(entry)) {
       entry.failures = 0;
-      entry.windowStart = this.now();
       if (this.dropIfIdle(key, entry)) return undefined;
+      this.restartWindow(key, entry);
     }
     return entry;
   }
 
   /**
-   * Adds an entry, keeping the map bounded without scanning it: entries are kept in insertion
-   * order, so expired ones are dropped from the front, and the oldest goes when it is still full.
+   * Adds an entry if there is room, making it only from expired entries. The map is ordered by
+   * window start, so they are all at its front and nothing past the first active one is looked at.
    */
-  private insert(key: string): Entry {
+  private insert(key: string): Entry | undefined {
     for (const [oldest, entry] of this.entries) {
-      if (this.entries.size < this.maxEntries && !this.expired(entry)) break;
+      if (this.entries.size < this.maxEntries || !this.expired(entry)) break;
       this.entries.delete(oldest);
+      // An attempt still in flight keeps its account tracked, in a new window
+      if (entry.pending > 0) {
+        entry.failures = 0;
+        entry.windowStart = this.now();
+        this.entries.set(oldest, entry);
+      }
     }
+    return this.entries.size < this.maxEntries ? this.start(key) : undefined;
+  }
+
+  private start(key: string): Entry {
     const entry = { failures: 0, pending: 0, windowStart: this.now() };
     this.entries.set(key, entry);
     return entry;
   }
 
+  private restartWindow(key: string, entry: Entry): void {
+    entry.windowStart = this.now();
+    this.entries.delete(key);
+    this.entries.set(key, entry);
+  }
+
   private expired(entry: Entry): boolean {
     return entry.windowStart + this.windowMs <= this.now();
+  }
+
+  private secondsLeft(entry: Entry): number {
+    return Math.max(1, Math.ceil((entry.windowStart + this.windowMs - this.now()) / 1000));
+  }
+
+  /** Seconds until the oldest entry expires and frees a slot. */
+  private secondsUntilFree(): number {
+    const oldest = this.entries.values().next().value;
+    return oldest ? this.secondsLeft(oldest) : 1;
   }
 
   private dropIfIdle(key: string, entry: Entry): boolean {
