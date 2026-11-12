@@ -170,6 +170,7 @@ ENABLE_FRONTEND=true
 - **DATA_DIR**: Directory for storing application data
 - **FRONTEND_DIR**: Path to static frontend files (for production)
 - **ENABLE_FRONTEND**: Whether to serve the frontend interface
+- **CSP_IMAGE_ORIGINS**: Extra origins the web app may load artwork from, besides `https://image.tmdb.org` (comma-separated origins, e.g. `https://images.example.com`; default: none). The Content Security Policy blocks images from any other host, so set this when the catalog serves TMDB images from a mirror. Entries that are not a bare origin are ignored
 
 #### Security & Performance
 

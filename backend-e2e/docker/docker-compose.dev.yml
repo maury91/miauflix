@@ -21,6 +21,8 @@ services:
       # Every test file logs in as the same admin in parallel; with the default 5 device slots,
       # evicted sessions (and with them their access tokens) stop working mid-test. 20 is the maximum.
       - MAX_DEVICE_SLOTS_PER_USER=20
+      # The web app loads artwork from the TMDB image mock; the CSP must allow it
+      - CSP_IMAGE_ORIGINS=http://127.0.0.1:${TMDB_IMAGE_PORT:-3001}
       - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
       - BUNQUEUE_HOST=bunqueue
       - BUNQUEUE_PORT=6789

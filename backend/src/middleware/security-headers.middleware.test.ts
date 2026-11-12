@@ -1,6 +1,10 @@
 import { Hono } from 'hono';
 
-import { createSecurityHeadersMiddleware, inlineScriptHashes } from './security-headers.middleware';
+import {
+  createSecurityHeadersMiddleware,
+  cspOrigins,
+  inlineScriptHashes,
+} from './security-headers.middleware';
 
 describe('security headers', () => {
   it('hashes inline scripts and skips external ones', () => {
@@ -27,5 +31,25 @@ describe('security headers', () => {
     expect(response.headers.get('Referrer-Policy')).toBe('same-origin');
     expect(response.headers.get('Strict-Transport-Security')).toBeNull();
     expect(response.headers.get('Cross-Origin-Resource-Policy')).toBeNull();
+  });
+
+  it('allows extra artwork origins for images and fetches, and only plain origins', async () => {
+    expect(
+      cspOrigins([
+        ' http://127.0.0.1:3001 ',
+        'https://img.example/',
+        'https://x.example/path',
+        'https://a; script-src *',
+        'ftp://f.example',
+        '',
+      ])
+    ).toEqual(['http://127.0.0.1:3001', 'https://img.example']);
+
+    const app = new Hono()
+      .use(createSecurityHeadersMiddleware(undefined, ['http://127.0.0.1:3001']))
+      .get('/', c => c.text('ok'));
+    const csp = (await app.request('/')).headers.get('Content-Security-Policy') ?? '';
+    expect(csp).toMatch(/img-src [^;]*https:\/\/image\.tmdb\.org http:\/\/127\.0\.0\.1:3001/);
+    expect(csp).toMatch(/connect-src [^;]*http:\/\/127\.0\.0\.1:3001/);
   });
 });

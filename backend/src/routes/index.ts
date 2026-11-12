@@ -110,7 +110,12 @@ export function createRoutes(deps: Deps) {
   );
 
   const app = new Hono()
-    .use(createSecurityHeadersMiddleware(frontendEnabled ? frontendDir : undefined))
+    .use(
+      createSecurityHeadersMiddleware(
+        frontendEnabled ? frontendDir : undefined,
+        deps.configurationService.get('CSP_IMAGE_ORIGINS') ?? []
+      )
+    )
     .use(async (c, next) => {
       // The address a browser reached the server at is one a TV on the network can use too
       deps.tvPairingService?.noteHost(c.req.header('host'), peerAddress(c));
