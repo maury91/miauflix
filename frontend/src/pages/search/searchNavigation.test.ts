@@ -125,3 +125,24 @@ describe('clampSearchFocus', () => {
     );
   });
 });
+
+describe('search state panel focus', () => {
+  const panel = { popular: 10, recents: 5, results: 0, state: 2 };
+  const state = (index: number) => ({ zone: 'state' as const, index });
+
+  it('reaches the panel in place of the results and moves between its stacked actions', () => {
+    expect(moveSearchFocus({ zone: 'recents', index: 2 }, 'down', panel)).toEqual(state(0));
+    expect(moveSearchFocus(keyboard(35), 'right', panel)).toEqual(state(0));
+    expect(moveSearchFocus(state(0), 'down', panel)).toEqual(state(1));
+    expect(moveSearchFocus(state(1), 'down', panel)).toBeNull();
+    expect(moveSearchFocus(state(1), 'up', panel)).toEqual(state(0));
+    expect(moveSearchFocus(state(0), 'up', panel)).toEqual({ zone: 'recents', index: 0 });
+    expect(moveSearchFocus(state(0), 'left', panel)?.zone).toBe('keyboard');
+    expect(moveSearchFocus(state(0), 'right', panel)).toBeNull();
+  });
+
+  it('leaves the panel once it is gone', () => {
+    expect(clampSearchFocus(state(1), { ...panel, state: 1 })).toEqual(state(0));
+    expect(clampSearchFocus(state(0), { ...panel, state: 0 })).toEqual(keyboard(0));
+  });
+});

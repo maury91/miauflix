@@ -112,7 +112,111 @@ describe('search slice', () => {
       searchActions.serverMessage({ type: 'search-genres', items: [{ key: '18', name: 'Drama' }] })
     );
     expect(state.status).toBe('error');
+    expect(state.error).toBeNull();
     expect(state.recents).toHaveLength(1);
     expect(state.genres).toEqual([{ key: '18', name: 'Drama' }]);
+  });
+
+  it('drops the previous query results when the new query fails', () => {
+    const state = reduce(
+      initialSearchState,
+      searchActions.queryChanged('dune'),
+      searchActions.searchStarted({ requestId: 1, page: 1 }),
+      page(1, [result(1), result(2)]),
+      searchActions.queryChanged('alien'),
+      searchActions.searchStarted({ requestId: 2, page: 1 }),
+      searchActions.serverMessage({ type: 'search-error', requestId: 2, message: 'search-failed' })
+    );
+    expect(state).toMatchObject({ status: 'error', results: [], totalResults: 0, page: 0 });
+  });
+
+  it('keeps the server explanation of a failed search until the next one starts', () => {
+    const error = {
+      success: false as const,
+      status: 503,
+      code: 'service_not_configured',
+      error: 'Media Catalog is not configured.',
+      message: 'Media Catalog is not configured.',
+      errorId: 'abcd1234',
+      needsConfiguration: true,
+    };
+    const failed = reduce(
+      initialSearchState,
+      searchActions.queryChanged('dune'),
+      searchActions.searchStarted({ requestId: 5, page: 1 }),
+      searchActions.serverMessage({
+        type: 'search-error',
+        requestId: 5,
+        message: 'search-failed',
+        error,
+      })
+    );
+    expect(failed.error).toEqual(error);
+    expect(reduce(failed, searchActions.searchStarted({ requestId: 6, page: 1 })).error).toBeNull();
+  });
+
+  it('keeps the results and records the error when a later page or the details fail', () => {
+    const error = {
+      success: false as const,
+      status: 500,
+      code: 'internal',
+      error: 'Something went wrong on the server.',
+      message: 'Something went wrong on the server.',
+      errorId: 'abcd1234',
+    };
+    const page = (requestId: number, pageNumber: number) =>
+      searchActions.serverMessage({
+        type: 'search-results',
+        requestId,
+        page: pageNumber,
+        totalPages: 3,
+        totalResults: 60,
+        results: [
+          {
+            _type: 'movie',
+            mediaId: pageNumber,
+            title: `Dune ${pageNumber}`,
+            overview: '',
+            poster: '',
+            backdrop: '',
+            releaseDate: '2021-01-01',
+            rating: 8,
+          },
+        ],
+      });
+    const loaded = reduce(
+      initialSearchState,
+      searchActions.queryChanged('dune'),
+      searchActions.searchStarted({ requestId: 7, page: 1 }),
+      page(7, 1)
+    );
+
+    const detailsFailed = reduce(
+      loaded,
+      searchActions.serverMessage({
+        type: 'search-error',
+        requestId: 7,
+        message: 'search-failed',
+        error,
+      })
+    );
+    expect(detailsFailed).toMatchObject({ status: 'ready', error });
+    expect(detailsFailed.results).toHaveLength(1);
+
+    const nextPageFailed = reduce(
+      loaded,
+      searchActions.searchStarted({ requestId: 8, page: 2 }),
+      searchActions.serverMessage({
+        type: 'search-error',
+        requestId: 8,
+        message: 'search-failed',
+        error,
+      })
+    );
+    expect(nextPageFailed).toMatchObject({ status: 'ready', moreRequestId: null, error });
+    expect(nextPageFailed.results).toHaveLength(1);
+
+    const retried = reduce(nextPageFailed, searchActions.searchStarted({ requestId: 9, page: 2 }));
+    expect(retried.error).toBeNull();
   });
 });

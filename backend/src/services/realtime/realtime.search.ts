@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 const searchGenreKeySchema = z.string().regex(SEARCH_GENRE_KEY_PATTERN);
 
+import { describeError, newErrorId } from '@errors/error-response';
 import type { SearchServerMessage } from '@routes/search.types';
 import type { SearchInput, SearchService } from '@services/search/search.service';
 
@@ -33,6 +34,8 @@ const recentEntrySchema = z.object({
 
 export interface SearchClient {
   userId: string;
+  /** Admins also receive the raw message of a failure. */
+  isAdmin?: boolean;
   send(message: SearchServerMessage): void;
 }
 
@@ -124,9 +127,17 @@ export class RealtimeSearchChannel {
       if (state.latestKey !== key) return;
       client.send({ type: 'search-details', requestId, items });
     } catch (error) {
-      logger.warn('RealtimeSearch', 'Search failed', error);
+      const errorId = newErrorId();
+      const { body, expected } = describeError(error, {
+        errorId,
+        includeDetail: client.isAdmin === true,
+      });
+      const reason = error instanceof Error ? error.message : String(error);
+      const line = `[error ${errorId}] Search failed: ${body.code}: ${reason}`;
+      if (expected) logger.warn('RealtimeSearch', line);
+      else logger.error('RealtimeSearch', line, error);
       if (state.latestKey === key)
-        client.send({ type: 'search-error', requestId, message: 'search-failed' });
+        client.send({ type: 'search-error', requestId, message: 'search-failed', error: body });
     }
   }
 

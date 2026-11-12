@@ -6,6 +6,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { builtForTizen, IS_TV, PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
 import {
   forwardRef,
   memo,
@@ -712,7 +713,10 @@ export const CategoryRow = memo(
       return (
         <RowContainer>
           {title}
-          <State>Failed to load content.</State>
+          {/* Polite, and only on screen: prefetched rows failing is not urgent. */}
+          <State role={visible ? 'status' : undefined}>
+            <ErrorNotice error={current.error} fallback="Failed to load content." />
+          </State>
         </RowContainer>
       );
     }

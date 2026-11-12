@@ -22,6 +22,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
 import { BackRail } from '@shared/ui/rail/BackRail';
 import { RAIL_COLLAPSED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
 import {
@@ -788,7 +789,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
               <Spinner text="Loading details..." />
             )}
             {(media._type === 'movie' ? movie.isError : show.isError) && (
-              <ErrorState>Failed to load details.</ErrorState>
+              <ErrorState role="alert">
+                <ErrorNotice
+                  error={media._type === 'movie' ? movie.error : show.error}
+                  fallback="Failed to load details."
+                />
+              </ErrorState>
             )}
             {current && <Overview>{current.overview || 'No overview available.'}</Overview>}
             <RatingActions aria-label="Rate this title">
@@ -850,7 +856,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
             </RatingActions>
             {savedRating.isError && (
               <ErrorState role="alert">
-                Could not load your rating.
+                <ErrorNotice error={savedRating.error} fallback="Could not load your rating." />
                 <PrimaryAction
                   data-details-primary
                   type="button"
@@ -862,7 +868,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
               </ErrorState>
             )}
             {ratingUpdate.isError && (
-              <ErrorState role="alert">Could not save your rating. Please try again.</ErrorState>
+              <ErrorState role="alert">
+                <ErrorNotice
+                  error={ratingUpdate.error}
+                  fallback="Could not save your rating. Please try again."
+                />
+              </ErrorState>
             )}
             {media._type === 'movie' && (
               <WarmupBorder

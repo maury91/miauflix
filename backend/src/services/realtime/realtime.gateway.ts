@@ -1,6 +1,7 @@
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
 import type { Server, ServerWebSocket, WebSocketHandler } from 'bun';
 
+import { UserRole } from '@entities/user.entity';
 import type { ConfigService } from '@mytypes/configuration';
 import type { MediaIntentRef, PreloadIntentRequest, ReachableIntent } from '@routes/playable.types';
 import type { PreloadPreparationSnapshot } from '@routes/preload.types';
@@ -83,6 +84,8 @@ interface ClientState {
   socket: RealtimeSocket;
   cookie: string;
   userId: string;
+  /** Admins also receive the raw message of failures. */
+  isAdmin: boolean;
   sessionId: string;
   clientId: string;
   focused: MediaIntentRef | null;
@@ -219,6 +222,7 @@ export class RealtimeGateway {
       socket,
       cookie: socket.data.cookie,
       userId: '',
+      isAdmin: false,
       sessionId: '',
       clientId: '',
       focused: null,
@@ -232,6 +236,9 @@ export class RealtimeGateway {
       searchClient: {
         get userId() {
           return state.userId;
+        },
+        get isAdmin() {
+          return state.isAdmin;
         },
         send: message => this.send(state, message),
       },
@@ -373,6 +380,7 @@ export class RealtimeGateway {
     try {
       const payload = await this.authService.verifyAccessToken(token);
       state.userId = payload.userId;
+      state.isAdmin = payload.role === UserRole.ADMIN;
       state.sessionId = message.session;
       state.clientId = message.clientId;
       clearTimeout(state.authTimer);

@@ -88,6 +88,98 @@ describe('SearchPage', () => {
     expect(results).toContainElement(document.activeElement as HTMLElement);
   });
 
+  const submit = (store: ReturnType<typeof setupTest>['store']) => {
+    const box = screen.getByRole('searchbox', { name: 'Search' });
+    box.focus();
+    fireEvent.keyDown(box, { key: 'Enter' });
+    return store.getState().search.requestId;
+  };
+
+  it('explains a search that needs setup, retries it and shows the technical details', () => {
+    const { store } = setupTest({ ...searchStateFixture, results: [], status: 'idle' });
+    const requestId = submit(store);
+    act(() => {
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-error',
+          requestId,
+          message: 'search-failed',
+          error: {
+            success: false,
+            status: 503,
+            code: 'service_not_configured',
+            error: 'Media Catalog is not configured.',
+            message: 'Media Catalog is not configured.',
+            errorId: 'abcd1234',
+            needsConfiguration: true,
+            hint: 'An admin needs to configure TMDB.',
+          },
+        })
+      );
+    });
+
+    expect(screen.getByRole('heading', { name: 'Search needs to be set up' })).toBeInTheDocument();
+    expect(screen.getByText('Media Catalog is not configured.')).toBeInTheDocument();
+    expect(screen.getByText('An admin needs to configure TMDB.')).toBeInTheDocument();
+    const retry = screen.getByRole('button', { name: 'Try again' });
+    expect(document.activeElement).toBe(retry);
+
+    fireEvent.keyDown(retry, { key: 'ArrowDown' });
+    const toggle = screen.getByRole('button', { name: 'Technical details' });
+    expect(document.activeElement).toBe(toggle);
+    expect(screen.queryByText('abcd1234')).not.toBeInTheDocument();
+    fireEvent.keyDown(toggle, { key: 'Enter' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('abcd1234')).toBeInTheDocument();
+
+    fireEvent.keyDown(toggle, { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(retry);
+    fireEvent.keyDown(retry, { key: 'Enter' });
+    expect(store.getState().search.status).toBe('loading');
+    const retryId = store.getState().search.requestId;
+    expect(retryId).toBeGreaterThan(requestId);
+
+    // When the retry works, focus moves to its results.
+    act(() => {
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-results',
+          requestId: retryId,
+          page: 1,
+          totalPages: 1,
+          totalResults: searchStateFixture.results.length,
+          results: searchStateFixture.results,
+        })
+      );
+    });
+    expect(store.getState().search.focus).toEqual({ zone: 'results', index: 0 });
+  });
+
+  it('offers to clear a search without results', () => {
+    const { store } = setupTest({ ...searchStateFixture, results: [], status: 'idle' });
+    store.dispatch(searchActions.queryChanged('zzzz'));
+    const requestId = submit(store);
+    act(() => {
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-results',
+          requestId,
+          page: 1,
+          totalPages: 0,
+          totalResults: 0,
+          results: [],
+        })
+      );
+    });
+
+    expect(screen.getByRole('heading', { name: 'No results for ‘zzzz’' })).toBeInTheDocument();
+    const clear = screen.getByRole('button', { name: 'Clear search' });
+    expect(document.activeElement).toBe(clear);
+    fireEvent.keyDown(clear, { key: 'Enter' });
+    expect(store.getState().search.query).toBe('');
+    expect(store.getState().search.focus).toEqual({ zone: 'keyboard', index: 0 });
+  });
+
   it('ignores the Enter that confirms an IME composition', () => {
     const { store } = setupTest(searchStateFixture);
     const box = screen.getByRole('searchbox', { name: 'Search' });

@@ -1,11 +1,12 @@
 import 'reflect-metadata';
 
 import { logger } from '@logger';
+import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
 import { Database } from '@database/database';
 import { MigrationService } from '@database/migrations/migration.service';
-import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
-import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
+import { UserRole } from '@entities/user.entity';
+import { describeError, newErrorId } from '@errors/error-response';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import { MediaRatingRepository } from '@repositories/media-rating.repository';
 import { RecentSearchRepository } from '@repositories/recent-search.repository';
@@ -355,53 +356,23 @@ try {
 
   // Error handling middleware - must be added first
   app.onError((err, c) => {
-    const expected =
-      err instanceof ServiceNotConfiguredError ||
-      err instanceof AuthError ||
-      err instanceof InvalidTokenError ||
-      err instanceof LoginError ||
-      err instanceof RoleError;
+    const errorId = newErrorId();
+    const role = (c as { get(key: string): { user?: { role?: string } } | undefined }).get(
+      'sessionInfo'
+    )?.user?.role;
+    const { status, body, expected } = describeError(err, {
+      errorId,
+      includeDetail: role === UserRole.ADMIN,
+    });
     // Stream and QR paths carry secret tokens: keep their shape, not their value.
     const where = `${c.req.method} ${c.req.path.replace(/[A-Za-z0-9_-]{24,}/g, ':token')}`;
+    const line = `[error ${errorId}] ${status} on ${where}: ${err.name}: ${err.message}`;
     // Unexpected errors carry their stack, so the request and the code that threw can be found.
-    if (expected) logger.error('App', `An error occured on ${where}: ${err.name}: ${err.message}`);
-    else
-      logger.error('App', `An error occured on ${where}: ${err.name}: ${err.message}`, err.stack);
+    if (expected) logger.error('App', line);
+    else logger.error('App', line, err.stack);
 
-    if (err instanceof ServiceNotConfiguredError) {
-      return c.json(
-        {
-          error: `Service '${err.service}' is not configured`,
-          needsConfiguration: true,
-          service: err.service,
-        },
-        503
-      );
-    }
-    if (err instanceof AuthError || err instanceof InvalidTokenError) {
-      return c.json({ error: 'Authentication required', message: err.message }, 401);
-    }
-    if (err instanceof LoginError) {
-      return c.json({ error: 'Invalid credentials', message: err.message }, 401);
-    }
-    if (err instanceof RoleError) {
-      return c.json(
-        {
-          error: 'Insufficient permissions',
-          message: err.message,
-        },
-        403
-      );
-    }
-
-    return c.json(
-      {
-        success: false,
-        message: err.message || 'Internal Server Error',
-        status: 500,
-      },
-      500
-    );
+    c.header('X-Error-Id', errorId);
+    return c.json(body, status as ContentfulStatusCode);
   });
 
   const port = configurationService.getOrThrow('PORT');
