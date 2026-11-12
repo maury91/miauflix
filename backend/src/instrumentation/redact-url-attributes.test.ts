@@ -18,6 +18,14 @@ describe('redactUrlAttributes', () => {
     });
   });
 
+  it('masks the query of a path attribute', () => {
+    expect(
+      redactUrlAttributes({ 'http.target': '/api/stream/tok?streamingKey=k&start=1' })
+    ).toEqual({
+      'http.target': '/api/stream/REDACTED?streamingKey=REDACTED&start=1',
+    });
+  });
+
   it('leaves spans without URL attributes alone', () => {
     expect(redactUrlAttributes({ 'http.route': '/api/movies/:id' })).toEqual({});
   });
