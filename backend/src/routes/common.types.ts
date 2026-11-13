@@ -11,6 +11,7 @@ import type { NotificationService } from '@services/notifications/notification.s
 import type { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
 import type { StreamService } from '@services/playback/stream.service';
+import type { TvRemuxService } from '@services/playback/tv-remux.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProfileService } from '@services/profile/profile.service';
 import type { ProgressService } from '@services/progress/progress.service';
@@ -49,6 +50,7 @@ export interface Deps {
   preloadIntentService: PreloadIntentService;
   playbackSessionService: PlaybackSessionService;
   audioPlaybackService: AudioPlaybackService;
+  tvRemuxService: TvRemuxService;
   profileService: ProfileService;
   progressService: ProgressService;
   subtitlesService: SubtitlesService;

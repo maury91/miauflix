@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { type PlayableRef, playableRefSchema } from '@mytypes/playable.types';
 import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
+import { TIZEN_AUDIO_CODECS, TIZEN_VIDEO_CODECS } from '@services/playback/device-codecs';
 
 const supportedQualities = ['auto', ...Object.values(Quality)] as ['auto', ...Quality[]];
 
@@ -28,6 +29,17 @@ export const playbackPreferencesSchema = z
       .max(8)
       .optional(),
     nativeAudioTracks: z.boolean().optional(),
+    /** Prefer another source over converting this one's audio (a TV playing files natively). */
+    avoidAudioConversion: z.boolean().optional(),
+    playsRemux: z.boolean().optional(),
+    /** Every codec a Samsung TV reports it decodes, in Samsung's names (Tizen 6.0 and newer). */
+    tizenCodecs: z
+      .object({
+        audio: z.array(z.enum(TIZEN_AUDIO_CODECS)).max(TIZEN_AUDIO_CODECS.length),
+        video: z.array(z.enum(TIZEN_VIDEO_CODECS)).max(TIZEN_VIDEO_CODECS.length),
+      })
+      .strict()
+      .optional(),
     /** Highest average bitrate (kbit/s) the client's connection sustains. */
     maxBitrateKbps: z.number().int().min(500).max(1_000_000).optional(),
   })

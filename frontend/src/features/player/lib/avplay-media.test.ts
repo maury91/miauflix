@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AvplayMedia } from './avplay-media';
+import { AVPLAY_CAPABILITIES, avplayCapabilities, AvplayMedia } from './avplay-media';
 
 import type { AVPlay, AVPlayListeners, TrackInfo } from '@/types/tizen';
 
@@ -122,6 +122,55 @@ describe('AvplayMedia', () => {
     expect(media.currentTime).toBe(42.5);
   });
 
+  it('plays a playlist still being written from the start, at the length it was given', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    // AVPlay plays an HLS playlist without its end as live: no length, starting near its end.
+    avplay.getDuration.mockReturnValue(0);
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    prepare();
+    expect(media.duration).toBe(3539.5);
+    expect(avplay.seekTo).toHaveBeenCalledWith(0, expect.any(Function), expect.any(Function));
+  });
+
+  it('resumes a playlist still being written where it was asked to', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    media.currentTime = 409.3;
+    prepare();
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.seekTo).toHaveBeenCalledWith(409_300, expect.any(Function), expect.any(Function));
+  });
+
+  it('plays a playlist still being written only once the resume seek has landed', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    let landed: (() => void) | undefined;
+    avplay.seekTo.mockImplementation((_milliseconds: number, onSuccess?: () => void) => {
+      landed = onSuccess;
+    });
+    media.autoplay = true;
+    // The player resumes when the metadata loads, as usePlaybackProgress does.
+    media.addEventListener('loadedmetadata', () => {
+      media.currentTime = 851.5;
+    });
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_500, expect.any(Function), expect.any(Function));
+    expect(avplay.play).not.toHaveBeenCalled();
+    landed?.();
+    expect(avplay.play).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps the length AVPlay reports, and its start, for a finished file', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/api/stream/key', element, 3539.5);
+    prepare();
+    expect(media.duration).toBe(120);
+    expect(avplay.seekTo).not.toHaveBeenCalled();
+  });
+
   it('ignores the old position while a seek is in flight', () => {
     const { avplay, media, events, element, prepare, listener } = setupTest();
     let finishSeek: (() => void) | undefined;
@@ -214,5 +263,34 @@ describe('AvplayMedia', () => {
     window.webapis = { avplay, productinfo: { isUdPanelSupported: () => true } };
     media.open('https://miauflix.example/stream', element);
     expect(avplay.setStreamingProperty).toHaveBeenCalledWith('SET_MODE_4K', 'TRUE');
+  });
+});
+
+describe('avplayCapabilities', () => {
+  afterEach(() => {
+    delete window.webapis;
+  });
+
+  it('keeps the fixed codec list on a TV that cannot be asked (Tizen 5.5)', () => {
+    window.webapis = { avplay: {} as AVPlay };
+    expect(avplayCapabilities()).toEqual(AVPLAY_CAPABILITIES);
+  });
+
+  it('sends every codec the TV reports, in Samsung names', () => {
+    const supported = new Set(['AAC', 'AC3', 'E-AC3', 'TrueHD', 'H264', 'HEVC', 'AV1']);
+    window.webapis = {
+      avplay: {} as AVPlay,
+      systeminfo: {
+        isSupportedAudioCodec: codec => supported.has(codec),
+        isSupportedVideoCodec: codec => {
+          if (codec === 'HEIC') throw new Error('TypeMismatchError');
+          return supported.has(codec);
+        },
+      },
+    };
+    expect(avplayCapabilities()).toEqual({
+      ...AVPLAY_CAPABILITIES,
+      tizenCodecs: { audio: ['AC3', 'E-AC3', 'TrueHD', 'AAC'], video: ['H264', 'HEVC', 'AV1'] },
+    });
   });
 });

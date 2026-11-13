@@ -12,6 +12,20 @@ interface AudioPlaybackOptions {
   transcodeVideo?: boolean;
   onReady: () => void;
   onError: (message: string) => void;
+  /** Each time the stall watchdog moves the playhead, for diagnostics. */
+  onRecovery?: (event: StallRecoveryEvent) => void;
+}
+
+/** A playhead move by the stall watchdog: `from` where it was, `to` where it went. */
+export interface StallRecoveryEvent {
+  /** Over a small gap before it was reached, in place after a stall, or after a frozen picture. */
+  kind: 'gap-jump' | 'stall-seek' | 'frozen-seek';
+  from: number;
+  to: number;
+  /** The buffered ranges at the time, as [start, end] pairs. */
+  buffered: Array<[number, number]>;
+  /** The element's decoded-frame count, when it reports one (frozen-picture detection uses it). */
+  decodedFrames?: number;
 }
 
 function aborted() {
@@ -96,6 +110,12 @@ function bufferStart(buffer: SourceBuffer): number {
 export const STALL_CHECK_MS = 250;
 /** Checks in a row without progress before the watchdog intervenes (about 1 s). */
 export const STALL_CHECKS = 4;
+/**
+ * Checks in a row with the playhead moving but no new decoded frame before the picture counts as
+ * frozen (5 s). Tizen 5.5 updates `totalVideoFrames` in batches of about 48 frames (2 s at 24 fps),
+ * so a shorter wait seeks a picture that is playing fine.
+ */
+export const FROZEN_CHECKS = 20;
 /** Media needed past the playhead before a nudge is worth it; less is ordinary buffering. */
 const NUDGE_MIN_AHEAD_SECONDS = 0.5;
 /** How far a nudge moves the playhead. */
@@ -148,19 +168,29 @@ export function upcomingGap(
  * stalls a few seconds later; only a seek recovers it. So the
  * watchdog jumps a small gap just before the playhead reaches it, and as a fallback re-seeks
  * when the playhead stops with media buffered ahead (see stallRecoveryTime) or when it moves
- * but no video frame has been decoded for about 1 s.
+ * but no video frame has been decoded for about 5 s.
  */
-export function watchForStalls(video: HTMLVideoElement, signal: AbortSignal): void {
+export function watchForStalls(
+  video: HTMLVideoElement,
+  signal: AbortSignal,
+  onRecovery?: (event: StallRecoveryEvent) => void
+): void {
   const frames = () => video.getVideoPlaybackQuality?.().totalVideoFrames;
   let lastTime = video.currentTime;
   let lastFrames = frames();
   let stalled = 0;
   let frozen = 0;
   let jump: ReturnType<typeof setTimeout> | undefined;
-  const seek = (time: number) => {
+  const seek = (time: number, kind: StallRecoveryEvent['kind']) => {
     stalled = 0;
     frozen = 0;
+    const from = video.currentTime;
     video.currentTime = time;
+    if (!onRecovery) return;
+    const buffered: StallRecoveryEvent['buffered'] = [];
+    for (let range = 0; range < video.buffered.length; range++)
+      buffered.push([video.buffered.start(range), video.buffered.end(range)]);
+    onRecovery({ kind, from, to: time, buffered, decodedFrames: frames() });
   };
   const timer = setInterval(() => {
     const time = video.currentTime;
@@ -183,7 +213,7 @@ export function watchForStalls(video: HTMLVideoElement, signal: AbortSignal): vo
         jump = undefined;
         // Skip only if nothing (a seek, a pause, new media filling the gap) changed the plan.
         const still = upcomingGap(video.buffered, video.currentTime);
-        if (!video.paused && !video.seeking && still?.to === gap.to) seek(gap.to);
+        if (!video.paused && !video.seeking && still?.to === gap.to) seek(gap.to, 'gap-jump');
       }, delay * 1000);
     }
 
@@ -194,10 +224,10 @@ export function watchForStalls(video: HTMLVideoElement, signal: AbortSignal): vo
     if (stalled >= STALL_CHECKS) {
       stalled = 0;
       const target = stallRecoveryTime(video.buffered, time);
-      if (target !== undefined) seek(target);
-    } else if (frozen >= STALL_CHECKS) {
+      if (target !== undefined) seek(target, 'stall-seek');
+    } else if (frozen >= FROZEN_CHECKS) {
       // Audio is playing but the picture is not: seeking in place restarts the video decoder.
-      seek(time);
+      seek(time, 'frozen-seek');
     }
   }, STALL_CHECK_MS);
   signal.addEventListener(
@@ -266,7 +296,13 @@ export async function appendWithinQuota(
 }
 
 /** Native MSE keeps a sparse, full-movie timeline while FFmpeg restarts on each seek. */
-export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
+/**
+ * Stops converted audio. With `keepPicture` the element is paused on its last frame instead of
+ * emptied, so it can stay on screen while another player takes over.
+ */
+export type StopAudioPlayback = (options?: { keepPicture?: boolean }) => void;
+
+export function startAudioPlayback(options: AudioPlaybackOptions): StopAudioPlayback {
   const { video, mimeType, durationSeconds, startSeconds, autoplay, onReady, onError } = options;
   const controller = new AbortController();
   const { signal } = controller;
@@ -352,7 +388,7 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
           if (beginning <= startSeconds + 0.15 && end > position) {
             video.currentTime = position;
             positioned = true;
-            watchForStalls(video, signal);
+            watchForStalls(video, signal, options.onRecovery);
             onReady();
             if (autoplay) void video.play().catch(() => undefined);
             break;
@@ -373,11 +409,12 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
     controller.abort();
     void reader?.cancel().catch(() => undefined);
   });
-  return () => {
+  return ({ keepPicture = false } = {}) => {
     controller.abort();
     void reader?.cancel().catch(() => undefined);
+    if (keepPicture) video.pause();
     if (objectUrl) {
-      if (video.getAttribute('src') === objectUrl) {
+      if (!keepPicture && video.getAttribute('src') === objectUrl) {
         video.removeAttribute('src');
         video.load();
       }

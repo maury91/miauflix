@@ -15,7 +15,7 @@ import { realtimeActions } from '@store/slices/realtime';
 import { searchActions } from '@store/slices/search';
 import type { AppDispatch, RootState } from '@store/store';
 
-import type { RealtimeFocus, RealtimeMap } from './realtime.client';
+import type { PlayerEventMessage, RealtimeFocus, RealtimeMap } from './realtime.client';
 
 export const realtimeRuntimeActions = {
   publishFocusRequested: createAction<Omit<RealtimeFocus, 'type' | 'clientSequence'>>(
@@ -158,6 +158,11 @@ export const realtimeMiddleware: Middleware = api => next => action => {
 
   return result;
 };
+
+/** Log a player diagnostic on the backend, over the realtime socket when it is connected. */
+export function reportPlayerEvent(event: PlayerEventMessage): void {
+  activeClient?.publishPlayerEvent(event);
+}
 
 /** Send progress over the socket when possible, otherwise persist through the existing HTTP API. */
 export function saveProgressWithRealtime(update: ProgressRequest) {

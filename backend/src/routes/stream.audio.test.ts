@@ -1,4 +1,5 @@
 import { noRateLimit } from '@__test-utils__/routes';
+import { ContractError } from '@miauflix/contract';
 
 import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { handleError } from '@middleware/error-handler.middleware';
@@ -19,20 +20,23 @@ const setupTest = () => {
     getSourceById: jest.fn(),
     resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie: { id: 12 } }),
   };
-  const mediaLoadClient = { streamFile: jest.fn() };
+  const mediaLoadClient = { streamFile: jest.fn(), readRemux: jest.fn() };
   const audioPlaybackService = {
     stream: jest
       .fn()
       .mockResolvedValue(new Response('fixture', { headers: { 'Content-Type': 'video/mp4' } })),
   };
+  const tvRemuxService = { requestWhenDownloaded: jest.fn() };
   const app = createStreamRoutes({
     rateLimitGuard: noRateLimit,
     playbackSessionService,
     streamService,
     mediaLoadClient,
     audioPlaybackService,
+    tvRemuxService,
   } as never).onError(handleError);
   return {
+    tvRemuxService,
     app,
     playbackSessionService,
     streamService,
@@ -153,5 +157,76 @@ describe('audio streaming authorization', () => {
     const { app, audioPlaybackService } = setupTest();
     expect((await app.request(`/${token}/audio?start=${start}`)).status).toBe(400);
     expect(audioPlaybackService.stream).not.toHaveBeenCalled();
+  });
+});
+
+describe('TV remux files', () => {
+  it('reads a file of the pinned source remux with the viewer Range', async () => {
+    const { app, mediaLoadClient, source } = setupTest();
+    mediaLoadClient.readRemux.mockResolvedValue(new Response('#EXTM3U'));
+    const response = await app.request(`/${token}/remux/index.m3u8`, {
+      headers: { range: 'bytes=0-' },
+    });
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe('#EXTM3U');
+    expect(mediaLoadClient.readRemux).toHaveBeenCalledWith(source, 'index.m3u8', 'bytes=0-');
+  });
+
+  it('starts the first playlist a playback opens at its start, and serves reloads whole', async () => {
+    const { app, mediaLoadClient } = setupTest();
+    const playlist = [
+      '#EXTM3U',
+      ...Array.from({ length: 20 }, (_, index) => [
+        '#EXTINF:6.000000,',
+        `seg${String(index).padStart(5, '0')}.ts`,
+      ]).flat(),
+      '',
+    ].join('\n');
+    mediaLoadClient.readRemux.mockImplementation(async () => new Response(playlist));
+    const first = await (await app.request(`/${token}/remux/index.m3u8?start=31`)).text();
+    expect(first.trimEnd().split('\n').at(-1)).toBe('seg00007.ts');
+    const reload = await (await app.request(`/${token}/remux/index.m3u8?start=31`)).text();
+    expect(reload).toBe(playlist);
+  });
+
+  it('answers 404 for a file the remux does not have', async () => {
+    const { app, mediaLoadClient } = setupTest();
+    mediaLoadClient.readRemux.mockRejectedValue(
+      new ContractError('remux_not_found', 'The remux has no such file')
+    );
+    expect((await app.request(`/${token}/remux/seg00009.ts`)).status).toBe(404);
+  });
+
+  it.each(['..%2Fsecret', 'index.m3u', 'seg1.ts', 'seg00001.m4s', 'init.mp4', 's1.srt'])(
+    'refuses a name that is not a remux file: %s',
+    async name => {
+      const { app, mediaLoadClient } = setupTest();
+      expect((await app.request(`/${token}/remux/${name}`)).status).toBe(400);
+      expect(mediaLoadClient.readRemux).not.toHaveBeenCalled();
+    }
+  );
+
+  it('rejects expired grants', async () => {
+    const { app, playbackSessionService, mediaLoadClient } = setupTest();
+    playbackSessionService.verify.mockResolvedValue(null);
+    expect((await app.request(`/${token}/remux/index.m3u8`)).status).toBe(401);
+    expect(mediaLoadClient.readRemux).not.toHaveBeenCalled();
+  });
+
+  it('has a prefetched episode remuxed for a TV that asks', async () => {
+    const { app, playbackSessionService, mediaLoadClient, tvRemuxService, source } = setupTest();
+    playbackSessionService.verify.mockResolvedValue({
+      sourceId: 9,
+      userId: 1,
+      playableKind: 'episode',
+      playableKey: 'e:1',
+    });
+    Object.assign(mediaLoadClient, { predownload: jest.fn().mockResolvedValue(true) });
+    expect((await app.request(`/${token}/prefetch`, { method: 'POST' })).status).toBe(202);
+    expect(tvRemuxService.requestWhenDownloaded).not.toHaveBeenCalled();
+    expect((await app.request(`/${token}/prefetch?remux=true`, { method: 'POST' })).status).toBe(
+      202
+    );
+    expect(tvRemuxService.requestWhenDownloaded).toHaveBeenCalledWith(source);
   });
 });

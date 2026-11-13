@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 
 import { logger } from '@logger';
+import type { RemuxStatus } from '@miauflix/service-contracts';
 import { type Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
@@ -28,7 +29,9 @@ import {
   type AudioPlaybackService,
   type PlaybackDelivery,
 } from './audio-playback.service';
+import { withDeviceCodecs } from './device-codecs';
 import { assessSwarm, type SwarmSample } from './swarm-health';
+import { remuxDelivery, remuxPlayable, type TvRemuxService } from './tv-remux.service';
 
 /** How often live sessions' sources are sampled. */
 const HEALTH_SAMPLE_MS = 1_000;
@@ -105,6 +108,9 @@ export class PlaybackUnavailableError extends Error {
 /** Waits before inspecting a playing source's audio again after a failed inspection. */
 const INSPECTION_RETRY_DELAYS_MS = [5_000, 15_000];
 
+/** Other sources checked for one that plays without converting audio, before converting. */
+const MAX_CONVERSION_ALTERNATIVES = 3;
+
 interface LiveSession {
   sourceId: number;
   userId: string;
@@ -113,7 +119,7 @@ interface LiveSession {
   createdAt: number;
   playable: PlayableRef;
   /** The preferences the session's source was selected with, reused for its backup. */
-  preferences: PlaybackPreferences;
+  preferences: AudioPlaybackPreferences & PlaybackPreferences;
   filePath?: string;
   durationSeconds?: number;
   samples: SwarmSample[];
@@ -127,6 +133,11 @@ interface LiveSession {
   provenRecorded?: boolean;
   /** A second source warming in case this one fails; `sourceId` once its claim exists. */
   hedge?: { ownerKey: string; sourceId?: number };
+  /**
+   * Plays converted audio while its file's TV remux is built; recreated once the remux is ready
+   * where the viewer is.
+   */
+  awaitingRemux?: boolean;
 }
 
 export interface PlaybackSession {
@@ -162,6 +173,7 @@ export interface PlaybackSessionServiceOptions {
   >;
   progress?: Pick<ProgressRepository, 'findByKey'>;
   playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
+  remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request'>;
 }
 
 export class PlaybackSessionService {
@@ -170,6 +182,8 @@ export class PlaybackSessionService {
   private readonly attemptListeners = new Set<(event: PlaybackSourceAttempt) => void>();
   /** Sessions that may still be streaming, so a failed source can move them elsewhere. */
   private readonly liveSessions = new Map<string, LiveSession>();
+  /** Sessions whose viewer position is being compared with their remux's progress. */
+  private readonly checkingRemux = new Set<string>();
   private healthTimer: ReturnType<typeof setInterval> | undefined;
   private checkingHealth = false;
   private readonly ttlMs: number;
@@ -185,6 +199,7 @@ export class PlaybackSessionService {
   >;
   private readonly progress?: Pick<ProgressRepository, 'findByKey'>;
   private readonly playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
+  private readonly remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request'>;
 
   constructor({
     db,
@@ -197,6 +212,7 @@ export class PlaybackSessionService {
     downloads,
     progress,
     playedSources,
+    remux,
   }: PlaybackSessionServiceOptions) {
     this.preparation = preparation;
     this.warmup = warmup;
@@ -206,9 +222,11 @@ export class PlaybackSessionService {
     this.downloads = downloads;
     this.progress = progress;
     this.playedSources = playedSources;
+    this.remux = remux;
     this.grants = db.getPlaybackGrantRepository();
     this.ttlMs = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
     sourceHealth?.onFailed(sourceId => this.failOver(sourceId));
+    remux?.onChange(status => this.remuxChanged(status));
   }
 
   async create(
@@ -221,16 +239,23 @@ export class PlaybackSessionService {
       sessionId?: string;
     } = {}
   ): Promise<PlaybackSession | null> {
+    preferences = withDeviceCodecs(preferences);
+    if (preferences.tizenCodecs) {
+      logger.debug(
+        'PlaybackSessionService',
+        `TV codecs: audio ${preferences.tizenCodecs.audio.join(', ') || 'none'}; video ${preferences.tizenCodecs.video.join(', ') || 'none'}`
+      );
+    }
     // Warm where the player will resume, as the details warmup did, not over it from the start.
     const resumeFraction = options.deferDownload
       ? undefined
       : await findResumeFraction(this.progress, userId, playable);
     let lastAttempt: SourceAttempt | undefined;
-    const prepare = (allowHevc: boolean) =>
+    const prepare = (allowHevc: boolean, avoid: readonly number[] = options.avoidSourceIds ?? []) =>
       this.preparation.prepare(playable, {
         through: options.deferDownload ? 'sources' : 'warm',
         ...(resumeFraction ? { resumeFraction } : {}),
-        ...(options.avoidSourceIds ? { avoidSourceIds: options.avoidSourceIds } : {}),
+        ...(avoid.length ? { avoidSourceIds: avoid } : {}),
         preferences: { ...preferences, allowHevc },
         workClass: 'interactive',
         ownerKey: this.playableKey(playable),
@@ -294,6 +319,49 @@ export class PlaybackSessionService {
         break;
       }
     }
+    // A TV plays a file's remux natively instead of converted audio, once it is ready.
+    let awaitingRemux = false;
+    const startSeconds = (resumeFraction ?? 0) * (delivery?.durationSeconds ?? 0);
+    if (delivery?.mode === 'audio-transcode' && preferences.playsRemux && prepared.target) {
+      const existing = await this.remux?.existing(prepared.target);
+      if (existing && remuxPlayable(existing.status, startSeconds))
+        delivery = remuxDelivery(delivery, existing.plan, existing.probe);
+    }
+    if (
+      delivery?.mode === 'audio-transcode' &&
+      preferences.avoidAudioConversion &&
+      prepared.source &&
+      this.audioPlaybackService
+    ) {
+      const converting = prepared.source.id;
+      const alternative = await this.conversionFreeCandidate(
+        playable,
+        { ...preferences, allowHevc },
+        [...(options.avoidSourceIds ?? []), converting],
+        'interactive'
+      );
+      const switched = alternative && (await prepare(allowHevc, alternative.avoided));
+      if (switched && switched.source?.id === alternative.sourceId && switched.target) {
+        logger.info(
+          'PlaybackSessionService',
+          `Source ${converting} needs audio conversion; playing source ${alternative.sourceId} instead`
+        );
+        prepared = switched;
+        if (prepared.state === 'ready' || prepared.state === 'warming')
+          await this.warmup?.promote(switched.target, this.playableKey(playable), ownerKey);
+        const known = await this.audioPlaybackService
+          .knownDelivery(switched.target, preferences)
+          .catch(() => null);
+        delivery = known ?? undefined;
+        pendingTarget = known ? undefined : switched.target;
+      }
+    }
+    if (delivery?.mode === 'audio-transcode' && preferences.playsRemux && prepared.target) {
+      const requested = await this.remux?.request(prepared.target, 'watching');
+      if (requested && remuxPlayable(requested.status, startSeconds))
+        delivery = remuxDelivery(delivery, requested.plan, requested.probe);
+      else awaitingRemux = Boolean(requested);
+    }
     if (!prepared.source) return null;
     // Download state is informational here: an unreachable engine reports nothing stored.
     const storage = await this.storage?.getStorageState(prepared.source.id).catch(() => null);
@@ -321,6 +389,7 @@ export class PlaybackSessionService {
       filePath: prepared.target?.filePath,
       durationSeconds: delivery?.durationSeconds,
       samples: [],
+      ...(awaitingRemux ? { awaitingRemux } : {}),
     });
     if (pendingTarget) {
       this.deliverWhenProbed(pendingTarget, preferences, {
@@ -597,6 +666,46 @@ export class PlaybackSessionService {
     return () => this.deliveryListeners.delete(listener);
   }
 
+  /**
+   * The best source, after `avoid`, whose file is not known to need converted audio: probed and
+   * playable as it is, or not probed yet. Only resolves files (no warming); `avoided` lists every
+   * source ruled out, for the preparation that then plays the candidate. Null when none is found.
+   */
+  private async conversionFreeCandidate(
+    playable: PlayableRef,
+    preferences: AudioPlaybackPreferences & PlaybackPreferences,
+    avoid: readonly number[],
+    workClass: 'background' | 'interactive'
+  ): Promise<{ sourceId: number; avoided: number[] } | null> {
+    const avoided = [...avoid];
+    try {
+      for (let tries = 0; tries < MAX_CONVERSION_ALTERNATIVES; tries++) {
+        const candidate = await this.preparation.prepare(playable, {
+          through: 'warm',
+          resolveOnly: true,
+          avoidSourceIds: avoided,
+          preferences,
+          workClass,
+        });
+        if (!candidate.source || !candidate.target) return null;
+        // A file that cannot be delivered at all counts as needing conversion.
+        const known = await this.audioPlaybackService
+          ?.knownDelivery(candidate.target, preferences)
+          .catch(() => undefined);
+        if (known === null || known?.mode === 'direct')
+          return { sourceId: candidate.source.id, avoided };
+        avoided.push(candidate.source.id);
+      }
+    } catch (error) {
+      logger.warn(
+        'PlaybackSessionService',
+        'Looking for a source without conversion failed',
+        error
+      );
+    }
+    return null;
+  }
+
   private deliverWhenProbed(
     target: PlaybackTarget,
     preferences: AudioPlaybackPreferences,
@@ -609,9 +718,35 @@ export class PlaybackSessionService {
     };
     void this.audioPlaybackService
       ?.inspect(target, preferences)
-      .then(delivery => {
+      .then(async delivery => {
         const live = this.liveSessions.get(address.playbackId);
         if (live) live.durationSeconds = delivery.durationSeconds;
+        if (delivery.mode === 'audio-transcode' && preferences.avoidAudioConversion && live) {
+          // The new session prefers a source that plays as it is (see create); this one's probe
+          // is now stored, so it is not picked again unless nothing else plays.
+          const alternative = await this.conversionFreeCandidate(
+            live.playable,
+            live.preferences,
+            [target.source.id],
+            'background'
+          );
+          if (alternative && this.liveSessions.get(address.playbackId) === live) {
+            logger.info(
+              'PlaybackSessionService',
+              `Source ${target.source.id} needs audio conversion; moving ${address.playbackId} to source ${alternative.sourceId}`
+            );
+            emit({ type: 'recreate', reason: 'The source needs audio conversion.' });
+            return;
+          }
+        }
+        if (delivery.mode === 'audio-transcode' && preferences.playsRemux && live) {
+          const requested = await this.remux?.request(target, 'watching');
+          if (requested && remuxPlayable(requested.status)) {
+            emit({ type: 'recreate', reason: 'A TV version of this file is ready.' });
+            return;
+          }
+          if (requested) live.awaitingRemux = true;
+        }
         emit({ type: 'delivery', delivery, streamUrl: this.streamUrl(streamingKey, delivery) });
       })
       .catch(error => {
@@ -645,7 +780,53 @@ export class PlaybackSessionService {
   }
 
   private streamUrl(streamingKey: string, delivery?: PlaybackDelivery): string {
-    return `/api/stream/${streamingKey}${delivery?.mode === 'audio-transcode' ? '/audio' : ''}`;
+    const suffix =
+      delivery?.mode === 'audio-transcode'
+        ? '/audio'
+        : delivery?.mode === 'remux'
+          ? '/remux/index.m3u8'
+          : '';
+    return `/api/stream/${streamingKey}${suffix}`;
+  }
+
+  /**
+   * A file's remux progressed: viewers converting its audio move to it with a new session once it
+   * plays from where they are (their saved progress, which the new session resumes from too).
+   */
+  private remuxChanged(status: RemuxStatus): void {
+    const now = Date.now();
+    for (const [playbackId, live] of this.liveSessions) {
+      if (!live.awaitingRemux || live.expiresAt <= now) continue;
+      if (live.sourceId !== status.sourceId || live.filePath !== status.filePath) continue;
+      if (this.checkingRemux.has(playbackId)) continue;
+      this.checkingRemux.add(playbackId);
+      void this.remuxReadyFor(live, status)
+        .then(ready => {
+          if (!ready || !live.awaitingRemux) return;
+          live.awaitingRemux = false;
+          logger.info(
+            'PlaybackSessionService',
+            `TV remux of source ${status.sourceId} is ${status.state === 'complete' ? 'ready' : 'ahead of the viewer'}; recreating ${playbackId}`
+          );
+          for (const listener of this.deliveryListeners)
+            listener({
+              userId: live.userId,
+              sessionId: live.sessionId,
+              playbackId,
+              update: { type: 'recreate', reason: 'A TV version of this file is ready.' },
+            });
+        })
+        .catch(error =>
+          logger.debug('PlaybackSessionService', 'Could not check the TV remux', error)
+        )
+        .finally(() => this.checkingRemux.delete(playbackId));
+    }
+  }
+
+  private async remuxReadyFor(live: LiveSession, status: RemuxStatus): Promise<boolean> {
+    if (status.state === 'complete') return true;
+    const fraction = await findResumeFraction(this.progress, live.userId, live.playable);
+    return remuxPlayable(status, (fraction ?? 0) * status.durationSeconds);
   }
 
   async verify(streamingKey: string): Promise<PlaybackGrant | null> {

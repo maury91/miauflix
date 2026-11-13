@@ -77,8 +77,9 @@ export function usePlaybackProgress({
   const readProgressSnapshot = useCallback(() => {
     if (audioPreparing.current) return latestProgress.current;
     const video = videoRef.current;
+    // A remux still being built lists only its finished segments: its own duration grows.
     const duration =
-      deliveryRef.current?.mode === 'audio-transcode'
+      deliveryRef.current?.mode === 'audio-transcode' || deliveryRef.current?.mode === 'remux'
         ? deliveryRef.current.durationSeconds
         : video?.duration;
     if (video && duration !== undefined && Number.isFinite(duration) && duration > 0) {

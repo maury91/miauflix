@@ -36,15 +36,92 @@ const TV_MAX_BITRATE_KBPS = 8_000;
 /**
  * What AVPlay decodes itself on 2020 and newer TVs, so the backend sends those files as they are
  * (Matroska and MP4, H.264 and H.265, every audio track) instead of converting them. Files with
- * other audio (DTS, TrueHD) still get converted audio, played in a `<video>` element.
+ * other audio (DTS, TrueHD) still get converted audio, played in a `<video>` element, unless the
+ * TV reports the codec (see `tizenCodecs`). Converted audio is a last resort: the backend first
+ * plays the file's TV remux (HLS with audio the TV decodes) when one is ready, then looks for
+ * another source that plays as it is, and has a remux built while it converts.
  */
 export const AVPLAY_CAPABILITIES = {
   allowHevc: true,
   nativeHevcContainers: ['mp4', 'matroska'],
   supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'flac'],
   nativeAudioTracks: true,
+  avoidAudioConversion: true,
+  playsRemux: true,
   maxBitrateKbps: TV_MAX_BITRATE_KBPS,
 } satisfies Partial<PlaybackPreferences>;
+
+/** The codec names `webapis.systeminfo` accepts, as Samsung documents them. */
+export const TIZEN_AUDIO_CODECS = [
+  'MPEG',
+  'MPEG-H',
+  'AC3',
+  'E-AC3',
+  'AC4',
+  'TrueHD',
+  'Vorbis',
+  'G2Cook',
+  'AAC',
+  'HE-AAC',
+  'WMA',
+  'ADPCM',
+  'OPUS',
+  'PCM',
+] as const;
+export const TIZEN_VIDEO_CODECS = [
+  'MPEG1',
+  'MPEG2',
+  'MPEG4',
+  'H263',
+  'H264',
+  'HEVC',
+  'VP8',
+  'VP9',
+  'RV',
+  'WMV',
+  'AVS',
+  'AVS_PLUS',
+  'MJPEG',
+  'JPEG',
+  'H264_MVC',
+  'HEIC',
+  'AVS2',
+  'HEVC_VR360',
+  'H264_VR360',
+  'VP9_VR360',
+  'HEVC_SHVC',
+  'AV1',
+  'AV1_VR360',
+] as const;
+
+/**
+ * Every codec the TV reports it decodes, for the backend to match against the file. Only Tizen
+ * 6.0 and newer can be asked; older TVs (and a failing query) send nothing and keep the fixed
+ * list in AVPLAY_CAPABILITIES.
+ */
+export function tizenCodecs(): PlaybackPreferences['tizenCodecs'] {
+  const systeminfo = typeof window === 'undefined' ? undefined : window.webapis?.systeminfo;
+  const audioQuery = systeminfo?.isSupportedAudioCodec;
+  const videoQuery = systeminfo?.isSupportedVideoCodec;
+  if (!audioQuery || !videoQuery) return undefined;
+  const supported = (query: (codec: string) => boolean, codec: string) => {
+    try {
+      return query.call(systeminfo, codec) === true;
+    } catch {
+      return false;
+    }
+  };
+  return {
+    audio: TIZEN_AUDIO_CODECS.filter(codec => supported(audioQuery, codec)),
+    video: TIZEN_VIDEO_CODECS.filter(codec => supported(videoQuery, codec)),
+  };
+}
+
+/** AVPlay's capabilities, with the codecs this TV reports when it can be asked. */
+export function avplayCapabilities(): Partial<PlaybackPreferences> {
+  const codecs = tizenCodecs();
+  return codecs ? { ...AVPLAY_CAPABILITIES, tizenCodecs: codecs } : AVPLAY_CAPABILITIES;
+}
 
 /** AVPlay places the video in a 1920x1080 space, whatever the app's resolution. */
 const DISPLAY_WIDTH = 1920;
@@ -136,8 +213,11 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     return this.prepared ? 4 : 0;
   }
 
-  /** Open `url` and prepare it, shown in the area of `element`. */
-  open(url: string, element: HTMLElement): void {
+  /**
+   * Open `url` and prepare it, shown in the area of `element`. `durationSeconds` stands in for the
+   * length AVPlay reports none of: an HLS playlist still being written plays as a live stream.
+   */
+  open(url: string, element: HTMLElement, durationSeconds?: number): void {
     this.close();
     const generation = ++this.generation;
     this.opened = true;
@@ -157,15 +237,25 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
       () => {
         if (generation !== this.generation) return;
         this.prepared = true;
-        this.length = this.avplay.getDuration() / 1000;
+        const reported = this.avplay.getDuration() / 1000;
+        const live = !(reported > 0);
+        this.length = live && durationSeconds ? durationSeconds : reported;
         this.audioTracks = this.readAudioTracks();
         this.emit('durationchange');
         this.emit('loadedmetadata');
         this.emit('loadeddata');
         this.emit('canplay');
-        if (this.pendingSeek !== null) this.currentTime = this.pendingSeek;
+        // A seek made before preparing, unless the events above (a resume) already seeked; a live
+        // playlist starts near its newest segment, so it is played from the start instead.
+        const start = this.seeking ? null : (this.pendingSeek ?? (live ? 0 : null));
         this.pendingSeek = null;
-        if (this.autoplay || !this.isPaused) this.start();
+        if (start !== null) this.currentTime = start;
+        const play = (): void => {
+          if (generation === this.generation && (this.autoplay || !this.isPaused)) this.start();
+        };
+        // Playing before the seek lands shows where AVPlay opened first: wait for it.
+        if (this.seeking) this.addEventListener('seeked', play, { once: true });
+        else play();
       },
       () => {
         if (generation === this.generation) this.emit('error');

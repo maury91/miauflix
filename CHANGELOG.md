@@ -4,8 +4,13 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ## Unreleased
 
+### New
+
+- Samsung TVs get a TV version of files whose audio they cannot play (TrueHD, DTS). It is built once in the background, about 20 times faster than real time, and kept encrypted next to the download. It holds the original picture, one audio track per language in a format the TV decodes (surround kept, as AC-3 5.1), and every subtitle track as its own file. A TV playing such a file switches to the TV version as soon as it is built a minute past where you are, instead of converting the audio live (the picture holds still for about a second while it switches), so it seeks like any other file and no longer jumps. The next episode is prepared the same way once it has downloaded. The TV version is deleted with the download
+
 ### Fixes
 
+- Samsung TVs no longer jump every few seconds while playing a file whose audio is converted
 - The server no longer fails to start when `CSP_IMAGE_ORIGINS` is not set
 - The catalog service no longer slows down to the point of not answering after the server restarts a few times, and it stops retrying SVG logos it cannot check every hour
 - Login is harder to abuse: an account refuses logins for up to 15 minutes after 10 wrong passwords, new accounts need passwords of at least 8 characters, and response times no longer reveal which emails have accounts
@@ -23,6 +28,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - The live connection (search, navigation, progress) is now rate-limited per user, so one client can no longer flood the server or the catalog with searches
 - Saving settings now fails and rolls back when a service is not working afterwards, and a key sent twice is saved with the value that was tested. The next episode is prepared even when it changes while the previous one is still being prepared. Background downloads paused for a stream are resumed reliably, and a finished download's buffering progress counts only what is stored. Download progress of a single episode counts that episode, not the whole season pack, and freeing space while an episode completes can no longer mark deleted files as downloaded
 - Setup: `--only-config` now exits with an error when a required setting is still missing, the setup check reports every failing service at once, and pressing Enter at a password prompt keeps the saved password. The player resumes where you left off even when the stream reports its length late
+- Samsung TVs play more files as they are: when a file's audio would have to be converted (for example TrueHD), the player first looks for another source of the same title that the TV plays directly, and converts only when none does. TVs that can report their codecs (Tizen 6 and newer) send the full list, so files with any audio or video they decode are no longer converted or skipped. Jumps the player makes over stalls in converted playback are now written to the server log
 
 ### Development
 

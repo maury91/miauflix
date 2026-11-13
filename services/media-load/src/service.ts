@@ -253,6 +253,17 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
     importStorage: ({ items }, ctx) => engineCall(ctx, () => runtime.importStorage(items)),
     completeImport: () => runtime.completeImport(),
 
+    requestRemux: ({ target, plan, priority }, ctx) =>
+      engineCall(ctx, () =>
+        engine().remux.request(target.sourceId, target.filePath, plan, priority)
+      ),
+    remuxStatus: ({ sourceId, filePath }) => engine().remux.find(sourceId, filePath),
+    remuxChanged: emit => engine().remux.onChange(emit),
+    readRemux: ({ sourceId, filePath, name }, ctx) =>
+      engineCall(ctx, () =>
+        engine().remux.read(sourceId, filePath, name, ctx.headers.get('range') ?? undefined)
+      ),
+
     read: ({ target, speculative }, ctx) =>
       engineCall(ctx, async () =>
         engine().downloads.streamFile(

@@ -90,7 +90,7 @@ vi.mock('@shared/config/constants', async importOriginal => ({
   API_URL: 'https://miauflix.example',
 }));
 
-import { realtimeSlice } from '@store/slices/realtime';
+import { realtimeActions, realtimeSlice } from '@store/slices/realtime';
 
 import { PlayerView } from './PlayerView';
 
@@ -278,5 +278,123 @@ describe('PlayerView on a Samsung TV', () => {
     );
     expect(view.container.querySelector('video')).not.toBeNull();
     expect(avplay.open).not.toHaveBeenCalled();
+  });
+
+  it('opens a TV version at the saved position', async () => {
+    const { avplay } = fakeAvplay();
+    window.webapis = { avplay };
+    resumeEntry.current = {
+      playable,
+      state: 'paused',
+      positionSeconds: 1200.7,
+      durationSeconds: 3540,
+      updatedAt: '2026-11-13T10:00:00Z',
+    };
+    createSession.mockReturnValue({
+      unwrap: () =>
+        Promise.resolve({
+          ...session,
+          streamUrl: '/api/stream/streaming-key/remux/index.m3u8',
+          delivery: {
+            mode: 'remux',
+            audioCodec: 'ac3',
+            durationSeconds: 3540,
+            mimeType: 'application/vnd.apple.mpegurl',
+            audioTracks: [],
+            defaultAudioTrackIndex: 0,
+          },
+        }),
+    });
+    render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
+    await waitFor(() =>
+      expect(avplay.open).toHaveBeenCalledWith(
+        'https://miauflix.example/api/stream/streaming-key/remux/index.m3u8?start=1200'
+      )
+    );
+  });
+
+  it('holds the converted picture until the TV version plays from the same position', async () => {
+    const { avplay } = fakeAvplay();
+    let prepared: (() => void) | undefined;
+    let landed: (() => void) | undefined;
+    avplay.prepareAsync.mockImplementation((onSuccess?: () => void) => {
+      prepared = onSuccess;
+    });
+    avplay.seekTo.mockImplementation((_milliseconds: number, onSuccess?: () => void) => {
+      landed = onSuccess;
+    });
+    // A TV version still being built: AVPlay plays it as a live stream, with no length.
+    avplay.getDuration.mockReturnValue(0);
+    window.webapis = { avplay };
+    const converting = {
+      ...session,
+      streamUrl: '/api/stream/streaming-key/audio',
+      delivery: {
+        mode: 'audio-transcode',
+        videoCodec: 'hevc',
+        audioCodec: 'truehd',
+        durationSeconds: 3540,
+        mimeType: 'video/mp4; codecs="hvc1.2.4.L120.B0, mp4a.40.2"',
+        audioTracks: [],
+        defaultAudioTrackIndex: 0,
+      },
+    } as CreatePlaybackSessionResponse;
+    let created: ((value: CreatePlaybackSessionResponse) => void) | undefined;
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(converting) })
+      .mockReturnValueOnce({
+        unwrap: () => new Promise<CreatePlaybackSessionResponse>(resolve => (created = resolve)),
+      });
+    const view = render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
+    await waitFor(() => expect(startAudioPlayback).toHaveBeenCalled());
+    const video = view.container.querySelector('video')!;
+    Object.defineProperty(video, 'currentTime', { configurable: true, value: 851.5 });
+
+    act(() => {
+      view.store.dispatch(
+        realtimeActions.playbackDeliveryReceived({
+          type: 'playback-delivery',
+          playbackId: session.playbackId,
+          update: { type: 'recreate', reason: 'A TV version of this file is ready.' },
+        })
+      );
+    });
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+    // The converted stream plays on while the new session is requested.
+    expect(view.container.querySelector('video')).toBe(video);
+    expect(stopAudioPlayback).not.toHaveBeenCalled();
+
+    await act(async () => {
+      created?.({
+        ...session,
+        playbackId: 'playback-2',
+        streamUrl: '/api/stream/streaming-key-2/remux/index.m3u8',
+        delivery: {
+          mode: 'remux',
+          audioCodec: 'ac3',
+          durationSeconds: 3540,
+          mimeType: 'application/vnd.apple.mpegurl',
+          audioTracks: [],
+          defaultAudioTrackIndex: 0,
+        },
+      } as CreatePlaybackSessionResponse);
+    });
+    await waitFor(() =>
+      expect(avplay.open).toHaveBeenCalledWith(
+        'https://miauflix.example/api/stream/streaming-key-2/remux/index.m3u8?start=851'
+      )
+    );
+    // Converted audio stopped, its last frame still on screen above AVPlay.
+    expect(stopAudioPlayback).toHaveBeenCalledWith({ keepPicture: true });
+    expect(view.container.querySelector('video')).toBe(video);
+
+    act(() => prepared?.());
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_500, expect.any(Function), expect.any(Function));
+    expect(avplay.play).not.toHaveBeenCalled();
+    expect(view.container.querySelector('video')).toBe(video);
+
+    act(() => landed?.());
+    expect(avplay.play).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(view.container.querySelector('video')).toBeNull());
   });
 });

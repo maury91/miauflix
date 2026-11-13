@@ -257,7 +257,76 @@ export interface ImportedSource {
 /** A sealed import or a location outside the service's downloads directories. */
 export type StorageImportError = 'import_closed' | 'invalid_storage_location';
 
-export const mediaLoad = contract('media-load', '1.1', {
+/** How important a remux is: a viewer is waiting, the file is expected next, or anything else. */
+export type RemuxPriority = 'watching' | 'next' | 'background';
+
+/** One audio track the remux keeps, by its position among the file's audio streams. */
+export interface RemuxAudioTrack {
+  /** Index among the file's audio streams (`0:a:N`). */
+  audioIndex: number;
+  /** Copied as it is (the TV decodes it), or converted to E-AC-3. */
+  copy: boolean;
+  /** Source channel count; conversion keeps up to 5.1. */
+  channels: number | null;
+  language: string | null;
+  title: string | null;
+  isDefault: boolean;
+}
+
+/** How a subtitle track is kept: text as WebVTT, styled as ASS with fonts, image as it is. */
+export type RemuxSubtitleKind = 'text' | 'styled' | 'image';
+
+export interface RemuxSubtitleTrack {
+  /** Index among the file's subtitle streams (`0:s:N`). */
+  subtitleIndex: number;
+  kind: RemuxSubtitleKind;
+  /** ffprobe codec name, e.g. `subrip`, `ass`, `hdmv_pgs_subtitle`. */
+  codec: string;
+  language: string | null;
+  title: string | null;
+  isDefault: boolean;
+  forced: boolean;
+  hearingImpaired: boolean;
+}
+
+/** What a remux keeps, decided by the backend from the file's probe. */
+export interface RemuxPlan {
+  /** ffprobe codec name of the (copied) video, e.g. `hevc`. */
+  videoCodec: string;
+  audio: RemuxAudioTrack[];
+  subtitles: RemuxSubtitleTrack[];
+  /** Duration of the source, to check the finished remux against. */
+  durationSeconds: number;
+}
+
+/** A subtitle sidecar of a remux, read with `readRemux` by `name`. */
+export interface RemuxSidecar extends RemuxSubtitleTrack {
+  name: string;
+  /** `vtt` (text), `mkv` (styled: ASS with the fonts attached; DVD/DVB image tracks), `sup` (PGS). */
+  format: 'vtt' | 'mkv' | 'sup';
+}
+
+export type RemuxState = 'queued' | 'running' | 'complete' | 'failed';
+
+export interface RemuxStatus {
+  sourceId: number;
+  filePath: string;
+  state: RemuxState;
+  priority: RemuxPriority;
+  /** Seconds of video already in the playlist (all of it once complete). */
+  readySeconds: number;
+  durationSeconds: number;
+  /** Bytes of segments and sidecars written. */
+  bytes: number;
+  /** Sidecars written so far (all of them once complete). */
+  subtitles: RemuxSidecar[];
+  error?: string;
+}
+
+/** A remux file name that is not part of the remux. */
+export type RemuxReadError = MediaLoadError | 'remux_not_found';
+
+export const mediaLoad = contract('media-load', '1.2', {
   /**
    * The key that encrypts media and the service's records (the backend's `SOURCE_SECURITY_KEY`).
    * The host sends it on every connection, before the configuration; engine calls wait for it.
@@ -335,6 +404,28 @@ export const mediaLoad = contract('media-load', '1.1', {
     StorageImportError
   >({ ungated: true }),
   completeImport: call<void, { imported: number }>({ ungated: true }),
+
+  /**
+   * Queue a TV remux of a target (HLS: video copied, one compatible audio track per language,
+   * subtitles as sidecars), or raise the priority of the one queued or running. Returns its status.
+   */
+  requestRemux: call<
+    { target: TargetRef; plan: RemuxPlan; priority: RemuxPriority },
+    RemuxStatus,
+    MediaLoadError
+  >({ since: 2 }),
+  /** A target's remux, or null when none was requested. */
+  remuxStatus: call<{ sourceId: number; filePath: string }, RemuxStatus | null>({ since: 2 }),
+  /** A remux progressed (a segment or sidecar was written), finished or failed. */
+  remuxChanged: event<RemuxStatus>({ since: 2 }),
+  /**
+   * A file of a target's remux, honouring `Range`: `index.m3u8` (the playlist, segment URIs
+   * relative to it), an HLS segment, or a subtitle sidecar.
+   */
+  readRemux: bytes<{ sourceId: number; filePath: string; name: string }, RemuxReadError>({
+    since: 2,
+    status: { remux_not_found: 404, unknown_source: 409 },
+  }),
 
   /**
    * Verified bytes of a target, honouring `Range`. Playback reads claim the file and count as an

@@ -216,6 +216,11 @@ export interface WebApis {
     /** Starts with the model year: `23_PTM_QTV_T09` is a 2023 TV. */
     getModelCode?: () => string;
   };
+  /** Codec support queries, on Tizen 6.0 (2021 TVs) and newer. */
+  systeminfo?: {
+    isSupportedAudioCodec?: (codec: string) => boolean;
+    isSupportedVideoCodec?: (codec: string) => boolean;
+  };
 }
 
 declare global {

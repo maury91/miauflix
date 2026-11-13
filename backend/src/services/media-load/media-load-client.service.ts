@@ -9,6 +9,9 @@ import {
   type MediaLoadError,
   type PiecesUpdate,
   type PlaybackHealth,
+  type RemuxPlan,
+  type RemuxPriority,
+  type RemuxStatus,
   type SourceDescriptor,
   type StorageBitfield,
   type StorageInventory,
@@ -396,6 +399,29 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
     return this.client.layoutKnown.on(({ sourceId, layout }) => listener(sourceId, layout));
   }
 
+  /* ---------- TV remuxes (reject with `unsupported` on a service before 1.2) ---------- */
+
+  /** Queue a TV remux of a stored file, or raise the priority of the one queued or running. */
+  requestRemux(
+    target: PlaybackTarget,
+    plan: RemuxPlan,
+    priority: RemuxPriority
+  ): Promise<RemuxStatus> {
+    return this.withSource(target.source, () =>
+      this.client.requestRemux({ target: targetRef(target), plan, priority })
+    );
+  }
+
+  /** A file's remux, or null when none was requested. */
+  getRemuxStatus(sourceId: number, filePath: string): Promise<RemuxStatus | null> {
+    return this.engine(() => this.client.remuxStatus({ sourceId, filePath }));
+  }
+
+  /** Hear remuxes progress, finish or fail; returns the unsubscribe function. */
+  onRemuxChanged(listener: (status: RemuxStatus) => void): () => void {
+    return this.client.remuxChanged.on(listener);
+  }
+
   /* ---------- bytes ---------- */
 
   /**
@@ -413,6 +439,21 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
     const response = await this.withSource(target.source, () =>
       this.client.read.open(
         { target: targetRef(target), ...(speculative ? { speculative } : {}) },
+        { headers: rangeHeader ? { range: rangeHeader } : {} }
+      )
+    );
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: new Headers(response.headers),
+    });
+  }
+
+  /** A file of a remux (the playlist, a segment or a subtitle sidecar), honouring `Range`. */
+  async readRemux(target: PlaybackTarget, name: string, rangeHeader?: string): Promise<Response> {
+    const response = await this.engine(() =>
+      this.client.readRemux.open(
+        { sourceId: target.source.id, filePath: target.filePath, name },
         { headers: rangeHeader ? { range: rangeHeader } : {} }
       )
     );

@@ -36,6 +36,8 @@ export type PlayerMediaEvents = Partial<
 interface AvplayVideoProps extends PlayerMediaEvents {
   avplay: AVPlay;
   src: string;
+  /** The file's length, for a stream AVPlay gives none (an HLS playlist still being written). */
+  durationSeconds?: number;
   autoPlay: boolean;
   /** Receives the media while mounted, like a `<video>` ref. */
   mediaRef: (media: PlayerMedia | null) => void;
@@ -95,6 +97,7 @@ function useMediaTime(media: AvplayMedia): number {
 export function AvplayVideo({
   avplay,
   src,
+  durationSeconds,
   autoPlay,
   mediaRef,
   'aria-label': label,
@@ -130,8 +133,10 @@ export function AvplayVideo({
     const plane = planeRef.current;
     if (!plane) return;
     media.autoplay = autoPlay;
-    media.open(src, plane);
+    media.open(src, plane, durationSeconds);
     return () => media.close();
+    // The length only matters when a file opens: a later change must not reopen it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [media, src, autoPlay]);
 
   useEffect(() => {
