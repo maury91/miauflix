@@ -7,7 +7,6 @@ import type {
   SearchResponse,
 } from '@miauflix/service-contracts';
 
-import type { RecentSearchRepository } from '@repositories/recent-search.repository';
 import type {
   SearchGenreDto,
   SearchPageDto,
@@ -15,7 +14,8 @@ import type {
   SearchRecentKind,
   SearchResultDetailDto,
   SearchResultDto,
-} from '@routes/search.types';
+} from '@mytypes/search.types';
+import type { RecentSearchRepository } from '@repositories/recent-search.repository';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 
 export type SearchInput =

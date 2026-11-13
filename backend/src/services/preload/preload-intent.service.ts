@@ -1,14 +1,14 @@
 import type { ContentSource } from '@entities/content-source.entity';
-import type { ProgressRepository } from '@repositories/progress.repository';
-import type { IntentLeaseKey, MediaIntentRef, PreloadIntentRequest } from '@routes/playable.types';
-import { playableKey } from '@routes/playable.types';
+import type { IntentLeaseKey, MediaIntentRef, PreloadIntentRequest } from '@mytypes/playable.types';
+import { playableKey } from '@mytypes/playable.types';
 import type {
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
   PreloadPreparationState,
   PreloadWarmupSnapshot,
   PreloadWarmupState,
-} from '@routes/preload.types';
+} from '@mytypes/preload.types';
+import type { ProgressRepository } from '@repositories/progress.repository';
 import { findResumeFraction } from '@services/progress/resume-fraction';
 
 import type { PlayablePreparationService } from './playable-preparation.service';

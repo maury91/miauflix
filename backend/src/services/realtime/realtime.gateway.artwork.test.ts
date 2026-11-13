@@ -40,16 +40,16 @@ describe('RealtimeGateway artwork subscriptions', () => {
       offChange: () => undefined,
     } as unknown as PreloadIntentService;
     const progress = {} as ProgressService;
-    const gateway = new RealtimeGateway(
-      auth,
+    const gateway = new RealtimeGateway({
+      authService: auth,
       config,
       preload,
       progress,
       catalog,
-      null,
-      { handles: () => false } as never,
-      { onChange: () => () => undefined } as never
-    );
+      playback: null,
+      search: { handles: () => false } as never,
+      availability: { onChange: () => () => undefined } as never,
+    });
     const sendMovie = jest.fn();
     const sendShow = jest.fn();
     const movieState = clientState(sendMovie);
@@ -102,21 +102,24 @@ describe('RealtimeGateway artwork subscriptions', () => {
       onArtwork: () => () => undefined,
       onArtworkStreamReady: () => () => undefined,
     } as unknown as CatalogClientService;
-    const gateway = new RealtimeGateway(
-      { onSessionRevoked: () => () => undefined } as unknown as AuthService,
-      { get: () => undefined } as unknown as ConfigService,
-      { onChange: () => undefined, offChange: () => undefined } as unknown as PreloadIntentService,
-      {} as ProgressService,
+    const gateway = new RealtimeGateway({
+      authService: { onSessionRevoked: () => () => undefined } as unknown as AuthService,
+      config: { get: () => undefined } as unknown as ConfigService,
+      preload: {
+        onChange: () => undefined,
+        offChange: () => undefined,
+      } as unknown as PreloadIntentService,
+      progress: {} as ProgressService,
       catalog,
-      null,
-      { handles: () => false } as never,
-      {
+      playback: null,
+      search: { handles: () => false } as never,
+      availability: {
         onChange: (listener: (change: SourceAvailabilityChange) => void) => {
           publish = listener;
           return () => undefined;
         },
-      }
-    );
+      },
+    });
     const showing = clientState(jest.fn());
     showing.artworkRefs.add('tv:22');
     const focusing = { ...clientState(jest.fn()), focused: { kind: 'show' as const, mediaId: 22 } };

@@ -1,5 +1,5 @@
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
-import type { SearchServerMessage } from '@routes/search.types';
+import type { SearchServerMessage } from '@mytypes/search.types';
 import type { SearchService } from '@services/search/search.service';
 
 import { RealtimeSearchChannel, type SearchClient } from './realtime.search';

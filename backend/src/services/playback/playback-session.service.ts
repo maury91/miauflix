@@ -6,10 +6,10 @@ import { type Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 import type { Database } from '@database/database';
 import type { PlaybackGrant } from '@entities/playback-grant.entity';
 import type { ConfigService } from '@mytypes/configuration';
+import type { PlayableRef } from '@mytypes/playable.types';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
-import type { PlayableRef } from '@routes/playable.types';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type {
@@ -148,6 +148,22 @@ export interface PlaybackSession {
   expiresAt: string;
 }
 
+export interface PlaybackSessionServiceOptions {
+  db: Database;
+  preparation: PlayablePreparationService;
+  config: ConfigService;
+  warmup?: SourceWarmupController;
+  storage?: Pick<MediaLoadClientService, 'getStorageState'>;
+  audioPlaybackService?: AudioPlaybackService;
+  sourceHealth?: Pick<SourceHealthService, 'markFailed' | 'onFailed'>;
+  downloads?: Pick<
+    MediaLoadClientService,
+    'getPlaybackHealth' | 'getWarmupTargetBytes' | 'releaseClaims' | 'warmSource'
+  >;
+  progress?: Pick<ProgressRepository, 'findByKey'>;
+  playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
+}
+
 export class PlaybackSessionService {
   private readonly grants: PlaybackGrantRepository;
   private readonly deliveryListeners = new Set<(event: PlaybackDeliveryUpdate) => void>();
@@ -158,21 +174,38 @@ export class PlaybackSessionService {
   private checkingHealth = false;
   private readonly ttlMs: number;
 
-  constructor(
-    db: Database,
-    private readonly preparation: PlayablePreparationService,
-    config: ConfigService,
-    private readonly warmup?: SourceWarmupController,
-    private readonly storage?: Pick<MediaLoadClientService, 'getStorageState'>,
-    private readonly audioPlaybackService?: AudioPlaybackService,
-    private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed' | 'onFailed'>,
-    private readonly downloads?: Pick<
-      MediaLoadClientService,
-      'getPlaybackHealth' | 'getWarmupTargetBytes' | 'releaseClaims' | 'warmSource'
-    >,
-    private readonly progress?: Pick<ProgressRepository, 'findByKey'>,
-    private readonly playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>
-  ) {
+  private readonly preparation: PlayablePreparationService;
+  private readonly warmup?: SourceWarmupController;
+  private readonly storage?: Pick<MediaLoadClientService, 'getStorageState'>;
+  private readonly audioPlaybackService?: AudioPlaybackService;
+  private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed' | 'onFailed'>;
+  private readonly downloads?: Pick<
+    MediaLoadClientService,
+    'getPlaybackHealth' | 'getWarmupTargetBytes' | 'releaseClaims' | 'warmSource'
+  >;
+  private readonly progress?: Pick<ProgressRepository, 'findByKey'>;
+  private readonly playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
+
+  constructor({
+    db,
+    preparation,
+    config,
+    warmup,
+    storage,
+    audioPlaybackService,
+    sourceHealth,
+    downloads,
+    progress,
+    playedSources,
+  }: PlaybackSessionServiceOptions) {
+    this.preparation = preparation;
+    this.warmup = warmup;
+    this.storage = storage;
+    this.audioPlaybackService = audioPlaybackService;
+    this.sourceHealth = sourceHealth;
+    this.downloads = downloads;
+    this.progress = progress;
+    this.playedSources = playedSources;
     this.grants = db.getPlaybackGrantRepository();
     this.ttlMs = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
     sourceHealth?.onFailed(sourceId => this.failOver(sourceId));

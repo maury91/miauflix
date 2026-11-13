@@ -47,13 +47,13 @@ const setupTest = (directory: string) => {
     getAssTrack: jest.fn().mockResolvedValue('[Script Info]\n[Events]\nFormat: Start, End, Text\n'),
     getFonts: jest.fn(),
   };
-  const service = new SubtitlesService(
-    config as never,
-    { request } as never,
-    { verify } as never,
-    streamService as never,
-    sourceSubtitles as never
-  );
+  const service = new SubtitlesService({
+    config: config as never,
+    requestService: { request } as never,
+    playbackSessionService: { verify } as never,
+    streamService: streamService as never,
+    sourceSubtitles: sourceSubtitles as never,
+  });
   const search = (results: unknown[]) => {
     request.mockResolvedValueOnce({ ok: true, body: { data: results } });
     return service.search('streaming-key', 'user', 'en', false, true);

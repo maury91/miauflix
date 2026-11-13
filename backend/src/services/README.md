@@ -9,6 +9,8 @@ Each folder owns one area. Folders named after a remote service (`catalog/`, `li
   and health, their file list, and which file is the video (`video-files.ts`).
 - `sources-client/` — the HTTP client for the sources service, which discovers sources.
 - `media-load/` — the client for the media-load service, which downloads and stores source data.
+- `storage/` — what media-load keeps on disk, joined with the titles of its sources, for the admin
+  storage screen.
 
 ## Playing a title
 
@@ -23,3 +25,14 @@ Three folders take part, in this order:
 `preload/` uses `playback/` for the target types and the source filters. A playback session calls
 `preload/` to prepare its source, so a source warmed during browsing is reused when the user
 presses Watch.
+
+## Layering
+
+Routes call services; services never import from `routes/`. Types that both sides use (playable
+refs, progress, preload snapshots, search messages, ratings, storage views, `UserDto`, the API
+error body) live in `src/types/` and are imported as `@mytypes/...`; ESLint rejects `@routes/...`
+imports outside `routes/`. Routes do not call repositories directly: account ratings go through
+`ratings/`, storage through `storage/`.
+
+Services with many dependencies take one options object rather than positional arguments, for
+example `new PlaybackSessionService({ db, preparation, config, ... })`.

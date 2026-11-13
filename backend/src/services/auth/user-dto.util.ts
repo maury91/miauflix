@@ -1,5 +1,5 @@
 import type { User } from '@entities/user.entity';
-import type { UserDto } from '@routes/auth.types';
+import type { UserDto } from '@mytypes/user.types';
 
 /** The user fields a client may see. */
 export function toUserDto(

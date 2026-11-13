@@ -2,7 +2,7 @@ import type { Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { RecentSearch } from '@entities/recent-search.entity';
-import type { SearchRecentKind } from '@routes/search.types';
+import type { SearchRecentKind } from '@mytypes/search.types';
 
 export const MAX_RECENT_SEARCHES = 10;
 

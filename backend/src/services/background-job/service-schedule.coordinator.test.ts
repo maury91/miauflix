@@ -45,12 +45,12 @@ const setupTest = (ready: boolean, enabled = true) => {
       return jest.fn();
     }),
   };
-  const coordinator = new ServiceScheduleCoordinator(
-    jobs as never,
-    configWithSubscription as never,
-    catalog as never,
-    lists as never
-  );
+  const coordinator = new ServiceScheduleCoordinator({
+    jobs: jobs as never,
+    config: configWithSubscription as never,
+    catalog: catalog as never,
+    lists: lists as never,
+  });
   coordinator.start(enabled);
   return { coordinator, jobs, catalog, lists, statusListener, configListener };
 };

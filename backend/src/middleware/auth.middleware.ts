@@ -2,7 +2,7 @@ import { createMiddleware } from 'hono/factory';
 
 import type { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
-import type { UserDto } from '@routes/auth.types';
+import type { UserDto } from '@mytypes/user.types';
 import type { AuthService } from '@services/auth/auth.service';
 import { readAccessToken } from '@utils/auth-transport.util';
 import { withSpan } from '@utils/tracing.util';

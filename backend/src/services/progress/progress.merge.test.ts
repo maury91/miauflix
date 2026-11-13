@@ -1,4 +1,4 @@
-import type { ProgressEntry } from '@routes/progress.types';
+import type { ProgressEntry } from '@mytypes/progress.types';
 
 import { mergeProgress } from './progress.merge';
 

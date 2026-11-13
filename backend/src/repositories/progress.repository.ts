@@ -2,8 +2,8 @@ import type { Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { Progress } from '@entities/progress.entity';
-import type { PlayableRef } from '@routes/playable.types';
-import { playableKey } from '@routes/playable.types';
+import type { PlayableRef } from '@mytypes/playable.types';
+import { playableKey } from '@mytypes/playable.types';
 
 export type ProgressUpdate = Pick<Progress, 'durationSeconds' | 'positionSeconds' | 'state'> & {
   playable: PlayableRef;

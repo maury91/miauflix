@@ -13,6 +13,56 @@ const storybookConfigs = storybook.configs['flat/recommended'].map(config => ({
   ],
 }));
 
+// Long relative paths into backend/src areas must use the path aliases instead.
+const backendAliasPatterns = [
+  {
+    group: ['../entities/*', '../../entities/*', '../../../entities/*', '../../../../entities/*'],
+    message: "Use '@entities/...' instead of long relative paths.",
+  },
+  {
+    group: ['../database/*', '../../database/*', '../../../database/*', '../../../../database/*'],
+    message: "Use '@database/...' instead of long relative paths.",
+  },
+  {
+    group: ['../errors/*', '../../errors/*', '../../../errors/*', '../../../../errors/*'],
+    message: "Use '@errors/...' instead of long relative paths.",
+  },
+  {
+    group: [
+      '../middleware/*',
+      '../../middleware/*',
+      '../../../middleware/*',
+      '../../../../middleware/*',
+    ],
+    message: "Use '@middleware/...' instead of long relative paths.",
+  },
+  {
+    group: [
+      '../repositories/*',
+      '../../repositories/*',
+      '../../../repositories/*',
+      '../../../../repositories/*',
+    ],
+    message: "Use '@repositories/...' instead of long relative paths.",
+  },
+  {
+    group: ['../routes/*', '../../routes/*', '../../../routes/*', '../../../../routes/*'],
+    message: "Use '@routes/...' instead of long relative paths.",
+  },
+  {
+    group: ['../services/*', '../../services/*', '../../../services/*', '../../../../services/*'],
+    message: "Use '@services/...' instead of long relative paths.",
+  },
+  {
+    group: ['../types/*', '../../types/*', '../../../types/*', '../../../../types/*'],
+    message: "Use '@mytypes/...' instead of long relative paths.",
+  },
+  {
+    group: ['../utils/*', '../../utils/*', '../../../utils/*', '../../../../utils/*'],
+    message: "Use '@utils/...' instead of long relative paths.",
+  },
+];
+
 export default [
   {
     ignores: [
@@ -89,73 +139,33 @@ export default [
       'no-restricted-imports': [
         'error',
         {
-          patterns: [
-            {
-              group: [
-                '../entities/*',
-                '../../entities/*',
-                '../../../entities/*',
-                '../../../../entities/*',
-              ],
-              message: "Use '@entities/...' instead of long relative paths.",
-            },
-            {
-              group: [
-                '../database/*',
-                '../../database/*',
-                '../../../database/*',
-                '../../../../database/*',
-              ],
-              message: "Use '@database/...' instead of long relative paths.",
-            },
-            {
-              group: ['../errors/*', '../../errors/*', '../../../errors/*', '../../../../errors/*'],
-              message: "Use '@errors/...' instead of long relative paths.",
-            },
-            {
-              group: [
-                '../middleware/*',
-                '../../middleware/*',
-                '../../../middleware/*',
-                '../../../../middleware/*',
-              ],
-              message: "Use '@middleware/...' instead of long relative paths.",
-            },
-            {
-              group: [
-                '../repositories/*',
-                '../../repositories/*',
-                '../../../repositories/*',
-                '../../../../repositories/*',
-              ],
-              message: "Use '@repositories/...' instead of long relative paths.",
-            },
-            {
-              group: ['../routes/*', '../../routes/*', '../../../routes/*', '../../../../routes/*'],
-              message: "Use '@routes/...' instead of long relative paths.",
-            },
-            {
-              group: [
-                '../services/*',
-                '../../services/*',
-                '../../../services/*',
-                '../../../../services/*',
-              ],
-              message: "Use '@services/...' instead of long relative paths.",
-            },
-            {
-              group: ['../types/*', '../../types/*', '../../../types/*', '../../../../types/*'],
-              message: "Use '@mytypes/...' instead of long relative paths.",
-            },
-            {
-              group: ['../utils/*', '../../utils/*', '../../../utils/*', '../../../../utils/*'],
-              message: "Use '@utils/...' instead of long relative paths.",
-            },
-          ],
+          patterns: backendAliasPatterns,
         },
       ],
       '@typescript-eslint/consistent-type-imports': 'warn',
       '@typescript-eslint/sort-type-constituents': 'warn',
+    },
+  },
+  {
+    // Routes are the HTTP edge: nothing below them may depend on them. Shared shapes live in
+    // backend/src/types (`@mytypes/...`).
+    files: [
+      'backend/src/{services,middleware,utils,repositories,entities,errors,database,types}/**/*.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            ...backendAliasPatterns,
+            {
+              group: ['@routes/*'],
+              message:
+                "Only routes may import '@routes/...'. Move the shared type to backend/src/types and import it from '@mytypes/...'.",
+            },
+          ],
+        },
+      ],
     },
   },
   {

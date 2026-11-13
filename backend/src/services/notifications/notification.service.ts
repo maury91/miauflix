@@ -7,9 +7,9 @@ import type { SourceQuality } from '@entities/content-source.entity';
 import { Movie } from '@entities/movie.entity';
 import { Notification, type NotificationType } from '@entities/notification.entity';
 import { TVShow } from '@entities/tvshow.entity';
+import { playableKey, type PlayableRef } from '@mytypes/playable.types';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
-import { playableKey, type PlayableRef } from '@routes/playable.types';
 import { EncryptedColumns } from '@utils/encrypted-column.util';
 
 export interface NotificationDto {

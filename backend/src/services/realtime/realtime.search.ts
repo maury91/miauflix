@@ -5,7 +5,7 @@ import { z } from 'zod';
 const searchGenreKeySchema = z.string().regex(SEARCH_GENRE_KEY_PATTERN);
 
 import { describeError, newErrorId } from '@errors/error-response';
-import type { SearchServerMessage } from '@routes/search.types';
+import type { SearchServerMessage } from '@mytypes/search.types';
 import type { SearchInput, SearchService } from '@services/search/search.service';
 import { KeyedTokenBucket } from '@utils/keyed-token-bucket';
 

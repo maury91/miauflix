@@ -14,7 +14,6 @@ import type { EpisodeSourceRepository } from '@repositories/episode-source.repos
 import type { MovieRepository } from '@repositories/movie.repository';
 import type { BackgroundJobService } from '@services/background-job/background-job.service';
 import type { NotificationService } from '@services/notifications/notification.service';
-import type { RequestService } from '@services/request/request.service';
 import type { SourceMetadata } from '@services/sources-client/source-candidate';
 import { fromCandidate } from '@services/sources-client/source-candidate';
 import type { SourcesClientService } from '@services/sources-client/sources-client.service';
@@ -93,6 +92,18 @@ function releaseQualityName(rank: number): string {
   );
 }
 
+export interface SourceServiceOptions {
+  db: Database;
+  /** media-load: reports whether its own connection is VPN-protected. */
+  peers: { getStatus(): ServiceInstanceStatus };
+  sourcesClient: SourcesClientService;
+  magnetService: SourceMetadataFileService;
+  config: ConfigService;
+  backgroundJobs: BackgroundJobService;
+  notifications: NotificationService;
+  availability: SourceAvailabilityService;
+}
+
 /**
  * Service for searching and managing sources
  */
@@ -111,18 +122,32 @@ export class SourceService {
   /** Sources whose file list could not be fetched, and when they may be tried again. */
   private readonly unresolvedUntil = new Map<number, number>();
 
-  constructor(
-    db: Database,
-    /** media-load: reports whether its own connection is VPN-protected. */
-    private readonly peers: { getStatus(): ServiceInstanceStatus },
-    private readonly sourcesClient: SourcesClientService,
-    private readonly magnetService: SourceMetadataFileService,
-    _requestService: RequestService,
-    private readonly config: ConfigService,
-    private readonly backgroundJobs: BackgroundJobService,
-    private readonly notifications: NotificationService,
-    private readonly availability: SourceAvailabilityService
-  ) {
+  /** media-load: reports whether its own connection is VPN-protected. */
+  private readonly peers: { getStatus(): ServiceInstanceStatus };
+  private readonly sourcesClient: SourcesClientService;
+  private readonly magnetService: SourceMetadataFileService;
+  private readonly config: ConfigService;
+  private readonly backgroundJobs: BackgroundJobService;
+  private readonly notifications: NotificationService;
+  private readonly availability: SourceAvailabilityService;
+
+  constructor({
+    db,
+    peers,
+    sourcesClient,
+    magnetService,
+    config,
+    backgroundJobs,
+    notifications,
+    availability,
+  }: SourceServiceOptions) {
+    this.peers = peers;
+    this.sourcesClient = sourcesClient;
+    this.magnetService = magnetService;
+    this.config = config;
+    this.backgroundJobs = backgroundJobs;
+    this.notifications = notifications;
+    this.availability = availability;
     this.movieRepository = db.getMovieRepository();
     this.contentSourceRepository = db.getContentSourceRepository();
     this.episodeSourceRepository = db.getEpisodeSourceRepository();

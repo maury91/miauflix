@@ -3,9 +3,13 @@ import type { Server, ServerWebSocket, WebSocketHandler } from 'bun';
 
 import { UserRole } from '@entities/user.entity';
 import type { ConfigService } from '@mytypes/configuration';
-import type { MediaIntentRef, PreloadIntentRequest, ReachableIntent } from '@routes/playable.types';
-import type { PreloadPreparationSnapshot } from '@routes/preload.types';
-import type { ProgressRequest } from '@routes/progress.types';
+import type {
+  MediaIntentRef,
+  PreloadIntentRequest,
+  ReachableIntent,
+} from '@mytypes/playable.types';
+import type { PreloadPreparationSnapshot } from '@mytypes/preload.types';
+import type { ProgressRequest } from '@mytypes/progress.types';
 import type { AuthService } from '@services/auth/auth.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type {
@@ -119,6 +123,21 @@ interface RealtimeEvent {
   preparation: PreloadPreparationSnapshot | null;
 }
 
+export interface RealtimeGatewayOptions {
+  authService: AuthService;
+  config: ConfigService;
+  preload: PreloadIntentService;
+  progress: ProgressService;
+  catalog: CatalogClientService;
+  playback:
+    | (Partial<Pick<PlaybackSessionService, 'onSourceAttempt'>> &
+        Pick<PlaybackSessionService, 'onDeliveryUpdate'>)
+    | null;
+  search: RealtimeSearchChannel;
+  availability: Pick<SourceAvailabilityService, 'onChange'>;
+  pieces?: Pick<PlaybackPiecesService, 'latestFor' | 'onRanges'> | null;
+}
+
 /**
  * Public realtime gateway for navigation interest, playback progress, and preparation status.
  * Progress is persisted through the same service used by the HTTP route.
@@ -138,20 +157,32 @@ export class RealtimeGateway {
     }
   };
 
-  constructor(
-    private readonly authService: AuthService,
-    private readonly config: ConfigService,
-    private readonly preload: PreloadIntentService,
-    private readonly progress: ProgressService,
-    private readonly catalog: CatalogClientService,
-    playback:
-      | (Partial<Pick<PlaybackSessionService, 'onSourceAttempt'>> &
-          Pick<PlaybackSessionService, 'onDeliveryUpdate'>)
-      | null,
-    private readonly search: RealtimeSearchChannel,
-    availability: Pick<SourceAvailabilityService, 'onChange'>,
-    private readonly pieces: Pick<PlaybackPiecesService, 'latestFor' | 'onRanges'> | null = null
-  ) {
+  private readonly authService: AuthService;
+  private readonly config: ConfigService;
+  private readonly preload: PreloadIntentService;
+  private readonly progress: ProgressService;
+  private readonly catalog: CatalogClientService;
+  private readonly search: RealtimeSearchChannel;
+  private readonly pieces: Pick<PlaybackPiecesService, 'latestFor' | 'onRanges'> | null;
+
+  constructor({
+    authService,
+    config,
+    preload,
+    progress,
+    catalog,
+    playback,
+    search,
+    availability,
+    pieces = null,
+  }: RealtimeGatewayOptions) {
+    this.authService = authService;
+    this.config = config;
+    this.preload = preload;
+    this.progress = progress;
+    this.catalog = catalog;
+    this.search = search;
+    this.pieces = pieces;
     this.removePiecesListener = pieces?.onRanges(update => this.deliverPieces(update)) ?? null;
     this.removeDeliveryListener =
       playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;

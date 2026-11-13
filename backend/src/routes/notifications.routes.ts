@@ -4,10 +4,10 @@ import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { type PlayableRef, playableRefSchema } from '@mytypes/playable.types';
 import { NOTIFICATIONS_PAGE_LIMIT } from '@services/notifications/notification.service';
 
 import type { Deps, ErrorResponse } from './common.types';
-import { type PlayableRef, playableRefSchema } from './playable.types';
 
 const notificationIdSchema = z.object({ id: z.coerce.number().int().positive() });
 const notificationListSchema = z.object({

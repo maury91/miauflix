@@ -12,19 +12,17 @@ describe('PlaybackSessionService', () => {
     'keeps direct playback available on inspection failure: %s',
     async error => {
       const grants = { create: jest.fn() };
-      const service = new PlaybackSessionService(
-        { getPlaybackGrantRepository: () => grants } as never,
-        {
+      const service = new PlaybackSessionService({
+        db: { getPlaybackGrantRepository: () => grants } as never,
+        preparation: {
           prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
         } as never,
-        { getOrThrow: () => 60000 } as never,
-        undefined,
-        undefined,
-        {
+        config: { getOrThrow: () => 60000 } as never,
+        audioPlaybackService: {
           knownDelivery: jest.fn().mockResolvedValue(null),
           inspect: jest.fn().mockRejectedValue(error),
-        } as never
-      );
+        } as never,
+      });
       const listener = jest.fn();
       service.onDeliveryUpdate(listener);
       const session = await service.create(
@@ -49,16 +47,14 @@ describe('PlaybackSessionService', () => {
         .mockRejectedValueOnce(new AudioPlaybackError('could not be inspected'))
         .mockResolvedValueOnce({ mode: 'audio-transcode', durationSeconds: 60 }),
     };
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-      {
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: {
         prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
       } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      audio as never
-    );
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: audio as never,
+    });
     const listener = jest.fn();
     service.onDeliveryUpdate(listener);
     const session = await service.create(
@@ -88,14 +84,14 @@ describe('PlaybackSessionService', () => {
         return { source: { id: 2 }, target: movie({ id: 2 }), state: 'cold' };
       }
     );
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-      { prepare } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never
-    );
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: { prepare } as never,
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
+        knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }),
+      } as never,
+    });
     const attempts = jest.fn();
     service.onSourceAttempt(attempts);
 
@@ -118,13 +114,13 @@ describe('PlaybackSessionService', () => {
   });
 
   it('reports exhaustion when every source proved fake', async () => {
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-      {
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: {
         prepare: async () => ({ source: null, target: null, state: 'cold', exhausted: true }),
       } as never,
-      { getOrThrow: () => 60000 } as never
-    );
+      config: { getOrThrow: () => 60000 } as never,
+    });
 
     await expect(
       service.create('user', { kind: 'movie', mediaId: 1 }, { quality: 'auto', allowHevc: false })
@@ -137,14 +133,14 @@ describe('PlaybackSessionService', () => {
       target: movie({ id: 2 }),
       state: 'cold',
     }));
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-      { prepare } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never
-    );
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: { prepare } as never,
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
+        knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }),
+      } as never,
+    });
 
     await service.create(
       'user',
@@ -172,17 +168,15 @@ describe('PlaybackSessionService', () => {
         state: 'paused',
       }),
     };
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-      { prepare } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never,
-      undefined,
-      undefined,
-      progress
-    );
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: { prepare } as never,
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
+        knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }),
+      } as never,
+      progress,
+    });
 
     await service.create(
       'user',
@@ -203,16 +197,14 @@ describe('PlaybackSessionService', () => {
       knownDelivery: jest.fn().mockResolvedValue(null),
       inspect: jest.fn().mockResolvedValue({ mode: 'audio-transcode', durationSeconds: 60 }),
     };
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => grants } as never,
-      {
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => grants } as never,
+      preparation: {
         prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
       } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      audio as never
-    );
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: audio as never,
+    });
     const listener = jest.fn();
     service.onDeliveryUpdate(listener);
     const session = await service.create(
@@ -240,21 +232,24 @@ describe('PlaybackSessionService', () => {
   it('moves live sessions off a source that stalls, and only those sessions', async () => {
     let stalled: ((sourceId: number) => void) | undefined;
     let sourceId = 1;
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-      {
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: {
         prepare: async () => ({
           source: { id: sourceId },
           target: movie({ id: sourceId }),
           state: 'ready',
         }),
       } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never,
-      { onFailed: listener => ((stalled = listener), () => undefined), markFailed: jest.fn() }
-    );
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
+        knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }),
+      } as never,
+      sourceHealth: {
+        onFailed: listener => ((stalled = listener), () => undefined),
+        markFailed: jest.fn(),
+      },
+    });
     const listener = jest.fn();
     service.onDeliveryUpdate(listener);
     const preferences = { quality: 'auto' as const, allowHevc: false };
@@ -308,20 +303,17 @@ describe('PlaybackSessionService', () => {
       };
       const sourceHealth = { onFailed: jest.fn(() => () => undefined), markFailed: jest.fn() };
       const playedSources = { recordPlayed: jest.fn().mockResolvedValue(undefined) };
-      const service = new PlaybackSessionService(
-        { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-        preparation as never,
-        { getOrThrow: () => 3_600_000 } as never,
-        undefined,
-        undefined,
-        {
+      const service = new PlaybackSessionService({
+        db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+        preparation: preparation as never,
+        config: { getOrThrow: () => 3_600_000 } as never,
+        audioPlaybackService: {
           knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct', durationSeconds: 3_600 }),
         } as never,
         sourceHealth,
         downloads,
-        undefined,
-        playedSources
-      );
+        playedSources,
+      });
       const start = () =>
         service.create(
           'user',
@@ -565,19 +557,17 @@ describe('PlaybackSessionService', () => {
   });
 
   it('asks the client to recreate an optimistic session the browser cannot play', async () => {
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
-      {
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: {
         prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
       } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      {
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
         knownDelivery: jest.fn().mockResolvedValue(null),
         inspect: jest.fn().mockRejectedValue(new AudioConversionRequiredError('needs H.264')),
-      } as never
-    );
+      } as never,
+    });
     const listener = jest.fn();
     service.onDeliveryUpdate(listener);
     const session = await service.create(
@@ -613,14 +603,13 @@ describe('PlaybackSessionService', () => {
         .mockResolvedValueOnce({ mode: 'direct' }),
     };
     const warmup = { promote: jest.fn() };
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => grants } as never,
-      preparation as never,
-      { getOrThrow: () => 60000 } as never,
-      warmup as never,
-      undefined,
-      audio as never
-    );
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => grants } as never,
+      preparation: preparation as never,
+      config: { getOrThrow: () => 60000 } as never,
+      warmup: warmup as never,
+      audioPlaybackService: audio as never,
+    });
     const result = await service.create(
       'user',
       { kind: 'movie', mediaId: 42 },
@@ -652,14 +641,12 @@ describe('PlaybackSessionService', () => {
         canConvertHevc: () => convert,
         knownDelivery: jest.fn().mockResolvedValue({ mode: 'audio-transcode' }),
       };
-      const service = new PlaybackSessionService(
-        { getPlaybackGrantRepository: () => grants } as never,
-        preparation as never,
-        { getOrThrow: () => 60000 } as never,
-        undefined,
-        undefined,
-        audio as never
-      );
+      const service = new PlaybackSessionService({
+        db: { getPlaybackGrantRepository: () => grants } as never,
+        preparation: preparation as never,
+        config: { getOrThrow: () => 60000 } as never,
+        audioPlaybackService: audio as never,
+      });
       await service.create(
         'user',
         { kind: 'movie', mediaId: 1 },
@@ -676,20 +663,18 @@ describe('PlaybackSessionService', () => {
 
   it('preserves a known conversion failure without issuing a grant', async () => {
     const grants = { create: jest.fn() };
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => grants } as never,
-      {
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => grants } as never,
+      preparation: {
         prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
       } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      {
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
         knownDelivery: jest
           .fn()
           .mockRejectedValue(new AudioConversionRequiredError('unsupported video')),
-      } as never
-    );
+      } as never,
+    });
     await expect(
       service.create('user', { kind: 'movie', mediaId: 1 }, { quality: 'auto', allowHevc: false })
     ).rejects.toThrow('unsupported video');
@@ -715,14 +700,13 @@ describe('PlaybackSessionService', () => {
     };
     const warmup = { promote: jest.fn() };
     const audio = { inspect: jest.fn() };
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => grants } as never,
-      preparation as never,
-      { getOrThrow: () => 60_000 } as never,
-      warmup as never,
-      undefined,
-      audio as never
-    );
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => grants } as never,
+      preparation: preparation as never,
+      config: { getOrThrow: () => 60_000 } as never,
+      warmup: warmup as never,
+      audioPlaybackService: audio as never,
+    });
     const playable = {
       kind: 'episode' as const,
       showMediaId: 42,
@@ -774,13 +758,13 @@ describe('PlaybackSessionService', () => {
       getPlaybackGrantRepository: jest.fn().mockReturnValue(grants),
     } as unknown as Database;
     const config = { getOrThrow: jest.fn().mockReturnValue(60_000) };
-    const service = new PlaybackSessionService(
-      database,
-      preparation as never,
-      config as never,
-      warmup as never,
-      storageService as never
-    );
+    const service = new PlaybackSessionService({
+      db: database,
+      preparation: preparation as never,
+      config: config as never,
+      warmup: warmup as never,
+      storage: storageService as never,
+    });
 
     const session = await service.create(
       'user-1',
@@ -798,14 +782,14 @@ describe('PlaybackSessionService', () => {
   it('grants a movie whose file is not resolved yet without inspecting it', async () => {
     const grants = { create: jest.fn() };
     const audio = { inspect: jest.fn() };
-    const service = new PlaybackSessionService(
-      { getPlaybackGrantRepository: () => grants } as never,
-      { prepare: async () => ({ source: { id: 3 }, target: null, state: 'cold' }) } as never,
-      { getOrThrow: () => 60000 } as never,
-      undefined,
-      undefined,
-      audio as never
-    );
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => grants } as never,
+      preparation: {
+        prepare: async () => ({ source: { id: 3 }, target: null, state: 'cold' }),
+      } as never,
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: audio as never,
+    });
 
     const session = await service.create(
       'user',

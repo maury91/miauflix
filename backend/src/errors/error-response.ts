@@ -7,7 +7,7 @@ import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/aut
 import { AppError } from '@errors/base.error';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import { ServiceUnavailableError } from '@errors/service-unavailable.error';
-import type { ApiErrorBody } from '@routes/error.types';
+import type { ApiErrorBody } from '@mytypes/error.types';
 import { services } from '@services/configuration/configuration.consts';
 
 export type { ApiErrorBody };

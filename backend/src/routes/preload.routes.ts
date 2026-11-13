@@ -4,10 +4,10 @@ import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { preloadIntentRequestSchema } from '@mytypes/playable.types';
+import type { PreloadIntentResponse } from '@mytypes/preload.types';
 
 import type { Deps } from './common.types';
-import { preloadIntentRequestSchema } from './playable.types';
-import type { PreloadIntentResponse } from './preload.types';
 
 const clientIdSchema = z.object({
   clientId: z.string().regex(/^[A-Za-z0-9_-]{1,128}$/, 'Invalid client id'),

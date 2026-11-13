@@ -3,10 +3,10 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
+import { playableRefSchema } from '@mytypes/playable.types';
+import type { ProgressListResponse } from '@mytypes/progress.types';
 
 import type { Deps } from './common.types';
-import { playableRefSchema } from './playable.types';
-import type { ProgressListResponse } from './progress.types';
 
 const progressSchema = z
   .object({

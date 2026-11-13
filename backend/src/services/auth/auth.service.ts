@@ -18,10 +18,10 @@ import {
   UserAlreadyExistsError,
 } from '@errors/auth.errors';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
+import type { UserDto } from '@mytypes/user.types';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
-import type { UserDto } from '@routes/auth.types';
 import type { StreamingToken } from '@services/auth/auth.types';
 import { randomAvatar } from '@services/profile/random-avatar.util';
 import type { AuditLogService } from '@services/security/audit-log.service';

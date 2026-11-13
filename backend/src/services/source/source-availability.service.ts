@@ -7,7 +7,7 @@ import type { ContentSource } from '@entities/content-source.entity';
 import { EpisodeSource } from '@entities/episode-source.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
-import type { PlayableRef } from '@routes/playable.types';
+import type { PlayableRef } from '@mytypes/playable.types';
 import type {
   NotificationService,
   NotifiedSource,

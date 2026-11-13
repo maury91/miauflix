@@ -36,6 +36,7 @@ import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { SourceWarmupController } from '@services/preload/source-warmup.controller';
 import { ProfileService } from '@services/profile/profile.service';
 import { ProgressService } from '@services/progress/progress.service';
+import { MediaRatingService } from '@services/ratings/media-rating.service';
 import { RealtimeGateway } from '@services/realtime/realtime.gateway';
 import { RealtimeSearchChannel } from '@services/realtime/realtime.search';
 import { RequestService } from '@services/request/request.service';
@@ -47,6 +48,7 @@ import { SourceAvailabilityService } from '@services/source/source-availability.
 import { SourceHealthService } from '@services/source/source-health.service';
 import { SourcesClientService } from '@services/sources-client/sources-client.service';
 import { StatsService } from '@services/stats/stats.service';
+import { StorageInventoryService } from '@services/storage/storage-inventory.service';
 import { SourceSubtitlesService } from '@services/subtitles/source-subtitles.service';
 import { SubtitlesService } from '@services/subtitles/subtitles.service';
 import { TvPairingService } from '@services/tv-pairing/tv-pairing.service';
@@ -132,17 +134,16 @@ try {
     configurationService,
     { sourcesClient: sourcesClientService }
   );
-  const sourceService = new SourceService(
+  const sourceService = new SourceService({
     db,
-    mediaLoadClient,
-    sourcesClientService,
+    peers: mediaLoadClient,
+    sourcesClient: sourcesClientService,
     magnetService,
-    requestService,
-    configurationService,
+    config: configurationService,
     backgroundJobs,
-    notificationService,
-    sourceAvailabilityService
-  );
+    notifications: notificationService,
+    availability: sourceAvailabilityService,
+  });
   const playbackTargetService = new PlaybackTargetService(
     db,
     mediaLoadClient,
@@ -171,54 +172,56 @@ try {
       ]);
     }
   );
-  const playablePreparationService = new PlayablePreparationService(
+  const playablePreparationService = new PlayablePreparationService({
     mediaService,
     sourceService,
-    sourceWarmupController,
-    mediaLoadClient,
-    playbackTargetService,
-    sourceHealthService
-  );
+    warmup: sourceWarmupController,
+    storage: mediaLoadClient,
+    targets: playbackTargetService,
+    sourceHealth: sourceHealthService,
+  });
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
     sourceWarmupController,
     db.getProgressRepository()
   );
-  const playbackSessionService = new PlaybackSessionService(
+  const playbackSessionService = new PlaybackSessionService({
     db,
-    playablePreparationService,
-    configurationService,
-    sourceWarmupController,
-    mediaLoadClient,
+    preparation: playablePreparationService,
+    config: configurationService,
+    warmup: sourceWarmupController,
+    storage: mediaLoadClient,
     audioPlaybackService,
-    sourceHealthService,
-    mediaLoadClient,
-    db.getProgressRepository(),
-    db.getContentSourceRepository()
-  );
+    sourceHealth: sourceHealthService,
+    downloads: mediaLoadClient,
+    progress: db.getProgressRepository(),
+    playedSources: db.getContentSourceRepository(),
+  });
   const playbackPiecesService = new PlaybackPiecesService(
     playbackSessionService,
     mediaLoadClient,
     db.getContentSourceRepository()
   );
-  const realtimeGateway = new RealtimeGateway(
+  const realtimeGateway = new RealtimeGateway({
     authService,
-    configurationService,
-    preloadIntentService,
-    progressService,
-    catalogClient,
-    playbackSessionService,
-    new RealtimeSearchChannel(new SearchService(catalogClient, new RecentSearchRepository(db))),
-    sourceAvailabilityService,
-    playbackPiecesService
-  );
-  const subtitlesService = new SubtitlesService(
-    configurationService,
+    config: configurationService,
+    preload: preloadIntentService,
+    progress: progressService,
+    catalog: catalogClient,
+    playback: playbackSessionService,
+    search: new RealtimeSearchChannel(
+      new SearchService(catalogClient, new RecentSearchRepository(db))
+    ),
+    availability: sourceAvailabilityService,
+    pieces: playbackPiecesService,
+  });
+  const subtitlesService = new SubtitlesService({
+    config: configurationService,
     requestService,
     playbackSessionService,
     streamService,
-    sourceSubtitlesService
-  );
+    sourceSubtitles: sourceSubtitlesService,
+  });
 
   const serverService = {
     testable: false as const,
@@ -251,13 +254,13 @@ try {
   await authService.configureUsers();
 
   const disableBackgroundTasks = configurationService.get('DISABLE_BACKGROUND_TASKS');
-  const scheduleCoordinator = new ServiceScheduleCoordinator(
-    backgroundJobs,
-    configurationService,
-    catalogClient,
-    listService,
-    listClient
-  );
+  const scheduleCoordinator = new ServiceScheduleCoordinator({
+    jobs: backgroundJobs,
+    config: configurationService,
+    catalog: catalogClient,
+    lists: listService,
+    listClient,
+  });
   if (disableBackgroundTasks) {
     logger.info('App', 'Background tasks disabled - running in on-demand mode only');
   } else {
@@ -333,8 +336,11 @@ try {
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
   const app = createRoutes({
-    mediaRatingRepository: new MediaRatingRepository(db),
-    contentSourceRepository: db.getContentSourceRepository(),
+    mediaRatingService: new MediaRatingService(new MediaRatingRepository(db)),
+    storageInventoryService: new StorageInventoryService({
+      contentSources: db.getContentSourceRepository(),
+      mediaLoadClient,
+    }),
     authService,
     auditLogService,
     catalogClient,

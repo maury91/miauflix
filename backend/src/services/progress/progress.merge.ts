@@ -1,5 +1,5 @@
-import { playableKey } from '@routes/playable.types';
-import type { ProgressEntry } from '@routes/progress.types';
+import { playableKey } from '@mytypes/playable.types';
+import type { ProgressEntry } from '@mytypes/progress.types';
 
 /**
  * Return the newest entry per playable, sorted newest first; local entries win timestamp ties.

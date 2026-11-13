@@ -123,6 +123,14 @@ function decodeOpenSubtitlesCandidate(id: string): { sourceId: number; fileId: n
   }
 }
 
+export interface SubtitlesServiceOptions {
+  config: ConfigService;
+  requestService: RequestService;
+  playbackSessionService: PlaybackSessionService;
+  streamService: StreamService;
+  sourceSubtitles: SourceSubtitlesService;
+}
+
 /** OpenSubtitles search and playback-bound subtitle delivery. */
 export class SubtitlesService {
   private readonly candidates = new Map<string, CandidateRecord>();
@@ -140,13 +148,25 @@ export class SubtitlesService {
   private cachedFontSetBytes = 0;
   private readonly pendingFontSets = new Map<string, Promise<ExtractedFont[]>>();
 
-  constructor(
-    private readonly config: ConfigService,
-    private readonly requestService: RequestService,
-    private readonly playbackSessionService: PlaybackSessionService,
-    private readonly streamService: StreamService,
-    private readonly sourceSubtitles: SourceSubtitlesService
-  ) {}
+  private readonly config: ConfigService;
+  private readonly requestService: RequestService;
+  private readonly playbackSessionService: PlaybackSessionService;
+  private readonly streamService: StreamService;
+  private readonly sourceSubtitles: SourceSubtitlesService;
+
+  constructor({
+    config,
+    requestService,
+    playbackSessionService,
+    streamService,
+    sourceSubtitles,
+  }: SubtitlesServiceOptions) {
+    this.config = config;
+    this.requestService = requestService;
+    this.playbackSessionService = playbackSessionService;
+    this.streamService = streamService;
+    this.sourceSubtitles = sourceSubtitles;
+  }
 
   /** Populate the same search cache used by authorized playback requests. */
   async warmSearch(imdbId: string | null | undefined, language: string): Promise<void> {

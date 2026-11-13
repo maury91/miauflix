@@ -1,6 +1,6 @@
 import { Column, Entity, Index, ManyToOne, PrimaryColumn, type Relation } from 'typeorm';
 
-import type { SearchRecentKind } from '@routes/search.types';
+import type { SearchRecentKind } from '@mytypes/search.types';
 import { encryptedText } from '@utils/encrypted-column.util';
 
 import { User } from './user.entity';
