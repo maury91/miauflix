@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { UserRole } from '@entities/user.entity';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import { isVideoFile } from '@services/download/download.utils';
+import { isVideoFile } from '@services/source/video-files';
 
 import type { Deps } from './common.types';
 import type { StorageInventoryResponse, StorageItemView } from './storage.types';

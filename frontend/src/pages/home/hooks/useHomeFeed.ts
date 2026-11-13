@@ -1,12 +1,12 @@
 import { useGetListsInfiniteQuery } from '@features/media/api/lists.api';
 import { mediaApi } from '@features/media/api/media.api';
 import { progressApi } from '@features/progress/api/progress.api';
+import { unfinishedProgress } from '@features/progress/lib/continue-watching';
 import type { MediaDto } from '@miauflix/backend';
 import type { AppDispatch, RootState } from '@store/store';
 import { useCallback, useEffect, useMemo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
-import { unfinishedProgress } from '../continue-watching';
 import { composeHomeCategories } from '../home-feed';
 import { cardSelector, progressTitle } from '../media-mappers';
 import { useSessionChange } from './useSessionChange';

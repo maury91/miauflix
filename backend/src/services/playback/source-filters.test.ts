@@ -8,9 +8,9 @@ import {
   filterSources,
   filterStreamableSources,
   preferWithinBitrate,
-} from './stream.util';
+} from './source-filters';
 
-describe('stream.util', () => {
+describe('source-filters', () => {
   beforeAll(() => {
     configureFakerSeed();
   });

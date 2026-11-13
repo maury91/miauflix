@@ -2,12 +2,12 @@ import { progressForPlayable } from '@features/progress/api/progress.api';
 import type { ProgressEntry, SeasonResponse } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
+import { artworkUrl } from '@shared/lib/media.utils';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { realtimePlayableKey } from '@store/slices/realtime';
 import { type UIEvent, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
-import { artworkUrl } from '../media.utils';
 import { ErrorState, PrimaryAction, SectionLabel } from './details.styles';
 import { episodeElementId, episodeProgressLabel } from './episodes.utils';
 

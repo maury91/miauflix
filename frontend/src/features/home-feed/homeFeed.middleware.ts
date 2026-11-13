@@ -1,5 +1,5 @@
+import { ROW_PAGE_SIZE } from '@features/home-feed/row-pages';
 import { listsApi } from '@features/media/api/lists.api';
-import { ROW_PAGE_SIZE } from '@pages/home/row-pages';
 import type { Middleware, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import type { RootState } from '@store/store';
 

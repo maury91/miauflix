@@ -8,8 +8,8 @@ import type { MediaLoadClientService } from '@services/media-load/media-load-cli
 
 import { FragmentedMp4Timeline } from './fragmented-mp4';
 import type { PlaybackTarget } from './playback-target';
+import { openSourceInput, PROBE_SIZE_BYTES } from './source-input';
 import { collectStderr } from './stderr-tail';
-import { openTorrentInput, PROBE_SIZE_BYTES } from './torrent-input';
 
 export interface PlaybackAudioTrack {
   index: number;
@@ -519,7 +519,7 @@ export class AudioPlaybackService {
       sourceId: target.source.id,
       speculative,
     });
-    const input = await openTorrentInput(this.mediaLoad, target, speculative);
+    const input = await openSourceInput(this.mediaLoad, target, speculative);
     try {
       const result = (await this.runProbe(
         input.url,
@@ -678,7 +678,7 @@ export class AudioPlaybackService {
     const abort = () => controller.abort();
     signal.addEventListener('abort', abort, { once: true });
     if (signal.aborted) abort();
-    let input: Awaited<ReturnType<typeof openTorrentInput>> | undefined;
+    let input: Awaited<ReturnType<typeof openSourceInput>> | undefined;
     let child: ReturnType<typeof spawn> | undefined;
     let timeline: FragmentedMp4Timeline | undefined;
     let expiry: ReturnType<typeof setTimeout> | undefined;
@@ -714,7 +714,7 @@ export class AudioPlaybackService {
       if (this.closed || this.jobs.size > 2 || this.processes.size >= 4) {
         throw new AudioPlaybackError('Audio conversion is busy. Retry shortly.');
       }
-      input = await openTorrentInput(this.mediaLoad, {
+      input = await openSourceInput(this.mediaLoad, {
         ...target,
         durationSeconds: delivery.durationSeconds,
       });

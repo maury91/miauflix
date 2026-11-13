@@ -4,7 +4,7 @@ jest.mock('@middleware/rate-limit.middleware', () => ({
       next(),
 }));
 
-import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
+import { ErrorWithStatus } from '@errors/error-with-status.error';
 
 import { createStreamRoutes } from './stream.routes';
 

@@ -30,9 +30,10 @@ import { AudioPlaybackService } from '@services/playback/audio-playback.service'
 import { PlaybackPiecesService } from '@services/playback/playback-pieces.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlaybackTargetService } from '@services/playback/playback-target.service';
+import { StreamService } from '@services/playback/stream.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
-import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
+import { SourceWarmupController } from '@services/preload/source-warmup.controller';
 import { ProfileService } from '@services/profile/profile.service';
 import { ProgressService } from '@services/progress/progress.service';
 import { RealtimeGateway } from '@services/realtime/realtime.gateway';
@@ -44,11 +45,10 @@ import { createSecurityCleanup } from '@services/security/security-cleanup';
 import { SourceMetadataFileService, SourceService } from '@services/source';
 import { SourceAvailabilityService } from '@services/source/source-availability.service';
 import { SourceHealthService } from '@services/source/source-health.service';
-import { SourcesClientService } from '@services/sources/sources-client.service';
+import { SourcesClientService } from '@services/sources-client/sources-client.service';
 import { StatsService } from '@services/stats/stats.service';
-import { StreamService } from '@services/stream/stream.service';
+import { SourceSubtitlesService } from '@services/subtitles/source-subtitles.service';
 import { SubtitlesService } from '@services/subtitles/subtitles.service';
-import { TorrentSubtitlesService } from '@services/subtitles/torrent-subtitles.service';
 import { TvPairingService } from '@services/tv-pairing/tv-pairing.service';
 
 import { initializeInstrumentation } from './instrumentation';
@@ -155,13 +155,13 @@ try {
     configurationService,
     db.getMediaProbeRepository()
   );
-  const torrentSubtitlesService = new TorrentSubtitlesService(mediaLoadClient);
-  const torrentWarmupController = new TorrentWarmupController(
+  const sourceSubtitlesService = new SourceSubtitlesService(mediaLoadClient);
+  const sourceWarmupController = new SourceWarmupController(
     mediaLoadClient,
     async (target, playableKey, subtitleLanguage, signal) => {
       await Promise.allSettled([
         audioPlaybackService.inspect(target, {}, true, signal),
-        torrentSubtitlesService.discover(target, true, signal),
+        sourceSubtitlesService.discover(target, true, signal),
         (async () => {
           const movieId = /^m:(\d+)$/.exec(playableKey)?.[1];
           if (!movieId) return;
@@ -174,21 +174,21 @@ try {
   const playablePreparationService = new PlayablePreparationService(
     mediaService,
     sourceService,
-    torrentWarmupController,
+    sourceWarmupController,
     mediaLoadClient,
     playbackTargetService,
     sourceHealthService
   );
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
-    torrentWarmupController,
+    sourceWarmupController,
     db.getProgressRepository()
   );
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
     configurationService,
-    torrentWarmupController,
+    sourceWarmupController,
     mediaLoadClient,
     audioPlaybackService,
     sourceHealthService,
@@ -217,7 +217,7 @@ try {
     requestService,
     playbackSessionService,
     streamService,
-    torrentSubtitlesService
+    sourceSubtitlesService
   );
 
   const serverService = {
@@ -318,7 +318,7 @@ try {
       // Do not leave a request holding the database open indefinitely.
       await Promise.race([drained, new Promise<void>(resolve => setTimeout(resolve, 5_000))]);
 
-      torrentSubtitlesService.close();
+      sourceSubtitlesService.close();
       await audioPlaybackService.close();
       // After the drain: open streams read through it.
       mediaLoadClient.stop();

@@ -21,7 +21,7 @@ vi.mock('@features/media/api/media.api', () => ({
 }));
 vi.mock('react-redux', () => ({ useSelector: () => undefined }));
 vi.mock('../hooks/useMediaBoxSizes', () => ({ useMediaBoxSizes: () => ({ margin: 50 }) }));
-vi.mock('../image-preloader', () => ({
+vi.mock('@shared/lib/image-preloader', () => ({
   URGENT: 0,
   imagePreloader: {
     load: (url: string) => {

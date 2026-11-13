@@ -7,8 +7,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { expect, fn, mocked } from 'storybook/test';
 
-import { homeCategories, mediaForCategory, mediaForCategoryBySlug } from '../home.fixtures';
 import { CategoryRow } from './CategoryRow';
+
+import {
+  homeCategories,
+  mediaForCategory,
+  mediaForCategoryBySlug,
+} from '@/__test-utils__/fixtures/home.fixtures';
 
 const meta = {
   title: 'Home/Category Row',

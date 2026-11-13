@@ -1,7 +1,7 @@
 import type { SearchGenreDto, SearchResultDto } from '@miauflix/backend';
 import { initialSearchState, type SearchState } from '@store/slices/search';
 
-import { homeFixtureAssets } from '../home/home.assets';
+import { homeFixtureAssets } from '@/__test-utils__/fixtures/home.assets';
 
 const poster = (mediaId: keyof typeof homeFixtureAssets) => homeFixtureAssets[mediaId].poster;
 

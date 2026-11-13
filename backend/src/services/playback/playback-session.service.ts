@@ -17,7 +17,7 @@ import type {
   PlaybackPreferences,
   SourceAttempt,
 } from '@services/preload/playable-preparation.service';
-import type { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
+import type { SourceWarmupController } from '@services/preload/source-warmup.controller';
 import { findResumeFraction } from '@services/progress/resume-fraction';
 import type { SourceHealthService } from '@services/source/source-health.service';
 
@@ -162,7 +162,7 @@ export class PlaybackSessionService {
     db: Database,
     private readonly preparation: PlayablePreparationService,
     config: ConfigService,
-    private readonly warmup?: TorrentWarmupController,
+    private readonly warmup?: SourceWarmupController,
     private readonly storage?: Pick<MediaLoadClientService, 'getStorageState'>,
     private readonly audioPlaybackService?: AudioPlaybackService,
     private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed' | 'onFailed'>,

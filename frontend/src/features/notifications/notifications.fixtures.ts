@@ -1,6 +1,6 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
 
-import { homeMedia } from './home.fixtures';
+import { homeMedia } from '@/__test-utils__/fixtures/home.fixtures';
 
 // Relative to load time, so the panel always reads "2h ago", "1d ago", ...
 const now = Date.now();

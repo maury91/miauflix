@@ -6,12 +6,12 @@ import { join, posix } from 'node:path';
 import { logger } from '@logger';
 
 import type { EncryptedStorageLayout } from '@entities/storage.entity';
-import { isVideoFile } from '@services/download/download.utils';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import { withFile } from '@services/playback/playback-target';
+import { openSourceInput, PROBE_SIZE_BYTES } from '@services/playback/source-input';
 import { collectStderr } from '@services/playback/stderr-tail';
-import { openTorrentInput, PROBE_SIZE_BYTES } from '@services/playback/torrent-input';
+import { isVideoFile } from '@services/source/video-files';
 
 import type { FontAttachment, FontNames } from './subtitle-fonts';
 import {
@@ -34,7 +34,7 @@ const STYLED_CODECS = new Set(['ass', 'ssa']);
 const EXTENSIONS = new Set(['.srt', '.vtt', '.ass', '.ssa']);
 const STYLED_EXTENSIONS = new Set(['.ass', '.ssa']);
 
-export interface TorrentSubtitle {
+export interface SourceSubtitle {
   fileId: string;
   provider: 'embedded' | 'torrent';
   language: string;
@@ -93,7 +93,7 @@ function stem(path: string): string {
 export function matchingSubtitleFiles(
   layout: EncryptedStorageLayout,
   videoPath: string
-): TorrentSubtitle[] {
+): SourceSubtitle[] {
   const videoStem = stem(videoPath);
   const singleVideo =
     layout.files.filter(file => isVideoFile(file.path.toLowerCase())).length === 1;
@@ -160,10 +160,10 @@ interface RunOptions {
 /** Wait before probing a video again after a failed probe. */
 const PROBE_RETRY_DELAY_MS = 3_000;
 
-export class TorrentSubtitlesService {
+export class SourceSubtitlesService {
   private readonly probes = new Map<
     string,
-    { expires: number; promise: Promise<TorrentSubtitle[]> }
+    { expires: number; promise: Promise<SourceSubtitle[]> }
   >();
   private readonly processes = new Set<ChildProcess>();
   private active = 0;
@@ -176,7 +176,7 @@ export class TorrentSubtitlesService {
     target: PlaybackTarget,
     speculative = false,
     signal?: AbortSignal
-  ): Promise<TorrentSubtitle[]> {
+  ): Promise<SourceSubtitle[]> {
     signal?.throwIfAborted();
     const { source, filePath: videoFilePath } = target;
     const layout = await this.downloads.getMediaFiles(target);
@@ -186,7 +186,7 @@ export class TorrentSubtitlesService {
         target,
         sidecars.map(track => track.path!)
       );
-    let embedded: TorrentSubtitle[] = [];
+    let embedded: SourceSubtitle[] = [];
     try {
       const cacheKey = `${source.id}:${videoFilePath}`;
       const cached = this.probes.get(cacheKey);
@@ -210,7 +210,7 @@ export class TorrentSubtitlesService {
       }
     } catch (error) {
       logger.warn(
-        'TorrentSubtitlesService',
+        'SourceSubtitlesService',
         'Embedded subtitle inspection failed',
         error instanceof Error ? error.message : error,
         (error as { detail?: string } | null)?.detail ?? ''
@@ -228,7 +228,7 @@ export class TorrentSubtitlesService {
     target: PlaybackTarget,
     speculative = false,
     signal?: AbortSignal
-  ): Promise<TorrentSubtitle[]> {
+  ): Promise<SourceSubtitle[]> {
     const inspect = () =>
       this.run(
         target,
@@ -301,11 +301,7 @@ export class TorrentSubtitlesService {
   }
 
   /** Extract a track discovered for the target video; sidecars are revalidated against it. */
-  async getTrack(
-    target: PlaybackTarget,
-    track: TorrentSubtitle,
-    startSeconds = 0
-  ): Promise<string> {
+  async getTrack(target: PlaybackTarget, track: SourceSubtitle, startSeconds = 0): Promise<string> {
     const sidecar = await this.checkTrack(target, track);
     const args = [
       '-map',
@@ -333,7 +329,7 @@ export class TorrentSubtitlesService {
    */
   async getAssTrack(
     target: PlaybackTarget,
-    track: TorrentSubtitle,
+    track: SourceSubtitle,
     startSeconds = 0
   ): Promise<string> {
     if (!track.styled) throw new Error('Subtitle track is not styled');
@@ -366,7 +362,7 @@ export class TorrentSubtitlesService {
    */
   async getFonts(
     target: PlaybackTarget,
-    track: TorrentSubtitle
+    track: SourceSubtitle
   ): Promise<{ fonts: ExtractedFont[]; complete: boolean }> {
     if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
       throw new Error('Subtitle track belongs to another video');
@@ -392,7 +388,7 @@ export class TorrentSubtitlesService {
           binary: true,
         });
       } catch (error) {
-        logger.debug('TorrentSubtitlesService', 'Font attachments could not all be read', {
+        logger.debug('SourceSubtitlesService', 'Font attachments could not all be read', {
           error: error instanceof Error ? error.message : error,
         });
         complete = false;
@@ -431,7 +427,7 @@ export class TorrentSubtitlesService {
   }
 
   /** The track still belongs to the target video; true when it is a sidecar file. */
-  private async checkTrack(target: PlaybackTarget, track: TorrentSubtitle): Promise<boolean> {
+  private async checkTrack(target: PlaybackTarget, track: SourceSubtitle): Promise<boolean> {
     if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
       throw new Error('Subtitle track belongs to another video');
     const sidecar = track.provider === 'torrent';
@@ -449,7 +445,7 @@ export class TorrentSubtitlesService {
    */
   async getFont(
     target: PlaybackTarget,
-    track: TorrentSubtitle
+    track: SourceSubtitle
   ): Promise<{ font: SubtitleFont | null; complete: boolean }> {
     if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
       throw new Error('Subtitle track belongs to another video');
@@ -485,7 +481,7 @@ export class TorrentSubtitlesService {
           binary: true,
         });
       } catch (error) {
-        logger.debug('TorrentSubtitlesService', 'Font attachment could not be read', {
+        logger.debug('SourceSubtitlesService', 'Font attachment could not be read', {
           filename: attachment.filename,
           error: error instanceof Error ? error.message : error,
         });
@@ -549,11 +545,11 @@ export class TorrentSubtitlesService {
       void opened?.close();
     };
     signal?.addEventListener('abort', cancel, { once: true });
-    let opened: Awaited<ReturnType<typeof openTorrentInput>> | undefined;
+    let opened: Awaited<ReturnType<typeof openSourceInput>> | undefined;
     let child: ChildProcess | undefined;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     try {
-      opened = await openTorrentInput(this.downloads, input, speculative);
+      opened = await openSourceInput(this.downloads, input, speculative);
       signal?.throwIfAborted();
       if (this.closed) throw new Error('Subtitle preparation is shutting down');
       const common = [

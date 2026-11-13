@@ -1,4 +1,4 @@
-import type { HomeAction, NavigationOutcome } from '../homeNavigation';
+import type { HomeAction, NavigationOutcome } from '@shared/lib/homeNavigation';
 
 type Controls = {
   back: HTMLButtonElement | null;

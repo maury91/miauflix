@@ -1,16 +1,16 @@
 jest.mock('node:child_process', () => ({ spawn: jest.fn() }));
-jest.mock('./torrent-input', () => ({ openTorrentInput: jest.fn() }));
+jest.mock('./source-input', () => ({ openSourceInput: jest.fn() }));
 jest.mock('@logger');
 
 import { spawn } from 'node:child_process';
 import { EventEmitter } from 'node:events';
 import { PassThrough } from 'node:stream';
 
-import { TorrentSubtitlesService } from '@services/subtitles/torrent-subtitles.service';
+import { SourceSubtitlesService } from '@services/subtitles/source-subtitles.service';
 
 import { AudioPlaybackService } from './audio-playback.service';
 import type { PlaybackTarget } from './playback-target';
-import { openTorrentInput } from './torrent-input';
+import { openSourceInput } from './source-input';
 
 const target = (id: number): PlaybackTarget => ({
   source: { id } as PlaybackTarget['source'],
@@ -36,7 +36,7 @@ const setupTest = () => {
     return process as never;
   });
   const close = jest.fn().mockResolvedValue(undefined);
-  jest.mocked(openTorrentInput).mockResolvedValue({ url: 'http://127.0.0.1/fixture', close });
+  jest.mocked(openSourceInput).mockResolvedValue({ url: 'http://127.0.0.1/fixture', close });
   const downloads = {
     getMediaFiles: jest.fn().mockResolvedValue({ files: [{ path: 'movie.mkv', length: 100 }] }),
   };
@@ -71,7 +71,7 @@ it('kills obsolete audio probes, evicts cancelled cache entries, and admits the 
 
 it('kills obsolete subtitle probes and releases admission capacity before another focused target', async () => {
   const { children, downloads } = setupTest();
-  const service = new TorrentSubtitlesService(downloads as never);
+  const service = new SourceSubtitlesService(downloads as never);
   for (let id = 1; id <= 6; id++) {
     const controller = new AbortController();
     const pending = service.discover(target(id), true, controller.signal);

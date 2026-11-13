@@ -8,9 +8,9 @@ import {
 import { mediaLoad, type SourceDescriptor } from '@miauflix/service-contracts';
 
 import type { ContentSource } from '@entities/content-source.entity';
+import { ErrorWithStatus } from '@errors/error-with-status.error';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
-import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 
 import { MediaLoadClientService, type StorageHandoff } from './media-load-client.service';
 

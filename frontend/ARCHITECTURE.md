@@ -11,20 +11,23 @@ This document outlines the frontend directory structure after the migration from
   - `startup/`: Device-specific bootstrap scripts (e.g. Tizen helper modules).
 
 - `src/pages/`
-  - Route-level React screens. Currently includes `login/` with `LoginPage.tsx` and corresponding tests.
+  - Route-level React screens. A page lays out its screen and composes features; it holds only code that belongs to that screen.
+  - `home/`: the Home screen. It hosts the browse rows, the hero, the sidebar, and the details and player views, which come from `features/details` and `features/player`.
 
 - `src/features/`
-  - Domain-specific slices that compose state, APIs, and UI.
-  - `auth/`
-    - `api/`: RTK Query API (`auth.api.ts`) powering login and device authentication flows.
-    - `lib/`: Feature-specific utilities (`formatCode`, `formatTimeRemaining`).
-    - `ui/login/`: Auth widgets (`LoginWithEmail`, `LoginWithQR`, `QRDisplay`, etc.) with unit tests and Storybook stories.
+  - Domain-specific slices that compose state, APIs, and UI. A feature may import from `shared/`, `store/` and other features, never from `pages/`.
+  - Each feature uses the same subfolders: `api/` (RTK Query), `hooks/`, `lib/` (pure logic), `ui/` (components).
+  - `auth/`: login and device authentication (`LoginWithEmail`, `LoginWithQR`, `QRDisplay`).
+  - `details/`: the title details view (`MediaDetails`, `EpisodesSection`, season loading).
+  - `player/`: the player (`PlayerView`, `PlayerControls`, `AvplayVideo`, subtitles, audio delivery, playback messages).
+  - `progress/`: watch progress and the episode rules built on it (continue watching, next episode).
+  - `notifications/`, `integrations/` (Trakt), `profiles/`, `preload/`, `home-feed/`: one domain each.
 
 - `src/shared/`
   - Cross-cutting assets and helpers.
   - `components/`: Generic building blocks such as `Spinner`.
   - `hooks/`: Reusable React hooks (`useWindowSize`).
-  - `lib/`: Pure utility helpers (`object.ts` with `typedEntries`, `mapObject`).
+  - `lib/`: Pure utility helpers (`object.ts`, `media.utils.ts`, `image-preloader.ts`, `homeNavigation.ts`).
   - `ui/logo/`: Branded primitives (`Logo` component and Storybook story).
   - `config/`: Environment helpers (`env.ts`) and exported runtime constants (`constants.ts`).
   - `styles/`: Global styles (`global.css`).

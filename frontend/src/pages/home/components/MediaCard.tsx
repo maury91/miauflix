@@ -1,10 +1,9 @@
 import type { MediaDto, ProgressEntry } from '@miauflix/backend';
+import { artworkUrl, getMediaTitle } from '@shared/lib/media.utils';
 import { MediaCard as ArtworkCard } from '@shared/ui/media-card/MediaCard';
 import type { RootState } from '@store/store';
 import { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
-
-import { artworkUrl, getMediaTitle } from '../media.utils';
 
 interface MediaCardProps {
   media: MediaDto;

@@ -1,6 +1,5 @@
 import type { RealtimeMediaRef } from '@features/realtime/realtime.client';
-
-import type { HomeView } from './homeNavigation';
+import type { HomeView } from '@shared/lib/homeNavigation';
 
 export interface HomeInterestWindow {
   media: Array<RealtimeMediaRef | null>;

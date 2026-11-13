@@ -1,14 +1,14 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { artworkUrl } from '@shared/lib/media.utils';
 import { formatRelativeTime } from '@shared/lib/relative-time';
 import { QualityBadge } from '@shared/ui/quality-badge/QualityBadge';
 import { RAIL_COLLAPSED_WIDTH_CSS, RAIL_EXPANDED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
 import { type FC, type MouseEvent, type RefObject, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { artworkUrl } from '../media.utils';
-import { notificationCopy } from '../notification-copy';
+import { notificationCopy } from '../lib/notification-copy';
 
 import BellIcon from '~icons/mdi/bell-outline';
 

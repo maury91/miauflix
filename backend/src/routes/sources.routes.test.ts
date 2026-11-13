@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
-import type { SourcesClientService } from '@services/sources/sources-client.service';
+import type { SourcesClientService } from '@services/sources-client/sources-client.service';
 
 import { createSourcesRoutes } from './sources.routes';
 

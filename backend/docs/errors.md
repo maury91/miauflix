@@ -136,7 +136,7 @@ Single class `SourceError(message, code)`.
 | `invalid_response_body` | Torrent metadata response body is neither ArrayBuffer nor string |
 | `service_not_found`     | Internal service name not registered in DataResolver             |
 
-`ErrorWithStatus` (in `services/source/services/error-with-status.util.ts`) also extends `AppError` with `type: 'source'` and uses the HTTP status string as the `code`.
+`ErrorWithStatus` (in `errors/error-with-status.error.ts`) also extends `AppError` with `type: 'source'` and uses the HTTP status string as the `code`.
 
 ---
 

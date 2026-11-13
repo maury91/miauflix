@@ -60,6 +60,6 @@ The following items are listed in [ToDo.md](../../ToDo.md), with no release date
 
 - [Streaming and seeking](../../backend/src/routes/stream.routes.ts)
 - [Playback sessions and preparation](../../backend/src/services/playback/playback-session.service.ts)
-- [Player](../../frontend/src/pages/home/components/PlayerView.tsx)
-- [Player controls](../../frontend/src/pages/home/components/PlayerControls.tsx)
-- [Continue watching](../../frontend/src/pages/home/continue-watching.ts)
+- [Player](../../frontend/src/features/player/ui/PlayerView.tsx)
+- [Player controls](../../frontend/src/features/player/ui/PlayerControls.tsx)
+- [Continue watching](../../frontend/src/features/progress/lib/continue-watching.ts)

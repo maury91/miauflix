@@ -3,7 +3,7 @@ import { IsNull, Not } from 'typeorm';
 
 import { ContentSource } from '@entities/content-source.entity';
 import { Storage } from '@entities/storage.entity';
-import { containsPlayableVideo } from '@services/download/download.utils';
+import { containsPlayableVideo } from '@services/source/video-files';
 
 import type { Migration } from './migration.types';
 

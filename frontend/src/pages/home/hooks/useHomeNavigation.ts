@@ -1,14 +1,14 @@
 import { type AppRoute, getRouteParent, navigate, navigateBack } from '@app/router';
+import type { MediaDetailsHandle } from '@features/details/ui/MediaDetails';
 import type { MediaDto, PlayableRef } from '@miauflix/backend';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import type { HomeAction, NavigationOutcome } from '@shared/lib/homeNavigation';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
 import { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import type { CategoryRowHandle } from '../components/CategoryRow';
-import type { MediaDetailsHandle } from '../components/MediaDetails';
-import type { HomeAction, NavigationOutcome } from '../homeNavigation';
 import type { HomeView } from './useMediaRoute';
 
 /**

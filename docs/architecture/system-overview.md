@@ -95,7 +95,7 @@ Live playback sessions sample peer availability, throughput, and blocked reads. 
 
 Local subtitles include embedded text and matching SRT/VTT/ASS/SSA files, converted to sanitized WebVTT. Embedded tracks are delivered in moving windows refreshed after seeks. OpenSubtitles search currently applies to movies with an IMDb ID and configured API key. Image-based PGS/VobSub conversion is not implemented.
 
-Implementation: [playback sessions](../../backend/src/services/playback/playback-session.service.ts), [audio delivery](../../backend/src/services/playback/audio-playback.service.ts), [torrent input](../../backend/src/services/playback/torrent-input.ts), [local subtitles](../../backend/src/services/subtitles/torrent-subtitles.service.ts), and [Samsung playback](../../frontend/src/features/player/lib/avplay-media.ts).
+Implementation: [playback sessions](../../backend/src/services/playback/playback-session.service.ts), [audio delivery](../../backend/src/services/playback/audio-playback.service.ts), [torrent input](../../backend/src/services/playback/source-input.ts), [local subtitles](../../backend/src/services/subtitles/source-subtitles.service.ts), and [Samsung playback](../../frontend/src/features/player/lib/avplay-media.ts).
 
 ## Data layer
 

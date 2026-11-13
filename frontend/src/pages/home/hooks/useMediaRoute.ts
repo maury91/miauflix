@@ -4,15 +4,15 @@ import {
   useGetSeasonQuery,
   useGetShowQuery,
 } from '@features/media/api/media.api';
-import type { MediaDto, PlayableRef } from '@miauflix/backend';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useMemo } from 'react';
-
 import {
   nextEpisode as findNextEpisode,
   nextEpisodeInSeason,
   nextSeasonNumber,
-} from '../episode-rules';
+} from '@features/progress/lib/episode-rules';
+import type { MediaDto, PlayableRef } from '@miauflix/backend';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useMemo } from 'react';
+
 import { mediaFromMovie, mediaFromShow } from '../media-mappers';
 
 export type HomeView = 'browse' | 'details' | 'player';

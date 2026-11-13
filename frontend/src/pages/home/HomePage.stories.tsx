@@ -14,6 +14,10 @@ import {
   useMarkAllNotificationsReadMutation,
   useMarkNotificationReadMutation,
 } from '@features/notifications/api/notifications.api';
+import {
+  notificationReadItems,
+  notificationUnreadItems,
+} from '@features/notifications/notifications.fixtures';
 import { configureStore } from '@reduxjs/toolkit';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
@@ -24,14 +28,14 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { expect, fn, mocked } from 'storybook/test';
 
+import HomePage from './HomePage';
+
 import {
   homeCategories,
   mediaForCategory,
   mediaForCategoryBySlug,
   popularCategories,
-} from './home.fixtures';
-import HomePage from './HomePage';
-import { notificationReadItems, notificationUnreadItems } from './notifications.fixtures';
+} from '@/__test-utils__/fixtures/home.fixtures';
 
 const meta = {
   title: 'Home/Home Page',

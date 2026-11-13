@@ -1,4 +1,4 @@
-import { containsPlayableVideo, isVideoFile, mainVideoPath } from './download.utils';
+import { containsPlayableVideo, isVideoFile, mainVideoPath } from './video-files';
 
 describe('video file helpers', () => {
   beforeEach(() => {

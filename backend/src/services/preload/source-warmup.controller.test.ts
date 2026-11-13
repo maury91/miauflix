@@ -1,7 +1,7 @@
 import type { ContentSource } from '@entities/content-source.entity';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 
-import { TorrentWarmupController, type TorrentWarmupDriver } from './torrent-warmup.controller';
+import { SourceWarmupController, type SourceWarmupDriver } from './source-warmup.controller';
 
 const source = (id: number, filePath = 'movie.mkv'): PlaybackTarget => ({
   source: { id, size: 100, file: Buffer.from('torrent') } as ContentSource,
@@ -9,9 +9,9 @@ const source = (id: number, filePath = 'movie.mkv'): PlaybackTarget => ({
   matchKind: 'movie',
 });
 
-describe('TorrentWarmupController', () => {
+describe('SourceWarmupController', () => {
   const setupTest = () => {
-    const driver: jest.Mocked<TorrentWarmupDriver> = {
+    const driver: jest.Mocked<SourceWarmupDriver> = {
       warmSource: jest.fn(async (item: PlaybackTarget, targetBytes: number, _leaseKey: string) => ({
         sourceId: item.source.id,
         filePath: item.filePath,
@@ -24,13 +24,13 @@ describe('TorrentWarmupController', () => {
       hasActivePlayback: jest.fn(() => false),
       isPlaybackActive: jest.fn((_sourceId: number) => false),
     };
-    return { controller: new TorrentWarmupController(driver), driver };
+    return { controller: new SourceWarmupController(driver), driver };
   };
 
   it('starts shared inspection once metadata is ready without waiting for the probe', async () => {
     const { driver } = setupTest();
     const inspect = jest.fn(() => new Promise<void>(() => {}));
-    const controller = new TorrentWarmupController(driver, inspect);
+    const controller = new SourceWarmupController(driver, inspect);
     await expect(controller.warm(source(1), 'lease', 'm:1')).resolves.toMatchObject({
       state: 'warming',
     });
@@ -60,7 +60,7 @@ describe('TorrentWarmupController', () => {
         signals.push(signal!);
       }
     );
-    const controller = new TorrentWarmupController(driver, prepare);
+    const controller = new SourceWarmupController(driver, prepare);
     await controller.warm(source(1), 'lease1', 'm:1');
     await controller.warm(source(2), 'lease2', 'm:2');
     expect(signals[0].aborted).toBe(true);

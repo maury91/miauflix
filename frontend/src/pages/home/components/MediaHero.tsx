@@ -1,6 +1,15 @@
 import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
+import { SourcePreparationStatus } from '@features/preload/ui/SourcePreparationStatus';
 import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
+import {
+  type BackdropFocus,
+  type BackdropPositionContext,
+  getBackdropPlacement,
+} from '@shared/lib/backdrop-focus';
+import { imagePreloader, URGENT } from '@shared/lib/image-preloader';
+import { artworkUrl, formatRuntime, getMediaTitle } from '@shared/lib/media.utils';
+import { MetadataDot, MetadataRating } from '@shared/ui/metadata/metadata.styles';
 import { selectSourceAvailability } from '@store/slices/realtime';
 import type { RootState } from '@store/store';
 import {
@@ -18,11 +27,6 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import {
-  type BackdropFocus,
-  type BackdropPositionContext,
-  getBackdropPlacement,
-} from '../backdrop-focus';
-import {
   pushBackdrop,
   revealBackdrop,
   settleBackdrop,
@@ -37,10 +41,6 @@ import {
 } from '../hero-backdrop-layout';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { useRestingValue } from '../hooks/useRestingValue';
-import { imagePreloader, URGENT } from '../image-preloader';
-import { artworkUrl, formatRuntime, getMediaTitle } from '../media.utils';
-import { MetadataDot, MetadataRating } from './metadata.styles';
-import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 import StarIcon from '~icons/mdi/star';
 

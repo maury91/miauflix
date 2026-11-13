@@ -12,7 +12,7 @@ import type {
 import { findResumeFraction } from '@services/progress/resume-fraction';
 
 import type { PlayablePreparationService } from './playable-preparation.service';
-import type { TorrentWarmupController } from './torrent-warmup.controller';
+import type { SourceWarmupController } from './source-warmup.controller';
 
 const LEASE_TTL_MS = 15_000;
 const SOURCE_METADATA_CACHE_LIMIT = 256;
@@ -100,7 +100,7 @@ export class PreloadIntentService {
 
   constructor(
     private readonly preparation?: PlayablePreparationService,
-    private readonly warmup?: TorrentWarmupController,
+    private readonly warmup?: SourceWarmupController,
     private readonly progress?: Pick<ProgressRepository, 'findByKey'>
   ) {
     this.cleanupTimer = setInterval(() => this.expire(), 1_000);

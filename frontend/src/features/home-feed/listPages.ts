@@ -1,6 +1,6 @@
+import { ROW_PAGE_SIZE } from '@features/home-feed/row-pages';
 import { listsApi } from '@features/media/api/lists.api';
 import type { ListResponse } from '@miauflix/backend';
-import { ROW_PAGE_SIZE } from '@pages/home/row-pages';
 import { createSelector } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
 import type { RootState } from '@store/store';

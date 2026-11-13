@@ -83,7 +83,7 @@ vi.mock('@features/realtime/realtime.middleware', () => ({
 
 import { realtimeActions, realtimeSlice } from '@store/slices/realtime';
 
-import { describePlaybackFailure, getPlaybackStatusMessage } from './playback-copy';
+import { describePlaybackFailure, getPlaybackStatusMessage } from '../lib/playback-copy';
 import { PlayerView } from './PlayerView';
 
 function render(ui: ReactElement) {

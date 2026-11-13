@@ -8,11 +8,12 @@ import { EpisodeSource } from '@entities/episode-source.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
 import type { PlayableRef } from '@routes/playable.types';
-import { containsPlayableVideo } from '@services/download/download.utils';
 import type {
   NotificationService,
   NotifiedSource,
 } from '@services/notifications/notification.service';
+
+import { containsPlayableVideo } from './video-files';
 
 /**
  * Whether a movie or episode can be played:

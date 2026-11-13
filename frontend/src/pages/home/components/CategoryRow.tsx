@@ -1,10 +1,19 @@
 import { listPageArgs, useListPage } from '@features/home-feed/listPages';
+import { ROW_PAGE_SIZE, rowPagesFor, rowRenderRadius } from '@features/home-feed/row-pages';
 import { usePromoteListMediaMutation } from '@features/media/api/lists.api';
 import { useQueueBackdropFocusMutation } from '@features/media/api/media.api';
+import { progressByMedia, progressKey } from '@features/progress/lib/progress-lookup';
 import type { ListDto, MediaDto, ProgressEntry } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { builtForTizen, IS_TV, PALETTE } from '@shared/config/constants';
+import {
+  type HomeAction,
+  type NavigationOutcome,
+  resolveCarouselAction,
+} from '@shared/lib/homeNavigation';
+import { IDLE, imagePreloader, NEARBY } from '@shared/lib/image-preloader';
+import { artworkUrl } from '@shared/lib/media.utils';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
 import {
@@ -23,13 +32,8 @@ import {
 import styled from 'styled-components';
 
 import { ROW_GAP_VH, ROW_HEIGHT_VH } from '../home-layout';
-import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
 import { useCoalescedValue } from '../hooks/useCoalescedValue';
 import { useSmoothScroller } from '../hooks/useSmoothScroller';
-import { IDLE, imagePreloader, NEARBY } from '../image-preloader';
-import { artworkUrl } from '../media.utils';
-import { progressByMedia, progressKey } from '../progress-lookup';
-import { ROW_PAGE_SIZE, rowPagesFor, rowRenderRadius } from '../row-pages';
 import { MediaCard } from './MediaCard';
 
 import ChevronLeftIcon from '~icons/line-md/chevron-left';

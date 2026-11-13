@@ -15,12 +15,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
 import {
   getNoSourceMessage,
   getPlaybackStatusMessage,
   getSourceAttemptMessage,
-} from './playback-copy';
+} from '../lib/playback-copy';
+import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
 import { PlayerControls, PlayerHeader } from './PlayerControls';
 import { SubtitleCaption } from './SubtitleCaption';
 

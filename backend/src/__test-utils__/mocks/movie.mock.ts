@@ -19,7 +19,7 @@ import type { Movie } from '@entities/movie.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow } from '@entities/tvshow.entity';
 import type { MovieDetail, SeasonDetail, TVShowDetail } from '@services/catalog/catalog.types';
-import type { SourceMetadata } from '@services/sources/source-candidate';
+import type { SourceMetadata } from '@services/sources-client/source-candidate';
 
 /**
  * Local slim media mirrors (movies, shows, seasons, episodes) and the catalog

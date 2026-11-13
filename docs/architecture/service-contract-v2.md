@@ -118,7 +118,7 @@ Remote `open()` performs an HTTP request to the service; local `open()` calls th
 
 Miauflix's backend serves `/api/stream/:token` by proxying `media-load`'s `read` bytes response, forwarding the viewer's `Range`. FFmpeg reads verified decrypted ranges from the backend's private loopback input, which opens the same call. The supplied Caddy configuration does not route video to a separate contract-based streaming service.
 
-Implementation: [signed tickets](../../packages/contract/src/tickets.ts), [local transport](../../packages/contract/src/local.ts), [video route](../../backend/src/routes/stream.routes.ts), and [FFmpeg input](../../backend/src/services/playback/torrent-input.ts).
+Implementation: [signed tickets](../../packages/contract/src/tickets.ts), [local transport](../../packages/contract/src/local.ts), [video route](../../backend/src/routes/stream.routes.ts), and [FFmpeg input](../../backend/src/services/playback/source-input.ts).
 
 ## Local transport and trust boundaries
 

@@ -1,10 +1,9 @@
+import { firstSeason } from '@features/details/lib/first-season';
 import { mediaApi } from '@features/media/api/media.api';
 import type { MediaDto, ProgressEntry } from '@miauflix/backend';
 import type { AppDispatch, RootState } from '@store/store';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { firstSeason } from '../first-season';
 
 /** Cached details younger than this (seconds) are not fetched again on focus. */
 const PREFETCH_IF_OLDER_THAN_S = 30;

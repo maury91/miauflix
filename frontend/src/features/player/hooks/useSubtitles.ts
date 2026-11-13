@@ -8,8 +8,8 @@ import {
 } from '@features/player/lib/media-subtitles';
 import { useSubtitleFont } from '@features/player/lib/subtitle-font';
 import { parseVtt, type SubtitleCue } from '@features/player/lib/vtt';
+import type { SubtitleTimingCue } from '@features/player/ui/SubtitleTiming';
 import type { SubtitleCandidateDto } from '@miauflix/backend';
-import type { SubtitleTimingCue } from '@pages/home/components/SubtitleTiming';
 import { API_CREDENTIALS, API_URL } from '@shared/config/constants';
 import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 

@@ -4,6 +4,7 @@ import parseTorrent from 'parse-torrent';
 import type { Database } from '@database/database';
 import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
+import { ErrorWithStatus } from '@errors/error-with-status.error';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type {
   ContentSourceRepository,
@@ -14,16 +15,15 @@ import type { MovieRepository } from '@repositories/movie.repository';
 import type { BackgroundJobService } from '@services/background-job/background-job.service';
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { RequestService } from '@services/request/request.service';
-import type { SourceMetadata } from '@services/sources/source-candidate';
-import { fromCandidate } from '@services/sources/source-candidate';
-import type { SourcesClientService } from '@services/sources/sources-client.service';
+import type { SourceMetadata } from '@services/sources-client/source-candidate';
+import { fromCandidate } from '@services/sources-client/source-candidate';
+import type { SourcesClientService } from '@services/sources-client/sources-client.service';
 import { scheduleNextCheck } from '@utils/scheduling.util';
 import { SingleFlight } from '@utils/singleflight.util';
 import { sleep } from '@utils/time';
 import { traced } from '@utils/tracing.util';
 import { providerSourcesToEntities } from '@utils/transformers.util';
 
-import { ErrorWithStatus } from './services/error-with-status.util';
 import { matchEpisodeFile } from './episode-file-matcher';
 import type { SourceAvailabilityService } from './source-availability.service';
 import type { SourceMetadataFileService } from './source-metadata-file.service';

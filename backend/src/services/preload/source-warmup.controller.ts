@@ -28,7 +28,7 @@ export interface WarmSlot {
   range?: Pick<WarmupResult, 'filePath' | 'firstPiece' | 'lastPiece' | 'targetBytes'>;
 }
 
-export interface TorrentWarmupDriver {
+export interface SourceWarmupDriver {
   /**
    * Warm a range of the target for one lease, from the file start or near `startFraction` of the
    * file; the lease key owns the warmup claim.
@@ -65,7 +65,7 @@ const DEFAULT_TARGET_BYTES = 64 * 1024 * 1024;
  * Serializes only slot transitions. The torrent itself downloads outside the
  * mutex, so a slow peer cannot block a Watch request or a later replacement.
  */
-export class TorrentWarmupController {
+export class SourceWarmupController {
   private slot: WarmSlot | null = null;
   private preparationAbort: AbortController | null = null;
   private generation = 0;
@@ -74,7 +74,7 @@ export class TorrentWarmupController {
   private readonly changeListeners = new Set<(slot: WarmSlot | null) => void>();
 
   constructor(
-    private readonly driver: TorrentWarmupDriver,
+    private readonly driver: SourceWarmupDriver,
     private readonly prepareTarget?: (
       target: PlaybackTarget,
       playableKey: string,
@@ -198,7 +198,7 @@ export class TorrentWarmupController {
           options.subtitleLanguage,
           this.preparationAbort.signal
         ).catch(error => {
-          logger.debug('TorrentWarmupController', 'Speculative playback inspection failed', error);
+          logger.debug('SourceWarmupController', 'Speculative playback inspection failed', error);
         });
         if (this.slot?.generation !== generation) {
           await this.driver.pauseSource(source.id);
@@ -391,7 +391,7 @@ export class TorrentWarmupController {
       try {
         listener(snapshot);
       } catch (error) {
-        logger.warn('TorrentWarmupController', 'A change listener failed', error);
+        logger.warn('SourceWarmupController', 'A change listener failed', error);
       }
     }
   }

@@ -4,7 +4,7 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
  * Playback preparation settings. The torrent engine's settings (limits, trackers, download path,
  * storage budget) belong to the media-load service, under the same keys.
  */
-export const downloadConfigurationDefinition = serviceConfiguration({
+export const playbackConfigurationDefinition = serviceConfiguration({
   name: 'Download',
   description: 'Playback preparation: warmup buffer and video conversion',
   variables: {

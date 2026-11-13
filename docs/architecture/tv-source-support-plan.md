@@ -22,7 +22,7 @@ Supported local subtitle tracks belong to the selected video or its matching sid
 
 Completed probes determine device-specific delivery immediately. An unknown file can start direct playback with `deliveryPending` while a background probe supplies delivery information. Native playback, remuxing, and conversion depend on the client's capabilities. The player receives session-scoped delivery updates.
 
-Implementation: [playback sessions](../../backend/src/services/playback/playback-session.service.ts), [stream routes](../../backend/src/routes/stream.routes.ts), [stream authorization](../../backend/src/services/stream/stream.service.ts), and [local subtitles](../../backend/src/services/subtitles/torrent-subtitles.service.ts).
+Implementation: [playback sessions](../../backend/src/services/playback/playback-session.service.ts), [stream routes](../../backend/src/routes/stream.routes.ts), [stream authorization](../../backend/src/services/playback/stream.service.ts), and [local subtitles](../../backend/src/services/subtitles/source-subtitles.service.ts).
 
 ## Next-episode preparation
 
@@ -32,7 +32,7 @@ Playback claims have higher piece priority than prefetch claims. File selections
 
 The player deduplicates its next-download request by episode identity. Seeking or repeated progress reports do not require a separate copy of the same episode.
 
-Implementation: [player preparation](../../frontend/src/pages/home/components/PlayerView.tsx), [prefetch authorization](../../backend/src/routes/stream.routes.ts), and [download ownership](../../backend/src/services/download/download.service.ts).
+Implementation: [player preparation](../../frontend/src/features/player/ui/PlayerView.tsx), [prefetch authorization](../../backend/src/routes/stream.routes.ts), and [download ownership](../../backend/src/services/download/download.service.ts).
 
 ## Credits and automatic continuation
 
@@ -40,7 +40,7 @@ Media inspection reads named end-credit chapters when available. The player can 
 
 Controls allow the viewer to play next immediately or cancel. Playback state, seeks, navigation, and session teardown govern the countdown; a combined-episode fallback has no reliable per-episode boundary for timed continuation. Named credits do not establish that no story scene follows them.
 
-Implementation: [chapter inspection](../../backend/src/services/playback/audio-playback.service.ts), [player](../../frontend/src/pages/home/components/PlayerView.tsx), and [player controls](../../frontend/src/pages/home/components/PlayerControls.tsx).
+Implementation: [chapter inspection](../../backend/src/services/playback/audio-playback.service.ts), [player](../../frontend/src/features/player/ui/PlayerView.tsx), and [player controls](../../frontend/src/features/player/ui/PlayerControls.tsx).
 
 ## Watchlist acquisition
 
@@ -64,7 +64,7 @@ Movie quality-upgrade notifications target users with local watchlist or viewing
 
 The Home sidebar opens the notification menu. Users can view unread or read items, mark one or all items read, and open the related playable or show details. Notification actions preserve remote/keyboard navigation behavior; they are not limited to dismissing a message.
 
-Implementation: [notification service](../../backend/src/services/notifications/notification.service.ts), [Home actions](../../frontend/src/pages/home/HomePage.tsx), and [notification targets](../../frontend/src/pages/home/notification-copy.ts).
+Implementation: [notification service](../../backend/src/services/notifications/notification.service.ts), [Home actions](../../frontend/src/pages/home/HomePage.tsx), and [notification targets](../../frontend/src/features/notifications/lib/notification-copy.ts).
 
 ## Scope and verification
 
