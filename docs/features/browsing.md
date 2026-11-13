@@ -35,7 +35,7 @@ Miauflix requests artwork sizes suited to cards, episode pictures, logos, and la
 ## Implementation references
 
 - [Home feed](../../frontend/src/pages/home/hooks/useHomeFeed.ts)
-- [Title details](../../frontend/src/pages/home/components/MediaDetails.tsx)
+- [Title details](../../frontend/src/features/details/ui/MediaDetails.tsx)
 - [Search page](../../frontend/src/pages/search/SearchPage.tsx)
 - [Search behavior](../../frontend/src/features/search/search.middleware.ts)
 - [Catalog service](../../services/media-catalog/src/catalog/catalog.service.ts)

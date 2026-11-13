@@ -6,10 +6,10 @@ import { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
 import type { MediaService } from '@services/media/media.service';
-import type { PlaybackTarget } from '@services/playback/playback-target';
-import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
 
+import type { PlaybackTarget } from './playback-target';
+import type { PlaybackTargetService } from './playback-target.service';
 import { StreamService } from './stream.service';
 
 describe('StreamService immediate source readiness', () => {

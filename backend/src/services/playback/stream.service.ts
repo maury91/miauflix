@@ -9,11 +9,12 @@ import type { ContentSourceRepository } from '@repositories/content-source.repos
 import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import { playableFromKey } from '@routes/playable.types';
 import type { MediaService } from '@services/media/media.service';
-import type { PlaybackTarget } from '@services/playback/playback-target';
-import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
-import { filterHevcSources, filterSources } from '@services/stream/stream.util';
 import { traced } from '@utils/tracing.util';
+
+import type { PlaybackTarget } from './playback-target';
+import type { PlaybackTargetService } from './playback-target.service';
+import { filterHevcSources, filterSources } from './source-filters';
 
 export interface ResolvedPlayback {
   target: PlaybackTarget;

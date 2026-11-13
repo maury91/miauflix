@@ -1,7 +1,8 @@
 import { parseAnimeRelease } from '@miauflix/source-metadata-extractor';
 
-import { isVideoFile } from '@services/download/download.utils';
-import type { SourceMetadata } from '@services/sources/source-candidate';
+import type { SourceMetadata } from '@services/sources-client/source-candidate';
+
+import { isVideoFile } from './video-files';
 
 export interface EpisodeFileMatch {
   videoFilePath: string | null;

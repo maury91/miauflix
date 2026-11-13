@@ -1,11 +1,11 @@
 import { useCreateSessionMutation } from '@features/player/api/playback.api';
-import { backendUrl, playbackPreferences } from '@features/player/lib/playback-request';
-import type { CreatePlaybackSessionResponse, PlayableRef } from '@miauflix/backend';
 import {
   describePlaybackFailure,
   isUnavailablePlaybackFailure,
   type PlaybackStatus,
-} from '@pages/home/components/playback-copy';
+} from '@features/player/lib/playback-copy';
+import { backendUrl, playbackPreferences } from '@features/player/lib/playback-request';
+import type { CreatePlaybackSessionResponse, PlayableRef } from '@miauflix/backend';
 import {
   realtimeActions,
   selectPlaybackDelivery,

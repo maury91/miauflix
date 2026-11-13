@@ -3,10 +3,18 @@ import { useLogoutMutation } from '@features/auth/api/auth.api';
 import { logOutSessions } from '@features/auth/logOutSessions';
 import { homeFeedActions, type RowIntent } from '@features/home-feed/homeFeed.slice';
 import { selectEmptyListSlugs } from '@features/home-feed/listPages';
+import { useTraktPrompt } from '@features/integrations/hooks/useTraktPrompt';
+import { TraktModal } from '@features/integrations/ui/TraktModal';
+import { notificationPlayable } from '@features/notifications/lib/notification-copy';
+import { NotificationsMenu } from '@features/notifications/ui/NotificationsMenu';
+import { subtitleLanguageForMedia } from '@features/player/lib/subtitle-language';
+import { PlayerView } from '@features/player/ui/PlayerView';
+import { ProfileMenu } from '@features/profiles/ui/ProfileMenu';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
+import { getMediaTitle } from '@shared/lib/media.utils';
 import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
 import { useAppSelector } from '@store/hooks';
 import {
@@ -33,11 +41,7 @@ import styled from 'styled-components';
 
 import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
 import { HomeSidebar, type SidebarItem } from './components/HomeSidebar';
-import { NotificationsMenu } from './components/NotificationsMenu';
-import { PlayerView } from './components/PlayerView';
 import { PreparedMediaDetails, PreparedMediaHero } from './components/PreparedViews';
-import { ProfileMenu } from './components/ProfileMenu';
-import { TraktModal } from './components/TraktModal';
 import { useFocusPrefetch } from './hooks/useFocusPrefetch';
 import { useHomeArtwork } from './hooks/useHomeArtwork';
 import { useHomeFeed } from './hooks/useHomeFeed';
@@ -52,12 +56,8 @@ import { useRealtimeInterest } from './hooks/useRealtimeInterest';
 import { useRestedRow } from './hooks/useRestedRow';
 import { useSessionChange } from './hooks/useSessionChange';
 import { useSmoothScroller } from './hooks/useSmoothScroller';
-import { useTraktPrompt } from './hooks/useTraktPrompt';
 import { CONTINUE_CATEGORY } from './home-feed';
 import { homeMountedRows, homeRowLoadState, WARM_ROWS } from './home-layout';
-import { getMediaTitle } from './media.utils';
-import { notificationPlayable } from './notification-copy';
-import { subtitleLanguageForMedia } from './subtitle-language';
 
 // Absolute, not fixed: a fixed element is its own stacking context, which would keep the rail
 // below the app logo. Nothing above Home scrolls, so both fill the viewport.

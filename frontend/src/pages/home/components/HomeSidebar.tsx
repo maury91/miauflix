@@ -1,5 +1,11 @@
+import { NOTIFICATIONS_PANEL_ATTRIBUTE } from '@features/notifications/ui/NotificationsMenu';
 import { ProfileAvatar } from '@features/profiles/avatar/ProfileAvatar';
+import {
+  PROFILE_PANEL_ATTRIBUTE,
+  PROFILE_RAIL_ITEM_ATTRIBUTE,
+} from '@features/profiles/ui/ProfileMenu';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import type { HomeAction, NavigationOutcome } from '@shared/lib/homeNavigation';
 import {
   Rail,
   RailIcon as Icon,
@@ -9,10 +15,6 @@ import {
 import type { SessionInfo } from '@store/slices/auth';
 import { memo, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-
-import type { HomeAction, NavigationOutcome } from '../homeNavigation';
-import { NOTIFICATIONS_PANEL_ATTRIBUTE } from './NotificationsMenu';
-import { PROFILE_PANEL_ATTRIBUTE, PROFILE_RAIL_ITEM_ATTRIBUTE } from './ProfileMenu';
 
 import NotificationsIcon from '~icons/mdi/bell-outline';
 import SettingsIcon from '~icons/mdi/cog-outline';

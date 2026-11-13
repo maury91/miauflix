@@ -41,7 +41,7 @@ const setupTest = (directory: string) => {
     get: jest.fn<string | undefined, []>().mockReturnValue('fixture-key'),
     getOrThrow: () => directory,
   };
-  const torrentSubtitles = {
+  const sourceSubtitles = {
     discover: jest.fn().mockResolvedValue([]),
     getTrack: jest.fn().mockResolvedValue('WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nLocal cue\n'),
     getAssTrack: jest.fn().mockResolvedValue('[Script Info]\n[Events]\nFormat: Start, End, Text\n'),
@@ -52,13 +52,13 @@ const setupTest = (directory: string) => {
     { request } as never,
     { verify } as never,
     streamService as never,
-    torrentSubtitles as never
+    sourceSubtitles as never
   );
   const search = (results: unknown[]) => {
     request.mockResolvedValueOnce({ ok: true, body: { data: results } });
     return service.search('streaming-key', 'user', 'en', false, true);
   };
-  return { service, request, verify, source, search, config, torrentSubtitles, streamService };
+  return { service, request, verify, source, search, config, sourceSubtitles, streamService };
 };
 
 describe('subtitle ranking and durable downloads', () => {
@@ -88,9 +88,9 @@ describe('subtitle ranking and durable downloads', () => {
   });
 
   it('discovers local subtitles without provider configuration and shares authorized cached content', async () => {
-    const { service, config, torrentSubtitles, request, verify, source } = setupTest(directory);
+    const { service, config, sourceSubtitles, request, verify, source } = setupTest(directory);
     config.get.mockReturnValue(undefined);
-    torrentSubtitles.discover.mockResolvedValue([
+    sourceSubtitles.discover.mockResolvedValue([
       {
         fileId: '9:torrent:Movie.en.srt',
         provider: 'torrent',
@@ -112,8 +112,8 @@ describe('subtitle ranking and durable downloads', () => {
       service.getTrack(second.candidates[0].id, 'streaming-key'),
     ]);
     expect(bodies[0]).toContain('Local cue');
-    expect(torrentSubtitles.getTrack).toHaveBeenCalledTimes(1);
-    expect(torrentSubtitles.getTrack).toHaveBeenCalledWith(
+    expect(sourceSubtitles.getTrack).toHaveBeenCalledTimes(1);
+    expect(sourceSubtitles.getTrack).toHaveBeenCalledWith(
       source,
       expect.objectContaining({ path: 'Movie.en.srt' }),
       0
@@ -126,8 +126,8 @@ describe('subtitle ranking and durable downloads', () => {
   });
 
   it('retains local tracks when the remote provider fails and isolates embedded windows', async () => {
-    const { service, torrentSubtitles, request } = setupTest(directory);
-    torrentSubtitles.discover.mockResolvedValue([
+    const { service, sourceSubtitles, request } = setupTest(directory);
+    sourceSubtitles.discover.mockResolvedValue([
       {
         fileId: '9:embedded:2',
         provider: 'embedded',
@@ -144,21 +144,21 @@ describe('subtitle ranking and durable downloads', () => {
     await service.getTrack(candidate.id, 'streaming-key', 61);
     await service.getTrack(candidate.id, 'streaming-key', 65);
     await service.getTrack(candidate.id, 'streaming-key', 121);
-    expect(torrentSubtitles.getTrack.mock.calls.map(call => call[2])).toEqual([60, 120]);
+    expect(sourceSubtitles.getTrack.mock.calls.map(call => call[2])).toEqual([60, 120]);
     await expect(service.getTrack(candidate.id, 'streaming-key', -1)).rejects.toThrow(
       'Invalid subtitle position'
     );
   });
 
   it('serves styled tracks as ASS with every attached font, sharing one font read', async () => {
-    const { service, torrentSubtitles, config } = setupTest(directory);
+    const { service, sourceSubtitles, config } = setupTest(directory);
     config.get.mockReturnValue(undefined);
     const fonts = [
       { streamIndex: 4, names: ['sign display'], data: Buffer.from('sign'), format: 'ttf' },
       { streamIndex: 5, names: ['miauflix sans'], data: Buffer.from('sans'), format: 'otf' },
     ];
-    torrentSubtitles.getFonts.mockResolvedValue({ fonts, complete: true });
-    torrentSubtitles.discover.mockResolvedValue([
+    sourceSubtitles.getFonts.mockResolvedValue({ fonts, complete: true });
+    sourceSubtitles.discover.mockResolvedValue([
       {
         fileId: '9:embedded:2',
         provider: 'embedded',
@@ -189,14 +189,14 @@ describe('subtitle ranking and durable downloads', () => {
     expect(await service.getTrack(styled.id, 'streaming-key', 65, 'ass')).toContain(
       '[Script Info]'
     );
-    expect(torrentSubtitles.getAssTrack).toHaveBeenCalledWith(
+    expect(sourceSubtitles.getAssTrack).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({ streamIndex: 2 }),
       60
     );
     // The VTT and ASS forms of one window are cached apart.
     await service.getTrack(styled.id, 'streaming-key', 65);
-    expect(torrentSubtitles.getTrack).toHaveBeenCalledTimes(1);
+    expect(sourceSubtitles.getTrack).toHaveBeenCalledTimes(1);
     await expect(service.getTrack(plain.id, 'streaming-key', 0, 'ass')).rejects.toThrow(
       'Subtitle is unavailable as ASS'
     );
@@ -212,18 +212,18 @@ describe('subtitle ranking and durable downloads', () => {
     expect(file).toEqual({ data: Buffer.from('sans'), format: 'otf' });
     expect(await service.getFontFile(styled.id, 'streaming-key', 9)).toBeNull();
     expect(await service.getFonts(plain.id, 'streaming-key')).toEqual([]);
-    expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(1);
+    expect(sourceSubtitles.getFonts).toHaveBeenCalledTimes(1);
   });
 
   it('reuses a partial font read briefly, then reads the fonts again', async () => {
-    const { service, torrentSubtitles, config } = setupTest(directory);
+    const { service, sourceSubtitles, config } = setupTest(directory);
     config.get.mockReturnValue(undefined);
     const now = jest.spyOn(Date, 'now');
     const partial = [
       { streamIndex: 4, names: ['sign display'], data: Buffer.from('sign'), format: 'ttf' },
     ];
-    torrentSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: false });
-    torrentSubtitles.discover.mockResolvedValue([
+    sourceSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: false });
+    sourceSubtitles.discover.mockResolvedValue([
       {
         fileId: '9:embedded:2',
         provider: 'embedded',
@@ -243,15 +243,15 @@ describe('subtitle ranking and durable downloads', () => {
     ]);
     now.mockReturnValue(20_000);
     expect(await service.getFontFile(id, 'streaming-key', 4)).toMatchObject({ format: 'ttf' });
-    expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(1);
+    expect(sourceSubtitles.getFonts).toHaveBeenCalledTimes(1);
 
     // Past 30 seconds the attachments are read again; a complete read then stays cached.
-    torrentSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: true });
+    sourceSubtitles.getFonts.mockResolvedValue({ fonts: partial, complete: true });
     now.mockReturnValue(31_001);
     await service.getFonts(id, 'streaming-key');
     now.mockReturnValue(10_000_000);
     await service.getFonts(id, 'streaming-key');
-    expect(torrentSubtitles.getFonts).toHaveBeenCalledTimes(2);
+    expect(sourceSubtitles.getFonts).toHaveBeenCalledTimes(2);
     now.mockRestore();
   });
 

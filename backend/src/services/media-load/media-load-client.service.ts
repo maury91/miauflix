@@ -20,10 +20,10 @@ import {
 } from '@miauflix/service-contracts';
 
 import type { ContentSource } from '@entities/content-source.entity';
+import { ErrorWithStatus } from '@errors/error-with-status.error';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import { RemoteService } from '@services/remote/remote-service';
-import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 
 /** Contract codes that keep meaning the backend's `ErrorWithStatus` codes. */
 const ENGINE_ERRORS = new Set<string>([

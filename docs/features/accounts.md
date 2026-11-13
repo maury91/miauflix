@@ -60,6 +60,6 @@ The [UI task list](../../ToDo.md#ui) also proposes using the same form controls 
 - [Sign-in, QR approval, account creation, and logout](../../backend/src/routes/auth.routes.ts)
 - [Profile name and avatar routes](../../backend/src/routes/profile.routes.ts)
 - [Who's watching](../../frontend/src/pages/profiles/WhosWatchingPage.tsx) and [the profile editor](../../frontend/src/pages/profiles/ProfileEditorPage.tsx)
-- [Personal ratings and watchlist controls](../../frontend/src/pages/home/components/MediaDetails.tsx)
+- [Personal ratings and watchlist controls](../../frontend/src/features/details/ui/MediaDetails.tsx)
 - [Trakt playback synchronization](../../services/list-service/src/playback-sync.ts)
 - [Notification behavior](../../backend/src/services/notifications/notification.service.ts)

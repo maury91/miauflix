@@ -1,8 +1,9 @@
-import { profilesFixture } from '@pages/profiles/profiles.fixtures';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 
 import { ProfileMenu } from './ProfileMenu';
+
+import { profilesFixture } from '@/__test-utils__/fixtures/profiles.fixtures';
 
 const meta = {
   title: 'Home/Profile Menu',

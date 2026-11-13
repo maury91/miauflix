@@ -1,6 +1,5 @@
+import { resumeEpisodeProgress } from '@features/progress/lib/episode-rules';
 import type { ProgressEntry, ShowResponse } from '@miauflix/backend';
-
-import { resumeEpisodeProgress } from './episode-rules';
 
 /** Open the season of the episode details resume, or the first regular season. */
 export function firstSeason(show: ShowResponse, progress: ProgressEntry[]): number | undefined {

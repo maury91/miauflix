@@ -5,7 +5,7 @@ import path from 'path';
 import { SourceError } from '@errors/source.errors';
 import type { ConfigService } from '@mytypes/configuration';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
-import type { SourcesClientService } from '@services/sources/sources-client.service';
+import type { SourcesClientService } from '@services/sources-client/sources-client.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 

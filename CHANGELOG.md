@@ -27,6 +27,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 ### Development
 
 - Bun now installs the dependencies everywhere (Docker images, CI, local setup): run `bun install` instead of `npm install`. `bun.lock` is the only lockfile; `package-lock.json` is gone
+- Code is easier to find: backend services and the web app's Home screen are reorganized by area (player, title details, progress, notifications, Trakt), with no change in behaviour
 
 ### Removed
 
