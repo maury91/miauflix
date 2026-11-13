@@ -131,4 +131,4 @@ function extractSourceMetadata(
 
 ## Contributing
 
-Please see the [technical specification](../../docs/source-metadata-extractor-specification.md) for detailed implementation guidelines.
+Follow the repository's [development workflow](../../docs/development/workflow.md). Keep each detector in `src/` covered by tests beside it, and run the package's tests before changing a pattern.

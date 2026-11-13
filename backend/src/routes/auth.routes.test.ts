@@ -2,16 +2,12 @@ jest.mock('@middleware/auth.middleware', () => ({
   // Every request counts as an admin's: these tests are about the routes' own checks
   authGuard: () => async (_context: unknown, next: () => Promise<void>) => next(),
 }));
-jest.mock('@middleware/rate-limit.middleware', () => ({
-  createRateLimitMiddlewareFactory:
-    () => () => async (_context: unknown, next: () => Promise<void>) =>
-      next(),
-}));
-
+import { noRateLimit } from '@__test-utils__/routes';
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError, UserAlreadyExistsError } from '@errors/auth.errors';
+import { handleError } from '@middleware/error-handler.middleware';
 
 import { createAuthRoutes } from './auth.routes';
 
@@ -45,10 +41,11 @@ const setupTest = () => {
     logSuspiciousActivity: jest.fn(),
   };
   const app = new Hono();
-  app.onError((error, c) => c.json({ error: error.message }, 401));
+  app.onError(handleError);
   app.route(
     '/auth',
     createAuthRoutes({
+      rateLimitGuard: noRateLimit,
       authService,
       auditLogService,
       configurationService: { get: () => undefined },
@@ -123,7 +120,7 @@ describe('auth routes token transport', () => {
     const { app } = setupTest();
     const response = await app.request('/auth/refresh/session-1', { method: 'POST' });
     expect(response.status).toBe(401);
-    expect(await response.json()).toEqual({ error: new InvalidTokenError().message });
+    expect(await response.json()).toMatchObject({ code: new InvalidTokenError().code });
   });
 
   it('logs out the session of the refresh token from X-Refresh-Token', async () => {
@@ -157,9 +154,11 @@ describe('auth routes account creation', () => {
       });
       await next();
     });
+    app.onError(handleError);
     app.route(
       '/auth',
       createAuthRoutes({
+        rateLimitGuard: noRateLimit,
         authService,
         auditLogService: {},
         configurationService: { get: () => undefined },

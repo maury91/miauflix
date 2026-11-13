@@ -119,14 +119,13 @@ The current source HTTP client uses this URL for definitions that require FlareS
 #### JWT Authentication (Auto-configured)
 
 ```bash
-# JWT secrets (automatically generated if not provided)
+# JWT secret (automatically generated if not provided)
 JWT_SECRET=64-character-hex-string
-STREAM_KEY_SALT=64-character-hex-string
 ```
 
-- **Description**: Cryptographic keys for JWT token signing and streaming authentication
-- **Default**: Automatically generated 256-bit random keys
-- **Note**: These are auto-configured by the system if not provided
+- **Description**: Cryptographic key for JWT token signing
+- **Default**: Automatically generated 256-bit random key
+- **Note**: It is auto-configured by the system if not provided
 
 Browsers receive session-scoped HttpOnly access and refresh cookies. The Samsung TV app uses token transport instead: access and refresh tokens are returned to the app and sent in headers. See [TV sign-in](samsung-tv.md#how-the-tv-app-signs-in).
 

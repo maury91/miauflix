@@ -5,6 +5,7 @@ import { HTTPException } from 'hono/http-exception';
 
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import { AppError } from '@errors/base.error';
+import { HttpError } from '@errors/http.error';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import { ServiceUnavailableError } from '@errors/service-unavailable.error';
 import type { ApiErrorBody } from '@mytypes/error.types';
@@ -122,6 +123,16 @@ export const describeError = (
       false
     );
   }
+
+  // Routes write these messages for users, so they are sent as is; 5xx ones still log a stack.
+  if (error instanceof HttpError)
+    return make(
+      error.status,
+      error.code,
+      error.message,
+      error.hint ? { hint: error.hint } : {},
+      error.status < 500
+    );
 
   if (error instanceof HTTPException)
     // 5xx messages can come from middleware internals; 4xx ones are written for the client.

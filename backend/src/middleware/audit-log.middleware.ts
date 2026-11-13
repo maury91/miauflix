@@ -7,12 +7,12 @@ import { redactPath } from '@utils/redact.util';
 import { withSpan } from '@utils/tracing.util';
 
 export function createAuditLogMiddleware(auditLogService: AuditLogService): MiddlewareHandler {
-  return async (context, next) => {
+  return async (c, next) => {
     return withSpan(
       'AuditLogMiddleware.process',
       async () => {
         // Skip logging for certain paths (like health checks)
-        const path = new URL(context.req.url).pathname;
+        const path = new URL(c.req.url).pathname;
         if (path === '/api/health') {
           return await next();
         }
@@ -21,53 +21,52 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService): Midd
         void auditLogService.logSecurityEvent({
           eventType: AuditEventType.API_ACCESS,
           severity: AuditEventSeverity.INFO,
-          description: `${context.req.method} ${redactPath(path)}`,
-          context: context,
+          description: `${c.req.method} ${redactPath(path)}`,
+          context: c,
           metadata: { path },
         });
 
         await next();
 
         // The response itself comes from the app's onError handler; this only records the error.
-        if (context.error) {
-          if (context.error instanceof AuthError || context.error instanceof InvalidTokenError) {
+        if (c.error) {
+          if (c.error instanceof AuthError || c.error instanceof InvalidTokenError) {
             await auditLogService.logUnauthorizedAccess({
-              context: context,
-              reason: context.error.message,
+              context: c,
+              reason: c.error.message,
             });
             return;
           }
 
-          if (context.error instanceof RoleError) {
+          if (c.error instanceof RoleError) {
             await auditLogService.logUnauthorizedAccess({
-              context: context,
-              reason: context.error.message,
-              userEmail: context.error.email,
+              context: c,
+              reason: c.error.message,
+              userEmail: c.error.email,
               metadata: {
-                role: context.error.role,
+                role: c.error.role,
               },
             });
             return;
           }
 
           // Log API errors
-          const errorMessage =
-            context.error instanceof Error ? context.error.message : String(context.error);
+          const errorMessage = c.error instanceof Error ? c.error.message : String(c.error);
 
           const errorDetails =
-            context.error instanceof Error
+            c.error instanceof Error
               ? {
-                  message: context.error.message,
-                  stack: context.error.stack,
-                  name: context.error.name,
+                  message: c.error.message,
+                  stack: c.error.stack,
+                  name: c.error.name,
                 }
-              : { message: String(context.error) };
+              : { message: String(c.error) };
 
           await auditLogService.logSecurityEvent({
             eventType: AuditEventType.API_ERROR,
             severity: AuditEventSeverity.ERROR,
             description: `API Error: ${errorMessage}`,
-            context: context,
+            context: c,
             metadata: {
               path,
               error: errorDetails,
@@ -75,7 +74,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService): Midd
           });
         }
       },
-      { path: redactPath(new URL(context.req.url).pathname), method: context.req.method }
+      { path: redactPath(new URL(c.req.url).pathname), method: c.req.method }
     );
   };
 }

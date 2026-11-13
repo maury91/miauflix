@@ -103,5 +103,5 @@ A further option, **locked boot**, would keep the master key encrypted and ask f
 - [Storage budgeting and cleanup](../../services/media-load/src/storage/storage.service.ts)
 - [Download retention and seeding](../../services/media-load/src/engine/download.service.ts)
 - [Storage dashboard](../../frontend/src/pages/settings/StoragePage.tsx)
-- [VPN detection](../../backend/src/services/security/vpn.service.ts)
+- [VPN check](../../packages/vpn-guard/src/vpn-guard.ts)
 - [Docker VPN setup](../../docker-compose.vpn.yml)

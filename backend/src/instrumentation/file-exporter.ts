@@ -1,3 +1,4 @@
+import { logger } from '@logger';
 import type { ExportResult } from '@opentelemetry/core';
 import type { ReadableSpan, SpanExporter } from '@opentelemetry/sdk-trace-base';
 import * as fs from 'fs';
@@ -60,7 +61,7 @@ export class FileSpanExporter implements SpanExporter {
       const indexFile = this.getIndexFile();
       fs.appendFileSync(indexFile, `${JSON.stringify(entry)}\n`, 'utf8');
     } catch (error) {
-      console.error('Error writing trace index:', error);
+      logger.error('Tracing', 'Error writing trace index', error);
     }
   }
 
@@ -109,7 +110,7 @@ export class FileSpanExporter implements SpanExporter {
       try {
         fs.unlinkSync(p);
       } catch (err) {
-        console.error('Error deleting old trace file:', p, err);
+        logger.error('Tracing', `Error deleting old trace file ${p}`, err);
       }
     }
 
@@ -137,7 +138,7 @@ export class FileSpanExporter implements SpanExporter {
       fs.writeFileSync(tmpFile, kept.length ? kept.join('\n') + '\n' : '', 'utf8');
       fs.renameSync(tmpFile, indexFile);
     } catch (err) {
-      console.error('Error rewriting trace index:', err);
+      logger.error('Tracing', 'Error rewriting trace index', err);
     }
   }
 
@@ -156,14 +157,14 @@ export class FileSpanExporter implements SpanExporter {
           encoding: 'utf8',
         });
         stream.on('error', error => {
-          console.error('Error writing traces to file:', error);
+          logger.error('Tracing', 'Error writing traces to file', error);
           stream.end();
           this.logStreams.delete(traceId);
         });
         this.logStreams.set(traceId, { stream, lastAccess: Date.now() });
         return stream;
       } catch (error) {
-        console.error('Error creating log stream:', error);
+        logger.error('Tracing', 'Error creating log stream', error);
         this.logStreams.delete(traceId);
         throw error;
       }
@@ -210,7 +211,7 @@ export class FileSpanExporter implements SpanExporter {
 
       resultCallback({ code: 0 });
     } catch (error) {
-      console.error('Error writing traces to file:', error);
+      logger.error('Tracing', 'Error writing traces to file', error);
       resultCallback({ code: 1, error: error as Error });
     }
   }

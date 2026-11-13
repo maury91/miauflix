@@ -1,14 +1,16 @@
 # HTTP VCR Testing Infrastructure
 
+Which test runner each workspace uses, and which API new tests should use, is listed under [Test runners](workflow.md#test-runners).
+
 The HTTP VCR (Video Cassette Recorder) testing system provides sophisticated HTTP request recording and replay capabilities for deterministic testing of external API integrations. This infrastructure enables reliable testing by capturing real HTTP responses and replaying them during test execution.
 
 ## Overview
 
 The HTTP VCR system consists of several components that work together to intercept, transform, and replay HTTP requests:
 
-- **[`http-vcr.ts`](../backend/src/__test-utils__/http-vcr.ts)**: Core VCR implementation with fetch interception
-- **[`http-vcr.config.ts`](../backend/src/__test-utils__/http-vcr.config.ts)**: Configuration and provider mappings
-- **[`types.ts`](../backend/src/__test-utils__/http-vcr-utils/types.ts)**: TypeScript interfaces and type definitions
+- **[`http-vcr.ts`](../../backend/src/__test-utils__/http-vcr.ts)**: Core VCR implementation with fetch interception
+- **[`http-vcr.config.ts`](../../backend/src/__test-utils__/http-vcr.config.ts)**: Configuration and provider mappings
+- **[`types.ts`](../../backend/src/__test-utils__/http-vcr-utils/types.ts)**: TypeScript interfaces and type definitions
 - **Transformer utilities**: Custom data transformation for specific APIs
 
 ## Architecture
@@ -88,7 +90,7 @@ test-fixtures/providers/
 ├── tmdb/
 └── trakt/
 
-backend/test-fixtures/
+services/sources/tests/fixtures/recorded/
 ├── torrage/
 └── itorrents/
 ```
@@ -110,7 +112,7 @@ interface StoredResponse {
 
 #### Filename Generation
 
-URLs are converted to filesystem-safe paths using [`urlToFilepath`](../backend/src/__test-utils__/http-vcr-utils/url.ts):
+URLs are converted to filesystem-safe paths using [`urlToFilepath`](../../backend/src/__test-utils__/http-vcr-utils/url.ts):
 
 ```typescript
 function urlToFilepath(
@@ -225,7 +227,7 @@ HTTP_VCR_FIXTURES_DIR=/path/to/fixtures
 
 ### Runtime Configuration
 
-Modify [`http-vcr.config.ts`](../backend/src/__test-utils__/http-vcr.config.ts) for:
+Modify [`http-vcr.config.ts`](../../backend/src/__test-utils__/http-vcr.config.ts) for:
 
 ```typescript
 export const HTTP_VCR_CONFIG: HttpVcrConfig = {
@@ -410,8 +412,8 @@ console.log('Transformed data:', transformed);
 
 ## Related Components
 
-- **[Test Data Factory](../backend/src/__test-utils__/test-data.factory.ts)**: Utilities for generating test data
-- **[Database Helpers](../backend/src/__test-utils__/database.helpers.ts)**: Database testing utilities
+- **[Test Data Factory](../../backend/src/__test-utils__/test-data.factory.ts)**: Utilities for generating test data
+- **[Database Helpers](../../backend/src/__test-utils__/database.helpers.ts)**: Database testing utilities
 
 ## Extensions and Customization
 
@@ -436,7 +438,7 @@ transformers: [
 
 ### Custom URL Processing
 
-Extend [`url.ts`](../backend/src/__test-utils__/http-vcr-utils/url.ts) utilities:
+Extend [`url.ts`](../../backend/src/__test-utils__/http-vcr-utils/url.ts) utilities:
 
 ```typescript
 export function customUrlProcessor(url: string): string {

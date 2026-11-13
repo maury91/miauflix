@@ -4,6 +4,7 @@ import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { getConnInfo, serveStatic } from 'hono/bun';
 
+import { HttpError } from '@errors/http.error';
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createCorsMiddleware } from '@middleware/cors.middleware';
@@ -13,7 +14,7 @@ import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 import { expandEquivalentOrigins, isTvAppOrigin } from '@utils/origin.util';
 
 import { createAuthRoutes } from './auth.routes';
-import type { Deps } from './common.types';
+import type { Deps, RouteDeps } from './common.types';
 import { createConfigRoutes } from './config.routes';
 import { createIntegrationRoutes } from './integrations.routes';
 import { createListRoutes } from './list.routes';
@@ -35,16 +36,19 @@ import { createSubtitleRoutes } from './subtitles.routes';
 const MAX_API_BODY_BYTES = 256 * 1024;
 const AVATAR_UPLOAD_PATH = '/api/auth/session/avatar';
 
-function createApiRoutes(deps: Deps) {
+function createApiRoutes(services: Deps) {
   const limitBody = bodyLimit({
     maxSize: MAX_API_BODY_BYTES,
-    onError: c => c.json({ error: 'Request body is too large' }, 413),
+    onError: () => {
+      throw new HttpError(413, 'Request body is too large');
+    },
   });
 
   const rateLimitGuard = createRateLimitMiddlewareFactory(
-    deps.auditLogService,
-    deps.configurationService
+    services.auditLogService,
+    services.configurationService
   );
+  const deps: RouteDeps = { ...services, rateLimitGuard };
 
   return (
     new Hono()

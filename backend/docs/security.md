@@ -1,131 +1,42 @@
-# Security System
+# Security
 
-The backend implements a comprehensive security system with multiple layers of protection:
+An overview of the backend's protections, with links to the code and to the detailed references. For what a viewer or host can rely on, see [Storage and privacy](../../docs/features/storage-privacy.md).
 
-## Security Features
+## Accounts and sessions
 
-### Authentication & Authorization
+Routes require authentication unless they are explicitly public. Access tokens are short-lived JWTs bound to a session; refresh tokens are opaque, stored hashed, and rotated. Passwords are hashed with bcrypt (`Bun.password`). Roles are `user` and `admin`; administrators create accounts. See [Authentication](authentication.md).
 
-- **Whitelist Approach**: All routes are protected by default unless explicitly whitelisted
-- **JWT-based Authentication**: Secure token-based authentication using industry-standard implementation
-- **Refresh Token Rotation**: Implements secure token refresh mechanism
-- **Role-based Access Control**: Supports different user roles (USER, ADMIN)
-- **Password Hashing**: Uses bcrypt for secure password storage
-- **Token Expiration**: Access tokens expire after 15 minutes, refresh tokens after 7 days
-- **Admin-Only User Creation**: Only administrators can create new user accounts
+Logins are limited per address by the rate limiter and per account by [`login-throttle.ts`](../src/services/auth/login-throttle.ts), which keeps the failure count in memory: after too many failures in a window the account refuses logins, even with the right password, until the window ends.
 
-### Security Monitoring & Detection
+## Rate limiting
 
-- **VPN Detection**: Integrated NordVPN detection service for user monitoring
-- **Audit Logging**: Comprehensive audit trail system tracking all security events
-- **Rate Limiting**: Protection against brute force and DoS attacks
-- **Security Event Logging**: Detailed logging of authentication attempts, authorization failures, and suspicious activities
+[`rate-limit.middleware.ts`](../src/middleware/rate-limit.middleware.ts) limits each route per client address (an IPv6 client per /64). The numbers passed to `rateLimitGuard` are requests per second. Memory stays bounded: once the table is full, new addresses share one overflow limiter per route. Limited requests are recorded in the audit log, at most once per address and route while they stay over the limit.
 
-### Data Encryption
+The client address comes from [`getRealClientIp`](../src/utils/proxy.util.ts), which trusts `X-Forwarded-For` only from a proxy that presents `REVERSE_PROXY_SECRET`. See [Reverse proxy](reverse-proxy.md).
 
-- **Database Field Encryption**: All sensitive torrent data is encrypted at rest using AES-256-GCM
-- **Torrent Identifier Protection**: Hash values, magnet links, and torrent files are automatically encrypted
-- **Deterministic Encryption**: Searchable fields use deterministic encryption for uniqueness constraints
-- **Key Management**: Secure encryption key handling via environment variables
-- **Migration Support**: Automated scripts to encrypt existing data during upgrades
+## Browser protections
 
-### Infrastructure Security
+- [Security headers](../src/middleware/security-headers.middleware.ts) on every response, including a Content Security Policy written for the served web app (inline scripts allowed by hash). HSTS is left to the TLS terminator (Caddy in the supplied HTTPS setup).
+- [CORS](../src/middleware/cors.middleware.ts) for the configured browser origins with credentials, and for the Samsung TV app's local origin without credentials.
+- Session cookies are HttpOnly and `SameSite=Strict`; see [Authentication](authentication.md#browser-transport).
 
-- **Input Sanitization**: Comprehensive input validation and sanitization
-- **CORS Configuration**: Properly configured Cross-Origin Resource Sharing
-- **Error Handling**: Secure error handling that doesn't leak sensitive information
-- **Session Management**: Secure token-based session management
+## Data at rest
 
-## Authentication Flow
+Text columns that would reveal what is stored or watched (file paths, probe output, searches, notification titles) are encrypted with AES-GCM and use column names that don't describe them ([`encrypted-column.util.ts`](../src/utils/encrypted-column.util.ts), [`EncryptionService`](../src/services/encryption/encryption.service.ts)). Columns used for lookups and unique constraints are encrypted deterministically. Downloaded media is encrypted by the media-load service; see [Encrypted chunk storage](../../services/media-load/docs/chunk-stores.md).
 
-1. **User Creation**: Only administrators can create new user accounts
-2. **Login**: Users receive access and refresh tokens upon successful login
-3. **Token Refresh**: Users can refresh their access token using their refresh token
-4. **Logout**: Users can invalidate their refresh token to log out
+## VPN check
 
-## Environment Variables
+Every service that reaches indexers, trackers or peers (the sources and media-load services) runs its own check with [`@miauflix/vpn-guard`](../../packages/vpn-guard/src/vpn-guard.ts). It asks NordVPN's IP insights whether the service's outbound connection is protected, or matches it against `<PREFIX>_KNOWN_VPN_IPS` for other VPNs. A protected result is trusted for five minutes; a failure counts as unprotected and is retried after 30 seconds. While unprotected, the sources service blocks searches and the media-load service fences its engine (no peers, announces, or new torrents).
 
-The following environment variables are required:
+`DISABLE_VPN_CHECK` in the backend's [VPN configuration](../src/services/security/vpn.configuration.ts) is the deployment-wide default; each service's `<PREFIX>_DISABLE_VPN_CHECK` overrides it. The backend itself does not check, and nothing inspects users' connections. For running the services behind a VPN, see [Using a VPN](../../docs/setup/docker-setup.md#using-a-vpn).
 
-```env
-JWT_SECRET=your-secure-secret-key
-```
+## Audit log and cleanup
 
-## Usage Example
+Security events and API access are recorded in the audit log; see [Security logging](security-logging.md). A daily [cleanup job](../src/services/security/security-cleanup.ts) deletes audit logs past their retention, expired QR login requests, refresh tokens and streaming keys.
 
-```typescript
-// Protected route example
-app.get('/protected', ({ user }) => {
-  return { message: `Hello ${user.email}!` };
-});
+## Deployment checklist
 
-// Admin-only route example
-app.get('/admin', ({ user }) => {
-  if (user.role !== UserRole.ADMIN) {
-    throw new Error('Forbidden');
-  }
-  return { message: 'Admin access granted' };
-});
-```
-
-## Security Best Practices
-
-1. Always use HTTPS in production
-2. Store sensitive environment variables securely
-3. Implement rate limiting for authentication endpoints
-4. Regularly rotate JWT secrets and encryption keys
-5. Monitor for suspicious activity
-6. Implement proper error handling
-7. Use secure password policies
-8. Verify database encryption is working (only ciphertext should be visible in raw DB)
-
-## JWT Implementation
-
-The authentication system uses industry-standard JWT handling, which provides:
-
-- **Standards Compliance**: Full implementation of JWT standards
-- **Advanced Security**: Support for multiple algorithms and key types
-- **Fine-grained Control**: Detailed control over token claims and headers
-- **Type Safety**: Excellent TypeScript support
-- **Performance**: Optimized for performance with minimal dependencies
-
-## VPN Detection
-
-The system includes VPN detection capabilities:
-
-- **NordVPN Detection**: Monitors user connections for NordVPN usage
-- **IP Geolocation**: Uses IP geolocation services to detect VPN usage
-- **Automated Monitoring**: Continuous monitoring of user connections
-- **Security Logging**: All VPN detection events are logged for security analysis
-
-## Audit Logging
-
-Comprehensive audit logging system tracks:
-
-- **Authentication Events**: Login attempts, token refresh, logout events
-- **Authorization Failures**: Failed access attempts to protected resources
-- **User Management**: User creation, role changes, account modifications
-- **Security Events**: VPN detection, suspicious activity, rate limit violations
-- **System Events**: Configuration changes, service starts/stops
-- **API Access**: All API endpoint access with user context
-
-### Audit Log Structure
-
-Each audit log entry includes:
-
-- Timestamp
-- User ID (if authenticated)
-- Event type
-- Event details
-- IP address
-- User agent
-- Request metadata
-
-## Rate Limiting
-
-Protection against abuse:
-
-- **Authentication Endpoints**: Special rate limiting for login/register endpoints
-- **API Endpoints**: General rate limiting for all API access
-- **User-specific Limits**: Different limits based on user roles
-- **IP-based Limits**: Protection against distributed attacks
+1. Serve over HTTPS and set `COOKIE_SECURE=true` (the supplied HTTPS setup does both).
+2. Keep `.env` and the data directory private; they hold the JWT and source security keys.
+3. Set `REVERSE_PROXY_SECRET` when behind a proxy, and never expose it to clients.
+4. Keep the VPN check enabled for the sources and media-load services unless they already route through a VPN you trust.

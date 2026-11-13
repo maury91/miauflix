@@ -122,13 +122,13 @@ const rateLimiters = new RateLimiterRegistry();
 
 export const createRateLimitMiddlewareFactory =
   (auditLogService: AuditLogService, configService: ConfigService) => (limit: number) => {
-    return createMiddleware(async (context, next) => {
-      const request = context.req.raw;
+    return createMiddleware(async (c, next) => {
+      const request = c.req.raw;
       const url = new URL(request.url);
 
       // Check if rate limiting should be bypassed
       const rateLimitTestMode = process.env.RATE_LIMIT_TEST_MODE === 'true';
-      const forceRateLimit = context.req.header('X-Force-RateLimit') === 'true';
+      const forceRateLimit = c.req.header('X-Force-RateLimit') === 'true';
 
       // In test mode, bypass rate limiting unless explicitly forced
       if (rateLimitTestMode && !forceRateLimit) {
@@ -137,9 +137,9 @@ export const createRateLimitMiddlewareFactory =
       }
 
       const clientIp =
-        getRealClientIp(context, configService.get('REVERSE_PROXY_SECRET') ?? '') || 'unknown';
+        getRealClientIp(c, configService.get('REVERSE_PROXY_SECRET') ?? '') || 'unknown';
       const path = url.pathname;
-      const routePath = context.req.routePath;
+      const routePath = c.req.routePath;
       const entry = rateLimiters.get(rateLimitSubject(clientIp), routePath, limit);
 
       // Check if the request should be rejected
@@ -149,7 +149,7 @@ export const createRateLimitMiddlewareFactory =
         if (now - entry.lastRejectionLog >= REJECTION_LOG_EVERY_MS) {
           entry.lastRejectionLog = now;
           void auditLogService.logRateLimitExceeded({
-            context,
+            context: c,
             limit,
             metadata: {
               ip: clientIp,
@@ -161,7 +161,7 @@ export const createRateLimitMiddlewareFactory =
         }
 
         // Return a 429 Too Many Requests response
-        return context.text('Too Many Requests', 429);
+        return c.text('Too Many Requests', 429);
       }
 
       await next();

@@ -5,7 +5,7 @@ rasterization on two tile workers) over DevTools, with the build of `cad67322`.
 
 This plan covers the JavaScript side: store traffic, re-renders and per-move effects. The CSS side
 (styled-components inserting rules, paint properties that re-resolve) is covered by
-[css-architecture.md](css-architecture.md) and its migration order. Each phase below says where
+[css-architecture.md](../development/css-architecture.md) and its migration order. Each phase below says where
 the two meet.
 
 ## Where Home stands

@@ -147,6 +147,19 @@ export default [
     },
   },
   {
+    // Backend logs go through `@logger`, which redacts source identifiers and adds trace ids.
+    files: ['backend/src/**/*.ts'],
+    ignores: [
+      'backend/src/logger.ts',
+      // The interactive setup talks to the person at the terminal.
+      'backend/src/services/configuration/configuration.wizard.ts',
+      'backend/src/**/*.test.ts',
+      'backend/src/__test-utils__/**',
+      'backend/src/__mocks__/**',
+    ],
+    rules: { 'no-console': 'error' },
+  },
+  {
     // Routes are the HTTP edge: nothing below them may depend on them. Shared shapes live in
     // backend/src/types (`@mytypes/...`).
     files: [

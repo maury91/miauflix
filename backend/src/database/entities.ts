@@ -20,7 +20,6 @@ import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
 import { StorageFile } from '@entities/storage-file.entity';
 import { StorageFileClaim } from '@entities/storage-file-claim.entity';
-import { StreamingKey } from '@entities/streaming-key.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
 
@@ -46,7 +45,6 @@ export const ENTITIES = [
   Storage,
   StorageFile,
   StorageFileClaim,
-  StreamingKey,
   Progress,
   PlaybackGrant,
   MediaProbe,

@@ -1,7 +1,7 @@
 /**
  * Test utilities for backend E2E tests
  */
-import { Client, hcWithType } from '@miauflix/backend';
+import { ApiErrorBody, Client, hcWithType } from '@miauflix/backend';
 import fs from 'fs';
 import path from 'path';
 
@@ -15,7 +15,7 @@ export interface TestResponse<T = any> {
 type ExtractResponseType<T> = T extends (
   ...args: any[]
 ) => Promise<{ json: () => Promise<infer R> }>
-  ? R
+  ? ApiErrorBody | R
   : T;
 
 export type AuthTokens = ExtractResponseType<Client['api']['auth']['login']['$post']>;

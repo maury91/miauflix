@@ -3,11 +3,10 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { preloadIntentRequestSchema } from '@mytypes/playable.types';
 import type { PreloadIntentResponse } from '@mytypes/preload.types';
 
-import type { Deps } from './common.types';
+import type { RouteDeps } from './common.types';
 
 const clientIdSchema = z.object({
   clientId: z.string().regex(/^[A-Za-z0-9_-]{1,128}$/, 'Invalid client id'),
@@ -18,12 +17,9 @@ const cleanupQuerySchema = z.object({
 });
 
 export const createPreloadRoutes = ({
-  auditLogService,
-  configurationService,
+  rateLimitGuard,
   preloadIntentService,
-}: Pick<Deps, 'auditLogService' | 'configurationService' | 'preloadIntentService'>) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
-
+}: Pick<RouteDeps, 'preloadIntentService' | 'rateLimitGuard'>) => {
   return new Hono()
     .put(
       '/intents/:clientId',

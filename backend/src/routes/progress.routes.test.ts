@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
-import { AuthError } from '@errors/auth.errors';
+import { handleError } from '@middleware/error-handler.middleware';
 import type { ProgressService } from '@services/progress/progress.service';
 
 import { createProgressRoutes } from './progress.routes';
@@ -27,9 +27,7 @@ const setupTest = (authenticated = true) => {
       });
     await next();
   });
-  app.onError((error, c) =>
-    c.json({ error: error.message }, error instanceof AuthError ? 401 : 500)
-  );
+  app.onError(handleError);
   app.route(
     '/progress',
     createProgressRoutes({ progressService: service as unknown as ProgressService })

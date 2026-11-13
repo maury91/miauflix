@@ -14,7 +14,7 @@ Selection prefers suitable completed local downloads, then considers quality, de
 
 `POST /api/playback/sessions` accepts a movie or episode reference and client playback preferences. It authenticates the user, selects a source, and returns preparation status, delivery information, an expiring streaming key, and a stream URL. Modern grants are bound to a user, playable item, and selected source; the stream route must not silently rerank them to another source.
 
-The direct `GET /api/stream/:token` path validates the grant and serves the selected video with HTTP byte-range support. It also retains the compatibility flow for movie keys created by `POST /api/movies/:mediaId/:quality`. The frontend/session preparation can request another source when a source is unusable; this is different from changing the target of an already-issued grant.
+The direct `GET /api/stream/:token` path validates the grant and serves the selected video with HTTP byte-range support. The frontend's session preparation can request another source when a source is unusable; this is different from changing the target of an already-issued grant.
 
 ## Preparation and download buffering
 
@@ -49,7 +49,7 @@ OpenSubtitles is optional and requires its configured API key. Search currently 
 
 ## Storage and playback progress
 
-Torrent pieces are stored encrypted. Downloads can keep seeding for a configured period, then detach while retaining local files. Storage budgets and file claims control reclamation; active playback is protected. Administrators can inspect storage and remove inactive downloads.
+The [media-load service](../../services/media-load/README.md) downloads and stores torrent pieces, encrypted (see [encrypted chunk storage](../../services/media-load/docs/chunk-stores.md)). Downloads can keep seeding for a configured period, then detach while retaining local files. Storage budgets and file claims control reclamation; active playback is protected. Administrators can inspect storage and remove inactive downloads.
 
 Per-account progress supports resume and Continue watching. Episode playback can prefetch and advance to the next episode, using named credits chapters (including anime ED/Ending/Outro in the second half) or a final-90-second countdown. Delivery exposes `creditsStartSeconds` and, when a later content chapter exists, `creditsEndSeconds`. Preview, eyecatch, logo, sponsor, and end-card chapters do not count as that content. With a post-credits target the player offers a five-second Skip credits countdown and a Watch credits cancellation; next-episode continuation starts no earlier than that target.
 
@@ -79,15 +79,15 @@ See the [playback request schema](../src/routes/playback.types.ts) and [route re
 
 ## Configuration and implementation references
 
-Use the administrator configuration editor for download, storage, subtitle, and source-service settings. Download settings include `CONTENT_DOWNLOAD_LIMIT`, `CONTENT_UPLOAD_LIMIT`, `CONTENT_SEED_DURATION_SECONDS`, `DISABLE_DISCOVERY`, `PRELOAD_WARM_TARGET`, and `CONVERT_H265_TO_H264`. Their configuration schemas define the units, transforms, and defaults. Source-service provider settings are published by the remote service and managed through the backend.
+Use the administrator configuration editor for download, storage, subtitle, and source-service settings. The media-load service publishes the download and storage settings (`CONTENT_DOWNLOAD_LIMIT`, `CONTENT_UPLOAD_LIMIT`, `CONTENT_SEED_DURATION_SECONDS`, `DISABLE_DISCOVERY`, `STORAGE_THRESHOLD` and others) in its [configuration schema](../../services/media-load/src/config/schema.ts); the backend keeps playback settings such as `PRELOAD_WARM_TARGET` and `CONVERT_H265_TO_H264`. Each schema defines units, transforms, and defaults. Remote services' settings are managed through the backend.
 
 - [Session creation](../src/services/playback/playback-session.service.ts)
 - [Preload routes](../src/routes/preload.routes.ts)
 - [Stream routes](../src/routes/stream.routes.ts)
 - [Audio inspection and FFmpeg delivery](../src/services/playback/audio-playback.service.ts)
-- [Download configuration](../src/services/playback/playback.configuration.ts)
-- [Download layer](../src/services/download/download.service.ts)
-- [Storage ownership](../src/services/storage/storage.service.ts)
+- [Playback configuration](../src/services/playback/playback.configuration.ts)
+- [Media-load client](../src/services/media-load/media-load-client.service.ts) and [storage hand-off](../src/services/media-load/storage-handoff.ts)
+- [Download engine](../../services/media-load/src/engine/download.service.ts) and [storage ownership](../../services/media-load/src/storage/storage.service.ts), in the media-load service
 - [Local subtitle extraction](../src/services/subtitles/source-subtitles.service.ts)
 - [Subtitle provider and delivery](../src/services/subtitles/subtitles.service.ts)
 - [Sources service](../../services/sources/README.md)

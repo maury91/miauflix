@@ -20,24 +20,15 @@ import {
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { UserDto } from '@mytypes/user.types';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
-import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
-import type { StreamingToken } from '@services/auth/auth.types';
 import { randomAvatar } from '@services/profile/random-avatar.util';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { readRefreshTokenPairs } from '@utils/auth-transport.util';
-import { InMemoryCache } from '@utils/in-memory-cache';
 import { generateSecurePassword } from '@utils/password.util';
 import { getRealClientIp } from '@utils/proxy.util';
 import { traced } from '@utils/tracing.util';
 
-import {
-  generateDeterministicSalt,
-  generateStreamingKey,
-  hashKeyWithSalt,
-  parseStreamingKey,
-  validateTokenPayload,
-} from './auth.util';
+import { validateTokenPayload } from './auth.util';
 import { toUserDto } from './user-dto.util';
 
 /** How many of the sessions a device holds `/auth/sessions` validates: one per profile on a shared TV. */
@@ -124,13 +115,9 @@ export interface UserSession {
 export class AuthService {
   private readonly userRepository: UserRepository;
   private readonly refreshTokenRepository: RefreshTokenRepository;
-  private readonly streamingKeyRepository: StreamingKeyRepository;
   private secretKey: Uint8Array;
   private readonly issuer = 'miauflix-api';
   private readonly audience = 'miauflix-client';
-  private streamingKeyTTL: number;
-  private streamingKeySalt: string;
-  private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
   private readonly sessionChecks = new Map<string, SessionCheck>();
   /**
    * Lookups that have not settled yet, by `userId:session`, kept apart from the cache (whose
@@ -164,7 +151,6 @@ export class AuthService {
     this.config = config;
     this.userRepository = db.getUserRepository();
     this.refreshTokenRepository = db.getRefreshTokenRepository();
-    this.streamingKeyRepository = db.getStreamingKeyRepository();
     config.registerService('JWT', this);
 
     // Convert the secret to a Uint8Array for jose
@@ -172,8 +158,6 @@ export class AuthService {
 
     // Configuration
     this.allowCreateAdminOnFirstRun = config.getOrThrow('ALLOW_CREATE_ADMIN_ON_FIRST_RUN');
-    this.streamingKeyTTL = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
-    this.streamingKeySalt = config.getOrThrow('STREAM_KEY_SALT');
     this.refreshTokenTTL = config.getOrThrow('REFRESH_TOKEN_EXPIRATION');
     this.accessTokenTTL = config.getOrThrow('ACCESS_TOKEN_EXPIRATION');
     this.refreshTokenMaxRefreshDays = config.getOrThrow('REFRESH_TOKEN_MAX_REFRESH_DAYS');
@@ -187,8 +171,6 @@ export class AuthService {
   async reload(): Promise<void> {
     this.secretKey = new TextEncoder().encode(this.config.getOrThrow('JWT_SECRET'));
     this.allowCreateAdminOnFirstRun = this.config.getOrThrow('ALLOW_CREATE_ADMIN_ON_FIRST_RUN');
-    this.streamingKeyTTL = this.config.getOrThrow('STREAM_TOKEN_EXPIRATION');
-    this.streamingKeySalt = this.config.getOrThrow('STREAM_KEY_SALT');
     this.refreshTokenTTL = this.config.getOrThrow('REFRESH_TOKEN_EXPIRATION');
     this.accessTokenTTL = this.config.getOrThrow('ACCESS_TOKEN_EXPIRATION');
     this.refreshTokenMaxRefreshDays = this.config.getOrThrow('REFRESH_TOKEN_MAX_REFRESH_DAYS');
@@ -223,10 +205,13 @@ export class AuthService {
     // Create the admin user
     await this.createUser(adminEmail, adminPassword, UserRole.ADMIN);
 
+    // Plain console output (no logger colours): backend-e2e/scripts/extract-credentials.sh parses this line.
+    /* eslint-disable no-console */
     console.log(
       `Created initial admin user with email: ${adminEmail} and password: ${adminPassword}`
     );
     console.log('Please change these credentials after first login.');
+    /* eslint-enable no-console */
   }
 
   /**
@@ -832,86 +817,5 @@ export class AuthService {
         value: authResult.refreshToken,
       },
     ];
-  }
-
-  /**
-   * Generate URL-safe streaming key
-   *
-   * Creates streaming keys that embed user ID for direct database queries
-   * using deterministic salt based on user ID + predefined salt.
-   */
-  @traced('AuthService')
-  async generateStreamingKey(movieId: number, userId: string): Promise<string> {
-    const { streamingKey, storedHash } = await generateStreamingKey(userId, this.streamingKeySalt);
-
-    // Store in database
-    await this.streamingKeyRepository.create({
-      keyHash: storedHash,
-      movieId,
-      userId,
-      expiresAt: new Date(Date.now() + this.streamingKeyTTL),
-    });
-
-    return streamingKey;
-  }
-
-  /**
-   * Find streaming key in database
-   */
-  @traced('AuthService')
-  private async findStreamingKey(
-    key: string,
-    userId: string
-  ): Promise<(StreamingToken & { expiresAt: Date }) | null> {
-    try {
-      const deterministicSalt = generateDeterministicSalt(userId, this.streamingKeySalt);
-      const hashToFind = await hashKeyWithSalt(key, deterministicSalt);
-
-      const streamingKey = await this.streamingKeyRepository.findByKeyHash(hashToFind);
-
-      if (streamingKey && streamingKey.expiresAt > new Date()) {
-        return {
-          movieId: streamingKey.movieId,
-          userId: streamingKey.userId,
-          expiresAt: streamingKey.expiresAt,
-        };
-      }
-    } catch {
-      return null;
-    }
-
-    return null;
-  }
-
-  /**
-   * Verify streaming key with cache-first approach
-   */
-  @traced('AuthService')
-  async verifyStreamingKey(key: string): Promise<StreamingToken> {
-    // Fast path: Check cache first
-    const cached = this.streamingKeyCache.get(key);
-    if (cached) {
-      return cached;
-    }
-
-    // Extract user ID and random key from the streaming key
-    const parsed = parseStreamingKey(key);
-    if (!parsed) {
-      throw new InvalidTokenError();
-    }
-
-    const { userId, randomKey } = parsed;
-
-    // Fallback: Direct database verification with deterministic salt
-    const found = await this.findStreamingKey(randomKey, userId);
-    if (found) {
-      const { expiresAt, ...streamingKey } = found;
-      // Cache the successful result until the key itself expires, never past it
-      this.streamingKeyCache.set(key, streamingKey, expiresAt.getTime());
-
-      return streamingKey;
-    }
-
-    throw new InvalidTokenError();
   }
 }

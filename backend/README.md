@@ -26,12 +26,12 @@ Follow [Docker setup](../docs/setup/docker-setup.md) for initial configuration, 
 - **Authentication:** email/password and QR login, administrator/user roles, JWT access tokens, and refresh-token rotation. Browser clients receive both access and refresh tokens in HttpOnly cookies. The packaged TV app requests token transport and sends tokens in headers; API access also accepts a Bearer token when no access cookie is present.
 - **Personal state:** watchlists, Like/Dislike/Love ratings, playback progress, availability requests, and in-app notifications.
 - **Playback:** source selection, source-bound playback grants, byte-range streaming, preloading, codec-aware delivery, subtitles, and next-episode preparation.
-- **Downloads and storage:** WebTorrent, encrypted torrent pieces, seeding retention, storage budgets, and cleanup that protects active streams.
+- **Downloads and storage:** asks the [media-load service](../services/media-load/README.md), which runs WebTorrent and owns encrypted pieces, seeding retention, storage budgets, and cleanup that protects active streams. The backend hands over storage recorded by older versions once.
 - **External services:** versioned clients for the catalog, lists, and sources. The catalog currently uses TMDB; the list service owns Trakt association and synchronization; the source service owns indexer website access.
 - **Background jobs:** queue jobs on the shared Bunqueue broker, rather than a fixed set of in-process polling tasks.
 - **Operations:** configuration, service status, VPN checks, rate limiting, audit logging, and optional tracing.
 
-The backend uses Node.js, Hono, SQLite/TypeORM, JOSE, and WebTorrent. The catalog, list, and source services run on Bun. See [system architecture](../docs/architecture/system-overview.md) for ownership and deployment boundaries.
+The backend runs on Bun with Hono, SQLite/TypeORM, and JOSE, like the catalog, list, source, and media-load services. Torrent downloads and encrypted storage live in the [media-load service](../services/media-load/README.md). See [system architecture](../docs/architecture/system-overview.md) for ownership and deployment boundaries.
 
 ## Documentation
 
@@ -41,7 +41,11 @@ The backend uses Node.js, Hono, SQLite/TypeORM, JOSE, and WebTorrent. The catalo
 | [Media services](docs/media-services.md)                | Catalog, lists, search, and media API routes  |
 | [Streaming services](docs/streaming-services.md)        | Playback, delivery, preloading, and subtitles |
 | [Authentication](docs/authentication.md)                | Authentication reference                      |
-| [Security](docs/security.md)                            | VPN detection and audit logging               |
+| [Security](docs/security.md)                            | Protections overview, VPN check, data at rest |
+| [Security logging](docs/security-logging.md)            | The audit log                                 |
+| [Reverse proxy](docs/reverse-proxy.md)                  | Client addresses behind a proxy               |
+| [Errors](docs/errors.md)                                | Error classes and responses                   |
+| [Background scheduling](docs/background-scheduling.md)  | Recurring jobs                                |
 | [Configuration](docs/configuration.md)                  | Configuration reference                       |
 | [Development workflow](../docs/development/workflow.md) | Workspace commands and development patterns   |
 | [Testing guide](../docs/development/testing-guide.md)   | Test environments and fixtures                |

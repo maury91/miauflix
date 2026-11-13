@@ -3,15 +3,13 @@ import { Hono } from 'hono';
 import z from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { type ListLoadPriority, LOCAL_WATCHLIST_SLUG } from '@services/media/list.service';
 
-import type { Deps } from './common.types';
+import type { RouteDeps } from './common.types';
 import { serializeMedia } from './list.serializers';
 import type { ListDto, ListResponse, ListsPageResponse } from './list.types';
 
-export const createListRoutes = ({ auditLogService, configurationService, listService }: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
+export const createListRoutes = ({ rateLimitGuard, listService }: RouteDeps) => {
   return new Hono()
     .get(
       '/lists',

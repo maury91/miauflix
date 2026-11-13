@@ -38,6 +38,5 @@ export const createCorsMiddleware = (
     credentials: false,
   });
 
-  return (context, next) =>
-    isTvApp(context.req.header('origin')) ? tvAppCors(context, next) : browserCors(context, next);
+  return (c, next) => (isTvApp(c.req.header('origin')) ? tvAppCors(c, next) : browserCors(c, next));
 };

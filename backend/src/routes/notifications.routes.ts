@@ -2,12 +2,12 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
+import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { type PlayableRef, playableRefSchema } from '@mytypes/playable.types';
 import { NOTIFICATIONS_PAGE_LIMIT } from '@services/notifications/notification.service';
 
-import type { Deps, ErrorResponse } from './common.types';
+import type { RouteDeps } from './common.types';
 
 const notificationIdSchema = z.object({ id: z.coerce.number().int().positive() });
 const notificationListSchema = z.object({
@@ -18,16 +18,10 @@ const notificationListSchema = z.object({
 const availabilityRequestSchema = z.object({ playable: playableRefSchema }).strict();
 
 export const createNotificationRoutes = ({
-  auditLogService,
-  configurationService,
+  rateLimitGuard,
   mediaService,
   notificationService,
-}: Pick<
-  Deps,
-  'auditLogService' | 'configurationService' | 'mediaService' | 'notificationService'
->) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
-
+}: Pick<RouteDeps, 'mediaService' | 'notificationService' | 'rateLimitGuard'>) => {
   /** Only titles the catalog knows can be waited on. */
   const exists = async (playable: PlayableRef): Promise<boolean> => {
     if (playable.kind === 'movie')
@@ -64,14 +58,10 @@ export const createNotificationRoutes = ({
         async c => {
           const { user } = c.get('sessionInfo');
           const { playable } = c.req.valid('json');
-          if (!(await exists(playable)))
-            return c.json({ error: 'Title not found' } satisfies ErrorResponse, 404);
+          if (!(await exists(playable))) throw new HttpError(404, 'Title not found');
           const result = await notificationService.requestAvailability(user.id, playable);
           if (result === 'limited')
-            return c.json(
-              { error: 'Too many pending notification requests' } satisfies ErrorResponse,
-              429
-            );
+            throw new HttpError(429, 'Too many pending notification requests');
           return c.json({ requested: true }, 201);
         }
       )

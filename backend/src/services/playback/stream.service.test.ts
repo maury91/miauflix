@@ -2,71 +2,12 @@ jest.mock('@logger');
 
 import { createMockContentSource, createMockMovie } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed } from '@__test-utils__/utils';
-import { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
 import type { MediaService } from '@services/media/media.service';
-import type { SourceService } from '@services/source/source.service';
 
 import type { PlaybackTarget } from './playback-target';
-import type { PlaybackTargetService } from './playback-target.service';
 import { StreamService } from './stream.service';
-
-describe('StreamService immediate source readiness', () => {
-  const setupTest = () => {
-    const movie = createMockMovie({ id: 7, mediaId: 42, releaseDate: '2020-05-01' });
-    const pending = createMockContentSource({ file: undefined });
-    const ready = createMockContentSource({
-      ...pending,
-      file: Buffer.from('torrent'),
-      quality: Quality.FHD,
-    });
-    const repository = { findById: jest.fn() };
-    const database = {
-      getContentSourceRepository: jest.fn().mockReturnValue(repository),
-      getEpisodeSourceRepository: jest.fn().mockReturnValue({ findForPlayback: jest.fn() }),
-    } as unknown as Database;
-    const sourceService = {
-      getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([pending]),
-      getSourcesForMovie: jest.fn().mockResolvedValue([ready]),
-      processSourceMetadata: jest.fn().mockResolvedValue(undefined),
-    } as unknown as jest.Mocked<SourceService>;
-    const mediaService = {
-      getMovieById: jest.fn().mockResolvedValue(movie),
-    } as unknown as jest.Mocked<MediaService>;
-    const service = new StreamService(
-      database,
-      sourceService,
-      mediaService,
-      {} as PlaybackTargetService
-    );
-
-    return { movie, pending, ready, service, sourceService };
-  };
-
-  beforeAll(() => {
-    configureFakerSeed();
-  });
-
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
-  it('resolves source metadata inline instead of waiting for a queue worker', async () => {
-    const { movie, pending, ready, service, sourceService } = setupTest();
-
-    await expect(service.getBestSourceForStreaming(movie.id, 'auto')).resolves.toEqual(ready);
-    expect(sourceService.getSourcesForMovieWithOnDemandSearch).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 7, mediaId: 42, releaseDate: '2020-05-01' }),
-      3_000
-    );
-    expect(sourceService.processSourceMetadata).toHaveBeenCalledWith(pending.id);
-  });
-});
 
 describe('StreamService.resolvePlaybackTarget', () => {
   const setupTest = () => {
@@ -99,7 +40,7 @@ describe('StreamService.resolvePlaybackTarget', () => {
         }) => ({ source: match.source, filePath: match.videoFilePath, matchKind: match.matchKind })
       ),
     };
-    const service = new StreamService(database, {} as SourceService, mediaService, targets);
+    const service = new StreamService(database, mediaService, targets);
     const grant = {
       sourceId: contentSource.id,
       playableKind: 'movie' as const,

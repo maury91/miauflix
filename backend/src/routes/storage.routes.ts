@@ -3,10 +3,10 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
+import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 
-import type { Deps } from './common.types';
+import type { RouteDeps } from './common.types';
 
 const sourceIdSchema = z.object({
   sourceId: z
@@ -17,12 +17,9 @@ const sourceIdSchema = z.object({
 });
 
 export const createStorageRoutes = (
-  deps: Pick<Deps, 'auditLogService' | 'configurationService' | 'storageInventoryService'>
+  deps: Pick<RouteDeps, 'rateLimitGuard' | 'storageInventoryService'>
 ) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(
-    deps.auditLogService,
-    deps.configurationService
-  );
+  const { rateLimitGuard } = deps;
 
   return new Hono()
     .get('/', rateLimitGuard(10), authGuard(UserRole.ADMIN), async c =>
@@ -39,11 +36,11 @@ export const createStorageRoutes = (
           case 'removed':
             return c.json({ success: true });
           case 'not_found':
-            return c.json({ error: 'Storage not found' }, 404);
+            throw new HttpError(404, 'Storage not found');
           case 'active_playback':
-            return c.json({ error: 'This download is currently being watched' }, 409);
+            throw new HttpError(409, 'This download is currently being watched');
           case 'cleanup_failed':
-            return c.json({ error: 'Could not remove the downloaded files' }, 500);
+            throw new HttpError(500, 'Could not remove the downloaded files');
         }
       }
     );

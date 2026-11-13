@@ -4,10 +4,10 @@ import { MAX_BATCH_ITEMS } from '@miauflix/service-contracts';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
+import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 
-import type { Deps } from './common.types';
+import type { RouteDeps } from './common.types';
 
 const mediaTypeSchema = z.enum(['movie', 'tv']);
 const backdropFocusBackgroundRequestSchema = z.object({
@@ -27,20 +27,18 @@ const paramsSchema = z.object({
  * to Hono's error handling.
  */
 export const createMediaRoutes = ({
-  auditLogService,
+  rateLimitGuard,
   catalogClient,
-  configurationService,
-}: Pick<Deps, 'auditLogService' | 'catalogClient' | 'configurationService'>) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
+}: Pick<RouteDeps, 'catalogClient' | 'rateLimitGuard'>) => {
   return new Hono()
     .post(
       '/backdrop-focus/background',
       rateLimitGuard(30),
       authGuard(),
       zValidator('json', backdropFocusBackgroundRequestSchema),
-      async context => {
-        const accepted = await catalogClient.queueBackdropFocus(context.req.valid('json').items);
-        return context.json({ accepted }, 202);
+      async c => {
+        const accepted = await catalogClient.queueBackdropFocus(c.req.valid('json').items);
+        return c.json({ accepted }, 202);
       }
     )
     .post(
@@ -48,19 +46,18 @@ export const createMediaRoutes = ({
       rateLimitGuard(5),
       authGuard(),
       zValidator('param', paramsSchema),
-      async context => {
-        const { mediaType, mediaId: rawMediaId } = context.req.valid('param');
+      async c => {
+        const { mediaType, mediaId: rawMediaId } = c.req.valid('param');
         const mediaId = Number(rawMediaId);
         if (!Number.isSafeInteger(mediaId) || mediaId <= 0)
-          return context.json({ error: 'Invalid media ID' }, 400);
+          throw new HttpError(400, 'Invalid media ID');
         try {
           const backdropFocus = await catalogClient.ensureBackdropFocus(mediaType, mediaId);
-          return context.json({ backdropFocus });
+          return c.json({ backdropFocus });
         } catch (error) {
-          if (isContractError(error, 'not_found'))
-            return context.json({ error: 'Title not found' }, 404);
+          if (isContractError(error, 'not_found')) throw new HttpError(404, 'Title not found');
           if (isContractError(error, 'no_backdrop'))
-            return context.json({ error: 'The title has no backdrop' }, 422);
+            throw new HttpError(422, 'The title has no backdrop');
           throw error;
         }
       }

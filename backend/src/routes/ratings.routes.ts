@@ -3,26 +3,23 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import type { MediaRatingResponse } from '@mytypes/ratings.types';
 
-import type { Deps } from './common.types';
+import type { RouteDeps } from './common.types';
 
 const mediaType = z.enum(['movie', 'tv']);
 const mediaId = z.number().int().positive().max(Number.MAX_SAFE_INTEGER);
 
 /** Authenticated account ratings; account identity always comes from the session. */
 export const createRatingRoutes = ({
+  rateLimitGuard,
   mediaRatingService,
-  auditLogService,
-  configurationService,
-}: Pick<Deps, 'auditLogService' | 'configurationService' | 'mediaRatingService'>) => {
-  const rateLimit = createRateLimitMiddlewareFactory(auditLogService, configurationService);
+}: Pick<RouteDeps, 'mediaRatingService' | 'rateLimitGuard'>) => {
   return new Hono()
     .get(
       '/',
       authGuard(),
-      rateLimit(10),
+      rateLimitGuard(10),
       zValidator(
         'query',
         z
@@ -41,7 +38,7 @@ export const createRatingRoutes = ({
     .put(
       '/',
       authGuard(),
-      rateLimit(30),
+      rateLimitGuard(30),
       zValidator(
         'json',
         z

@@ -1,12 +1,10 @@
 import 'reflect-metadata';
 
 import { logger } from '@logger';
-import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
 import { Database } from '@database/database';
 import { MigrationService } from '@database/migrations/migration.service';
-import { UserRole } from '@entities/user.entity';
-import { describeError, newErrorId } from '@errors/error-response';
+import { handleError } from '@middleware/error-handler.middleware';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import { MediaRatingRepository } from '@repositories/media-rating.repository';
 import { RecentSearchRepository } from '@repositories/recent-search.repository';
@@ -150,7 +148,7 @@ try {
     sourceHealthService,
     sourceAvailabilityService
   );
-  const streamService = new StreamService(db, sourceService, mediaService, playbackTargetService);
+  const streamService = new StreamService(db, mediaService, playbackTargetService);
   const audioPlaybackService = new AudioPlaybackService(
     mediaLoadClient,
     configurationService,
@@ -282,7 +280,6 @@ try {
         'audit logs': () => auditLogService.cleanupOldLogs(),
         'QR login requests': () => qrLoginService.cleanup(),
         'expired refresh tokens': () => db.getRefreshTokenRepository().deleteExpired(),
-        'expired streaming keys': () => db.getStreamingKeyRepository().deleteExpired(),
       }),
       worker: backgroundWorker,
     });
@@ -367,26 +364,7 @@ try {
     tvPairingService,
   });
 
-  // Error handling middleware - must be added first
-  app.onError((err, c) => {
-    const errorId = newErrorId();
-    const role = (c as { get(key: string): { user?: { role?: string } } | undefined }).get(
-      'sessionInfo'
-    )?.user?.role;
-    const { status, body, expected } = describeError(err, {
-      errorId,
-      includeDetail: role === UserRole.ADMIN,
-    });
-    // Stream and QR paths carry secret tokens: keep their shape, not their value.
-    const where = `${c.req.method} ${c.req.path.replace(/[A-Za-z0-9_-]{24,}/g, ':token')}`;
-    const line = `[error ${errorId}] ${status} on ${where}: ${err.name}: ${err.message}`;
-    // Unexpected errors carry their stack, so the request and the code that threw can be found.
-    if (expected) logger.error('App', line);
-    else logger.error('App', line, err.stack);
-
-    c.header('X-Error-Id', errorId);
-    return c.json(body, status as ContentfulStatusCode);
-  });
+  app.onError(handleError);
 
   const port = configurationService.getOrThrow('PORT');
   httpServer.current = Bun.serve({
