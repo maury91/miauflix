@@ -26,7 +26,11 @@ Welcome to the Miauflix documentation! This guide helps you find the right infor
 - **Architecture references?** Start with the [Architecture index](architecture/README.md)
 - **System overview?** Read [System Architecture](architecture/system-overview.md)
 - **Service and data flows?** See [Architecture Diagrams](architecture/diagrams.md)
-- **Technical details?** See [Backend Documentation](../backend/docs/)
+- **Technical details?** See [Backend Documentation](../backend/docs/) and the service READMEs ([sources](../services/sources/README.md), [media-load](../services/media-load/README.md), [media catalog](../services/media-catalog/README.md))
+
+### 🗺️ Plans
+
+- **Plans, roadmaps, and past investigations** are kept apart in [plans/](plans/README.md). They do not describe the current system; everything outside that folder does.
 
 ## Documentation Structure
 
@@ -34,20 +38,22 @@ Welcome to the Miauflix documentation! This guide helps you find the right infor
 docs/
 ├── features.md         # Available features and planned improvements
 ├── features/           # Detailed feature groups and limitations
+├── philosophy.md       # Why it works the way it does
 ├── setup/              # Setup and deployment
 │   ├── getting-started.md       # Main setup guide
 │   ├── environment-variables.md # Complete environment variables reference
 │   ├── docker-setup.md          # Docker deployment
-│   └── flaresolverr.md          # FlareSolverr Cloudflare bypass
+│   ├── flaresolverr.md          # FlareSolverr Cloudflare bypass
+│   └── samsung-tv.md            # Samsung TV app
 ├── development/        # Development resources
-│   ├── workflow.md           # Development workflow
+│   ├── workflow.md           # Development workflow and toolchain
 │   ├── testing-guide.md      # Testing practices
 │   ├── ci-cd-guide.md        # GitHub Actions/CI
 │   ├── coding-conventions.md # Code standards
-│   └── bun-compatibility.md  # What blocks moving back to Bun
-├── architecture/       # System architecture
-│   ├── system-overview.md    # Current components and ownership
-│   └── diagrams.md           # Service and data-flow diagrams
+│   ├── css-architecture.md   # Build-time styles (proposal, partly applied)
+│   └── bun-compatibility.md  # Bun specifics and the remaining uTP gap
+├── architecture/       # Current architecture references (see its README)
+└── plans/              # Plans and records: not a description of the current system
 ```
 
 ## Finding What You Need
@@ -74,7 +80,6 @@ docs/
 
 - **Frontend E2E Tests**: [frontend/e2e/](../frontend/e2e/)
 - **Current Planned Features**: [ToDo.md](../ToDo.md)
-- **Detailed Task Documents**: [todo/](../todo/)
 - **Main README**: [README.md](../README.md)
 
 ---

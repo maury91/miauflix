@@ -30,6 +30,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - Code is easier to find: backend services and the web app's Home screen are reorganized by area (player, title details, progress, notifications, Trakt), with no change in behaviour
 - Backend layers point one way: services no longer depend on route files, routes no longer reach into repositories, and the largest services are wired with named options instead of long argument lists. No change in behaviour
 - Every API error now answers with the same body (status, code, message and an error id that matches the server log), where many routes sent only `{ error }`; the `error` text is unchanged. Unexpected failures on movie and show pages are logged with their cause instead of only printed to the console
+- Committing is faster: the pre-commit hook formats and lints only the staged files and type-checks, and the unit tests run before each push instead. The last stray lockfiles (`backend-e2e/package-lock.json`, `services/media-catalog/bun.lock`) are gone, and the [development workflow](docs/development/workflow.md#toolchain-at-a-glance) says which tool does what and which test runner each workspace uses
 
 ### Removed
 
@@ -40,6 +41,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 ### Documentation
 
 - New guide to what a copy of the server's disk shows, and the plan to keep the database that links downloads to torrents on an external server such as AWS RDS: [storage privacy](docs/features/storage-privacy.md#what-the-disk-shows)
+- Documentation no longer points at code that moved: the security, audit log, streaming, storage and architecture docs describe the current services, the encrypted storage doc moved to the [media-load service](services/media-load/docs/chunk-stores.md), and plans and past investigations now live apart in [docs/plans](docs/plans/README.md)
 
 ## 2026-11-08 v0.2.0 Anime and improved subs
 
