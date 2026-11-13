@@ -1,6 +1,6 @@
 import { logger } from '@logger';
 
-import { playableFromKey } from '@routes/playable.types';
+import { playableFromKey } from '@mytypes/playable.types';
 import type { CacheService } from '@services/cache/cache.service';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';

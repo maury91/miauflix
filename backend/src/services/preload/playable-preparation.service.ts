@@ -4,8 +4,8 @@ import parseTorrent from 'parse-torrent';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
-import type { PlayableRef } from '@routes/playable.types';
-import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
+import type { PlayableRef } from '@mytypes/playable.types';
+import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@mytypes/preload.types';
 import type { MediaService } from '@services/media/media.service';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
@@ -88,16 +88,39 @@ export interface PreparationOptions {
 /** Sources tried for one preparation before reporting the last result. */
 const MAX_SOURCE_ATTEMPTS = 8;
 
+export interface PlayablePreparationServiceOptions {
+  mediaService: MediaService;
+  sourceService: SourceService;
+  warmup?: SourceWarmupController;
+  storage?: Pick<MediaLoadClientService, 'getStorageStates'>;
+  targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
+  sourceHealth?: Pick<SourceHealthService, 'hasFailed'>;
+}
+
 /** Shared inline preparation seam for focus, details, and Watch. */
 export class PlayablePreparationService {
-  constructor(
-    private readonly mediaService: MediaService,
-    private readonly sourceService: SourceService,
-    private readonly warmup?: SourceWarmupController,
-    private readonly storage?: Pick<MediaLoadClientService, 'getStorageStates'>,
-    private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>,
-    private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>
-  ) {}
+  private readonly mediaService: MediaService;
+  private readonly sourceService: SourceService;
+  private readonly warmup?: SourceWarmupController;
+  private readonly storage?: Pick<MediaLoadClientService, 'getStorageStates'>;
+  private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
+  private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>;
+
+  constructor({
+    mediaService,
+    sourceService,
+    warmup,
+    storage,
+    targets,
+    sourceHealth,
+  }: PlayablePreparationServiceOptions) {
+    this.mediaService = mediaService;
+    this.sourceService = sourceService;
+    this.warmup = warmup;
+    this.storage = storage;
+    this.targets = targets;
+    this.sourceHealth = sourceHealth;
+  }
 
   private readonly episodeFileSizeCache = new Map<string, number | null>();
 

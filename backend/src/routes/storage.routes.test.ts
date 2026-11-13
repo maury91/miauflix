@@ -4,6 +4,7 @@ import { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
+import { StorageInventoryService } from '@services/storage/storage-inventory.service';
 
 import { createStorageRoutes } from './storage.routes';
 
@@ -60,8 +61,10 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
   app.route(
     '/storage',
     createStorageRoutes({
-      mediaLoadClient: mediaLoadClient as unknown as MediaLoadClientService,
-      contentSourceRepository: contentSourceRepository as unknown as ContentSourceRepository,
+      storageInventoryService: new StorageInventoryService({
+        mediaLoadClient: mediaLoadClient as unknown as MediaLoadClientService,
+        contentSources: contentSourceRepository as unknown as ContentSourceRepository,
+      }),
       auditLogService: {} as never,
       configurationService: { get: () => undefined } as never,
     })

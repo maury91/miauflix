@@ -5,7 +5,7 @@ jest.mock('parse-torrent', () =>
 
 import { Language, Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
-import type { PlayableRef } from '@routes/playable.types';
+import type { PlayableRef } from '@mytypes/playable.types';
 import { SourceHealthService } from '@services/source/source-health.service';
 
 import { PlayablePreparationService } from './playable-preparation.service';
@@ -73,13 +73,13 @@ describe('PlayablePreparationService', () => {
     };
     const storageService = storageOf(id => (id === 1 ? completion : null));
     const warmup = { warm: jest.fn().mockResolvedValue({ state: 'ready' }) };
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      warmup as never,
-      storageService as never,
-      movieTargets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: warmup as never,
+      storage: storageService as never,
+      targets: movieTargets as never,
+    });
     for (const through of ['sources', 'warm'] as const) {
       const result = await service.prepare(
         { kind: 'movie', mediaId: 42 },
@@ -102,17 +102,19 @@ describe('PlayablePreparationService', () => {
   it('warms where a resume will start', async () => {
     const source = { id: 1, quality: Quality.HD, streamingScore: 1, file: null };
     const warmup = { warm: jest.fn().mockResolvedValue({ state: 'warming' }) };
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      {
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
         requestMovieVerification: jest.fn(),
         getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([source]),
         processSourceMetadata: jest.fn(),
       } as never,
-      warmup as never,
-      storageOf(() => ({ downloaded: 10000 })) as never,
-      movieTargets as never
-    );
+      warmup: warmup as never,
+      storage: storageOf(() => ({ downloaded: 10000 })) as never,
+      targets: movieTargets as never,
+    });
 
     await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -146,15 +148,16 @@ describe('PlayablePreparationService', () => {
       streamingScore: 100,
       file: Buffer.from('torrent'),
     };
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      {
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
         requestMovieVerification: jest.fn(),
         getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([fresh, downloaded]),
       } as never,
-      undefined,
-      storageOf(id => (id === 1 ? cached : null)) as never
-    );
+      storage: storageOf(id => (id === 1 ? cached : null)) as never,
+    });
     const result = await service.prepare(
       { kind: 'movie', mediaId: 42 },
       {
@@ -195,13 +198,12 @@ describe('PlayablePreparationService', () => {
       getSourcesForMovie: jest.fn(),
     };
     const warmup = { warm: jest.fn() };
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      warmup as never,
-      undefined,
-      movieTargets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: warmup as never,
+      targets: movieTargets as never,
+    });
 
     const prepared = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -250,13 +252,12 @@ describe('PlayablePreparationService', () => {
       getSourcesForMovie: jest.fn(),
     };
     const warmup = { warm: jest.fn().mockResolvedValue({ state: 'warming' }) };
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      warmup as never,
-      undefined,
-      movieTargets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: warmup as never,
+      targets: movieTargets as never,
+    });
 
     const prepared = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -295,13 +296,13 @@ describe('PlayablePreparationService', () => {
         downloadedIds.includes(id) ? { videoCompletedAt: new Date(), downloaded: 10000 } : null
       );
       const warmup = { warm: jest.fn().mockResolvedValue({ state: 'ready' }) };
-      const service = new PlayablePreparationService(
-        mediaService as never,
-        sourceService as never,
-        warmup as never,
-        storageService as never,
-        movieTargets as never
-      );
+      const service = new PlayablePreparationService({
+        mediaService: mediaService as never,
+        sourceService: sourceService as never,
+        warmup: warmup as never,
+        storage: storageService as never,
+        targets: movieTargets as never,
+      });
       const prepare = (through: 'sources' | 'warm') =>
         service.prepare(
           { kind: 'movie', mediaId: 42 },
@@ -399,13 +400,12 @@ describe('PlayablePreparationService', () => {
       getSourcesForMovie: jest.fn(),
     };
     const warmup = { warm: jest.fn().mockResolvedValue({ state: 'warming' }) };
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      warmup as never,
-      undefined,
-      movieTargets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: warmup as never,
+      targets: movieTargets as never,
+    });
 
     const prepared = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -445,14 +445,14 @@ describe('PlayablePreparationService', () => {
     const hasFailed = jest.fn((id: number) => id === 1);
     const prepare = (sources: unknown[]) => {
       sourceService.getSourcesForMovieWithOnDemandSearch.mockResolvedValue(sources);
-      return new PlayablePreparationService(
-        { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-        sourceService as never,
-        undefined,
-        undefined,
-        movieTargets as never,
-        { hasFailed }
-      ).prepare(
+      return new PlayablePreparationService({
+        mediaService: {
+          getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+        } as never,
+        sourceService: sourceService as never,
+        targets: movieTargets as never,
+        sourceHealth: { hasFailed },
+      }).prepare(
         { kind: 'movie', mediaId: 42 },
         {
           through: 'sources',
@@ -501,14 +501,14 @@ describe('PlayablePreparationService', () => {
     const sources = [candidate(1, 9), candidate(2, 8), candidate(3, 7), candidate(4, 6)];
     const targets = fakeAwareTargets([1, 2, 3]);
     const onSourceAttempt = jest.fn();
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      movieService(sources) as never,
-      undefined,
-      undefined,
-      targets as never,
-      new SourceHealthService()
-    );
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: movieService(sources) as never,
+      targets: targets as never,
+      sourceHealth: new SourceHealthService(),
+    });
 
     const prepared = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -527,14 +527,14 @@ describe('PlayablePreparationService', () => {
 
   it('reports exhaustion once every source proves fake', async () => {
     const sources = [candidate(1, 9), candidate(2, 8)];
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      movieService(sources) as never,
-      undefined,
-      undefined,
-      fakeAwareTargets([1, 2]) as never,
-      new SourceHealthService()
-    );
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: movieService(sources) as never,
+      targets: fakeAwareTargets([1, 2]) as never,
+      sourceHealth: new SourceHealthService(),
+    });
 
     const prepared = await service.prepare({ kind: 'movie', mediaId: 42 }, warmOptions());
 
@@ -544,14 +544,14 @@ describe('PlayablePreparationService', () => {
   it('never picks a source already known to be fake', async () => {
     const sources = [candidate(1, 9, false), candidate(2, 1)];
     const targets = fakeAwareTargets([]);
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      movieService(sources) as never,
-      undefined,
-      undefined,
-      targets as never,
-      new SourceHealthService()
-    );
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: movieService(sources) as never,
+      targets: targets as never,
+      sourceHealth: new SourceHealthService(),
+    });
     const onSourceAttempt = jest.fn();
 
     await service.prepare({ kind: 'movie', mediaId: 42 }, warmOptions(onSourceAttempt));
@@ -565,10 +565,12 @@ describe('PlayablePreparationService', () => {
     const seeded = { ...candidate(1, 3_100), quality: Quality.FHD };
     const played = { ...candidate(2, 3_000), quality: Quality.HD, lastPlayedOn: today };
     const prepare = (quality: Quality | 'auto') =>
-      new PlayablePreparationService(
-        { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-        movieService([seeded, played]) as never
-      ).prepare(
+      new PlayablePreparationService({
+        mediaService: {
+          getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+        } as never,
+        sourceService: movieService([seeded, played]) as never,
+      }).prepare(
         { kind: 'movie', mediaId: 42 },
         { ...warmOptions(), through: 'sources', preferences: { quality, allowHevc: true } }
       );
@@ -585,10 +587,12 @@ describe('PlayablePreparationService', () => {
     };
     const neutral = { ...candidate(2, 3_000), quality: Quality.HD, languages: [Language.MULTI] };
     const prepare = (quality: Quality | 'auto', audioLanguages?: string[]) =>
-      new PlayablePreparationService(
-        { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-        movieService([french, neutral]) as never
-      ).prepare(
+      new PlayablePreparationService({
+        mediaService: {
+          getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+        } as never,
+        sourceService: movieService([french, neutral]) as never,
+      }).prepare(
         { kind: 'movie', mediaId: 42 },
         {
           ...warmOptions(),
@@ -606,13 +610,13 @@ describe('PlayablePreparationService', () => {
   it('is exhausted without trying anything when every source is known fake', async () => {
     const targets = fakeAwareTargets([]);
     const sourceService = movieService([candidate(1, 9, false), candidate(2, 1, false)]);
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      sourceService as never,
-      undefined,
-      undefined,
-      targets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: sourceService as never,
+      targets: targets as never,
+    });
 
     const prepared = await service.prepare({ kind: 'movie', mediaId: 42 }, warmOptions());
 
@@ -622,10 +626,12 @@ describe('PlayablePreparationService', () => {
 
   it('queues background verification while no candidate is verified', async () => {
     const sourceService = movieService([candidate(1, 9)]);
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      sourceService as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: sourceService as never,
+    });
 
     await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -660,18 +666,18 @@ describe('PlayablePreparationService', () => {
         return { source, filePath: 'movie.mkv', matchKind: 'movie' };
       }),
     };
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      {
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
         requestMovieVerification: jest.fn(),
         getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([fake, real]),
         processSourceMetadata: jest.fn(),
       } as never,
-      undefined,
-      undefined,
-      targets as never,
-      health
-    );
+      targets: targets as never,
+      sourceHealth: health,
+    });
 
     const prepared = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -702,17 +708,18 @@ describe('PlayablePreparationService', () => {
       streamingScore: 1,
     };
     const warmup = { warm: jest.fn() };
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      {
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
         requestMovieVerification: jest.fn(),
         getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([primary, backup]),
         processSourceMetadata: jest.fn(),
       } as never,
-      warmup as never,
-      undefined,
-      movieTargets as never
-    );
+      warmup: warmup as never,
+      targets: movieTargets as never,
+    });
 
     const prepared = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -761,13 +768,12 @@ describe('PlayablePreparationService', () => {
     const warmup = {
       warm: jest.fn().mockResolvedValue({ state: 'warming' }),
     };
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      warmup as never,
-      undefined,
-      movieTargets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: warmup as never,
+      targets: movieTargets as never,
+    });
     const playable: PlayableRef = { kind: 'movie', mediaId: 42 };
 
     const prepared = await service.prepare(playable, {
@@ -809,13 +815,12 @@ describe('PlayablePreparationService', () => {
       getSourcesForMovie: jest.fn().mockResolvedValue([source]),
     };
     const warmup = { warm: jest.fn() };
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      warmup as never,
-      undefined,
-      movieTargets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: warmup as never,
+      targets: movieTargets as never,
+    });
 
     await expect(
       service.prepare(
@@ -857,13 +862,12 @@ describe('PlayablePreparationService', () => {
       getSourcesForMovie: jest.fn().mockResolvedValue([]),
     };
     const warmup = { warm: jest.fn() };
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      warmup as never,
-      undefined,
-      movieTargets as never
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: warmup as never,
+      targets: movieTargets as never,
+    });
 
     await expect(
       service.prepare(
@@ -881,16 +885,17 @@ describe('PlayablePreparationService', () => {
   it('keeps the selected movie source cold when its file list cannot be resolved', async () => {
     const source = { id: 9, quality: Quality.FHD, streamingScore: 10, file: Buffer.from('t') };
     const warmup = { warm: jest.fn() };
-    const service = new PlayablePreparationService(
-      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
-      {
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
         getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([source]),
         requestMovieVerification: jest.fn(),
       } as never,
-      warmup as never,
-      undefined,
-      { forMovie: jest.fn().mockRejectedValue(new Error('metadata timeout')) } as never
-    );
+      warmup: warmup as never,
+      targets: { forMovie: jest.fn().mockRejectedValue(new Error('metadata timeout')) } as never,
+    });
 
     const prepared = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -938,8 +943,8 @@ describe('PlayablePreparationService', () => {
         videoFilePath: 'Show S01/Show.S01E02.mkv',
       }
     ) => {
-      const service = new PlayablePreparationService(
-        {
+      const service = new PlayablePreparationService({
+        mediaService: {
           getTVShowByMediaId: jest.fn().mockResolvedValue({
             local: { id: 3, mediaId: 900, name: 'Show', imdbId: 'tt1', episodeRuntime },
           }),
@@ -948,13 +953,13 @@ describe('PlayablePreparationService', () => {
             .fn()
             .mockResolvedValue({ episodes: [{ id: 81, episodeNumber: 2, airDate: null }] }),
         } as never,
-        {
+        sourceService: {
           getSourcesForEpisodeWithOnDemandSearch: jest.fn().mockResolvedValue([
             { source: heavy, videoFilePath: 'Show.S01E02.2160p.mkv', matchKind: 'single' },
             { ...packMatch, matchKind: 'single' },
           ]),
-        } as never
-      );
+        } as never,
+      });
       return (maxBitrateKbps?: number) =>
         service.prepare(
           { kind: 'episode', showMediaId: 900, seasonNumber: 1, episodeNumber: 2 },
@@ -1023,14 +1028,13 @@ describe('PlayablePreparationService', () => {
     const targets = { forEpisode: jest.fn().mockRejectedValue(new Error('no peers')) };
     const health = new SourceHealthService();
     health.markFailed(source.id);
-    const service = new PlayablePreparationService(
-      mediaService as never,
-      sourceService as never,
-      { warm: jest.fn() } as never,
-      undefined,
-      targets as never,
-      health
-    );
+    const service = new PlayablePreparationService({
+      mediaService: mediaService as never,
+      sourceService: sourceService as never,
+      warmup: { warm: jest.fn() } as never,
+      targets: targets as never,
+      sourceHealth: health,
+    });
 
     const result = await service.prepare(
       { kind: 'episode', showMediaId: 900, seasonNumber: 1, episodeNumber: 2 },

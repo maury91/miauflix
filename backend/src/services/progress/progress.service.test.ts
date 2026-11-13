@@ -2,7 +2,7 @@ jest.mock('@logger', () => ({ logger: { warn: jest.fn() } }));
 
 import type { Database } from '@database/database';
 import type { Progress } from '@entities/progress.entity';
-import type { ProgressUpdateRequest } from '@routes/progress.types';
+import type { ProgressUpdateRequest } from '@mytypes/progress.types';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { EpisodeNumberingService } from '@services/media/episode-numbering.service';
 

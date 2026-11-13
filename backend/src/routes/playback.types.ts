@@ -1,9 +1,8 @@
 import { Quality, type VideoCodec } from '@miauflix/source-metadata-extractor';
 import { z } from 'zod';
 
+import { type PlayableRef, playableRefSchema } from '@mytypes/playable.types';
 import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
-
-import { type PlayableRef, playableRefSchema } from './playable.types';
 
 const supportedQualities = ['auto', ...Object.values(Quality)] as ['auto', ...Quality[]];
 

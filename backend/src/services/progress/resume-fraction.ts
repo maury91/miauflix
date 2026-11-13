@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
+import { playableKey, type PlayableRef } from '@mytypes/playable.types';
 import type { ProgressRepository } from '@repositories/progress.repository';
-import { playableKey, type PlayableRef } from '@routes/playable.types';
 
 /**
  * Where a user's playback of a playable will resume, as a fraction (0–1) of its duration, using

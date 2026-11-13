@@ -16,6 +16,14 @@ import { BACKGROUND_JOB_QUEUES } from './background-job.types';
 
 const RETRY_MS = 15_000;
 
+export interface ServiceScheduleCoordinatorOptions {
+  jobs: BackgroundJobService;
+  config: ConfigurationService;
+  catalog: CatalogClientService;
+  lists: ListService;
+  listClient?: ListClientService;
+}
+
 /** Owns schedule lifecycle; Bunqueue owns persistence and job execution. */
 export class ServiceScheduleCoordinator {
   private operation: Promise<void> = Promise.resolve();
@@ -27,13 +35,19 @@ export class ServiceScheduleCoordinator {
   private unsubscribeConfig: (() => void) | null = null;
   private retryTimer: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(
-    private readonly jobs: BackgroundJobService,
-    private readonly config: ConfigurationService,
-    private readonly catalog: CatalogClientService,
-    private readonly lists: ListService,
-    private readonly listClient?: ListClientService
-  ) {}
+  private readonly jobs: BackgroundJobService;
+  private readonly config: ConfigurationService;
+  private readonly catalog: CatalogClientService;
+  private readonly lists: ListService;
+  private readonly listClient?: ListClientService;
+
+  constructor({ jobs, config, catalog, lists, listClient }: ServiceScheduleCoordinatorOptions) {
+    this.jobs = jobs;
+    this.config = config;
+    this.catalog = catalog;
+    this.lists = lists;
+    this.listClient = listClient;
+  }
 
   start(enabled = true): void {
     if (this.unsubscribe) return;

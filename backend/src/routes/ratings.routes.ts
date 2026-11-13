@@ -4,19 +4,19 @@ import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import type { MediaRatingResponse } from '@mytypes/ratings.types';
 
 import type { Deps } from './common.types';
-import type { MediaRatingResponse } from './ratings.types';
 
 const mediaType = z.enum(['movie', 'tv']);
 const mediaId = z.number().int().positive().max(Number.MAX_SAFE_INTEGER);
 
 /** Authenticated account ratings; account identity always comes from the session. */
 export const createRatingRoutes = ({
-  mediaRatingRepository,
+  mediaRatingService,
   auditLogService,
   configurationService,
-}: Pick<Deps, 'auditLogService' | 'configurationService' | 'mediaRatingRepository'>) => {
+}: Pick<Deps, 'auditLogService' | 'configurationService' | 'mediaRatingService'>) => {
   const rateLimit = createRateLimitMiddlewareFactory(auditLogService, configurationService);
   return new Hono()
     .get(
@@ -34,7 +34,7 @@ export const createRatingRoutes = ({
       ),
       async c => {
         const media = c.req.valid('query');
-        const rating = await mediaRatingRepository.get(c.get('sessionInfo').user.id, media);
+        const rating = await mediaRatingService.get(c.get('sessionInfo').user.id, media);
         return c.json({ ...media, rating } satisfies MediaRatingResponse);
       }
     )
@@ -54,7 +54,7 @@ export const createRatingRoutes = ({
       ),
       async c => {
         const { rating, ...media } = c.req.valid('json');
-        await mediaRatingRepository.set(c.get('sessionInfo').user.id, media, rating);
+        await mediaRatingService.set(c.get('sessionInfo').user.id, media, rating);
         return c.json({ ...media, rating } satisfies MediaRatingResponse);
       }
     );

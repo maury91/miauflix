@@ -1,5 +1,3 @@
-import type { ContentSourceRepository } from '@repositories/content-source.repository';
-import type { MediaRatingRepository } from '@repositories/media-rating.repository';
 import type { AuthService } from '@services/auth/auth.service';
 import type { QrLoginService } from '@services/auth/qr-login.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
@@ -15,20 +13,22 @@ import type { StreamService } from '@services/playback/stream.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProfileService } from '@services/profile/profile.service';
 import type { ProgressService } from '@services/progress/progress.service';
+import type { MediaRatingService } from '@services/ratings/media-rating.service';
 import type { RequestService } from '@services/request/request.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import type { SourceMetadataFileService, SourceService } from '@services/source';
 import type { SourceAvailabilityService } from '@services/source/source-availability.service';
 import type { SourcesClientService } from '@services/sources-client/sources-client.service';
 import type { StatsService } from '@services/stats/stats.service';
+import type { StorageInventoryService } from '@services/storage/storage-inventory.service';
 import type { SubtitlesService } from '@services/subtitles/subtitles.service';
 import type { TvPairingService } from '@services/tv-pairing/tv-pairing.service';
 
 export interface Deps {
   /** Learns the addresses the server is reached at, for TV apps; absent in tests. */
   tvPairingService?: TvPairingService;
-  mediaRatingRepository: MediaRatingRepository;
-  contentSourceRepository: ContentSourceRepository;
+  mediaRatingService: MediaRatingService;
+  storageInventoryService: StorageInventoryService;
   notificationService: NotificationService;
   auditLogService: AuditLogService;
   authService: AuthService;

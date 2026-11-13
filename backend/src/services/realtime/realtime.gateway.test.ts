@@ -62,16 +62,16 @@ const setupTest = async () => {
     onArtworkStreamReady: jest.fn(() => jest.fn()),
     queueArtwork: jest.fn().mockResolvedValue(undefined),
   };
-  const gateway = new RealtimeGateway(
-    authStub() as never,
-    { get: jest.fn().mockReturnValue('__at') } as never,
-    preload as never,
-    {} as never,
-    catalog as never,
-    null,
-    { handles: () => false } as never,
-    { onChange: () => () => undefined } as never
-  );
+  const gateway = new RealtimeGateway({
+    authService: authStub() as never,
+    config: { get: jest.fn().mockReturnValue('__at') } as never,
+    preload: preload as never,
+    progress: {} as never,
+    catalog: catalog as never,
+    playback: null,
+    search: { handles: () => false } as never,
+    availability: { onChange: () => () => undefined } as never,
+  });
   const socket = openSocket(gateway, '__at_session=fixture-token');
   socket.emit(
     'message',
@@ -138,24 +138,24 @@ describe('RealtimeGateway playback delivery', () => {
   it('forwards a background probe result only to the session that started the playback', async () => {
     let deliver: ((event: PlaybackDeliveryUpdate) => void) | undefined;
     const unsubscribe = jest.fn();
-    const gateway = new RealtimeGateway(
-      authStub() as never,
-      { get: jest.fn().mockReturnValue('__at') } as never,
-      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
-      {} as never,
-      {
+    const gateway = new RealtimeGateway({
+      authService: authStub() as never,
+      config: { get: jest.fn().mockReturnValue('__at') } as never,
+      preload: { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      progress: {} as never,
+      catalog: {
         onArtwork: jest.fn(() => jest.fn()),
         onArtworkStreamReady: jest.fn(() => jest.fn()),
       } as never,
-      {
+      playback: {
         onDeliveryUpdate: (listener: (event: PlaybackDeliveryUpdate) => void) => {
           deliver = listener;
           return unsubscribe;
         },
       },
-      { handles: () => false } as never,
-      { onChange: () => () => undefined } as never
-    );
+      search: { handles: () => false } as never,
+      availability: { onChange: () => () => undefined } as never,
+    });
     const connect = async (session: string) => {
       const socket = openSocket(gateway, `__at_${session}=fixture-token`);
       socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));
@@ -206,20 +206,20 @@ describe('RealtimeGateway playback pieces', () => {
         userId === 'user' && sessionId === 'session' ? [latest] : []
       ),
     };
-    const gateway = new RealtimeGateway(
-      authStub() as never,
-      { get: jest.fn().mockReturnValue('__at') } as never,
-      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
-      {} as never,
-      {
+    const gateway = new RealtimeGateway({
+      authService: authStub() as never,
+      config: { get: jest.fn().mockReturnValue('__at') } as never,
+      preload: { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      progress: {} as never,
+      catalog: {
         onArtwork: jest.fn(() => jest.fn()),
         onArtworkStreamReady: jest.fn(() => jest.fn()),
       } as never,
-      null,
-      { handles: () => false } as never,
-      { onChange: () => () => undefined } as never,
-      pieces
-    );
+      playback: null,
+      search: { handles: () => false } as never,
+      availability: { onChange: () => () => undefined } as never,
+      pieces,
+    });
     const connect = async (session: string) => {
       const socket = openSocket(gateway, `__at_${session}=fixture-token`);
       socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));
@@ -256,19 +256,19 @@ describe('RealtimeGateway search routing', () => {
       handles: jest.fn((type: string) => type.startsWith('search')),
       handle: jest.fn((_client: unknown, message: { query?: string }) => !!message.query),
     };
-    const gateway = new RealtimeGateway(
-      authStub() as never,
-      { get: jest.fn().mockReturnValue('__at') } as never,
-      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
-      {} as never,
-      {
+    const gateway = new RealtimeGateway({
+      authService: authStub() as never,
+      config: { get: jest.fn().mockReturnValue('__at') } as never,
+      preload: { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      progress: {} as never,
+      catalog: {
         onArtwork: jest.fn(() => jest.fn()),
         onArtworkStreamReady: jest.fn(() => jest.fn()),
       } as never,
-      null,
-      search as never,
-      { onChange: () => () => undefined } as never
-    );
+      playback: null,
+      search: search as never,
+      availability: { onChange: () => () => undefined } as never,
+    });
     const socket = openSocket(gateway, '__at_session=fixture-token');
     socket.emit(
       'message',
@@ -299,9 +299,9 @@ describe('RealtimeGateway search routing', () => {
 describe('RealtimeGateway TV app authentication', () => {
   const setupGateway = (allowTvApp: boolean, allowNullOrigin = false) => {
     const auth = authStub();
-    const gateway = new RealtimeGateway(
-      auth as never,
-      {
+    const gateway = new RealtimeGateway({
+      authService: auth as never,
+      config: {
         get: jest.fn((key: string) =>
           key === 'ALLOW_TV_APP'
             ? allowTvApp
@@ -312,17 +312,22 @@ describe('RealtimeGateway TV app authentication', () => {
                 : '__at'
         ),
       } as never,
-      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn(), update: jest.fn() } as never,
-      {} as never,
-      {
+      preload: {
+        onChange: jest.fn(),
+        offChange: jest.fn(),
+        remove: jest.fn(),
+        update: jest.fn(),
+      } as never,
+      progress: {} as never,
+      catalog: {
         onArtwork: jest.fn(() => jest.fn()),
         onArtworkStreamReady: jest.fn(() => jest.fn()),
         queueArtwork: jest.fn(),
       } as never,
-      null,
-      { handles: () => false } as never,
-      { onChange: () => () => undefined } as never
-    );
+      playback: null,
+      search: { handles: () => false } as never,
+      availability: { onChange: () => () => undefined } as never,
+    });
     return { gateway, auth };
   };
 
@@ -374,19 +379,19 @@ describe('RealtimeGateway TV app authentication', () => {
 describe('RealtimeGateway session revocation', () => {
   it('closes only the sockets of a revoked session', async () => {
     const auth = authStub();
-    const gateway = new RealtimeGateway(
-      auth as never,
-      { get: jest.fn().mockReturnValue('__at') } as never,
-      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
-      {} as never,
-      {
+    const gateway = new RealtimeGateway({
+      authService: auth as never,
+      config: { get: jest.fn().mockReturnValue('__at') } as never,
+      preload: { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      progress: {} as never,
+      catalog: {
         onArtwork: jest.fn(() => jest.fn()),
         onArtworkStreamReady: jest.fn(() => jest.fn()),
       } as never,
-      null,
-      { handles: () => false } as never,
-      { onChange: () => () => undefined } as never
-    );
+      playback: null,
+      search: { handles: () => false } as never,
+      availability: { onChange: () => () => undefined } as never,
+    });
     const connect = async (session: string) => {
       const socket = openSocket(gateway, `__at_${session}=fixture-token`);
       socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));

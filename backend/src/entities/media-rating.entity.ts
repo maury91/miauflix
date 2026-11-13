@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryColumn, type Relation } from 'typeorm';
 
-import type { MediaRatingValue } from '@routes/ratings.types';
+import type { MediaRatingValue } from '@mytypes/ratings.types';
 
 import { User } from './user.entity';
 
