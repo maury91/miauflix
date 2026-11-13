@@ -854,6 +854,30 @@ describe('ConfigurationService web configuration actions', () => {
     expect(save).not.toHaveBeenCalled();
   });
 
+  it('saves a working fix for a failing service even when restoring its old configuration throws', async () => {
+    const configuration = setupTest();
+    let reloads = 0;
+    let status: ServiceInstanceStatus = { status: 'error', errorMessage: 'broken', error: null };
+    configuration.registerService('CATALOG', {
+      testable: true,
+      getStatus: () => status,
+      reload: jest.fn(async () => {
+        reloads++;
+        // The probe works, restoring the broken configuration throws, applying the fix works.
+        if (reloads === 2) throw new Error('old configuration is broken');
+        status = { status: 'ready' };
+      }),
+    });
+    jest
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs(catalogEntries('http://catalog:3001'));
+
+    expect(result.success).toBe(true);
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog:3001');
+  });
+
   it('tests all groups before persisting or applying a multi-group save', async () => {
     const configuration = setupTest();
     const makeSchema = (id: string, key: string): ServiceConfigSchema => ({

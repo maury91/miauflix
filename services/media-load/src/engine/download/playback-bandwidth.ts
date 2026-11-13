@@ -87,12 +87,14 @@ export class PlaybackBandwidth {
     sourceId: number,
     stillQualifies: () => Promise<boolean>
   ): Promise<void> {
+    // An earlier pause may already track it; a failed pause here must not drop that tracking.
+    const trackedBefore = this.pausedForPlayback.has(sourceId);
     this.pausedForPlayback.add(sourceId);
     let paused = false;
     try {
       paused = await this.selection.pauseDownload(sourceId);
     } finally {
-      if (!paused) this.pausedForPlayback.delete(sourceId);
+      if (!paused && !trackedBefore) this.pausedForPlayback.delete(sourceId);
     }
     if (!paused) return;
     // A resume ran while pausing and may have landed first: resume again so it is not left paused.

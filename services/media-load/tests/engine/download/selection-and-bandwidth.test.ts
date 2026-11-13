@@ -254,6 +254,19 @@ describe('PlaybackBandwidth', () => {
     expect(selection.resumeDownload.mock.calls).toEqual([[2], [2]]);
   });
 
+  it('keeps a source an earlier pause tracks when a later pause of it does nothing', async () => {
+    const { bandwidth, storageService, playback, selection } = setup();
+    playback.openStream(9, 'movie.mkv');
+    storageService.getStorageBySource.mockResolvedValue({ location: '/other' });
+    storageService.getSpeculativeSourceIds.mockResolvedValue([2]);
+    selection.pauseDownload.mockResolvedValueOnce(true).mockResolvedValueOnce(false);
+
+    await bandwidth.pauseSpeculativeDownloads(9);
+    await bandwidth.pauseSpeculativeDownloads(9);
+    await bandwidth.resumeSpeculativeDownloads();
+    expect(selection.resumeDownload.mock.calls).toEqual([[2]]);
+  });
+
   it('reports a failed pause only after the others settle, keeping them for the resume', async () => {
     const { bandwidth, storageService, playback, selection } = setup();
     playback.openStream(9, 'movie.mkv');

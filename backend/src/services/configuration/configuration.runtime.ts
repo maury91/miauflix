@@ -47,14 +47,16 @@ export function serviceStatusMessage(
 
 /**
  * Reloads local services so they pick the stored configuration back up after a test or a failed
- * save. Returns the services whose reload threw, and those in `readyBefore` (ready before the
- * test or save) that are not ready afterwards. A service that was already failing before is not
- * counted when it fails again on its old configuration: that would block saving its fix.
+ * save. Returns the services that do not come back: without `readyBefore`, those whose reload
+ * threw; with it (the services ready before the test or save), those of them whose reload threw
+ * or left them not ready. A service that was already failing before is not counted when it fails
+ * again on its old configuration, whether its reload throws or not: that would block saving its
+ * fix (a saved candidate is still checked for readiness when it is applied).
  */
 export async function restoreRuntimeServices(
   registeredServices: RegisteredServices,
   serviceNames: Iterable<ServiceName>,
-  readyBefore: ReadonlySet<ServiceName> = new Set()
+  readyBefore?: ReadonlySet<ServiceName>
 ): Promise<ServiceName[]> {
   const failed: ServiceName[] = [];
   for (const serviceName of serviceNames) {
@@ -70,14 +72,14 @@ export async function restoreRuntimeServices(
       if (instance.getStatus().status === 'ready') {
         logger.info('Config', `${serviceName} restoration restart completed: ready`);
       } else {
-        if (readyBefore.has(serviceName)) failed.push(serviceName);
+        if (readyBefore?.has(serviceName)) failed.push(serviceName);
         logger.warn(
           'Config',
           `${serviceName} restoration restart completed without becoming ready: ${serviceStatusMessage(registeredServices, serviceName)}`
         );
       }
     } catch (error) {
-      failed.push(serviceName);
+      if (!readyBefore || readyBefore.has(serviceName)) failed.push(serviceName);
       console.warn(
         `[Config] Failed to restore ${serviceName} after a configuration test: ${error instanceof Error ? error.message : error}`
       );

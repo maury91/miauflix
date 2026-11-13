@@ -76,6 +76,20 @@ describe('restoreRuntimeServices', () => {
   });
 });
 
+describe('restoreRuntimeServices with the services ready before', () => {
+  it('does not count a service that was already failing, even when its reload throws', async () => {
+    const throwing = () => remote({ reload: jest.fn().mockRejectedValue(new Error('boom')) });
+    const services = new Map<ServiceName, ConfigurableService>([
+      ['CATALOG', throwing()],
+      ['LIST', throwing()],
+    ]);
+
+    expect(await restoreRuntimeServices(services, ['CATALOG', 'LIST'], new Set(['LIST']))).toEqual([
+      'LIST',
+    ]);
+  });
+});
+
 describe('probeRemoteConsumer', () => {
   it('passes the snapshot as entries and reports the test result', async () => {
     const instance = remote({

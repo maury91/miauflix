@@ -53,22 +53,27 @@ export class CompletionTracker {
     sourceId: number,
     layout: EncryptedStorageLayout
   ): Promise<void> {
-    const bitfield = torrent.bitfield?.buffer;
-    const files = await this.storageService.getFiles(sourceId);
-    const newlyComplete = files
-      .filter(file => !file.completedAt && isFileCompleteInBitfield(layout, file.path, bitfield))
-      .map(file => file.path);
-    await this.storageService.markFilesComplete(sourceId, newlyComplete);
-    const complete = new Set([
-      ...files.filter(file => file.completedAt).map(file => file.path),
-      ...newlyComplete,
-    ]);
-    // A claim on a path the source does not contain can never complete; it must not block others.
-    const claimed = (await this.storageService.getClaimedPaths(sourceId)).filter(path =>
-      layout.files.some(file => file.path === path)
-    );
-    if (!claimed.length || !claimed.every(path => complete.has(path))) return;
-    const storage = await this.storageService.markVideoComplete(sourceId, layout);
+    // Decided and written under the source lock: a reclaim, which clears the torrent's pieces and
+    // the files' completion under the same lock, cannot run between reading the bitfield and
+    // writing, so a reclaimed file (or a neighbor that lost a piece) is never marked complete.
+    const storage = await this.storageService.withSourceLock(sourceId, async () => {
+      const bitfield = torrent.bitfield?.buffer;
+      const files = await this.storageService.getFiles(sourceId);
+      const newlyComplete = files
+        .filter(file => !file.completedAt && isFileCompleteInBitfield(layout, file.path, bitfield))
+        .map(file => file.path);
+      await this.storageService.markFilesComplete(sourceId, newlyComplete);
+      const complete = new Set([
+        ...files.filter(file => file.completedAt).map(file => file.path),
+        ...newlyComplete,
+      ]);
+      // A claim on a path the source does not contain can never complete; it must not block others.
+      const claimed = (await this.storageService.getClaimedPaths(sourceId)).filter(path =>
+        layout.files.some(file => file.path === path)
+      );
+      if (!claimed.length || !claimed.every(path => complete.has(path))) return null;
+      return this.storageService.markVideoCompleteLocked(sourceId, layout);
+    });
     if (storage) this.seeding.scheduleSeedExpiry(storage);
   }
 

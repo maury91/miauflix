@@ -6,7 +6,7 @@ import type {
 
 import { logger } from '../../lib/logger';
 import type { StorageService } from '../../storage/storage.service';
-import type { Storage } from '../../storage/types';
+import type { EncryptedStorageLayout, Storage } from '../../storage/types';
 import { isPieceInBitfield } from '../download.utils';
 import {
   createEncryptedLayout,
@@ -115,12 +115,9 @@ export class DownloadStatus {
         return null;
       }
 
-      const requestedBytes = storage.encryptedLayout
-        ? getSelectedBytes(
-            storage.encryptedLayout,
-            await this.storageService.getClaimedPaths(sourceId)
-          )
-        : 0;
+      const layout = storage.encryptedLayout;
+      const claimedPaths = layout ? await this.storageService.getClaimedPaths(sourceId) : [];
+      const requestedBytes = layout ? getSelectedBytes(layout, claimedPaths) : 0;
       const fileBytes = requestedBytes || storage.size;
       if (storage.videoCompletedAt || storage.localOnly) {
         const bytes = fileBytes;
@@ -144,6 +141,19 @@ export class DownloadStatus {
           totalBytes: fileBytes,
           downloadSpeed: 0,
           isComplete: Boolean(storage.videoCompletedAt) || storage.downloaded >= 10000,
+        };
+      }
+
+      // A selective download counts only its claimed files, as the completed result above does.
+      if (layout && requestedBytes > 0 && torrent.bitfield) {
+        const downloadedBytes = claimedVerifiedBytes(layout, claimedPaths, torrent.bitfield);
+        return {
+          sourceId,
+          progress: Math.min(100, (downloadedBytes / requestedBytes) * 100),
+          downloadedBytes,
+          totalBytes: requestedBytes,
+          downloadSpeed: torrent.downloadSpeed,
+          isComplete: this.getStorageActivity(storage).videoComplete,
         };
       }
 
@@ -213,13 +223,21 @@ export class DownloadStatus {
       if ((storage.videoCompletedAt || storage.localOnly) && layout) {
         const targetBytes = getFileRangeByteLength(layout, filePath, firstPiece, lastPiece);
         if (targetBytes <= 0) return { ...NO_RANGE_PROGRESS };
-        // A local-only source is stored whole; a completed one only has its claimed files, so its
-        // range is measured from the stored piece bitfield.
-        if (storage.localOnly) {
-          return { verifiedBytes: targetBytes, targetBytes, progress: 100, isComplete: true };
-        }
+        // Completion (and the local-only state a completed source moves to when its seeding ends)
+        // only covers the claimed files, so the range is measured from the stored piece bitfield.
+        // Only pieces overlapping the file count (targetBytes > 0 means its offset and length are
+        // valid), so a range far past the file does not walk pieces it never touches.
+        const file = layout.files.find(candidate => candidate.path === filePath)!;
+        const pieceLength = Number(layout.pieceLength);
+        const fileStart = Number(file.offset);
+        const fileEnd = fileStart + Number(file.length);
+        const lastFilePiece = Math.min(lastPiece, Math.floor((fileEnd - 1) / pieceLength));
         let verifiedBytes = 0;
-        for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+        for (
+          let piece = Math.max(firstPiece, Math.floor(fileStart / pieceLength));
+          piece <= lastFilePiece;
+          piece += 1
+        ) {
           if (isPieceInBitfield(storage.downloadedPieces, piece)) {
             verifiedBytes += getFileRangeByteLength(layout, filePath, piece, piece);
           }
@@ -260,4 +278,22 @@ export class DownloadStatus {
       isComplete: verifiedBytes === targetBytes,
     };
   }
+}
+
+/** Verified bytes of the claimed files, counting only each file's share of its boundary pieces. */
+function claimedVerifiedBytes(
+  layout: EncryptedStorageLayout,
+  claimedPaths: string[],
+  bitfield: { get(piece: number): boolean }
+): number {
+  let bytes = 0;
+  for (const file of layout.files) {
+    if (!claimedPaths.includes(file.path) || file.length <= 0) continue;
+    const firstPiece = Math.floor(file.offset / layout.pieceLength);
+    const lastPiece = Math.floor((file.offset + file.length - 1) / layout.pieceLength);
+    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+      if (bitfield.get(piece)) bytes += getFileRangeByteLength(layout, file.path, piece, piece);
+    }
+  }
+  return bytes;
 }

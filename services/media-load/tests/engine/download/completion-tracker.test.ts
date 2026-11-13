@@ -60,4 +60,53 @@ describe('CompletionTracker', () => {
 
     expect(storageService.updateDownloadProgress).toHaveBeenCalledTimes(2);
   });
+
+  it('decides and writes completion under the source lock, so a reclaim cannot interleave', async () => {
+    let tail: Promise<unknown> = Promise.resolve();
+    const withSourceLock = <T>(_id: number, operation: () => Promise<T>): Promise<T> => {
+      const run = tail.then(operation);
+      tail = run.catch(() => undefined);
+      return run;
+    };
+    let releaseFiles!: () => void;
+    const filesGate = new Promise<void>(resolve => (releaseFiles = resolve));
+    const events: string[] = [];
+    const torrent = { bitfield: { buffer: new Uint8Array([0b1100_0000]) } } as unknown as Torrent;
+    const storageService = {
+      withSourceLock,
+      getFiles: jest.fn(async () => {
+        await filesGate;
+        return [{ path: 'a.mkv', completedAt: null }];
+      }),
+      markFilesComplete: jest.fn(async (_id: number, paths: string[]) => {
+        events.push(`complete ${paths.join(',')}`);
+      }),
+      getClaimedPaths: jest.fn(async () => ['a.mkv']),
+      markVideoCompleteLocked: jest.fn(async () => {
+        events.push('source complete');
+        return null;
+      }),
+    };
+    const tracker = new CompletionTracker(
+      storageService as unknown as StorageService,
+      {} as SeedScheduler,
+      {} as PlaybackBandwidth
+    );
+    const layout = {
+      storeName: 's',
+      pieceLength: 4,
+      files: [{ path: 'a.mkv', offset: 0, length: 8 }],
+    } as unknown as EncryptedStorageLayout;
+
+    const recording = tracker.recordCompletion(torrent, 1, layout);
+    await flush();
+    // A reclaim of a.mkv asks for the lock while completion is still deciding.
+    const reclaim = withSourceLock(1, async () => {
+      events.push('reclaim');
+    });
+    releaseFiles();
+    await Promise.all([recording, reclaim]);
+
+    expect(events).toEqual(['complete a.mkv', 'source complete', 'reclaim']);
+  });
 });

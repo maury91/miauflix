@@ -202,11 +202,11 @@ export class FileStreamer {
     const firstByte = range?.start ?? 0;
     const lastByte = range?.end ?? file.length - 1;
     // Refuse an inspection read before responding if its first piece cannot be fetched.
-    // Later missing pieces can still cut the body short after the headers are sent.
+    // Later missing pieces can still cut the body short after the headers are sent. A local-only
+    // source is checked too: it only stores the files it was completed with.
     if (
       speculative &&
       !torrent &&
-      !storage.localOnly &&
       !isPieceInBitfield(
         storage.downloadedPieces,
         Math.floor((file.offset + firstByte) / layout.pieceLength)
