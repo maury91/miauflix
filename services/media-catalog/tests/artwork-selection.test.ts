@@ -263,6 +263,57 @@ describe('artwork selection', () => {
     database.close();
   });
 
+  it('skips logos the worker cannot download (SVG) for good instead of retrying them', async () => {
+    const database = new CatalogDatabase(makeDatabasePath());
+    const repository = new ArtworkRepository(database);
+    const svg = 'https://image.tmdb.org/t/p/original/only-logo.svg';
+    // A failure recorded before unanalyzable logos were skipped must not bring the retry back
+    repository.saveLogoAssetFailure('https://image.tmdb.org/t/p/w300/only-logo.svg');
+    repository.saveBackdrop('tmdb:svg-backdrop', 'png', 'luminance', 1);
+    repository.enqueue({
+      mediaType: 'tv',
+      mediaId: 498,
+      signature: 'svg',
+      imageKey: 'tmdb:svg-backdrop',
+      backdropUrl: 'unused',
+      displayBackdrop: 'unused',
+      fallbackLogo: svg,
+      candidates: [{ url: svg, language: 'en', width: 0, height: 0, voteAverage: 0, voteCount: 0 }],
+      popularity: 0,
+      priority: 0,
+    });
+    let measured = 0;
+    const worker = {
+      prepare: async () => {
+        throw new Error('cached backdrop should be reused');
+      },
+      measure: async () => {
+        measured++;
+        throw new Error('artwork_url_rejected');
+      },
+      close: async () => undefined,
+    };
+    const service = new ArtworkSelectionService(repository, {} as CatalogProvider, worker);
+    service.start();
+    try {
+      for (
+        let attempt = 0;
+        attempt < 100 && repository.get('tv', 498)?.status === 'pending';
+        attempt++
+      ) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+      }
+      const saved = repository.get('tv', 498)!;
+      expect(saved.status).toBe('ready');
+      expect(saved.retryAfter).toBeNull();
+      expect(repository.nextRetryAt()).toBeUndefined();
+      expect(measured).toBe(0);
+    } finally {
+      await service.stop();
+      database.close();
+    }
+  });
+
   it('retries an earlier failed logo after a later logo satisfies both targets', async () => {
     const database = new CatalogDatabase(makeDatabasePath());
     const movies = new MovieRepository(database);

@@ -10,7 +10,11 @@ import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
 import { logger } from '../logger';
 import type { CatalogProvider, ProviderSearchPage } from '../provider/provider';
-import { ArtworkSelectionService, type ArtworkUpdate } from '../services/artwork-selection.service';
+import {
+  type ArtworkListeners,
+  ArtworkSelectionService,
+  type ArtworkUpdate,
+} from '../services/artwork-selection.service';
 import {
   BackdropFocusService,
   DEFAULT_BACKDROP_FOCUS_CONCURRENCY,
@@ -61,6 +65,8 @@ export class CatalogService {
   private artworkBackgroundTimer: ReturnType<typeof setInterval> | undefined;
   private backdropFocusScanOffset = 0;
   private artworkScanRunning = false;
+  /** Set once the runtime replaces or stops this instance: a running scan stops writing. */
+  private retired = false;
   private movieArtworkScanOffset = 0;
   private tvArtworkScanOffset = 0;
   private readonly artworkMetadataRetry = new Map<string, number>();
@@ -77,7 +83,8 @@ export class CatalogService {
     private readonly values: CatalogValues,
     backdropFocusRepository: BackdropFocusRepository,
     artworkRepository?: ArtworkRepository,
-    anime?: { index: AnimeIndex; layouts: AnimeLayoutRepository }
+    anime?: { index: AnimeIndex; layouts: AnimeLayoutRepository },
+    artworkListeners?: ArtworkListeners
   ) {
     this.hydrator = new CatalogHydrator(
       this.movies,
@@ -108,7 +115,12 @@ export class CatalogService {
       this.values.backdropFocusConcurrency ?? DEFAULT_BACKDROP_FOCUS_CONCURRENCY
     );
     if (artworkRepository) {
-      this.artworkService = new ArtworkSelectionService(artworkRepository, this.provider);
+      this.artworkService = new ArtworkSelectionService(
+        artworkRepository,
+        this.provider,
+        undefined,
+        artworkListeners
+      );
     }
     this.synchronizer = new CatalogSynchronizer(
       this.movies,
@@ -443,8 +455,15 @@ export class CatalogService {
     this.artworkBackgroundTimer = undefined;
   }
 
+  /**
+   * Retires this instance for good: background scans stop, queued backdrop analyses are dropped
+   * and artwork work is refused. The synchronous part runs before the first await, so a caller
+   * can install a replacement right after calling this.
+   */
   async stopArtworkBackground(): Promise<void> {
+    this.retired = true;
     this.stopBackdropFocusBackground();
+    this.backdropFocusService.stopBackground();
     await this.artworkService?.stop();
   }
 
@@ -463,6 +482,8 @@ export class CatalogService {
       this.movieArtworkScanOffset += pageSize;
       this.tvArtworkScanOffset += pageSize;
       for (const movie of movies) {
+        // Checked after every await: a replacement may have taken over meanwhile
+        if (this.retired) return;
         if (movie.logoCandidates === null) {
           await this.refreshArtworkMetadata('movie', movie.mediaId);
           continue;
@@ -476,6 +497,7 @@ export class CatalogService {
           });
       }
       for (const show of shows) {
+        if (this.retired) return;
         if (show.logoCandidates === null) {
           await this.refreshArtworkMetadata('tv', show.mediaId);
           continue;
@@ -504,9 +526,12 @@ export class CatalogService {
     try {
       if (mediaType === 'movie') {
         const movie = await this.provider.getMovie(mediaId);
+        // Fetched with a configuration that has since been replaced
+        if (this.retired) return;
         if (movie) this.movies.upsertMovie(movie);
       } else {
         const show = await this.provider.getTVShow(mediaId);
+        if (this.retired) return;
         if (show) this.tvShows.upsertTVShow(show);
       }
       this.artworkMetadataRetry.delete(key);

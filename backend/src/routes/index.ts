@@ -113,7 +113,7 @@ export function createRoutes(deps: Deps) {
     .use(
       createSecurityHeadersMiddleware(
         frontendEnabled ? frontendDir : undefined,
-        deps.configurationService.get('CSP_IMAGE_ORIGINS') ?? []
+        deps.configurationService.get('CSP_IMAGE_ORIGINS') || []
       )
     )
     .use(async (c, next) => {

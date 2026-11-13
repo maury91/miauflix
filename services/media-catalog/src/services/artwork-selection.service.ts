@@ -13,6 +13,7 @@ import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
 import type { MediaRef } from '../types';
 import { ArtworkAnalysisWorkerClient } from './artwork-analysis.worker-client';
+import { isAnalyzableArtworkUrl } from './artwork-urls';
 
 export interface ArtworkUpdate {
   mediaType: MediaRef['mediaType'];
@@ -58,11 +59,18 @@ function parseArray<T>(value: string): T[] {
 const parseCandidates = (value: string) => parseArray<ArtworkCandidate>(value);
 const parseMeasurements = (value: string) => parseArray<ArtworkMeasurement>(value);
 
+export type ArtworkListeners = Set<(update: ArtworkUpdate) => void>;
+
 export class ArtworkSelectionService {
   private readonly worker: Pick<ArtworkAnalysisWorkerClient, 'prepare' | 'measure' | 'close'>;
-  private readonly listeners = new Set<(update: ArtworkUpdate) => void>();
   private running = false;
   private stopped = true;
+  /**
+   * Set by stop(), for good: this instance was replaced. Unlike `stopped` (also true before
+   * start(), when only on-demand enqueues run), it rejects enqueues and publications, so work
+   * still in flight in the old instance cannot overwrite or announce artwork state.
+   */
+  private retired = false;
   private retryTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(
@@ -71,19 +79,22 @@ export class ArtworkSelectionService {
     worker: Pick<
       ArtworkAnalysisWorkerClient,
       'prepare' | 'measure' | 'close'
-    > = new ArtworkAnalysisWorkerClient()
+    > = new ArtworkAnalysisWorkerClient(),
+    /** Who hears updates; pass a shared set so subscriptions outlive this instance. */
+    private readonly listeners: ArtworkListeners = new Set()
   ) {
     this.worker = worker;
   }
 
   start(): void {
-    if (!this.stopped) return;
+    if (!this.stopped || this.retired) return;
     this.stopped = false;
     this.pump();
   }
 
   async stop(): Promise<void> {
     this.stopped = true;
+    this.retired = true;
     if (this.retryTimer) clearTimeout(this.retryTimer);
     this.retryTimer = undefined;
     await this.worker.close();
@@ -102,6 +113,7 @@ export class ArtworkSelectionService {
   }
 
   enqueue(input: { ref: MediaRef; row: MovieRow | TVShowRow; priority: number }): void {
+    if (this.retired) return;
     const candidates = this.readCandidates(input.row.logo_candidates, input.row.logo ?? '');
     const focusSource = input.row.backdrop
       ? this.provider.getBackdropAnalysisSource(input.row.backdrop)
@@ -257,6 +269,12 @@ export class ArtworkSelectionService {
     const candidate = candidates[index];
     if (!candidate) return;
     const analysisUrl = analysisLogoUrl(candidate.url);
+    if (!isAnalyzableArtworkUrl(analysisUrl, false)) {
+      // Such as an SVG logo: it can never be measured, so it is skipped for good, not retried
+      this.advancePastFailedCandidate(row, candidates, measurements, index);
+      logger.debug(SCOPE, `Skipping logo ${index} for ${row.mediaType} ${row.mediaId}: not a PNG`);
+      return;
+    }
     const cached = this.repository.getLogo(row.imageKey, analysisUrl);
     const asset = this.repository.getLogoAsset(analysisUrl);
     let measurement = measurements.find(
@@ -285,14 +303,10 @@ export class ArtworkSelectionService {
       asset.failedAt !== null &&
       asset.failedAt + RETRY_DELAY_MS > Date.now()
     ) {
-      this.advancePastFailedCandidate(
-        row,
-        candidates,
-        measurements,
-        candidate,
-        index,
-        asset.failedAt
-      );
+      this.advancePastFailedCandidate(row, candidates, measurements, index, {
+        url: candidate.url,
+        failedAt: asset.failedAt,
+      });
       return;
     }
     if (!measurement) {
@@ -307,7 +321,10 @@ export class ArtworkSelectionService {
       } catch (error) {
         if (this.stopped) return;
         const failedAt = this.repository.saveLogoAssetFailure(analysisUrl);
-        this.advancePastFailedCandidate(row, candidates, measurements, candidate, index, failedAt);
+        this.advancePastFailedCandidate(row, candidates, measurements, index, {
+          url: candidate.url,
+          failedAt,
+        });
         logger.warn(
           SCOPE,
           `Skipping unusable logo ${index} for ${row.mediaType} ${row.mediaId}`,
@@ -407,13 +424,16 @@ export class ArtworkSelectionService {
     if (saved && saved.revision !== row.revision) this.publish(saved);
   }
 
+  /**
+   * Moves past a candidate that could not be measured. With `failure`, it is retried later; without,
+   * it is unusable for good and only candidates that failed before are retried.
+   */
   private advancePastFailedCandidate(
     row: ArtworkRow,
     candidates: ArtworkCandidate[],
     measurements: ArtworkMeasurement[],
-    candidate: ArtworkCandidate,
     index: number,
-    failedAt: number
+    failure?: { url: string; failedAt: number }
   ): void {
     const isLast = index + 1 >= candidates.length;
     if (!isLast) {
@@ -427,11 +447,12 @@ export class ArtworkSelectionService {
       if (saved && saved.revision !== row.revision) this.publish(saved);
       return;
     }
-    const retry = this.retryCandidate(row.imageKey, candidates, measurements, {
-      index,
-      url: candidate.url,
-      createdAt: failedAt,
-    });
+    const retry = this.retryCandidate(
+      row.imageKey,
+      candidates,
+      measurements,
+      failure && { index, url: failure.url, createdAt: failure.failedAt }
+    );
     const saved = this.repository.progress({
       mediaType: row.mediaType,
       mediaId: row.mediaId,
@@ -455,7 +476,10 @@ export class ArtworkSelectionService {
     latestFailure?: { index: number; url: string; createdAt: number }
   ): { index: number; retryAfter: number } | null {
     const failures = candidates.flatMap((candidate, index) => {
-      const asset = this.repository.getLogoAsset(analysisLogoUrl(candidate.url));
+      const analysisUrl = analysisLogoUrl(candidate.url);
+      // Failures recorded before unanalyzable logos were skipped would otherwise retry forever
+      if (!isAnalyzableArtworkUrl(analysisUrl, false)) return [];
+      const asset = this.repository.getLogoAsset(analysisUrl);
       return asset?.failedAt !== null && asset?.failedAt !== undefined
         ? [{ index, createdAt: asset.failedAt }]
         : [];
@@ -502,6 +526,7 @@ export class ArtworkSelectionService {
   }
 
   private publish(row: ArtworkRow): void {
+    if (this.retired) return;
     const update = this.toUpdate(row);
     for (const listener of this.listeners) listener(update);
   }
