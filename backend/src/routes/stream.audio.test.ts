@@ -1,10 +1,7 @@
-jest.mock('@middleware/rate-limit.middleware', () => ({
-  createRateLimitMiddlewareFactory:
-    () => () => async (_context: unknown, next: () => Promise<void>) =>
-      next(),
-}));
+import { noRateLimit } from '@__test-utils__/routes';
 
 import { ErrorWithStatus } from '@errors/error-with-status.error';
+import { handleError } from '@middleware/error-handler.middleware';
 
 import { createStreamRoutes } from './stream.routes';
 
@@ -31,12 +28,13 @@ const setupTest = () => {
       .mockResolvedValue(new Response('fixture', { headers: { 'Content-Type': 'video/mp4' } })),
   };
   const app = createStreamRoutes({
+    rateLimitGuard: noRateLimit,
     playbackSessionService,
     streamService,
     mediaService,
     mediaLoadClient,
     audioPlaybackService,
-  } as never);
+  } as never).onError(handleError);
   return {
     app,
     playbackSessionService,
@@ -60,7 +58,7 @@ describe('direct streaming errors', () => {
     const response = await app.request(`/${token}`);
 
     expect(response.status).toBe(status);
-    expect(await response.json()).toEqual({ error: 'Unavailable' });
+    expect(await response.json()).toMatchObject({ error: 'Unavailable' });
   });
 });
 
@@ -79,10 +77,11 @@ describe('next-episode prefetch', () => {
         .mockReturnValue(new Promise((_, reject) => setTimeout(reject, 5, new Error('full')))),
     };
     const app = createStreamRoutes({
+      rateLimitGuard: noRateLimit,
       playbackSessionService,
       streamService,
       mediaLoadClient: downloadService,
-    } as never);
+    } as never).onError(handleError);
     const response = await app.request(`/${token}/prefetch`, { method: 'POST' });
     expect(response.status).toBe(202);
     expect(downloadService.predownload).toHaveBeenCalled();

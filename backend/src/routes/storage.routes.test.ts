@@ -1,7 +1,8 @@
+import { noRateLimit } from '@__test-utils__/routes';
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
-import { AuthError, RoleError } from '@errors/auth.errors';
+import { handleError } from '@middleware/error-handler.middleware';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import { StorageInventoryService } from '@services/storage/storage-inventory.service';
@@ -52,33 +53,19 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
     }
     await next();
   });
-  app.onError((error, c) =>
-    c.json(
-      { error: error.message },
-      error instanceof AuthError ? 401 : error instanceof RoleError ? 403 : 500
-    )
-  );
+  app.onError(handleError);
   app.route(
     '/storage',
     createStorageRoutes({
+      rateLimitGuard: noRateLimit,
       storageInventoryService: new StorageInventoryService({
         mediaLoadClient: mediaLoadClient as unknown as MediaLoadClientService,
         contentSources: contentSourceRepository as unknown as ContentSourceRepository,
       }),
-      auditLogService: {} as never,
-      configurationService: { get: () => undefined } as never,
     })
   );
   return { app, mediaLoadClient, contentSourceRepository };
 };
-
-beforeAll(() => {
-  process.env.RATE_LIMIT_TEST_MODE = 'true';
-});
-
-afterAll(() => {
-  delete process.env.RATE_LIMIT_TEST_MODE;
-});
 
 describe('storage routes', () => {
   it('requires an administrator to list the storage inventory', async () => {

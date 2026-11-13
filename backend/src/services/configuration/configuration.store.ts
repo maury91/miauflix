@@ -193,14 +193,15 @@ export class ConfigurationStore {
       const outcome = transformWithFallback(varName, varInfo, this.raw.get(varName) ?? '');
       if (outcome.kind === 'empty') {
         delete cv[varName];
-        console.warn(
-          `[Config] ${varName}: stored value is invalid and has no valid default, set to empty`
+        logger.warn(
+          'Config',
+          `${varName}: stored value is invalid and has no valid default, set to empty`
         );
         continue;
       }
       cv[varName] = outcome.value;
       if (outcome.kind === 'default')
-        console.warn(`[Config] ${varName}: stored value is invalid, reverted to default`);
+        logger.warn('Config', `${varName}: stored value is invalid, reverted to default`);
     }
   }
 

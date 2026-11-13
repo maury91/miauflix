@@ -2,6 +2,7 @@ import { ContractError } from '@miauflix/contract';
 import { HTTPException } from 'hono/http-exception';
 
 import { AuthError } from '@errors/auth.errors';
+import { HttpError } from '@errors/http.error';
 import { MediaError } from '@errors/media.errors';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import { ServiceUnavailableError } from '@errors/service-unavailable.error';
@@ -13,6 +14,29 @@ const describe_ = (error: unknown) => describeError(error, { errorId: 'abcd1234'
 describe('describeError', () => {
   it('generates short hex error ids', () => {
     expect(newErrorId()).toMatch(/^[0-9a-f]{8}$/);
+  });
+
+  it('sends a route error with its status, code and message', () => {
+    expect(describe_(new HttpError(404, 'Movie not found'))).toMatchObject({
+      status: 404,
+      expected: true,
+      body: {
+        status: 404,
+        code: 'not_found',
+        error: 'Movie not found',
+        message: 'Movie not found',
+      },
+    });
+    const { body, expected } = describe_(
+      new HttpError(500, 'Could not remove the downloaded files', { hint: 'Check the disk.' })
+    );
+    expect(body).toMatchObject({
+      code: 'internal',
+      message: 'Could not remove the downloaded files',
+      hint: 'Check the disk.',
+    });
+    expect(expected).toBe(false);
+    expect(describe_(new HttpError(409, 'Busy', { code: 'busy' })).body.code).toBe('busy');
   });
 
   it('tells how to fix an unconfigured catalog', () => {

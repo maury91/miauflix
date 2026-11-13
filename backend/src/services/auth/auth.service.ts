@@ -1,3 +1,4 @@
+import { logger } from '@logger';
 import { password as bunPassword } from 'bun';
 import { randomBytes } from 'crypto';
 import type { Context } from 'hono';
@@ -223,10 +224,11 @@ export class AuthService {
     // Create the admin user
     await this.createUser(adminEmail, adminPassword, UserRole.ADMIN);
 
-    console.log(
+    logger.info(
+      'Auth',
       `Created initial admin user with email: ${adminEmail} and password: ${adminPassword}`
     );
-    console.log('Please change these credentials after first login.');
+    logger.info('Auth', 'Please change these credentials after first login.');
   }
 
   /**

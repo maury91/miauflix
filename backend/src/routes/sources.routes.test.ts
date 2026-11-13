@@ -1,8 +1,9 @@
+import { noRateLimit } from '@__test-utils__/routes';
 import { ContractError } from '@miauflix/contract';
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
-import { AuthError, RoleError } from '@errors/auth.errors';
+import { handleError } from '@middleware/error-handler.middleware';
 import type { SourcesClientService } from '@services/sources-client/sources-client.service';
 
 import { createSourcesRoutes } from './sources.routes';
@@ -34,18 +35,12 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
       });
     await next();
   });
-  app.onError((error, c) =>
-    c.json(
-      { error: error.message },
-      error instanceof AuthError ? 401 : error instanceof RoleError ? 403 : 500
-    )
-  );
+  app.onError(handleError);
   app.route(
     '/sources',
     createSourcesRoutes({
+      rateLimitGuard: noRateLimit,
       sourcesClientService: sourcesClientService as unknown as SourcesClientService,
-      auditLogService: {} as never,
-      configurationService: { get: () => undefined } as never,
     } as never)
   );
   return { app, sourcesClientService };
@@ -133,7 +128,7 @@ describe('sources routes', () => {
       json('POST', { url: 'https://repo.example/list.json' })
     );
     expect(duplicate.status).toBe(400);
-    expect(await duplicate.json()).toEqual({ error: 'Repository already added' });
+    expect(await duplicate.json()).toMatchObject({ error: 'Repository already added' });
     sourcesClientService.refreshRepository.mockRejectedValueOnce(
       new ContractError('unsupported', 'old service')
     );

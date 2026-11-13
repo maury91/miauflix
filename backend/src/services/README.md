@@ -34,5 +34,9 @@ error body) live in `src/types/` and are imported as `@mytypes/...`; ESLint reje
 imports outside `routes/`. Routes do not call repositories directly: account ratings go through
 `ratings/`, storage through `storage/`.
 
+Routes report failures by throwing `HttpError` (`@errors/http.error`) or a typed service error;
+the app's error handler (`@middleware/error-handler.middleware`) turns them into the standard error
+body. Logs go through `@logger`, never `console`.
+
 Services with many dependencies take one options object rather than positional arguments, for
 example `new PlaybackSessionService({ db, preparation, config, ... })`.
