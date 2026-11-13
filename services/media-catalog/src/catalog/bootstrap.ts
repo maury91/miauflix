@@ -13,6 +13,7 @@ import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
 import { TmdbProvider } from '../provider/tmdb/tmdb.provider';
 import type { ServiceContext } from '../service-context';
+import type { ArtworkListeners } from '../services/artwork-selection.service';
 import { DEFAULT_BACKDROP_FOCUS_CONCURRENCY } from '../services/backdrop-focus.service';
 import { ApiCache } from '../utils/api-cache';
 import { CatalogWorkerManager } from '../workers/worker';
@@ -25,6 +26,14 @@ import { CatalogService } from './catalog.service';
  *   `POST /configuration/test` and the main app's config push)
  * - activates the provider + data plane only after a backend configuration push succeeds
  * - installs the queue workers once activation attaches the data plane
+ *
+ * At most one CatalogService is active at a time: activation retires the previous one (its
+ * artwork pump, worker thread, timers and queued backdrop analyses) as it installs the next, and
+ * activation, deactivation and stop run one after another. `ctx.catalog` is never null during a
+ * replacement, and deactivation drains the queue workers before detaching it: a job that found
+ * no catalog would be acknowledged without running. The backend pushes its configuration every time it
+ * connects, so without this each reconnect left another instance running. Testing a configuration
+ * only builds a provider, never a CatalogService.
  */
 export class CatalogRuntime {
   private readonly movies: MovieRepository;
@@ -38,6 +47,16 @@ export class CatalogRuntime {
   private readonly animeLayouts: AnimeLayoutRepository;
   private workerManager: CatalogWorkerManager;
   private stopped = false;
+  /** The only active instance; `ctx.catalog` mirrors it for the request handlers. */
+  private active: CatalogService | null = null;
+  /**
+   * Artwork subscribers, shared by every instance: the host subscribes once while the service is
+   * ready, and a configuration push that replaces the instance keeps it ready, so subscriptions
+   * must survive the replacement.
+   */
+  private readonly artworkListeners: ArtworkListeners = new Set();
+  /** Lifecycle operations, chained so they never overlap. */
+  private lifecycle: Promise<unknown> = Promise.resolve();
 
   constructor(
     private readonly ctx: ServiceContext,
@@ -64,15 +83,32 @@ export class CatalogRuntime {
 
   async stop(): Promise<void> {
     this.stopped = true;
-    await this.ctx.catalog?.stopArtworkBackground();
-    await this.workerManager.stop();
-    this.ctx.catalog = null;
+    await this.exclusive(async () => {
+      await this.workerManager.stop();
+      await this.retire();
+    });
   }
 
-  private async deactivate(): Promise<void> {
-    await this.ctx.catalog?.stopArtworkBackground();
+  private deactivate(): Promise<void> {
+    return this.exclusive(async () => {
+      // Running jobs finish with the catalog still attached
+      await this.workerManager.pause();
+      await this.retire();
+    });
+  }
+
+  private exclusive<T>(operation: () => Promise<T>): Promise<T> {
+    const result = this.lifecycle.then(operation);
+    this.lifecycle = result.catch(() => undefined);
+    return result;
+  }
+
+  /** Detaches the active instance and stops its background work. */
+  private async retire(): Promise<void> {
+    const previous = this.active;
+    this.active = null;
     this.ctx.catalog = null;
-    await this.workerManager.pause();
+    await previous?.stopArtworkBackground();
   }
 
   private buildProvider(values: Record<string, string>): CatalogProvider {
@@ -109,41 +145,59 @@ export class CatalogRuntime {
       return { success: true, message: `Catalog provider '${provider.name}' is ready` };
     },
 
-    activate: async values => {
-      if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
-      const provider = this.buildProvider(values);
-      try {
-        await provider.test();
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
-        return { success: false, message };
-      }
-
-      if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
-
-      const catalog = new CatalogService(
-        this.movies,
-        this.tvShows,
-        this.localization,
-        this.syncState,
-        provider,
-        this.catalogValues(values),
-        this.backdropFocus,
-        this.artwork,
-        { index: this.animeIndex, layouts: this.animeLayouts }
-      );
-      this.ctx.catalog = catalog;
-      if (!this.ctx.env.disableBackgroundTasks) catalog.startBackdropFocusBackground();
-      void catalog
-        .getGenres('en')
-        .catch(error => logger.warn('CatalogRuntime', 'Unable to preload English genres', error));
-      this.workerManager.start();
-      return { success: true, message: `Catalog provider '${provider.name}' is ready` };
-    },
+    activate: values => this.exclusive(() => this.activate(values)),
 
     deactivate: async () => {
       await this.deactivate();
       return { success: true, message: 'Catalog runtime returned to standby' };
     },
   };
+
+  private async activate(
+    values: Record<string, string>
+  ): Promise<{ success: boolean; message: string }> {
+    if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
+    const provider = this.buildProvider(values);
+    try {
+      await provider.test();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      // The active instance, if any, keeps serving with its configuration
+      return { success: false, message };
+    }
+
+    if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
+
+    const previous = this.active;
+    const catalog = new CatalogService(
+      this.movies,
+      this.tvShows,
+      this.localization,
+      this.syncState,
+      provider,
+      this.catalogValues(values),
+      this.backdropFocus,
+      this.artwork,
+      { index: this.animeIndex, layouts: this.animeLayouts },
+      this.artworkListeners
+    );
+    // Retiring flags the previous instance synchronously, so it stops queuing work before this one
+    // starts; only its worker-thread shutdown is awaited. Jobs already running keep the instance
+    // they started with, whose catalog methods still work.
+    const retiring = previous?.stopArtworkBackground();
+    this.active = catalog;
+    this.ctx.catalog = catalog;
+    if (!this.ctx.env.disableBackgroundTasks) catalog.startBackdropFocusBackground();
+    void catalog
+      .getGenres('en')
+      .catch(error => logger.warn('CatalogRuntime', 'Unable to preload English genres', error));
+    this.workerManager.start();
+    // The replacement is installed and serving: the old instance failing to shut down does not
+    // make this activation fail (reporting it would have the configuration activate yet another
+    // instance with the previous values)
+    await retiring?.catch(error =>
+      logger.warn('CatalogRuntime', 'The replaced catalog did not shut down cleanly', error)
+    );
+    return { success: true, message: `Catalog provider '${provider.name}' is ready` };
+  }
 }

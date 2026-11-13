@@ -237,6 +237,51 @@ describe('CatalogService', () => {
     }
   });
 
+  it('stops a database artwork scan that resumes after the instance is retired', async () => {
+    const { service, repo, provider, cleanup } = setup();
+    provider.artworkAnalysis = true;
+    // 42 needs its metadata refreshed (blocked below); 43 is ready to be queued right after
+    const queued = makeMovie(43);
+    repo.movies.upsertMovie(queued);
+    const request = Promise.withResolvers<void>();
+    const requested = Promise.withResolvers<void>();
+    const candidates = spyOn(repo.movies, 'getArtworkCandidates').mockReturnValue([
+      { mediaId: 42, logoCandidates: null },
+      { mediaId: 43, logoCandidates: '[]' },
+    ] as never);
+    const fetch = spyOn(provider, 'getMovie').mockImplementation(async (mediaId: number) => {
+      requested.resolve();
+      await request.promise;
+      return makeMovie(mediaId);
+    });
+    const published: number[] = [];
+    service.onArtworkUpdate(update => published.push(update.mediaId));
+    try {
+      const scan = (
+        service as unknown as { enqueueNextDatabaseArtwork(): Promise<void> }
+      ).enqueueNextDatabaseArtwork();
+      await requested.promise;
+      // A replacement takes over while the old provider request is still in flight
+      await service.stopArtworkBackground();
+      request.resolve();
+      await scan;
+
+      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(repo.movies.getMovie(42)).toBeUndefined();
+      expect(repo.artwork.get('movie', 43)).toBeUndefined();
+      expect(published).toEqual([]);
+      // Requests still served by the retired instance cannot queue or announce artwork either
+      expect(service.queueArtwork([{ mediaType: 'movie', mediaId: 43 }], 'focused')).toBe(1);
+      expect(repo.artwork.get('movie', 43)).toBeUndefined();
+      expect(published).toEqual([]);
+    } finally {
+      request.resolve();
+      candidates.mockRestore();
+      fetch.mockRestore();
+      cleanup();
+    }
+  });
+
   it('invalidates stale artwork before projecting a detail response', async () => {
     const { repo, provider, service, cleanup } = setup();
     try {

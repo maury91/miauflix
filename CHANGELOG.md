@@ -6,6 +6,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- The server no longer fails to start when `CSP_IMAGE_ORIGINS` is not set
+- The catalog service no longer slows down to the point of not answering after the server restarts a few times, and it stops retrying SVG logos it cannot check every hour
 - Login is harder to abuse: an account refuses logins for up to 15 minutes after 10 wrong passwords, new accounts need passwords of at least 8 characters, and response times no longer reveal which emails have accounts
 - Logging out, or a stolen refresh token being used, now ends the session everywhere at once: its access tokens stop working and its live connections close. A refresh token used more than 30 seconds after it was replaced revokes the session (sooner, it is only refused, since two tabs refreshing at once look the same)
 - The internal services can require a shared secret (`SERVICE_TOKEN`), recommended when running them outside Docker. FlareSolverr and Jaeger images are pinned to a version

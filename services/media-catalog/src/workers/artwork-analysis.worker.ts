@@ -8,6 +8,7 @@ import {
   measureLogoContrast,
   relativeLuminance,
 } from '../services/artwork-contrast';
+import { isAnalyzableArtworkUrl } from '../services/artwork-urls';
 
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 const MAX_IMAGE_PIXELS = 40_000_000;
@@ -27,15 +28,8 @@ type Request =
     };
 
 async function download(urlText: string, allowJpeg = true): Promise<Buffer> {
+  if (!isAnalyzableArtworkUrl(urlText, allowJpeg)) throw new Error('artwork_url_rejected');
   const url = new URL(urlText);
-  if (
-    url.protocol !== 'https:' ||
-    url.hostname !== 'image.tmdb.org' ||
-    url.port ||
-    !url.pathname.startsWith('/t/p/w300/') ||
-    !(allowJpeg ? /\.(?:png|jpe?g)$/iu : /\.png$/iu).test(url.pathname)
-  )
-    throw new Error('artwork_url_rejected');
   const response = await fetch(url, { signal: AbortSignal.timeout(15_000), redirect: 'error' });
   if (!response.ok) throw new Error(`artwork_download_${response.status}`);
   const reader = response.body?.getReader();
