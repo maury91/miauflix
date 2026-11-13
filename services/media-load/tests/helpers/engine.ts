@@ -230,3 +230,17 @@ export async function createSource(
   await database.getSourceRepository().put(source);
   return source;
 }
+
+/** The coordinator's units, for tests that drive or observe one of them directly. */
+export const units = (service: object) =>
+  service as unknown as Record<
+    | 'bandwidth'
+    | 'hooks'
+    | 'playback'
+    | 'seeding'
+    | 'selection'
+    | 'startup'
+    | 'torrents'
+    | 'tracker',
+    object
+  >;

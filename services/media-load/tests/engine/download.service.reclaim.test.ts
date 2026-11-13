@@ -6,7 +6,13 @@ import EncryptedChunkStore from '../../src/chunk-stores/encrypted-chunk-store/en
 import { isPieceInBitfield } from '../../src/engine/download.utils';
 import type { StorageService as StorageServiceType } from '../../src/storage/storage.service';
 import type { ContentSource, EncryptedStorageLayout } from '../../src/storage/types';
-import { createSource, mockEngineModules, testConfig, testDatabase } from '../helpers/engine';
+import {
+  createSource,
+  mockEngineModules,
+  testConfig,
+  testDatabase,
+  units,
+} from '../helpers/engine';
 
 mockEngineModules();
 
@@ -41,7 +47,9 @@ describe('reclaiming files of a pack', () => {
     for (let tick = 0; tick < 50 && service.getStatus().status !== 'ready'; tick += 1)
       await new Promise(resolve => setImmediate(resolve));
     const addTorrent = jest.spyOn(
-      service as unknown as { addTorrent: (...args: unknown[]) => Promise<unknown> },
+      units(service).torrents as unknown as {
+        addTorrent: (...args: unknown[]) => Promise<unknown>;
+      },
       'addTorrent'
     );
     addTorrent.mockImplementation(async (...args: unknown[]) => {
@@ -398,7 +406,7 @@ describe('reclaiming files of a pack', () => {
     const { storageService, service } = ctx;
     const reselect = jest
       .spyOn(
-        service as unknown as { reselectAfterReclaim: () => Promise<void> },
+        units(service).hooks as unknown as { reselectAfterReclaim: () => Promise<void> },
         'reselectAfterReclaim'
       )
       .mockResolvedValue();
@@ -484,7 +492,7 @@ describe('reclaiming files of a pack', () => {
     let finishReselect!: () => void;
     const reselect = jest
       .spyOn(
-        service as unknown as { reselectAfterReclaim: () => Promise<void> },
+        units(service).hooks as unknown as { reselectAfterReclaim: () => Promise<void> },
         'reselectAfterReclaim'
       )
       .mockImplementation(() => new Promise<void>(resolve => (finishReselect = resolve)));

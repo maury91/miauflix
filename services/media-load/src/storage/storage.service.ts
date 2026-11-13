@@ -427,17 +427,25 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     sourceId: number,
     encryptedLayout: EncryptedStorageLayout
   ): Promise<Storage | null> {
-    return this.withSourceLock(sourceId, async () => {
-      const storage = await this.storageRepository.findBySourceId(sourceId);
-      if (!storage) return null;
-      if (storage.videoCompletedAt) return storage;
-      const completed = await this.storageRepository.update(storage.id, {
-        videoCompletedAt: new Date(),
-        encryptedLayout: storage.encryptedLayout ?? encryptedLayout,
-      });
-      if (completed) await this.markAsAccessed(sourceId);
-      return completed;
+    return this.withSourceLock(sourceId, () =>
+      this.markVideoCompleteLocked(sourceId, encryptedLayout)
+    );
+  }
+
+  /** markVideoComplete for a caller already holding the source lock. */
+  async markVideoCompleteLocked(
+    sourceId: number,
+    encryptedLayout: EncryptedStorageLayout
+  ): Promise<Storage | null> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
+    if (!storage) return null;
+    if (storage.videoCompletedAt) return storage;
+    const completed = await this.storageRepository.update(storage.id, {
+      videoCompletedAt: new Date(),
+      encryptedLayout: storage.encryptedLayout ?? encryptedLayout,
     });
+    if (completed) await this.markAsAccessed(sourceId);
+    return completed;
   }
 
   async detachCompletedStorage(

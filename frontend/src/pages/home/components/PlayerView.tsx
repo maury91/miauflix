@@ -1,60 +1,28 @@
 import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
-import {
-  type PlaybackPreferences,
-  useCreateSessionMutation,
-  useSearchSubtitlesMutation,
-} from '@features/player/api/playback.api';
-import { assRendererSupported, useAssSubtitles } from '@features/player/lib/ass-subtitles';
-import { playbackAudioCapabilities } from '@features/player/lib/audio-language';
-import { startAudioPlayback } from '@features/player/lib/audio-playback';
-import {
-  AVPLAY_CAPABILITIES,
-  getAvplay,
-  type PlayerMedia,
-} from '@features/player/lib/avplay-media';
-import {
-  mediaSubtitleKey,
-  type MediaSubtitles,
-  readMediaSubtitles,
-  saveMediaSubtitles,
-} from '@features/player/lib/media-subtitles';
-import { useSubtitleFont } from '@features/player/lib/subtitle-font';
-import { parseVtt, type SubtitleCue } from '@features/player/lib/vtt';
-import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
-import { saveProgressWithRealtime } from '@features/realtime/realtime.middleware';
-import type {
-  CreatePlaybackSessionResponse,
-  PlayableRef,
-  ProgressRequest,
-  SubtitleCandidateDto,
-} from '@miauflix/backend';
-import { API_CREDENTIALS, API_URL, builtForTizen, PALETTE } from '@shared/config/constants';
+import { useAudioDelivery } from '@features/player/hooks/useAudioDelivery';
+import { usePlaybackProgress, useResumePoint } from '@features/player/hooks/usePlaybackProgress';
+import { type NextEpisode, usePlaybackPrompts } from '@features/player/hooks/usePlaybackPrompts';
+import { usePlaybackSource } from '@features/player/hooks/usePlaybackSource';
+import { useSubtitles } from '@features/player/hooks/useSubtitles';
+import { getAvplay, type PlayerMedia } from '@features/player/lib/avplay-media';
+import { mediaSubtitleKey } from '@features/player/lib/media-subtitles';
+import type { PlayableRef } from '@miauflix/backend';
+import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { selectCurrentUser } from '@store/slices/auth';
-import {
-  realtimeActions,
-  selectPlaybackDelivery,
-  selectPlaybackPieces,
-  selectSourceAttempt,
-} from '@store/slices/realtime';
-import type { AppDispatch } from '@store/store';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
 import {
-  describePlaybackFailure,
   getNoSourceMessage,
   getPlaybackStatusMessage,
   getSourceAttemptMessage,
-  isUnavailablePlaybackFailure,
-  type PlaybackStatus,
 } from './playback-copy';
 import { PlayerControls, PlayerHeader } from './PlayerControls';
 import { SubtitleCaption } from './SubtitleCaption';
-import type { SubtitleTimingCue } from './SubtitleTiming';
 
 import BellIcon from '~icons/mdi/bell-ring-outline';
 
@@ -172,133 +140,23 @@ const NextEpisodeButton = styled(BackButton)`
   background: ${PALETTE.color.interactive};
 `;
 
-/** Backend paths as URLs in the TV app: its page is a local file, so relative paths miss the backend. */
-function backendUrl(path: string): string {
-  return builtForTizen && path.startsWith('/') ? `${API_URL.replace(/\/+$/, '')}${path}` : path;
-}
-
-/** What this client can decode, so the backend can choose how to deliver the file. */
-function playbackPreferences(avplay: boolean): PlaybackPreferences {
-  return {
-    quality: 'auto',
-    ...playbackAudioCapabilities(document.createElement('video')),
-    ...(avplay ? AVPLAY_CAPABILITIES : {}),
-  };
-}
-
 interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
   onBack: () => void;
-  nextEpisode: { playable: PlayableRef; title: string } | null;
+  nextEpisode: NextEpisode | null;
   onPlayNext: () => void;
 }
 
 /**
- * Create a playback session and report progress during playback, on pause, completion, and cleanup.
- * Resume unfinished progress beyond five seconds by its fraction of the saved duration,
- * capped one second before the current video’s end. Preparation failures offer a retry.
+ * Play a target: create its playback session (walking its sources on failure, with a retry),
+ * deliver its audio, report and resume progress, draw subtitles, and offer intro/credits skips
+ * and the next episode. Each concern lives in a hook under `features/player/hooks`.
  */
 export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }: PlayerViewProps) {
-  const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(selectCurrentUser);
-  const [createSession, sessionRequest] = useCreateSessionMutation();
-  const [createNextSession] = useCreateSessionMutation();
-  const resetSessionRequestRef = useRef(sessionRequest.reset);
-  resetSessionRequestRef.current = sessionRequest.reset;
-  const resetSessionRequest = useCallback(() => resetSessionRequestRef.current(), []);
-  const createdSession = sessionRequest.data ?? null;
-  // Streams start before the file is probed; the probe's delivery arrives over realtime.
-  const deliveryUpdate = useSelector(selectPlaybackDelivery(createdSession?.playbackId));
-  const downloadedRanges = useSelector(selectPlaybackPieces(createdSession?.playbackId));
-  const session = useMemo(
-    () =>
-      createdSession && deliveryUpdate?.type === 'delivery'
-        ? {
-            ...createdSession,
-            delivery: deliveryUpdate.delivery,
-            streamUrl: backendUrl(deliveryUpdate.streamUrl),
-            deliveryPending: false,
-          }
-        : createdSession && { ...createdSession, streamUrl: backendUrl(createdSession.streamUrl) },
-    [createdSession, deliveryUpdate]
-  );
   /** Samsung TVs play through AVPlay, which decodes far more than their browser does. */
   const [avplay] = useState(() => (builtForTizen ? getAvplay() : undefined));
-  /** The direct stream failed before the probe said how this file must be delivered. */
-  const directFailedWhilePending = useRef(false);
-  /**
-   * Sources whose stream failed for this playable. The backend rules out fakes and stalled
-   * swarms, so each new session normally brings the next candidate; a repeat ends the walk.
-   */
-  const failedSources = useRef<{ key: string; ids: Set<number> }>({ key: '', ids: new Set() });
-  const pushedAttempt = useSelector(selectSourceAttempt(playable));
-  const [requestAvailability, availabilityRequest] = useRequestAvailabilityMutation();
-  const [prefetchedNextSession, setPrefetchedNextSession] =
-    useState<CreatePlaybackSessionResponse | null>(null);
-  const prefetchedNextRef = useRef<CreatePlaybackSessionResponse | null>(null);
-  const nextRequestInFlight = useRef<Promise<void> | null>(null);
-  /** The next episode that already got its one retry at the 70% prefetch point. */
-  const nextRetriedAtPrefetch = useRef<string | null>(null);
-  const nextEpisodeKeyRef = useRef<string | null>(null);
-  const nextDownloadStarted = useRef<string | null>(null);
-  const [nextSearchReached, setNextSearchReached] = useState(false);
-  const nextDismissed = useRef<string | null>(null);
-  const nextTransitioned = useRef<string | null>(null);
-  const suppressCreditAfterSeek = useRef(false);
-  const [nextCountdown, setNextCountdown] = useState<number | null>(null);
-  /** Seconds before the credits are skipped to the scene after them; null while not offered. */
-  const [skipCountdown, setSkipCountdown] = useState<number | null>(null);
-  const skipDismissed = useRef(false);
-  const [inIntro, setInIntro] = useState(false);
-  const nextEpisodeKey = nextEpisode
-    ? `${nextEpisode.playable.kind === 'movie' ? `m:${nextEpisode.playable.mediaId}` : `e:${nextEpisode.playable.showMediaId}:${nextEpisode.playable.seasonNumber}:${nextEpisode.playable.episodeNumber}`}`
-    : null;
-  const nextEpisodeRef = useRef(nextEpisode);
-  nextEpisodeRef.current = nextEpisode;
-  nextEpisodeKeyRef.current = nextEpisodeKey;
-  const [searchSubtitles] = useSearchSubtitlesMutation();
-  const progress = useGetProgressQuery(undefined);
-  const subtitleStorageKey = mediaSubtitleKey(currentUser?.id, playable);
-  const rememberedSubtitles = useRef<MediaSubtitles | null>(readMediaSubtitles(subtitleStorageKey));
-  const [subtitleSearchPreferences, setSubtitleSearchPreferences] = useState<
-    { language: string; hearingImpaired: boolean } | undefined
-  >();
-  const [subtitleCandidates, setSubtitleCandidates] = useState<SubtitleCandidateDto[]>([]);
-  const [subtitleConfigured, setSubtitleConfigured] = useState<boolean | null>(null);
-  const [subtitleAvailable, setSubtitleAvailable] = useState<boolean | null>(null);
-  const [subtitleLoading, setSubtitleLoading] = useState(false);
-  const [subtitleMessage, setSubtitleMessage] = useState('');
-  const [selectedSubtitleId, setSelectedSubtitleId] = useState<string | null>(null);
-  const [subtitleOffset, setSubtitleOffset] = useState(0);
-  const [subtitleWindow, setSubtitleWindow] = useState(0);
-  const [subtitleCues, setSubtitleCues] = useState<SubtitleTimingCue[]>([]);
-  /** The native track's current line, drawn by `SubtitleCaption` rather than the browser. */
-  const [nativeCaption, setNativeCaption] = useState('');
-  /** Pixels the open player controls cover at the bottom; captions sit above them. */
-  const [controlsInset, setControlsInset] = useState(0);
-  /** Pixels the open header covers at the top; styled subtitles are drawn below it. */
-  const [headerInset, setHeaderInset] = useState(0);
-  const subtitleInsets = useMemo(
-    () => ({ top: headerInset, bottom: controlsInset }),
-    [headerInset, controlsInset]
-  );
-  const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState<PlaybackStatus>('checking');
-  const [attempt, setAttempt] = useState(0);
-  const [audioSeek, setAudioSeek] = useState({ position: 0, autoplay: true, revision: 0 });
-  const [pendingPosition, setPendingPosition] = useState<number | undefined>();
-  const [audioTrackIndex, setAudioTrackIndex] = useState<number | undefined>();
-  const audioPreparing = useRef(false);
-  const deliveryRef = useRef(session?.delivery);
-  deliveryRef.current = session?.delivery;
-  const requestId = useRef(0);
-  const sessionInFlight = useRef<{
-    key: string;
-    promise: Promise<CreatePlaybackSessionResponse>;
-  } | null>(null);
-
-  const sessionSubtitleStorageKey = useRef<string | null>(null);
   const videoRef = useRef<PlayerMedia | null>(null);
   /** The same element as `videoRef`, for effects that attach to it (the ASS renderer). */
   const [mediaElement, setMediaElement] = useState<PlayerMedia | null>(null);
@@ -306,799 +164,66 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     videoRef.current = media;
     setMediaElement(media);
   }, []);
-  const resumeApplied = useRef(false);
-  const latestProgress = useRef<{
-    positionSeconds: number;
-    durationSeconds: number;
-  } | null>(null);
-  const completedRef = useRef(false);
-  const subtitleTrackRef = useRef<HTMLTrackElement | null>(null);
-  const subtitleRequestId = useRef(0);
-  const currentStreamingKey = useRef<string | null>(null);
-  const cueTimes = useRef(new WeakMap<TextTrackCue, { start: number; end: number }>());
-  const resume = progress.data ? progressForPlayable(progress.data.progress, playable) : undefined;
-  const resumeRef = useRef(resume);
-  resumeRef.current = resume;
-  const subtitleOffsetRef = useRef(0);
-  currentStreamingKey.current = session?.streamingKey ?? null;
-  subtitleOffsetRef.current = subtitleOffset;
+  const subtitleStorageKey = mediaSubtitleKey(currentUser?.id, playable);
 
-  const prepareNextEpisode = useCallback(
-    (atPrefetchPoint = false) => {
-      const target = nextEpisodeRef.current;
-      const key = nextEpisodeKeyRef.current;
-      if (!target || !key) return Promise.resolve();
-      if (prefetchedNextRef.current && nextEpisodeKeyRef.current === key) return Promise.resolve();
-      if (nextRequestInFlight.current) return nextRequestInFlight.current;
-      if (atPrefetchPoint) {
-        // Every timeupdate past 70% lands here; a failing source gets one retry, not one per tick.
-        if (nextRetriedAtPrefetch.current === key) return Promise.resolve();
-        nextRetriedAtPrefetch.current = key;
-      }
-      const request = createNextSession({
-        playable: target.playable,
-        deferDownload: true,
-        preferences: playbackPreferences(!!avplay),
-      })
-        .unwrap()
-        .then(result => {
-          if (nextEpisodeKeyRef.current !== key) return;
-          prefetchedNextRef.current = result;
-          setPrefetchedNextSession(result);
-        })
-        .catch(() => {
-          // A missing next source is retried once playback reaches the 70% prefetch point.
-        })
-        .finally(() => {
-          if (nextRequestInFlight.current === request) nextRequestInFlight.current = null;
-        });
-      nextRequestInFlight.current = request;
-      return request;
-    },
-    [avplay, createNextSession]
-  );
-
-  const startNextEpisodeDownload = useCallback(() => {
-    if (
-      !nextEpisodeKey ||
-      !prefetchedNextRef.current ||
-      nextDownloadStarted.current === nextEpisodeKey
-    )
-      return;
-    nextDownloadStarted.current = nextEpisodeKey;
-    const streamUrl = backendUrl(prefetchedNextRef.current.streamUrl.replace(/\/audio$/, ''));
-    void fetch(`${streamUrl}/prefetch`, {
-      method: 'POST',
-      cache: 'no-store',
-    })
-      .then(async response => {
-        if (!response.ok) throw new Error('Next episode download could not start');
-        await response.body?.cancel();
-      })
-      .catch(() => {
-        // Prefetch is best-effort. Retrying on every media timeupdate would
-        // flood the route when capacity is unavailable; playback itself retries.
-      });
-  }, [nextEpisodeKey]);
-
-  const readProgressSnapshot = useCallback(() => {
-    if (audioPreparing.current) return latestProgress.current;
-    const video = videoRef.current;
-    const duration =
-      deliveryRef.current?.mode === 'audio-transcode'
-        ? deliveryRef.current.durationSeconds
-        : video?.duration;
-    if (video && duration !== undefined && Number.isFinite(duration) && duration > 0) {
-      latestProgress.current = {
-        positionSeconds: Math.min(Math.max(video.currentTime, 0), duration),
-        durationSeconds: duration,
-      };
-    }
-    return latestProgress.current;
-  }, []);
-
-  const saveProgress = useCallback(
-    (state: 'playing' | 'paused' | 'completed') => {
-      const snapshot = readProgressSnapshot();
-      if (!snapshot) return;
-      const update: ProgressRequest = {
-        playable,
-        ...snapshot,
-        state,
-      };
-      void dispatch(saveProgressWithRealtime(update));
-    },
-    [dispatch, playable, readProgressSnapshot]
-  );
-
-  const playNextEpisode = useCallback(() => {
-    if (!nextEpisodeKey || nextTransitioned.current === nextEpisodeKey) return;
-    nextTransitioned.current = nextEpisodeKey;
-    setNextCountdown(null);
-    // Skipping the credits still finishes this episode; onEnded may never fire.
-    if (!completedRef.current) {
-      completedRef.current = true;
-      saveProgress('completed');
-    }
-    onPlayNext();
-  }, [nextEpisodeKey, onPlayNext, saveProgress]);
-
-  const updateNextCountdown = useCallback(() => {
-    const video = videoRef.current;
-    if (
-      !video ||
-      !session ||
-      !nextEpisodeKey ||
-      !prefetchedNextRef.current ||
-      session?.episodeMatchKind === 'combined' ||
-      nextDismissed.current === nextEpisodeKey ||
-      nextTransitioned.current === nextEpisodeKey
-    ) {
-      setNextCountdown(null);
-      return;
-    }
-    const duration =
-      session.delivery?.durationSeconds ?? (Number.isFinite(video.duration) ? video.duration : 0);
-    if (!Number.isFinite(duration) || duration <= 0) {
-      setNextCountdown(null);
-      return;
-    }
-    const creditsStart = session.delivery?.creditsStartSeconds;
-    const hasCreditsMarker =
-      !suppressCreditAfterSeek.current &&
-      creditsStart !== undefined &&
-      session.delivery?.creditsEndSeconds === undefined &&
-      Number.isFinite(creditsStart) &&
-      creditsStart > 0 &&
-      creditsStart < duration;
-    let remaining: number | null = null;
-    if (hasCreditsMarker) {
-      if (video.currentTime >= creditsStart!) remaining = 5 - (video.currentTime - creditsStart!);
-    } else {
-      // With a scene after the credits, the countdown waits for it instead of covering the credits.
-      const creditsEnd = session.delivery?.creditsEndSeconds;
-      const threshold = Math.max(
-        duration <= 90 ? 0 : duration - 90,
-        creditsEnd !== undefined && Number.isFinite(creditsEnd) && creditsEnd < duration
-          ? creditsEnd
-          : 0
-      );
-      if (video.currentTime >= threshold) remaining = duration - video.currentTime;
-    }
-    if (remaining === null) {
-      setNextCountdown(null);
-      return;
-    }
-    const seconds = Math.max(0, Math.ceil(remaining));
-    setNextCountdown(seconds);
-    if (remaining <= 0) playNextEpisode();
-  }, [nextEpisodeKey, playNextEpisode, session]);
-
-  useEffect(() => {
-    prefetchedNextRef.current = null;
-    setPrefetchedNextSession(null);
-    nextDownloadStarted.current = null;
-    nextRetriedAtPrefetch.current = null;
-    setNextSearchReached(false);
-    nextDismissed.current = null;
-    nextTransitioned.current = null;
-    suppressCreditAfterSeek.current = false;
-    setNextCountdown(null);
-    skipDismissed.current = false;
-    setSkipCountdown(null);
-    setInIntro(false);
-  }, [playable, nextEpisodeKey]);
-
-  useEffect(() => {
-    if (session?.streamingKey && nextEpisodeKey) void prepareNextEpisode();
-  }, [session?.streamingKey, nextEpisodeKey, prepareNextEpisode]);
-
-  useEffect(() => {
-    if (nextSearchReached && prefetchedNextSession) startNextEpisodeDownload();
-  }, [nextSearchReached, prefetchedNextSession, startNextEpisodeDownload]);
-
-  useEffect(() => {
-    subtitleRequestId.current += 1;
-    setSubtitleCandidates([]);
-    setSubtitleConfigured(null);
-    setSubtitleAvailable(null);
-    setSubtitleLoading(false);
-    setSubtitleMessage('');
-    setSelectedSubtitleId(null);
-    setSubtitleCues([]);
-    setSubtitleOffset(0);
-    cueTimes.current = new WeakMap();
-    return () => {
-      subtitleRequestId.current += 1;
-    };
-  }, [session?.streamingKey]);
-
-  const applySubtitleOffset = useCallback(() => {
-    const cues = subtitleTrackRef.current?.track.cues;
-    if (!cues) return;
-    for (const cue of cues) {
-      let original = cueTimes.current.get(cue);
-      if (!original) {
-        original = { start: cue.startTime, end: cue.endTime };
-        cueTimes.current.set(cue, original);
-      }
-      const offset = subtitleOffsetRef.current;
-      cue.startTime = Math.max(0, original.start + offset);
-      cue.endTime = Math.max(cue.startTime + 0.01, original.end + offset);
-    }
-  }, []);
-
-  useEffect(() => {
-    setSubtitleWindow(
-      Math.floor(Math.max(0, (videoRef.current?.currentTime ?? 0) - subtitleOffset) / 60) * 60
-    );
-  }, [subtitleOffset]);
-
-  const syncNativeCaption = useCallback(() => {
-    const active = subtitleTrackRef.current?.track.activeCues;
-    setNativeCaption(
-      active
-        ? Array.from(active)
-            .map(cue => {
-              const vttCue = cue as VTTCue;
-              return typeof vttCue.getCueAsHTML === 'function'
-                ? (vttCue.getCueAsHTML().textContent ?? '')
-                : (vttCue.text ?? '');
-            })
-            .filter(Boolean)
-            .join('\n')
-        : ''
-    );
-  }, []);
-
-  const handleSubtitleLoaded = useCallback(() => {
-    const cues = subtitleTrackRef.current?.track.cues;
-    if (cues)
-      setSubtitleCues(
-        Array.from(cues).map(cue => {
-          const original = cueTimes.current.get(cue) ?? { start: cue.startTime, end: cue.endTime };
-          const vttCue = cue as VTTCue;
-          const text =
-            typeof vttCue.getCueAsHTML === 'function'
-              ? (vttCue.getCueAsHTML().textContent ?? '')
-              : (vttCue.text ?? '');
-          return { ...original, text };
-        })
-      );
-    applySubtitleOffset();
-  }, [applySubtitleOffset]);
-
-  const handleSubtitleSearch = useCallback(
-    async (language: string, hearingImpaired: boolean, restoring = false, localOnly = false) => {
-      if (!session || sessionSubtitleStorageKey.current !== subtitleStorageKey) return;
-      const request = ++subtitleRequestId.current;
-      const streamingKey = session.streamingKey;
-      setSubtitleLoading(true);
-      setSubtitleMessage('');
-      setSelectedSubtitleId(null);
-      setSubtitleCues([]);
-      setSubtitleOffset(0);
-      setSubtitleSearchPreferences({ language, hearingImpaired });
-      const saved = rememberedSubtitles.current;
-      const remembered =
-        restoring || (saved?.language === language && saved?.hearingImpaired === hearingImpaired)
-          ? saved
-          : null;
-      try {
-        const result = await searchSubtitles({
-          streamingKey,
-          language,
-          hearingImpaired,
-          refresh: !restoring,
-          ...(localOnly ? { localOnly: true } : {}),
-        }).unwrap();
-        if (subtitleRequestId.current !== request || currentStreamingKey.current !== streamingKey)
-          return;
-        setSubtitleCandidates(result.candidates);
-        setSubtitleConfigured(result.configured);
-        setSubtitleAvailable(result.available);
-        if (result.available && (result.configured || result.candidates.length > 0)) {
-          const selected =
-            remembered?.selectedFileId == null
-              ? undefined
-              : result.candidates.find(candidate => candidate.fileId === remembered.selectedFileId);
-          const preferences: MediaSubtitles = {
-            language,
-            hearingImpaired,
-            selectedFileId: selected?.fileId ?? null,
-            offset: selected ? (remembered?.offset ?? 0) : 0,
-          };
-          rememberedSubtitles.current = preferences;
-          if (!localOnly) saveMediaSubtitles(subtitleStorageKey, preferences);
-          setSelectedSubtitleId(selected?.id ?? null);
-          setSubtitleOffset(preferences.offset);
-        }
-        setSubtitleMessage(
-          result.configured && result.available && result.candidates.length === 0
-            ? 'No subtitles found for this language.'
-            : ''
-        );
-      } catch {
-        if (subtitleRequestId.current === request && currentStreamingKey.current === streamingKey) {
-          setSubtitleAvailable(false);
-          setSubtitleMessage('Subtitle search failed. Playback can continue.');
-        }
-      } finally {
-        if (subtitleRequestId.current === request) setSubtitleLoading(false);
-      }
-    },
-    [searchSubtitles, session, subtitleStorageKey]
-  );
-
-  useEffect(() => {
-    if (!session || sessionSubtitleStorageKey.current !== subtitleStorageKey) return;
-    rememberedSubtitles.current = readMediaSubtitles(subtitleStorageKey);
-    const remembered = rememberedSubtitles.current;
-    const saved = resumeRef.current;
-    if (remembered && saved && saved.state !== 'completed' && saved.positionSeconds > 5)
-      setSubtitleWindow(Math.floor(Math.max(0, saved.positionSeconds) / 60) * 60);
-    if (remembered)
-      void handleSubtitleSearch(remembered.language, remembered.hearingImpaired, true);
-    else void handleSubtitleSearch(navigator.language.split('-')[0] || 'en', false, true, true);
-  }, [session, subtitleStorageKey, handleSubtitleSearch]);
-
-  const handleSubtitleSelect = useCallback(
-    (id: string | null) => {
-      setSubtitleWindow(Math.floor((videoRef.current?.currentTime ?? 0) / 60) * 60);
-      setSelectedSubtitleId(id);
-      setSubtitleCues([]);
-      setSubtitleOffset(0);
-      setSubtitleMessage('');
-      cueTimes.current = new WeakMap();
-      const remembered = rememberedSubtitles.current;
-      if (remembered) {
-        const next = {
-          ...remembered,
-          selectedFileId: subtitleCandidates.find(candidate => candidate.id === id)?.fileId ?? null,
-          offset: 0,
-        };
-        rememberedSubtitles.current = next;
-        saveMediaSubtitles(subtitleStorageKey, next);
-      }
-    },
-    [subtitleCandidates, subtitleStorageKey]
-  );
-
-  const handleSubtitleOffsetChange = useCallback(
-    (offset: number) => {
-      setSubtitleOffset(offset);
-      const remembered = rememberedSubtitles.current;
-      if (remembered) {
-        const next = { ...remembered, offset };
-        rememberedSubtitles.current = next;
-        saveMediaSubtitles(subtitleStorageKey, next);
-      }
-    },
-    [subtitleStorageKey]
-  );
-
-  const selectedSubtitle = subtitleCandidates.find(
-    candidate => candidate.id === selectedSubtitleId
-  );
-  const subtitleTrackUrl = selectedSubtitle
-    ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}`
-    : null;
-  /** A styled track whose renderer failed falls back to WebVTT captions. */
-  const [assFailedId, setAssFailedId] = useState<string | null>(null);
-  const usesAss =
-    !!selectedSubtitle?.styled &&
-    assFailedId !== selectedSubtitle.id &&
-    mediaElement instanceof HTMLVideoElement &&
-    assRendererSupported();
-  const handleAssCues = useCallback((cues: SubtitleTimingCue[]) => setSubtitleCues(cues), []);
-  const handleAssError = useCallback(() => {
-    setAssFailedId(selectedSubtitleId);
-    setSubtitleCues([]);
-  }, [selectedSubtitleId]);
-  useAssSubtitles({
-    video: usesAss ? (mediaElement as HTMLVideoElement) : null,
-    trackUrl: usesAss ? subtitleTrackUrl : null,
-    streamingKey: session?.streamingKey ?? '',
-    windowed: selectedSubtitle?.provider === 'embedded',
-    windowStart: subtitleWindow,
-    offset: subtitleOffset,
-    insets: subtitleInsets,
-    onCues: handleAssCues,
-    onError: handleAssError,
-  });
-  const subtitleUrl =
-    selectedSubtitle && session && !usesAss
-      ? `${subtitleTrackUrl}?streamingKey=${encodeURIComponent(session.streamingKey)}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`
-      : null;
-  const subtitleFontFamily = useSubtitleFont(
-    selectedSubtitle?.embeddedFonts && session && !usesAss
-      ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}/font?streamingKey=${encodeURIComponent(session.streamingKey)}`
-      : null
-  );
-  const hasProgress = !!progress.data;
-  const selectedAudio = session?.delivery?.audioTracks?.find(
-    track => track.index === audioTrackIndex
-  );
-  const needsSelectedTrack =
-    session?.delivery?.mode === 'direct' &&
-    audioTrackIndex !== session.delivery.defaultAudioTrackIndex &&
-    (!(videoRef.current && 'audioTracks' in videoRef.current) ||
-      selectedAudio?.canPlayDirect === false) &&
-    !!selectedAudio?.mimeType;
-  const [audioRemux, setAudioRemux] = useState(false);
-  const audioDelivery =
-    session?.delivery?.mode === 'audio-transcode' || needsSelectedTrack || audioRemux
-      ? session?.delivery
-      : undefined;
-  // Converted audio is fed to a <video> element through Media Source Extensions
-  const playsInAvplay = !!avplay && !audioDelivery;
-
-  /** Converted audio restarts the conversion at the new position; anything else seeks itself. */
-  const seekConvertedAudio = useCallback(
-    (position: number) => {
-      const autoplay = audioPreparing.current ? audioSeek.autoplay : !videoRef.current?.paused;
-      resumeApplied.current = true;
-      audioPreparing.current = true;
-      setPendingPosition(position);
-      setAudioSeek(previous => ({ position, autoplay, revision: previous.revision + 1 }));
-    },
-    [audioSeek.autoplay]
-  );
-
-  const seekTo = useCallback(
-    (position: number) => {
-      const video = videoRef.current;
-      if (!video) return;
-      if (audioDelivery) seekConvertedAudio(position);
-      else video.currentTime = position;
-    },
-    [audioDelivery, seekConvertedAudio]
-  );
-
-  const skipCredits = useCallback(() => {
-    const creditsEnd = session?.delivery?.creditsEndSeconds;
-    setSkipCountdown(null);
-    if (creditsEnd === undefined) return;
-    skipDismissed.current = true;
-    seekTo(creditsEnd);
-  }, [seekTo, session]);
-
-  const skipIntro = useCallback(() => {
-    const introEnd = session?.delivery?.introEndSeconds;
-    setInIntro(false);
-    if (introEnd !== undefined) seekTo(introEnd);
-  }, [seekTo, session]);
-
-  /** Show "Skip intro" while the opening plays. */
-  const updateIntroSkip = useCallback(() => {
-    const video = videoRef.current;
-    const start = session?.delivery?.introStartSeconds;
-    const end = session?.delivery?.introEndSeconds;
-    setInIntro(
-      !!video &&
-        start !== undefined &&
-        end !== undefined &&
-        video.currentTime >= start &&
-        // The last second is not worth a skip.
-        video.currentTime < end - 1
-    );
-  }, [session]);
-
-  /** Offer to skip credits that a scene follows, and skip them after a short countdown. */
-  const updateCreditsSkip = useCallback(() => {
-    const video = videoRef.current;
-    const creditsStart = session?.delivery?.creditsStartSeconds;
-    const creditsEnd = session?.delivery?.creditsEndSeconds;
-    if (
-      !video ||
-      creditsStart === undefined ||
-      creditsEnd === undefined ||
-      skipDismissed.current ||
-      suppressCreditAfterSeek.current ||
-      video.currentTime < creditsStart ||
-      video.currentTime >= creditsEnd
-    ) {
-      setSkipCountdown(null);
-      return;
-    }
-    const remaining = 5 - (video.currentTime - creditsStart);
-    if (remaining <= 0) skipCredits();
-    else setSkipCountdown(Math.ceil(remaining));
-  }, [session, skipCredits]);
-  /** The selected subtitle's cues, drawn over AVPlay, which has no `<track>`. */
-  const [avplayCues, setAvplayCues] = useState<SubtitleCue[]>([]);
-
-  useEffect(() => {
-    setAvplayCues([]);
-    if (!playsInAvplay || !subtitleUrl) return;
-    const controller = new AbortController();
-    fetch(subtitleUrl, { credentials: API_CREDENTIALS, signal: controller.signal })
-      .then(async (response: Response) => {
-        if (!response.ok) throw new Error(`Subtitle request failed: ${response.status}`);
-        const cues = parseVtt(await response.text());
-        setAvplayCues(cues);
-        setSubtitleCues(cues);
-      })
-      .catch(() => {
-        if (!controller.signal.aborted)
-          setSubtitleMessage('The selected subtitle could not be loaded.');
-      });
-    return () => controller.abort();
-  }, [playsInAvplay, subtitleUrl]);
-
-  useEffect(() => {
-    const video = videoRef.current as
-      | (PlayerMedia & {
-          audioTracks?: { length: number; [index: number]: { enabled: boolean } };
-        })
-      | null;
-    if (audioDelivery || !video?.audioTracks || audioTrackIndex === undefined) return;
-    const select = () => {
-      if (!video.audioTracks || !video.audioTracks[audioTrackIndex]) return;
-      for (let index = 0; index < video.audioTracks.length; index++)
-        video.audioTracks[index].enabled = index === audioTrackIndex;
-    };
-    select();
-    video.addEventListener('loadedmetadata', select);
-    return () => video.removeEventListener('loadedmetadata', select);
-  }, [session, audioDelivery, audioTrackIndex]);
-
-  useEffect(() => {
-    if (!session || !audioDelivery) return;
-    let position = audioSeek.position;
-    if (!resumeApplied.current && hasProgress) {
-      resumeApplied.current = true;
-      const saved = resumeRef.current;
-      if (
-        saved &&
-        saved.state !== 'completed' &&
-        saved.positionSeconds > 5 &&
-        saved.durationSeconds > 0
-      ) {
-        position = Math.min(
-          (saved.positionSeconds / saved.durationSeconds) * audioDelivery.durationSeconds,
-          Math.max(0, audioDelivery.durationSeconds - 1)
-        );
-      }
-    }
-    // Converted audio plays through Media Source Extensions, in the <video> element
-    const video = videoRef.current;
-    if (!(video instanceof HTMLVideoElement)) return;
-    audioPreparing.current = true;
-    setStatus('preparing');
-    setPendingPosition(position);
-    return startAudioPlayback({
-      video,
-      transcodeVideo: audioDelivery.transcodeVideo,
-      url: session.streamUrl.endsWith('/audio') ? session.streamUrl : `${session.streamUrl}/audio`,
-      mimeType:
-        audioDelivery.audioTracks?.find(track => track.index === audioTrackIndex)?.mimeType ??
-        audioDelivery.mimeType,
-      copyAudio: audioDelivery.audioTracks?.find(track => track.index === audioTrackIndex)
-        ?.copyAudio,
-      durationSeconds: audioDelivery.durationSeconds,
-      startSeconds: position,
-      autoplay: audioSeek.autoplay,
-      audioTrackIndex,
-      onReady: () => {
-        audioPreparing.current = false;
-        setPendingPosition(undefined);
-        setStatus('ready');
-      },
-      onError: message => {
-        setStatus('error');
-        setError(message);
-        resetSessionRequest();
-      },
-    });
-  }, [session, audioDelivery, audioSeek, hasProgress, audioTrackIndex, resetSessionRequest]);
-
-  useEffect(() => {
-    const track = subtitleTrackRef.current;
-    if (!track || !selectedSubtitle) return;
-    const failed = () => setSubtitleMessage('The selected subtitle could not be loaded.');
-    // Track load/error events do not bubble; subscribe to the native element.
-    track.addEventListener('load', handleSubtitleLoaded);
-    track.addEventListener('error', failed);
-    const textTrack = track.track;
-    textTrack.addEventListener?.('cuechange', syncNativeCaption);
-    if (track.readyState === 2) handleSubtitleLoaded();
-    const previewTimer = window.setInterval(() => {
-      if (track.readyState === 3) window.clearInterval(previewTimer);
-      if (track.track.cues?.length) {
-        handleSubtitleLoaded();
-        window.clearInterval(previewTimer);
-      }
-    }, 100);
-    return () => {
-      window.clearInterval(previewTimer);
-      track.removeEventListener('load', handleSubtitleLoaded);
-      track.removeEventListener('error', failed);
-      textTrack.removeEventListener?.('cuechange', syncNativeCaption);
-      setNativeCaption('');
-    };
-  }, [selectedSubtitle, handleSubtitleLoaded, syncNativeCaption, subtitleWindow]);
-
-  useEffect(() => {
-    const track = subtitleTrackRef.current;
-    if (!track) return;
-    // Hidden still tracks the active cues; the player draws them itself
-    track.track.mode = selectedSubtitle ? 'hidden' : 'disabled';
-    if (selectedSubtitle) applySubtitleOffset();
-    syncNativeCaption();
-  }, [
-    applySubtitleOffset,
-    syncNativeCaption,
-    selectedSubtitle,
-    subtitleOffset,
-    audioSeek,
-    audioTrackIndex,
-  ]);
-
-  const failSource = useCallback(() => {
-    const key = JSON.stringify(playable);
-    if (failedSources.current.key !== key) failedSources.current = { key, ids: new Set() };
-    const sourceId = sessionRequest.data?.source.id;
-    if (sourceId !== undefined && !failedSources.current.ids.has(sourceId)) {
-      // The backend records a source that cannot play, so a new session picks the next one.
-      failedSources.current.ids.add(sourceId);
-      setAttempt(value => value + 1);
-      return;
-    }
-    resetSessionRequest();
-    setStatus('error');
-    setError(
-      `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`
-    );
-  }, [playable, resetSessionRequest, sessionRequest.data, title]);
-
-  useEffect(() => {
-    if (!deliveryUpdate) return;
-    if (deliveryUpdate.type === 'recreate') {
-      setAttempt(value => value + 1);
-      return;
-    }
-    const { delivery } = deliveryUpdate;
-    setAudioTrackIndex(delivery.defaultAudioTrackIndex);
-    if (delivery.mode === 'audio-transcode') {
-      // Continue from where the optimistic direct stream got to.
-      const video = videoRef.current;
-      audioPreparing.current = true;
-      directFailedWhilePending.current = false;
-      setAudioSeek(previous => ({
-        position: video?.currentTime ?? 0,
-        autoplay: video ? !video.paused || video.autoplay : true,
-        revision: previous.revision + 1,
-      }));
-    } else if (directFailedWhilePending.current) {
-      directFailedWhilePending.current = false;
-      failSource();
-    }
-  }, [deliveryUpdate, failSource]);
-
-  useEffect(() => {
-    const currentRequest = ++requestId.current;
-    directFailedWhilePending.current = false;
-    sessionSubtitleStorageKey.current = null;
-    const sessionKey = JSON.stringify([playable, attempt]);
-    if (sessionInFlight.current?.key !== sessionKey) {
-      resetSessionRequest();
-      dispatch(realtimeActions.sourceAttemptCleared(playable));
-    }
-    setError(null);
-    setStatus('preparing');
-    resumeApplied.current = false;
-    completedRef.current = false;
-    latestProgress.current = null;
-
-    // Sources this player already failed to play: the backend cannot see a browser rejection.
-    const avoidSourceIds =
-      failedSources.current.key === JSON.stringify(playable) ? [...failedSources.current.ids] : [];
-    if (sessionInFlight.current?.key !== sessionKey)
-      sessionInFlight.current = {
-        key: sessionKey,
-        promise: createSession({
-          playable,
-          ...(avoidSourceIds.length ? { avoidSourceIds } : {}),
-          preferences: playbackPreferences(!!avplay),
-        }).unwrap(),
-      };
-    void sessionInFlight.current.promise
-      .then(result => {
-        if (currentRequest !== requestId.current) return;
-        const failed = failedSources.current;
-        if (failed.key === JSON.stringify(playable) && failed.ids.has(result.source.id)) {
-          // Nothing new to try: the only sources left already failed here.
-          resetSessionRequest();
-          setStatus('error');
-          setError(
-            `Playback for “${title}” could not load any of its sources. Retry to try source preparation again.`
-          );
-          return;
-        }
-        setStatus(result.preparation.state === 'warm' ? 'ready' : 'preparing');
-        setAudioSeek({ position: 0, autoplay: true, revision: 0 });
-        setPendingPosition(undefined);
-        setAudioRemux(false);
-        setAudioTrackIndex(result.delivery?.defaultAudioTrackIndex);
-        audioPreparing.current = result.delivery?.mode === 'audio-transcode';
-        sessionSubtitleStorageKey.current = subtitleStorageKey;
-      })
-      .catch((reason: unknown) => {
-        if (currentRequest !== requestId.current) return;
-        if (isUnavailablePlaybackFailure(reason) && avoidSourceIds.length) {
-          // Only sources that already failed here are left.
-          setStatus('error');
-          setError(
-            `Playback for “${title}” could not load any of its sources. Retry to try source preparation again.`
-          );
-          return;
-        }
-        if (isUnavailablePlaybackFailure(reason)) {
-          // No source exists, or every one proved fake: offer to notify once one is out.
-          setStatus('exhausted');
-          return;
-        }
-        setStatus('error');
-        setError(describePlaybackFailure(reason, title));
-      });
-
-    return () => {
-      requestId.current += 1;
-      const cleanupRequest = requestId.current;
-      const snapshot = readProgressSnapshot();
-      const completed = completedRef.current;
-      queueMicrotask(() => {
-        // StrictMode immediately sets up the same target again. A real target change
-        // still saves the old target's snapshot before its refs are reused.
-        if (
-          snapshot &&
-          !completed &&
-          (requestId.current === cleanupRequest || sessionInFlight.current?.key !== sessionKey)
-        ) {
-          void dispatch(saveProgressWithRealtime({ playable, ...snapshot, state: 'paused' }));
-        }
-      });
-    };
-  }, [
-    attempt,
-    avplay,
-    createSession,
+  // Call order matters: each hook's effects run in this order, and later ones rely on it
+  // (the session request resets resume state before the direct stream resumes, and converted
+  // audio starts before a delivery update reads the element's position).
+  const source = usePlaybackSource({
     playable,
-    resetSessionRequest,
-    saveProgress,
-    readProgressSnapshot,
-    dispatch,
-    subtitleStorageKey,
     title,
-  ]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      if (
-        !audioPreparing.current &&
-        !completedRef.current &&
-        videoRef.current &&
-        !videoRef.current.paused
-      )
-        saveProgress('playing');
-    }, 10_000);
-    return () => window.clearInterval(timer);
-  }, [saveProgress]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (audioDelivery || !video || resumeApplied.current || !resume || resume.state === 'completed')
-      return;
-    if (!Number.isFinite(video.duration) || video.duration <= 0 || resume.positionSeconds <= 5) {
-      return;
-    }
-    resumeApplied.current = true;
-    video.currentTime = Math.min(
-      (resume.positionSeconds / resume.durationSeconds) * video.duration,
-      Math.max(0, video.duration - 1)
-    );
-  }, [resume, audioDelivery]);
+    avplay: !!avplay,
+    subtitleKey: subtitleStorageKey,
+  });
+  const { session, status, error } = source;
+  const [requestAvailability, availabilityRequest] = useRequestAvailabilityMutation();
+  const resume = useResumePoint(playable);
+  const audio = useAudioDelivery({
+    session,
+    deliveryUpdate: source.deliveryUpdate,
+    avplay: !!avplay,
+    videoRef,
+    resume,
+    setStatus: source.setStatus,
+    failPlayback: source.failPlayback,
+    restartSession: source.restartSession,
+    settlePendingFailure: source.settlePendingFailure,
+  });
+  const { audioDelivery, audioPreparing, playsInAvplay } = audio;
+  const progress = usePlaybackProgress({
+    playable,
+    videoRef,
+    audioPreparing,
+    delivery: session?.delivery,
+    audioDelivery,
+    resume,
+  });
+  source.handlers.current = {
+    onRequestStart: progress.resetForRequest,
+    onSessionCreated: audio.resetForSession,
+    onTargetLeave: progress.captureLeave,
+  };
+  const subtitles = useSubtitles({
+    session,
+    storageKey: subtitleStorageKey,
+    sessionStorageKey: source.sessionSubtitleKey,
+    videoRef,
+    mediaElement,
+    resumeRef: resume.resumeRef,
+    playsInAvplay,
+    audioSeek: audio.audioSeek,
+    audioTrackIndex: audio.audioTrackIndex,
+  });
+  const prompts = usePlaybackPrompts({
+    playable,
+    nextEpisode,
+    session,
+    avplay: !!avplay,
+    videoRef,
+    seekTo: audio.seekTo,
+    completeOnce: progress.completeOnce,
+    onPlayNext,
+  });
 
   useEffect(() => {
     document.body.dataset['miauflixPlayer'] = 'true';
@@ -1109,81 +234,36 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
 
   const mediaEvents: Required<PlayerMediaEvents> = {
     onLoadedMetadata: (event: { currentTarget: PlayerMedia }) => {
-      if (audioDelivery) return;
-      if (!resumeApplied.current && progress.data) {
-        resumeApplied.current = true;
-        if (resume && resume.state !== 'completed' && resume.positionSeconds > 5) {
-          event.currentTarget.currentTime = Math.min(
-            (resume.positionSeconds / resume.durationSeconds) * event.currentTarget.duration,
-            Math.max(0, event.currentTarget.duration - 1)
-          );
-        }
-      }
-      readProgressSnapshot();
+      progress.handleLoadedMetadata(event.currentTarget);
     },
     onSeeked: (event: { currentTarget: PlayerMedia }) => {
       if (audioPreparing.current) return;
-      const creditsStart = session?.delivery?.creditsStartSeconds;
-      suppressCreditAfterSeek.current =
-        creditsStart !== undefined && event.currentTarget.currentTime >= creditsStart;
-      if (creditsStart !== undefined && event.currentTarget.currentTime < creditsStart)
-        skipDismissed.current = false;
-      setSubtitleWindow(
-        Math.floor(Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60) *
-          60
-      );
-      updateNextCountdown();
-      updateCreditsSkip();
-      updateIntroSkip();
+      prompts.handleSeeked(event.currentTarget.currentTime);
+      subtitles.followPlayhead(event.currentTarget.currentTime);
+      prompts.updatePrompts();
     },
     onTimeUpdate: (event: { currentTarget: PlayerMedia }) => {
       if (audioPreparing.current) return;
-      const duration = session?.delivery?.durationSeconds ?? event.currentTarget.duration;
-      if (
-        nextEpisode &&
-        Number.isFinite(duration) &&
-        duration > 0 &&
-        event.currentTarget.currentTime / duration >= 0.7
-      ) {
-        if (!nextSearchReached) setNextSearchReached(true);
-        void prepareNextEpisode(true);
-        startNextEpisodeDownload();
-      }
-      setSubtitleWindow(
-        Math.floor(Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60) *
-          60
-      );
-      readProgressSnapshot();
-      updateNextCountdown();
-      updateCreditsSkip();
-      updateIntroSkip();
+      prompts.handleTimeUpdate(event.currentTarget);
+      subtitles.followPlayhead(event.currentTarget.currentTime);
+      progress.readProgressSnapshot();
+      prompts.updatePrompts();
     },
     onCanPlay: () => {
-      if (!audioPreparing.current) setStatus('ready');
+      if (!audioPreparing.current) source.setStatus('ready');
     },
     onPlaying: () => {
       if (!audioPreparing.current) {
-        setStatus('ready');
-        saveProgress('playing');
+        source.setStatus('ready');
+        progress.handlePlaying();
       }
     },
-    onPause: () => {
-      if (!audioPreparing.current && !completedRef.current) saveProgress('paused');
-    },
+    onPause: () => progress.handlePause(),
     onEnded: () => {
-      completedRef.current = true;
-      saveProgress('completed');
-      updateNextCountdown();
+      progress.handleEnded();
+      prompts.updateNextCountdown();
     },
-    onError: () => {
-      // The browser may reject an unprobed file whose audio needs transcoding;
-      // the pending delivery decides whether that is a real failure.
-      if (session?.deliveryPending) {
-        directFailedWhilePending.current = true;
-        return;
-      }
-      failSource();
-    },
+    onError: () => source.handleMediaError(),
   };
 
   const pageRef = useRef<HTMLElement | null>(null);
@@ -1224,11 +304,12 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       pageRef.current?.focus({ preventScroll: true });
   }, [error, status, availabilityRequest.isSuccess]);
 
-  const sourceAttempt = pushedAttempt ?? session?.sourceAttempt ?? null;
+  const { sourceAttempt } = source;
   const statusMessage =
     sourceAttempt && (status === 'checking' || status === 'preparing')
       ? getSourceAttemptMessage(sourceAttempt, title)
       : getPlaybackStatusMessage(status, title);
+  const selectedSubtitle = subtitles.selected;
 
   return (
     <Page ref={setPage} tabIndex={-1} aria-label="Player">
@@ -1242,10 +323,10 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               src={session.streamUrl}
               aria-label={title}
               autoPlay
-              subtitleCues={selectedSubtitle ? avplayCues : []}
-              subtitleOffset={subtitleOffset}
-              subtitleRaise={controlsInset}
-              subtitleFontFamily={subtitleFontFamily}
+              subtitleCues={selectedSubtitle ? subtitles.avplayCues : []}
+              subtitleOffset={subtitles.offset}
+              subtitleRaise={subtitles.controlsInset}
+              subtitleFontFamily={subtitles.fontFamily}
               {...mediaEvents}
             />
           ) : (
@@ -1259,27 +340,27 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               playsInline
               {...mediaEvents}
             >
-              {selectedSubtitle && subtitleUrl && (
+              {selectedSubtitle && subtitles.url && (
                 <track
-                  key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitleWindow : 0}`}
+                  key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitles.subtitleWindow : 0}`}
                   ref={node => {
-                    subtitleTrackRef.current = node;
+                    subtitles.trackRef.current = node;
                     if (node) node.track.mode = 'hidden';
                   }}
                   kind="subtitles"
                   srcLang={selectedSubtitle.language}
                   label={`${selectedSubtitle.languageLabel}${selectedSubtitle.hearingImpaired ? ' (SDH)' : ''}`}
-                  src={subtitleUrl}
+                  src={subtitles.url}
                   default
                 />
               )}
             </Video>
           )}
-          {!playsInAvplay && selectedSubtitle && nativeCaption && (
+          {!playsInAvplay && selectedSubtitle && subtitles.nativeCaption && (
             <SubtitleCaption
-              text={nativeCaption}
-              raise={controlsInset}
-              fontFamily={subtitleFontFamily}
+              text={subtitles.nativeCaption}
+              raise={subtitles.controlsInset}
+              fontFamily={subtitles.fontFamily}
               data-testid="subtitle-caption"
             />
           )}
@@ -1288,97 +369,60 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             key={playsInAvplay ? 'avplay' : 'video'}
             prompts={
               <>
-                {inIntro && (
-                  <SkipIntroButton type="button" onClick={skipIntro}>
+                {prompts.inIntro && (
+                  <SkipIntroButton type="button" onClick={prompts.skipIntro}>
                     Skip intro
                   </SkipIntroButton>
                 )}
-                {skipCountdown !== null && (
+                {prompts.skipCountdown !== null && (
                   <NextEpisodePrompt role="group" aria-label="Credits">
-                    <NextEpisodeButton type="button" onClick={skipCredits}>
-                      Skip credits ({skipCountdown}s)
+                    <NextEpisodeButton type="button" onClick={prompts.skipCredits}>
+                      Skip credits ({prompts.skipCountdown}s)
                     </NextEpisodeButton>
-                    <BackButton
-                      type="button"
-                      onClick={() => {
-                        skipDismissed.current = true;
-                        setSkipCountdown(null);
-                      }}
-                    >
+                    <BackButton type="button" onClick={prompts.watchCredits}>
                       Watch credits
                     </BackButton>
                   </NextEpisodePrompt>
                 )}
-                {skipCountdown === null && nextEpisode && nextCountdown !== null && (
-                  <NextEpisodePrompt role="group" aria-label="Next episode">
-                    <NextEpisodeButton type="button" onClick={playNextEpisode}>
-                      Play next episode ({nextCountdown}s)
-                    </NextEpisodeButton>
-                    <BackButton
-                      type="button"
-                      onClick={() => {
-                        nextDismissed.current = nextEpisodeKey;
-                        setNextCountdown(null);
-                      }}
-                    >
-                      Stay
-                    </BackButton>
-                  </NextEpisodePrompt>
-                )}
+                {prompts.skipCountdown === null &&
+                  nextEpisode &&
+                  prompts.nextCountdown !== null && (
+                    <NextEpisodePrompt role="group" aria-label="Next episode">
+                      <NextEpisodeButton type="button" onClick={prompts.playNextEpisode}>
+                        Play next episode ({prompts.nextCountdown}s)
+                      </NextEpisodeButton>
+                      <BackButton type="button" onClick={prompts.stay}>
+                        Stay
+                      </BackButton>
+                    </NextEpisodePrompt>
+                  )}
               </>
             }
             videoRef={videoRef}
             preparing={status !== 'ready'}
             onBack={onBack}
-            subtitleSearchPreferences={subtitleSearchPreferences}
-            subtitleCues={subtitleCues}
-            subtitleCandidates={subtitleCandidates}
-            subtitleConfigured={subtitleConfigured}
-            subtitleAvailable={subtitleAvailable}
-            subtitleLoading={subtitleLoading}
-            subtitleMessage={subtitleMessage}
-            selectedSubtitleId={selectedSubtitleId}
-            subtitleOffset={subtitleOffset}
-            onSearchSubtitles={handleSubtitleSearch}
-            onSelectSubtitle={handleSubtitleSelect}
-            onSubtitleOffsetChange={handleSubtitleOffsetChange}
+            subtitleSearchPreferences={subtitles.searchPreferences}
+            subtitleCues={subtitles.cues}
+            subtitleCandidates={subtitles.candidates}
+            subtitleConfigured={subtitles.configured}
+            subtitleAvailable={subtitles.available}
+            subtitleLoading={subtitles.loading}
+            subtitleMessage={subtitles.message}
+            selectedSubtitleId={subtitles.selectedId}
+            subtitleOffset={subtitles.offset}
+            onSearchSubtitles={subtitles.search}
+            onSelectSubtitle={subtitles.select}
+            onSubtitleOffsetChange={subtitles.changeOffset}
             subtitlePreferencesKey={currentUser?.id ?? null}
-            onControlsInsetChange={setControlsInset}
-            onHeaderInsetChange={setHeaderInset}
-            downloadedRanges={downloadedRanges}
+            onControlsInsetChange={subtitles.setControlsInset}
+            onHeaderInsetChange={subtitles.setHeaderInset}
+            downloadedRanges={source.downloadedRanges}
             durationSeconds={audioDelivery?.durationSeconds}
-            pendingPosition={pendingPosition}
-            audioTracks={session?.delivery?.audioTracks?.filter(
-              track =>
-                session.delivery?.mode === 'audio-transcode' ||
-                track.index === session.delivery?.defaultAudioTrackIndex ||
-                !!track.mimeType ||
-                (videoRef.current && 'audioTracks' in videoRef.current && track.canPlayDirect)
-            )}
-            selectedAudioTrackIndex={audioTrackIndex}
-            onSelectAudioTrack={index => {
-              if (index === audioTrackIndex) return;
-              const position = pendingPosition ?? videoRef.current?.currentTime ?? 0;
-              const autoplay = audioPreparing.current
-                ? audioSeek.autoplay
-                : !videoRef.current?.paused;
-              resumeApplied.current = true;
-              const nativeSelection =
-                session.delivery?.mode === 'direct' &&
-                !audioRemux &&
-                videoRef.current &&
-                'audioTracks' in videoRef.current &&
-                session.delivery.audioTracks?.find(track => track.index === index)
-                  ?.canPlayDirect !== false;
-              audioPreparing.current = !nativeSelection;
-              if (!nativeSelection) {
-                setAudioRemux(true);
-                setPendingPosition(position);
-              }
-              setAudioTrackIndex(index);
-              setAudioSeek(previous => ({ position, autoplay, revision: previous.revision + 1 }));
-            }}
-            onSeek={audioDelivery ? seekConvertedAudio : undefined}
+            pendingPosition={audio.pendingPosition}
+            audioTracks={audio.audioTracks}
+            selectedAudioTrackIndex={audio.audioTrackIndex}
+            onSelectAudioTrack={audio.selectAudioTrack}
+            onSeek={audioDelivery ? audio.seekConvertedAudio : undefined}
           />
           <VideoStatus $ready={status === 'ready'} role="status" aria-live="polite">
             {statusMessage}
@@ -1413,16 +457,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             <span>{error ?? statusMessage}</span>
           )}
           {error && (
-            <RetryButton
-              ref={retryRef}
-              type="button"
-              onClick={() => {
-                failedSources.current = { key: '', ids: new Set() };
-                setError(null);
-                setStatus('checking');
-                setAttempt(value => value + 1);
-              }}
-            >
+            <RetryButton ref={retryRef} type="button" onClick={source.retry}>
               Retry
             </RetryButton>
           )}

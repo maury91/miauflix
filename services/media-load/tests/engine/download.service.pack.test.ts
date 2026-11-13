@@ -12,6 +12,7 @@ import {
   mockEngineModules,
   mockInstance,
   testConfig,
+  units,
 } from '../helpers/engine';
 
 mockEngineModules();
@@ -215,7 +216,7 @@ describe('DownloadService reclaiming one file of a pack', () => {
     storageService.getStorageBySource.mockResolvedValue(storage);
     const reclaim = (paths: string[], pieces: Array<{ first: number; last: number }>) =>
       (
-        service as unknown as {
+        units(service).hooks as unknown as {
           reclaimStoredFiles: (...args: unknown[]) => Promise<Uint8Array | void>;
         }
       ).reclaimStoredFiles(storage, paths, pieces);
