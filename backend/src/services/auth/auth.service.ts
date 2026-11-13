@@ -1,4 +1,3 @@
-import { logger } from '@logger';
 import { password as bunPassword } from 'bun';
 import { randomBytes } from 'crypto';
 import type { Context } from 'hono';
@@ -206,11 +205,13 @@ export class AuthService {
     // Create the admin user
     await this.createUser(adminEmail, adminPassword, UserRole.ADMIN);
 
-    logger.info(
-      'Auth',
+    // Plain console output (no logger colours): backend-e2e/scripts/extract-credentials.sh parses this line.
+    /* eslint-disable no-console */
+    console.log(
       `Created initial admin user with email: ${adminEmail} and password: ${adminPassword}`
     );
-    logger.info('Auth', 'Please change these credentials after first login.');
+    console.log('Please change these credentials after first login.');
+    /* eslint-enable no-console */
   }
 
   /**

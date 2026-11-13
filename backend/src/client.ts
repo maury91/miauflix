@@ -31,6 +31,7 @@ export type * from './routes/show.types';
 export type * from './routes/sources.types';
 export type * from './routes/stream.types';
 export type * from './routes/subtitles.types';
+export type { ApiErrorBody } from './types/error.types';
 
 // Re-export shared domain types (used by routes and services alike)
 export type * from './types/error.types';
