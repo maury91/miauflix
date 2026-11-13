@@ -39,7 +39,11 @@ const createSourceServiceDependencies = () => ({
 });
 const sourceServiceDependencies = () => {
   const { backgroundJobs, notifications, availability } = createSourceServiceDependencies();
-  return [backgroundJobs as never, notifications as never, availability as never] as const;
+  return {
+    backgroundJobs: backgroundJobs as never,
+    notifications: notifications as never,
+    availability: availability as never,
+  };
 };
 const candidateItem = (source = createMockSourceMetadata()): SourceSearchItem => ({
   type: 'candidate',
@@ -108,15 +112,14 @@ const setupTest = () => {
       .fn()
       .mockReturnValue({ findByEpisodeId: jest.fn().mockResolvedValue([]) }),
   });
-  const service = new SourceService(
-    mockDatabase,
-    mockPeers,
-    mockSourcesClient as never,
-    mockSourceMetadataFileService,
-    mockRequestService as never,
-    mockConfigService,
-    ...sourceServiceDependencies()
-  );
+  const service = new SourceService({
+    db: mockDatabase,
+    peers: mockPeers,
+    sourcesClient: mockSourcesClient as never,
+    magnetService: mockSourceMetadataFileService,
+    config: mockConfigService,
+    ...sourceServiceDependencies(),
+  });
   return {
     service,
     mockMovie,
@@ -137,15 +140,14 @@ const setupTest = () => {
 const createServiceWithUnprotectedPeers = () => {
   const mocks = setupTest();
   mocks.mockPeers.getStatus.mockReturnValue({ status: 'ready', vpn: 'unprotected' });
-  const service = new SourceService(
-    mocks.mockDatabase,
-    mocks.mockPeers,
-    mocks.mockSourcesClient as never,
-    mocks.mockSourceMetadataFileService,
-    mocks.mockRequestService as never,
-    mocks.mockConfigService,
-    ...sourceServiceDependencies()
-  );
+  const service = new SourceService({
+    db: mocks.mockDatabase,
+    peers: mocks.mockPeers,
+    sourcesClient: mocks.mockSourcesClient as never,
+    magnetService: mocks.mockSourceMetadataFileService,
+    config: mocks.mockConfigService,
+    ...sourceServiceDependencies(),
+  });
   return { ...mocks, service };
 };
 const createMockSourceForStats = (overrides: Partial<ContentSource> = {}) =>
@@ -212,17 +214,16 @@ describe('SourceService', () => {
       });
       const notifications = { episodeAvailable: jest.fn() };
       const backgroundJobs = { bulkBestEffort: jest.fn(), enqueueBestEffort: jest.fn() };
-      const service = new SourceService(
-        mocks.mockDatabase,
-        mocks.mockPeers,
-        mocks.mockSourcesClient as never,
-        mocks.mockSourceMetadataFileService,
-        mocks.mockRequestService as never,
-        mocks.mockConfigService,
-        backgroundJobs as never,
-        notifications as never,
-        createSourceServiceDependencies().availability as never
-      );
+      const service = new SourceService({
+        db: mocks.mockDatabase,
+        peers: mocks.mockPeers,
+        sourcesClient: mocks.mockSourcesClient as never,
+        magnetService: mocks.mockSourceMetadataFileService,
+        config: mocks.mockConfigService,
+        backgroundJobs: backgroundJobs as never,
+        notifications: notifications as never,
+        availability: createSourceServiceDependencies().availability as never,
+      });
       const releases = jest.spyOn(service as never, 'getTVReleases').mockResolvedValue([
         {
           metadata: { season: 1, episode: 8, files: ['Show.S01E08.mkv'] },

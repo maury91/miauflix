@@ -9,6 +9,7 @@ import { Hono } from 'hono';
 import { UserRole } from '@entities/user.entity';
 import { AuthError } from '@errors/auth.errors';
 import type { MediaRatingRepository } from '@repositories/media-rating.repository';
+import { MediaRatingService } from '@services/ratings/media-rating.service';
 
 import { createRatingRoutes } from './ratings.routes';
 
@@ -32,7 +33,7 @@ const setupTest = (authenticated = true) => {
   app.route(
     '/ratings',
     createRatingRoutes({
-      mediaRatingRepository: repository as unknown as MediaRatingRepository,
+      mediaRatingService: new MediaRatingService(repository as unknown as MediaRatingRepository),
       auditLogService: {} as never,
       configurationService: { get: () => undefined } as never,
     })
