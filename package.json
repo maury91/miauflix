@@ -107,8 +107,8 @@
     "{*.{js,ts,tsx,json,css,scss,md},!(test-fixtures)/**/*.{js,ts,tsx,json,css,scss,md}}": [
       "prettier --write"
     ],
-    "backend/src/**/*.ts": [
-      "npm run lint:fix"
+    "{backend/src,services/*/src,services/*/tests}/**/*.ts": [
+      "eslint --fix"
     ]
   },
   "overrides": {

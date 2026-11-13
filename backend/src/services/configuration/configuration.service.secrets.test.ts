@@ -8,7 +8,7 @@ import { ConfigurationService } from './configuration.service';
 const clearEnvironmentVariable = jest.requireActual('../../../test-utils/environment')
   .clearEnvironmentVariable as (name: string) => () => void;
 
-const GENERATED_SECRETS = ['JWT_SECRET', 'STREAM_KEY_SALT', 'SOURCE_SECURITY_KEY'] as const;
+const GENERATED_SECRETS = ['JWT_SECRET', 'SOURCE_SECURITY_KEY'] as const;
 
 const restoreEnvironment: Array<() => void> = [];
 let dataDir: string;
@@ -80,13 +80,11 @@ describe('ConfigurationService generated secrets', () => {
   it('lets an explicit environment variable win over a persisted secret', async () => {
     const persisted = readSecrets(await setupTest());
     process.env.JWT_SECRET = 'jwt-from-environment';
-    process.env.SOURCE_SECURITY_KEY = Buffer.alloc(32, 7).toString('base64');
 
     const configuration = await setupTest();
 
     expect(configuration.get('JWT_SECRET')).toBe('jwt-from-environment');
-    expect(configuration.get('SOURCE_SECURITY_KEY')).toBe(process.env.SOURCE_SECURITY_KEY);
-    expect(configuration.get('STREAM_KEY_SALT')).toBe(persisted.STREAM_KEY_SALT);
+    expect(configuration.get('SOURCE_SECURITY_KEY')).toBe(persisted.SOURCE_SECURITY_KEY);
     // The persisted value is kept for when the environment variable is removed
     expect(readConfigFile().JWT_SECRET).toBe(persisted.JWT_SECRET);
   });

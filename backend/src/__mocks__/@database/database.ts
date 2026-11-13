@@ -6,7 +6,6 @@ import type { Movie } from '@entities/movie.entity';
 import type { RefreshToken } from '@entities/refresh-token.entity';
 import type { Season } from '@entities/season.entity';
 import type { Storage } from '@entities/storage.entity';
-import type { StreamingKey } from '@entities/streaming-key.entity';
 import type { TVShow } from '@entities/tvshow.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
@@ -18,7 +17,6 @@ import type { ProgressRepository } from '@repositories/progress.repository';
 import type { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StorageRepository } from '@repositories/storage.repository';
-import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { TVShowRepository } from '@repositories/tvshow.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import type { MovieDetail } from '@services/catalog/catalog.types';
@@ -192,18 +190,6 @@ const createMockRefreshTokenRepository = (): jest.Mocked<RefreshTokenRepository>
   } as unknown as jest.Mocked<RefreshTokenRepository>;
 };
 
-// Mock StreamingKeyRepository (used by AuthService)
-const createMockStreamingKeyRepository = (): jest.Mocked<StreamingKeyRepository> => {
-  return {
-    create: jest.fn(() => Promise.resolve({} as unknown as StreamingKey)),
-    findByKeyHash: jest.fn(() => Promise.resolve(null)),
-    deleteByKeyHash: jest.fn(() => Promise.resolve()),
-    deleteExpired: jest.fn(() => Promise.resolve(0)),
-    deleteByUserId: jest.fn(() => Promise.resolve(0)),
-    deleteByMovieId: jest.fn(() => Promise.resolve(0)),
-  } as unknown as jest.Mocked<StreamingKeyRepository>;
-};
-
 // Mock StorageRepository
 const createMockStorageRepository = (): jest.Mocked<StorageRepository> => {
   return {
@@ -239,7 +225,6 @@ export class Database {
   private auditLogRepository: jest.Mocked<AuditLogRepository>;
   private qrLoginRequestRepository: jest.Mocked<QrLoginRequestRepository>;
   private storageRepository: jest.Mocked<StorageRepository>;
-  private streamingKeyRepository: jest.Mocked<StreamingKeyRepository>;
 
   // Make getter methods jest mocks so they can be overridden
   public getMovieRepository: jest.Mock;
@@ -253,7 +238,6 @@ export class Database {
   public getAuditLogRepository: jest.Mock;
   public getQrLoginRequestRepository: jest.Mock;
   public getStorageRepository: jest.Mock;
-  public getStreamingKeyRepository: jest.Mock;
 
   constructor(_encryptionService?: EncryptionService) {
     // Initialize all repositories with default mocks
@@ -268,7 +252,6 @@ export class Database {
     this.auditLogRepository = {} as jest.Mocked<AuditLogRepository>;
     this.qrLoginRequestRepository = {} as jest.Mocked<QrLoginRequestRepository>;
     this.storageRepository = createMockStorageRepository();
-    this.streamingKeyRepository = createMockStreamingKeyRepository();
 
     // Initialize getter methods as jest mocks that return the repositories
     this.getMovieRepository = jest.fn(() => this.movieRepository);
@@ -282,7 +265,6 @@ export class Database {
     this.getAuditLogRepository = jest.fn(() => this.auditLogRepository);
     this.getQrLoginRequestRepository = jest.fn(() => this.qrLoginRequestRepository);
     this.getStorageRepository = jest.fn(() => this.storageRepository);
-    this.getStreamingKeyRepository = jest.fn(() => this.streamingKeyRepository);
   }
 
   async initialize(): Promise<void> {

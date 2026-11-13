@@ -1,13 +1,8 @@
-jest.mock('@middleware/rate-limit.middleware', () => ({
-  createRateLimitMiddlewareFactory:
-    () => () => async (_context: unknown, next: () => Promise<void>) =>
-      next(),
-}));
-
+import { noRateLimit } from '@__test-utils__/routes';
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
-import { AuthError } from '@errors/auth.errors';
+import { handleError } from '@middleware/error-handler.middleware';
 import type { MediaRatingRepository } from '@repositories/media-rating.repository';
 import { MediaRatingService } from '@services/ratings/media-rating.service';
 
@@ -27,15 +22,12 @@ const setupTest = (authenticated = true) => {
       });
     await next();
   });
-  app.onError((error, c) =>
-    c.json({ error: error.message }, error instanceof AuthError ? 401 : 500)
-  );
+  app.onError(handleError);
   app.route(
     '/ratings',
     createRatingRoutes({
+      rateLimitGuard: noRateLimit,
       mediaRatingService: new MediaRatingService(repository as unknown as MediaRatingRepository),
-      auditLogService: {} as never,
-      configurationService: { get: () => undefined } as never,
     })
   );
   return { app, repository };

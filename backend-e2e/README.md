@@ -316,9 +316,6 @@ If E2E tests fail in GitHub Actions:
 3. **Local reproduction**:
 
    ```bash
-   # Validate CI setup locally
-   ./scripts/validate-e2e-ci.sh
-
    # Run E2E tests with same environment as CI
    npm run test:backend:e2e
    ```

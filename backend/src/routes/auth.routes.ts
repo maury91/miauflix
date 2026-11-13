@@ -5,8 +5,8 @@ import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError, UserAlreadyExistsError } from '@errors/auth.errors';
+import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import type { AuthResult, AuthService } from '@services/auth/auth.service';
 import { LoginThrottle } from '@services/auth/login-throttle';
 import { toUserDto } from '@services/auth/user-dto.util';
@@ -21,34 +21,33 @@ import type {
   RefreshResponse,
   SessionResponse,
 } from './auth.types';
-import type { Deps, ErrorResponse } from './common.types';
+import type { RouteDeps } from './common.types';
 import { avatarLookSchema, displayNameSchema } from './profile.schema';
 
 /** Set the session cookies, or hand the tokens to a client that asked for token transport. */
 function deliverTokens(
-  context: Context,
+  c: Context,
   authService: AuthService,
   { accessToken, refreshToken, ...authResult }: AuthResult
 ): { tokens?: AuthTokens } {
-  if (wantsTokenTransport(context, authService.getSessionCookiePrefixes()))
+  if (wantsTokenTransport(c, authService.getSessionCookiePrefixes()))
     return { tokens: { accessToken, refreshToken } };
-  setCookies(context, authService.getCookies({ accessToken, refreshToken, ...authResult }));
+  setCookies(c, authService.getCookies({ accessToken, refreshToken, ...authResult }));
   return {};
 }
 
 export const createAuthRoutes = ({
+  rateLimitGuard,
   authService,
   auditLogService,
-  configurationService,
   qrLoginService,
-}: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
+}: RouteDeps) => {
   const loginThrottle = new LoginThrottle();
 
   return new Hono()
-    .get('/setup', rateLimitGuard(0.5), async context => {
+    .get('/setup', rateLimitGuard(0.5), async c => {
       const available = await authService.isSetupAvailable();
-      return context.json({ available });
+      return c.json({ available });
     })
     .post(
       '/setup',
@@ -60,31 +59,25 @@ export const createAuthRoutes = ({
           password: z.string().min(8),
         })
       ),
-      async context => {
-        const { email, password } = context.req.valid('json');
-        try {
-          const user = await authService.setupAdmin(email, password, context);
-          if (!user) {
-            return context.json({ error: 'Not found' } satisfies ErrorResponse, 404);
-          }
-          // Auto-login: generate tokens so the frontend gets a session immediately
-          const authResult = await authService.generateTokens(user, context);
-          const delivered = deliverTokens(context, authService, authResult);
-          return context.json(
-            {
-              session: authResult.session,
-              user: authResult.user,
-              ...delivered,
-            } satisfies LoginResponse,
-            201
-          );
-        } catch (error: unknown) {
-          if (error instanceof Error && error.message === 'Admin user already exists') {
-            // We do not want to leak that the service was initialized with the allowCreateAdminOnFirstRun enabled
-            return context.json({ error: 'Not found' } satisfies ErrorResponse, 404);
-          }
-          return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);
-        }
+      async c => {
+        const { email, password } = c.req.valid('json');
+        const user = await authService.setupAdmin(email, password, c).catch((error: unknown) => {
+          if (error instanceof Error && error.message === 'Admin user already exists') return null;
+          throw error;
+        });
+        // Same answer either way: do not leak that the first admin can be created here.
+        if (!user) throw new HttpError(404, 'Not found');
+        // Auto-login: generate tokens so the frontend gets a session immediately
+        const authResult = await authService.generateTokens(user, c);
+        const delivered = deliverTokens(c, authService, authResult);
+        return c.json(
+          {
+            session: authResult.session,
+            user: authResult.user,
+            ...delivered,
+          } satisfies LoginResponse,
+          201
+        );
       }
     )
     .post(
@@ -97,22 +90,19 @@ export const createAuthRoutes = ({
           password: z.string().min(1),
         })
       ),
-      async context => {
-        const { email, password } = context.req.valid('json');
+      async c => {
+        const { email, password } = c.req.valid('json');
 
         // Per account, on top of the per-IP limit: guesses spread over many addresses add up here
         const retryAfter = loginThrottle.begin(email);
         if (retryAfter > 0) {
           await auditLogService.logSuspiciousActivity({
             userEmail: email,
-            context,
+            context: c,
             description: 'Login refused: too many failed attempts for this account',
           });
-          context.header('Retry-After', String(retryAfter));
-          return context.json(
-            { error: 'Too many failed login attempts. Try again later.' } satisfies ErrorResponse,
-            429
-          );
+          c.header('Retry-After', String(retryAfter));
+          throw new HttpError(429, 'Too many failed login attempts. Try again later.');
         }
 
         let user: Awaited<ReturnType<typeof authService.validateUser>>;
@@ -127,26 +117,26 @@ export const createAuthRoutes = ({
           await auditLogService.logLoginAttempt({
             success: false,
             userEmail: email,
-            context,
+            context: c,
           });
-          return context.json({ error: 'Invalid credentials' } satisfies ErrorResponse, 401);
+          throw new HttpError(401, 'Invalid credentials');
         }
         loginThrottle.succeed(email);
 
         // Generate tokens
-        const authResult = await authService.generateTokens(user, context);
+        const authResult = await authService.generateTokens(user, c);
 
         // Set authentication cookies (or return the tokens to a token-transport client)
-        const delivered = deliverTokens(context, authService, authResult);
+        const delivered = deliverTokens(c, authService, authResult);
 
         await auditLogService.logLoginAttempt({
           success: true,
           userEmail: email,
-          context,
+          context: c,
         });
 
         // Return session and user info (tokens are in cookies unless token transport was asked)
-        return context.json({
+        return c.json({
           session: authResult.session,
           user: authResult.user,
           ...delivered,
@@ -156,35 +146,35 @@ export const createAuthRoutes = ({
     .post(
       '/refresh/:session',
       rateLimitGuard(0.2), // 1 attempt every 5 seconds
-      async context => {
-        const { session } = context.req.param();
+      async c => {
+        const { session } = c.req.param();
         // Get refresh token from session-scoped HttpOnly cookie (or X-Refresh-Token)
         const { name: cookieName } = authService.getCookieConfig(session);
-        const refreshToken = readRefreshToken(context, cookieName);
+        const refreshToken = readRefreshToken(c, cookieName);
 
         if (!refreshToken) {
           throw new InvalidTokenError();
         }
 
         // Refresh tokens with rotation
-        const authResult = await authService.refreshTokens(refreshToken, session, context);
+        const authResult = await authService.refreshTokens(refreshToken, session, c);
 
         if (!authResult) {
           // Clear invalid cookies
-          authService.clearCookies(context, session);
+          authService.clearCookies(c, session);
           throw new InvalidTokenError();
         }
 
         // Set authentication cookies (or return the tokens to a token-transport client)
-        const delivered = deliverTokens(context, authService, authResult);
+        const delivered = deliverTokens(c, authService, authResult);
 
         await auditLogService.logTokenRefresh({
           userEmail: authResult.user.email,
-          context,
+          context: c,
         });
 
         // Return user info (tokens are in cookies unless token transport was asked)
-        return context.json({
+        return c.json({
           user: authResult.user,
           ...delivered,
         } satisfies RefreshResponse);
@@ -193,11 +183,11 @@ export const createAuthRoutes = ({
     .post(
       '/logout/:session',
       rateLimitGuard(1), // 1 attempt per second
-      async context => {
-        const { session } = context.req.param();
+      async c => {
+        const { session } = c.req.param();
         // Get refresh token from session-scoped HttpOnly cookie (or X-Refresh-Token)
         const { name: cookieName } = authService.getCookieConfig(session);
-        const refreshToken = readRefreshToken(context, cookieName);
+        const refreshToken = readRefreshToken(c, cookieName);
 
         if (refreshToken) {
           const user = await authService.logout(refreshToken, session);
@@ -205,16 +195,16 @@ export const createAuthRoutes = ({
           if (user) {
             await auditLogService.logTokenInvalidation({
               userEmail: user.email,
-              context,
+              context: c,
               reason: 'User logged out',
             });
           }
         }
 
         // Clear cookies for this specific session only
-        authService.clearCookies(context, session);
+        authService.clearCookies(c, session);
 
-        return context.json({ message: 'Logged out successfully' } satisfies LogoutResponse);
+        return c.json({ message: 'Logged out successfully' } satisfies LogoutResponse);
       }
     )
     .post(
@@ -231,79 +221,75 @@ export const createAuthRoutes = ({
           avatar: avatarLookSchema.optional(),
         })
       ),
-      async context => {
-        const { email, password, role, displayName, avatar } = context.req.valid('json');
+      async c => {
+        const { email, password, role, displayName, avatar } = c.req.valid('json');
 
         let newUser: Awaited<ReturnType<typeof authService.createUser>>;
         try {
           newUser = await authService.createUser(email, password, role, { displayName, avatar });
         } catch (error) {
           if (error instanceof UserAlreadyExistsError) {
-            return context.json(
-              { error: 'An account with this email already exists' } satisfies ErrorResponse,
-              409
-            );
+            throw new HttpError(409, 'An account with this email already exists');
           }
           throw error;
         }
-        return context.json(toUserDto(newUser) satisfies CreateUserResponse, 201);
+        return c.json(toUserDto(newUser) satisfies CreateUserResponse, 201);
       }
     )
-    .post('/qr', rateLimitGuard(2), async context => {
-      return context.json(await qrLoginService.create(context));
+    .post('/qr', rateLimitGuard(2), async c => {
+      return c.json(await qrLoginService.create(c));
     })
-    .get('/qr/:approvalToken', rateLimitGuard(10), async context => {
-      const request = await qrLoginService.getApproval(context.req.param('approvalToken'));
-      if (!request) return context.json({ error: 'QR login request not found' }, 404);
+    .get('/qr/:approvalToken', rateLimitGuard(10), async c => {
+      const request = await qrLoginService.getApproval(c.req.param('approvalToken'));
+      if (!request) throw new HttpError(404, 'QR login request not found');
       if (request.expiresAt <= new Date()) {
-        return context.json({ state: 'expired', expiresAt: request.expiresAt.toISOString() });
+        return c.json({ state: 'expired', expiresAt: request.expiresAt.toISOString() });
       }
-      return context.json({
+      return c.json({
         state: request.state,
         expiresAt: request.expiresAt.toISOString(),
         device: { userAgent: request.userAgent },
       });
     })
-    .post('/qr/:approvalToken/approve', rateLimitGuard(1), authGuard(), async context => {
-      const { user } = context.get('sessionInfo');
-      const request = await qrLoginService.approve(context.req.param('approvalToken'), user.id);
-      if (!request) return context.json({ error: 'QR login request is no longer pending' }, 409);
-      return context.json({ state: 'approved' as const });
+    .post('/qr/:approvalToken/approve', rateLimitGuard(1), authGuard(), async c => {
+      const { user } = c.get('sessionInfo');
+      const request = await qrLoginService.approve(c.req.param('approvalToken'), user.id);
+      if (!request) throw new HttpError(409, 'QR login request is no longer pending');
+      return c.json({ state: 'approved' as const });
     })
-    .post('/qr/:approvalToken/reject', rateLimitGuard(1), authGuard(), async context => {
-      const rejected = await qrLoginService.reject(context.req.param('approvalToken'));
-      return rejected
-        ? context.json({ state: 'rejected' as const })
-        : context.json({ error: 'QR login request is no longer pending' }, 409);
+    .post('/qr/:approvalToken/reject', rateLimitGuard(1), authGuard(), async c => {
+      const rejected = await qrLoginService.reject(c.req.param('approvalToken'));
+      if (!rejected) throw new HttpError(409, 'QR login request is no longer pending');
+      return c.json({ state: 'rejected' as const });
     })
     .post(
       '/qr/:requestId/claim',
       rateLimitGuard(1),
       zValidator('json', z.object({ claimToken: z.string().min(32) })),
-      async context => {
-        const { claimToken } = context.req.valid('json');
-        const claim = await qrLoginService.beginClaim(claimToken, context.req.param('requestId'));
+      async c => {
+        const { claimToken } = c.req.valid('json');
+        const claim = await qrLoginService.beginClaim(claimToken, c.req.param('requestId'));
         if (!claim) {
-          return context.json({ state: 'pending' as const }, 202);
+          return c.json({ state: 'pending' as const }, 202);
         }
         const { request, lease } = claim;
         let authResult!: Awaited<ReturnType<typeof authService.generateTokens>>;
         try {
           if (!request.approvedUserId) {
             await qrLoginService.releaseClaim(request.id, lease);
-            return context.json({ error: 'QR login request has no approving user' }, 409);
+            throw new HttpError(409, 'QR login request has no approving user');
           }
           const user = await authService.getUserById(request.approvedUserId);
           if (!user) {
             await qrLoginService.releaseClaim(request.id, lease);
-            return context.json({ error: 'Approving user no longer exists' }, 409);
+            throw new HttpError(409, 'Approving user no longer exists');
           }
-          authResult = await authService.generateTokens(user, context);
+          authResult = await authService.generateTokens(user, c);
           const completed = await qrLoginService.completeClaim(request.id, lease);
           if (!completed) {
             await authService.revokeSession(user.id, authResult.session);
             await qrLoginService.releaseClaim(request.id, lease);
-            return context.json({ state: 'pending' as const }, 202);
+            return c.json({ state: 'pending' as const }, 202);
           }
         } catch (error) {
           try {
@@ -315,8 +301,8 @@ export const createAuthRoutes = ({
           }
           throw error;
         }
-        const delivered = deliverTokens(context, authService, authResult);
-        return context.json({
+        const delivered = deliverTokens(c, authService, authResult);
+        return c.json({
           session: authResult.session,
           user: authResult.user,
           ...delivered,
@@ -326,19 +312,19 @@ export const createAuthRoutes = ({
     .get(
       '/sessions',
       rateLimitGuard(0.5), // 1 request every 2 seconds (sensitive endpoint)
-      async context => {
-        const sessions = await authService.getSessionsFromCookies(context);
-        return context.json(sessions);
+      async c => {
+        const sessions = await authService.getSessionsFromCookies(c);
+        return c.json(sessions);
       }
     )
-    .get('/session', authGuard(), async context => {
-      const sessionInfo = context.get('sessionInfo');
+    .get('/session', authGuard(), async c => {
+      const sessionInfo = c.get('sessionInfo');
       const user = await authService.getUserById(sessionInfo.user.id);
       if (!user) {
         throw new InvalidTokenError();
       }
 
-      return context.json({
+      return c.json({
         id: sessionInfo.sessionId,
         user: toUserDto(user),
       } satisfies SessionResponse);

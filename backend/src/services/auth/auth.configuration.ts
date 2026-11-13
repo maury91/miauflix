@@ -21,13 +21,6 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       required: false,
       transform: transforms.time(['s', 'm', 'h', 'd']),
     }),
-    STREAM_KEY_SALT: variable({
-      description: 'Salt for generating deterministic streaming key hashes',
-      example: 'a-random-streaming-salt-key',
-      defaultValue: () => randomBytes(32).toString('hex'),
-      required: true,
-      skipUserInteraction: true,
-    }),
     REFRESH_TOKEN_COOKIE_NAME: variable({
       description: 'Name for the refresh token HttpOnly cookie',
       example: '__refresh_token',

@@ -2,7 +2,7 @@
 
 TV playback combines catalog episode identity, source discovery, explicit video-file associations, per-file storage claims, and user-bound streaming grants. A season pack is shared storage containing independently selectable episode files.
 
-See [source identity and file claims](source-identity-and-file-claims-plan.md) for the data model and [System overview](system-overview.md) for service ownership.
+See [source identity and file claims](source-identity-and-file-claims.md) for the data model and [System overview](system-overview.md) for service ownership.
 
 ## Catalog identity and source matching
 
@@ -32,7 +32,7 @@ Playback claims have higher piece priority than prefetch claims. File selections
 
 The player deduplicates its next-download request by episode identity. Seeking or repeated progress reports do not require a separate copy of the same episode.
 
-Implementation: [player preparation](../../frontend/src/features/player/ui/PlayerView.tsx), [prefetch authorization](../../backend/src/routes/stream.routes.ts), and [download ownership](../../backend/src/services/download/download.service.ts).
+Implementation: [player preparation](../../frontend/src/features/player/ui/PlayerView.tsx), [prefetch authorization](../../backend/src/routes/stream.routes.ts), and [download ownership](../../services/media-load/src/engine/download.service.ts) in the media-load service.
 
 ## Credits and automatic continuation
 
@@ -56,7 +56,7 @@ A single normalized source owns torrent data for all associated episodes. Storag
 
 The configured seeding window starts when currently requested files are complete. An incomplete request reopens completion state. Detaching an idle completed torrent retains encrypted data, and a later episode request can attach it again for missing pieces.
 
-Cleanup can reclaim individual eligible files from a retained pack. It protects active playback and stronger claims, and accounts for shared boundary pieces. Source records and episode associations remain available for reacquisition. See [file reclamation](source-identity-and-file-claims-plan.md#per-file-reclamation-and-concurrency).
+Cleanup can reclaim individual eligible files from a retained pack. It protects active playback and stronger claims, and accounts for shared boundary pieces. Source records and episode associations remain available for reacquisition. See [file reclamation](source-identity-and-file-claims.md#per-file-reclamation-and-concurrency).
 
 ## Notifications and navigation
 

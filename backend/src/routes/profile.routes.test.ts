@@ -1,13 +1,8 @@
-jest.mock('@middleware/rate-limit.middleware', () => ({
-  createRateLimitMiddlewareFactory:
-    () => () => async (_context: unknown, next: () => Promise<void>) =>
-      next(),
-}));
-
+import { noRateLimit } from '@__test-utils__/routes';
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
-import { AuthError } from '@errors/auth.errors';
+import { handleError } from '@middleware/error-handler.middleware';
 import type { ProfileService } from '@services/profile/profile.service';
 import { InvalidAvatarImageError, MAX_AVATAR_IMAGE_BYTES } from '@services/profile/profile.service';
 
@@ -40,12 +35,11 @@ const setupTest = (authenticated = true) => {
       });
     await next();
   });
-  app.onError((error, c) =>
-    c.json({ error: error.message }, error instanceof AuthError ? 401 : 500)
-  );
+  app.onError(handleError);
   app.route(
     '/auth',
     createProfileRoutes({
+      rateLimitGuard: noRateLimit,
       auditLogService: {},
       configurationService: { get: () => undefined },
       profileService: profileService as unknown as ProfileService,

@@ -3,10 +3,11 @@
 Miauflix uses Bunqueue for all recurring work. The schedule definitions live next to
 their owning domain:
 
-- `services/source/source.schedule.ts` — source discovery, metadata, and statistics seeds
-- `services/cache/cache.schedule.ts` — cache cleanup
-- `services/media/list.schedule.ts` — one refresh schedule per configured list
-- `services/catalog/catalog.schedule.ts` — catalog change scans and season hydration
+- [`services/source/source.schedule.ts`](../src/services/source/source.schedule.ts) — source discovery, metadata, and statistics seeds
+- [`services/cache/cache.schedule.ts`](../src/services/cache/cache.schedule.ts) — cache cleanup
+- [`services/media/list.schedule.ts`](../src/services/media/list.schedule.ts) — one refresh schedule per configured list
+- [`services/catalog/catalog.schedule.ts`](../src/services/catalog/catalog.schedule.ts) — catalog change scans and season hydration
+- [`services/security/security-cleanup.ts`](../src/services/security/security-cleanup.ts) — expired audit logs, QR logins, refresh tokens and streaming keys
 
 `ServiceScheduleCoordinator` is the lifecycle boundary. It connects to Bunqueue,
 upserts the desired schedules, retries broker failures, removes stale list and legacy
@@ -21,6 +22,7 @@ schedules, and waits for reconciliation to finish during shutdown.
 | Catalog movie/show scans |       90 minutes |        Yes         |
 | Incomplete season seed   |        5 seconds |        Yes         |
 | Cache cleanup            |          6 hours |         No         |
+| Security cleanup         |         24 hours |        Yes         |
 
 Every schedule is durable, prevents overlap, retries failed jobs with exponential
 backoff, and skips missed historical runs after a restart. Existing configured interval

@@ -161,7 +161,7 @@ These are the current authentication setting names and defaults, rather than a r
 
 Generated secrets are persisted by the configuration system so they survive restarts. Preserve the server's persistent data and keys. See [configuration bootstrap](../src/services/configuration/configuration.service.ts) and [HTTPS deployment](../../docker-compose.https.yml).
 
-Streaming uses separate settings and credentials, including `STREAM_TOKEN_EXPIRATION` and `STREAM_KEY_SALT`. Video access is not authenticated by putting an ordinary API JWT in the stream URL. See [Streaming Services](streaming-services.md) and the [stream route](../src/routes/stream.routes.ts).
+Streaming uses separate settings and credentials, including `STREAM_TOKEN_EXPIRATION`. Video access is not authenticated by putting an ordinary API JWT in the stream URL. See [Streaming Services](streaming-services.md) and the [stream route](../src/routes/stream.routes.ts).
 
 ## Current UI boundaries
 

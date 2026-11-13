@@ -484,8 +484,9 @@ export class ConfigurationService {
             }
           }
         } catch (error) {
-          console.warn(
-            `[Config] ${key}: invalid value — ${error instanceof Error ? error.message : error}`
+          logger.warn(
+            'Config',
+            `${key}: invalid value — ${error instanceof Error ? error.message : error}`
           );
           invalidKeys.push(key);
         }

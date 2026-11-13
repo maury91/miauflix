@@ -2,7 +2,7 @@
 
 Miauflix separates a downloadable source from the movies or episodes it contains, the file a viewer plays, and the consumers that need that file. This separation lets several accounts play different episodes from one season pack without sharing a mutable file selection.
 
-See [TV source architecture](tv-source-support-plan.md) for episode discovery and continuation, and [System overview](system-overview.md) for service boundaries.
+See [TV source architecture](tv-source-support.md) for episode discovery and continuation, and [System overview](system-overview.md) for service boundaries.
 
 ## Source and association records
 
@@ -32,7 +32,7 @@ For an episode, resolution first checks the associated path exactly against the 
 
 Probe caches and subtitle candidate identities include the video file identity. Different episodes in one source therefore have distinct inspection and subtitle state. Subtitle sidecars are addressed as specific files of the same source.
 
-Implementation: [target type](../../backend/src/services/playback/playback-target.ts), [target resolution](../../backend/src/services/playback/playback-target.service.ts), [episode association mutations](../../backend/src/repositories/episode-source.repository.ts), and [encrypted file reader](../../backend/src/services/download/encrypted-file-reader.ts).
+Implementation: [target type](../../backend/src/services/playback/playback-target.ts), [target resolution](../../backend/src/services/playback/playback-target.service.ts), [episode association mutations](../../backend/src/repositories/episode-source.repository.ts), and [encrypted file reader](../../services/media-load/src/engine/encrypted-file-reader.ts).
 
 ## Claims and selection
 
@@ -48,9 +48,9 @@ A claim identifies storage, path, kind, owner key, optional byte range, and opti
 
 Download priority and retention protection are separate properties. Selection uses the union of live claims, applying the highest applicable priority to overlapping data. Releasing one owner does not release another owner's interest. Paused sources have no selected pieces until resumed. Matching subtitle sidecars copy the video's live claims.
 
-`StorageService` owns claim persistence and storage admission. `DownloadService` owns WebTorrent selection and applies claim changes through per-source reconciliation. Admission records its claim with the admitted storage, preventing an unclaimed interval in which cleanup could remove a newly accepted request. Expiry cleanup releases expired claims and reconciles affected source selections; startup clears transient playback claims.
+Both run in the media-load service. `StorageService` owns claim persistence and storage admission. `DownloadService` owns WebTorrent selection and applies claim changes through per-source reconciliation. Admission records its claim with the admitted storage, preventing an unclaimed interval in which cleanup could remove a newly accepted request. Expiry cleanup releases expired claims and reconciles affected source selections; startup clears transient playback claims.
 
-Implementation: [claim model and ranks](../../backend/src/entities/storage-file-claim.entity.ts), [file completion model](../../backend/src/entities/storage-file.entity.ts), [storage service](../../backend/src/services/storage/storage.service.ts), and [download selection](../../backend/src/services/download/download.service.ts).
+Implementation: [claim model and ranks](../../services/media-load/src/storage/types.ts), [claim and file repository](../../services/media-load/src/storage/storage-file.repository.ts), [storage service](../../services/media-load/src/storage/storage.service.ts), and [download selection](../../services/media-load/src/engine/download.service.ts). The backend's [storage hand-off](../../backend/src/services/media-load/storage-handoff.ts) moves storage recorded by older backends into the service.
 
 ## Completion and retention
 
@@ -70,10 +70,10 @@ Physical deletion, bitfield changes, and database completion/accounting updates 
 
 Reselection runs after the source lock and outside the admission queue. It can attach torrents and acquire source locks, so running it inside admission would create a lock-order hazard. Claimed files are reselected after either successful or failed cleanup.
 
-Implementation: [reclamation](../../backend/src/services/storage/storage.service.ts), [file repository](../../backend/src/repositories/storage-file.repository.ts), [encrypted chunk storage](../../backend/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), and [piece geometry helpers](../../backend/src/services/source/video-files.ts).
+Implementation: [reclamation](../../services/media-load/src/storage/storage.service.ts), [file repository](../../services/media-load/src/storage/storage-file.repository.ts), [encrypted chunk storage](../../services/media-load/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), and [piece geometry helpers](../../services/media-load/src/engine/download.utils.ts).
 
 ## Data preservation
 
-Database initialization applies registered column renames and synchronizes the TypeORM schema. Ordered data migrations run before normal service work. Entity changes require preservation of existing associations, encrypted records, storage data, and keys; deleting the database or downloads is not an initialization requirement.
+Database initialization backs up the database before a schema change, applies the [schema migrations](../../backend/src/database/schema-upgrade.ts) (never TypeORM `synchronize()`), then runs the ordered data migrations before normal service work. Storage, claims and encrypted chunks are owned by the media-load service's own database. Entity changes require preservation of existing associations, encrypted records, storage data, and keys; deleting the database or downloads is not an initialization requirement.
 
-See [data migration constraints](../ai/gotchas.md#-data-migrations) and the [migration registry](../../backend/src/database/migrations/index.ts). Tests for targets, associations, claims, shared-pack reads, and reclamation live alongside their owning modules. Planned combined-episode boundaries and additional integration coverage are tracked in [ToDo.md](../../ToDo.md#tv-source-support).
+See the append-only [data migration registry](../../backend/src/database/migrations/index.ts). Tests for targets, associations, claims, shared-pack reads, and reclamation live alongside their owning modules. Planned combined-episode boundaries and additional integration coverage are tracked in [ToDo.md](../../ToDo.md#tv-source-support).

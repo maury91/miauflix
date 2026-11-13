@@ -248,26 +248,6 @@ describe('Movie Endpoints', () => {
     });
   });
 
-  // describe.skip('POST /movies/:mediaId/:quality', () => {
-  //   it('should generate a streaming key for a valid movie', async () => {
-  //     if (!userCredentials) {
-  //       throw new Error(
-  //         'No user credentials available for testing - ensure backend is running and generating admin user'
-  //       );
-  //     }
-
-  //     const response = await client.post(['api', 'movies', ':mediaId', ':quality'], {
-  //       param: { mediaId: '550', quality: 'auto' },
-  //     });
-
-  //     expect(response).toBeHttpStatus(200);
-  //     expect(response.data).toHaveProperty('streamingKey');
-  //     if ('streamingKey' in response.data) {
-  //       expect(typeof response.data.streamingKey).toBe('string');
-  //     }
-  //   });
-  // });
-
   // Performance test: on-demand source request for unprocessed movie
   it('should request a source on-demand for an unprocessed movie in under 1 second', async () => {
     if (!userCredentials) {

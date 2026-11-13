@@ -4,10 +4,11 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
+import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { handleError } from '@middleware/error-handler.middleware';
 
-import type { Deps } from './common.types';
+import type { RouteDeps } from './common.types';
 
 const updateSchema = z.object({
   enabled: z.boolean().optional(),
@@ -54,11 +55,8 @@ const failure = (error: unknown) => {
   return null;
 };
 
-export const createSourcesRoutes = (deps: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(
-    deps.auditLogService,
-    deps.configurationService
-  );
+export const createSourcesRoutes = (deps: RouteDeps) => {
+  const { rateLimitGuard } = deps;
   const sources = deps.sourcesClientService;
   const admin = authGuard(UserRole.ADMIN);
 
@@ -66,7 +64,7 @@ export const createSourcesRoutes = (deps: Deps) => {
     .onError((error, c) => {
       const mapped = failure(error);
       if (!mapped) throw error;
-      return c.json({ error: mapped.message }, mapped.status);
+      return handleError(new HttpError(mapped.status, mapped.message), c);
     })
     .get('/providers', rateLimitGuard(10), admin, async c => c.json(await sources.providers()))
     .put('/providers/order', rateLimitGuard(5), admin, zValidator('json', orderSchema), async c =>

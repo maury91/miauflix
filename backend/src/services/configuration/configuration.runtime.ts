@@ -80,8 +80,9 @@ export async function restoreRuntimeServices(
       }
     } catch (error) {
       if (!readyBefore || readyBefore.has(serviceName)) failed.push(serviceName);
-      console.warn(
-        `[Config] Failed to restore ${serviceName} after a configuration test: ${error instanceof Error ? error.message : error}`
+      logger.warn(
+        'Config',
+        `Failed to restore ${serviceName} after a configuration test: ${error instanceof Error ? error.message : error}`
       );
     }
   }

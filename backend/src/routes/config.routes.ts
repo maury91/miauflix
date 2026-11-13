@@ -4,21 +4,18 @@ import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
 import { ConfigurationServiceError } from '@errors/configuration.errors';
+import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { ALL_VAR_NAMES } from '@services/configuration/configuration.consts';
 import { isConfigGroupName } from '@services/configuration/configuration.utils';
 
-import type { Deps } from './common.types';
+import type { RouteDeps } from './common.types';
 const configEntriesSchema = z.object({
   entries: z.array(z.object({ key: z.string(), value: z.string() })),
 });
 
-export const createConfigRoutes = (deps: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(
-    deps.auditLogService,
-    deps.configurationService
-  );
+export const createConfigRoutes = (deps: RouteDeps) => {
+  const { rateLimitGuard } = deps;
 
   return (
     new Hono()
@@ -38,9 +35,9 @@ export const createConfigRoutes = (deps: Deps) => {
 
           const unknownKeys = entries.filter(e => !ALL_VAR_NAMES.has(e.key));
           if (unknownKeys.length > 0) {
-            return c.json(
-              { error: `Unknown configuration keys: ${unknownKeys.map(e => e.key).join(', ')}` },
-              400
+            throw new HttpError(
+              400,
+              `Unknown configuration keys: ${unknownKeys.map(e => e.key).join(', ')}`
             );
           }
 
@@ -57,7 +54,7 @@ export const createConfigRoutes = (deps: Deps) => {
         async c => {
           const serviceParam = c.req.param('service').toUpperCase();
           if (!isConfigGroupName(serviceParam)) {
-            return c.json({ error: `Configuration group '${serviceParam}' does not exist` }, 404);
+            throw new HttpError(404, `Configuration group '${serviceParam}' does not exist`);
           }
           const { entries } = c.req.valid('json');
           return c.json(await deps.configurationService.testServiceConfigs(serviceParam, entries));
@@ -73,7 +70,7 @@ export const createConfigRoutes = (deps: Deps) => {
         async c => {
           const serviceParam = c.req.param('service').toUpperCase();
           if (!isConfigGroupName(serviceParam)) {
-            return c.json({ error: `Configuration group '${serviceParam}' does not exist` }, 404);
+            throw new HttpError(404, `Configuration group '${serviceParam}' does not exist`);
           }
           const { entries } = c.req.valid('json');
           return c.json(await deps.configurationService.saveServiceConfigs(serviceParam, entries));
@@ -92,7 +89,7 @@ export const createConfigRoutes = (deps: Deps) => {
           if (e instanceof ConfigurationServiceError) {
             switch (e.code) {
               case 'service_not_found':
-                return c.json({ error: e.message }, 404);
+                throw new HttpError(404, e.message);
               case 'service_not_registered':
                 return c.json(
                   {
@@ -102,9 +99,9 @@ export const createConfigRoutes = (deps: Deps) => {
                   422
                 );
             }
-            return c.json({ error: e.message }, 400);
+            throw new HttpError(400, e.message);
           }
-          return c.json({ error: 'Restart failed' }, 500);
+          throw new HttpError(500, 'Restart failed', { cause: e });
         }
       })
   );

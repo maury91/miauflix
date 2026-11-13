@@ -2,7 +2,7 @@
 
 ## TV source support
 
-See [TV source support plan](docs/architecture/tv-source-support-plan.md).
+See [TV source support plan](docs/architecture/tv-source-support.md).
 
 - [ ] Support multi-episode video releases correctly (for example, two broadcast episodes in one file). Exact single-episode sources remain preferred and combined videos remain a last resort. Resolve catalog numbering, episode boundaries, resume/progress attribution, and subtitle timing before treating a combined file as episode-accurate; never split its duration evenly.
 - [ ] Evaluate bounded credits-tail analysis and mid/post-credit story-scene detection. Current playback uses named end-credit chapters (including anime ED/Ending), skips to a chapter-marked scene after credits, and otherwise uses the final-90-second countdown; validate any detector against offline fixtures before enabling automatic transitions.

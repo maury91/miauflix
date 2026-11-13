@@ -41,10 +41,34 @@ miauflix/
 
 ### Prerequisites
 
-- Node.js 22 or later (`nvm use` picks the pinned version): npm, the frontend and its tooling
-- [Bun](https://bun.sh/) 1.4 or later: runs the backend and the catalog, list, source and media-load services
+- [Bun](https://bun.sh/) 1.4 (the version in `packageManager`): installs every workspace and runs the backend and the catalog, list, source and media-load services
+- Node.js 22 (`.nvmrc`; `nvm use` picks it): runs the frontend's Vite, Vitest and Playwright tooling, the packages' `node --test` suites, and the repository scripts in `scripts/`
 - Docker and Docker Compose (for full stack testing)
 - Git
+
+### Toolchain at a glance
+
+| Question                         | Answer                                                                                                                                                                                                          |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Which package manager?           | Bun. `bun install` at the root installs every workspace.                                                                                                                                                        |
+| Which lockfile is authoritative? | The root `bun.lock`, the only one for the workspaces. `package-lock.json` is ignored; never commit one. The E2E mock servers in `backend-e2e/docker/mock` are a separate Bun project with their own `bun.lock`. |
+| Why do scripts say `npm run`?    | npm only runs `package.json` scripts here (`npm run dev`, `npm test --workspace …`); `bun run` works too. Neither installs anything.                                                                            |
+| What do Docker images use?       | `bun install --frozen-lockfile` against the root `bun.lock`; Node 22 is present only in build stages, for the frontend build.                                                                                   |
+| Which runtime runs the code?     | Bun for the backend and services; the browser (or Node during the build) for the frontend.                                                                                                                      |
+
+### Test runners
+
+Each workspace keeps the runner its tests were written for; `npm test` at the root runs the backend, frontend, package and service suites through Turbo; the E2E suites have their own commands (see the [testing guide](testing-guide.md) and [`backend-e2e`](../../backend-e2e/README.md)).
+
+| Workspace                                                                  | Runner                           | Write new tests with                                                                                                                                                                                                                                                                          |
+| -------------------------------------------------------------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `backend`                                                                  | `bun test --isolate`             | The Jest API (`jest.fn`, `jest.mock`, `jest.useFakeTimers`) as globals. [`bun-jest.preload.ts`](../../backend/src/__test-utils__/bun-jest.preload.ts) gives Bun Jest's mocking and hoisting; see [Bun compatibility](bun-compatibility.md#tests). Don't mix in `mock.module` from `bun:test`. |
+| `services/*`, `tv-pairing`                                                 | `bun test`                       | Imports from `bun:test` (`describe`, `expect`, `mock`, `spyOn`; its `jest` export for fake timers). No preload.                                                                                                                                                                               |
+| `frontend`                                                                 | Vitest                           | Vitest's `vi` API, tests beside their source.                                                                                                                                                                                                                                                 |
+| `packages/contract`, `service-configuration`, `vpn-guard`, `anime-mapping` | `node --test` on the built files | `node:test` and `node:assert`, so the packages stay runtime-neutral (`contract` also runs them under Bun).                                                                                                                                                                                    |
+| `packages/source-metadata-extractor`, `backend-e2e`                        | Jest                             | Jest.                                                                                                                                                                                                                                                                                         |
+
+The backend's Jest-style tests are deliberate rather than leftovers: they predate the move to Bun, and the preload keeps them running unchanged.
 
 ### Initial Setup
 
@@ -170,37 +194,13 @@ import { User } from '../../../entities/user.entity';
 - `@mytypes/*` - `src/types/*` - TypeScript type definitions
 - `@errors/*` - `src/errors/*` - Error classes
 - `@dto/*` - `src/dto/*` - Data transfer objects
-- `@content-directories/*` - `src/content-directories/*` - Content directory handling
 - `@logger` - `src/logger` - Logger configuration
 - `@constants` - `src/constants` - Application constants
 - `@__test-utils__/*` - `src/__test-utils__/*` - Test utility functions
 
 ### Frontend Path Aliases
 
-**Vite Config Aliases (for bundling):**
-
-- `@` - `./src` - Source root directory
-- `@components` - `./src/app/components` - React components
-- `@pages` - `./src/app/pages` - Page components
-- `@store` - `./src/store` - Redux store and slices
-- `@types` - `./src/types` - TypeScript type definitions
-- `@utils` - `./src/utils` - Utility functions
-- `@hooks` - `./src/app/hooks` - React hooks
-- `@consts` - `./src/consts` - Application constants
-
-**TypeScript Config Aliases (for type checking):**
-
-- `@/*` - `./src/*` - Source root directory (includes subdirectories)
-- `@components/*` - `./src/app/components/*` - React components
-- `@pages/*` - `./src/app/pages/*` - Page components
-- `@store/*` - `./src/store/*` - Redux store and slices
-- `@types/*` - `./src/types/*` - TypeScript type definitions
-- `@utils/*` - `./src/utils/*` - Utility functions
-- `@hooks/*` - `./src/app/hooks/*` - React hooks
-- `@consts/*` - `./src/consts/*` - Application constants
-- `@miauflix/types` - `./src/types/api` - API type definitions
-
-**Note**: Frontend Jest tests include `moduleNameMapper` for `^@/(.*)$` → `./src/$1` and `^~icons/(.*)$` → icon mocks. Add any other needed aliases to `frontend/jest.config.ts`.
+The frontend's aliases (`@app`, `@features`, `@pages`, `@shared`, `@store`, `@types`, `@utils`, and `@` for `src`) are defined in `frontend/tsconfig.json` and `frontend/vite.config.ts`, which Vitest also reads; see the [frontend README](../../frontend/README.md#path-aliases). Add a new alias to both files.
 
 ### TypeScript Standards
 
@@ -270,10 +270,10 @@ describe('Service', () => {
 
 ```typescript
 // ✅ CORRECT - Mocks at file top before imports
-jest.mock('@services/download/download.service');
+jest.mock('@services/media-load/media-load-client.service');
 jest.mock('@repositories/movie.repository');
 
-import { DownloadService } from '@services/download/download.service';
+import { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
 describe('Service', () => {
   // Tests here
@@ -323,13 +323,14 @@ docs: update API documentation
 refactor: simplify database connection logic
 ```
 
-### Pre-commit Hooks
+### Git Hooks
 
-The project uses Husky for pre-commit hooks:
+Husky runs two hooks:
 
-- **Prettier** - Code formatting
-- **ESLint** - Code linting (backend only)
-- **Type checking** - TypeScript validation
+- **pre-commit** runs [lint-staged](../../package.json) on the staged files only: Prettier formats staged JS, TS, JSON, CSS and Markdown, and ESLint (`--fix`) checks staged TypeScript in `backend/src` and the services. Then `npm run check:ts` type-checks every workspace (Turbo caches unchanged ones).
+- **pre-push** runs `npm test`, the unit suites of the backend, frontend, packages and services, so a push never carries a failing test.
+
+CI runs all of these again (`npm run build`, `npm run check:ts`, `npm run lint`, `npm run format:check` and `npm test`) on every push and pull request.
 
 ## Code Quality
 
@@ -342,7 +343,7 @@ npm run format
 # Check formatting without changes
 npm run format:check
 
-# Lint backend code
+# Lint every workspace
 npm run lint
 
 # Fix linting issues automatically

@@ -1,27 +1,21 @@
 import { zValidator } from '@hono/zod-validator';
 import { logger } from '@logger';
-import { Quality } from '@miauflix/source-metadata-extractor';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
-import { InvalidTokenError } from '@errors/auth.errors';
 import { ErrorWithStatus } from '@errors/error-with-status.error';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { HttpError } from '@errors/http.error';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
 
-import type { Deps, ErrorResponse } from './common.types';
+import type { RouteDeps } from './common.types';
 
 export const createStreamRoutes = ({
-  auditLogService,
+  rateLimitGuard,
   audioPlaybackService,
-  authService,
-  configurationService,
   mediaLoadClient,
-  mediaService,
   playbackSessionService,
   streamService,
-}: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
+}: RouteDeps) => {
   /** A fake source surfaces as `source_file_unavailable`; `null` lets the route answer 404. */
   const resolveTarget = async (
     grant: Parameters<typeof streamService.resolvePlaybackTarget>[0]
@@ -43,15 +37,15 @@ export const createStreamRoutes = ({
       '/:token/prefetch',
       rateLimitGuard(60),
       zValidator('param', z.object({ token: z.string().regex(/^[A-Za-z0-9_-]{43}$/) })),
-      async context => {
-        const grant = await playbackSessionService.verify(context.req.valid('param').token);
-        if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
+      async c => {
+        const grant = await playbackSessionService.verify(c.req.valid('param').token);
+        if (!grant) throw new HttpError(401, 'Invalid or expired streaming key');
         // Only the next episode is prefetched; movie grants never reach source resolution.
         if (grant.playableKind !== 'episode')
-          return context.json({ error: 'Episode file is unavailable' }, 404);
+          throw new HttpError(404, 'Episode file is unavailable');
         const { resolved, unavailable } = await resolveTarget(grant);
-        if (unavailable) return context.json({ error: unavailable } satisfies ErrorResponse, 404);
-        if (!resolved) return context.json({ error: 'Playback grant does not match source' }, 403);
+        if (unavailable) throw new HttpError(404, unavailable);
+        if (!resolved) throw new HttpError(403, 'Playback grant does not match source');
         // Best-effort: grant and source are validated above, so failures here are only logged.
         void mediaLoadClient
           .predownload(resolved.target, {
@@ -61,7 +55,7 @@ export const createStreamRoutes = ({
           .catch((error: unknown) =>
             logger.warn('StreamRoutes', 'Next-episode prefetch failed', error)
           );
-        return context.body(null, 202);
+        return c.body(null, 202);
       }
     )
     .get(
@@ -77,30 +71,31 @@ export const createStreamRoutes = ({
           transcodeVideo: z.enum(['true', 'false']).optional(),
         })
       ),
-      async context => {
-        const { token } = context.req.valid('param');
+      async c => {
+        const { token } = c.req.valid('param');
         const grant = await playbackSessionService.verify(token);
-        if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
+        if (!grant) throw new HttpError(401, 'Invalid or expired streaming key');
         const { resolved, unavailable } = await resolveTarget(grant);
-        if (unavailable) return context.json({ error: unavailable } satisfies ErrorResponse, 404);
+        if (unavailable) throw new HttpError(404, unavailable);
         if (!resolved) {
-          return context.json({ error: 'Playback grant does not match source' }, 403);
+          throw new HttpError(403, 'Playback grant does not match source');
         }
         try {
           return await audioPlaybackService.stream(
             resolved.target,
             token,
-            context.req.valid('query').start,
+            c.req.valid('query').start,
             grant.expiresAt,
-            context.req.raw.signal,
-            context.req.valid('query').audioTrack,
-            context.req.valid('query').audioCopy === 'true',
-            context.req.valid('query').transcodeVideo === 'true'
+            c.req.raw.signal,
+            c.req.valid('query').audioTrack,
+            c.req.valid('query').audioCopy === 'true',
+            c.req.valid('query').transcodeVideo === 'true'
           );
         } catch (error) {
-          if (error instanceof AudioPlaybackError)
-            return context.json({ error: error.message }, error.status);
-          return context.json({ error: 'Audio conversion could not start. Retry playback.' }, 503);
+          if (error instanceof AudioPlaybackError) throw new HttpError(error.status, error.message);
+          throw new HttpError(503, 'Audio conversion could not start. Retry playback.', {
+            cause: error,
+          });
         }
       }
     )
@@ -113,77 +108,28 @@ export const createStreamRoutes = ({
           token: z.string().min(10, 'Invalid key format'),
         })
       ),
-      zValidator(
-        'query',
-        z.object({
-          quality: z.enum(['auto', ...Object.values(Quality)]).optional(),
-          hevc: z
-            .string()
-            .optional()
-            .transform(val => val === 'true'),
-        })
-      ),
-      async context => {
+      async c => {
         try {
-          const { token } = context.req.valid('param');
-          const { quality = 'auto', hevc = true } = context.req.valid('query');
+          const { token } = c.req.valid('param');
 
-          // New playback grants are pinned to the exact source selected by the
-          // preparation pipeline. They must never fall back to source ranking.
+          // Playback grants are pinned to the exact source the preparation pipeline selected;
+          // they never fall back to source ranking.
           const playbackGrant = await playbackSessionService.verify(token);
-          if (playbackGrant) {
-            const resolved = await streamService.resolvePlaybackTarget(playbackGrant);
-            if (!resolved) {
-              return context.json(
-                { error: 'Playback grant does not match source' } satisfies ErrorResponse,
-                403
-              );
-            }
-            return await mediaLoadClient.streamFile(resolved.target, context.req.header('range'));
+          if (!playbackGrant) throw new HttpError(401, 'Invalid or expired streaming key');
+          const resolved = await streamService.resolvePlaybackTarget(playbackGrant);
+          if (!resolved) {
+            throw new HttpError(403, 'Playback grant does not match source');
           }
-
-          // Verify streaming key (includes timing attack protection)
-          const keyData = await authService.verifyStreamingKey(token);
-          const { movieId } = keyData;
-          if (!movieId)
-            return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
-          const movie = await mediaService.getMovieById(movieId);
-
-          if (!movie) {
-            return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
-          }
-
-          // Get the best source based on quality and codec preferences
-          const source = await streamService.getBestSourceForStreaming(movieId, quality, hevc);
-
-          if (!source) {
-            const codecMsg = hevc === false ? ' (H.265 excluded)' : '';
-            return context.json(
-              {
-                error: `No ${quality === 'auto' ? 'suitable' : quality} quality source available${codecMsg}`,
-              } satisfies ErrorResponse,
-              404
-            );
-          }
-
-          // Stream the movie's main video
-          const target = await streamService.movieTarget(movieId, source);
-          return await mediaLoadClient.streamFile(target, context.req.header('range'));
+          return await mediaLoadClient.streamFile(resolved.target, c.req.header('range'));
         } catch (error: unknown) {
           if (error instanceof ErrorWithStatus) {
             if (error.status === 'source_file_unavailable') {
               // A fake source: the player moves on to the next one.
-              return context.json({ error: error.message } satisfies ErrorResponse, 404);
+              throw new HttpError(404, error.message);
             }
             if (error.status === 'local_media_unavailable') {
-              return context.json({ error: error.message } satisfies ErrorResponse, 410);
+              throw new HttpError(410, error.message);
             }
-          }
-          if (error instanceof InvalidTokenError) {
-            return context.json(
-              { error: 'Invalid or expired streaming key' } satisfies ErrorResponse,
-              401
-            );
           }
           // The global error handler logs it and maps service errors (timeouts, ...) to a status.
           throw error;

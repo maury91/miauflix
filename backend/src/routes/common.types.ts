@@ -1,3 +1,4 @@
+import type { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import type { AuthService } from '@services/auth/auth.service';
 import type { QrLoginService } from '@services/auth/qr-login.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
@@ -54,6 +55,10 @@ export interface Deps {
   mediaLoadClient: MediaLoadClientService;
 }
 
-export interface ErrorResponse {
-  error: string;
+/** Rate limit middleware for a number of requests per window; one factory serves every route. */
+export type RateLimitGuard = ReturnType<typeof createRateLimitMiddlewareFactory>;
+
+/** What each route factory gets: the services, plus the middleware built once for all routes. */
+export interface RouteDeps extends Deps {
+  rateLimitGuard: RateLimitGuard;
 }
