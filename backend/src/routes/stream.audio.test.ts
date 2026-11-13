@@ -17,10 +17,8 @@ const setupTest = () => {
   const playbackSessionService = { verify: jest.fn().mockResolvedValue(grant) };
   const streamService = {
     getSourceById: jest.fn(),
-    getBestSourceForStreaming: jest.fn(),
     resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie: { id: 12 } }),
   };
-  const mediaService = { getMovieById: jest.fn().mockResolvedValue({ mediaId: 123 }) };
   const mediaLoadClient = { streamFile: jest.fn() };
   const audioPlaybackService = {
     stream: jest
@@ -31,7 +29,6 @@ const setupTest = () => {
     rateLimitGuard: noRateLimit,
     playbackSessionService,
     streamService,
-    mediaService,
     mediaLoadClient,
     audioPlaybackService,
   } as never).onError(handleError);
@@ -39,7 +36,6 @@ const setupTest = () => {
     app,
     playbackSessionService,
     streamService,
-    mediaService,
     mediaLoadClient,
     audioPlaybackService,
     source,
@@ -59,6 +55,17 @@ describe('direct streaming errors', () => {
 
     expect(response.status).toBe(status);
     expect(await response.json()).toMatchObject({ error: 'Unavailable' });
+  });
+
+  it('refuses a key that is not an active playback grant', async () => {
+    const { app, playbackSessionService, streamService, mediaLoadClient } = setupTest();
+    playbackSessionService.verify.mockResolvedValue(null);
+
+    const response = await app.request(`/${token}`);
+
+    expect(response.status).toBe(401);
+    expect(streamService.resolvePlaybackTarget).not.toHaveBeenCalled();
+    expect(mediaLoadClient.streamFile).not.toHaveBeenCalled();
   });
 });
 
@@ -91,7 +98,7 @@ describe('next-episode prefetch', () => {
 
 describe('audio streaming authorization', () => {
   it('converts only the pinned source and forwards the seek and expiration', async () => {
-    const { app, audioPlaybackService, streamService, source, grant } = setupTest();
+    const { app, audioPlaybackService, source, grant } = setupTest();
     const response = await app.request(`/${token}/audio?start=45&audioTrack=1`);
     expect(response.status).toBe(200);
     expect(audioPlaybackService.stream).toHaveBeenCalledWith(
@@ -104,7 +111,6 @@ describe('audio streaming authorization', () => {
       false,
       false
     );
-    expect(streamService.getBestSourceForStreaming).not.toHaveBeenCalled();
   });
 
   it('forwards explicit video conversion for the pinned source', async () => {

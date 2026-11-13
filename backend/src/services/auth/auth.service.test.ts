@@ -75,7 +75,6 @@ const createMockConfig = (): ConfigurationService => {
       ACCESS_TOKEN_COOKIE_NAME: '__test_at',
       COOKIE_SECURE: true,
       STREAM_TOKEN_EXPIRATION: 21600000,
-      STREAM_KEY_SALT: 'test-salt',
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: false,
     };
     return config[key] as never;

@@ -18,7 +18,6 @@ export type {
   SeasonResponse,
   ShowResponse,
   Source,
-  StreamingKeyResponse,
   TVShowDto,
   UserDto,
 } from '@miauflix/backend';

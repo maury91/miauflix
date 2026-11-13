@@ -6,7 +6,6 @@
     "types": ["jest", "node", "unplugin-icons/types/react", "@playwright/test"]
   },
   "include": [
-    "jest.config.ts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "src/**/*.test.tsx",

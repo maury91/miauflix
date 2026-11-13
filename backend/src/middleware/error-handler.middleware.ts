@@ -4,6 +4,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
 import { UserRole } from '@entities/user.entity';
 import { describeError, newErrorId } from '@errors/error-response';
+import { redactPath } from '@utils/redact.util';
 
 /**
  * Answers every error a route throws with the standard error body (`ApiErrorBody`), and logs it
@@ -18,8 +19,8 @@ export const handleError: ErrorHandler = (err, c) => {
     errorId,
     includeDetail: role === UserRole.ADMIN,
   });
-  // Stream and QR paths carry secret tokens: keep their shape, not their value.
-  const where = `${c.req.method} ${c.req.path.replace(/[A-Za-z0-9_-]{24,}/g, ':token')}`;
+  // Stream and QR paths carry secret tokens: the segment is masked whatever its encoding or length.
+  const where = `${c.req.method} ${redactPath(c.req.path)}`;
   const line = `[error ${errorId}] ${status} on ${where}: ${err.name}: ${err.message}`;
   // Unexpected errors carry their stack, so the request and the code that threw can be found.
   if (expected) logger.error('App', line);

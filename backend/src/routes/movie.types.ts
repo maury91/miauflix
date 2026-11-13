@@ -40,13 +40,3 @@ export interface MovieResponse {
   sourceAvailability: SourceAvailability;
   sources?: MovieSourceDto[];
 }
-
-export interface StreamingKeyResponse {
-  streamingKey: string;
-  quality: Quality | '3D' | null;
-  size: number;
-  videoCodec: VideoCodec | null;
-  broadcasters: number | null;
-  watchers: number | null;
-  expiresAt: Date;
-}

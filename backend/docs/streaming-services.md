@@ -14,7 +14,7 @@ Selection prefers suitable completed local downloads, then considers quality, de
 
 `POST /api/playback/sessions` accepts a movie or episode reference and client playback preferences. It authenticates the user, selects a source, and returns preparation status, delivery information, an expiring streaming key, and a stream URL. Modern grants are bound to a user, playable item, and selected source; the stream route must not silently rerank them to another source.
 
-The direct `GET /api/stream/:token` path validates the grant and serves the selected video with HTTP byte-range support. It also retains the compatibility flow for movie keys created by `POST /api/movies/:mediaId/:quality`. The frontend/session preparation can request another source when a source is unusable; this is different from changing the target of an already-issued grant.
+The direct `GET /api/stream/:token` path validates the grant and serves the selected video with HTTP byte-range support. The frontend/session preparation can request another source when a source is unusable; this is different from changing the target of an already-issued grant.
 
 ## Preparation and download buffering
 

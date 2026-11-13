@@ -34,6 +34,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 ### Removed
 
 - The old nginx/certbot HTTPS setup (`setup-ssl.sh`, the `nginx/` folder and its scripts) and `npm run deploy:frontend`: HTTPS has been set up with Caddy (`docker-compose.https.yml`) for a while. `STREAM_TOKEN_SECRET` was never used and is no longer generated
+- Unused code and files: the backend's copy of the torrent engine's type definitions, six backend dependencies nothing imported, the frontend's unused Jest config, a stray `image.png` and the outdated `todo/` folder (`ToDo.md` is the task list)
+- The old movie streaming keys (`POST /api/movies/:mediaId/:quality`), which the app stopped using when playback moved to playback sessions: video is streamed only with a playback session's key. The `STREAM_KEY_SALT` setting goes with them; a saved value is ignored
 
 ### Documentation
 

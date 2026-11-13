@@ -271,7 +271,7 @@ sequenceDiagram
 
 A playback grant binds a user, playable identity, and source; target resolution selects the associated
 file. The preparation pipeline and player can try another source when one fails. The stream route
-also accepts movie keys issued by `POST /api/movies/:mediaId/:quality`.
+only accepts playback grants.
 
 Compatible audio/video can remain unchanged. Selected unsupported audio is converted to stereo
 AAC. HEVC delivery depends on device support; optional H.264 conversion is disabled by default and

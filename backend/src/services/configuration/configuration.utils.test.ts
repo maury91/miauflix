@@ -201,11 +201,11 @@ describe('saveToEnvFile', () => {
   it('writes multiple vars in a single call', () => {
     mockExistsSync.mockReturnValue(false);
 
-    saveToEnvFile({ JWT_SECRET: 'a', STREAM_KEY_SALT: 'b' } as never);
+    saveToEnvFile({ JWT_SECRET: 'a', SOURCE_SECURITY_KEY: 'b' } as never);
 
     const written = mockWriteFileSync.mock.calls[0][1] as string;
     expect(written).toContain('JWT_SECRET=a');
-    expect(written).toContain('STREAM_KEY_SALT=b');
+    expect(written).toContain('SOURCE_SECURITY_KEY=b');
   });
 
   it('writes to the project-root .env when the backend is the working directory', () => {

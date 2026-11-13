@@ -1,4 +1,4 @@
-/// <reference types="./types/webtorrent.d.ts" />
+/// <reference types="./types/parse-torrent.d.ts" />
 
 import { hc } from 'hono/client';
 

@@ -1,10 +1,8 @@
 import { zValidator } from '@hono/zod-validator';
 import { logger } from '@logger';
-import { Quality } from '@miauflix/source-metadata-extractor';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
-import { InvalidTokenError } from '@errors/auth.errors';
 import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { HttpError } from '@errors/http.error';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
@@ -14,9 +12,7 @@ import type { RouteDeps } from './common.types';
 export const createStreamRoutes = ({
   rateLimitGuard,
   audioPlaybackService,
-  authService,
   mediaLoadClient,
-  mediaService,
   playbackSessionService,
   streamService,
 }: RouteDeps) => {
@@ -112,56 +108,19 @@ export const createStreamRoutes = ({
           token: z.string().min(10, 'Invalid key format'),
         })
       ),
-      zValidator(
-        'query',
-        z.object({
-          quality: z.enum(['auto', ...Object.values(Quality)]).optional(),
-          hevc: z
-            .string()
-            .optional()
-            .transform(val => val === 'true'),
-        })
-      ),
       async c => {
         try {
           const { token } = c.req.valid('param');
-          const { quality = 'auto', hevc = true } = c.req.valid('query');
 
-          // New playback grants are pinned to the exact source selected by the
-          // preparation pipeline. They must never fall back to source ranking.
+          // Playback grants are pinned to the exact source the preparation pipeline selected;
+          // they never fall back to source ranking.
           const playbackGrant = await playbackSessionService.verify(token);
-          if (playbackGrant) {
-            const resolved = await streamService.resolvePlaybackTarget(playbackGrant);
-            if (!resolved) {
-              throw new HttpError(403, 'Playback grant does not match source');
-            }
-            return await mediaLoadClient.streamFile(resolved.target, c.req.header('range'));
+          if (!playbackGrant) throw new HttpError(401, 'Invalid or expired streaming key');
+          const resolved = await streamService.resolvePlaybackTarget(playbackGrant);
+          if (!resolved) {
+            throw new HttpError(403, 'Playback grant does not match source');
           }
-
-          // Verify streaming key (includes timing attack protection)
-          const keyData = await authService.verifyStreamingKey(token);
-          const { movieId } = keyData;
-          if (!movieId) throw new HttpError(404, 'Movie not found');
-          const movie = await mediaService.getMovieById(movieId);
-
-          if (!movie) {
-            throw new HttpError(404, 'Movie not found');
-          }
-
-          // Get the best source based on quality and codec preferences
-          const source = await streamService.getBestSourceForStreaming(movieId, quality, hevc);
-
-          if (!source) {
-            const codecMsg = hevc === false ? ' (H.265 excluded)' : '';
-            throw new HttpError(
-              404,
-              `No ${quality === 'auto' ? 'suitable' : quality} quality source available${codecMsg}`
-            );
-          }
-
-          // Stream the movie's main video
-          const target = await streamService.movieTarget(movieId, source);
-          return await mediaLoadClient.streamFile(target, c.req.header('range'));
+          return await mediaLoadClient.streamFile(resolved.target, c.req.header('range'));
         } catch (error: unknown) {
           if (error instanceof ErrorWithStatus) {
             if (error.status === 'source_file_unavailable') {
@@ -171,9 +130,6 @@ export const createStreamRoutes = ({
             if (error.status === 'local_media_unavailable') {
               throw new HttpError(410, error.message);
             }
-          }
-          if (error instanceof InvalidTokenError) {
-            throw new HttpError(401, 'Invalid or expired streaming key');
           }
           // The global error handler logs it and maps service errors (timeouts, ...) to a status.
           throw error;

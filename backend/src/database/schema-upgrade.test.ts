@@ -49,6 +49,32 @@ describe('upgradeSchema', () => {
   const drift = async (dataSource: DataSource) =>
     (await dataSource.driver.createSchemaBuilder().log()).upQueries;
 
+  /**
+   * A database from before schema migrations: built by synchronize(), with the tables of entities
+   * removed since the baseline (synchronize() never dropped them), which the baseline still has.
+   */
+  const legacyDatabase = async () => {
+    const legacy = await open([]);
+    await legacy.synchronize();
+    const baseline = new DataSource({
+      type: 'sqlite',
+      database: path.join(dir, 'baseline.sqlite'),
+      migrations: [schemaMigrations[0]],
+      migrationsTableName: SCHEMA_MIGRATIONS_TABLE,
+    });
+    await baseline.initialize();
+    sources.push(baseline);
+    await baseline.runMigrations();
+    const tables = `SELECT name, sql FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name != '${SCHEMA_MIGRATIONS_TABLE}'`;
+    const present = new Set(
+      ((await legacy.query(tables)) as { name: string }[]).map(table => table.name)
+    );
+    for (const table of (await baseline.query(tables)) as { name: string; sql: string }[]) {
+      if (!present.has(table.name)) await legacy.query(table.sql);
+    }
+    return legacy;
+  };
+
   beforeEach(async () => {
     dir = await mkdtemp(path.join(os.tmpdir(), 'miauflix-schema-test-'));
   });
@@ -88,8 +114,7 @@ describe('upgradeSchema', () => {
   });
 
   it('records a matching legacy database at the baseline and runs the later migrations', async () => {
-    const legacy = await open([]);
-    await legacy.synchronize();
+    const legacy = await legacyDatabase();
     await legacy.destroy();
 
     const dataSource = await open([...schemaMigrations, AddProbe9999999999999]);

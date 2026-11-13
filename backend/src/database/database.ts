@@ -27,7 +27,6 @@ import { QrLoginRequestRepository } from '@repositories/qr-login-request.reposit
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { StorageRepository } from '@repositories/storage.repository';
 import { StorageFileRepository } from '@repositories/storage-file.repository';
-import { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
@@ -123,7 +122,6 @@ export class Database {
   private qrLoginRequestRepository: QrLoginRequestRepository;
   private storageRepository: StorageRepository;
   private storageFileRepository: StorageFileRepository;
-  private streamingKeyRepository: StreamingKeyRepository;
   private progressRepository: ProgressRepository;
   private playbackGrantRepository: PlaybackGrantRepository;
   private mediaProbeRepository: MediaProbeRepository;
@@ -173,7 +171,6 @@ export class Database {
     this.storageRepository = new StorageRepository(this);
     this.storageFileRepository = new StorageFileRepository(this);
     await this.storageRepository.resetActiveStreams();
-    this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this);
     this.playbackGrantRepository = new PlaybackGrantRepository(this);
     this.mediaProbeRepository = new MediaProbeRepository(this);
@@ -266,10 +263,6 @@ export class Database {
 
   public getStorageRepository() {
     return this.storageRepository;
-  }
-
-  public getStreamingKeyRepository() {
-    return this.streamingKeyRepository;
   }
 
   public getProgressRepository() {

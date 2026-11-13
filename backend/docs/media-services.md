@@ -40,7 +40,6 @@ These paths are mounted under `/api` by [route registration](../src/routes/index
 | Method and path                                                     | Behavior                                                                    |
 | ------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | `GET /api/movies/:id?lang=&includeSources=true`                     | Movie detail by catalog ID; optional on-demand source lookup                |
-| `POST /api/movies/:mediaId/:quality`                                | Compatibility movie streaming-key flow; new playback uses sessions          |
 | `GET /api/shows/:id?lang=`                                          | Show detail and season summaries                                            |
 | `GET /api/shows/:id/seasons`                                        | Season summaries                                                            |
 | `GET /api/shows/:id/seasons/:season`                                | Season detail, episodes, and per-episode source availability                |

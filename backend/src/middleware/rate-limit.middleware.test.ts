@@ -1,4 +1,13 @@
-import { RateLimiterRegistry, rateLimitSubject } from './rate-limit.middleware';
+import { Hono } from 'hono';
+
+import type { ConfigService } from '@mytypes/configuration';
+import type { AuditLogService } from '@services/security/audit-log.service';
+
+import {
+  createRateLimitMiddlewareFactory,
+  RateLimiterRegistry,
+  rateLimitSubject,
+} from './rate-limit.middleware';
 
 describe('rateLimitSubject', () => {
   it('keeps IPv4 addresses as they are', () => {
@@ -82,5 +91,24 @@ describe('RateLimiterRegistry', () => {
     const e = registry.get('e', '/x', 1);
     expect(e).not.toBe(c);
     expect(registry.size).toBe(1);
+  });
+});
+
+describe('createRateLimitMiddlewareFactory', () => {
+  it('gives each route its own allowance when routers share one factory', async () => {
+    const rateLimitGuard = createRateLimitMiddlewareFactory(
+      { logRateLimitExceeded: jest.fn() } as unknown as AuditLogService,
+      { get: jest.fn(() => undefined) } as unknown as ConfigService
+    );
+    const auth = new Hono().post('/login', rateLimitGuard(1), c => c.text('ok'));
+    const integrations = new Hono().post('/trakt/poll', rateLimitGuard(1), c => c.text('ok'));
+    const app = new Hono().route('/auth', auth).route('/integrations', integrations);
+    // What Bun's server gives getConnInfo: one client for every request.
+    const server = { requestIP: () => ({ address: '198.51.100.20', family: 'IPv4', port: 1 }) };
+    const post = (path: string) => app.request(path, { method: 'POST' }, server);
+
+    expect((await post('/integrations/trakt/poll')).status).toBe(200);
+    expect((await post('/integrations/trakt/poll')).status).toBe(429);
+    expect((await post('/auth/login')).status).toBe(200);
   });
 });

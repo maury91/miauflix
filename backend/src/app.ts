@@ -148,7 +148,7 @@ try {
     sourceHealthService,
     sourceAvailabilityService
   );
-  const streamService = new StreamService(db, sourceService, mediaService, playbackTargetService);
+  const streamService = new StreamService(db, mediaService, playbackTargetService);
   const audioPlaybackService = new AudioPlaybackService(
     mediaLoadClient,
     configurationService,
@@ -280,7 +280,6 @@ try {
         'audit logs': () => auditLogService.cleanupOldLogs(),
         'QR login requests': () => qrLoginService.cleanup(),
         'expired refresh tokens': () => db.getRefreshTokenRepository().deleteExpired(),
-        'expired streaming keys': () => db.getStreamingKeyRepository().deleteExpired(),
       }),
       worker: backgroundWorker,
     });
