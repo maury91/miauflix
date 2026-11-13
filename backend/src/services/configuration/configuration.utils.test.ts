@@ -1,53 +1,27 @@
 import { ConfigurationServiceError } from '@errors/configuration.errors';
 
-jest.mock('@inquirer/prompts', () => ({
-  confirm: jest.fn(),
-  input: jest.fn(),
-  password: jest.fn(),
-  select: jest.fn(),
-}));
-
 jest.mock('fs', () => ({
   existsSync: jest.fn(),
   readFileSync: jest.fn(),
   writeFileSync: jest.fn(),
 }));
 
-jest.mock('tty', () => ({
-  isatty: jest.fn(),
-}));
-
-import { confirm, input } from '@inquirer/prompts';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { isatty } from 'tty';
 
-import type { ConfigurableService, ValidatorTransform, VariableInfo } from '@mytypes/configuration';
+import type { ValidatorTransform, VariableInfo } from '@mytypes/configuration';
 
 import {
   applyTransform,
+  assertKnownConfigKeys,
   buildAllConfigs,
-  configureService,
   getDefaultValue,
-  handlerFromInstance,
-  isNonInteractiveMode,
   isValidConfigUpdate,
   saveToEnvFile,
-  validateExistingConfiguration,
 } from './configuration.utils';
 
-const mockIsatty = isatty as jest.MockedFunction<typeof isatty>;
 const mockExistsSync = existsSync as jest.MockedFunction<typeof existsSync>;
 const mockReadFileSync = readFileSync as jest.MockedFunction<typeof readFileSync>;
 const mockWriteFileSync = writeFileSync as jest.MockedFunction<typeof writeFileSync>;
-const mockInput = input as jest.MockedFunction<typeof input>;
-const mockConfirm = confirm as jest.MockedFunction<typeof confirm>;
-
-const makeMockService = (isReady: boolean): ConfigurableService => ({
-  testable: true,
-  getStatus: () =>
-    isReady ? { status: 'ready' } : { status: 'error', errorMessage: 'not ready', error: null },
-  reload: jest.fn().mockResolvedValue(undefined),
-});
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -58,20 +32,6 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.restoreAllMocks();
-});
-
-// ---------------------------------------------------------------------------
-
-describe('isNonInteractiveMode', () => {
-  it('returns false when stdout is a TTY (interactive)', () => {
-    mockIsatty.mockReturnValue(true);
-    expect(isNonInteractiveMode()).toBe(false);
-  });
-
-  it('returns true when stdout is not a TTY (non-interactive)', () => {
-    mockIsatty.mockReturnValue(false);
-    expect(isNonInteractiveMode()).toBe(true);
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -118,25 +78,6 @@ describe('buildAllConfigs', () => {
       required: true,
       advanced: true,
     });
-  });
-});
-
-// ---------------------------------------------------------------------------
-
-describe('handlerFromInstance', () => {
-  it('isAlive reflects the instance isReady property', () => {
-    const handler = handlerFromInstance(makeMockService(true));
-    expect(handler.isAlive()).toBe(true);
-
-    const handler2 = handlerFromInstance(makeMockService(false));
-    expect(handler2.isAlive()).toBe(false);
-  });
-
-  it('reload delegates to instance.reload', async () => {
-    const instance = makeMockService(true);
-    const handler = handlerFromInstance(instance);
-    await handler.reload();
-    expect(instance.reload).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -283,111 +224,20 @@ describe('saveToEnvFile', () => {
 
 // ---------------------------------------------------------------------------
 
-describe('validateExistingConfiguration', () => {
-  it('returns an empty array when no services are registered (all pass trivially)', async () => {
-    const result = await validateExistingConfiguration(new Map());
-    expect(result).toEqual([]);
-  });
-
-  it('returns an empty array when all registered services are alive', async () => {
-    const map = new Map<string, ConfigurableService>([
-      ['CATALOG', makeMockService(true)],
-      ['JWT', makeMockService(true)],
-    ]);
-    const result = await validateExistingConfiguration(map);
-    expect(result).toEqual([]);
-  });
-
-  it('returns the service entry when the registered service is not ready after reload', async () => {
-    const map = new Map<string, ConfigurableService>([['CATALOG', makeMockService(false)]]);
-    const result = await validateExistingConfiguration(map);
-    expect(result).toContainEqual({ serviceKey: 'CATALOG', error: 'Not ready' });
-  });
-
-  it('returns the service entry with the reload error message on reload failure', async () => {
-    const instance: ConfigurableService = {
-      testable: true,
-      getStatus: () => ({ status: 'error', errorMessage: 'not ready', error: null }),
-      reload: jest.fn().mockRejectedValue(new Error('connection refused')),
-    };
-    const map = new Map<string, ConfigurableService>([['CATALOG', instance]]);
-    const result = await validateExistingConfiguration(map);
-    expect(result).toContainEqual({ serviceKey: 'CATALOG', error: 'connection refused' });
-  });
-});
-
 // ---------------------------------------------------------------------------
 
-describe('configureService', () => {
-  const makeTestService = (variables: Record<string, VariableInfo>) =>
-    ({
-      name: 'Test',
-      description: 'Test service',
-      variables,
-    }) as never;
-
-  it('calls applyValues with the prompted value for a required variable', async () => {
-    mockInput.mockResolvedValue('my-entered-value');
-    const applyValues = jest.fn().mockResolvedValue(undefined);
-
-    await configureService(makeTestService({ MY_VAR: { description: 'A var', required: true } }), {
-      currentValues: {},
-      applyValues,
-    });
-
-    expect(applyValues).toHaveBeenCalledWith({ MY_VAR: 'my-entered-value' });
+describe('assertKnownConfigKeys', () => {
+  it('accepts entries whose keys are all known variables', () => {
+    expect(() => assertKnownConfigKeys([{ key: 'CATALOG_SERVICE_URL', value: 'x' }])).not.toThrow();
   });
 
-  it('populates currentValues as the default for the prompt', async () => {
-    mockInput.mockResolvedValue('prefilled');
-    const applyValues = jest.fn().mockResolvedValue(undefined);
-
-    await configureService(makeTestService({ MY_VAR: { description: 'A var', required: false } }), {
-      currentValues: { MY_VAR: 'prefilled' },
-      applyValues,
-    });
-
-    expect(applyValues).toHaveBeenCalledWith({ MY_VAR: 'prefilled' });
-  });
-
-  it('does not prompt for retry when no handler is provided', async () => {
-    mockInput.mockResolvedValue('v');
-    const applyValues = jest.fn().mockResolvedValue(undefined);
-
-    await configureService(makeTestService({ V: { description: 'd', required: true } }), {
-      currentValues: {},
-      applyValues,
-    });
-
-    expect(mockConfirm).not.toHaveBeenCalled();
-  });
-
-  it('does not prompt for retry when handler succeeds after config', async () => {
-    mockInput.mockResolvedValue('v');
-    const applyValues = jest.fn().mockResolvedValue(undefined);
-    const instance = makeMockService(true);
-
-    await configureService(makeTestService({ V: { description: 'd', required: true } }), {
-      currentValues: {},
-      applyValues,
-      handler: handlerFromInstance(instance),
-    });
-
-    expect(mockConfirm).not.toHaveBeenCalled();
-  });
-
-  it('prompts for retry when handler reports failure and skips retry when user declines', async () => {
-    mockInput.mockResolvedValue('bad-value');
-    const applyValues = jest.fn().mockResolvedValue(undefined);
-    const instance = makeMockService(false);
-    mockConfirm.mockResolvedValue(false);
-
-    const result = await configureService(
-      makeTestService({ V: { description: 'd', required: true } }),
-      { currentValues: {}, applyValues, handler: handlerFromInstance(instance) }
-    );
-
-    expect(mockConfirm).toHaveBeenCalledTimes(1);
-    expect(result).toEqual({ V: 'bad-value' });
+  it('throws unknown_config_key naming only the unknown keys', () => {
+    const run = () =>
+      assertKnownConfigKeys([
+        { key: 'CATALOG_SERVICE_URL', value: 'x' },
+        { key: 'NOT_A_REAL_KEY', value: 'y' },
+      ]);
+    expect(run).toThrow(ConfigurationServiceError);
+    expect(run).toThrow('Unknown configuration keys: NOT_A_REAL_KEY');
   });
 });
