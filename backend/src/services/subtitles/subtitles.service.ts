@@ -6,19 +6,19 @@ import { logger } from '@logger';
 import parseTorrent from 'parse-torrent';
 
 import type { ConfigService } from '@mytypes/configuration';
-import { isVideoFile } from '@services/download/download.utils';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
+import type { StreamService } from '@services/playback/stream.service';
 import type { RequestService } from '@services/request/request.service';
-import type { StreamService } from '@services/stream/stream.service';
+import { isVideoFile } from '@services/source/video-files';
 
-import { filenameSimilarity } from './subtitle-matching';
-import { toWebVtt } from './subtitles.util';
 import type {
   ExtractedFont,
+  SourceSubtitle,
+  SourceSubtitlesService,
   SubtitleFont,
-  TorrentSubtitle,
-  TorrentSubtitlesService,
-} from './torrent-subtitles.service';
+} from './source-subtitles.service';
+import { filenameSimilarity } from './subtitle-matching';
+import { toWebVtt } from './subtitles.util';
 
 const API_BASE = 'https://api.opensubtitles.com/api/v1';
 const MAX_CANDIDATES = 500;
@@ -87,7 +87,7 @@ interface CandidateRecord {
   sourceId: number;
   playableKey: string;
   expiresAt: number;
-  local?: TorrentSubtitle;
+  local?: SourceSubtitle;
 }
 
 function makeCandidateId(
@@ -145,7 +145,7 @@ export class SubtitlesService {
     private readonly requestService: RequestService,
     private readonly playbackSessionService: PlaybackSessionService,
     private readonly streamService: StreamService,
-    private readonly torrentSubtitles: TorrentSubtitlesService
+    private readonly sourceSubtitles: SourceSubtitlesService
   ) {}
 
   /** Populate the same search cache used by authorized playback requests. */
@@ -178,7 +178,7 @@ export class SubtitlesService {
     const { source } = resolved.target;
     const local: SubtitleCandidate[] = [];
     try {
-      for (const track of await this.torrentSubtitles.discover(resolved.target)) {
+      for (const track of await this.sourceSubtitles.discover(resolved.target)) {
         const candidate: SubtitleCandidate = {
           id: makeCandidateId(track.provider, source.id, track.fileId, grant.playableKey),
           provider: track.provider,
@@ -429,7 +429,7 @@ export class SubtitlesService {
           };
         } else {
           try {
-            const local = await this.torrentSubtitles.discover(resolved.target);
+            const local = await this.sourceSubtitles.discover(resolved.target);
             const track = local.find(
               item =>
                 makeCandidateId(item.provider, source.id, item.fileId, grant!.playableKey) ===
@@ -517,8 +517,8 @@ export class SubtitlesService {
             if (resolved.target.source.id !== record.sourceId)
               throw new SubtitleAccessError('Playback source is unavailable');
             return format === 'ass'
-              ? this.torrentSubtitles.getAssTrack(resolved.target, record.local!, window)
-              : this.torrentSubtitles.getTrack(resolved.target, record.local!, window);
+              ? this.sourceSubtitles.getAssTrack(resolved.target, record.local!, window)
+              : this.sourceSubtitles.getTrack(resolved.target, record.local!, window);
           })
         : this.loadStoredTrack(record.fileId as number)
     )
@@ -554,7 +554,7 @@ export class SubtitlesService {
     }
     const pending = this.pendingFonts.get(key);
     if (pending) return pending;
-    const loading = this.torrentSubtitles
+    const loading = this.sourceSubtitles
       .getFont(resolved.target, local)
       .then(({ font, complete }) => {
         // A miss after a failed read may be transient: try again next time.
@@ -602,7 +602,7 @@ export class SubtitlesService {
     }
     const pending = this.pendingFontSets.get(key);
     if (pending) return pending;
-    const loading = this.torrentSubtitles
+    const loading = this.sourceSubtitles
       .getFonts(resolved.target, local)
       .then(({ fonts, complete }) => {
         const bytes = fonts.reduce((total, font) => total + font.data.length, 0);

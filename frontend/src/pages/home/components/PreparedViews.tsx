@@ -1,7 +1,7 @@
+import { MediaDetails, type MediaDetailsHandle } from '@features/details/ui/MediaDetails';
 import { type ComponentProps, forwardRef, memo } from 'react';
 
 import { type PreparationInputs, usePreparation } from '../hooks/useHomePreparation';
-import { MediaDetails, type MediaDetailsHandle } from './MediaDetails';
 import { MediaHero } from './MediaHero';
 
 /**

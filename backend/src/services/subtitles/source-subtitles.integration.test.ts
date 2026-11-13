@@ -8,7 +8,7 @@ import { buildTestFont, testAssHeader } from '@__test-utils__/font';
 import type { ContentSource } from '@entities/content-source.entity';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 
-import { TorrentSubtitlesService } from './torrent-subtitles.service';
+import { SourceSubtitlesService } from './source-subtitles.service';
 
 const integration =
   spawnSync('ffmpeg', ['-version'], { stdio: 'ignore' }).status === 0 ? describe : describe.skip;
@@ -97,7 +97,7 @@ integration('torrent and embedded subtitle delivery', () => {
         });
       },
     };
-    return { source, service: new TorrentSubtitlesService(download as never) };
+    return { source, service: new SourceSubtitlesService(download as never) };
   };
 
   it('discovers embedded ASS plus a matching torrent ASS and converts both to sanitized WebVTT', async () => {
@@ -246,7 +246,7 @@ integration('fonts attached to a release', () => {
         });
       },
     };
-    const service = new TorrentSubtitlesService(download as never);
+    const service = new SourceSubtitlesService(download as never);
     try {
       const [track] = await service.discover(target);
       expect(track.fonts?.map(font => font.filename)).toEqual([

@@ -1,6 +1,6 @@
+import { getBackdropPlacement } from '@shared/lib/backdrop-focus';
 import { describe, expect, it } from 'vitest';
 
-import { getBackdropPlacement } from './backdrop-focus';
 import { getHeroBackdropLayout, getHeroTextGeometry } from './hero-backdrop-layout';
 
 const focus = { x: 0.5009114583333333, y: 0.26180555555555557 };

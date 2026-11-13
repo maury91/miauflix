@@ -263,7 +263,7 @@ vi.mock('./components/CategoryRow', async () => {
     ),
   };
 });
-vi.mock('./components/PlayerView', () => ({
+vi.mock('@features/player/ui/PlayerView', () => ({
   PlayerView: (props: {
     playable: { kind: string; mediaId?: number; showMediaId?: number };
     nextEpisode?: { playable: unknown } | null;
@@ -298,7 +298,7 @@ vi.mock('./components/MediaHero', async () => {
     },
   };
 });
-vi.mock('./components/MediaDetails', async () => {
+vi.mock('@features/details/ui/MediaDetails', async () => {
   const React = await import('react');
   return {
     MediaDetails: React.forwardRef(

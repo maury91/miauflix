@@ -1,9 +1,9 @@
 import type { SearchResultDetailDto, SearchResultDto } from '@miauflix/backend';
-import { MetadataDot, MetadataRating } from '@pages/home/components/metadata.styles';
-import { formatRuntime } from '@pages/home/media.utils';
-import { artworkUrl } from '@pages/home/media.utils';
 import { PALETTE } from '@shared/config/constants';
+import { formatRuntime } from '@shared/lib/media.utils';
+import { artworkUrl } from '@shared/lib/media.utils';
 import { ErrorNotice, PosterCard } from '@shared/ui';
+import { MetadataDot, MetadataRating } from '@shared/ui/metadata/metadata.styles';
 import { searchResultKey } from '@store/slices/search';
 import { type FC, Fragment, type ReactNode } from 'react';
 import styled from 'styled-components';

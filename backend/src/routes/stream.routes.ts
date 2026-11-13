@@ -5,9 +5,9 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { InvalidTokenError } from '@errors/auth.errors';
+import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
-import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 
 import type { Deps, ErrorResponse } from './common.types';
 

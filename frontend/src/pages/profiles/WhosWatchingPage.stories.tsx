@@ -4,8 +4,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { expect, fn, waitFor } from 'storybook/test';
 
-import { profilesFixture } from './profiles.fixtures';
 import WhosWatchingPage from './WhosWatchingPage';
+
+import { profilesFixture } from '@/__test-utils__/fixtures/profiles.fixtures';
 
 const withProfiles = (sessions: SessionInfo[]) => (Story: () => React.ReactElement) => {
   const store = configureStore({

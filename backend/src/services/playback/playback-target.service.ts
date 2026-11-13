@@ -3,13 +3,13 @@ import { logger } from '@logger';
 import type { Database } from '@database/database';
 import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
+import { ErrorWithStatus } from '@errors/error-with-status.error';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
-import { containsPlayableVideo, mainVideoPath } from '@services/download/download.utils';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
-import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import type { SourceAvailabilityService } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
+import { containsPlayableVideo, mainVideoPath } from '@services/source/video-files';
 
 import type { PlaybackTarget } from './playback-target';
 

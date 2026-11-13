@@ -1,4 +1,4 @@
-import type { SourceMetadata } from '@services/sources/source-candidate';
+import type { SourceMetadata } from '@services/sources-client/source-candidate';
 
 import { matchEpisodeFile } from '../episode-file-matcher';
 

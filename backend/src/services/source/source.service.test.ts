@@ -18,10 +18,10 @@ import parseTorrent from 'parse-torrent';
 
 import { Database } from '@database/database';
 import type { ContentSource } from '@entities/content-source.entity';
+import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { ContentSourceRepository } from '@repositories/content-source.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { ConfigurationService } from '@services/configuration/configuration.service';
-import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import { SourceService } from '@services/source/source.service';
 import { SourceMetadataFileService } from '@services/source/source-metadata-file.service';
 

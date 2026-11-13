@@ -1,4 +1,4 @@
-import { parseSourceMetadataInfo } from './torrent-parser.util';
+import { parseSourceMetadataInfo } from '@utils/source-metadata-parser.util';
 
 describe('language separators', () => {
   it.each(['Movie_multi_audio_1080p', 'Movie_dual_audio_1080p'])(

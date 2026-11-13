@@ -11,6 +11,7 @@ import type { MediaLoadClientService } from '@services/media-load/media-load-cli
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
+import type { StreamService } from '@services/playback/stream.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProfileService } from '@services/profile/profile.service';
 import type { ProgressService } from '@services/progress/progress.service';
@@ -18,9 +19,8 @@ import type { RequestService } from '@services/request/request.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import type { SourceMetadataFileService, SourceService } from '@services/source';
 import type { SourceAvailabilityService } from '@services/source/source-availability.service';
-import type { SourcesClientService } from '@services/sources/sources-client.service';
+import type { SourcesClientService } from '@services/sources-client/sources-client.service';
 import type { StatsService } from '@services/stats/stats.service';
-import type { StreamService } from '@services/stream/stream.service';
 import type { SubtitlesService } from '@services/subtitles/subtitles.service';
 import type { TvPairingService } from '@services/tv-pairing/tv-pairing.service';
 

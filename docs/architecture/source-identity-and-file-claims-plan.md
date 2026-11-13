@@ -70,7 +70,7 @@ Physical deletion, bitfield changes, and database completion/accounting updates 
 
 Reselection runs after the source lock and outside the admission queue. It can attach torrents and acquire source locks, so running it inside admission would create a lock-order hazard. Claimed files are reselected after either successful or failed cleanup.
 
-Implementation: [reclamation](../../backend/src/services/storage/storage.service.ts), [file repository](../../backend/src/repositories/storage-file.repository.ts), [encrypted chunk storage](../../backend/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), and [piece geometry helpers](../../backend/src/services/download/download.utils.ts).
+Implementation: [reclamation](../../backend/src/services/storage/storage.service.ts), [file repository](../../backend/src/repositories/storage-file.repository.ts), [encrypted chunk storage](../../backend/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), and [piece geometry helpers](../../backend/src/services/source/video-files.ts).
 
 ## Data preservation
 

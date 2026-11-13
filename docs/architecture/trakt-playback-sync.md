@@ -55,6 +55,6 @@ the exact local position.
 - [Encrypted outbox and snapshots](../../services/list-service/src/playback-sync.ts)
 - [Trakt provider operations](../../services/list-service/src/trakt-client.ts)
 - [List service lifecycle](../../services/list-service/src/service.ts)
-- [Player progress reports](../../frontend/src/pages/home/components/PlayerView.tsx)
+- [Player progress reports](../../frontend/src/features/player/ui/PlayerView.tsx)
 
 For account linking and transport ownership, see [Service contracts](service-contract-v2.md) and [System overview](system-overview.md).

@@ -1,6 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { HomeRegion } from '@pages/home/homeNavigation';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { HomeRegion } from '@shared/lib/homeNavigation';
 import { clearAuth, setSession } from '@store/slices/auth';
 
 interface HomeNavigationState {

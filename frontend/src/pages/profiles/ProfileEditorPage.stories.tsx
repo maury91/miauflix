@@ -5,7 +5,8 @@ import { Provider } from 'react-redux';
 import { fn } from 'storybook/test';
 
 import ProfileEditorPage from './ProfileEditorPage';
-import { profilesFixture } from './profiles.fixtures';
+
+import { profilesFixture } from '@/__test-utils__/fixtures/profiles.fixtures';
 
 const withProfiles = (Story: () => React.ReactElement) => {
   const store = configureStore({

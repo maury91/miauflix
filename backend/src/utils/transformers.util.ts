@@ -1,5 +1,5 @@
 import type { ContentSource } from '@entities/content-source.entity';
-import type { SourceMetadata } from '@services/sources/source-candidate';
+import type { SourceMetadata } from '@services/sources-client/source-candidate';
 import { calculateStreamingScore } from '@utils/streaming-score.util';
 
 /**

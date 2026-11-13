@@ -49,9 +49,9 @@ Automatic subtitle translation and language-learning subtitles are also planned.
 ## Implementation references
 
 - [Audio inspection and conversion](../../backend/src/services/playback/audio-playback.service.ts)
-- [Local subtitle discovery](../../backend/src/services/subtitles/torrent-subtitles.service.ts)
+- [Local subtitle discovery](../../backend/src/services/subtitles/source-subtitles.service.ts)
 - [OpenSubtitles integration](../../backend/src/services/subtitles/subtitles.service.ts)
 - [Styled browser subtitle rendering](../../frontend/src/features/player/lib/ass-subtitles.ts)
-- [Shared plain captions](../../frontend/src/pages/home/components/SubtitleCaption.tsx)
-- [Subtitle controls](../../frontend/src/pages/home/components/SubtitleMenu.tsx)
+- [Shared plain captions](../../frontend/src/features/player/ui/SubtitleCaption.tsx)
+- [Subtitle controls](../../frontend/src/features/player/ui/SubtitleMenu.tsx)
 - [Audio language matching](../../frontend/src/features/player/lib/audio-language.ts)

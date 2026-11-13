@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 
-import { homeFixtureAssets } from '../../../pages/home/home.assets';
 import { MediaCard } from './MediaCard';
+
+import { homeFixtureAssets } from '@/__test-utils__/fixtures/home.assets';
 
 const artwork = homeFixtureAssets[687163];
 const meta = {

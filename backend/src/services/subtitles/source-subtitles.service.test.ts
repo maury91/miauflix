@@ -2,7 +2,7 @@ import type { ContentSource } from '@entities/content-source.entity';
 import type { EncryptedStorageLayout } from '@entities/storage.entity';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 
-import { matchingSubtitleFiles, TorrentSubtitlesService } from './torrent-subtitles.service';
+import { matchingSubtitleFiles, SourceSubtitlesService } from './source-subtitles.service';
 
 const VIDEO = 'Show.S01E02.mkv';
 const file = (path: string, length = 100) => ({ path, length, offset: 0 });
@@ -80,7 +80,7 @@ describe('torrent subtitle matching', () => {
   });
 
   it('keeps matching torrent files available when embedded inspection fails', async () => {
-    const service = new TorrentSubtitlesService({
+    const service = new SourceSubtitlesService({
       prepareSubtitleFiles: async () => {},
       getMediaFiles: async () => layout(['Show.S01E02.mkv', 'Show.S01E02.en.srt']),
     } as never);
@@ -98,7 +98,7 @@ describe('torrent subtitle matching', () => {
   });
 
   it('probes once more a moment after a failed probe', async () => {
-    const service = new TorrentSubtitlesService({
+    const service = new SourceSubtitlesService({
       prepareSubtitleFiles: async () => {},
       getMediaFiles: async () => layout(['Show.S01E02.mkv']),
     } as never);
@@ -116,7 +116,7 @@ describe('torrent subtitle matching', () => {
   });
 
   it('exposes embedded text tracks while excluding image subtitles', async () => {
-    const service = new TorrentSubtitlesService({
+    const service = new SourceSubtitlesService({
       prepareSubtitleFiles: async () => {},
       getMediaFiles: async () => layout(['Show.S01E02.mkv']),
     } as never);
@@ -136,7 +136,7 @@ describe('torrent subtitle matching', () => {
   });
 
   it('scopes tracks to the video so episodes of one pack never share subtitles', async () => {
-    const service = new TorrentSubtitlesService({
+    const service = new SourceSubtitlesService({
       prepareSubtitleFiles: async () => {},
       getMediaFiles: async () => layout(['Show.S01E01.mkv', 'Show.S01E02.mkv']),
     } as never);

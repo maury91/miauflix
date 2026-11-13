@@ -13,7 +13,7 @@ import type { PlaybackTarget } from './playback-target';
 export const PROBE_SIZE_BYTES = 2 * 1024 * 1024;
 
 /** A private loopback capability exposes only this file; no arbitrary URLs or plaintext files. */
-export async function openTorrentInput(
+export async function openSourceInput(
   mediaLoad: MediaLoadClientService,
   target: PlaybackTarget,
   speculative = false

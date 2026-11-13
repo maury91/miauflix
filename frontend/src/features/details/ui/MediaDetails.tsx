@@ -10,7 +10,9 @@ import {
 } from '@features/media/api/media.api';
 import { useGetMediaRatingQuery, useSetMediaRatingMutation } from '@features/media/api/ratings.api';
 import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
+import { SourcePreparationStatus } from '@features/preload/ui/SourcePreparationStatus';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
+import { episodeForSeason } from '@features/progress/lib/episode-rules';
 import type {
   MediaDto,
   PlayableRef,
@@ -21,8 +23,14 @@ import { createSelector } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
+import type { BackdropPositionContext } from '@shared/lib/backdrop-focus';
+import { getBackdropPlacement } from '@shared/lib/backdrop-focus';
+import { type HomeAction, type NavigationOutcome } from '@shared/lib/homeNavigation';
+import { imagePreloader, URGENT } from '@shared/lib/image-preloader';
+import { artworkUrl, formatRuntime, getMediaTitle } from '@shared/lib/media.utils';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
+import { MetadataDot, MetadataRating } from '@shared/ui/metadata/metadata.styles';
 import { BackRail } from '@shared/ui/rail/BackRail';
 import { RAIL_COLLAPSED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
 import {
@@ -44,20 +52,12 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import type { BackdropPositionContext } from '../backdrop-focus';
-import { getBackdropPlacement } from '../backdrop-focus';
-import { episodeForSeason } from '../episode-rules';
-import { firstSeason } from '../first-season';
-import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
 import { useShowSeasons } from '../hooks/useShowSeasons';
-import { imagePreloader, URGENT } from '../image-preloader';
-import { artworkUrl, formatRuntime, getMediaTitle } from '../media.utils';
+import { firstSeason } from '../lib/first-season';
 import { ErrorState, PrimaryAction, SectionLabel } from './details.styles';
 import { navigateDetails } from './detailsNavigation';
 import { episodeElementId } from './episodes.utils';
 import { EpisodesSection } from './EpisodesSection';
-import { MetadataDot, MetadataRating } from './metadata.styles';
-import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 import BellIcon from '~icons/mdi/bell-ring-outline';
 import BookmarkIcon from '~icons/mdi/bookmark-outline';

@@ -3,12 +3,12 @@ import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
 import { queueConfigurationDefinition } from '@services/background-job/background-job.configuration';
 import { catalogConfigurationDefinition } from '@services/catalog/catalog.configuration';
 import { serverConfigurationDefinition } from '@services/configuration/configuration.configuration';
-import { downloadConfigurationDefinition } from '@services/download/download.configuration';
 import { listConfigurationDefinition } from '@services/list/list.configuration';
 import { mediaLoadConfigurationDefinition } from '@services/media-load/media-load.configuration';
+import { playbackConfigurationDefinition } from '@services/playback/playback.configuration';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
-import { sourcesConfigurationDefinition } from '@services/sources/sources.configuration';
+import { sourcesConfigurationDefinition } from '@services/sources-client/sources.configuration';
 import { subtitlesConfigurationDefinition } from '@services/subtitles/subtitles.configuration';
 import { objectKeys } from '@utils/object.util';
 
@@ -22,7 +22,7 @@ export const services = {
   SOURCES: sourcesConfigurationDefinition,
   MEDIA_LOAD: mediaLoadConfigurationDefinition,
   VPN: vpnConfigurationDefinition,
-  DOWNLOAD: downloadConfigurationDefinition,
+  DOWNLOAD: playbackConfigurationDefinition,
   SUBTITLES: subtitlesConfigurationDefinition,
 };
 

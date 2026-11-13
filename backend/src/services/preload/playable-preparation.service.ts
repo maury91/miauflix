@@ -6,21 +6,21 @@ import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
 import type { PlayableRef } from '@routes/playable.types';
 import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
-import { isVideoFile } from '@services/download/download.utils';
 import type { MediaService } from '@services/media/media.service';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
-import type { SourceService } from '@services/source/source.service';
-import { isUsableSource } from '@services/source/source-availability.service';
-import type { SourceHealthService } from '@services/source/source-health.service';
 import {
   filterHevcSources,
   filterSources,
   fitsBitrate,
   type PlayedSize,
   preferWithinBitrate,
-} from '@services/stream/stream.util';
+} from '@services/playback/source-filters';
+import type { SourceService } from '@services/source/source.service';
+import { isUsableSource } from '@services/source/source-availability.service';
+import type { SourceHealthService } from '@services/source/source-health.service';
+import { isVideoFile } from '@services/source/video-files';
 import {
   madeForOtherLanguage,
   viewerLanguageFirst,
@@ -28,7 +28,7 @@ import {
 } from '@utils/release-language.util';
 import { byPlaybackRank } from '@utils/streaming-score.util';
 
-import type { TorrentWarmupController } from './torrent-warmup.controller';
+import type { SourceWarmupController } from './source-warmup.controller';
 
 export interface PlaybackPreferences {
   subtitleLanguage?: string;
@@ -93,7 +93,7 @@ export class PlayablePreparationService {
   constructor(
     private readonly mediaService: MediaService,
     private readonly sourceService: SourceService,
-    private readonly warmup?: TorrentWarmupController,
+    private readonly warmup?: SourceWarmupController,
     private readonly storage?: Pick<MediaLoadClientService, 'getStorageStates'>,
     private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>,
     private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>
@@ -410,7 +410,7 @@ export class PlayablePreparationService {
     if (!this.warmup || !target || options.resolveOnly) {
       return { playable, source, target, state: 'cold', warmup: emptyWarmup() };
     }
-    let slot: Awaited<ReturnType<TorrentWarmupController['warm']>>;
+    let slot: Awaited<ReturnType<SourceWarmupController['warm']>>;
     try {
       slot = await this.warmup.warm(
         target,
