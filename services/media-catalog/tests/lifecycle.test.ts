@@ -8,6 +8,7 @@ import { CatalogRuntime } from '../src/catalog/bootstrap';
 import { CatalogService } from '../src/catalog/catalog.service';
 import { CatalogConfigService } from '../src/config/config.service';
 import { CatalogDatabase } from '../src/db/database';
+import { MovieRepository } from '../src/db/movie.repo';
 import type { ServiceContext } from '../src/service-context';
 import { CatalogWorkerManager } from '../src/workers/worker';
 
@@ -196,6 +197,170 @@ describe('catalog lifecycle', () => {
       await runtime.stop();
       genres.mockRestore();
       stopArtwork.mockRestore();
+      globalThis.fetch = originalFetch;
+      cleanup();
+    }
+  });
+
+  it('keeps artwork subscriptions delivering across reactivation', async () => {
+    const { config, context, db, runtime, cleanup } = setup();
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) =>
+      String(input).endsWith('/configuration')
+        ? Response.json({ images: { secure_base_url: 'https://image.tmdb.org/t/p/' } })
+        : Response.json({ genres: [] })) as unknown as typeof fetch;
+    const values = {
+      TMDB_API_URL: 'https://api.themoviedb.org/3',
+      TMDB_API_ACCESS_TOKEN: 'test-token',
+      EPISODE_SYNC_MODE: 'ON_DEMAND',
+      CATALOG_HYDRATION_TTL_MS: '86400000',
+    };
+    const movie = (mediaId: number, logo: string) => ({
+      mediaId,
+      imdbId: null,
+      title: `Movie ${mediaId}`,
+      overview: '',
+      tagline: '',
+      releaseDate: '',
+      runtime: 0,
+      poster: '',
+      backdrop: `https://image.tmdb.org/t/p/original/backdrop-${mediaId}.jpg`,
+      logo,
+      logoCandidates: [
+        { url: logo, language: 'en', width: 300, height: 100, voteAverage: 0, voteCount: 0 },
+      ],
+      genreIds: [],
+      popularity: 1,
+      rating: 0,
+      translations: [],
+    });
+    const movies = new MovieRepository(db);
+    movies.upsertMovie(movie(1, 'https://image.tmdb.org/t/p/original/logo-1.png'));
+    movies.upsertMovie(movie(2, 'https://image.tmdb.org/t/p/original/logo-2.png'));
+    try {
+      expect((await config.applyRemote(values)).success).toBe(true);
+      // The host subscribes while the service is ready, on the instance active then
+      const received: number[] = [];
+      const unsubscribe = context.catalog!.onArtworkUpdate(update => received.push(update.mediaId));
+
+      // A configuration push replaces the instance without the service leaving `ready`
+      const first = context.catalog;
+      expect((await config.applyRemote(values)).success).toBe(true);
+      expect(context.catalog).not.toBe(first);
+
+      context.catalog!.queueArtwork([{ mediaType: 'movie', mediaId: 1 }], 'focused');
+      expect(received).toEqual([1]);
+
+      unsubscribe();
+      context.catalog!.queueArtwork([{ mediaType: 'movie', mediaId: 2 }], 'focused');
+      expect(received).toEqual([1]);
+    } finally {
+      await runtime.stop();
+      globalThis.fetch = originalFetch;
+      cleanup();
+    }
+  });
+
+  it('never leaves queue workers without a catalog while replacing or deactivating it', async () => {
+    const { config, context, runtime, cleanup } = setup();
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) =>
+      String(input).endsWith('/configuration')
+        ? Response.json({ images: { secure_base_url: 'https://image.test/' } })
+        : Response.json({ genres: [] })) as unknown as typeof fetch;
+    const values = {
+      TMDB_API_URL: 'https://api.themoviedb.org/3',
+      TMDB_API_ACCESS_TOKEN: 'test-token',
+      EPISODE_SYNC_MODE: 'ON_DEMAND',
+      CATALOG_HYDRATION_TTL_MS: '86400000',
+    };
+    const retiring = Promise.withResolvers<void>();
+    const retireCalled = Promise.withResolvers<void>();
+    let holdRetirement = false;
+    const original = CatalogService.prototype.stopArtworkBackground;
+    const stopArtwork = spyOn(CatalogService.prototype, 'stopArtworkBackground').mockImplementation(
+      async function (this: CatalogService) {
+        const stopping = original.call(this);
+        if (holdRetirement) {
+          retireCalled.resolve();
+          await retiring.promise;
+        }
+        await stopping;
+      }
+    );
+    // What a queue worker sees when it picks up a job: `() => ctx.catalog`
+    const jobCatalog = () => context.catalog;
+    const catalogsSeenByPause: unknown[] = [];
+    const pause = spyOn(CatalogWorkerManager.prototype, 'pause').mockImplementation(async () => {
+      catalogsSeenByPause.push(jobCatalog());
+    });
+    try {
+      expect((await config.applyRemote(values)).success).toBe(true);
+      const first = jobCatalog();
+
+      holdRetirement = true;
+      const replacing = config.applyRemote(values);
+      await retireCalled.promise;
+      // The old instance's shutdown is still pending: a job dispatched now gets the replacement
+      const during = jobCatalog();
+      expect(during).not.toBeNull();
+      expect(during).not.toBe(first);
+      retiring.resolve();
+      expect((await replacing).success).toBe(true);
+      expect(jobCatalog()).toBe(during);
+
+      // Deactivation drains the workers before detaching the catalog
+      holdRetirement = false;
+      await config.clearRemote();
+      expect(catalogsSeenByPause).toEqual([during]);
+      expect(jobCatalog()).toBeNull();
+    } finally {
+      retiring.resolve();
+      await runtime.stop();
+      stopArtwork.mockRestore();
+      pause.mockRestore();
+      globalThis.fetch = originalFetch;
+      cleanup();
+    }
+  });
+
+  it('reports a replacement as active even when the replaced instance fails to shut down', async () => {
+    const { config, context, runtime, cleanup } = setup();
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) =>
+      String(input).endsWith('/configuration')
+        ? Response.json({ images: { secure_base_url: 'https://image.test/' } })
+        : Response.json({ genres: [] })) as unknown as typeof fetch;
+    const values = {
+      TMDB_API_URL: 'https://api.themoviedb.org/3',
+      TMDB_API_ACCESS_TOKEN: 'test-token',
+      EPISODE_SYNC_MODE: 'ON_DEMAND',
+      CATALOG_HYDRATION_TTL_MS: '86400000',
+    };
+    const created: CatalogService[] = [];
+    const genres = spyOn(CatalogService.prototype, 'getGenres').mockImplementation(function (
+      this: CatalogService
+    ) {
+      created.push(this);
+      return Promise.resolve([]);
+    });
+    const stopArtwork = spyOn(CatalogService.prototype, 'stopArtworkBackground').mockRejectedValue(
+      new Error('worker refused to terminate')
+    );
+    try {
+      expect((await config.applyRemote(values)).success).toBe(true);
+      const result = await config.applyRemote({ ...values, CATALOG_HYDRATION_TTL_MS: '3600000' });
+
+      expect(result.success).toBe(true);
+      expect(config.state).toBe('ready');
+      expect(config.values.CATALOG_HYDRATION_TTL_MS).toBe('3600000');
+      // No re-activation with the previous values: the replacement is what serves
+      expect(created).toHaveLength(2);
+      expect(context.catalog).toBe(created[1]!);
+    } finally {
+      stopArtwork.mockRestore();
+      await runtime.stop();
+      genres.mockRestore();
       globalThis.fetch = originalFetch;
       cleanup();
     }

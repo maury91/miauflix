@@ -59,11 +59,18 @@ function parseArray<T>(value: string): T[] {
 const parseCandidates = (value: string) => parseArray<ArtworkCandidate>(value);
 const parseMeasurements = (value: string) => parseArray<ArtworkMeasurement>(value);
 
+export type ArtworkListeners = Set<(update: ArtworkUpdate) => void>;
+
 export class ArtworkSelectionService {
   private readonly worker: Pick<ArtworkAnalysisWorkerClient, 'prepare' | 'measure' | 'close'>;
-  private readonly listeners = new Set<(update: ArtworkUpdate) => void>();
   private running = false;
   private stopped = true;
+  /**
+   * Set by stop(), for good: this instance was replaced. Unlike `stopped` (also true before
+   * start(), when only on-demand enqueues run), it rejects enqueues and publications, so work
+   * still in flight in the old instance cannot overwrite or announce artwork state.
+   */
+  private retired = false;
   private retryTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(
@@ -72,19 +79,22 @@ export class ArtworkSelectionService {
     worker: Pick<
       ArtworkAnalysisWorkerClient,
       'prepare' | 'measure' | 'close'
-    > = new ArtworkAnalysisWorkerClient()
+    > = new ArtworkAnalysisWorkerClient(),
+    /** Who hears updates; pass a shared set so subscriptions outlive this instance. */
+    private readonly listeners: ArtworkListeners = new Set()
   ) {
     this.worker = worker;
   }
 
   start(): void {
-    if (!this.stopped) return;
+    if (!this.stopped || this.retired) return;
     this.stopped = false;
     this.pump();
   }
 
   async stop(): Promise<void> {
     this.stopped = true;
+    this.retired = true;
     if (this.retryTimer) clearTimeout(this.retryTimer);
     this.retryTimer = undefined;
     await this.worker.close();
@@ -103,6 +113,7 @@ export class ArtworkSelectionService {
   }
 
   enqueue(input: { ref: MediaRef; row: MovieRow | TVShowRow; priority: number }): void {
+    if (this.retired) return;
     const candidates = this.readCandidates(input.row.logo_candidates, input.row.logo ?? '');
     const focusSource = input.row.backdrop
       ? this.provider.getBackdropAnalysisSource(input.row.backdrop)
@@ -515,6 +526,7 @@ export class ArtworkSelectionService {
   }
 
   private publish(row: ArtworkRow): void {
+    if (this.retired) return;
     const update = this.toUpdate(row);
     for (const listener of this.listeners) listener(update);
   }

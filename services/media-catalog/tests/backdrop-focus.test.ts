@@ -162,4 +162,65 @@ describe('BackdropFocusService', () => {
     await new Promise(resolve => setTimeout(resolve, 25));
     database.close();
   });
+
+  it('drops queued background analyses once stopped, keeping running and immediate ones', async () => {
+    const started = Promise.withResolvers<void>();
+    const gate = Promise.withResolvers<void>();
+    const downloaded: string[] = [];
+    globalThis.fetch = (async (input: string | URL | Request) => {
+      downloaded.push(String(input));
+      return new Response(fixture, { headers: { 'content-type': 'image/jpeg' } });
+    }) as unknown as typeof fetch;
+    const dataDir = mkdtempSync(join(tmpdir(), 'backdrop-focus-'));
+    directories.push(dataDir);
+    const database = new CatalogDatabase(dataDir);
+    const repository = new BackdropFocusRepository(database);
+    const service = new BackdropFocusService(
+      repository,
+      async () => {
+        started.resolve();
+        await gate.promise;
+        return { x: 0.5, y: 0.5 };
+      },
+      1
+    );
+    const source = (name: string) => ({
+      key: `/${name}.jpg`,
+      url: `https://image.tmdb.org/t/p/w780/${name}.jpg`,
+    });
+    try {
+      expect(service.enqueueBackground(source('running'), 'tmdb', 'database')).toBe(true);
+      await started.promise;
+      expect(service.enqueueBackground(source('queued-database'), 'tmdb', 'database')).toBe(true);
+      expect(service.enqueueBackground(source('queued-displayed'), 'tmdb', 'displayed')).toBe(true);
+
+      // The catalog that owns this service is retired while an analysis is running
+      service.stopBackground();
+      expect(service.hasPendingBackground('database')).toBe(false);
+      expect(service.hasPendingBackground('displayed')).toBe(false);
+      expect(service.enqueueBackground(source('late'), 'tmdb', 'database')).toBe(false);
+      // Requests the retired instance is still serving get their answer, even for a key whose
+      // background task was cancelled in this same tick
+      const immediate = service.ensure(source('requested'), 'tmdb');
+      const cancelledKey = service.ensure(source('queued-displayed'), 'tmdb');
+      gate.resolve();
+      expect(await immediate).toEqual({ x: 0.5, y: 0.5 });
+      expect(await cancelledKey).toEqual({ x: 0.5, y: 0.5 });
+      await new Promise(resolve => setTimeout(resolve, 25));
+
+      expect(downloaded).toEqual([
+        source('running').url,
+        source('requested').url,
+        source('queued-displayed').url,
+      ]);
+      expect(repository.get({ provider: 'tmdb', imageKey: '/running.jpg' })).not.toBeNull();
+      expect(repository.get({ provider: 'tmdb', imageKey: '/queued-database.jpg' })).toBeFalsy();
+      expect(
+        repository.get({ provider: 'tmdb', imageKey: '/queued-displayed.jpg' })
+      ).not.toBeNull();
+    } finally {
+      gate.resolve();
+      database.close();
+    }
+  });
 });

@@ -63,6 +63,16 @@ class BackdropFocusScheduler {
     return true;
   }
 
+  /**
+   * Rejects every background task still waiting and returns their keys; running and immediate
+   * tasks are kept.
+   */
+  cancelBackground(reason: Error): string[] {
+    const cancelled = [...this.backgroundDisplayed.splice(0), ...this.backgroundDatabase.splice(0)];
+    for (const task of cancelled) task.reject(reason);
+    return cancelled.map(task => task.key);
+  }
+
   hasPending(priority: BackgroundPriority): boolean {
     return (
       (priority === 'displayed' ? this.backgroundDisplayed : this.backgroundDatabase).length > 0
@@ -119,6 +129,7 @@ const smartcropRuntime = smartcrop as unknown as SmartcropRuntime;
 export class BackdropFocusService {
   private readonly inflight = new Map<string, Promise<BackdropFocus>>();
   private readonly computationQueue: BackdropFocusScheduler;
+  private backgroundStopped = false;
 
   constructor(
     private readonly repository: BackdropFocusRepository,
@@ -162,12 +173,26 @@ export class BackdropFocusService {
     priority: BackgroundPriority
   ): boolean {
     const key: BackdropFocusKey = { provider, imageKey: source.key };
+    if (this.backgroundStopped) return false;
     const inflightKey = this.inflightKey(key);
     if (this.repository.get(key) || !this.repository.shouldRetry(key)) return false;
     if (this.inflight.has(inflightKey)) return false;
     const promise = this.schedule(inflightKey, key, source, priority);
     void promise.catch(() => undefined);
     return true;
+  }
+
+  /**
+   * For a retired catalog: drops queued background analyses and refuses new ones. Analyses
+   * already running finish (their result does not depend on the configuration), and `ensure`
+   * keeps working for requests the retired instance is still serving.
+   */
+  stopBackground(): void {
+    this.backgroundStopped = true;
+    // Forgotten now, not when the rejection settles: `ensure` must schedule these afresh instead
+    // of joining a cancelled task
+    for (const key of this.computationQueue.cancelBackground(new Error('backdrop_focus_cancelled')))
+      this.inflight.delete(key);
   }
 
   /** Returns whether work is already waiting in the selected background queue. */
@@ -187,7 +212,10 @@ export class BackdropFocusService {
         : this.computationQueue.addBackground(inflightKey, priority, () =>
             this.compute(source, key)
           )
-    ).finally(() => this.inflight.delete(inflightKey));
+    ).finally(() => {
+      // A cancelled task's entry may already belong to the task that replaced it
+      if (this.inflight.get(inflightKey) === promise) this.inflight.delete(inflightKey);
+    });
     this.inflight.set(inflightKey, promise);
     return promise;
   }
