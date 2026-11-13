@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { describe, expect, it, spyOn } from 'bun:test';
 
 import { CatalogRuntime } from '../src/catalog/bootstrap';
+import { CatalogService } from '../src/catalog/catalog.service';
 import { CatalogConfigService } from '../src/config/config.service';
 import { CatalogDatabase } from '../src/db/database';
 import type { ServiceContext } from '../src/service-context';
@@ -128,6 +129,73 @@ describe('catalog lifecycle', () => {
       expect(context.catalog).not.toBeNull();
     } finally {
       await runtime.stop();
+      globalThis.fetch = originalFetch;
+      cleanup();
+    }
+  });
+
+  it('keeps a single active catalog across reactivations, even concurrent ones', async () => {
+    const { config, context, runtime, cleanup } = setup();
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0], init?: RequestInit) => {
+      if (new Headers(init?.headers).get('authorization')?.includes('rejected-token'))
+        return new Response('{}', { status: 401 });
+      if (String(input).endsWith('/configuration'))
+        return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+      return Response.json({ genres: [] });
+    }) as unknown as typeof fetch;
+    const created = new Set<CatalogService>();
+    const retired = new Set<CatalogService>();
+    const genres = spyOn(CatalogService.prototype, 'getGenres').mockImplementation(function (
+      this: CatalogService
+    ) {
+      created.add(this);
+      return Promise.resolve([]);
+    });
+    const stopArtwork = spyOn(CatalogService.prototype, 'stopArtworkBackground').mockImplementation(
+      async function (this: CatalogService) {
+        retired.add(this);
+      }
+    );
+    const values = (token: string) => ({
+      TMDB_API_URL: 'https://api.themoviedb.org/3',
+      TMDB_API_ACCESS_TOKEN: token,
+      EPISODE_SYNC_MODE: 'ON_DEMAND',
+      CATALOG_HYDRATION_TTL_MS: '86400000',
+    });
+    try {
+      // The backend pushes its configuration on every reconnect
+      expect((await config.applyRemote(values('test-token'))).success).toBe(true);
+      const first = context.catalog;
+      expect((await config.applyRemote(values('test-token'))).success).toBe(true);
+      expect(context.catalog).not.toBe(first);
+      expect(retired.has(first!)).toBe(true);
+
+      // Even callers that skip the configuration's own queue cannot overlap activations
+      const prober = (
+        runtime as unknown as {
+          prober: { activate(values: Record<string, string>): Promise<{ success: boolean }> };
+        }
+      ).prober;
+      const results = await Promise.all([1, 2, 3].map(() => prober.activate(values('test-token'))));
+      expect(results.every(result => result.success)).toBe(true);
+      expect(created.size).toBe(5);
+      const running = [...created].filter(catalog => !retired.has(catalog));
+      expect(running).toEqual([context.catalog!]);
+
+      // A rejected configuration leaves the active instance serving
+      const active = context.catalog;
+      expect((await config.applyRemote(values('rejected-token'))).success).toBe(false);
+      expect(context.catalog).toBe(active);
+      expect(retired.has(active!)).toBe(false);
+
+      // Testing a configuration never creates an instance
+      await config.test(values('test-token'));
+      expect(created.size).toBe(5);
+    } finally {
+      await runtime.stop();
+      genres.mockRestore();
+      stopArtwork.mockRestore();
       globalThis.fetch = originalFetch;
       cleanup();
     }

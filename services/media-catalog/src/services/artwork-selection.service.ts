@@ -13,6 +13,7 @@ import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
 import type { MediaRef } from '../types';
 import { ArtworkAnalysisWorkerClient } from './artwork-analysis.worker-client';
+import { isAnalyzableArtworkUrl } from './artwork-urls';
 
 export interface ArtworkUpdate {
   mediaType: MediaRef['mediaType'];
@@ -257,6 +258,12 @@ export class ArtworkSelectionService {
     const candidate = candidates[index];
     if (!candidate) return;
     const analysisUrl = analysisLogoUrl(candidate.url);
+    if (!isAnalyzableArtworkUrl(analysisUrl, false)) {
+      // Such as an SVG logo: it can never be measured, so it is skipped for good, not retried
+      this.advancePastFailedCandidate(row, candidates, measurements, index);
+      logger.debug(SCOPE, `Skipping logo ${index} for ${row.mediaType} ${row.mediaId}: not a PNG`);
+      return;
+    }
     const cached = this.repository.getLogo(row.imageKey, analysisUrl);
     const asset = this.repository.getLogoAsset(analysisUrl);
     let measurement = measurements.find(
@@ -285,14 +292,10 @@ export class ArtworkSelectionService {
       asset.failedAt !== null &&
       asset.failedAt + RETRY_DELAY_MS > Date.now()
     ) {
-      this.advancePastFailedCandidate(
-        row,
-        candidates,
-        measurements,
-        candidate,
-        index,
-        asset.failedAt
-      );
+      this.advancePastFailedCandidate(row, candidates, measurements, index, {
+        url: candidate.url,
+        failedAt: asset.failedAt,
+      });
       return;
     }
     if (!measurement) {
@@ -307,7 +310,10 @@ export class ArtworkSelectionService {
       } catch (error) {
         if (this.stopped) return;
         const failedAt = this.repository.saveLogoAssetFailure(analysisUrl);
-        this.advancePastFailedCandidate(row, candidates, measurements, candidate, index, failedAt);
+        this.advancePastFailedCandidate(row, candidates, measurements, index, {
+          url: candidate.url,
+          failedAt,
+        });
         logger.warn(
           SCOPE,
           `Skipping unusable logo ${index} for ${row.mediaType} ${row.mediaId}`,
@@ -407,13 +413,16 @@ export class ArtworkSelectionService {
     if (saved && saved.revision !== row.revision) this.publish(saved);
   }
 
+  /**
+   * Moves past a candidate that could not be measured. With `failure`, it is retried later; without,
+   * it is unusable for good and only candidates that failed before are retried.
+   */
   private advancePastFailedCandidate(
     row: ArtworkRow,
     candidates: ArtworkCandidate[],
     measurements: ArtworkMeasurement[],
-    candidate: ArtworkCandidate,
     index: number,
-    failedAt: number
+    failure?: { url: string; failedAt: number }
   ): void {
     const isLast = index + 1 >= candidates.length;
     if (!isLast) {
@@ -427,11 +436,12 @@ export class ArtworkSelectionService {
       if (saved && saved.revision !== row.revision) this.publish(saved);
       return;
     }
-    const retry = this.retryCandidate(row.imageKey, candidates, measurements, {
-      index,
-      url: candidate.url,
-      createdAt: failedAt,
-    });
+    const retry = this.retryCandidate(
+      row.imageKey,
+      candidates,
+      measurements,
+      failure && { index, url: failure.url, createdAt: failure.failedAt }
+    );
     const saved = this.repository.progress({
       mediaType: row.mediaType,
       mediaId: row.mediaId,
@@ -455,7 +465,10 @@ export class ArtworkSelectionService {
     latestFailure?: { index: number; url: string; createdAt: number }
   ): { index: number; retryAfter: number } | null {
     const failures = candidates.flatMap((candidate, index) => {
-      const asset = this.repository.getLogoAsset(analysisLogoUrl(candidate.url));
+      const analysisUrl = analysisLogoUrl(candidate.url);
+      // Failures recorded before unanalyzable logos were skipped would otherwise retry forever
+      if (!isAnalyzableArtworkUrl(analysisUrl, false)) return [];
+      const asset = this.repository.getLogoAsset(analysisUrl);
       return asset?.failedAt !== null && asset?.failedAt !== undefined
         ? [{ index, createdAt: asset.failedAt }]
         : [];
