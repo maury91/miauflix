@@ -105,7 +105,10 @@ describe('PlaybackBandwidth', () => {
       getSpeculativeSourceIds: jest.fn(async () => [] as number[]),
     };
     const playback = new PlaybackState();
-    const selection = { pauseDownload: jest.fn(), resumeDownload: jest.fn() };
+    const selection = {
+      pauseDownload: jest.fn(),
+      resumeDownload: jest.fn(async (_sourceId: number) => true),
+    };
     const bandwidth = new PlaybackBandwidth(
       storageService as unknown as StorageService,
       testConfig(),
@@ -170,7 +173,7 @@ describe('PlaybackBandwidth', () => {
     expect(selection.resumeDownload.mock.calls).toEqual([[2]]);
   });
 
-  it('resumes a source at once when its stream ends while the pause is pending', async () => {
+  it('resumes a source when its stream ends while the pause is pending', async () => {
     const { bandwidth, storageService, playback, selection } = setup();
     playback.openStream(9, 'movie.mkv');
     storageService.getStorageBySource.mockResolvedValue({ location: '/other' });
@@ -183,12 +186,41 @@ describe('PlaybackBandwidth', () => {
 
     const pausing = bandwidth.pauseSpeculativeDownloads(9);
     await flush();
-    // The stream ends, and its readiness check finds nothing paused yet.
+    // The stream ends; its readiness check already sees the pending pause and resumes it.
     playback.closeStream(9, 'movie.mkv');
     await bandwidth.resumeSpeculativeDownloadsWhenPlaybackReady();
-    expect(selection.resumeDownload).not.toHaveBeenCalled();
+    expect(selection.resumeDownload.mock.calls).toEqual([[2]]);
 
+    // That resume may have landed before the pause did, so the pause resumes it once more.
     pause.resolve();
+    await pausing;
+    expect(selection.resumeDownload.mock.calls).toEqual([[2], [2]]);
+    await bandwidth.resumeSpeculativeDownloads();
+    expect(selection.resumeDownload).toHaveBeenCalledTimes(2);
+  });
+
+  it('resumes a source whose stream ended while its pause was being rechecked', async () => {
+    const { bandwidth, storageService, playback, selection } = setup();
+    playback.openStream(9, 'movie.mkv');
+    const recheck = deferred();
+    storageService.getStorageBySource.mockResolvedValue({ location: '/other' });
+    storageService.getSpeculativeSourceIds.mockResolvedValue([2]);
+    selection.pauseDownload.mockImplementation(async () => {
+      // The recheck after the pause waits on this storage lookup.
+      storageService.getStorageBySource.mockImplementationOnce(async () => {
+        await recheck.promise;
+        return { location: '/other' };
+      });
+      return true;
+    });
+
+    const pausing = bandwidth.pauseSpeculativeDownloads(9);
+    await flush();
+    playback.closeStream(9, 'movie.mkv');
+    await bandwidth.resumeSpeculativeDownloadsWhenPlaybackReady();
+    expect(selection.resumeDownload.mock.calls).toEqual([[2]]);
+
+    recheck.resolve();
     await pausing;
     expect(selection.resumeDownload.mock.calls).toEqual([[2]]);
   });
@@ -205,5 +237,44 @@ describe('PlaybackBandwidth', () => {
     await bandwidth.resumeSpeculativeDownloads();
     await bandwidth.resumeSpeculativeDownloads();
     expect(selection.resumeDownload.mock.calls).toEqual([[2], [2]]);
+  });
+
+  it('keeps a source whose resume did nothing for the next readiness check', async () => {
+    const { bandwidth, storageService, playback, selection } = setup();
+    playback.openStream(9, 'movie.mkv');
+    storageService.getStorageBySource.mockResolvedValue({ location: '/other' });
+    storageService.getSpeculativeSourceIds.mockResolvedValue([2]);
+    selection.pauseDownload.mockResolvedValue(true);
+    await bandwidth.pauseSpeculativeDownloads(9);
+
+    selection.resumeDownload.mockResolvedValueOnce(false);
+    await bandwidth.resumeSpeculativeDownloads();
+    await bandwidth.resumeSpeculativeDownloads();
+    await bandwidth.resumeSpeculativeDownloads();
+    expect(selection.resumeDownload.mock.calls).toEqual([[2], [2]]);
+  });
+
+  it('reports a failed pause only after the others settle, keeping them for the resume', async () => {
+    const { bandwidth, storageService, playback, selection } = setup();
+    playback.openStream(9, 'movie.mkv');
+    storageService.getStorageBySource.mockResolvedValue({ location: '/other' });
+    storageService.getSpeculativeSourceIds.mockResolvedValue([2, 3]);
+    const slow = deferred();
+    selection.pauseDownload.mockImplementation(async (id: number) => {
+      if (id === 2) throw new Error('pause failed');
+      await slow.promise;
+      return true;
+    });
+
+    let rejected = false;
+    const pausing = bandwidth.pauseSpeculativeDownloads(9).catch(() => (rejected = true));
+    await flush();
+    expect(rejected).toBe(false);
+
+    slow.resolve();
+    await pausing;
+    expect(rejected).toBe(true);
+    await bandwidth.resumeSpeculativeDownloads();
+    expect(selection.resumeDownload.mock.calls).toEqual([[3]]);
   });
 });

@@ -80,6 +80,13 @@ export async function saveAndApply(
     outcome = await plan.apply(progress);
   } catch (error) {
     store.restore(snapshot);
+    // Blame the failing service before rolling back, so rollback notes add to this message.
+    const failedService = progress.applying ?? plan.fallbackFailedService?.();
+    const failed = plan.results.find(result => result.service === failedService);
+    if (failed) {
+      failed.success = false;
+      failed.message = errorMessage(error);
+    }
     try {
       if (plan.onRollbackSaveError) await store.save().catch(plan.onRollbackSaveError);
       else await store.save();
@@ -87,12 +94,6 @@ export async function saveAndApply(
       // The services must leave the rejected candidate even when config.json cannot be restored;
       // a file error is still thrown afterwards.
       await plan.rollback();
-    }
-    const failedService = progress.applying ?? plan.fallbackFailedService?.();
-    const failed = plan.results.find(result => result.service === failedService);
-    if (failed) {
-      failed.success = false;
-      failed.message = errorMessage(error);
     }
     return unappliedSaveResult(false, plan.results);
   }

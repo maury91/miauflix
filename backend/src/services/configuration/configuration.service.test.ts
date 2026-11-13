@@ -780,6 +780,80 @@ describe('ConfigurationService web configuration actions', () => {
     expect(configuration.get('PRELOAD_WARM_TARGET')).toBeUndefined();
   });
 
+  it('saves the last value of a key submitted twice, which is the one tested', async () => {
+    const { configuration } = setupLiveCatalog();
+    const store = (configuration as unknown as { store: ConfigurationStore }).store;
+    jest.spyOn(store, 'save').mockResolvedValue(undefined);
+    await configuration.testAndSaveConfigs(catalogEntries('http://catalog:3001'));
+    const setFileValue = jest.spyOn(store, 'setFileValue');
+
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'CATALOG_SERVICE_URL', value: 'http://elsewhere' },
+      ...catalogEntries('http://catalog:3001'),
+    ]);
+
+    expect(result.success).toBe(true);
+    expect(setFileValue).not.toHaveBeenCalledWith('CATALOG_SERVICE_URL', 'http://elsewhere');
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog:3001');
+  });
+
+  it('rolls the save back when a local service is not ready after applying it', async () => {
+    const configuration = setupTest();
+    let reloads = 0;
+    let status: ServiceInstanceStatus = { status: 'ready' };
+    configuration.registerService('CATALOG', {
+      testable: true,
+      getStatus: () => status,
+      reload: jest.fn(async () => {
+        reloads++;
+        // Probe and restore succeed; the reload that applies the save leaves it failing.
+        status =
+          reloads === 3
+            ? { status: 'error', errorMessage: 'apply failed', error: null }
+            : { status: 'ready' };
+      }),
+    });
+    jest
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs(catalogEntries('http://catalog:3001'));
+
+    expect(result.success).toBe(false);
+    expect(result.services.find(item => item.service === 'CATALOG')?.message).toContain(
+      'apply failed'
+    );
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBeUndefined();
+  });
+
+  it('fails when a service that was ready is not ready after its probe is restored', async () => {
+    const configuration = setupTest();
+    let reloads = 0;
+    let status: ServiceInstanceStatus = { status: 'ready' };
+    configuration.registerService('CATALOG', {
+      testable: true,
+      getStatus: () => status,
+      reload: jest.fn(async () => {
+        reloads++;
+        status =
+          reloads === 1
+            ? { status: 'ready' }
+            : { status: 'error', errorMessage: 'down', error: null };
+      }),
+    });
+    const save = jest
+      .spyOn((configuration as unknown as { store: ConfigurationStore }).store, 'save')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs(catalogEntries('http://catalog:3001'));
+
+    expect(result.success).toBe(false);
+    expect(result.services.map(item => item.message)).toContain(
+      'CATALOG could not be restored after its configuration probe'
+    );
+    expect(save).not.toHaveBeenCalled();
+  });
+
   it('tests all groups before persisting or applying a multi-group save', async () => {
     const configuration = setupTest();
     const makeSchema = (id: string, key: string): ServiceConfigSchema => ({

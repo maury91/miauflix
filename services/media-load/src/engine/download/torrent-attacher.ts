@@ -218,12 +218,17 @@ export class TorrentAttacher {
           const onMetadata = () => onSourceMetadata(existingSourceFile);
           const onError = () =>
             reject(new ErrorWithStatus(`Error adding file to client`, 'add_error'));
+          // Removed by its owner before its metadata arrived: it never will.
+          const onClose = () =>
+            reject(new ErrorWithStatus(`Torrent was removed while adding file`, 'add_error'));
           stopWaitingOnExisting = () => {
             existingSourceFile.off('metadata', onMetadata);
             existingSourceFile.off('error', onError);
+            existingSourceFile.off('close', onClose);
           };
           existingSourceFile.once('metadata', onMetadata);
           existingSourceFile.once('error', onError);
+          existingSourceFile.once('close', onClose);
           return;
         }
         temporaryTorrent = this.client.add(

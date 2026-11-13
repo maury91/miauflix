@@ -54,7 +54,8 @@ export function usePlaybackPrompts({
   const [prefetchedNextSession, setPrefetchedNextSession] =
     useState<CreatePlaybackSessionResponse | null>(null);
   const prefetchedNextRef = useRef<CreatePlaybackSessionResponse | null>(null);
-  const nextRequestInFlight = useRef<Promise<void> | null>(null);
+  /** The next-session request in flight, with the next episode it was made for. */
+  const nextRequestInFlight = useRef<{ key: string; promise: Promise<void> } | null>(null);
   /** The next episode that already got its one retry at the 70% prefetch point. */
   const nextRetriedAtPrefetch = useRef<string | null>(null);
   const nextDownloadStarted = useRef<string | null>(null);
@@ -79,7 +80,8 @@ export function usePlaybackPrompts({
       const key = nextEpisodeKeyRef.current;
       if (!target || !key) return Promise.resolve();
       if (prefetchedNextRef.current && nextEpisodeKeyRef.current === key) return Promise.resolve();
-      if (nextRequestInFlight.current) return nextRequestInFlight.current;
+      // A request for an earlier next episode does not stand in for this one's.
+      if (nextRequestInFlight.current?.key === key) return nextRequestInFlight.current.promise;
       if (atPrefetchPoint) {
         // Every timeupdate past 70% lands here; a failing source gets one retry, not one per tick.
         if (nextRetriedAtPrefetch.current === key) return Promise.resolve();
@@ -100,9 +102,9 @@ export function usePlaybackPrompts({
           // A missing next source is retried once playback reaches the 70% prefetch point.
         })
         .finally(() => {
-          if (nextRequestInFlight.current === request) nextRequestInFlight.current = null;
+          if (nextRequestInFlight.current?.promise === request) nextRequestInFlight.current = null;
         });
-      nextRequestInFlight.current = request;
+      nextRequestInFlight.current = { key, promise: request };
       return request;
     },
     [avplay, createNextSession]

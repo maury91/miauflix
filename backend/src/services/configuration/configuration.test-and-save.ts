@@ -61,9 +61,11 @@ type RemoteSnapshots = {
  */
 export async function testAndSaveConfigs(
   ctx: ConfigurationContext,
-  entries: Entry[]
+  submittedEntries: Entry[]
 ): Promise<SaveConfigsResult> {
-  if (!entries.length) return unappliedSaveResult(false, []);
+  if (!submittedEntries.length) return unappliedSaveResult(false, []);
+  // A key submitted twice keeps its last value, so the tested and the saved value are the same.
+  const entries = [...new Map(submittedEntries.map(entry => [entry.key, entry])).values()];
 
   const { groups, invalidKeys } = groupEntries(ctx, entries);
   if (invalidKeys.length) {
@@ -85,7 +87,13 @@ export async function testAndSaveConfigs(
   if (results.some(result => !result.success)) return unappliedSaveResult(false, results);
 
   const remoteSnapshots = collectRemoteSnapshots(ctx, candidate);
-  await probeCandidate(ctx, candidate, remoteSnapshots.next, results);
+  // Only a service that was ready before counts as not restored when it is not ready afterwards.
+  const readyBefore = new Set(
+    candidate.localGroups.filter(
+      serviceName => ctx.registeredServices.get(serviceName)?.getStatus().status === 'ready'
+    )
+  );
+  await probeCandidate(ctx, candidate, remoteSnapshots.next, results, readyBefore);
   if (results.some(result => !result.success)) return unappliedSaveResult(false, results);
 
   const { store, registeredServices } = ctx;
@@ -129,7 +137,8 @@ export async function testAndSaveConfigs(
         );
         const failedLocalRestorations = await restoreRuntimeServices(
           registeredServices,
-          candidate.localGroups
+          candidate.localGroups,
+          readyBefore
         );
         for (const serviceName of failedLocalRestorations) {
           const result = results.find(item => item.service === serviceName);
@@ -279,7 +288,8 @@ async function probeCandidate(
   ctx: ConfigurationContext,
   candidate: Candidate,
   remoteSnapshots: ReadonlyMap<ServiceName, Record<string, string>>,
-  results: ConfigServiceActionResult[]
+  results: ConfigServiceActionResult[],
+  readyBefore: ReadonlySet<ServiceName>
 ): Promise<void> {
   const { store, registeredServices } = ctx;
   const { localGroups } = candidate;
@@ -318,7 +328,11 @@ async function probeCandidate(
     }
   });
 
-  const failedProbeRestorations = await restoreRuntimeServices(registeredServices, locallyTested);
+  const failedProbeRestorations = await restoreRuntimeServices(
+    registeredServices,
+    locallyTested,
+    readyBefore
+  );
   for (const serviceName of failedProbeRestorations) {
     results.push({
       service: serviceName,
@@ -367,6 +381,10 @@ async function applyCandidate(
     if (!instance) continue;
     progress.applying = serviceName;
     await instance.reload();
+    // reload() can resolve with the service still failing; that must roll the save back.
+    if (instance.testable && instance.getStatus().status !== 'ready') {
+      throw new Error(serviceStatusMessage(registeredServices, serviceName));
+    }
     restarted.push(serviceName);
   }
   return { restarted, needsProcessRestart, changed: changedGroups, recovered: [] };

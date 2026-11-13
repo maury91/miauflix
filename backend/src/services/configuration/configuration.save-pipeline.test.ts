@@ -110,6 +110,24 @@ describe('saveAndApply', () => {
     expect(notify).not.toHaveBeenCalled();
   });
 
+  it('keeps the rollback notes added to the failed service', async () => {
+    const { store } = makeStore();
+    const plan: SavePlan = makePlan(store, {
+      apply: async progress => {
+        progress.applying = 'LIST';
+        throw new Error('LIST rejected');
+      },
+      rollback: async () => {
+        const list = plan.results.find(item => item.service === 'LIST')!;
+        list.message = `${list.message}; rollback failed`;
+      },
+    });
+
+    const result = await saveAndApply(store, plan, jest.fn());
+
+    expect(result.services[1].message).toBe('LIST rejected; rollback failed');
+  });
+
   it('blames the fallback service when the failure happens before applying one', async () => {
     const { store, save } = makeStore();
     save.mockRejectedValueOnce(new Error('disk full'));

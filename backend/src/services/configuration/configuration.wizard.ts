@@ -501,7 +501,11 @@ async function promptForGroup(
     }
   }
   // The user can keep values whose test failed ("Using potentially invalid configuration").
-  const stillFailing = Boolean(testLocally && !handlerFromInstance(registeredInstance).isAlive());
+  // A non-testable service's status does not say whether its configuration works (it may still be
+  // initializing), so it is never reported as failing.
+  const stillFailing = Boolean(
+    testLocally && registeredInstance.testable && !handlerFromInstance(registeredInstance).isAlive()
+  );
   return { changed, stillFailing };
 }
 

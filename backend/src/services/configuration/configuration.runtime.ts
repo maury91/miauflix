@@ -47,11 +47,14 @@ export function serviceStatusMessage(
 
 /**
  * Reloads local services so they pick the stored configuration back up after a test or a failed
- * save. Returns the services whose reload threw.
+ * save. Returns the services whose reload threw, and those in `readyBefore` (ready before the
+ * test or save) that are not ready afterwards. A service that was already failing before is not
+ * counted when it fails again on its old configuration: that would block saving its fix.
  */
 export async function restoreRuntimeServices(
   registeredServices: RegisteredServices,
-  serviceNames: Iterable<ServiceName>
+  serviceNames: Iterable<ServiceName>,
+  readyBefore: ReadonlySet<ServiceName> = new Set()
 ): Promise<ServiceName[]> {
   const failed: ServiceName[] = [];
   for (const serviceName of serviceNames) {
@@ -67,6 +70,7 @@ export async function restoreRuntimeServices(
       if (instance.getStatus().status === 'ready') {
         logger.info('Config', `${serviceName} restoration restart completed: ready`);
       } else {
+        if (readyBefore.has(serviceName)) failed.push(serviceName);
         logger.warn(
           'Config',
           `${serviceName} restoration restart completed without becoming ready: ${serviceStatusMessage(registeredServices, serviceName)}`

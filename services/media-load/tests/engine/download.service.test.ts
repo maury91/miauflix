@@ -215,7 +215,13 @@ describe('DownloadService', () => {
     };
 
     it.each([
-      ['completed', { videoCompletedAt: new Date('2026-10-10T12:00:00Z') }],
+      [
+        'completed',
+        {
+          videoCompletedAt: new Date('2026-10-10T12:00:00Z'),
+          downloadedPieces: new Uint8Array([0b11000000]),
+        },
+      ],
       ['local-only', { localOnly: true }],
     ])('reports the requested video bytes verified for %s media', async (_name, completion) => {
       const { service, mockStorageService } = setupTest();
@@ -239,6 +245,26 @@ describe('DownloadService', () => {
         verifiedBytes: 0,
         targetBytes: 0,
         progress: 0,
+        isComplete: false,
+      });
+    });
+
+    it('measures a completed source from its stored pieces, which cover only claimed files', async () => {
+      const { service, mockStorageService } = setupTest();
+      mockStorageService.getStorageBySource.mockResolvedValue(
+        createMockStorage({
+          encryptedLayout: layout,
+          videoCompletedAt: new Date('2026-10-10T12:00:00Z'),
+          localOnly: false,
+          downloadedPieces: new Uint8Array([0b10000000]),
+        })
+      );
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [];
+
+      await expect(service.getRangeProgress(1, 'video.mkv', 0, 1)).resolves.toEqual({
+        verifiedBytes: 1,
+        targetBytes: 5,
+        progress: 20,
         isComplete: false,
       });
     });
@@ -579,6 +605,21 @@ describe('DownloadService', () => {
       expect(mockedTorrentInstance.remove).not.toHaveBeenCalled();
       expect(torrent.listenerCount('metadata')).toBe(0);
       expect(torrent.listenerCount('error')).toBe(0);
+    });
+
+    it('stops waiting when the torrent another operation is adding is removed', async () => {
+      const { service } = setupTest();
+      const hash = 'abcdef1234567890abcdef1234567890abcdef12';
+      const torrent = Object.assign(new EventEmitter(), { infoHash: hash, torrentFile: undefined });
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [torrent];
+
+      const lookup = service.getSourceMetadataFile(`magnet:?xt=urn:btih:${hash}`, hash, 5000);
+      torrent.emit('close');
+
+      await expect(lookup).rejects.toMatchObject({ status: 'add_error' });
+      expect(mockedTorrentInstance.remove).not.toHaveBeenCalled();
+      expect(torrent.listenerCount('metadata')).toBe(0);
+      expect(torrent.listenerCount('close')).toBe(0);
     });
   });
 
@@ -1052,6 +1093,83 @@ describe('DownloadService', () => {
       expect(service.isPlaybackActive(1)).toBe(false);
       expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(1, 1, true);
       expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(2, 1, false);
+    });
+
+    it('resumes what it paused when pausing for a new stream fails', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as {
+        ready: boolean;
+        add: AnyMock;
+        torrents: unknown[];
+      };
+      const storage = {
+        id: 1,
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+        size: 10,
+      };
+      webtorrent.ready = true;
+      mockStorageService.createStorage.mockResolvedValue(storage as never);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage as never);
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+      const file = {
+        name: 'movie.mkv',
+        path: 'movie.mkv',
+        length: 10,
+        offset: 0,
+        select: jest.fn(),
+      };
+      const torrent = {
+        infoHash: 'a'.repeat(40),
+        name: 'movie',
+        bitfield: undefined,
+        pieces: new Array(1),
+        ready: true,
+        pieceLength: 10,
+        length: 10,
+        files: [file],
+        on: jest.fn(),
+        once: jest.fn(),
+        removeListener: jest.fn(),
+        off: jest.fn(),
+        _select: jest.fn(),
+        _deselect: jest.fn(),
+        critical: jest.fn(),
+        setPriority: jest.fn(),
+        throttleDownloadSpeed: jest.fn(),
+      };
+      webtorrent.torrents = [];
+      mockStorageService.withSourceLock.mockImplementation(async (_sourceId, operation) =>
+        operation()
+      );
+      webtorrent.add.mockImplementation((_input, _options, callback) => {
+        queueMicrotask(() => callback?.(torrent as never));
+        return torrent as never;
+      });
+
+      const bandwidth = units(service).bandwidth as unknown as {
+        pauseSpeculativeDownloads: (sourceId: number) => Promise<void>;
+        resumeSpeculativeDownloads: () => Promise<void>;
+      };
+      jest
+        .spyOn(bandwidth, 'pauseSpeculativeDownloads')
+        .mockRejectedValue(new Error('pause failed'));
+      const resume = jest.spyOn(bandwidth, 'resumeSpeculativeDownloads').mockResolvedValue();
+
+      await expect(
+        service.streamFile(
+          target({
+            id: 1,
+            size: 10,
+            hash: 'a'.repeat(40),
+            magnetLink: 'magnet:?xt=urn:btih:test',
+            file: null,
+          })
+        )
+      ).rejects.toThrow('pause failed');
+
+      expect(resume).toHaveBeenCalledTimes(1);
+      expect(service.hasActivePlayback()).toBe(false);
     });
 
     it('keeps an active response readable after seeding expires and removes the torrent without its files', async () => {

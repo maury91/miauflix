@@ -142,6 +142,35 @@ describe('usePlaybackPrompts', () => {
     expect(onPlayNext).toHaveBeenCalledTimes(1);
   });
 
+  it('prepares a new next episode while the previous one is still being prepared', async () => {
+    createNextSession.mockReturnValue({ unwrap: () => new Promise(() => {}) });
+    const session = sessionWith({});
+    const videoRef = { current: { currentTime: 950, duration: 1000 } as PlayerMedia };
+    const episode3 = { playable: { ...playable, episodeNumber: 3 }, title: 'Episode 3' };
+    const { rerender } = renderHook(
+      ({ next }) =>
+        usePlaybackPrompts({
+          playable,
+          nextEpisode: next,
+          session,
+          avplay: false,
+          videoRef,
+          seekTo: vi.fn(),
+          completeOnce: vi.fn(),
+          onPlayNext: vi.fn(),
+        }),
+      { initialProps: { next: nextEpisode } }
+    );
+    await waitFor(() => expect(createNextSession).toHaveBeenCalledTimes(1));
+
+    rerender({ next: episode3 });
+
+    await waitFor(() => expect(createNextSession).toHaveBeenCalledTimes(2));
+    expect(createNextSession).toHaveBeenLastCalledWith(
+      expect.objectContaining({ playable: episode3.playable })
+    );
+  });
+
   it('does not offer the next episode again after Stay', async () => {
     createNextSession.mockReturnValue({
       unwrap: () => Promise.resolve({ streamUrl: '/api/stream/next' }),

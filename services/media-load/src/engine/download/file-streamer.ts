@@ -295,7 +295,11 @@ export class FileStreamer {
           await this.bandwidth.pauseSpeculativeDownloads(sourceId);
         } catch (error) {
           this.playback.closeStream(sourceId, path);
-          this.bandwidth.refreshTorrentPriorities();
+          // Sources paused before the failure must not stay paused with no stream to wait for.
+          // (Another source's stream may have opened while pausing.)
+          const openStreams: number = this.playback.streamCount;
+          if (openStreams === 0) await this.bandwidth.resumeSpeculativeDownloads();
+          else this.bandwidth.refreshTorrentPriorities();
           this.playback.notifyPlaybackChange();
           await this.storageService.setPlaybackActive(sourceId, false);
           throw error;

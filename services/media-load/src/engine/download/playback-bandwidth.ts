@@ -59,7 +59,8 @@ export class PlaybackBandwidth {
   async pauseSpeculativeDownloads(excludeSourceId: number): Promise<void> {
     if (!(await this.hasIncompleteActivePlayback())) return;
     const sourceIds = (await this.storageService.getSpeculativeSourceIds()) ?? [];
-    await Promise.all(
+    // Every pause settles before a failure is reported, so the caller can resume all that paused.
+    const results = await Promise.allSettled(
       sourceIds
         .filter(
           sourceId => sourceId !== excludeSourceId && !this.playback.isPlaybackActive(sourceId)
@@ -73,33 +74,55 @@ export class PlaybackBandwidth {
           )
         )
     );
+    const failure = results.find(result => result.status === 'rejected');
+    if (failure) throw failure.reason;
   }
 
   /**
-   * Pause a source for a buffering stream. The pause is asynchronous: if the reason went away
-   * meanwhile (the stream buffered or ended, or this source started streaming), a readiness check
-   * may already have run without seeing this source, so it is resumed here instead of tracked.
+   * Pause a source for a buffering stream. The source is tracked before the pause starts, so a
+   * readiness check that runs meanwhile takes and resumes it. If the reason went away (the stream
+   * buffered or ended, or this source started streaming), it is resumed here instead of tracked.
    */
   private async pauseForPlayback(
     sourceId: number,
     stillQualifies: () => Promise<boolean>
   ): Promise<void> {
-    if (!(await this.selection.pauseDownload(sourceId))) return;
-    if (await stillQualifies()) this.pausedForPlayback.add(sourceId);
-    else await this.selection.resumeDownload(sourceId);
+    this.pausedForPlayback.add(sourceId);
+    let paused = false;
+    try {
+      paused = await this.selection.pauseDownload(sourceId);
+    } finally {
+      if (!paused) this.pausedForPlayback.delete(sourceId);
+    }
+    if (!paused) return;
+    // A resume ran while pausing and may have landed first: resume again so it is not left paused.
+    if (!this.pausedForPlayback.has(sourceId)) return this.resumeOrKeep([sourceId]);
+    const qualifies = await stillQualifies().catch(error => {
+      logger.warn('DownloadService', `Failed to recheck the pause of source ${sourceId}`, error);
+      return false;
+    });
+    if (qualifies) return;
+    // A readiness check that ran during the recheck already resumed it.
+    if (this.pausedForPlayback.delete(sourceId)) await this.resumeOrKeep([sourceId]);
+  }
+
+  /** Resume sources; one whose resume failed or did nothing stays tracked for the next check. */
+  private async resumeOrKeep(sourceIds: number[]): Promise<void> {
+    const results = await Promise.allSettled(
+      sourceIds.map(sourceId => this.selection.resumeDownload(sourceId))
+    );
+    results.forEach((result, index) => {
+      if (result.status === 'rejected' || !result.value)
+        this.pausedForPlayback.add(sourceIds[index]);
+    });
   }
 
   /** Resume only torrents paused by playback admission; unrelated pauses remain untouched. */
   async resumeSpeculativeDownloads(): Promise<void> {
     const sourceIds = [...this.pausedForPlayback];
     this.pausedForPlayback.clear();
-    const results = await Promise.allSettled(
-      sourceIds.map(sourceId => this.selection.resumeDownload(sourceId))
-    );
     // A resume that failed keeps its source, so the next readiness check retries it.
-    results.forEach((result, index) => {
-      if (result.status === 'rejected') this.pausedForPlayback.add(sourceIds[index]);
-    });
+    await this.resumeOrKeep(sourceIds);
     // The stream has buffered its file (or ended): lift the caps on the other torrents.
     this.refreshTorrentPriorities();
   }

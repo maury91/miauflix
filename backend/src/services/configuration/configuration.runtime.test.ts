@@ -60,6 +60,20 @@ describe('restoreRuntimeServices', () => {
     ]);
     expect(ok.reload).toHaveBeenCalledTimes(1);
   });
+
+  it('also returns services that were ready before and are not ready after reloading', async () => {
+    const failing = remote({
+      getStatus: () => ({ status: 'error', errorMessage: 'down', error: null }),
+    });
+    const services = new Map<ServiceName, ConfigurableService>([
+      ['CATALOG', failing],
+      ['LIST', failing],
+    ]);
+
+    expect(await restoreRuntimeServices(services, ['CATALOG', 'LIST'], new Set(['LIST']))).toEqual([
+      'LIST',
+    ]);
+  });
 });
 
 describe('probeRemoteConsumer', () => {

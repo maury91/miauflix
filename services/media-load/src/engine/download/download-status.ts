@@ -7,6 +7,7 @@ import type {
 import { logger } from '../../lib/logger';
 import type { StorageService } from '../../storage/storage.service';
 import type { Storage } from '../../storage/types';
+import { isPieceInBitfield } from '../download.utils';
 import {
   createEncryptedLayout,
   getFileRangeByteLength,
@@ -211,9 +212,20 @@ export class DownloadStatus {
     if (!torrent?.bitfield) {
       if ((storage.videoCompletedAt || storage.localOnly) && layout) {
         const targetBytes = getFileRangeByteLength(layout, filePath, firstPiece, lastPiece);
-        if (targetBytes > 0) {
+        if (targetBytes <= 0) return { ...NO_RANGE_PROGRESS };
+        // A local-only source is stored whole; a completed one only has its claimed files, so its
+        // range is measured from the stored piece bitfield.
+        if (storage.localOnly) {
           return { verifiedBytes: targetBytes, targetBytes, progress: 100, isComplete: true };
         }
+        let verifiedBytes = 0;
+        for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+          if (isPieceInBitfield(storage.downloadedPieces, piece)) {
+            verifiedBytes += getFileRangeByteLength(layout, filePath, piece, piece);
+          }
+        }
+        const progress = Math.min(100, (verifiedBytes / targetBytes) * 100);
+        return { verifiedBytes, targetBytes, progress, isComplete: verifiedBytes === targetBytes };
       }
       return { ...NO_RANGE_PROGRESS };
     }

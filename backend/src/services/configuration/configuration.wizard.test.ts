@@ -349,6 +349,24 @@ describe('runSetupWizard', () => {
     expect([...result.servicesNeedingConfiguration]).toEqual(['CATALOG']);
   });
 
+  it('does not report a non-testable service that is still initializing as failing', async () => {
+    mockIsatty.mockReturnValue(true);
+    mockInput.mockImplementation(
+      (async ({ default: current }: { default?: string }) => current) as never
+    );
+    mockPassword.mockResolvedValue('');
+    const server: ConfigurableService = {
+      testable: false,
+      getStatus: () => ({ status: 'initializing', details: 'starting', startedAt: 0 }),
+      reload: jest.fn().mockResolvedValue(undefined),
+    };
+    const host = makeHost([], { registeredServices: new Map([['SERVER', server]]) });
+
+    const result = await runSetupWizard(host, { forceReconfigure: true });
+
+    expect(result.servicesNeedingConfiguration.has('SERVER')).toBe(false);
+  });
+
   it('prompts for each group in a TTY, saves it, and persists the changed values', async () => {
     mockIsatty.mockReturnValue(true);
     mockInput.mockImplementation((async ({
