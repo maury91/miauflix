@@ -29,7 +29,6 @@ import {
   type AudioPlaybackService,
   type PlaybackDelivery,
 } from './audio-playback.service';
-import { withDeviceCodecs } from './device-codecs';
 import { assessSwarm, type SwarmSample } from './swarm-health';
 import {
   codecsPlayable,
@@ -146,6 +145,11 @@ interface LiveSession {
    * where the viewer is.
    */
   awaitingRemux?: boolean;
+  /**
+   * Told to move to another source: still streaming until its player switches, but no longer a
+   * reason to keep its source for the viewer, so the replacement's admission can reclaim it.
+   */
+  retiring?: boolean;
 }
 
 export interface PlaybackSession {
@@ -255,13 +259,6 @@ export class PlaybackSessionService {
       sessionId?: string;
     } = {}
   ): Promise<PlaybackSession | null> {
-    preferences = withDeviceCodecs(preferences);
-    if (preferences.tizenCodecs) {
-      logger.debug(
-        'PlaybackSessionService',
-        `TV codecs: audio ${preferences.tizenCodecs.audio.join(', ') || 'none'}; video ${preferences.tizenCodecs.video.join(', ') || 'none'}`
-      );
-    }
     // Warm where the player will resume, as the details warmup did, not over it from the start.
     const resumeFraction = options.deferDownload
       ? undefined
@@ -652,6 +649,7 @@ export class PlaybackSessionService {
     for (const live of this.liveSessions.values())
       if (
         live.expiresAt > now &&
+        !live.retiring &&
         live.sourceId === sourceId &&
         this.watchOwnerKey(live.userId, live.playable) === ownerKey
       )
@@ -825,6 +823,7 @@ export class PlaybackSessionService {
               'PlaybackSessionService',
               `Source ${target.source.id} needs audio conversion; moving ${address.playbackId} to source ${alternative.sourceId}`
             );
+            live.retiring = true;
             emit({ type: 'recreate', reason: 'The source needs audio conversion.' });
             return;
           }

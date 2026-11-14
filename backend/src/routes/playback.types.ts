@@ -3,7 +3,9 @@ import { z } from 'zod';
 
 import { type PlayableRef, playableRefSchema } from '@mytypes/playable.types';
 import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
-import { TIZEN_AUDIO_CODECS, TIZEN_VIDEO_CODECS } from '@services/playback/device-codecs';
+
+/** A codec as ffprobe names it (`codec_name`): every platform reports its codecs this way. */
+const codecNameSchema = z.string().regex(/^[a-z0-9_]{1,32}$/);
 
 const supportedQualities = ['auto', ...Object.values(Quality)] as ['auto', ...Quality[]];
 
@@ -20,10 +22,10 @@ export const playbackPreferencesSchema = z
       .max(2)
       .optional(),
     audioLanguages: z.array(z.string().min(1).max(35)).max(20).optional(),
-    supportedAudioCodecs: z
-      .array(z.enum(['aac', 'mp3', 'opus', 'vorbis', 'flac', 'ac3', 'eac3', 'dts']))
-      .max(8)
-      .optional(),
+    /** Audio codecs the client decodes natively, in ffprobe names. */
+    supportedAudioCodecs: z.array(codecNameSchema).max(64).optional(),
+    /** Video codecs the client decodes natively, in ffprobe names; unset assumes H.264 and H.265. */
+    supportedVideoCodecs: z.array(codecNameSchema).max(64).optional(),
     supportedMseAudioCodecs: z
       .array(z.enum(['aac', 'mp3', 'opus', 'vorbis', 'flac', 'ac3', 'eac3', 'dts']))
       .max(8)
@@ -32,14 +34,6 @@ export const playbackPreferencesSchema = z
     /** Prefer another source over converting this one's audio (a TV playing files natively). */
     avoidAudioConversion: z.boolean().optional(),
     playsRemux: z.boolean().optional(),
-    /** Every codec a Samsung TV reports it decodes, in Samsung's names (Tizen 6.0 and newer). */
-    tizenCodecs: z
-      .object({
-        audio: z.array(z.enum(TIZEN_AUDIO_CODECS)).max(TIZEN_AUDIO_CODECS.length),
-        video: z.array(z.enum(TIZEN_VIDEO_CODECS)).max(TIZEN_VIDEO_CODECS.length),
-      })
-      .strict()
-      .optional(),
     /** Highest average bitrate (kbit/s) the client's connection sustains. */
     maxBitrateKbps: z.number().int().min(500).max(1_000_000).optional(),
   })

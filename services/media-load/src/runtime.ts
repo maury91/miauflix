@@ -149,6 +149,8 @@ export class MediaLoadRuntime {
       const database = new MediaLoadDatabase(db, encryption);
       const { imported } = new StorageImporter(database).status();
       const storage = new StorageService(database, config);
+      // A previous process's remuxes are requeued: the room they held is stale.
+      await storage.releaseRemuxReservations();
       const pieces = new PieceUpdates(database.getStorageRepository());
       const downloads = new DownloadService(storage, config, dhtBootstrap, {
         networkAllowed: this.networkAllowed(),

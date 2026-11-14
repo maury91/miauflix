@@ -6,7 +6,6 @@ import type { ConfigService } from '@mytypes/configuration';
 import type { MediaProbeRepository } from '@repositories/media-probe.repository';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
-import type { TizenAudioCodec, TizenVideoCodec } from './device-codecs';
 import { FragmentedMp4Timeline } from './fragmented-mp4';
 import type { PlaybackTarget } from './playback-target';
 import { openSourceInput, PROBE_SIZE_BYTES } from './source-input';
@@ -57,8 +56,6 @@ export interface AudioPlaybackPreferences {
   avoidAudioConversion?: boolean;
   /** Plays a TV remux (HLS) instead of converted audio, once one is ready (see TvRemuxService). */
   playsRemux?: boolean;
-  /** What a Samsung TV reports it decodes, folded into the lists above by `withDeviceCodecs`. */
-  tizenCodecs?: { audio: TizenAudioCodec[]; video: TizenVideoCodec[] };
 }
 
 export class AudioPlaybackError extends Error {

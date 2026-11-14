@@ -582,7 +582,7 @@ describe('StorageService', () => {
         size: 1000,
         reservedBytes: 1500,
       });
-      await database.getStorageRepository().reconcileAllocation(storage.id, 800);
+      await database.getStorageRepository().reconcileAllocation(storage.id, 800, 0);
 
       const inventory = await storageService.getInventory();
       // Titles are the backend's; the service knows the source by its descriptor.
@@ -1586,63 +1586,108 @@ describe('StorageService', () => {
       }
     });
 
-    it('keeps a remux charged beside a download that is still writing', async () => {
-      const { storageService } = setupTest();
-      const movie = await testDataFactory.createTestMovie();
-      const source = await testDataFactory.createTestContentSource(movie.id);
-      const location = fs.mkdtempSync(`${os.tmpdir()}/remux-pack-`);
-      const output = `${location}/remux/1`;
-      try {
-        await storageService.createStorage({
-          sourceId: source.id,
-          location,
-          size: 600 * 1024,
-          reservedBytes: 600 * 1024,
-        });
-        const release = await storageService.reserveAdditional(source.id, 300 * 1024, true, output);
-        // 500 of the pack's 600 KiB are downloaded; the remux, inside the storage, wrote 200.
-        fs.writeFileSync(`${location}/episode.mkv`, Buffer.alloc(500 * 1024, 1));
-        fs.mkdirSync(output, { recursive: true });
-        fs.writeFileSync(`${output}/seg00000.ts`, Buffer.alloc(200 * 1024, 1));
-        // A download progress update may measure both files before the remux releases its room.
-        expect((await storageService.reconcileAllocation(source.id))?.reservedBytes).toBe(
-          600 * 1024
-        );
-        await release();
-        const storage = await storageService.getStorageBySource(source.id);
-        // Together they cross the pack's reservation, yet 100 KiB of it are still to come.
-        expect(storage?.allocatedBytes).toBeGreaterThanOrEqual(700 * 1024);
-        expect(storage?.reservedBytes).toBeGreaterThanOrEqual(800 * 1024);
-        expect(storage?.remuxReservedBytes).toBe(0);
-      } finally {
+    describe('remux output', () => {
+      const KiB = 1024;
+      let location: string;
+      beforeEach(() => {
+        location = fs.mkdtempSync(`${os.tmpdir()}/remux-pack-`);
+      });
+      afterEach(() => {
         fs.rmSync(location, { recursive: true, force: true });
-      }
-    });
-
-    it('charges the held remux estimate when measuring an output child fails', async () => {
-      const { storageService } = setupTest();
-      const source = await createSource(database);
-      const location = fs.mkdtempSync(`${os.tmpdir()}/remux-unmeasurable-`);
-      const output = `${location}/remux/1`;
-      try {
+      });
+      const write = (path: string, bytes: number) => {
+        fs.mkdirSync(`${location}/${path}`.replace(/\/[^/]+$/, ''), { recursive: true });
+        fs.writeFileSync(`${location}/${path}`, Buffer.alloc(bytes, 1));
+      };
+      const pack = async (storageService: StorageService) => {
+        const movie = await testDataFactory.createTestMovie();
+        const source = await testDataFactory.createTestContentSource(movie.id);
         await storageService.createStorage({
           sourceId: source.id,
           location,
-          size: 600 * 1024,
-          reservedBytes: 600 * 1024,
+          size: 600 * KiB,
+          reservedBytes: 600 * KiB,
         });
-        const release = await storageService.reserveAdditional(source.id, 200 * 1024, true, output);
-        fs.mkdirSync(output, { recursive: true });
-        // stat on this child fails with ELOOP, making the measurement return null.
-        fs.symlinkSync('loop', `${output}/loop`);
+        return source.id;
+      };
+
+      it('charges finished remux output beside a download that is still writing', async () => {
+        const { storageService } = setupTest();
+        const sourceId = await pack(storageService);
+        const release = await storageService.reserveAdditional(sourceId, 300 * KiB, true);
+        // 500 of the pack's 600 KiB are downloaded; the remux, inside the storage, wrote 200.
+        write('episode.mkv', 500 * KiB);
+        write('remux/1/seg00000.ts', 200 * KiB);
+        // A download progress update may measure both before the remux lets its room go.
+        expect((await storageService.reconcileAllocation(sourceId))?.reservedBytes).toBe(600 * KiB);
         await release();
-        expect(await storageService.getStorageBySource(source.id)).toMatchObject({
-          reservedBytes: 800 * 1024,
+        expect(await storageService.getStorageBySource(sourceId)).toMatchObject({
+          allocatedBytes: 700 * KiB,
+          remuxBytes: 200 * KiB,
+          reservedBytes: 600 * KiB,
           remuxReservedBytes: 0,
         });
-      } finally {
-        fs.rmSync(location, { recursive: true, force: true });
-      }
+        // The 100 KiB still to download stay charged, beside the remux.
+        expect(await storageService.getChargedStorageUsage()).toBe(BigInt(800 * KiB));
+      });
+
+      it('stops charging remux output once it is deleted', async () => {
+        const { storageService } = setupTest();
+        const sourceId = await pack(storageService);
+        const release = await storageService.reserveAdditional(sourceId, 300 * KiB, true);
+        write('episode.mkv', 500 * KiB);
+        write('remux/1/seg00000.ts', 200 * KiB);
+        await release();
+        // The remux runs again: its old output goes first, then it asks for room.
+        fs.rmSync(`${location}/remux`, { recursive: true });
+        await storageService.reserveAdditional(sourceId, 300 * KiB, true);
+        expect(await storageService.getChargedStorageUsage()).toBe(BigInt(900 * KiB));
+      });
+
+      it('reserves a reopened download beside the remux output it kept', async () => {
+        const { storageService } = setupTest();
+        const sourceId = await pack(storageService);
+        write('episode.mkv', 100 * KiB);
+        write('remux/1/seg00000.ts', 200 * KiB);
+        // Detached and unclaimed: charged what it holds.
+        await storageService.releaseReservation(sourceId);
+        expect(await storageService.getChargedStorageUsage()).toBe(BigInt(300 * KiB));
+        // Claimed again: the download's 600 KiB come on top of the remux's 200.
+        await storageService.reserveStorage(sourceId, 600 * KiB);
+        expect(await storageService.getChargedStorageUsage()).toBe(BigInt(800 * KiB));
+      });
+
+      it('charges the held room when the remux output cannot be measured', async () => {
+        const { storageService } = setupTest();
+        const sourceId = await pack(storageService);
+        const release = await storageService.reserveAdditional(sourceId, 200 * KiB, true);
+        fs.mkdirSync(`${location}/remux/1`, { recursive: true });
+        // stat on this child fails with ELOOP, making the measurement return null.
+        fs.symlinkSync('loop', `${location}/remux/1/loop`);
+        await release();
+        expect(await storageService.getStorageBySource(sourceId)).toMatchObject({
+          remuxBytes: 200 * KiB,
+          reservedBytes: 600 * KiB,
+          remuxReservedBytes: 0,
+        });
+        expect(await storageService.getChargedStorageUsage()).toBe(BigInt(800 * KiB));
+      });
+
+      it('charges what a previous process left writing instead of the room it held', async () => {
+        const { storageService } = setupTest();
+        const sourceId = await pack(storageService);
+        // The process died while its remux held room, after writing part of it.
+        await storageService.reserveAdditional(sourceId, 300 * KiB, false);
+        write('remux/1/seg00000.ts', 120 * KiB);
+
+        await storageService.releaseRemuxReservations();
+        expect(await storageService.getStorageBySource(sourceId)).toMatchObject({
+          remuxBytes: 120 * KiB,
+          reservedBytes: 600 * KiB,
+          remuxReservedBytes: 0,
+        });
+        expect(await storageService.getChargedStorageUsage()).toBe(BigInt(720 * KiB));
+      });
     });
 
     it('serializes concurrent reservations for the same source', async () => {

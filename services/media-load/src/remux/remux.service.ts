@@ -14,7 +14,7 @@ import type {
 import type { Encryption } from '../lib/encryption';
 import { ErrorWithStatus } from '../lib/errors';
 import { logger } from '../lib/logger';
-import type { Storage } from '../storage/types';
+import { REMUX_DIRECTORY, type Storage } from '../storage/types';
 import { PRIORITY_RANK, type RemuxRecord, type RemuxRepository } from './remux.repository';
 import {
   ac3Layout,
@@ -55,8 +55,7 @@ export interface RemuxServiceDeps {
     reserveAdditional(
       sourceId: number,
       bytes: number,
-      retained: boolean,
-      output?: string
+      retained: boolean
     ): Promise<() => Promise<void>>;
     markAsAccessed(sourceId: number): Promise<void>;
     on(event: 'delete', listener: (storage: Storage) => void): unknown;
@@ -180,17 +179,8 @@ export class RemuxService {
       if (job.record.id === record.id) {
         job.record.priority = 'watching';
         if (job.child?.pid) this.renice(job.child.pid, WATCHING_NICE);
-      } else if (
-        PRIORITY_RANK[job.record.priority] > PRIORITY_RANK.watching &&
-        record.state === 'queued' &&
-        // A remux that cannot run yet would leave the stopped one waiting for nothing.
-        (await this.fileComplete(record)) &&
-        this.job === job &&
-        !job.stopped
-      ) {
-        logger.info('Remux', `Pausing remux ${job.record.id} for one a viewer is waiting for`);
-        job.stopped = 'requeue';
-        job.child?.kill('SIGKILL');
+      } else if (record.state === 'queued') {
+        await this.preempt(job, record);
       }
     }
     this.schedule();
@@ -282,7 +272,7 @@ export class RemuxService {
   }
 
   private dirOf(record: Pick<RemuxRecord, 'location' | 'id'>): string {
-    return join(record.location, 'remux', String(record.id));
+    return join(record.location, REMUX_DIRECTORY, String(record.id));
   }
 
   /** A file's name on disk: keyed, so names say nothing about what the directory holds. */
@@ -339,6 +329,30 @@ export class RemuxService {
     if (queued.length && !this.closed)
       this.retryTimer = setTimeout(() => this.schedule(), this.deps.retryMs ?? RETRY_MS);
     return false;
+  }
+
+  /**
+   * Stop the running remux, below `watching`, for a queued one a viewer is waiting for, once that
+   * one's file is downloaded (a remux that cannot run yet would leave the stopped one waiting for
+   * nothing). True when it was stopped.
+   */
+  private async preempt(job: Job, waiting: RemuxRecord): Promise<boolean> {
+    const lower = () => PRIORITY_RANK[job.record.priority] > PRIORITY_RANK.watching;
+    if (!lower() || !(await this.fileComplete(waiting))) return false;
+    // Promoted, finished or stopped while the file was checked.
+    if (!lower() || this.job !== job || job.stopped) return false;
+    logger.info('Remux', `Pausing remux ${job.record.id} for one a viewer is waiting for`);
+    job.stopped = 'requeue';
+    job.child?.kill('SIGKILL');
+    return true;
+  }
+
+  /** Stop the running remux for a waiting one whose file finished downloading since it asked. */
+  private async preemptForWaiting(job: Job): Promise<void> {
+    for (const record of this.deps.repository.queued()) {
+      if (record.priority !== 'watching') break;
+      if (this.job !== job || job.stopped || (await this.preempt(job, record))) return;
+    }
   }
 
   /** Whether a remux's file is downloaded; a failed check counts as not yet, and is retried. */
@@ -476,6 +490,17 @@ export class RemuxService {
     };
     this.job = job;
     let release: (() => Promise<void>) | null = null;
+    // A viewer may be waiting for a remux whose file was still downloading when they asked.
+    let checking = false;
+    const watcher = setInterval(() => {
+      if (checking) return;
+      checking = true;
+      void this.preemptForWaiting(job)
+        .catch(error => logger.warn('Remux', 'Could not check the waiting remuxes', error))
+        .finally(() => {
+          checking = false;
+        });
+    }, this.deps.retryMs ?? RETRY_MS);
     try {
       // What an earlier run left goes first, so it is not charged next to its replacement.
       await rm(job.dir, { recursive: true, force: true });
@@ -483,8 +508,7 @@ export class RemuxService {
       release = await this.deps.storage.reserveAdditional(
         record.sourceId,
         await this.estimatedBytes(record),
-        record.priority === 'watching',
-        job.dir
+        record.priority === 'watching'
       );
       await mkdir(job.dir, { recursive: true });
       // Stopped while its directory was prepared (a viewer's remux, a removal, a shutdown): the
@@ -540,6 +564,7 @@ export class RemuxService {
         await this.discard(record, message).catch(() => undefined);
       }
     } finally {
+      clearInterval(watcher);
       // Charge what the remux wrote (or nothing, once discarded) instead of the estimate.
       await release?.().catch(() => undefined);
       this.job = null;

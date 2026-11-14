@@ -234,6 +234,27 @@ describe('AvplayMedia', () => {
     );
   });
 
+  it('prepares once the opening seek lands when AVPlay refuses to prepare during it', () => {
+    const { avplay, media, events, element, prepare } = setupTest();
+    media.autoplay = true;
+    let landed: (() => void) | undefined;
+    avplay.seekTo.mockImplementationOnce((_milliseconds: number, onSuccess?: () => void) => {
+      landed = onSuccess;
+    });
+    avplay.prepareAsync.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    expect(avplay.prepareAsync).toHaveBeenCalledTimes(1);
+    expect(events).not.toContain('error');
+    landed?.();
+    expect(avplay.prepareAsync).toHaveBeenCalledTimes(2);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.play).toHaveBeenCalledTimes(1);
+    expect(media.currentTime).toBe(600);
+  });
+
   it('keeps the file length when AVPlay reports only the part built so far', () => {
     const { avplay, media, element, prepare } = setupTest();
     avplay.getDuration.mockReturnValue(2_000_000);
@@ -412,6 +433,15 @@ describe('AvplayMedia', () => {
     expect(events).toContain('error');
   });
 
+  it('reports a file AVPlay refuses to prepare', () => {
+    const { avplay, media, events, element } = setupTest();
+    avplay.prepareAsync.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.open('https://miauflix.example/stream', element);
+    expect(events).toContain('error');
+  });
+
   it('ignores the callbacks of a closed file', () => {
     const { avplay, media, events, element, prepare } = setupTest();
     media.open('https://miauflix.example/stream', element);
@@ -454,7 +484,7 @@ describe('avplayCapabilities', () => {
     expect(avplayCapabilities()).toEqual(AVPLAY_CAPABILITIES);
   });
 
-  it('sends every codec the TV reports, in Samsung names', () => {
+  it('sends every codec the TV reports, in ffprobe names', () => {
     const supported = new Set(['AAC', 'AC3', 'E-AC3', 'TrueHD', 'H264', 'HEVC', 'AV1']);
     window.webapis = {
       avplay: {} as AVPlay,
@@ -468,7 +498,23 @@ describe('avplayCapabilities', () => {
     };
     expect(avplayCapabilities()).toEqual({
       ...AVPLAY_CAPABILITIES,
-      tizenCodecs: { audio: ['AC3', 'E-AC3', 'TrueHD', 'AAC'], video: ['H264', 'HEVC', 'AV1'] },
+      supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'flac', 'truehd', 'mlp'],
+      supportedVideoCodecs: ['h264', 'hevc', 'av1'],
+    });
+  });
+
+  it('drops H.265 for a TV that does not report HEVC', () => {
+    window.webapis = {
+      avplay: {} as AVPlay,
+      systeminfo: {
+        isSupportedAudioCodec: codec => codec === 'AAC',
+        isSupportedVideoCodec: codec => codec === 'H264',
+      },
+    };
+    expect(avplayCapabilities()).toMatchObject({
+      allowHevc: false,
+      nativeHevcContainers: [],
+      supportedVideoCodecs: ['h264'],
     });
   });
 });

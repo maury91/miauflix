@@ -69,6 +69,8 @@ const setup = async (options: { complete?: boolean } = {}) => {
     /** Sources whose file is still downloading, whatever `value` says. */
     downloading: new Set<number>(),
     error: null as Error | null,
+    /** Holds every check until it resolves. */
+    gate: null as Promise<void> | null,
   };
   const storage = {
     getStorageBySource: jest.fn(async (sourceId: number) => stored[sourceId - 1] ?? null),
@@ -87,6 +89,7 @@ const setup = async (options: { complete?: boolean } = {}) => {
     encryption: database.encryption,
     storage,
     isFileComplete: async (sourceId: number) => {
+      await complete.gate;
       if (complete.error) throw complete.error;
       return complete.value && !complete.downloading.has(sourceId);
     },
@@ -172,12 +175,7 @@ describe('RemuxService', () => {
     expect(await ranged.text()).toBe('gme');
     // Room for the remux was reserved first, and the rest given back: its 10-byte file with
     // headroom, and its converted 5.1 track as 12 s of AC-3 at 640 kbit/s.
-    expect(storage.reserveAdditional).toHaveBeenCalledWith(
-      1,
-      11 + 960_000,
-      false,
-      expect.stringContaining(join(root, 'source-1', 'remux'))
-    );
+    expect(storage.reserveAdditional).toHaveBeenCalledWith(1, 11 + 960_000, false);
     expect(storage.released).toHaveBeenCalledTimes(1);
 
     // Nothing is stored in the clear, under names that say nothing.
@@ -198,12 +196,7 @@ describe('RemuxService', () => {
     const failed = settled(1);
     await service.request(1, 'Show/E01.mkv', plan, 'watching');
     expect(await failed).toMatchObject({ state: 'failed', error: 'Insufficient storage capacity' });
-    expect(storage.reserveAdditional).toHaveBeenCalledWith(
-      1,
-      11 + 960_000,
-      true,
-      expect.stringContaining(join(root, 'source-1', 'remux'))
-    );
+    expect(storage.reserveAdditional).toHaveBeenCalledWith(1, 11 + 960_000, true);
     expect(await readdir(join(root, 'source-1', 'remux')).catch(() => [])).toEqual([]);
   });
 
@@ -298,6 +291,49 @@ describe('RemuxService', () => {
     await Bun.sleep(60);
     expect(service.find(1, 'Show/E01.mkv')?.state).toBe('running');
     expect(service.find(2, 'Show/E01.mkv')?.state).toBe('queued');
+    delete process.env.FAKE_FFMPEG_HANG;
+  });
+
+  it('stops a background remux once the file a viewer waits for finishes downloading', async () => {
+    const { service, settled, complete, events } = await setup();
+    process.env.FAKE_FFMPEG_HANG = '1';
+    await service.request(1, 'Show/E01.mkv', plan, 'background');
+    while (service.find(1, 'Show/E01.mkv')?.state !== 'running') await Bun.sleep(5);
+    complete.downloading.add(2);
+    await service.request(2, 'Show/E01.mkv', plan, 'watching');
+    await Bun.sleep(60);
+    expect(service.find(1, 'Show/E01.mkv')?.state).toBe('running');
+    delete process.env.FAKE_FFMPEG_HANG;
+    const watched = settled(2);
+    const background = settled(1);
+    complete.downloading.delete(2);
+    expect((await watched).state).toBe('complete');
+    expect((await background).state).toBe('complete');
+    const order = events.filter(event => event.state === 'complete').map(event => event.sourceId);
+    expect(order).toEqual([2, 1]);
+  });
+
+  it('keeps a remux promoted while a waiting file is checked', async () => {
+    const { service, complete, events } = await setup();
+    process.env.FAKE_FFMPEG_HANG = '1';
+    await service.request(1, 'Show/E01.mkv', plan, 'background');
+    while (service.find(1, 'Show/E01.mkv')?.state !== 'running') await Bun.sleep(5);
+    let open!: () => void;
+    complete.gate = new Promise(resolve => (open = resolve));
+    const waiting = service.request(2, 'Show/E01.mkv', plan, 'watching');
+    await Bun.sleep(10);
+    await service.request(1, 'Show/E01.mkv', plan, 'watching');
+    complete.gate = null;
+    open();
+    await waiting;
+    await Bun.sleep(60);
+    expect(service.find(1, 'Show/E01.mkv')).toMatchObject({
+      state: 'running',
+      priority: 'watching',
+    });
+    expect(service.find(2, 'Show/E01.mkv')?.state).toBe('queued');
+    // Never stopped and queued again.
+    expect(events.some(event => event.sourceId === 1 && event.state === 'queued')).toBe(false);
     delete process.env.FAKE_FFMPEG_HANG;
   });
 

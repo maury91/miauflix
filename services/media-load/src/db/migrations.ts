@@ -118,4 +118,7 @@ export const migrations: string[] = [
   // Room held for a TV remux being written, on top of the download's own commitment (allocation
   // or reservation): the remux's estimated size, charged until the remux ends.
   `ALTER TABLE storage ADD COLUMN remuxReservedBytes INTEGER NOT NULL DEFAULT 0;`,
+  // What finished TV remuxes hold on disk, kept apart from the download's reservation (which
+  // estimates the source files only); measured from the next reconcile on.
+  `ALTER TABLE storage ADD COLUMN remuxBytes INTEGER NOT NULL DEFAULT 0;`,
 ];

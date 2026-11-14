@@ -1027,6 +1027,7 @@ describe('PlaybackSessionService', () => {
             : { source: { id }, target: movie({ id }), state: 'ready' };
         }),
       };
+      const downloads = { releaseClaims: jest.fn(async () => undefined) };
       const audio = {
         knownDelivery: jest.fn(async (target: { source: { id: number } }) =>
           deliveries[target.source.id]
@@ -1044,6 +1045,7 @@ describe('PlaybackSessionService', () => {
         config: { getOrThrow: () => 60000 } as never,
         warmup: { promote: jest.fn() } as never,
         audioPlaybackService: audio as never,
+        downloads: downloads as never,
       });
       const create = () =>
         service.create(
@@ -1052,7 +1054,7 @@ describe('PlaybackSessionService', () => {
           { quality: 'auto', allowHevc: true, avoidAudioConversion: true },
           { sessionId: 'session' }
         );
-      return { service, create, grants, audio };
+      return { service, create, grants, audio, deliveries, downloads };
     };
 
     it('plays the next source that needs no conversion', async () => {
@@ -1099,6 +1101,23 @@ describe('PlaybackSessionService', () => {
           update: { type: 'recreate', reason: 'The source needs audio conversion.' },
         })
       );
+    });
+
+    it('lets the replacement reclaim the source a recreated session was told to leave', async () => {
+      const { service, create, deliveries, downloads } = setupTest({ 1: null, 2: null });
+      const listener = jest.fn();
+      service.onDeliveryUpdate(listener);
+      await create();
+      await new Promise(resolve => setImmediate(resolve));
+      await new Promise(resolve => setImmediate(resolve));
+      expect(listener).toHaveBeenCalledWith(
+        expect.objectContaining({ update: expect.objectContaining({ type: 'recreate' }) })
+      );
+      // The probe is stored now: the replacement finds source 1 needs conversion.
+      deliveries[1] = { mode: 'audio-transcode' };
+      const replacement = await create();
+      expect(replacement?.source.id).toBe(2);
+      expect(downloads.releaseClaims).toHaveBeenCalledWith(1, expect.any(String), 'watched');
     });
   });
 

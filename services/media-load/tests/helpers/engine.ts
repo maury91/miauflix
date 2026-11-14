@@ -154,6 +154,7 @@ export function createMockStorage(overrides: Partial<Storage> = {}): Storage {
     allocatedBytes: 0,
     reservedBytes: 0,
     remuxReservedBytes: 0,
+    remuxBytes: 0,
     totalPieces: 0,
     pieceLength: 0,
     lastInterestAt: null,
