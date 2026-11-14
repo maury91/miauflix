@@ -1,0 +1,88 @@
+import { forwardRef, type InputHTMLAttributes, type ReactNode, useEffect, useRef } from 'react';
+
+import * as styles from './choice.css';
+import { ChoiceError, ChoiceFrame, type ChoiceProps } from './ChoiceFrame';
+import { useChoiceIds } from './useChoiceIds';
+
+import CheckIcon from '~icons/mdi/check-bold';
+import MixedIcon from '~icons/mdi/minus-thick';
+
+export type CheckboxProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'className' | 'style' | 'type' | 'checked' | 'defaultChecked' | 'onChange' | 'children' | 'size'
+> &
+  ChoiceProps & {
+    checked: boolean;
+    onCheckedChange: (checked: boolean) => void;
+    /** Some of the items it controls are checked. Shown as a dash; a press checks all. */
+    indeterminate?: boolean;
+    /** Validation message below the choice, with an icon. */
+    error?: ReactNode;
+  };
+
+/**
+ * A boolean choice that is part of a form or a list (several can be on at once). For a setting that
+ * applies at once, use Switch. Confirm toggles it; arrows never do (style guide, section 9).
+ */
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
+  {
+    label,
+    description,
+    error,
+    focused,
+    onPointerFocus,
+    checked,
+    onCheckedChange,
+    indeterminate = false,
+    disabled = false,
+    ...props
+  },
+  ref
+) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const { labelId, descriptionId, errorId, describedBy } = useChoiceIds(description, error);
+
+  // `indeterminate` exists only as a DOM property
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.indeterminate = indeterminate;
+  }, [indeterminate]);
+
+  return (
+    <div>
+      <ChoiceFrame
+        label={label}
+        description={description}
+        descriptionId={descriptionId}
+        labelId={labelId}
+        focused={focused}
+        onPointerFocus={onPointerFocus}
+        checked={checked}
+        mixed={indeterminate}
+        invalid={Boolean(error)}
+        disabled={disabled}
+        indicator={
+          <span className={styles.checkbox}>
+            {indeterminate ? <MixedIcon /> : checked ? <CheckIcon /> : null}
+            <input
+              {...props}
+              ref={node => {
+                inputRef.current = node;
+                if (typeof ref === 'function') ref(node);
+                else if (ref) ref.current = node;
+              }}
+              type="checkbox"
+              className={styles.nativeInput}
+              checked={checked}
+              disabled={disabled}
+              aria-labelledby={labelId}
+              aria-describedby={describedBy}
+              aria-invalid={error ? true : undefined}
+              onChange={event => onCheckedChange(event.target.checked)}
+            />
+          </span>
+        }
+      />
+      <ChoiceError id={errorId}>{error}</ChoiceError>
+    </div>
+  );
+});
