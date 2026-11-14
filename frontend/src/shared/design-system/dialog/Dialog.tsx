@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { IconButton } from '../icon-button/IconButton';
 import { SurfaceContextProvider } from '../surface';
 import * as styles from './dialog.css';
-import { isTopDialog, pushDialog } from './dialogStack';
+import { isTopDialog, pushDialog, topDialogRoot } from './dialogStack';
 
 import CloseIcon from '~icons/mdi/close';
 
@@ -41,6 +41,30 @@ export interface DialogProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
+const tabbable =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/** Tab and Shift+Tab cycle inside the dialog (desktop keyboards; TV remotes have no Tab). */
+function containTab(event: KeyboardEvent, panel: HTMLElement) {
+  const items = Array.from(panel.querySelectorAll<HTMLElement>(tabbable));
+  if (items.length === 0) {
+    event.preventDefault();
+    panel.focus({ preventScroll: true });
+    return;
+  }
+  const first = items[0];
+  const last = items[items.length - 1];
+  const active = document.activeElement;
+  const outside = !(active instanceof Node) || !panel.contains(active);
+  if (event.shiftKey && (outside || active === first || active === panel)) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (outside || active === last)) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
 const isEditing = () => {
   const active = document.activeElement;
   return (
@@ -51,7 +75,8 @@ const isEditing = () => {
 
 /**
  * A labelled modal overlay with a scrollable body and actions. Nothing behind it can be reached:
- * the navigation layer restricts movement to the topmost scope, and the scrim takes the pointer.
+ * the navigation layer restricts movement to the topmost scope, everything outside the topmost
+ * dialog is `inert`, Tab cycles inside it, and the scroll lock is shared by all open dialogs.
  * Back dismisses only the topmost dialog, and only after a field in edit mode has left it. DOM
  * focus moves to the panel while open, for assistive technology, and returns when it closes;
  * virtual focus (its initial target and the restoration to the opener) is the navigation layer's.
@@ -78,26 +103,36 @@ export function Dialog({
   useEffect(() => {
     if (!open) return;
     const id = Symbol('dialog');
-    const pop = pushDialog(id);
+    const panel = panelRef.current;
     const previous = document.activeElement;
-    panelRef.current?.focus({ preventScroll: true });
-    const { overflow } = document.body.style;
-    document.body.style.overflow = 'hidden';
+    const pop = pushDialog(id, panel?.parentElement ?? null);
+    panel?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (!isTopDialog(id) || getKeyboardAction(event) !== 'back') return;
+      if (!isTopDialog(id)) return;
+      if (event.key === 'Tab' && panel) {
+        containTab(event, panel);
+        return;
+      }
+      // A tooltip spends Escape first (see Tooltip)
+      if (event.defaultPrevented || getKeyboardAction(event) !== 'back') return;
       // Backspace edits text; any Back while editing leaves the edit layer first
       if (event.key === 'Backspace' || isEditing()) return;
       event.preventDefault();
       event.stopPropagation();
       onDismissRef.current?.();
     };
-    window.addEventListener('keydown', onKeyDown, true);
+    // Bubble phase on the document: a tooltip's capture listener on the window runs first
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKeyDown, true);
-      document.body.style.overflow = overflow;
+      document.removeEventListener('keydown', onKeyDown);
+      const wasTop = isTopDialog(id);
       pop();
-      if (previous instanceof HTMLElement && previous.isConnected) {
+      // An underlying dialog closing leaves focus where it is, in the topmost one
+      if (!wasTop) return;
+      const next = topDialogRoot()?.querySelector<HTMLElement>('[role="dialog"]');
+      if (next) next.focus({ preventScroll: true });
+      else if (previous instanceof HTMLElement && previous.isConnected) {
         previous.focus({ preventScroll: true });
       }
     };

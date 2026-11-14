@@ -1,26 +1,23 @@
 import { style } from '@vanilla-extract/css';
 
-import { color, fontFamily, radius } from '../tokens';
+import { color, radius } from '../tokens';
 
 /**
- * Avatar (docs/plans/style-guide.md, section 8.4): a passive circle holding a picture, or a fallback
- * (the name's first letter on a colour, or custom content) while the picture loads, when there is
- * none and when it fails. The fallback stays under the picture, so loading never shows a hole.
+ * Avatar (docs/plans/style-guide.md, section 8.4): a passive circle holding a picture. Until the
+ * picture has loaded (and if it fails) the circle shows its colour and optional placeholder, so it
+ * never changes size or leaves a hole.
  *
- * - `data-size="sm" | "md" | "lg" | "xl" | "fill"`: 2, 2.5, 4 and 8rem, or the container's width
- *   (a square tile frame); the letter scales with the size
+ * - `data-size="sm" | "md" | "lg" | "xl" | "fill"`: 2, 2.5, 4 and 8rem, or the container (a square
+ *   tile frame)
  * - `data-fit="cover" | "contain"`
+ * - `data-status="loading" | "loaded" | "failed"`
  */
 
 const sizes = { sm: '2rem', md: '2.5rem', lg: '4rem', xl: '8rem' } as const;
 
-const sizeSelectors: Record<string, { width: string; height: string; fontSize: string }> = {};
+const sizeSelectors: Record<string, { width: string; height: string }> = {};
 for (const [size, side] of Object.entries(sizes)) {
-  sizeSelectors[`&[data-size="${size}"]`] = {
-    width: side,
-    height: side,
-    fontSize: `${parseFloat(side) * 0.45}rem`,
-  };
+  sizeSelectors[`&[data-size="${size}"]`] = { width: side, height: side };
 }
 
 export const avatar = style({
@@ -31,10 +28,6 @@ export const avatar = style({
   overflow: 'hidden',
   borderRadius: radius.full,
   backgroundColor: color.surfaceRaised,
-  color: color.text,
-  fontFamily,
-  fontWeight: 600,
-  lineHeight: 1,
   selectors: {
     ...sizeSelectors,
     '&[data-size="fill"]': {
@@ -43,12 +36,11 @@ export const avatar = style({
       right: 0,
       bottom: 0,
       left: 0,
-      fontSize: '3rem',
     },
   },
 });
 
-export const fallback = style({
+export const placeholder = style({
   position: 'absolute',
   top: 0,
   right: 0,
@@ -57,7 +49,6 @@ export const fallback = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  textTransform: 'uppercase',
 });
 
 export const image = style({
@@ -70,7 +61,7 @@ export const image = style({
   objectFit: 'cover',
   selectors: {
     [`${avatar}[data-fit="contain"] &`]: { objectFit: 'contain' },
-    // Until decoded the fallback shows through; a broken image is removed
+    // Until decoded the colour and placeholder show through
     [`${avatar}:not([data-status="loaded"]) &`]: { opacity: 0 },
   },
 });

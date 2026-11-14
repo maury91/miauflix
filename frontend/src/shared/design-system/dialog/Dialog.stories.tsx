@@ -126,16 +126,33 @@ function FormDialog() {
   const [open, setOpen] = useState(true);
   const [address, setAddress] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const { focus, isFocused } = useStoryVirtualFocus([['address'], ['save', 'cancel']], 'address');
+  // Closed, only the opener can be focused; the navigation layer restores focus to it
+  const { focus, isFocused } = useStoryVirtualFocus(
+    open ? [['address'], ['save', 'cancel']] : [['opener']],
+    'address'
+  );
+  const close = () => {
+    setOpen(false);
+    focus('opener');
+  };
   return (
     <SurfaceStage surface="solid">
       <div style={page}>
-        <Button onClick={() => setOpen(true)}>Add server</Button>
+        <Button
+          focused={isFocused('opener')}
+          onMouseMove={() => focus('opener')}
+          onClick={() => {
+            setOpen(true);
+            focus('address');
+          }}
+        >
+          Add server
+        </Button>
         <Dialog
           open={open}
           title="Add a server"
           description="Use the address shown in the server's setup screen."
-          onDismiss={() => setOpen(false)}
+          onDismiss={close}
           actions={
             <>
               <Button
@@ -144,7 +161,7 @@ function FormDialog() {
                 onClick={() => {
                   if (!address.startsWith('http'))
                     setError('Start the address with http:// or https://.');
-                  else setOpen(false);
+                  else close();
                 }}
               >
                 Save
@@ -152,7 +169,7 @@ function FormDialog() {
               <Button
                 focused={isFocused('cancel')}
                 onMouseMove={() => focus('cancel')}
-                onClick={() => setOpen(false)}
+                onClick={close}
               >
                 Cancel
               </Button>
@@ -192,6 +209,13 @@ export const FormRecipe: Story = {
     ).toBeInTheDocument();
     await userEvent.keyboard('{Escape}');
     await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    // Focus is back on the opener, and Confirm reopens the form
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('button', { name: 'Add server' })).toHaveAttribute(
+      'data-focused'
+    );
+    await userEvent.keyboard('{Enter}');
+    await body.findByRole('dialog', { name: 'Add a server' });
   },
 };
 

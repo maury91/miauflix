@@ -1,5 +1,6 @@
 import { type ButtonHTMLAttributes, forwardRef } from 'react';
 
+import { joinIds } from '../ids';
 import * as styles from './choice.css';
 import { ChoiceFrame, type ChoiceProps } from './ChoiceFrame';
 import { useChoiceIds } from './useChoiceIds';
@@ -28,6 +29,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
     onCheckedChange,
     disabled = false,
     onClick,
+    'aria-describedby': callerDescribedBy,
     ...props
   },
   ref
@@ -54,7 +56,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
             role="switch"
             aria-checked={checked}
             aria-labelledby={labelId}
-            aria-describedby={describedBy}
+            aria-describedby={joinIds(callerDescribedBy, describedBy)}
             disabled={disabled}
             className={styles.nativeInput}
             onClick={event => {

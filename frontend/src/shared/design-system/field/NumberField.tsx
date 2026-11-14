@@ -65,10 +65,12 @@ export type NumberFieldProps = Omit<
     onPointerFocus?: (part: NumberFieldPart) => void;
   };
 
+/** Decimal places of a step, including exponent notation (`1e-7` has 7, `1.5e-3` has 4). */
 const decimalsOf = (value: number) => {
-  const text = String(value);
-  const dot = text.indexOf('.');
-  return dot === -1 ? 0 : text.length - dot - 1;
+  const [mantissa, exponent = '0'] = String(value).split('e');
+  const dot = mantissa.indexOf('.');
+  const fraction = dot === -1 ? 0 : mantissa.length - dot - 1;
+  return Math.min(100, Math.max(0, fraction - Number(exponent)));
 };
 
 /**
@@ -100,6 +102,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     onFocus,
     onBlur,
     onKeyDown,
+    'aria-describedby': ariaDescribedBy,
     ...props
   },
   ref
@@ -139,15 +142,17 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     setDraft(formatted);
     onFocus?.(event);
   };
+  // Read-only and disabled fields never commit: the draft is only the shown value
+  const editable = !readOnly && !disabled;
   const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
-    if (draft !== null) commit(draft);
+    if (draft !== null && editable) commit(draft);
     setDraft(null);
     onBlur?.(event);
   };
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
     if (event.defaultPrevented || event.nativeEvent.isComposing) return;
-    if (event.key === 'Enter' && draft !== null) {
+    if (event.key === 'Enter' && draft !== null && editable) {
       commit(draft);
       setDraft(null);
     }
@@ -161,7 +166,14 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   const negativeAllowed = min === undefined || min < 0;
 
   return (
-    <Field label={label} indicator={indicator} description={description} error={error} id={id}>
+    <Field
+      label={label}
+      indicator={indicator}
+      description={description}
+      error={error}
+      id={id}
+      aria-describedby={ariaDescribedBy}
+    >
       {control => (
         <InputFrame
           size={size}

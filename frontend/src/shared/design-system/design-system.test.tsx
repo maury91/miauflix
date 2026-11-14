@@ -606,12 +606,12 @@ describe('Dialog', () => {
   it('dismisses on Back, the scrim and the close button only when dismissible', () => {
     const onDismiss = vi.fn();
     const { rerender } = renderDialog();
-    fireEvent.keyDown(window, { key: 'Escape' });
+    fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('button', { name: 'Close' })).toBeNull();
     rerender(
       <Dialog open title="Remove server?" actions={null} onDismiss={onDismiss} closeLabel="Close" />
     );
-    fireEvent.keyDown(window, { key: 'Escape' });
+    fireEvent.keyDown(document, { key: 'Escape' });
     fireEvent.mouseDown(screen.getByRole('dialog').parentElement as HTMLElement);
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(onDismiss).toHaveBeenCalledTimes(3);
@@ -632,7 +632,7 @@ describe('Dialog', () => {
     fireEvent.keyDown(input, { key: 'Escape' });
     expect(inner).not.toHaveBeenCalled();
     input.blur();
-    fireEvent.keyDown(window, { key: 'Escape' });
+    fireEvent.keyDown(document, { key: 'Escape' });
     expect(inner).toHaveBeenCalledTimes(1);
     expect(outer).not.toHaveBeenCalled();
   });
@@ -907,19 +907,264 @@ describe('Artwork', () => {
 });
 
 describe('Avatar', () => {
-  it('is named by its name and shows the first letter until the picture loads', () => {
-    render(<Avatar name="Élodie" src="/e.png" color="#6d4aa8" />);
+  it('is a named picture over its colour, and the colour alone until it loads', () => {
+    render(<Avatar name="Élodie" src="/e.png" color="#6d4aa8" placeholder="•" />);
     const avatar = screen.getByRole('img', { name: 'Élodie' });
-    expect(avatar).toHaveTextContent('É');
     expect(avatar).toHaveStyle({ backgroundColor: '#6d4aa8' });
+    expect(avatar).toHaveAttribute('data-status', 'loading');
+    expect(avatar).toHaveTextContent('•');
     fireEvent.load(avatar.querySelector('img') as HTMLImageElement);
     expect(avatar).toHaveAttribute('data-status', 'loaded');
-    expect(avatar).not.toHaveTextContent('É');
+    expect(avatar).not.toHaveTextContent('•');
   });
 
-  it('is hidden when decorative', () => {
-    const { container } = render(<Avatar name="Guest" decorative />);
+  it('keeps its circle when the picture fails, and is hidden when decorative', () => {
+    const { container } = render(<Avatar name="Guest" src="/g.png" decorative />);
     expect(screen.queryByRole('img')).toBeNull();
-    expect(container.firstElementChild).toHaveAttribute('aria-hidden', 'true');
+    const avatar = container.firstElementChild as HTMLElement;
+    expect(avatar).toHaveAttribute('aria-hidden', 'true');
+    fireEvent.error(avatar.querySelector('img') as HTMLImageElement);
+    expect(avatar).toHaveAttribute('data-status', 'failed');
+    expect(avatar.querySelector('img')).toBeNull();
+  });
+});
+
+describe('Review fixes', () => {
+  it('keeps the caller’s descriptions on fields, choices, tiles and nav items', () => {
+    render(
+      <>
+        <p id="help">Shared help</p>
+        <TextField label="Name" description="Shown on the profile" aria-describedby="help" />
+        <Switch label="Sync" checked onCheckedChange={vi.fn()} aria-describedby="help" />
+        <Checkbox
+          label="Remember"
+          checked={false}
+          onCheckedChange={vi.fn()}
+          aria-describedby="help"
+        />
+        <CollectionTile label="Dune" supportingText="2024" aria-describedby="help" />
+        <NavRail label="Main">
+          <NavItem
+            icon={<Icon />}
+            label="Inbox"
+            badge="3"
+            badgeLabel="3 unread"
+            aria-describedby="help"
+          />
+        </NavRail>
+      </>
+    );
+    expect(screen.getByRole('textbox', { name: 'Name' })).toHaveAccessibleDescription(
+      'Shared help Shown on the profile'
+    );
+    expect(screen.getByRole('switch', { name: 'Sync' })).toHaveAccessibleDescription('Shared help');
+    expect(screen.getByRole('checkbox', { name: 'Remember' })).toHaveAccessibleDescription(
+      'Shared help'
+    );
+    expect(screen.getByRole('button', { name: 'Dune' })).toHaveAccessibleDescription(
+      'Shared help 2024'
+    );
+    expect(screen.getByRole('button', { name: 'Inbox' })).toHaveAccessibleDescription(
+      'Shared help 3 unread'
+    );
+  });
+
+  it('checks a mixed checkbox and keeps it mixed while the owner says so', () => {
+    const onCheckedChange = vi.fn();
+    render(<Checkbox label="All" checked indeterminate onCheckedChange={onCheckedChange} />);
+    const box = screen.getByRole('checkbox', { name: 'All' }) as HTMLInputElement;
+    expect(box.indeterminate).toBe(true);
+    fireEvent.click(box);
+    expect(onCheckedChange).toHaveBeenCalledWith(true);
+    expect(box.indeterminate).toBe(true);
+  });
+
+  it('links radio descriptions whatever characters the values hold', () => {
+    render(
+      <RadioGroup
+        label="Audio"
+        value="original audio"
+        onChange={vi.fn()}
+        options={[{ value: 'original audio', label: 'Original', description: 'As released' }]}
+      />
+    );
+    expect(screen.getByRole('radio', { name: 'Original' })).toHaveAccessibleDescription(
+      'As released'
+    );
+  });
+
+  it('steps by exponent-notation steps and never commits a read-only field', () => {
+    const onChange = vi.fn();
+    const { rerender } = render(
+      <NumberField
+        label="Offset"
+        value={0}
+        step={1e-7}
+        onChange={onChange}
+        decrementLabel="Less"
+        incrementLabel="More"
+      />
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'More' }));
+    expect(onChange).toHaveBeenLastCalledWith(1e-7);
+
+    onChange.mockClear();
+    rerender(<NumberField label="Offset" value={1.5} readOnly onChange={onChange} />);
+    const input = screen.getByRole('textbox', { name: 'Offset' });
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: 'Enter' });
+    fireEvent.blur(input);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('never runs a disabled progress button, and disabling ends the countdown', () => {
+    const onAction = vi.fn();
+    const { rerender } = render(
+      <ProgressButton duration={1000} focused onAction={onAction}>
+        Next episode
+      </ProgressButton>
+    );
+    const button = screen.getByRole('button', { name: 'Next episode' });
+    const clip = button.lastElementChild as HTMLElement;
+    rerender(
+      <ProgressButton duration={1000} focused disabled onAction={onAction}>
+        Next episode
+      </ProgressButton>
+    );
+    fireEvent.animationEnd(clip);
+    expect(onAction).not.toHaveBeenCalled();
+    expect(button).not.toHaveAttribute('data-progress');
+
+    render(
+      <ProgressButton duration={1000} disabled onAction={onAction}>
+        Skip intro
+      </ProgressButton>
+    );
+    expect(screen.getByRole('button', { name: 'Skip intro' })).not.toHaveAttribute('data-progress');
+  });
+
+  it('keeps a described artwork named when its image fails', () => {
+    const { container } = render(<Artwork src="/missing.jpg" alt="Dune poster" />);
+    fireEvent.error(container.querySelector('img') as HTMLImageElement);
+    expect(screen.getByRole('img', { name: 'Dune poster' })).toHaveAttribute(
+      'data-status',
+      'failed'
+    );
+  });
+
+  it('closes a select popup on Tab, when disabled, and never confirms a removed option', () => {
+    const items = [
+      { value: 'en', label: 'English' },
+      { value: 'it', label: 'Italian' },
+    ];
+    const onChange = vi.fn();
+    const props = { label: 'Audio', mode: 'popup' as const, value: null, onChange };
+    const { rerender } = render(<Select {...props} items={items} />);
+    const trigger = screen.getByRole('button', { name: /^Audio/ });
+
+    fireEvent.click(trigger);
+    fireEvent.keyDown(window, { key: 'Tab' });
+    expect(screen.queryByRole('listbox')).toBeNull();
+
+    fireEvent.click(trigger);
+    rerender(<Select {...props} items={items} disabled />);
+    expect(screen.queryByRole('listbox')).toBeNull();
+
+    rerender(<Select {...props} items={items} />);
+    fireEvent.click(trigger);
+    // English is active; it goes away while the popup is open
+    rerender(<Select {...props} items={[{ ...items[0], disabled: true }, items[1]]} />);
+    fireEvent.keyDown(window, { key: 'Enter' });
+    expect(onChange).toHaveBeenCalledWith('it');
+  });
+
+  it('shares the scroll lock and focus between stacked dialogs, and leaves the rest inert', () => {
+    const outside = document.createElement('button');
+    document.body.appendChild(outside);
+    outside.focus();
+    document.body.style.overflow = 'auto';
+    const dialog = (title: string, open: boolean) => (
+      <Dialog open={open} title={title} actions={<Button>OK</Button>} />
+    );
+    const { rerender } = render(
+      <>
+        {dialog('First', true)}
+        {dialog('Second', false)}
+      </>
+    );
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(outside).toHaveAttribute('inert');
+
+    rerender(
+      <>
+        {dialog('First', true)}
+        {dialog('Second', true)}
+      </>
+    );
+    const second = screen.getByRole('dialog', { name: 'Second' });
+    expect(second).toHaveFocus();
+    expect(screen.getByRole('dialog', { name: 'First' }).parentElement).toHaveAttribute('inert');
+
+    // The underlying dialog closes first: the lock and focus stay with the topmost
+    rerender(
+      <>
+        {dialog('First', false)}
+        {dialog('Second', true)}
+      </>
+    );
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(second).toHaveFocus();
+    expect(second.parentElement).not.toHaveAttribute('inert');
+
+    rerender(
+      <>
+        {dialog('First', false)}
+        {dialog('Second', false)}
+      </>
+    );
+    expect(document.body.style.overflow).toBe('auto');
+    expect(outside).not.toHaveAttribute('inert');
+    outside.remove();
+    document.body.style.overflow = '';
+  });
+
+  it('cycles Tab inside the topmost dialog', () => {
+    render(
+      <Dialog
+        open
+        title="Remove?"
+        actions={
+          <>
+            <Button>Keep</Button>
+            <Button>Remove</Button>
+          </>
+        }
+      />
+    );
+    const keep = screen.getByRole('button', { name: 'Keep' });
+    const remove = screen.getByRole('button', { name: 'Remove' });
+    remove.focus();
+    fireEvent.keyDown(remove, { key: 'Tab' });
+    expect(keep).toHaveFocus();
+    fireEvent.keyDown(keep, { key: 'Tab', shiftKey: true });
+    expect(remove).toHaveFocus();
+  });
+
+  it('spends Escape on a tooltip before the dialog around it', () => {
+    const onDismiss = vi.fn();
+    render(
+      <Dialog
+        open
+        title="Player"
+        onDismiss={onDismiss}
+        actions={
+          <IconButton label="Subtitles" icon={<Icon />} tooltip="Choose a language" focused />
+        }
+      />
+    );
+    fireEvent.keyDown(document.activeElement ?? document, { key: 'Escape' });
+    expect(onDismiss).not.toHaveBeenCalled();
+    fireEvent.keyDown(document.activeElement ?? document, { key: 'Escape' });
+    expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 });

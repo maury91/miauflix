@@ -40,13 +40,13 @@ export const item = style({
 const captionHeight = `${parseFloat(typeScale.caption.fontSize) * parseFloat(typeScale.caption.lineHeight)}rem`;
 
 /**
- * Centred under (or over) the buttons. A flex container centres an overflowing child on both
- * sides, so a description wider than the group runs past both ends without widening it.
+ * Centred under (or over) the buttons. The slot reserves the line's height; the text is positioned
+ * out of flow, so a description wider than the buttons never widens the group (and never moves
+ * them) and runs past both ends instead.
  */
 export const slot = style({
+  position: 'relative',
   alignSelf: 'stretch',
-  display: 'flex',
-  justifyContent: 'center',
   height: captionHeight,
   margin: `${space.xs} 0`,
   color: color.text,
@@ -66,8 +66,11 @@ const appear = keyframes({
 
 /** Remounted per focused child, so each new description fades in. */
 export const slotText = style({
-  flex: 'none',
+  position: 'absolute',
+  top: 0,
+  left: '50%',
   display: 'block',
+  transform: 'translateX(-50%)',
   animation: `${appear} ${duration.standard} ${easing.standard}`,
   '@media': {
     '(prefers-reduced-motion: reduce)': { animation: 'none' },

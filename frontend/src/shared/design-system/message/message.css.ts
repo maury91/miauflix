@@ -1,4 +1,4 @@
-import { style, type StyleRule } from '@vanilla-extract/css';
+import { globalStyle, style, type StyleRule } from '@vanilla-extract/css';
 
 import { color, fontFamily, radius, space, typeScale } from '../tokens';
 
@@ -98,15 +98,28 @@ export const body = style({
   },
 });
 
-/** One or two actions: after the text on a wide banner, below it when narrow or inline. */
+/**
+ * One or two actions: after the text on a wide banner, below it when narrow or inline. Never wider
+ * than the message: the buttons wrap onto a second line instead of overflowing.
+ */
 export const actions = style({
   display: 'flex',
-  flex: 'none',
+  flex: '0 1 auto',
+  flexWrap: 'wrap',
   alignItems: 'center',
-  marginTop: space.xs,
+  maxWidth: '100%',
+  minWidth: 0,
   selectors: {
     [`${message}[data-variant="banner"] &`]: { marginLeft: space.md },
     [`[dir="rtl"] ${message}[data-variant="banner"] &`]: { marginLeft: 0, marginRight: space.md },
     [`${message}[data-variant="inline"] &`]: { flexBasis: '100%' },
   },
+});
+
+/** Spacing between the actions, also when they wrap; mirrored for right-to-left text. */
+globalStyle(`${actions} > *`, { marginTop: space.xs });
+globalStyle(`${actions} > *:not(:last-child)`, { marginRight: space.xs });
+globalStyle(`[dir="rtl"] ${actions} > *:not(:last-child)`, {
+  marginRight: 0,
+  marginLeft: space.xs,
 });

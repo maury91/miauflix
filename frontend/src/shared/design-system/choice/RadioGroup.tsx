@@ -74,9 +74,10 @@ export function RadioGroup<Value extends string = string>({
         </p>
       )}
       <div className={styles.options} data-orientation={orientation}>
-        {options.map(option => {
+        {options.map((option, index) => {
           const optionDisabled = disabled || Boolean(option.disabled);
-          const optionId = `${generatedName}-${option.value}`;
+          // By position: a value may hold a space, which would split an ID reference list
+          const optionId = `${generatedName}-${index}`;
           return (
             <div key={option.value} className={styles.option}>
               <ChoiceFrame

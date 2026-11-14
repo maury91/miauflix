@@ -102,7 +102,15 @@ export const States: Story = {
           <CollectionTile
             label="Guest"
             ratio="square"
-            visual={<Avatar name="Guest" size="fill" color="#3d6b5c" decorative />}
+            visual={
+              <Avatar
+                name="Guest"
+                src={storyImage('#cdb4db', '#3a0ca3')}
+                size="fill"
+                color="#3d6b5c"
+                decorative
+              />
+            }
             disabled
           />
         </div>

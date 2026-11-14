@@ -3,6 +3,7 @@ import { type ButtonHTMLAttributes, type ReactNode, useId } from 'react';
 import { visuallyHidden } from '../a11y.css';
 import * as actionStyles from '../action/action.css';
 import { Badge } from '../badge/Badge';
+import { joinIds } from '../ids';
 import { SurfaceContextProvider } from '../surface';
 import * as styles from './navRail.css';
 
@@ -65,6 +66,7 @@ export function NavItem({
   badge,
   badgeLabel,
   type = 'button',
+  'aria-describedby': callerDescribedBy,
   ...props
 }: NavItemProps) {
   const badgeId = useId();
@@ -78,7 +80,7 @@ export function NavItem({
       data-focused={focused || undefined}
       data-selected={current || undefined}
       aria-current={current ? 'page' : undefined}
-      aria-describedby={badge && badgeLabel ? badgeId : undefined}
+      aria-describedby={joinIds(callerDescribedBy, badge && badgeLabel && badgeId)}
     >
       <span className={styles.icon} aria-hidden="true">
         {icon}

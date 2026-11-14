@@ -49,8 +49,8 @@ const DIRECTIONS = new Set(['up', 'down', 'left', 'right']);
 /**
  * A Button for an automatic action (docs/plans/style-guide.md, "Progress button"). It fills from
  * the rest look to the focused look and runs its action when full. The feature focuses it when it
- * appears. Any arrow key, or virtual focus moving away, ends the countdown for good; a new countdown needs a new
- * ProgressButton (remount it with a `key`).
+ * appears. Any arrow key, virtual focus moving away, or `disabled`, ends the countdown for good; a
+ * new countdown needs a new ProgressButton (remount it with a `key`).
  */
 export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>(
   function ProgressButton(
@@ -64,14 +64,16 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
       paused = false,
       initialProgress = 0,
       onAction,
+      disabled = false,
       ...props
     },
     ref
   ) {
     const surface = useSurfaceContext();
-    const [counting, setCounting] = useState(true);
+    // A disabled button never counts down
+    const [counting, setCounting] = useState(!disabled);
     // The animation's end and a key press can arrive in the same frame: read the latest state
-    const countingRef = useRef(true);
+    const countingRef = useRef(!disabled);
 
     const endCountdown = useCallback(() => {
       if (!countingRef.current) return false;
@@ -91,6 +93,11 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
       return () => window.removeEventListener('keydown', onKeyDown, true);
     }, [counting, endCountdown]);
 
+    // Disabling ends the countdown for good, like an arrow key
+    useEffect(() => {
+      if (disabled) endCountdown();
+    }, [disabled, endCountdown]);
+
     const handleClick = () => {
       endCountdown();
       onAction();
@@ -106,7 +113,7 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
     const handleAnimationEnd = (event: AnimationEvent<HTMLSpanElement>) => {
       // Only the clipping layer's own animation: the copy inside ends at the same time
       if (event.target !== event.currentTarget) return;
-      if (endCountdown()) onAction();
+      if (endCountdown() && !disabled) onAction();
     };
 
     const clamped = Math.min(1, Math.max(0, initialProgress));
@@ -127,6 +134,7 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
         data-full-width={fullWidth || undefined}
         data-progress={counting || undefined}
         data-paused={(counting && paused) || undefined}
+        disabled={disabled}
         onClick={handleClick}
       >
         <ActionIcon icon={icon} loading={false} />
