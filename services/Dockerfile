@@ -137,18 +137,83 @@ EXPOSE 3003
 CMD ["sources"]
 
 # --- miauflix-media-load: the torrent engine on its own. Runs its own VPN check. ---
-FROM runtime-base AS media-load
+# Debian, not the Alpine base: FFmpeg on musl decodes TrueHD about 8 times slower (42 s against
+# 5 s for two minutes of 5.1), which held TV remuxes at about 3x real time instead of 20x. Its
+# production dependencies are installed here, so native packages get their glibc binaries; the
+# workspace packages it uses are plain JavaScript and come from the Alpine builder.
+FROM oven/bun:1.4.0 AS media-load-builder
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends nodejs npm ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+WORKDIR /workspace
+COPY package.json bun.lock turbo.json tsconfig.json ./
+COPY backend/package.json backend/package.json
+COPY frontend/package.json frontend/package.json
+COPY backend-e2e/package.json backend-e2e/package.json
+COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
+COPY packages/contract/package.json packages/contract/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
+COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
+COPY services/list-service/package.json services/list-service/package.json
+COPY services/media-catalog/package.json services/media-catalog/package.json
+COPY services/media-load/package.json services/media-load/package.json
+COPY services/sources/package.json services/sources/package.json
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    for attempt in 1 2 3; do \
+      bun install --frozen-lockfile --production --ignore-scripts \
+        --filter @miauflix/media-load-service && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
+    done
+# node-datachannel's prebuilt (glibc) binary, for the tracker client's WebRTC.
+RUN --mount=type=cache,target=/root/.npm \
+    for attempt in 1 2 3; do \
+      npm rebuild node-datachannel && break; \
+      [ "$attempt" = 3 ] && exit 1; \
+      echo "node-datachannel download failed (attempt $attempt), retrying"; sleep 20; \
+    done
+
+FROM oven/bun:1.4.0 AS media-load
+# FFmpeg builds the TV remuxes (HLS, audio converted to E-AC-3) of stored files. The entrypoint
+# drops to the bunqueue user (uid 1001, as in the other images, so a shared volume keeps its
+# owner) with su-exec, which gosu stands in for.
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ffmpeg gosu && \
+    rm -rf /var/lib/apt/lists/* && \
+    ln -s "$(command -v gosu)" /usr/local/bin/su-exec && \
+    groupadd -g 1001 bunqueue && useradd -u 1001 -g 1001 -M -d /workspace -s /bin/bash bunqueue && \
+    mkdir -p /app/data /usr/src/app/downloads && \
+    chown -R bunqueue:bunqueue /app/data /usr/src/app/downloads
+WORKDIR /workspace
+COPY --from=media-load-builder --chown=1001:1001 /workspace/node_modules ./node_modules
+COPY --from=builder --chown=1001:1001 /workspace/packages/source-metadata-extractor ./packages/source-metadata-extractor
+COPY --from=builder --chown=1001:1001 /workspace/packages/contract ./packages/contract
+COPY --from=builder --chown=1001:1001 /workspace/packages/service-contracts ./packages/service-contracts
+COPY --from=builder --chown=1001:1001 /workspace/packages/service-configuration ./packages/service-configuration
+COPY --from=builder --chown=1001:1001 /workspace/packages/vpn-guard ./packages/vpn-guard
 COPY --from=builder --chown=1001:1001 /workspace/services/media-load ./services/media-load
+COPY --chown=1001:1001 services/entrypoint.sh /app/miauflix-services-entrypoint.sh
+COPY --chown=1001:1001 services/healthcheck.ts /app/healthcheck.ts
+RUN chmod +x /app/miauflix-services-entrypoint.sh
 # A standalone volume holds this service and, by default, its downloads, as in the earlier
 # miauflix-media-load image.
-ENV MEDIA_LOAD_DATA_DIR=/app/data \
+ENV MEDIA_LOAD_PORT=3004 \
+    MEDIA_LOAD_DATA_DIR=/app/data \
     MEDIA_LOAD_DEFAULT_DOWNLOAD_PATH=/app/data/downloads
+VOLUME /app/data
 EXPOSE 3004
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=10 CMD bun /app/healthcheck.ts
+ENTRYPOINT ["/bin/bash", "/app/miauflix-services-entrypoint.sh"]
 CMD ["media-load"]
 
 # --- miauflix-services: every service in one container, to save resources. Also the default
 # target. Override CMD to run a subset. ---
 FROM catalog-code AS services
+# FFmpeg for media-load's TV remuxes. On Alpine it decodes TrueHD about 8 times slower than the
+# standalone miauflix-media-load image (Debian): remuxes still work, at about 3x real time.
+RUN apk add --no-cache ffmpeg
 COPY --from=builder --chown=1001:1001 /workspace/services/sources ./services/sources
 COPY --from=builder --chown=1001:1001 /workspace/services/media-load ./services/media-load
 EXPOSE 3001 3002 3003 3004 6789 6790

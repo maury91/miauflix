@@ -56,6 +56,20 @@ const SPECULATIVE_EVICTION_RANK = CLAIM_RANK.watchlist;
 /** Retained admission (watching) may also evict watched and prefetched storage, never playback. */
 const RETAINED_EVICTION_RANK = CLAIM_RANK.prefetch;
 
+/**
+ * What a storage is charged: its allocation, or a larger reservation until measured, plus the
+ * room a remux being written holds. While the remux writes, its output is counted twice (in the
+ * allocation and in its room) until it ends and its room goes: an overcount, never an under.
+ */
+function chargeOf(
+  storage: Pick<Storage, 'allocatedBytes' | 'remuxReservedBytes' | 'reservedBytes'>
+): number {
+  return (
+    Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0) +
+    (storage.remuxReservedBytes ?? 0)
+  );
+}
+
 export interface StorageInventory {
   items: Array<Storage & { requestedFiles: string[] }>;
   physicalBytes: number | null;
@@ -185,11 +199,11 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     try {
       return await this.withAdmission(async () => {
         const current = await this.storageRepository.findBySourceId(sourceId);
-        const currentCharge = current
-          ? Math.max(current.allocatedBytes ?? 0, current.reservedBytes ?? 0)
-          : 0;
+        const currentCharge = current ? chargeOf(current) : 0;
         const nextReservation = Math.max(current?.reservedBytes ?? 0, reservation);
-        const nextCharge = Math.max(current?.allocatedBytes ?? 0, nextReservation);
+        const nextCharge =
+          Math.max(current?.allocatedBytes ?? 0, nextReservation) +
+          (current?.remuxReservedBytes ?? 0);
         const delta = nextCharge - currentCharge;
 
         if (delta > 0) {
@@ -562,7 +576,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       const handler = this.reclaimHandler;
       if (!plan.reclaim.length || !handler) return { status: 'nothing' };
 
-      const chargeBefore = Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0);
+      const chargeBefore = chargeOf(storage);
       let failed = false;
       try {
         // Drop the weak claims first so nothing reselects these files while they are removed.
@@ -588,9 +602,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       // Claimed files must be reselected whether or not the reclaim went through.
       reselect = await this.storageRepository.findBySourceIdWithRelation(sourceId);
       if (failed) return { status: 'cleanup_failed' };
-      const chargeAfter = reselect
-        ? Math.max(reselect.allocatedBytes ?? 0, reselect.reservedBytes ?? 0)
-        : 0;
+      const chargeAfter = reselect ? chargeOf(reselect) : 0;
       logger.info(
         'StorageService',
         `Reclaimed ${plan.reclaim.length} file(s) of source ${sourceId}, kept ${plan.kept.length}`
@@ -858,8 +870,10 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         if (!storage) throw new Error(`Storage not found for movie source ${sourceId}`);
         const requested = Math.max(0, Math.floor(bytes));
         const nextReservation = Math.max(storage.reservedBytes ?? 0, requested);
-        const currentCharge = Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0);
-        const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
+        const currentCharge = chargeOf(storage);
+        const nextCharge =
+          Math.max(storage.allocatedBytes ?? 0, nextReservation) +
+          (storage.remuxReservedBytes ?? 0);
         const delta = nextCharge - currentCharge;
         if (delta > 0) {
           await this.cleanupWithinAdmission(
@@ -880,6 +894,79 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     } finally {
       this.reselectAfterAdmission(reselects);
     }
+  }
+
+  /**
+   * Reserve room for `bytes` more on top of everything a storage is committed to (what it holds,
+   * and what its download may still write), for a TV remux written beside the source. Weaker
+   * storage is evicted first, as for a download's reservation: a remux a viewer waits for may
+   * evict prefetched storage; any other keeps the playback reserve free and evicts only
+   * speculative storage. Rejects when there is no room.
+   *
+   * The storage is measured first, so files left by an earlier remux that were deleted since are
+   * no longer charged. The room is held apart (`remuxReservedBytes`), added to the download's
+   * commitment, so a pack still downloading keeps its share and a later reservation adds to it.
+   * The returned function measures the storage again and lets the room go: what the remux wrote
+   * is then charged as allocation (all the room it held, when the storage cannot be measured).
+   * While the source's download still holds a reservation, that reservation grows by what the
+   * remux wrote (its `output` directory): the download's share is still to be written beside it.
+   */
+  async reserveAdditional(
+    sourceId: number,
+    bytes: number,
+    retained: boolean,
+    output?: string
+  ): Promise<() => Promise<void>> {
+    const reselects: Storage[] = [];
+    const room = Math.max(0, Math.floor(bytes));
+    try {
+      await this.withAdmission(async () => {
+        const storage = await this.storageRepository.findBySourceId(sourceId);
+        if (!storage) throw new Error(`Storage not found for movie source ${sourceId}`);
+        const measured = await this.measureAllocatedBytes(storage.location).catch(() => null);
+        if (measured !== null)
+          await this.storageRepository.reconcileAllocation(storage.id, measured);
+        if (room > 0) {
+          await this.cleanupWithinAdmission(
+            true,
+            room,
+            sourceId,
+            !retained,
+            retained ? RETAINED_EVICTION_RANK : SPECULATIVE_EVICTION_RANK,
+            reselects
+          );
+          await this.assertCapacity(room, !retained);
+        }
+        await this.storageRepository.update(storage.id, { remuxReservedBytes: room });
+      });
+    } finally {
+      this.reselectAfterAdmission(reselects);
+    }
+    return () =>
+      this.withAdmission(async () => {
+        const storage = await this.storageRepository.findBySourceId(sourceId);
+        if (!storage) return;
+        const measured = await this.measureAllocatedBytes(storage.location).catch(() => null);
+        const held = storage.remuxReservedBytes ?? 0;
+        // Unmeasurable output counts as all the room it held.
+        const written = output
+          ? ((await this.measureAllocatedBytes(output).catch(() => null)) ?? held)
+          : 0;
+        const allocatedBytes = measured ?? (storage.allocatedBytes ?? 0) + Math.max(held, written);
+        const downloading = storage.reservedBytes ?? 0;
+        // The remux is written inside the storage: the download's share is what is left once
+        // the remux is taken out of the allocation.
+        const sourceBytes = measured === null ? null : measured - written;
+        const reservedBytes =
+          downloading > 0 && (sourceBytes === null || downloading > sourceBytes)
+            ? downloading + written
+            : 0;
+        await this.storageRepository.update(storage.id, {
+          allocatedBytes,
+          reservedBytes,
+          remuxReservedBytes: 0,
+        });
+      });
   }
 
   private async withAdmission<T>(operation: () => Promise<T>): Promise<T> {

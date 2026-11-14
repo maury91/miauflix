@@ -1,6 +1,7 @@
 import { startAudioPlayback } from '@features/player/lib/audio-playback';
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import type { PlaybackStatus } from '@features/player/lib/playback-copy';
+import { reportPlayerEvent } from '@features/realtime/realtime.middleware';
 import type { CreatePlaybackSessionResponse, PlaybackDelivery } from '@miauflix/backend';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -18,7 +19,10 @@ interface AudioDeliveryOptions {
   resume: ResumePoint;
   setStatus: (status: PlaybackStatus) => void;
   failPlayback: (message: string) => void;
-  restartSession: () => void;
+  /** `keepPicture` holds the current picture on screen until the new session plays. */
+  restartSession: (keepPicture?: boolean) => void;
+  /** The picture is held for a new session: stopping converted audio must not blank it. */
+  pictureHeld: boolean;
   settlePendingFailure: (mode: PlaybackDelivery['mode']) => void;
 }
 
@@ -36,8 +40,11 @@ export function useAudioDelivery({
   setStatus,
   failPlayback,
   restartSession,
+  pictureHeld,
   settlePendingFailure,
 }: AudioDeliveryOptions) {
+  const pictureHeldRef = useRef(pictureHeld);
+  pictureHeldRef.current = pictureHeld;
   const [audioSeek, setAudioSeek] = useState({ position: 0, autoplay: true, revision: 0 });
   const [pendingPosition, setPendingPosition] = useState<number | undefined>();
   const [audioTrackIndex, setAudioTrackIndex] = useState<number | undefined>();
@@ -60,6 +67,8 @@ export function useAudioDelivery({
       : undefined;
   // Converted audio is fed to a <video> element through Media Source Extensions
   const playsInAvplay = avplay && !audioDelivery;
+  const audioDeliveryRef = useRef(audioDelivery);
+  audioDeliveryRef.current = audioDelivery;
 
   /** Converted audio restarts the conversion at the new position; anything else seeks itself. */
   const seekConvertedAudio = useCallback(
@@ -136,7 +145,7 @@ export function useAudioDelivery({
     audioPreparing.current = true;
     setStatus('preparing');
     setPendingPosition(position);
-    return startAudioPlayback({
+    const stop = startAudioPlayback({
       video,
       transcodeVideo: audioDelivery.transcodeVideo,
       url: session.streamUrl.endsWith('/audio') ? session.streamUrl : `${session.streamUrl}/audio`,
@@ -155,7 +164,9 @@ export function useAudioDelivery({
         setStatus('ready');
       },
       onError: failPlayback,
+      onRecovery: event => reportPlayerEvent({ playbackId: session.playbackId, ...event }),
     });
+    return () => stop({ keepPicture: pictureHeldRef.current });
   }, [
     session,
     audioDelivery,
@@ -173,7 +184,8 @@ export function useAudioDelivery({
   useEffect(() => {
     if (!deliveryUpdate) return;
     if (deliveryUpdate.type === 'recreate') {
-      restartSession();
+      // On a TV, converted audio plays on, picture and all, until AVPlay takes over.
+      restartSession(avplay && !!audioDeliveryRef.current);
       return;
     }
     const { delivery } = deliveryUpdate;
@@ -191,7 +203,7 @@ export function useAudioDelivery({
     } else {
       settlePendingFailure(delivery.mode);
     }
-  }, [deliveryUpdate, restartSession, settlePendingFailure, videoRef]);
+  }, [avplay, deliveryUpdate, restartSession, settlePendingFailure, videoRef]);
 
   /** Switch tracks natively when the element can, else restart conversion with the new track. */
   const selectAudioTrack = (index: number) => {
@@ -199,8 +211,9 @@ export function useAudioDelivery({
     const position = pendingPosition ?? videoRef.current?.currentTime ?? 0;
     const autoplay = audioPreparing.current ? audioSeek.autoplay : !videoRef.current?.paused;
     resumeApplied.current = true;
+    // A remux's tracks are all ones the TV decodes: AVPlay switches between them itself.
     const nativeSelection =
-      session?.delivery?.mode === 'direct' &&
+      (session?.delivery?.mode === 'direct' || session?.delivery?.mode === 'remux') &&
       !audioRemux &&
       videoRef.current &&
       'audioTracks' in videoRef.current &&

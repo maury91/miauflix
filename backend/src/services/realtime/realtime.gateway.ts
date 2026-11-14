@@ -1,3 +1,4 @@
+import { logger } from '@logger';
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
 import type { Server, ServerWebSocket, WebSocketHandler } from 'bun';
 
@@ -89,6 +90,20 @@ type HeartbeatMessage = {
   visible: boolean;
 };
 
+/** A player diagnostic: the stall watchdog moved the playhead (see the frontend's audio-playback). */
+type PlayerEventMessage = {
+  type: 'player-event';
+  playbackId?: string;
+  kind: 'frozen-seek' | 'gap-jump' | 'stall-seek';
+  from: number;
+  to: number;
+  buffered: Array<[number, number]>;
+  decodedFrames?: number;
+};
+
+/** Player diagnostics logged per socket and minute; the rest are dropped. */
+const MAX_PLAYER_EVENTS_PER_MINUTE = 30;
+
 type ProgressMessage = ProgressRequest & {
   type: 'progress';
   clientSequence: number;
@@ -114,6 +129,8 @@ interface ClientState {
   authenticating: boolean;
   artworkRefs: Set<string>;
   searchClient: SearchClient;
+  /** Player diagnostics logged in the current minute. */
+  playerEvents: { windowStart: number; count: number };
 }
 
 interface RealtimeEvent {
@@ -311,6 +328,7 @@ export class RealtimeGateway {
       authTimer: setTimeout(() => socket.close(1008, 'Authentication required'), AUTH_TIMEOUT_MS),
       authenticating: false,
       artworkRefs: new Set<string>(),
+      playerEvents: { windowStart: 0, count: 0 },
       searchClient: {
         get userId() {
           return state.userId;
@@ -431,6 +449,11 @@ export class RealtimeGateway {
             });
           })
           .catch(() => state.socket.close(1011, 'Progress update failed'));
+        return;
+      }
+      if (message.type === 'player-event') {
+        if (!this.isPlayerEvent(message)) return this.invalid(state, 'Invalid player event');
+        this.logPlayerEvent(state, message);
         return;
       }
       if (this.search.handles(message.type)) {
@@ -811,6 +834,43 @@ export class RealtimeGateway {
           Number.isSafeInteger(item.mediaId) &&
           item.mediaId > 0
       )
+    );
+  }
+
+  private isPlayerEvent(
+    value: Record<string, unknown>
+  ): value is PlayerEventMessage & Record<string, unknown> {
+    const time = (item: unknown) => typeof item === 'number' && Number.isFinite(item) && item >= 0;
+    return (
+      (value.playbackId === undefined ||
+        (typeof value.playbackId === 'string' && /^[a-f0-9]{32}$/.test(value.playbackId))) &&
+      (value.kind === 'gap-jump' || value.kind === 'stall-seek' || value.kind === 'frozen-seek') &&
+      time(value.from) &&
+      time(value.to) &&
+      Array.isArray(value.buffered) &&
+      value.buffered.length <= 50 &&
+      value.buffered.every(
+        range => Array.isArray(range) && range.length === 2 && time(range[0]) && time(range[1])
+      ) &&
+      (value.decodedFrames === undefined || time(value.decodedFrames))
+    );
+  }
+
+  /** Log a player diagnostic, at most MAX_PLAYER_EVENTS_PER_MINUTE per socket. */
+  private logPlayerEvent(state: ClientState, event: PlayerEventMessage): void {
+    const now = Date.now();
+    if (now - state.playerEvents.windowStart >= 60_000)
+      state.playerEvents = { windowStart: now, count: 0 };
+    if (++state.playerEvents.count > MAX_PLAYER_EVENTS_PER_MINUTE) return;
+    const seconds = (value: number) => value.toFixed(2);
+    const buffered = event.buffered
+      .map(([start, end]) => `${seconds(start)}-${seconds(end)}`)
+      .join(' ');
+    logger.info(
+      'PlayerEvents',
+      `${event.kind} ${seconds(event.from)} -> ${seconds(event.to)}` +
+        ` (playback ${event.playbackId ?? 'unknown'}, buffered ${buffered || 'none'}` +
+        `, decoded frames ${event.decodedFrames ?? 'n/a'})`
     );
   }
 

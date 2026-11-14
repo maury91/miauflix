@@ -29,6 +29,7 @@ import { PlaybackPiecesService } from '@services/playback/playback-pieces.servic
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlaybackTargetService } from '@services/playback/playback-target.service';
 import { StreamService } from '@services/playback/stream.service';
+import { TvRemuxService } from '@services/playback/tv-remux.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { SourceWarmupController } from '@services/preload/source-warmup.controller';
@@ -154,6 +155,12 @@ try {
     configurationService,
     db.getMediaProbeRepository()
   );
+  const tvRemuxService = new TvRemuxService(
+    mediaLoadClient,
+    audioPlaybackService,
+    db.getMediaVariantRepository(),
+    db.getMediaProbeRepository()
+  );
   const sourceSubtitlesService = new SourceSubtitlesService(mediaLoadClient);
   const sourceWarmupController = new SourceWarmupController(
     mediaLoadClient,
@@ -194,6 +201,7 @@ try {
     downloads: mediaLoadClient,
     progress: db.getProgressRepository(),
     playedSources: db.getContentSourceRepository(),
+    remux: tvRemuxService,
   });
   const playbackPiecesService = new PlaybackPiecesService(
     playbackSessionService,
@@ -319,6 +327,7 @@ try {
       await Promise.race([drained, new Promise<void>(resolve => setTimeout(resolve, 5_000))]);
 
       sourceSubtitlesService.close();
+      tvRemuxService.close();
       await audioPlaybackService.close();
       // After the drain: open streams read through it.
       mediaLoadClient.stop();
@@ -358,6 +367,7 @@ try {
     preloadIntentService,
     playbackSessionService,
     audioPlaybackService,
+    tvRemuxService,
     progressService,
     notificationService,
     subtitlesService,

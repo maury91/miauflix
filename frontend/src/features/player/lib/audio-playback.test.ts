@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   appendWithinQuota,
   type BufferBudget,
+  FROZEN_CHECKS,
   MAX_AHEAD_SECONDS,
   MAX_STALLED_RETRIES,
   MIN_AHEAD_SECONDS,
@@ -266,14 +267,43 @@ describe('watchForStalls', () => {
       getVideoPlaybackQuality: () => quality,
     } as unknown as HTMLVideoElement;
     const controller = new AbortController();
-    watchForStalls(video, controller.signal);
-    return { video, controller, quality };
+    const onRecovery = vi.fn();
+    watchForStalls(video, controller.signal, onRecovery);
+    return { video, controller, quality, onRecovery };
   };
 
   it('nudges a playhead that stops with media buffered ahead', () => {
     const { video } = setupVideo(180.05);
     vi.advanceTimersByTime(STALL_CHECK_MS * STALL_CHECKS);
     expect(video.currentTime).toBeCloseTo(180.15);
+  });
+
+  it('reports each move with where it went and what was buffered', () => {
+    const { onRecovery } = setupVideo(180.05);
+    vi.advanceTimersByTime(STALL_CHECK_MS * STALL_CHECKS);
+    expect(onRecovery).toHaveBeenCalledTimes(1);
+    const [event] = onRecovery.mock.calls[0];
+    expect(event).toMatchObject({
+      kind: 'stall-seek',
+      from: 180.05,
+      buffered: [[177.26, 208.48]],
+      decodedFrames: 0,
+    });
+    expect(event.to).toBeCloseTo(180.15);
+  });
+
+  it('reports a gap jump as such', () => {
+    const { video, quality, onRecovery } = setupVideo(
+      177,
+      ranges([166.83, 177.18], [177.26, 208.48])
+    );
+    vi.advanceTimersByTime(STALL_CHECK_MS);
+    video.currentTime = 177.13;
+    quality.totalVideoFrames += 3;
+    vi.advanceTimersByTime(130);
+    expect(onRecovery).toHaveBeenCalledWith(
+      expect.objectContaining({ kind: 'gap-jump', from: 177.13 })
+    );
   });
 
   it('leaves a moving playhead alone', () => {
@@ -319,7 +349,7 @@ describe('watchForStalls', () => {
   });
 
   it('re-seeks in place when the playhead moves but no frame is decoded', () => {
-    const { video } = setupVideo(178);
+    const { video, onRecovery } = setupVideo(178);
     const seeks: number[] = [];
     let time = 178;
     Object.defineProperty(video, 'currentTime', {
@@ -329,22 +359,37 @@ describe('watchForStalls', () => {
         time = value;
       },
     });
-    for (let check = 0; check <= STALL_CHECKS; check++) {
+    for (let check = 0; check <= FROZEN_CHECKS; check++) {
       time += 0.25;
       vi.advanceTimersByTime(STALL_CHECK_MS);
     }
-    expect(seeks).toEqual([179]);
+    const at = 178 + 0.25 * FROZEN_CHECKS;
+    expect(seeks).toEqual([at]);
+    expect(onRecovery).toHaveBeenCalledWith(
+      expect.objectContaining({ kind: 'frozen-seek', from: at, to: at })
+    );
+  });
+
+  it('leaves a picture alone whose decoded-frame count moves in 2-second batches', () => {
+    // Tizen 5.5 counts decoded frames 48 at a time, every 2 s at 24 fps.
+    const { video, quality, onRecovery } = setupVideo(178);
+    for (let check = 1; check <= FROZEN_CHECKS * 3; check++) {
+      video.currentTime += 0.25;
+      if (check % 8 === 0) quality.totalVideoFrames += 48;
+      vi.advanceTimersByTime(STALL_CHECK_MS);
+    }
+    expect(onRecovery).not.toHaveBeenCalled();
   });
 
   it('does not re-seek while the tab is hidden and video decoding is paused', () => {
     const hidden = vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
     try {
       const { video } = setupVideo(178);
-      for (let check = 0; check <= STALL_CHECKS * 2; check++) {
+      for (let check = 0; check <= FROZEN_CHECKS * 2; check++) {
         video.currentTime += 0.25;
         vi.advanceTimersByTime(STALL_CHECK_MS);
       }
-      expect(video.currentTime).toBe(178 + 0.25 * (STALL_CHECKS * 2 + 1));
+      expect(video.currentTime).toBe(178 + 0.25 * (FROZEN_CHECKS * 2 + 1));
     } finally {
       hidden.mockRestore();
     }

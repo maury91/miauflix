@@ -6,6 +6,7 @@ import type { ConfigService } from '@mytypes/configuration';
 import type { MediaProbeRepository } from '@repositories/media-probe.repository';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
+import type { TizenAudioCodec, TizenVideoCodec } from './device-codecs';
 import { FragmentedMp4Timeline } from './fragmented-mp4';
 import type { PlaybackTarget } from './playback-target';
 import { openSourceInput, PROBE_SIZE_BYTES } from './source-input';
@@ -24,7 +25,8 @@ export interface PlaybackAudioTrack {
 }
 
 export interface PlaybackDelivery {
-  mode: 'audio-transcode' | 'direct';
+  /** `remux`: the file's TV remux (HLS, audio the TV decodes), played natively. */
+  mode: 'audio-transcode' | 'direct' | 'remux';
   transcodeVideo?: boolean;
   videoCodec?: 'h264' | 'hevc';
   audioCodec: string | null;
@@ -48,7 +50,15 @@ export interface AudioPlaybackPreferences {
   audioLanguages?: string[];
   supportedAudioCodecs?: string[];
   supportedMseAudioCodecs?: string[];
+  /** Video codecs (ffprobe names) the client decodes natively; unset assumes H.264 and H.265. */
+  supportedVideoCodecs?: string[];
   nativeAudioTracks?: boolean;
+  /** Look for another source before converting audio (see PlaybackSessionService). */
+  avoidAudioConversion?: boolean;
+  /** Plays a TV remux (HLS) instead of converted audio, once one is ready (see TvRemuxService). */
+  playsRemux?: boolean;
+  /** What a Samsung TV reports it decodes, folded into the lists above by `withDeviceCodecs`. */
+  tizenCodecs?: { audio: TizenAudioCodec[]; video: TizenVideoCodec[] };
 }
 
 export class AudioPlaybackError extends Error {
@@ -68,7 +78,7 @@ export class AudioConversionRequiredError extends AudioPlaybackError {
   }
 }
 
-interface ProbeResult {
+export interface ProbeResult {
   format?: { duration?: string; format_name?: string };
   chapters?: Array<{ start_time?: string; tags?: { title?: string } }>;
   streams?: Array<{
@@ -77,7 +87,7 @@ interface ProbeResult {
     extradata?: string;
     channels?: number;
     tags?: { language?: string; title?: string };
-    disposition?: { default?: number };
+    disposition?: { default?: number; forced?: number; hearing_impaired?: number };
   }>;
 }
 
@@ -269,11 +279,13 @@ export function deliveryFromProbe(
   const copyHevc = !!hevc && preferences.supportedMseVideoCodecs?.includes('hevc');
   const nativeContainer = nativeHevcContainer(probe.format?.format_name);
   const nativeVideo =
-    video.codec_name !== 'hevc' ||
-    (preferences.nativeHevcContainers === undefined
-      ? preferences.allowHevc !== false
-      : nativeContainer !== undefined &&
-        preferences.nativeHevcContainers.includes(nativeContainer));
+    (preferences.supportedVideoCodecs === undefined ||
+      preferences.supportedVideoCodecs.includes(video.codec_name ?? '')) &&
+    (video.codec_name !== 'hevc' ||
+      (preferences.nativeHevcContainers === undefined
+        ? preferences.allowHevc !== false
+        : nativeContainer !== undefined &&
+          preferences.nativeHevcContainers.includes(nativeContainer)));
   let videoCodec = usableAvc ? `avc1.${avc!.slice(2, 8)}` : copyHevc ? hevc : undefined;
   const transcodeVideo =
     video.codec_name === 'hevc' &&
@@ -326,7 +338,9 @@ export function deliveryFromProbe(
     };
   if (!nativeVideo && !copyHevc && !transcodeVideo)
     throw new AudioConversionRequiredError(
-      'This client cannot decode H.265 and video conversion is disabled.'
+      video.codec_name === 'hevc'
+        ? 'This client cannot decode H.265 and video conversion is disabled.'
+        : `This client cannot decode ${video.codec_name ?? 'this'} video.`
     );
   if (video.codec_name !== 'h264' && !copyHevc && !transcodeVideo) {
     throw new AudioConversionRequiredError('Audio conversion requires an H.264 video source.');
@@ -495,6 +509,19 @@ export class AudioPlaybackService {
     return result ? deliveryFromProbe(result, preferences, this.canConvertHevc()) : null;
   }
 
+  /** The streams of a file whose probe already finished, in memory or stored; null when unknown. */
+  async knownProbe(target: PlaybackTarget): Promise<ProbeResult | null> {
+    const cached = this.probes.get(`${target.source.id}:${target.filePath}`);
+    if (cached && cached.expires > Date.now() && cached.result) return cached.result;
+    const stored = await this.store?.find(target.source.id, target.filePath).catch(() => null);
+    return stored ? (JSON.parse(stored) as ProbeResult) : null;
+  }
+
+  /** A file's streams, probed (and stored) when unknown; reads count as speculative. */
+  async probeFile(target: PlaybackTarget, signal?: AbortSignal): Promise<ProbeResult> {
+    return (await this.knownProbe(target)) ?? this.storedOrProbe(target, true, signal);
+  }
+
   /** A torrent file never changes, so a stored probe is reused instead of reading it again. */
   private async storedOrProbe(
     target: PlaybackTarget,
@@ -527,7 +554,7 @@ export class AudioPlaybackService {
           '-show_streams',
           '-show_format',
           '-show_entries',
-          'stream=codec_type,codec_name,channels:stream_tags=language,title:stream_disposition=default:chapter=start_time:chapter_tags=title:format=duration,format_name',
+          'stream=codec_type,codec_name,channels:stream_tags=language,title:stream_disposition=default,forced,hearing_impaired:chapter=start_time:chapter_tags=title:format=duration,format_name',
         ],
         signal,
         input.close

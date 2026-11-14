@@ -1493,6 +1493,158 @@ describe('StorageService', () => {
       }
     });
 
+    it('admits a replacement warmup once the old watched claim is released', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '1MB';
+      try {
+        const { storageService } = setupTest();
+        const oldSource = await createSource(database);
+        const replacement = await createSource(database);
+        await storageService.createStorage({
+          sourceId: oldSource.id,
+          location: '/tmp/test/old-watched-source',
+          size: 700 * 1024,
+          reservedBytes: 700 * 1024,
+        });
+        await claim(storageService, oldSource.id, 'watched', { ownerKey: 'viewer' });
+        const warmReplacement = () =>
+          storageService.createStorage({
+            sourceId: replacement.id,
+            location: '/tmp/test/replacement-source',
+            size: 700 * 1024,
+            reservedBytes: 700 * 1024,
+            speculative: true,
+          });
+
+        await expect(warmReplacement()).rejects.toThrow('Insufficient storage capacity');
+        await storageService.releaseClaims(oldSource.id, { ownerKey: 'viewer', kind: 'watched' });
+        expect((await warmReplacement()).sourceId).toBe(replacement.id);
+        expect(await storageService.getStorageBySource(oldSource.id)).toBeNull();
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
+    it('reserves room for a remux beside its source, evicting weaker storage first', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '50GB';
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+        const expiredSource = await testDataFactory.createTestContentSource(movie.id);
+        const targetSource = await testDataFactory.createTestContentSource(movie.id);
+        await storageService.createStorage({
+          sourceId: expiredSource.id,
+          location: '/tmp/test/remux-expired.mkv',
+          size: 700 * 1024,
+          speculative: true,
+          reservedBytes: 700 * 1024,
+        });
+        await storageService.createStorage({
+          sourceId: targetSource.id,
+          location: '/tmp/test/remux-target-missing',
+          size: 200 * 1024,
+          speculative: true,
+          reservedBytes: 200 * 1024,
+        });
+
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
+        const release = await storageService.reserveAdditional(targetSource.id, 500 * 1024, false);
+        // Held apart from the download's reservation, on top of what is on disk (nothing yet).
+        expect(await storageService.getStorageBySource(targetSource.id)).toMatchObject({
+          reservedBytes: 200 * 1024,
+          remuxReservedBytes: 500 * 1024,
+        });
+        expect(await storageService.getStorageBySource(expiredSource.id)).toBeNull();
+        // More than the limit holds: refused.
+        await expect(
+          storageService.reserveAdditional(targetSource.id, 2 * 1024 * 1024, false)
+        ).rejects.toThrow('Insufficient storage capacity');
+        // A download reserving meanwhile keeps its share once the remux room goes.
+        await storageService.reserveStorage(targetSource.id, 300 * 1024, true);
+
+        await release();
+        expect(await storageService.getStorageBySource(targetSource.id)).toMatchObject({
+          reservedBytes: 300 * 1024,
+          remuxReservedBytes: 0,
+        });
+
+        // A pack still downloading: the remux room comes on top of what it may still write, so
+        // 600 KiB to download and a 500 KiB remux do not fit in 1 MiB.
+        await storageService.reserveStorage(targetSource.id, 600 * 1024, true);
+        await expect(
+          storageService.reserveAdditional(targetSource.id, 500 * 1024, false)
+        ).rejects.toThrow('Insufficient storage capacity');
+        expect((await storageService.getStorageBySource(targetSource.id))?.remuxReservedBytes).toBe(
+          0
+        );
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
+    it('keeps a remux charged beside a download that is still writing', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestContentSource(movie.id);
+      const location = fs.mkdtempSync(`${os.tmpdir()}/remux-pack-`);
+      const output = `${location}/remux/1`;
+      try {
+        await storageService.createStorage({
+          sourceId: source.id,
+          location,
+          size: 600 * 1024,
+          reservedBytes: 600 * 1024,
+        });
+        const release = await storageService.reserveAdditional(source.id, 300 * 1024, true, output);
+        // 500 of the pack's 600 KiB are downloaded; the remux, inside the storage, wrote 200.
+        fs.writeFileSync(`${location}/episode.mkv`, Buffer.alloc(500 * 1024, 1));
+        fs.mkdirSync(output, { recursive: true });
+        fs.writeFileSync(`${output}/seg00000.ts`, Buffer.alloc(200 * 1024, 1));
+        // A download progress update may measure both files before the remux releases its room.
+        expect((await storageService.reconcileAllocation(source.id))?.reservedBytes).toBe(
+          600 * 1024
+        );
+        await release();
+        const storage = await storageService.getStorageBySource(source.id);
+        // Together they cross the pack's reservation, yet 100 KiB of it are still to come.
+        expect(storage?.allocatedBytes).toBeGreaterThanOrEqual(700 * 1024);
+        expect(storage?.reservedBytes).toBeGreaterThanOrEqual(800 * 1024);
+        expect(storage?.remuxReservedBytes).toBe(0);
+      } finally {
+        fs.rmSync(location, { recursive: true, force: true });
+      }
+    });
+
+    it('charges the held remux estimate when measuring an output child fails', async () => {
+      const { storageService } = setupTest();
+      const source = await createSource(database);
+      const location = fs.mkdtempSync(`${os.tmpdir()}/remux-unmeasurable-`);
+      const output = `${location}/remux/1`;
+      try {
+        await storageService.createStorage({
+          sourceId: source.id,
+          location,
+          size: 600 * 1024,
+          reservedBytes: 600 * 1024,
+        });
+        const release = await storageService.reserveAdditional(source.id, 200 * 1024, true, output);
+        fs.mkdirSync(output, { recursive: true });
+        // stat on this child fails with ELOOP, making the measurement return null.
+        fs.symlinkSync('loop', `${output}/loop`);
+        await release();
+        expect(await storageService.getStorageBySource(source.id)).toMatchObject({
+          reservedBytes: 800 * 1024,
+          remuxReservedBytes: 0,
+        });
+      } finally {
+        fs.rmSync(location, { recursive: true, force: true });
+      }
+    });
+
     it('serializes concurrent reservations for the same source', async () => {
       const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();

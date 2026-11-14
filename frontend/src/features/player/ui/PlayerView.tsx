@@ -1,6 +1,10 @@
 import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
 import { useAudioDelivery } from '@features/player/hooks/useAudioDelivery';
-import { usePlaybackProgress, useResumePoint } from '@features/player/hooks/usePlaybackProgress';
+import {
+  resumePosition,
+  usePlaybackProgress,
+  useResumePoint,
+} from '@features/player/hooks/usePlaybackProgress';
 import { type NextEpisode, usePlaybackPrompts } from '@features/player/hooks/usePlaybackPrompts';
 import { usePlaybackSource } from '@features/player/hooks/usePlaybackSource';
 import { useSubtitles } from '@features/player/hooks/useSubtitles';
@@ -36,11 +40,22 @@ const Page = styled.main`
   outline: none;
 `;
 
-const Video = styled.video`
+/** How long a held picture waits for AVPlay to play before it goes anyway. */
+const PICTURE_HOLD_LIMIT_MS = 15_000;
+
+const Video = styled.video<{ $held?: boolean }>`
   width: 100%;
   height: 100%;
   object-fit: contain;
   background: #000;
+  ${({ $held }) =>
+    $held &&
+    `
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  `}
 `;
 
 const Message = styled.div`
@@ -164,6 +179,26 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     videoRef.current = media;
     setMediaElement(media);
   }, []);
+  /** The `<video>` element, which can stay on screen (paused) after AVPlay took over. */
+  const videoElement = useRef<HTMLVideoElement | null>(null);
+  const setVideoElement = useCallback(
+    (element: HTMLVideoElement | null) => {
+      if (element) {
+        videoElement.current = element;
+        setMedia(element);
+        return;
+      }
+      // A held picture going away must not drop the player that replaced it.
+      if (videoRef.current === videoElement.current) setMedia(null);
+      // A held picture kept its converted stream attached: let the decoder go.
+      if (videoElement.current?.getAttribute('src')?.startsWith('blob:')) {
+        videoElement.current.removeAttribute('src');
+        videoElement.current.load();
+      }
+      videoElement.current = null;
+    },
+    [setMedia]
+  );
   const subtitleStorageKey = mediaSubtitleKey(currentUser?.id, playable);
 
   // Call order matters: each hook's effects run in this order, and later ones rely on it
@@ -187,6 +222,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     setStatus: source.setStatus,
     failPlayback: source.failPlayback,
     restartSession: source.restartSession,
+    pictureHeld: source.pictureHeld,
     settlePendingFailure: source.settlePendingFailure,
   });
   const { audioDelivery, audioPreparing, playsInAvplay } = audio;
@@ -224,6 +260,76 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     completeOnce: progress.completeOnce,
     onPlayNext,
   });
+
+  // A switch from converted audio to AVPlay: the paused <video> keeps its last frame on top while
+  // AVPlay prepares underneath from the same position. AVPlay's picture replaces it once it plays.
+  const { pictureHeld, releasePicture } = source;
+  const holdingPicture = pictureHeld && source.replacementReady && !!avplay && playsInAvplay;
+  /** The player a held picture's position was handed to, once. */
+  const handedOverTo = useRef<PlayerMedia | null>(null);
+  useEffect(() => {
+    if (!pictureHeld) return;
+    // The new session plays in the <video> again: nothing to hand over.
+    if (source.replacementReady && !(avplay && playsInAvplay)) {
+      releasePicture();
+      return;
+    }
+    const media = mediaElement;
+    if (!holdingPicture || !media || media === videoElement.current) return;
+    if (handedOverTo.current !== media) {
+      handedOverTo.current = media;
+      resume.resumeApplied.current = true;
+      media.currentTime = videoElement.current?.currentTime ?? media.currentTime;
+    }
+    media.addEventListener('playing', releasePicture);
+    media.addEventListener('error', releasePicture);
+    // Paused, the held picture stays until the viewer plays: AVPlay shows nothing before.
+    const timer = media.autoplay ? window.setTimeout(releasePicture, PICTURE_HOLD_LIMIT_MS) : 0;
+    return () => {
+      media.removeEventListener('playing', releasePicture);
+      media.removeEventListener('error', releasePicture);
+      window.clearTimeout(timer);
+    };
+  }, [
+    avplay,
+    holdingPicture,
+    mediaElement,
+    pictureHeld,
+    playsInAvplay,
+    releasePicture,
+    resume.resumeApplied,
+    source.replacementReady,
+  ]);
+
+  // AVPlay opens a TV version still being built from near its newest segment: its playlist is
+  // asked to start where playback will (the held picture, else the resume point), once per stream,
+  // so it waits for the saved progress (null until then).
+  const avplayStart = useRef<{
+    streamUrl: string;
+    src: string;
+    start: number;
+    autoplay: boolean;
+  } | null>(null);
+  const avplayOpen = (() => {
+    if (!session || session.delivery?.mode !== 'remux')
+      return { src: session?.streamUrl ?? '', start: undefined, autoplay: true };
+    if (avplayStart.current?.streamUrl === session.streamUrl) return avplayStart.current;
+    const holding = pictureHeld && !!videoElement.current;
+    if (!holding && !resume.progressSettled) return null;
+    const saved = resume.resumeRef.current;
+    const duration = session.delivery.durationSeconds;
+    const start =
+      holding && videoElement.current
+        ? videoElement.current.currentTime
+        : saved && saved.state !== 'completed' && saved.positionSeconds > 5 && duration > 0
+          ? resumePosition(saved, duration)
+          : 0;
+    const src = `${session.streamUrl}?start=${Math.floor(start)}`;
+    // A viewer who paused before the handoff finds it paused after.
+    const autoplay = !(holding && videoElement.current?.paused);
+    avplayStart.current = { streamUrl: session.streamUrl, src, start, autoplay };
+    return avplayStart.current;
+  })();
 
   useEffect(() => {
     document.body.dataset['miauflixPlayer'] = 'true';
@@ -316,29 +422,33 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       {!session && <PlayerHeader onBack={onBack} />}
       {session ? (
         <>
-          {avplay && playsInAvplay ? (
+          {avplay && playsInAvplay && avplayOpen && (
             <AvplayVideo
               avplay={avplay}
               mediaRef={setMedia}
-              src={session.streamUrl}
+              src={avplayOpen.src}
+              startSeconds={avplayOpen.start}
+              durationSeconds={session.delivery?.durationSeconds}
               aria-label={title}
-              autoPlay
+              autoPlay={avplayOpen.autoplay}
               subtitleCues={selectedSubtitle ? subtitles.avplayCues : []}
               subtitleOffset={subtitles.offset}
               subtitleRaise={subtitles.controlsInset}
               subtitleFontFamily={subtitles.fontFamily}
               {...mediaEvents}
             />
-          ) : (
+          )}
+          {(!(avplay && playsInAvplay) || holdingPicture) && (
             <Video
-              ref={setMedia}
-              src={audioDelivery ? undefined : session.streamUrl}
+              ref={setVideoElement}
+              $held={holdingPicture}
+              src={audioDelivery || holdingPicture ? undefined : session.streamUrl}
               // The TV app's backend is cross-origin, and subtitle tracks only load across origins with CORS
               crossOrigin={builtForTizen ? 'anonymous' : undefined}
               aria-label={title}
-              autoPlay={!audioDelivery}
+              autoPlay={!audioDelivery && !holdingPicture}
               playsInline
-              {...mediaEvents}
+              {...(holdingPicture ? {} : mediaEvents)}
             >
               {selectedSubtitle && subtitles.url && (
                 <track
@@ -399,7 +509,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               </>
             }
             videoRef={videoRef}
-            preparing={status !== 'ready'}
+            preparing={status !== 'ready' && !pictureHeld}
             onBack={onBack}
             subtitleSearchPreferences={subtitles.searchPreferences}
             subtitleCues={subtitles.cues}
@@ -424,7 +534,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             onSelectAudioTrack={audio.selectAudioTrack}
             onSeek={audioDelivery ? audio.seekConvertedAudio : undefined}
           />
-          <VideoStatus $ready={status === 'ready'} role="status" aria-live="polite">
+          <VideoStatus $ready={status === 'ready' || pictureHeld} role="status" aria-live="polite">
             {statusMessage}
           </VideoStatus>
         </>

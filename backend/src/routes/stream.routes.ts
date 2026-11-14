@@ -1,11 +1,13 @@
 import { zValidator } from '@hono/zod-validator';
 import { logger } from '@logger';
+import { ContractError } from '@miauflix/contract';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { HttpError } from '@errors/http.error';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
+import { OpenedPlaylists, playlistStartingAt } from '@services/playback/tv-remux.service';
 
 import type { RouteDeps } from './common.types';
 
@@ -15,7 +17,9 @@ export const createStreamRoutes = ({
   mediaLoadClient,
   playbackSessionService,
   streamService,
+  tvRemuxService,
 }: RouteDeps) => {
+  const openedPlaylists = new OpenedPlaylists();
   /** A fake source surfaces as `source_file_unavailable`; `null` lets the route answer 404. */
   const resolveTarget = async (
     grant: Parameters<typeof streamService.resolvePlaybackTarget>[0]
@@ -37,6 +41,7 @@ export const createStreamRoutes = ({
       '/:token/prefetch',
       rateLimitGuard(60),
       zValidator('param', z.object({ token: z.string().regex(/^[A-Za-z0-9_-]{43}$/) })),
+      zValidator('query', z.object({ remux: z.enum(['true', 'false']).optional() })),
       async c => {
         const grant = await playbackSessionService.verify(c.req.valid('param').token);
         if (!grant) throw new HttpError(401, 'Invalid or expired streaming key');
@@ -55,7 +60,56 @@ export const createStreamRoutes = ({
           .catch((error: unknown) =>
             logger.warn('StreamRoutes', 'Next-episode prefetch failed', error)
           );
+        // A TV gets the episode's remux built once it is downloaded, when it needs one.
+        if (c.req.valid('query').remux === 'true')
+          tvRemuxService.requestWhenDownloaded(resolved.target);
         return c.body(null, 202);
+      }
+    )
+    .get(
+      '/:token/remux/:name',
+      // AVPlay reads the playlist again every segment, and segments quickly while it buffers.
+      rateLimitGuard(600),
+      zValidator(
+        'param',
+        z.object({
+          token: z.string().regex(/^[A-Za-z0-9_-]{43}$/),
+          name: z.string().regex(/^(?:index\.m3u8|seg\d{5}\.ts|s\d{1,3}\.(?:vtt|mkv|sup))$/),
+        })
+      ),
+      zValidator('query', z.object({ start: z.coerce.number().finite().min(0).optional() })),
+      async c => {
+        const { token, name } = c.req.valid('param');
+        const { start } = c.req.valid('query');
+        const grant = await playbackSessionService.verify(token);
+        if (!grant) throw new HttpError(401, 'Invalid or expired streaming key');
+        const { resolved, unavailable } = await resolveTarget(grant);
+        if (unavailable) throw new HttpError(404, unavailable);
+        if (!resolved) throw new HttpError(403, 'Playback grant does not match source');
+        if (name.endsWith('.ts')) openedPlaylists.segmentRequested(token);
+        // A playback opening its playlist starts where the viewer is; once playing, it is whole.
+        const cutting = name === 'index.m3u8' && start !== undefined && openedPlaylists.cut(token);
+        try {
+          // A playlist being shortened is read whole: a range of it would be cut as if complete.
+          const response = await mediaLoadClient.readRemux(
+            resolved.target,
+            name,
+            cutting ? undefined : c.req.header('range')
+          );
+          if (!cutting || start === undefined) return response;
+          // A shorter body: its length and range are recomputed, not the upstream ones.
+          const headers = new Headers(response.headers);
+          for (const name of ['content-length', 'content-range', 'content-encoding', 'etag'])
+            headers.delete(name);
+          return new Response(playlistStartingAt(await response.text(), start), {
+            status: response.status === 206 ? 200 : response.status,
+            headers,
+          });
+        } catch (error) {
+          if (error instanceof ContractError && error.code === 'remux_not_found')
+            throw new HttpError(404, 'This file has no TV version');
+          throw error;
+        }
       }
     )
     .get(

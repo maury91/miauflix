@@ -22,6 +22,8 @@ export function useResumePoint(playable: PlayableRef) {
     resumeRef,
     /** The saved progress has loaded (it may hold nothing for this target). */
     hasProgress: !!progress.data,
+    /** The saved progress has loaded or failed to: waiting for it longer is pointless. */
+    progressSettled: !progress.isLoading,
     resumeApplied,
   };
 }
@@ -77,8 +79,9 @@ export function usePlaybackProgress({
   const readProgressSnapshot = useCallback(() => {
     if (audioPreparing.current) return latestProgress.current;
     const video = videoRef.current;
+    // A remux still being built lists only its finished segments: its own duration grows.
     const duration =
-      deliveryRef.current?.mode === 'audio-transcode'
+      deliveryRef.current?.mode === 'audio-transcode' || deliveryRef.current?.mode === 'remux'
         ? deliveryRef.current.durationSeconds
         : video?.duration;
     if (video && duration !== undefined && Number.isFinite(duration) && duration > 0) {

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AvplayMedia } from './avplay-media';
+import { AVPLAY_CAPABILITIES, avplayCapabilities, AvplayMedia } from './avplay-media';
 
 import type { AVPlay, AVPlayListeners, TrackInfo } from '@/types/tizen';
 
@@ -46,6 +46,7 @@ const setupTest = () => {
       listener = value;
     }),
     setStreamingProperty: vi.fn(),
+    setBufferingParam: vi.fn(),
     getTotalTrackInfo: vi.fn((): TrackInfo[] => [
       { type: 'VIDEO', index: 0, extra_info: '' },
       { type: 'AUDIO', index: 1, extra_info: '' },
@@ -122,6 +123,171 @@ describe('AvplayMedia', () => {
     expect(media.currentTime).toBe(42.5);
   });
 
+  it('plays a playlist still being written from the start, at the length it was given', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    // AVPlay plays an HLS playlist without its end as live: no length, starting near its end.
+    avplay.getDuration.mockReturnValue(0);
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    prepare();
+    expect(media.duration).toBe(3539.5);
+    expect(avplay.seekTo).toHaveBeenCalledWith(0, expect.any(Function), expect.any(Function));
+  });
+
+  it('resumes a playlist still being written where it was asked to', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    media.currentTime = 409.3;
+    prepare();
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.seekTo).toHaveBeenCalledWith(409_300, expect.any(Function), expect.any(Function));
+  });
+
+  it('plays a playlist still being written only once the resume seek has landed', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    let landed: (() => void) | undefined;
+    avplay.seekTo.mockImplementation((_milliseconds: number, onSuccess?: () => void) => {
+      landed = onSuccess;
+    });
+    media.autoplay = true;
+    // The player resumes when the metadata loads, as usePlaybackProgress does.
+    media.addEventListener('loadedmetadata', () => {
+      media.currentTime = 851.5;
+    });
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_500, expect.any(Function), expect.any(Function));
+    expect(avplay.play).not.toHaveBeenCalled();
+    landed?.();
+    expect(avplay.play).toHaveBeenCalledTimes(1);
+  });
+
+  it('opens at the start it is given, seeking before preparing, and plays once prepared', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    media.autoplay = true;
+    // The player resumes at the same place when the metadata loads: nothing left to seek.
+    media.addEventListener('loadedmetadata', () => {
+      media.currentTime = 851.5;
+    });
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_200, expect.any(Function), expect.any(Function));
+    expect(avplay.seekTo.mock.invocationCallOrder[0]).toBeLessThan(
+      avplay.prepareAsync.mock.invocationCallOrder[0]
+    );
+    expect(media.currentTime).toBe(851.2);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.play).toHaveBeenCalledTimes(1);
+    // A later seek to the same place is a real one.
+    media.currentTime = 851.5;
+    expect(avplay.seekTo).toHaveBeenCalledTimes(2);
+  });
+
+  it('seeks back to where it opened after moving elsewhere before preparing', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
+    media.currentTime = 100;
+    media.currentTime = 851.2;
+    expect(media.currentTime).toBe(851.2);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      851_200,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('seeks to the start once prepared when AVPlay cannot seek before', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    avplay.seekTo.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      600_000,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('seeks to the start once prepared when AVPlay reports the early seek failed', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    let refused: (() => void) | undefined;
+    avplay.seekTo.mockImplementationOnce(
+      (_milliseconds: number, _onSuccess?: () => void, onError?: () => void) => {
+        refused = onError;
+      }
+    );
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    refused?.();
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      600_000,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('keeps the file length when AVPlay reports only the part built so far', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(2_000_000);
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3600, 1800);
+    prepare();
+    expect(media.duration).toBe(3600);
+  });
+
+  it('keeps a seek asked for before the opening seek reported its failure', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    let refused: (() => void) | undefined;
+    avplay.seekTo.mockImplementationOnce(
+      (_milliseconds: number, _onSuccess?: () => void, onError?: () => void) => {
+        refused = onError;
+      }
+    );
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    media.currentTime = 900;
+    refused?.();
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      900_000,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('keeps the length AVPlay reports, and its start, for a finished file', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/api/stream/key', element, 3539.5);
+    prepare();
+    expect(media.duration).toBe(120);
+    expect(avplay.seekTo).not.toHaveBeenCalled();
+  });
+
+  it('buffers a second before playing a TV version, and the default for other streams', () => {
+    const { avplay, media, element } = setupTest();
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8?start=1355', element);
+    expect(avplay.setBufferingParam).toHaveBeenCalledWith(
+      'PLAYER_BUFFER_FOR_PLAY',
+      'PLAYER_BUFFER_SIZE_IN_SECOND',
+      1
+    );
+    expect(avplay.setBufferingParam).toHaveBeenCalledWith(
+      'PLAYER_BUFFER_FOR_RESUME',
+      'PLAYER_BUFFER_SIZE_IN_SECOND',
+      1
+    );
+    avplay.setBufferingParam.mockClear();
+    media.open('https://miauflix.example/api/stream/key', element);
+    expect(avplay.setBufferingParam).not.toHaveBeenCalled();
+  });
+
   it('ignores the old position while a seek is in flight', () => {
     const { avplay, media, events, element, prepare, listener } = setupTest();
     let finishSeek: (() => void) | undefined;
@@ -191,6 +357,54 @@ describe('AvplayMedia', () => {
     expect(media.audioTracks[1].enabled).toBe(true);
   });
 
+  it('switches audio chosen while paused once playback starts', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/stream', element);
+    prepare();
+    // AVPlay switches audio tracks only while playing.
+    avplay.setSelectTrack.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.audioTracks[1].enabled = true;
+    expect(media.audioTracks[1].enabled).toBe(true);
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(1);
+    await media.play();
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(2);
+    expect(avplay.setSelectTrack).toHaveBeenLastCalledWith('AUDIO', 2);
+  });
+
+  it('drops audio chosen while paused when it is turned off before playback starts', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/stream', element);
+    prepare();
+    avplay.setSelectTrack.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.audioTracks[1].enabled = true;
+    media.audioTracks[1].enabled = false;
+    await media.play();
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(1);
+  });
+
+  it('lets an audio track be asked for again when switching to it on play fails', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/stream', element);
+    prepare();
+    avplay.setSelectTrack
+      .mockImplementationOnce(() => {
+        throw new Error('InvalidStateError');
+      })
+      .mockImplementationOnce(() => {
+        throw new Error('InvalidStateError');
+      });
+    media.audioTracks[1].enabled = true;
+    await media.play();
+    expect(media.audioTracks[1].enabled).toBe(false);
+    media.audioTracks[1].enabled = true;
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(3);
+    expect(media.audioTracks[1].enabled).toBe(true);
+  });
+
   it('reports a file AVPlay cannot prepare', () => {
     const { media, events, element, failPrepare } = setupTest();
     media.open('https://miauflix.example/stream', element);
@@ -214,5 +428,47 @@ describe('AvplayMedia', () => {
     window.webapis = { avplay, productinfo: { isUdPanelSupported: () => true } };
     media.open('https://miauflix.example/stream', element);
     expect(avplay.setStreamingProperty).toHaveBeenCalledWith('SET_MODE_4K', 'TRUE');
+  });
+});
+
+describe('avplayCapabilities', () => {
+  afterEach(() => {
+    delete window.webapis;
+  });
+
+  it('keeps the fixed codec list on a TV that cannot be asked (Tizen 5.5)', () => {
+    window.webapis = { avplay: {} as AVPlay };
+    expect(avplayCapabilities()).toEqual(AVPLAY_CAPABILITIES);
+  });
+
+  it('keeps the fixed codec list when the TV cannot answer for a kind of codec', () => {
+    window.webapis = {
+      avplay: {} as AVPlay,
+      systeminfo: {
+        isSupportedAudioCodec: codec => codec === 'AAC',
+        isSupportedVideoCodec: () => {
+          throw new Error('NotSupportedError');
+        },
+      },
+    };
+    expect(avplayCapabilities()).toEqual(AVPLAY_CAPABILITIES);
+  });
+
+  it('sends every codec the TV reports, in Samsung names', () => {
+    const supported = new Set(['AAC', 'AC3', 'E-AC3', 'TrueHD', 'H264', 'HEVC', 'AV1']);
+    window.webapis = {
+      avplay: {} as AVPlay,
+      systeminfo: {
+        isSupportedAudioCodec: codec => supported.has(codec),
+        isSupportedVideoCodec: codec => {
+          if (codec === 'HEIC') throw new Error('TypeMismatchError');
+          return supported.has(codec);
+        },
+      },
+    };
+    expect(avplayCapabilities()).toEqual({
+      ...AVPLAY_CAPABILITIES,
+      tizenCodecs: { audio: ['AC3', 'E-AC3', 'TrueHD', 'AAC'], video: ['H264', 'HEVC', 'AV1'] },
+    });
   });
 });

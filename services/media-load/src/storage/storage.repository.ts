@@ -13,6 +13,7 @@ interface StorageRow {
   verifiedBytes: number;
   allocatedBytes: number;
   reservedBytes: number;
+  remuxReservedBytes: number;
   totalPieces: number;
   pieceLength: number;
   lastInterestAt: number | null;
@@ -38,6 +39,7 @@ const COLUMNS = [
   'verifiedBytes',
   'allocatedBytes',
   'reservedBytes',
+  'remuxReservedBytes',
   'totalPieces',
   'pieceLength',
   'lastInterestAt',
@@ -239,11 +241,13 @@ export class StorageRepository {
     await this.update(id, accounting);
   }
 
+  /** Remux output can cross the download's reservation before the download has caught up. */
   async reconcileAllocation(id: number, allocatedBytes: number): Promise<void> {
     this.db
       .query(
         `UPDATE storage SET allocatedBytes = ?1,
-           reservedBytes = CASE WHEN ?1 >= reservedBytes THEN 0 ELSE reservedBytes END,
+           reservedBytes = CASE
+             WHEN remuxReservedBytes = 0 AND ?1 >= reservedBytes THEN 0 ELSE reservedBytes END,
            updatedAt = ?2
          WHERE id = ?3`
       )
@@ -309,9 +313,12 @@ export class StorageRepository {
     return this.sum('size');
   }
 
-  /** Application charge: physical allocation, or the reservation until measured. */
+  /**
+   * Application charge: physical allocation, or the reservation until measured, plus the room a
+   * remux being written holds.
+   */
   async getChargedStorageUsage(): Promise<bigint> {
-    return this.sum('MAX(allocatedBytes, reservedBytes)');
+    return this.sum('MAX(allocatedBytes, reservedBytes) + remuxReservedBytes');
   }
 
   async getTotalReservedStorageUsage(): Promise<bigint> {

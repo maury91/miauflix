@@ -24,6 +24,7 @@ import { TransferStats } from './engine/transfer-stats';
 import { Encryption } from './lib/encryption';
 import { ErrorWithStatus } from './lib/errors';
 import { logger } from './lib/logger';
+import { RemuxService } from './remux/remux.service';
 import { encodeBitfield, PieceUpdates } from './storage/piece-updates';
 import { StorageService } from './storage/storage.service';
 import { StorageImporter } from './storage/storage-import';
@@ -45,6 +46,7 @@ export interface Engine {
   downloads: DownloadService;
   transfers: TransferStats;
   pieces: PieceUpdates;
+  remux: RemuxService;
 }
 
 /**
@@ -153,12 +155,28 @@ export class MediaLoadRuntime {
       });
       const transfers = new TransferStats(downloads.client, database.getTransferRepository());
       transfers.start();
-      this.engine = { database, storage, downloads, transfers, pieces };
+      const remux = new RemuxService({
+        repository: database.getRemuxRepository(),
+        encryption,
+        storage,
+        isFileComplete: (sourceId, filePath) => downloads.isFileComplete(sourceId, filePath),
+        readSource: async (sourceId, filePath, range) =>
+          downloads.streamFile(
+            { source: await this.source(sourceId), filePath, matchKind: 'movie' },
+            range,
+            true
+          ),
+        ffmpegPath: process.env.FFMPEG_PATH || undefined,
+      });
+      this.engine = { database, storage, downloads, transfers, pieces, remux };
       this.imported = imported;
     } catch (error) {
       db.close();
       throw error;
     }
+    void this.engine.remux
+      .start()
+      .catch(error => logger.warn('MediaLoad', 'Remux queue failed to start', error));
     this.notifyStart(this.engine);
   }
 
@@ -323,6 +341,7 @@ export class MediaLoadRuntime {
     await this.importCompletion?.catch(() => undefined);
     engine.transfers.stop();
     engine.pieces.close();
+    await engine.remux.close();
     await engine.downloads.close().catch(error => logger.warn('MediaLoad', 'Close failed', error));
     engine.database.close();
   }

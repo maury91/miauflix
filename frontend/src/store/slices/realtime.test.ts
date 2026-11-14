@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import {
   realtimeActions,
   realtimeSlice,
+  selectPlaybackDelivered,
+  selectPlaybackDelivery,
   selectSourceAttempt,
   selectSourceAvailability,
 } from './realtime';
@@ -52,6 +54,7 @@ describe('realtime state', () => {
       ready: false,
       preparationByMediaId: {},
       playbackDeliveries: {},
+      playbackDelivered: {},
       playbackPieces: {},
       availabilityByPlayable: {},
       sourceAttempts: {},
@@ -85,6 +88,34 @@ describe('realtime state', () => {
 
     state = realtimeSlice.reducer(state, realtimeActions.sourceAttemptCleared(episode));
     expect(selectSourceAttempt(episode)({ realtime: state })).toBeNull();
+  });
+
+  it('keeps a playback delivery when a recreate follows it', () => {
+    const delivery = {
+      type: 'delivery' as const,
+      delivery: { mode: 'audio-transcode' as const, durationSeconds: 60 },
+      streamUrl: '/api/stream/key/audio',
+    };
+    let state = realtimeSlice.reducer(undefined, { type: '@@test/init' });
+    state = realtimeSlice.reducer(
+      state,
+      realtimeActions.playbackDeliveryReceived({
+        type: 'playback-delivery',
+        playbackId: 'playback-1',
+        update: delivery as never,
+      })
+    );
+    state = realtimeSlice.reducer(
+      state,
+      realtimeActions.playbackDeliveryReceived({
+        type: 'playback-delivery',
+        playbackId: 'playback-1',
+        update: { type: 'recreate', reason: 'A TV version of this file is ready.' },
+      })
+    );
+    const root = { realtime: state };
+    expect(selectPlaybackDelivery('playback-1')(root)?.type).toBe('recreate');
+    expect(selectPlaybackDelivered('playback-1')(root)).toEqual(delivery);
   });
 
   it('keeps the state unchanged when the backend repeats a status', () => {

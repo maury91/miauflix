@@ -31,6 +31,8 @@ export interface Storage {
   allocatedBytes: number;
   /** Admission charge while physical allocation has not been measured. */
   reservedBytes: number;
+  /** Room for a TV remux being written, charged on top of the rest; 0 when none is. */
+  remuxReservedBytes: number;
   totalPieces: number;
   pieceLength: number;
   lastInterestAt: Date | null;

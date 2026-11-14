@@ -27,6 +27,16 @@ const MAP_COALESCE_MS = 50;
 const ARTWORK_BATCH_SIZE = 50;
 const MAX_ARTWORK_SUBSCRIPTIONS = 5_000;
 
+/** A stall-watchdog playhead move, logged by the backend to diagnose jumpy playback. */
+export interface PlayerEventMessage {
+  playbackId?: string;
+  kind: 'gap-jump' | 'stall-seek' | 'frozen-seek';
+  from: number;
+  to: number;
+  buffered: Array<[number, number]>;
+  decodedFrames?: number;
+}
+
 export type RealtimeMediaRef =
   | { kind: 'movie'; mediaId: number }
   | { kind: 'show'; mediaId: number }
@@ -238,6 +248,16 @@ export class RealtimeClient {
       return;
     }
     this.pendingSearch.set(message.type, message);
+  }
+
+  /** Report a player diagnostic for the backend log; dropped while disconnected. */
+  publishPlayerEvent(event: PlayerEventMessage): void {
+    if (!this.ready || !this.socket) return;
+    try {
+      this.socket.send(JSON.stringify({ type: 'player-event', ...event }));
+    } catch {
+      // Diagnostics are best effort.
+    }
   }
 
   /** Send durable playback progress through the authenticated socket when it is available. */
