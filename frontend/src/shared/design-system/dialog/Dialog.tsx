@@ -147,13 +147,13 @@ export function Dialog({
       // Back to what opened this dialog if it is still there and reachable; otherwise the next
       // dialog's panel, or the element that opened the first dialog
       const fallback = nextRoot ? nextRoot.querySelector('[role="dialog"]') : opener;
-      const target = [previous, fallback].find(
-        element =>
-          element instanceof HTMLElement &&
-          element.isConnected &&
-          (!nextRoot || nextRoot.contains(element))
-      );
-      if (target instanceof HTMLElement) target.focus({ preventScroll: true });
+      // A candidate that cannot take focus (disabled, hidden) gives way to the next one
+      for (const element of [previous, fallback]) {
+        if (!(element instanceof HTMLElement) || !element.isConnected) continue;
+        if (nextRoot && !nextRoot.contains(element)) continue;
+        element.focus({ preventScroll: true });
+        if (document.activeElement === element) break;
+      }
     };
   }, [open, id, parent]);
 

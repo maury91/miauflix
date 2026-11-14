@@ -5,6 +5,8 @@
  * Tab, hidden from assistive technology), including body children added while a dialog is open.
  * Elements that were already inert are left alone.
  */
+import { layer } from '../tokens';
+
 interface OpenDialog {
   id: symbol;
   /** The dialog's portal root, a child of `document.body`. */
@@ -30,6 +32,11 @@ function makeInert(element: Element) {
 function updateModality() {
   for (const element of madeInert) element.removeAttribute('inert');
   madeInert.clear();
+  // Paint order follows the stack, not the portals' DOM order: a nested dialog open from the start
+  // mounts its portal before its parent's, which would otherwise paint over it
+  stack.forEach((entry, index) => {
+    if (entry.root) entry.root.style.zIndex = String(layer.modalBackdrop + index);
+  });
   const top = stack[stack.length - 1];
   if (!top) {
     observer?.disconnect();
@@ -80,7 +87,7 @@ export function pushDialog(
   updateModality();
   return () => {
     const index = stack.findIndex(entry => entry.id === id);
-    if (index !== -1) stack.splice(index, 1);
+    if (index !== -1) stack.splice(index, 1)[0].root?.style.removeProperty('z-index');
     parents.delete(id);
     updateModality();
     if (stack.length > 0) return null;

@@ -1183,9 +1183,34 @@ describe('Review fixes', () => {
     expect(inner).toHaveFocus();
     expect(inner.parentElement).not.toHaveAttribute('inert');
     expect(screen.getByRole('dialog', { name: 'Outer' }).parentElement).toHaveAttribute('inert');
+    // Paints above its parent, though its portal was added to the body first
+    expect(Number(inner.parentElement?.style.zIndex)).toBeGreaterThan(
+      Number(screen.getByRole('dialog', { name: 'Outer' }).parentElement?.style.zIndex)
+    );
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(onDismissInner).toHaveBeenCalledTimes(1);
     expect(onDismissOuter).not.toHaveBeenCalled();
+  });
+
+  it('restores focus to the next candidate when the opener cannot take it', () => {
+    const ui = (secondOpen: boolean, openerDisabled: boolean) => (
+      <>
+        <Dialog
+          open
+          title="First"
+          actions={<Button disabled={openerDisabled}>Open second</Button>}
+        />
+        <Dialog open={secondOpen} title="Second" actions={<Button>OK</Button>} />
+      </>
+    );
+    const { rerender } = render(ui(false, false));
+    screen.getByRole('button', { name: 'Open second' }).focus();
+    rerender(ui(true, false));
+    expect(screen.getByRole('dialog', { name: 'Second' })).toHaveFocus();
+    // The opener becomes disabled while Second is open: focus falls back to First's panel
+    rerender(ui(true, true));
+    rerender(ui(false, true));
+    expect(screen.getByRole('dialog', { name: 'First' })).toHaveFocus();
   });
 
   it('makes content added behind an open dialog inert, and releases it', async () => {
