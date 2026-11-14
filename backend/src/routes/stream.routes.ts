@@ -86,14 +86,15 @@ export const createStreamRoutes = ({
         const { resolved, unavailable } = await resolveTarget(grant);
         if (unavailable) throw new HttpError(404, unavailable);
         if (!resolved) throw new HttpError(403, 'Playback grant does not match source');
+        if (name.endsWith('.ts')) openedPlaylists.segmentRequested(token);
         try {
           const response = await mediaLoadClient.readRemux(
             resolved.target,
             name,
             c.req.header('range')
           );
-          // The first playlist a playback opens starts where the viewer is; reloads are whole.
-          if (name !== 'index.m3u8' || start === undefined || !openedPlaylists.open(token))
+          // A playback opening its playlist starts where the viewer is; once playing, it is whole.
+          if (name !== 'index.m3u8' || start === undefined || !openedPlaylists.cut(token))
             return response;
           return new Response(playlistStartingAt(await response.text(), start), {
             status: response.status,

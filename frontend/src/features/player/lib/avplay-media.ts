@@ -128,6 +128,12 @@ const DISPLAY_WIDTH = 1920;
 const DISPLAY_HEIGHT = 1080;
 /** AVPlay reports the position about every 100 ms; `<video>` fires timeupdate every 250 ms. */
 const TIME_UPDATE_INTERVAL_MS = 250;
+/** A seek this close to where a file opened, as it prepares, is that same start. */
+const OPENED_AT_TOLERANCE_SECONDS = 1.5;
+/** Seconds AVPlay buffers before it plays an HLS playlist (a TV version). */
+const QUICK_START_SECONDS = 1;
+
+const isHlsPlaylist = (url: string): boolean => /\.m3u8(?:\?|$)/.test(url);
 /** AVPlay ends a stream that runs dry; before this share of the duration that is a stall. */
 const EARLY_END_SHARE = 0.9;
 
@@ -166,6 +172,8 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
   private opened = false;
   private seeking = false;
   private pendingSeek: number | null = null;
+  /** Where the file was opened at, until it has prepared. */
+  private startedAt: number | null = null;
   private lastTimeUpdate = 0;
   /** Bumped on every open and close, so callbacks of an earlier file are ignored. */
   private generation = 0;
@@ -180,6 +188,8 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
 
   set currentTime(seconds: number) {
     if (!Number.isFinite(seconds)) return;
+    // Where it opened: as it prepares, a resume to the same place needs no seek.
+    if (this.openedAt(seconds)) return;
     this.position = Math.max(0, seconds);
     if (!this.prepared) {
       this.pendingSeek = this.position;
@@ -216,8 +226,11 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
   /**
    * Open `url` and prepare it, shown in the area of `element`. `durationSeconds` stands in for the
    * length AVPlay reports none of: an HLS playlist still being written plays as a live stream.
+   * `startSeconds` is where it starts: AVPlay is seeked there before it prepares, so the first
+   * picture it shows is that one, and no second seek is needed (on Tizen 5.5, a seek after
+   * preparing showed the start of the segment first, and downloaded that segment again).
    */
-  open(url: string, element: HTMLElement, durationSeconds?: number): void {
+  open(url: string, element: HTMLElement, durationSeconds?: number, startSeconds?: number): void {
     this.close();
     const generation = ++this.generation;
     this.opened = true;
@@ -225,12 +238,25 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     try {
       this.avplay.open(url);
       this.avplay.setListener(this.listener(generation));
+      // Placed before preparing: moved there afterwards (to keep the display hidden until it
+      // played), Tizen 5.5 plays the sound with a black picture.
       this.place(element);
       this.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_AUTO_ASPECT_RATIO');
       this.enable4K();
+      if (isHlsPlaylist(url)) this.startQuickly();
     } catch {
       this.emit('error');
       return;
+    }
+    if (startSeconds !== undefined && startSeconds > 0) {
+      try {
+        this.avplay.seekTo(Math.floor(startSeconds * 1000));
+        this.position = startSeconds;
+        this.startedAt = startSeconds;
+      } catch {
+        // This AVPlay cannot seek before preparing: it seeks once prepared instead
+        this.pendingSeek = startSeconds;
+      }
     }
     this.emit('loadstart');
     this.avplay.prepareAsync(
@@ -245,11 +271,22 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
         this.emit('loadedmetadata');
         this.emit('loadeddata');
         this.emit('canplay');
-        // A seek made before preparing, unless the events above (a resume) already seeked; a live
-        // playlist starts near its newest segment, so it is played from the start instead.
-        const start = this.seeking ? null : (this.pendingSeek ?? (live ? 0 : null));
+        // A seek made before preparing, unless the events above (a resume) already seeked or it
+        // opened there; a live playlist starts near its newest segment, so it is played from the
+        // start instead.
+        const pending = this.pendingSeek;
+        const start = this.seeking
+          ? null
+          : pending !== null
+            ? this.openedAt(pending)
+              ? null
+              : pending
+            : live && this.startedAt === null
+              ? 0
+              : null;
         this.pendingSeek = null;
         if (start !== null) this.currentTime = start;
+        this.startedAt = null;
         const play = (): void => {
           if (generation === this.generation && (this.autoplay || !this.isPaused)) this.start();
         };
@@ -300,6 +337,7 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     this.prepared = false;
     this.seeking = false;
     this.pendingSeek = null;
+    this.startedAt = null;
     this.position = 0;
     this.length = Number.NaN;
     this.isPaused = true;
@@ -315,6 +353,13 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
       // Already closed
     }
     this.emit('emptied');
+  }
+
+  /** The file opened at `seconds`, give or take a keyframe, and has not finished preparing. */
+  private openedAt(seconds: number): boolean {
+    return (
+      this.startedAt !== null && Math.abs(seconds - this.startedAt) < OPENED_AT_TOLERANCE_SECONDS
+    );
   }
 
   private start(): void {
@@ -388,6 +433,29 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
       Math.round(rect.width * x),
       Math.round(rect.height * y)
     );
+  }
+
+  /**
+   * Play a TV version once a second is buffered, before and after a seek. By default AVPlay waits
+   * for three of its 6-second segments (about 15 MB) first: on Tizen 5.5, over a link that brings
+   * a segment in 1.5 s, this took the start plus a seek from 6.8 s to 3 s. Only for HLS, whose
+   * segments are already stored: a torrent stream needs the default margin against starving.
+   */
+  private startQuickly(): void {
+    try {
+      this.avplay.setBufferingParam?.(
+        'PLAYER_BUFFER_FOR_PLAY',
+        'PLAYER_BUFFER_SIZE_IN_SECOND',
+        QUICK_START_SECONDS
+      );
+      this.avplay.setBufferingParam?.(
+        'PLAYER_BUFFER_FOR_RESUME',
+        'PLAYER_BUFFER_SIZE_IN_SECOND',
+        QUICK_START_SECONDS
+      );
+    } catch {
+      // An older AVPlay buffers as it always did
+    }
   }
 
   private enable4K(): void {

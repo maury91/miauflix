@@ -46,6 +46,7 @@ const setupTest = () => {
       listener = value;
     }),
     setStreamingProperty: vi.fn(),
+    setBufferingParam: vi.fn(),
     getTotalTrackInfo: vi.fn((): TrackInfo[] => [
       { type: 'VIDEO', index: 0, extra_info: '' },
       { type: 'AUDIO', index: 1, extra_info: '' },
@@ -163,12 +164,67 @@ describe('AvplayMedia', () => {
     expect(avplay.play).toHaveBeenCalledTimes(1);
   });
 
+  it('opens at the start it is given, seeking before preparing, and plays once prepared', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    media.autoplay = true;
+    // The player resumes at the same place when the metadata loads: nothing left to seek.
+    media.addEventListener('loadedmetadata', () => {
+      media.currentTime = 851.5;
+    });
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_200);
+    expect(avplay.seekTo.mock.invocationCallOrder[0]).toBeLessThan(
+      avplay.prepareAsync.mock.invocationCallOrder[0]
+    );
+    expect(media.currentTime).toBe(851.2);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.play).toHaveBeenCalledTimes(1);
+    // A later seek to the same place is a real one.
+    media.currentTime = 851.5;
+    expect(avplay.seekTo).toHaveBeenCalledTimes(2);
+  });
+
+  it('seeks to the start once prepared when AVPlay cannot seek before', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    avplay.seekTo.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      600_000,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
   it('keeps the length AVPlay reports, and its start, for a finished file', () => {
     const { avplay, media, element, prepare } = setupTest();
     media.open('https://miauflix.example/api/stream/key', element, 3539.5);
     prepare();
     expect(media.duration).toBe(120);
     expect(avplay.seekTo).not.toHaveBeenCalled();
+  });
+
+  it('buffers a second before playing a TV version, and the default for other streams', () => {
+    const { avplay, media, element } = setupTest();
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8?start=1355', element);
+    expect(avplay.setBufferingParam).toHaveBeenCalledWith(
+      'PLAYER_BUFFER_FOR_PLAY',
+      'PLAYER_BUFFER_SIZE_IN_SECOND',
+      1
+    );
+    expect(avplay.setBufferingParam).toHaveBeenCalledWith(
+      'PLAYER_BUFFER_FOR_RESUME',
+      'PLAYER_BUFFER_SIZE_IN_SECOND',
+      1
+    );
+    avplay.setBufferingParam.mockClear();
+    media.open('https://miauflix.example/api/stream/key', element);
+    expect(avplay.setBufferingParam).not.toHaveBeenCalled();
   });
 
   it('ignores the old position while a seek is in flight', () => {

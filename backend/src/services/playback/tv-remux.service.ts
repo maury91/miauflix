@@ -328,18 +328,35 @@ export function playlistStartingAt(playlist: string, startSeconds: number): stri
 /** How long a playback is remembered to have opened its remux playlist. */
 const OPENED_PLAYLIST_MS = 6 * 60 * 60_000;
 
-/** The playbacks (by streaming key) that already opened their remux playlist. */
+/**
+ * Which playbacks (by streaming key) are still opening their remux: AVPlay picks where it starts
+ * from the playlists it reads before its first segment (it reads two as it opens, and starts from
+ * the second), so those are cut where the viewer is; once it asks for a segment, it has started.
+ */
 export class OpenedPlaylists {
-  private readonly opened = new Map<string, number>();
+  private readonly playbacks = new Map<string, { openedAt: number; started: boolean }>();
 
-  constructor(private readonly now: () => number = Date.now) {}
+  constructor(private readonly now: () => number = () => Date.now()) {}
 
-  /** True the first time `key` opens its playlist, false on its reloads. */
-  open(key: string): boolean {
+  /** Whether `key`'s playlist is cut where it starts: until it asks for its first segment. */
+  cut(key: string): boolean {
+    return !this.playback(key).started;
+  }
+
+  /** `key` asked for a segment: its start is chosen, and later playlists are whole. */
+  segmentRequested(key: string): void {
+    this.playback(key).started = true;
+  }
+
+  private playback(key: string): { openedAt: number; started: boolean } {
     const now = this.now();
-    for (const [opened, expiresAt] of this.opened) if (expiresAt <= now) this.opened.delete(opened);
-    if (this.opened.has(key)) return false;
-    this.opened.set(key, now + OPENED_PLAYLIST_MS);
-    return true;
+    for (const [other, playback] of this.playbacks)
+      if (playback.openedAt + OPENED_PLAYLIST_MS <= now) this.playbacks.delete(other);
+    let playback = this.playbacks.get(key);
+    if (!playback) {
+      playback = { openedAt: now, started: false };
+      this.playbacks.set(key, playback);
+    }
+    return playback;
   }
 }

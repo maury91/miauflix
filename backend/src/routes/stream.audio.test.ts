@@ -172,7 +172,7 @@ describe('TV remux files', () => {
     expect(mediaLoadClient.readRemux).toHaveBeenCalledWith(source, 'index.m3u8', 'bytes=0-');
   });
 
-  it('starts the first playlist a playback opens at its start, and serves reloads whole', async () => {
+  it('starts the playlist a playback opens at its start, and serves later reloads whole', async () => {
     const { app, mediaLoadClient } = setupTest();
     const playlist = [
       '#EXTM3U',
@@ -183,10 +183,17 @@ describe('TV remux files', () => {
       '',
     ].join('\n');
     mediaLoadClient.readRemux.mockImplementation(async () => new Response(playlist));
-    const first = await (await app.request(`/${token}/remux/index.m3u8?start=31`)).text();
-    expect(first.trimEnd().split('\n').at(-1)).toBe('seg00007.ts');
-    const reload = await (await app.request(`/${token}/remux/index.m3u8?start=31`)).text();
-    expect(reload).toBe(playlist);
+    const lastSegment = async () =>
+      (await (await app.request(`/${token}/remux/index.m3u8?start=31`)).text())
+        .trimEnd()
+        .split('\n')
+        .at(-1);
+    expect(await lastSegment()).toBe('seg00007.ts');
+    // AVPlay reads the playlist twice as it opens, and starts from the second.
+    expect(await lastSegment()).toBe('seg00007.ts');
+    mediaLoadClient.readRemux.mockImplementationOnce(async () => new Response('segment'));
+    await app.request(`/${token}/remux/seg00005.ts`);
+    expect(await lastSegment()).toBe('seg00019.ts');
   });
 
   it('answers 404 for a file the remux does not have', async () => {

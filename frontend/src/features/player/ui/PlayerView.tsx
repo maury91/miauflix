@@ -302,10 +302,11 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
 
   // AVPlay opens a TV version still being built from near its newest segment: its playlist is
   // asked to start where playback will (the held picture, else the resume point), once per stream.
-  const avplayStart = useRef<{ streamUrl: string; src: string } | null>(null);
-  const avplaySrc = (() => {
-    if (!session || session.delivery?.mode !== 'remux') return session?.streamUrl ?? '';
-    if (avplayStart.current?.streamUrl === session.streamUrl) return avplayStart.current.src;
+  const avplayStart = useRef<{ streamUrl: string; src: string; start: number } | null>(null);
+  const avplayOpen = (() => {
+    if (!session || session.delivery?.mode !== 'remux')
+      return { src: session?.streamUrl ?? '', start: undefined };
+    if (avplayStart.current?.streamUrl === session.streamUrl) return avplayStart.current;
     const saved = resume.resumeRef.current;
     const duration = session.delivery.durationSeconds;
     const start =
@@ -315,8 +316,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
           ? resumePosition(saved, duration)
           : 0;
     const src = `${session.streamUrl}?start=${Math.floor(start)}`;
-    avplayStart.current = { streamUrl: session.streamUrl, src };
-    return src;
+    avplayStart.current = { streamUrl: session.streamUrl, src, start };
+    return avplayStart.current;
   })();
 
   useEffect(() => {
@@ -414,7 +415,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             <AvplayVideo
               avplay={avplay}
               mediaRef={setMedia}
-              src={avplaySrc}
+              src={avplayOpen.src}
+              startSeconds={avplayOpen.start}
               durationSeconds={session.delivery?.durationSeconds}
               aria-label={title}
               autoPlay

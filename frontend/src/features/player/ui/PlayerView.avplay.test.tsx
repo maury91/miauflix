@@ -316,12 +316,8 @@ describe('PlayerView on a Samsung TV', () => {
   it('holds the converted picture until the TV version plays from the same position', async () => {
     const { avplay } = fakeAvplay();
     let prepared: (() => void) | undefined;
-    let landed: (() => void) | undefined;
     avplay.prepareAsync.mockImplementation((onSuccess?: () => void) => {
       prepared = onSuccess;
-    });
-    avplay.seekTo.mockImplementation((_milliseconds: number, onSuccess?: () => void) => {
-      landed = onSuccess;
     });
     // A TV version still being built: AVPlay plays it as a live stream, with no length.
     avplay.getDuration.mockReturnValue(0);
@@ -387,13 +383,17 @@ describe('PlayerView on a Samsung TV', () => {
     // Converted audio stopped, its last frame still on screen above AVPlay.
     expect(stopAudioPlayback).toHaveBeenCalledWith({ keepPicture: true });
     expect(view.container.querySelector('video')).toBe(video);
-
-    act(() => prepared?.());
-    expect(avplay.seekTo).toHaveBeenCalledWith(851_500, expect.any(Function), expect.any(Function));
+    // AVPlay opens where the converted stream got to: seeked before it prepares.
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_500);
+    expect(avplay.prepareAsync.mock.invocationCallOrder[0]).toBeGreaterThan(
+      avplay.seekTo.mock.invocationCallOrder[0]
+    );
     expect(avplay.play).not.toHaveBeenCalled();
-    expect(view.container.querySelector('video')).toBe(video);
 
-    act(() => landed?.());
+    // Prepared there, it plays at once: no second seek.
+    act(() => prepared?.());
+    expect(avplay.seekTo).toHaveBeenCalledTimes(1);
     expect(avplay.play).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(view.container.querySelector('video')).toBeNull());
   });

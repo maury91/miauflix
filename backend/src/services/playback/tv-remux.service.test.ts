@@ -245,13 +245,17 @@ describe('playlistStartingAt', () => {
 });
 
 describe('OpenedPlaylists', () => {
-  it('cuts only the first playlist a playback opens, for six hours', () => {
+  it('cuts the playlist until the playback asks for a segment, and again six hours later', () => {
     let now = 0;
     const opened = new OpenedPlaylists(() => now);
-    expect(opened.open('key')).toBe(true);
-    expect(opened.open('key')).toBe(false);
-    expect(opened.open('other')).toBe(true);
+    expect(opened.cut('key')).toBe(true);
+    // AVPlay reads it a second time as it opens, however long the first read took.
+    now = 5_000;
+    expect(opened.cut('key')).toBe(true);
+    opened.segmentRequested('key');
+    expect(opened.cut('key')).toBe(false);
+    expect(opened.cut('other')).toBe(true);
     now = 6 * 60 * 60_000;
-    expect(opened.open('key')).toBe(true);
+    expect(opened.cut('key')).toBe(true);
   });
 });

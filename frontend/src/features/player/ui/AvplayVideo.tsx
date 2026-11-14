@@ -38,6 +38,8 @@ interface AvplayVideoProps extends PlayerMediaEvents {
   src: string;
   /** The file's length, for a stream AVPlay gives none (an HLS playlist still being written). */
   durationSeconds?: number;
+  /** Where to start, for a stream AVPlay can seek before preparing (a TV version). */
+  startSeconds?: number;
   autoPlay: boolean;
   /** Receives the media while mounted, like a `<video>` ref. */
   mediaRef: (media: PlayerMedia | null) => void;
@@ -98,6 +100,7 @@ export function AvplayVideo({
   avplay,
   src,
   durationSeconds,
+  startSeconds,
   autoPlay,
   mediaRef,
   'aria-label': label,
@@ -133,9 +136,9 @@ export function AvplayVideo({
     const plane = planeRef.current;
     if (!plane) return;
     media.autoplay = autoPlay;
-    media.open(src, plane, durationSeconds);
+    media.open(src, plane, durationSeconds, startSeconds);
     return () => media.close();
-    // The length only matters when a file opens: a later change must not reopen it.
+    // The length and start only matter when a file opens: a later change must not reopen it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [media, src, autoPlay]);
 

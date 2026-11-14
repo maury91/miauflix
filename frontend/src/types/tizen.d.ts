@@ -203,6 +203,12 @@ export interface AVPlay {
   ) => void;
   setListener: (listener: AVPlayListeners) => void;
   setStreamingProperty: (property: 'SET_MODE_4K', value: 'TRUE' | 'FALSE') => void;
+  /** How much AVPlay buffers before it plays (`FOR_PLAY`) and after it ran dry (`FOR_RESUME`). */
+  setBufferingParam?: (
+    option: 'PLAYER_BUFFER_FOR_PLAY' | 'PLAYER_BUFFER_FOR_RESUME',
+    unit: 'PLAYER_BUFFER_SIZE_IN_SECOND' | 'PLAYER_BUFFER_SIZE_IN_BYTE',
+    amount: number
+  ) => void;
   getTotalTrackInfo: () => TrackInfo[];
   setSelectTrack: (type: 'AUDIO' | 'TEXT', index: number) => void;
   suspend: () => void;
