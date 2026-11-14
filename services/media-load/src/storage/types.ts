@@ -31,6 +31,13 @@ export interface Storage {
   allocatedBytes: number;
   /** Admission charge while physical allocation has not been measured. */
   reservedBytes: number;
+  /** Room for a TV remux being written, charged on top of the rest; 0 when none is. */
+  remuxReservedBytes: number;
+  /**
+   * What the storage's TV remuxes hold on disk (its `remux` directory), as last measured: part of
+   * `allocatedBytes`, charged beside the download's reservation rather than inside it.
+   */
+  remuxBytes: number;
   totalPieces: number;
   pieceLength: number;
   lastInterestAt: Date | null;
@@ -132,3 +139,6 @@ export const withFile = (target: PlaybackTarget, filePath: string): PlaybackTarg
   ...target,
   filePath,
 });
+
+/** The directory, inside a storage's location, its TV remuxes are written to. */
+export const REMUX_DIRECTORY = 'remux';

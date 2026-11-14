@@ -116,6 +116,26 @@ const startMediaLoad = async () => {
       importState.imported = true;
       return { imported: importState.batches.flat().length };
     },
+    requestRemux: ({ target, plan, priority }, ctx) => {
+      known(target.sourceId, ctx.fail);
+      calls.push(`requestRemux:${target.sourceId}:${priority}:${plan.audio.length}`);
+      return {
+        sourceId: target.sourceId,
+        filePath: target.filePath,
+        state: 'queued' as const,
+        priority,
+        readySeconds: 0,
+        durationSeconds: plan.durationSeconds,
+        bytes: 0,
+        subtitles: [],
+      };
+    },
+    remuxStatus: () => null,
+    remuxChanged: () => () => undefined,
+    readRemux: ({ name }, ctx) =>
+      name === 'index.m3u8'
+        ? new Response(`remux range=${ctx.headers.get('range') ?? 'none'}`)
+        : ctx.fail('remux_not_found', 'The remux has no such file'),
     read: ({ target }, ctx) => {
       known(target.sourceId, ctx.fail);
       if (target.filePath === 'missing.mkv')
@@ -237,6 +257,23 @@ describe('MediaLoadClientService', () => {
     // Routes return it after CORS headers were set: Hono must be able to copy them on.
     expect(() => response.headers.set('access-control-allow-origin', '*')).not.toThrow();
     await expect(response.text()).resolves.toBe('range=bytes=10-');
+  });
+
+  it('requests remuxes for described sources and reads their files with the Range', async () => {
+    const { client, calls } = await setupTest();
+    const plan = { videoCodec: 'hevc', durationSeconds: 60, audio: [], subtitles: [] };
+    await expect(client.requestRemux(target(), plan, 'watching')).resolves.toMatchObject({
+      state: 'queued',
+      priority: 'watching',
+    });
+    expect(calls).toContain('requestRemux:5:watching:0');
+    await expect(client.getRemuxStatus(5, 'movie.mkv')).resolves.toBeNull();
+    const playlist = await client.readRemux(target(), 'index.m3u8', 'bytes=0-');
+    expect(() => playlist.headers.set('access-control-allow-origin', '*')).not.toThrow();
+    await expect(playlist.text()).resolves.toBe('remux range=bytes=0-');
+    await expect(client.readRemux(target(), 'seg00000.ts')).rejects.toMatchObject({
+      code: 'remux_not_found',
+    });
   });
 
   it('mirrors the sources with an open stream', async () => {

@@ -1,5 +1,6 @@
 import type { MigrationInterface } from 'typeorm';
 
+import { AddMediaVariant1794649236030 } from './AddMediaVariant1794649236030';
 import { Baseline1794506434316 } from './Baseline1794506434316';
 
 export type SchemaMigration = new () => MigrationInterface;
@@ -9,4 +10,7 @@ export type SchemaMigration = new () => MigrationInterface;
  * `bun run db:migration <Name>` (from backend/); it is added to the end of this list.
  * Append only: a released migration is never edited, reordered or removed.
  */
-export const schemaMigrations: SchemaMigration[] = [Baseline1794506434316];
+export const schemaMigrations: SchemaMigration[] = [
+  Baseline1794506434316,
+  AddMediaVariant1794649236030,
+];

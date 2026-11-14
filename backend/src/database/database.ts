@@ -19,6 +19,7 @@ import { AuditLogRepository } from '@repositories/audit-log.repository';
 import { ContentSourceRepository } from '@repositories/content-source.repository';
 import { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import { MediaProbeRepository } from '@repositories/media-probe.repository';
+import { MediaVariantRepository } from '@repositories/media-variant.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
@@ -125,6 +126,7 @@ export class Database {
   private progressRepository: ProgressRepository;
   private playbackGrantRepository: PlaybackGrantRepository;
   private mediaProbeRepository: MediaProbeRepository;
+  private mediaVariantRepository: MediaVariantRepository;
 
   constructor(configurationService: ConfigurationService) {
     const encryptionService = new EncryptionService(
@@ -174,6 +176,7 @@ export class Database {
     this.progressRepository = new ProgressRepository(this);
     this.playbackGrantRepository = new PlaybackGrantRepository(this);
     this.mediaProbeRepository = new MediaProbeRepository(this);
+    this.mediaVariantRepository = new MediaVariantRepository(this);
   }
 
   public async close(): Promise<void> {
@@ -275,5 +278,9 @@ export class Database {
 
   public getMediaProbeRepository() {
     return this.mediaProbeRepository;
+  }
+
+  public getMediaVariantRepository() {
+    return this.mediaVariantRepository;
   }
 }

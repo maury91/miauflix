@@ -118,8 +118,11 @@ export function usePlaybackPrompts({
     )
       return;
     nextDownloadStarted.current = nextEpisodeKey;
-    const streamUrl = backendUrl(prefetchedNextRef.current.streamUrl.replace(/\/audio$/, ''));
-    void fetch(`${streamUrl}/prefetch`, {
+    const streamUrl = backendUrl(
+      prefetchedNextRef.current.streamUrl.replace(/\/(?:audio|remux\/index\.m3u8)$/, '')
+    );
+    // A TV has the episode remuxed once downloaded when its audio would need converting.
+    void fetch(`${streamUrl}/prefetch${avplay ? '?remux=true' : ''}`, {
       method: 'POST',
       cache: 'no-store',
     })
@@ -131,7 +134,7 @@ export function usePlaybackPrompts({
         // Prefetch is best-effort. Retrying on every media timeupdate would
         // flood the route when capacity is unavailable; playback itself retries.
       });
-  }, [nextEpisodeKey]);
+  }, [avplay, nextEpisodeKey]);
 
   const playNextEpisode = useCallback(() => {
     if (!nextEpisodeKey || nextTransitioned.current === nextEpisodeKey) return;

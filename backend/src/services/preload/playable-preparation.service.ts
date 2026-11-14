@@ -11,8 +11,8 @@ import type { MediaLoadClientService } from '@services/media-load/media-load-cli
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import {
-  filterHevcSources,
   filterSources,
+  filterVideoCodecSources,
   fitsBitrate,
   type PlayedSize,
   preferWithinBitrate,
@@ -36,6 +36,8 @@ export interface PlaybackPreferences {
   audioLanguages?: string[];
   quality: Quality | 'auto';
   allowHevc: boolean;
+  /** The video codecs the client decodes, in ffprobe's names (a TV reports them). */
+  supportedVideoCodecs?: string[];
   /** The highest average bitrate the client's connection sustains; leaner sources win. */
   maxBitrateKbps?: number;
 }
@@ -174,7 +176,7 @@ export class PlayablePreparationService {
       // Nothing verified yet: check the candidates in the background, well before Watch.
       this.sourceService.requestMovieVerification(media.local.id, 10);
     }
-    const candidates = filterHevcSources(sources, options.preferences.allowHevc);
+    const candidates = filterVideoCodecSources(sources, options.preferences);
     // An unreachable engine has no local copy to offer: fall back to the swarm.
     const stored = this.storage
       ? await this.storage.getStorageStates(candidates.map(source => source.id)).catch(() => [])
@@ -309,7 +311,7 @@ export class PlayablePreparationService {
       match =>
         match.videoFilePath &&
         !options.avoidSourceIds?.includes(match.source.id) &&
-        filterHevcSources([match.source], options.preferences.allowHevc).length
+        filterVideoCodecSources([match.source], options.preferences).length
     );
     if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
       return exhausted(playable);
@@ -382,7 +384,7 @@ export class PlayablePreparationService {
     options: PreparationOptions
   ): void {
     if (!options.onSourceAttempt) return;
-    const compatible = filterHevcSources([...sources], options.preferences.allowHevc);
+    const compatible = filterVideoCodecSources([...sources], options.preferences);
     const ruledOut = compatible.filter(
       candidate =>
         candidate.id !== source.id &&
@@ -553,8 +555,8 @@ export class PlayablePreparationService {
     bitrate?: BitrateBudget
   ): ContentSource[] {
     const compatible = requireFile
-      ? filterSources([...sources], preferences.allowHevc)
-      : filterHevcSources([...sources], preferences.allowHevc).sort(byPlaybackRank());
+      ? filterSources([...sources], preferences)
+      : filterVideoCodecSources([...sources], preferences).sort(byPlaybackRank());
     // Known fakes are never picked. A source that failed during playback is skipped while any
     // other candidate remains.
     const real = compatible.filter(isUsableSource);

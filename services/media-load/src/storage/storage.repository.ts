@@ -13,6 +13,8 @@ interface StorageRow {
   verifiedBytes: number;
   allocatedBytes: number;
   reservedBytes: number;
+  remuxReservedBytes: number;
+  remuxBytes: number;
   totalPieces: number;
   pieceLength: number;
   lastInterestAt: number | null;
@@ -38,6 +40,8 @@ const COLUMNS = [
   'verifiedBytes',
   'allocatedBytes',
   'reservedBytes',
+  'remuxReservedBytes',
+  'remuxBytes',
   'totalPieces',
   'pieceLength',
   'lastInterestAt',
@@ -239,24 +243,31 @@ export class StorageRepository {
     await this.update(id, accounting);
   }
 
-  async reconcileAllocation(id: number, allocatedBytes: number): Promise<void> {
+  /**
+   * Record a measurement: everything on disk, and the remuxes' share of it. The download's
+   * reservation goes once its own files (the rest) reach it; not while a remux is written, as
+   * its output cannot be told apart from the source's yet.
+   */
+  async reconcileAllocation(id: number, allocatedBytes: number, remuxBytes: number): Promise<void> {
     this.db
       .query(
-        `UPDATE storage SET allocatedBytes = ?1,
-           reservedBytes = CASE WHEN ?1 >= reservedBytes THEN 0 ELSE reservedBytes END,
-           updatedAt = ?2
-         WHERE id = ?3`
+        `UPDATE storage SET allocatedBytes = ?1, remuxBytes = ?2,
+           reservedBytes = CASE
+             WHEN remuxReservedBytes = 0 AND ?1 - ?2 >= reservedBytes THEN 0 ELSE reservedBytes END,
+           updatedAt = ?3
+         WHERE id = ?4`
       )
-      .run(allocatedBytes, Date.now(), id);
+      .run(allocatedBytes, remuxBytes, Date.now(), id);
   }
 
   /** Charge only what is on disk: nothing will grow this storage until it is claimed again. */
-  async releaseReservation(id: number, allocatedBytes: number): Promise<void> {
+  async releaseReservation(id: number, allocatedBytes: number, remuxBytes: number): Promise<void> {
     this.db
       .query(
-        'UPDATE storage SET allocatedBytes = ?1, reservedBytes = 0, updatedAt = ?2 WHERE id = ?3'
+        `UPDATE storage SET allocatedBytes = ?1, remuxBytes = ?2, reservedBytes = 0, updatedAt = ?3
+         WHERE id = ?4`
       )
-      .run(allocatedBytes, Date.now(), id);
+      .run(allocatedBytes, remuxBytes, Date.now(), id);
   }
 
   async changeActiveStreams(id: number, delta: -1 | 1): Promise<boolean> {
@@ -278,6 +289,14 @@ export class StorageRepository {
     this.db
       .query('UPDATE storage SET activeStreams = 0, updatedAt = ? WHERE activeStreams > 0')
       .run(Date.now());
+  }
+
+  /** Storage holding room for a remux being written. */
+  async findWithRemuxReservations(): Promise<Storage[]> {
+    return this.db
+      .query<StorageRow, []>('SELECT * FROM storage WHERE remuxReservedBytes > 0')
+      .all()
+      .map(row => this.toStorage(row));
   }
 
   /** Storage not accessed for `daysSinceLastAccess` days (or never), oldest first. */
@@ -309,9 +328,11 @@ export class StorageRepository {
     return this.sum('size');
   }
 
-  /** Application charge: physical allocation, or the reservation until measured. */
+  /** Application charge of every storage: see `chargeOf` in StorageService. */
   async getChargedStorageUsage(): Promise<bigint> {
-    return this.sum('MAX(allocatedBytes, reservedBytes)');
+    return this.sum(
+      'MAX(allocatedBytes - remuxBytes, reservedBytes) + remuxBytes + remuxReservedBytes'
+    );
   }
 
   async getTotalReservedStorageUsage(): Promise<bigint> {

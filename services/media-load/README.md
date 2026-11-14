@@ -1,6 +1,6 @@
 # Media load service
 
-Bun service implementing the `media-load` 1.1 contract on port 3004. It is the torrent engine: it runs WebTorrent, owns the encrypted storage (sources, files, claims, budgets and reclamation, in its own SQLite database), serves verified byte ranges to the backend (`read`), and answers tracker scrapes. Playback sessions, FFmpeg and subtitles stay in the backend. See [Service contracts](../../docs/architecture/service-contract-v2.md) for the protocol and [Encrypted chunk storage](docs/chunk-stores.md) for the on-disk format.
+Bun service implementing the `media-load` 1.2 contract on port 3004. It is the torrent engine: it runs WebTorrent, owns the encrypted storage (sources, files, claims, budgets and reclamation, in its own SQLite database), serves verified byte ranges to the backend (`read`), and answers tracker scrapes. It also builds TV remuxes of stored files with FFmpeg (`requestRemux`, `readRemux`: HLS with audio a Samsung TV decodes, stored encrypted next to the source; see the [TV remux plan](../../docs/plans/tv-remux-plan.md)). Playback sessions, live audio conversion and subtitles stay in the backend. See [Service contracts](../../docs/architecture/service-contract-v2.md) for the protocol and [Encrypted chunk storage](docs/chunk-stores.md) for the on-disk format.
 
 On first start the service waits for the backend to hand over the storage that older backends recorded (`importStorage`, then `completeImport`); until then it reports `configuring` and refuses engine calls.
 

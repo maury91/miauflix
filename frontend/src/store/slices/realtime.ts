@@ -13,11 +13,15 @@ import type {
 } from '@miauflix/backend';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
+type PlaybackDeliveredUpdate = Extract<RealtimePlaybackDelivery['update'], { type: 'delivery' }>;
+
 interface RealtimeState {
   ready: boolean;
   preparationByMediaId: Record<number, PreloadPreparationSnapshot>;
   /** Latest background probe result per playback session. */
   playbackDeliveries: Record<string, RealtimePlaybackDelivery['update']>;
+  /** Latest delivery per playback session: a later `recreate` does not replace it. */
+  playbackDelivered: Record<string, PlaybackDeliveredUpdate>;
   /** Downloaded stretches of each playback's file (thousandths), for the seek bar. */
   playbackPieces: Record<string, RealtimePlaybackPieces['ranges']>;
   /** Pushed source availability per playable key, newer than any details response. */
@@ -30,6 +34,7 @@ const initialState: RealtimeState = {
   ready: false,
   preparationByMediaId: {},
   playbackDeliveries: {},
+  playbackDelivered: {},
   playbackPieces: {},
   availabilityByPlayable: {},
   sourceAttempts: {},
@@ -128,7 +133,9 @@ export const realtimeSlice = createSlice({
       delete state.sourceAttempts[realtimePlayableKey(action.payload)];
     },
     playbackDeliveryReceived(state, action: PayloadAction<RealtimePlaybackDelivery>) {
-      state.playbackDeliveries[action.payload.playbackId] = action.payload.update;
+      const { playbackId, update } = action.payload;
+      state.playbackDeliveries[playbackId] = update;
+      if (update.type === 'delivery') state.playbackDelivered[playbackId] = update;
     },
     playbackPiecesReceived(state, action: PayloadAction<RealtimePlaybackPieces>) {
       state.playbackPieces[action.payload.playbackId] = action.payload.ranges;
@@ -150,6 +157,10 @@ export const selectPreparationByMediaId =
 export const selectPlaybackDelivery =
   (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
     playbackId === undefined ? null : (state.realtime.playbackDeliveries[playbackId] ?? null);
+
+export const selectPlaybackDelivered =
+  (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
+    playbackId === undefined ? null : (state.realtime.playbackDelivered[playbackId] ?? null);
 
 export const selectPlaybackPieces =
   (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>

@@ -169,6 +169,42 @@ describe('PlayablePreparationService', () => {
     expect(result.source).toBe(fresh);
   });
 
+  it('skips a source whose video the TV reported it does not decode', async () => {
+    const av1 = {
+      id: 1,
+      quality: Quality.FHD,
+      streamingScore: 100,
+      file: Buffer.from('torrent'),
+      videoCodec: VideoCodec.AV1,
+    };
+    const h264 = {
+      id: 2,
+      quality: Quality.FHD,
+      streamingScore: 1,
+      file: Buffer.from('torrent'),
+      videoCodec: VideoCodec.X264,
+    };
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
+        requestMovieVerification: jest.fn(),
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([av1, h264]),
+      } as never,
+      storage: storageOf(() => null) as never,
+    });
+    const result = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'sources',
+        preferences: { quality: 'auto', allowHevc: true, supportedVideoCodecs: ['h264', 'hevc'] },
+        workClass: 'interactive',
+      }
+    );
+    expect(result.source).toBe(h264);
+  });
+
   it('discovers source metadata for browse without starting torrent work', async () => {
     const source = {
       id: 11,

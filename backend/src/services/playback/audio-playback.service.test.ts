@@ -294,6 +294,51 @@ describe('audio playback delivery', () => {
     expect(args).toContain('delay_moov+frag_keyframe+default_base_moof');
     expect(args).not.toContain('libx264');
   });
+
+  describe('codecs a client reports', () => {
+    const tv = {
+      allowHevc: true,
+      nativeHevcContainers: ['mp4', 'matroska'] as Array<'matroska' | 'mp4'>,
+      supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'flac'],
+      nativeAudioTracks: true,
+      supportedMseVideoCodecs: ['h264', 'hevc'] as Array<'h264' | 'hevc'>,
+    };
+
+    it('plays TrueHD as it is for a client that decodes it', () => {
+      const probe = {
+        format: { duration: '3558.7', format_name: 'matroska,webm' },
+        streams: [
+          {
+            codec_type: 'video',
+            codec_name: 'hevc',
+            extradata: '00000000: 0102 2000 0000 9000 0000 0000 78f0 00fc',
+          },
+          { codec_type: 'audio', codec_name: 'truehd', channels: 6 },
+        ],
+      };
+      expect(deliveryFromProbe(probe, tv).mode).toBe('audio-transcode');
+      const reported = {
+        ...tv,
+        supportedAudioCodecs: [...tv.supportedAudioCodecs, 'truehd'],
+        supportedVideoCodecs: ['h264', 'hevc'],
+      };
+      expect(deliveryFromProbe(probe, reported).mode).toBe('direct');
+    });
+
+    it('does not play a video codec the client leaves out', () => {
+      const probe = {
+        format: { duration: '120', format_name: 'matroska,webm' },
+        streams: [
+          { codec_type: 'video', codec_name: 'av1' },
+          { codec_type: 'audio', codec_name: 'aac' },
+        ],
+      };
+      expect(deliveryFromProbe(probe, tv).mode).toBe('direct');
+      expect(() => deliveryFromProbe(probe, { ...tv, supportedVideoCodecs: ['h264'] })).toThrow(
+        'cannot decode av1 video'
+      );
+    });
+  });
 });
 
 describe('credits chapters', () => {
