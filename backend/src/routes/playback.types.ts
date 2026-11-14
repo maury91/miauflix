@@ -24,7 +24,10 @@ export const playbackPreferencesSchema = z
     audioLanguages: z.array(z.string().min(1).max(35)).max(20).optional(),
     /** Audio codecs the client decodes natively, in ffprobe names. */
     supportedAudioCodecs: z.array(codecNameSchema).max(64).optional(),
-    /** Video codecs the client decodes natively, in ffprobe names; unset assumes H.264 and H.265. */
+    /**
+     * Video codecs the client decodes natively, in ffprobe names; unset allows any (H.265 still
+     * follows `allowHevc`).
+     */
     supportedVideoCodecs: z.array(codecNameSchema).max(64).optional(),
     supportedMseAudioCodecs: z
       .array(z.enum(['aac', 'mp3', 'opus', 'vorbis', 'flac', 'ac3', 'eac3', 'dts']))

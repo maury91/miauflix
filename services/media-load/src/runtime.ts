@@ -57,6 +57,8 @@ export class MediaLoadRuntime {
   private securityKey: string | null = null;
   private settings: EngineSettings | null = null;
   private engine: Engine | null = null;
+  /** The engine start in progress, which overlapping `activate` calls wait for. */
+  private starting: Promise<void> | null = null;
   /** Whether the backend's storage import finished (read when the engine starts). */
   private imported = false;
   private importCompletion: Promise<{ imported: number }> | null = null;
@@ -118,20 +120,34 @@ export class MediaLoadRuntime {
     const previous = this.settings;
     this.settings = next;
     if (!this.engine) {
-      try {
-        await this.start(next.DISABLE_DISCOVERY ? undefined : await resolveDhtBootstrap());
-      } catch (error) {
-        this.settings = previous;
-        throw error;
+      // One start at a time: a call made while it runs waits for it, then applies its settings
+      // in place. A failed start puts back the settings from before it.
+      const starting = this.starting;
+      if (starting) await starting;
+      else {
+        const start = (async () => {
+          try {
+            await this.start(next.DISABLE_DISCOVERY ? undefined : await resolveDhtBootstrap());
+          } catch (error) {
+            this.settings = previous;
+            throw error;
+          }
+        })();
+        this.starting = start;
+        try {
+          await start;
+        } finally {
+          if (this.starting === start) this.starting = null;
+        }
+        return { restartKeys: [] };
       }
-      return { restartKeys: [] };
     }
     const restartKeys = previous
       ? RESTART_KEYS.filter(key => String(previous[key]) !== String(next[key]))
       : [];
     if (restartKeys.length)
       logger.warn('MediaLoad', `Restart the service to apply: ${restartKeys.join(', ')}`);
-    const { downloads, storage } = this.engine;
+    const { downloads, storage } = this.running;
     downloads.client.throttleDownload?.(Number(next.CONTENT_DOWNLOAD_LIMIT));
     downloads.client.throttleUpload?.(Number(next.CONTENT_UPLOAD_LIMIT));
     if (previous?.CONTENT_SEED_DURATION_SECONDS !== next.CONTENT_SEED_DURATION_SECONDS) {

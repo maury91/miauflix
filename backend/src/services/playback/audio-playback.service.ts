@@ -49,7 +49,10 @@ export interface AudioPlaybackPreferences {
   audioLanguages?: string[];
   supportedAudioCodecs?: string[];
   supportedMseAudioCodecs?: string[];
-  /** Video codecs (ffprobe names) the client decodes natively; unset assumes H.264 and H.265. */
+  /**
+   * Video codecs (ffprobe names) the client decodes natively; unset allows any (H.265 still
+   * follows the HEVC preferences).
+   */
   supportedVideoCodecs?: string[];
   nativeAudioTracks?: boolean;
   /** Look for another source before converting audio (see PlaybackSessionService). */
