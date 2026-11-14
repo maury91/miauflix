@@ -186,6 +186,20 @@ describe('AvplayMedia', () => {
     expect(avplay.seekTo).toHaveBeenCalledTimes(2);
   });
 
+  it('seeks back to where it opened after moving elsewhere before preparing', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
+    media.currentTime = 100;
+    media.currentTime = 851.2;
+    expect(media.currentTime).toBe(851.2);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      851_200,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
   it('seeks to the start once prepared when AVPlay cannot seek before', () => {
     const { avplay, media, element, prepare } = setupTest();
     avplay.getDuration.mockReturnValue(0);
@@ -357,6 +371,19 @@ describe('AvplayMedia', () => {
     await media.play();
     expect(avplay.setSelectTrack).toHaveBeenCalledTimes(2);
     expect(avplay.setSelectTrack).toHaveBeenLastCalledWith('AUDIO', 2);
+  });
+
+  it('drops audio chosen while paused when it is turned off before playback starts', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/stream', element);
+    prepare();
+    avplay.setSelectTrack.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.audioTracks[1].enabled = true;
+    media.audioTracks[1].enabled = false;
+    await media.play();
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(1);
   });
 
   it('lets an audio track be asked for again when switching to it on play fails', async () => {

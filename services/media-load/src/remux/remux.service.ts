@@ -55,7 +55,8 @@ export interface RemuxServiceDeps {
     reserveAdditional(
       sourceId: number,
       bytes: number,
-      retained: boolean
+      retained: boolean,
+      output?: string
     ): Promise<() => Promise<void>>;
     markAsAccessed(sourceId: number): Promise<void>;
     on(event: 'delete', listener: (storage: Storage) => void): unknown;
@@ -179,7 +180,14 @@ export class RemuxService {
       if (job.record.id === record.id) {
         job.record.priority = 'watching';
         if (job.child?.pid) this.renice(job.child.pid, WATCHING_NICE);
-      } else if (PRIORITY_RANK[job.record.priority] > PRIORITY_RANK.watching) {
+      } else if (
+        PRIORITY_RANK[job.record.priority] > PRIORITY_RANK.watching &&
+        record.state === 'queued' &&
+        // A remux that cannot run yet would leave the stopped one waiting for nothing.
+        (await this.fileComplete(record)) &&
+        this.job === job &&
+        !job.stopped
+      ) {
         logger.info('Remux', `Pausing remux ${job.record.id} for one a viewer is waiting for`);
         job.stopped = 'requeue';
         job.child?.kill('SIGKILL');
@@ -321,7 +329,7 @@ export class RemuxService {
     this.retryTimer = null;
     const queued = this.deps.repository.queued();
     for (const record of queued) {
-      if (!(await this.deps.isFileComplete(record.sourceId, record.filePath))) continue;
+      if (!(await this.fileComplete(record))) continue;
       // Shut down while the file was checked: nothing is left to stop a remux started now.
       if (this.closed) return false;
       await this.run(record);
@@ -331,6 +339,16 @@ export class RemuxService {
     if (queued.length && !this.closed)
       this.retryTimer = setTimeout(() => this.schedule(), this.deps.retryMs ?? RETRY_MS);
     return false;
+  }
+
+  /** Whether a remux's file is downloaded; a failed check counts as not yet, and is retried. */
+  private async fileComplete(record: RemuxRecord): Promise<boolean> {
+    try {
+      return await this.deps.isFileComplete(record.sourceId, record.filePath);
+    } catch (error) {
+      logger.warn('Remux', `Could not check whether remux ${record.id} can run`, error);
+      return false;
+    }
   }
 
   private loopback(): ReturnType<typeof Bun.serve> {
@@ -361,6 +379,8 @@ export class RemuxService {
     if (request.method !== 'PUT' && request.method !== 'POST')
       return new Response(null, { status: 405 });
     const body = request.arrayBuffer();
+    // Read later, after the uploads ahead of it: a failed read must not go unhandled meanwhile.
+    body.catch(() => undefined);
     let write: Promise<void>;
     if (job.sidecars.has(name)) {
       // A sidecar upload lasts until FFmpeg ends: queued, it would hold back every segment.
@@ -463,7 +483,8 @@ export class RemuxService {
       release = await this.deps.storage.reserveAdditional(
         record.sourceId,
         await this.estimatedBytes(record),
-        record.priority === 'watching'
+        record.priority === 'watching',
+        job.dir
       );
       await mkdir(job.dir, { recursive: true });
       // Stopped while its directory was prepared (a viewer's remux, a removal, a shutdown): the

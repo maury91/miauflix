@@ -114,16 +114,6 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
     if (sessionSubtitleKey.current !== null) sessionSubtitleKey.current = subtitleKey;
   }, [subtitleKey]);
 
-  /** Playback cannot go on: show the error and drop the session. */
-  const failPlayback = useCallback(
-    (message: string) => {
-      setStatus('error');
-      setError(message);
-      resetSessionRequest();
-    },
-    [resetSessionRequest]
-  );
-
   /**
    * The session shown while its replacement is requested, so a switch keeps playing (and keeps
    * its picture) instead of tearing the player down; dropped once the new one arrives.
@@ -133,26 +123,58 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
    * The playback whose picture stays on screen until the player releases it (`releasePicture`).
    */
   const [heldPlaybackId, setHeldPlaybackId] = useState<string | null>(null);
+  /** The title the held session plays: another title shows none of it. */
+  const [heldFor, setHeldFor] = useState<string | null>(null);
+  const playableKey = JSON.stringify(playable);
+  const holdsThisTitle = heldFor === playableKey;
   const sessionRef = useRef(session);
   sessionRef.current = session;
+  const heldSessionRef = useRef(heldSession);
+  heldSessionRef.current = holdsThisTitle ? heldSession : null;
 
   /**
    * Ask for a new session, for example when the backend says the current one must be recreated.
    * With `keepPicture`, the current session plays on until the new one arrives, and its picture
    * stays until `releasePicture`.
    */
-  const restartSession = useCallback((keepPicture = false) => {
-    if (keepPicture && sessionRef.current) {
-      setHeldSession(sessionRef.current);
-      setHeldPlaybackId(sessionRef.current.playbackId);
-    }
-    setAttempt(value => value + 1);
-  }, []);
+  const restartSession = useCallback(
+    (keepPicture = false) => {
+      if (keepPicture && sessionRef.current) {
+        setHeldSession(sessionRef.current);
+        setHeldPlaybackId(sessionRef.current.playbackId);
+        setHeldFor(playableKey);
+      }
+      setAttempt(value => value + 1);
+    },
+    [playableKey]
+  );
 
   const releasePicture = useCallback(() => {
     setHeldPlaybackId(null);
     setHeldSession(null);
+    setHeldFor(null);
   }, []);
+
+  useEffect(() => {
+    if (heldFor !== null && !holdsThisTitle) releasePicture();
+  }, [heldFor, holdsThisTitle, releasePicture]);
+
+  /**
+   * Playback cannot go on: show the error and drop the session. A failure of a session held while
+   * its replacement is requested only ends the hold: the replacement plays on its own.
+   */
+  const failPlayback = useCallback(
+    (message: string) => {
+      if (heldSessionRef.current && !sessionRef.current) {
+        releasePicture();
+        return;
+      }
+      setStatus('error');
+      setError(message);
+      resetSessionRequest();
+    },
+    [releasePicture, resetSessionRequest]
+  );
 
   useEffect(() => {
     if (createdSession) setHeldSession(null);
@@ -181,6 +203,11 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
 
   /** The media element rejected the stream. */
   const handleMediaError = useCallback(() => {
+    // The held session's stream failed: its replacement is still coming.
+    if (heldSessionRef.current && !sessionRef.current) {
+      releasePicture();
+      return;
+    }
     // The browser may reject an unprobed file whose audio needs transcoding;
     // the pending delivery decides whether that is a real failure.
     if (session?.deliveryPending) {
@@ -188,7 +215,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
       return;
     }
     failSource();
-  }, [failSource, session?.deliveryPending]);
+  }, [failSource, releasePicture, session?.deliveryPending]);
 
   /** The probe decided how the file is delivered: settle a direct-stream failure seen meanwhile. */
   const settlePendingFailure = useCallback(
@@ -291,13 +318,16 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
   }, [attempt, avplay, createSession, playable, resetSessionRequest, dispatch]);
 
   return {
-    session: session ?? heldSession,
+    session: session ?? (holdsThisTitle ? heldSession : null),
     /** The previous session's picture is held on screen while the new one starts. */
-    pictureHeld: heldPlaybackId !== null,
+    pictureHeld: holdsThisTitle && heldPlaybackId !== null,
     releasePicture,
     /** The session that replaces the one whose picture is held has arrived. */
     replacementReady:
-      heldPlaybackId !== null && !!createdSession && createdSession.playbackId !== heldPlaybackId,
+      holdsThisTitle &&
+      heldPlaybackId !== null &&
+      !!createdSession &&
+      createdSession.playbackId !== heldPlaybackId,
     deliveryUpdate,
     downloadedRanges,
     /** The realtime source attempt, else the one the session was created with. */

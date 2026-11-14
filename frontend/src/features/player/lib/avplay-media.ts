@@ -208,6 +208,8 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     // Where it opened: as it prepares, a resume to the same place needs no seek.
     if (this.openedAt(seconds)) return;
     this.seekRequests += 1;
+    // Moved elsewhere: a later seek back to where it opened is a seek like any other.
+    this.startedAt = null;
     this.position = Math.max(0, seconds);
     if (!this.prepared) {
       this.pendingSeek = this.position;
@@ -405,7 +407,8 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     this.avplay.play();
     const audioTrack = this.pendingAudioTrack;
     this.pendingAudioTrack = null;
-    if (audioTrack !== null) {
+    // Turned off again while paused: nothing is left to select.
+    if (audioTrack !== null && audioTrack.track.enabled) {
       try {
         this.avplay.setSelectTrack('AUDIO', audioTrack.index);
       } catch {

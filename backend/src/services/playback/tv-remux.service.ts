@@ -134,11 +134,15 @@ export function remuxPlan(probe: ProbeResult): RemuxPlan | null {
   return { videoCodec: video.codec_name!, durationSeconds, audio: audioTracks, subtitles };
 }
 
-/** The delivery of a file played through its remux: its audio tracks are the remux's own. */
+/**
+ * The delivery of a file played through its remux: its audio tracks are the remux's own. The
+ * default track is one the client decodes (the file's default when it does).
+ */
 export function remuxDelivery(
   delivery: PlaybackDelivery,
   plan: RemuxPlan,
-  probe: ProbeResult
+  probe: ProbeResult,
+  supportedAudioCodecs?: string[]
 ): PlaybackDelivery {
   const sourceAudio = (probe.streams ?? []).filter(stream => stream.codec_type === 'audio');
   const audioTracks: PlaybackAudioTrack[] = plan.audio.map((track, index) => ({
@@ -150,10 +154,17 @@ export function remuxDelivery(
     isDefault: track.isDefault,
     canPlayDirect: true,
   }));
-  const defaultAudioTrackIndex = Math.max(
-    0,
-    audioTracks.findIndex(track => track.isDefault)
-  );
+  const plays = (track: PlaybackAudioTrack) =>
+    !supportedAudioCodecs || (!!track.codec && supportedAudioCodecs.includes(track.codec));
+  for (const track of audioTracks) track.canPlayDirect = plays(track);
+  const playable = audioTracks.filter(plays);
+  const defaultAudioTrackIndex =
+    (
+      playable.find(track => track.isDefault) ??
+      playable[0] ??
+      audioTracks.find(track => track.isDefault) ??
+      audioTracks[0]
+    )?.index ?? 0;
   return {
     ...delivery,
     mode: 'remux',
@@ -272,13 +283,15 @@ export class TvRemuxService {
     const probe = await this.audio.knownProbe(target).catch(() => null);
     const plan = probe && remuxPlan(probe);
     if (!probe || !plan) return null;
-    const status = await this.mediaLoad
-      .getRemuxStatus(target.source.id, target.filePath)
-      .catch(() => null);
-    if (status)
-      await this.inOrder(target.source.id, target.filePath, () =>
-        this.record(target.source.id, target.filePath, status, remuxCodecs(plan, probe))
-      );
+    // Looked up in turn with the status events, so an older answer is not recorded after them.
+    const status = await this.inOrder(target.source.id, target.filePath, async () => {
+      const found = await this.mediaLoad
+        .getRemuxStatus(target.source.id, target.filePath)
+        .catch(() => null);
+      if (found)
+        await this.record(target.source.id, target.filePath, found, remuxCodecs(plan, probe));
+      return found;
+    });
     return status && status.state !== 'failed' ? { status, plan, probe } : null;
   }
 
@@ -293,21 +306,21 @@ export class TvRemuxService {
    */
   async request(target: PlaybackTarget, priority: RemuxPriority): Promise<RemuxRequest | null> {
     const probe = await this.audio.knownProbe(target).catch(() => null);
-    return probe ? this.requestFor(target, probe, priority) : null;
+    const plan = probe && remuxPlan(probe);
+    return probe && plan ? this.requestFor(target, probe, plan, priority) : null;
   }
 
   /**
    * Run a file's recordings one after another, so an older status (a lookup of the probe still in
    * flight) cannot overwrite a newer one, such as its failure.
    */
-  private inOrder(
-    sourceId: number,
-    filePath: string,
-    recording: () => Promise<void>
-  ): Promise<void> {
+  private inOrder<T>(sourceId: number, filePath: string, recording: () => Promise<T>): Promise<T> {
     const key = `${sourceId}:${filePath}`;
     const run = (this.recordings.get(key) ?? Promise.resolve()).then(recording);
-    const settled = run.catch(() => undefined);
+    const settled = run.then(
+      () => undefined,
+      () => undefined
+    );
     this.recordings.set(key, settled);
     void settled.then(() => {
       if (this.recordings.get(key) === settled) this.recordings.delete(key);
@@ -362,16 +375,17 @@ export class TvRemuxService {
   private async requestFor(
     target: PlaybackTarget,
     probe: ProbeResult,
+    plan: RemuxPlan,
     priority: RemuxPriority
   ): Promise<RemuxRequest | null> {
-    const plan = remuxPlan(probe);
-    if (!plan) return null;
     try {
-      const status = await this.mediaLoad.requestRemux(target, plan, priority);
-      await this.inOrder(target.source.id, target.filePath, () =>
-        this.record(target.source.id, target.filePath, status, remuxCodecs(plan, probe))
-      );
-      return { status, plan, probe };
+      // Asked in turn with the status events, as `existing` looks it up.
+      const status = await this.inOrder(target.source.id, target.filePath, async () => {
+        const requested = await this.mediaLoad.requestRemux(target, plan, priority);
+        await this.record(target.source.id, target.filePath, requested, remuxCodecs(plan, probe));
+        return requested;
+      });
+      return status.state === 'failed' ? null : { status, plan, probe };
     } catch (error) {
       logger.debug('TvRemuxService', `No remux for source ${target.source.id}`, error);
       return null;
@@ -388,8 +402,10 @@ export class TvRemuxService {
     let polls = 0;
     const check = async (): Promise<boolean> => {
       if (await this.mediaLoad.isFileComplete(target.source.id, target.filePath)) {
-        await this.requestFor(target, await this.audio.probeFile(target), 'next');
-        return true;
+        const probe = await this.audio.probeFile(target);
+        const plan = remuxPlan(probe);
+        // Needs no remux, or asked for: done. A request that failed is tried again later.
+        if (!plan || (await this.requestFor(target, probe, plan, 'next'))) return true;
       }
       return ++polls >= DOWNLOAD_POLL_LIMIT;
     };

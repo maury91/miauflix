@@ -121,6 +121,13 @@ describe('remuxDelivery', () => {
       [2, 'ac3', 6],
     ]);
   });
+
+  it('defaults to a track the client decodes', () => {
+    const base = { mode: 'audio-transcode', durationSeconds: 3539.5 } as PlaybackDelivery;
+    const delivery = remuxDelivery(base, remuxPlan(mobland)!, mobland, ['ac3']);
+    expect(delivery).toMatchObject({ audioCodec: 'ac3', defaultAudioTrackIndex: 2 });
+    expect(delivery.audioTracks?.map(track => track.canPlayDirect)).toEqual([false, false, true]);
+  });
 });
 
 describe('remuxPlayable', () => {
@@ -198,6 +205,38 @@ describe('TvRemuxService', () => {
       expect(mediaLoad.requestRemux).toHaveBeenCalledWith(target, expect.anything(), 'next');
       await jest.advanceTimersByTimeAsync(600_000);
       expect(mediaLoad.isFileComplete).toHaveBeenCalledTimes(3);
+      service.close();
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('asks again later for a prefetched episode whose remux request failed', async () => {
+    jest.useFakeTimers();
+    try {
+      const { service, mediaLoad } = setupTest();
+      mediaLoad.requestRemux.mockRejectedValueOnce(new Error('media-load restarting'));
+      service.requestWhenDownloaded(target);
+      await jest.advanceTimersByTimeAsync(0);
+      expect(mediaLoad.requestRemux).toHaveBeenCalledTimes(1);
+      await jest.advanceTimersByTimeAsync(60_000);
+      expect(mediaLoad.requestRemux).toHaveBeenCalledTimes(2);
+      await jest.advanceTimersByTimeAsync(600_000);
+      expect(mediaLoad.requestRemux).toHaveBeenCalledTimes(2);
+      service.close();
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('stops retrying a failed prefetch remux after 180 checks', async () => {
+    jest.useFakeTimers();
+    try {
+      const { service, mediaLoad } = setupTest();
+      mediaLoad.requestRemux.mockRejectedValue(new Error('media-load unavailable'));
+      service.requestWhenDownloaded(target);
+      await jest.advanceTimersByTimeAsync(4 * 60 * 60_000);
+      expect(mediaLoad.requestRemux).toHaveBeenCalledTimes(180);
       service.close();
     } finally {
       jest.useRealTimers();
@@ -330,7 +369,7 @@ describe('TV versions recorded as versions of their file', () => {
       slowProbes = true;
       return () => lookups.splice(0).forEach(release => release());
     };
-    return { service, report, row, holdProbes };
+    return { service, report, row, holdProbes, mediaLoad };
   };
   const tv = { supportedAudioCodecs: ['aac', 'ac3', 'eac3'], allowHevc: true };
 
@@ -365,6 +404,27 @@ describe('TV versions recorded as versions of their file', () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(row(9)).toBeUndefined();
   });
+
+  it.each(['lookup', 'request'] as const)(
+    'keeps a failure heard during a pending %s',
+    async operation => {
+      const { service, report, row, mediaLoad } = setupTest();
+      let answer: (status: RemuxStatus) => void = () => undefined;
+      const rpc = operation === 'lookup' ? mediaLoad.getRemuxStatus : mediaLoad.requestRemux;
+      rpc.mockImplementationOnce(() => new Promise(resolve => (answer = resolve)) as never);
+      const pending =
+        operation === 'lookup' ? service.existing(target) : service.request(target, 'watching');
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(rpc).toHaveBeenCalledTimes(1);
+      await report('failed');
+      // The RPC answers with the status from before the failure.
+      answer({ sourceId: 4, filePath: 'S01E02.mkv', state: 'running' } as RemuxStatus);
+      await pending;
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(row()).toBeUndefined();
+      expect(await service.usable(target, tv)).toBe(false);
+    }
+  );
 
   it('counts a version usable only when the client plays its codecs', () => {
     const version = { videoCodec: 'hevc', audioCodecs: ['ac3'] };

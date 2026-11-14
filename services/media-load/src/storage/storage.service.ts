@@ -908,11 +908,14 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * commitment, so a pack still downloading keeps its share and a later reservation adds to it.
    * The returned function measures the storage again and lets the room go: what the remux wrote
    * is then charged as allocation (all the room it held, when the storage cannot be measured).
+   * While the source's download still holds a reservation, that reservation grows by what the
+   * remux wrote (its `output` directory): the download's share is still to be written beside it.
    */
   async reserveAdditional(
     sourceId: number,
     bytes: number,
-    retained: boolean
+    retained: boolean,
+    output?: string
   ): Promise<() => Promise<void>> {
     const reselects: Storage[] = [];
     const room = Math.max(0, Math.floor(bytes));
@@ -944,10 +947,25 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         const storage = await this.storageRepository.findBySourceId(sourceId);
         if (!storage) return;
         const measured = await this.measureAllocatedBytes(storage.location).catch(() => null);
-        const allocatedBytes =
-          measured ?? (storage.allocatedBytes ?? 0) + (storage.remuxReservedBytes ?? 0);
-        await this.storageRepository.reconcileAllocation(storage.id, allocatedBytes);
-        await this.storageRepository.update(storage.id, { remuxReservedBytes: 0 });
+        const held = storage.remuxReservedBytes ?? 0;
+        // Unmeasurable output counts as all the room it held.
+        const written = output
+          ? ((await this.measureAllocatedBytes(output).catch(() => null)) ?? held)
+          : 0;
+        const allocatedBytes = measured ?? (storage.allocatedBytes ?? 0) + Math.max(held, written);
+        const downloading = storage.reservedBytes ?? 0;
+        // The remux is written inside the storage: the download's share is what is left once
+        // the remux is taken out of the allocation.
+        const sourceBytes = measured === null ? null : measured - written;
+        const reservedBytes =
+          downloading > 0 && (sourceBytes === null || downloading > sourceBytes)
+            ? downloading + written
+            : 0;
+        await this.storageRepository.update(storage.id, {
+          allocatedBytes,
+          reservedBytes,
+          remuxReservedBytes: 0,
+        });
       });
   }
 

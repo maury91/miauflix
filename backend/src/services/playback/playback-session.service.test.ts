@@ -700,6 +700,8 @@ describe('PlaybackSessionService', () => {
       unresolvedAlternative?: boolean;
       /** The audio the client decodes; any when absent. */
       supportedAudioCodecs?: string[];
+      /** Source 1's file is not probed yet: its delivery is found in the background. */
+      unprobed?: boolean;
     }) => {
       let changed: ((status: object) => void) | undefined;
       let resync: (() => void) | undefined;
@@ -723,20 +725,29 @@ describe('PlaybackSessionService', () => {
           remuxState.current ? { sourceId, filePath: 'movie.mkv', ...remuxState.current } : null
         ),
       };
+      const downloads = { releaseClaims: jest.fn(async () => undefined) };
       const preparation = {
-        prepare: jest.fn(async (_playable: unknown, options: { avoidSourceIds?: number[] }) => {
-          const avoided = options.avoidSourceIds ?? [];
-          if (!avoided.includes(1))
-            return { source: { id: 1 }, target: movie({ id: 1 }), state: 'ready' };
-          if (remuxState.unresolvedAlternative) {
-            if (!avoided.includes(2)) return { source: { id: 2 }, target: null, state: 'ready' };
-            if (!avoided.includes(3))
-              return { source: { id: 3 }, target: movie({ id: 3 }), state: 'ready' };
+        prepare: jest.fn(
+          async (
+            _playable: unknown,
+            options: {
+              avoidSourceIds?: number[];
+              resolveOnly?: boolean;
+            }
+          ) => {
+            const avoided = options.avoidSourceIds ?? [];
+            if (!avoided.includes(1))
+              return { source: { id: 1 }, target: movie({ id: 1 }), state: 'ready' };
+            if (remuxState.unresolvedAlternative) {
+              if (!avoided.includes(2)) return { source: { id: 2 }, target: null, state: 'ready' };
+              if (!avoided.includes(3))
+                return { source: { id: 3 }, target: movie({ id: 3 }), state: 'ready' };
+            }
+            if (remuxState.alternative && !avoided.includes(2))
+              return { source: { id: 2 }, target: movie({ id: 2 }), state: 'ready' };
+            return { source: null, target: null, state: 'cold' };
           }
-          if (remuxState.alternative && !avoided.includes(2))
-            return { source: { id: 2 }, target: movie({ id: 2 }), state: 'ready' };
-          return { source: null, target: null, state: 'cold' };
-        }),
+        ),
       };
       const service = new PlaybackSessionService({
         db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
@@ -744,13 +755,23 @@ describe('PlaybackSessionService', () => {
         config: { getOrThrow: () => 60000 } as never,
         warmup: { promote: jest.fn() } as never,
         audioPlaybackService: {
-          knownDelivery: jest.fn(async (target: { source: { id: number } }) => ({
-            mode: target.source.id === 1 ? 'audio-transcode' : 'direct',
+          knownDelivery: jest.fn(async (target: { source: { id: number } }) =>
+            remuxState.unprobed && target.source.id === 1
+              ? null
+              : {
+                  mode: target.source.id === 1 ? 'audio-transcode' : 'direct',
+                  durationSeconds: 600,
+                  transcodeVideo: remuxState.transcodeVideo ?? false,
+                }
+          ),
+          inspect: jest.fn(async () => ({
+            mode: 'audio-transcode',
             durationSeconds: 600,
             transcodeVideo: remuxState.transcodeVideo ?? false,
           })),
         } as never,
         remux: remux as never,
+        downloads: downloads as never,
         progress: {
           findByKey: jest.fn(async () => {
             if (remuxState.slowProgress) await new Promise<void>(resolve => lookups.push(resolve));
@@ -788,6 +809,7 @@ describe('PlaybackSessionService', () => {
       return {
         create,
         remux,
+        downloads,
         preparation,
         listener,
         report,
@@ -833,6 +855,19 @@ describe('PlaybackSessionService', () => {
       report(1, 'complete', 600);
       await settle();
       expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('recreates a session probed in the background once its remux is ready', async () => {
+      // The remux finished before the probe ended: its event reached no waiting session.
+      const { create, listener } = setupTest({ unprobed: true, current: status('complete', 600) });
+      const session = await create();
+      expect(session?.deliveryPending).toBe(true);
+      await settle();
+      await settle();
+      expect(listener).toHaveBeenCalledWith(
+        expect.objectContaining({ update: expect.objectContaining({ type: 'delivery' }) })
+      );
+      expect(listener).toHaveBeenLastCalledWith(recreated(session?.playbackId));
     });
 
     it('recreates the session once the remux being built is a minute past the viewer', async () => {
@@ -890,10 +925,33 @@ describe('PlaybackSessionService', () => {
     });
 
     it('moves to a release that plays as it is when the file has no TV version', async () => {
-      const { create } = setupTest({ alternative: true });
+      const { create, downloads } = setupTest({ alternative: true });
       const session = await create();
       expect(session?.source.id).toBe(2);
       expect(session?.delivery?.mode).toBe('direct');
+      // The release that needed conversion is no longer kept for this viewer.
+      expect(downloads.releaseClaims).toHaveBeenCalledWith(1, expect.any(String), 'watched');
+      expect(downloads.releaseClaims).not.toHaveBeenCalledWith(2, expect.anything(), 'watched');
+    });
+
+    it('waits for the old watched claim to release before warming a replacement in a one-source cache', async () => {
+      const { create, downloads, preparation } = setupTest({ alternative: true });
+      let oldSourcePinned = true;
+      downloads.releaseClaims.mockImplementationOnce(async () => {
+        await settle();
+        oldSourcePinned = false;
+      });
+      const prepare = preparation.prepare.getMockImplementation()!;
+      preparation.prepare.mockImplementation(async (playable, options) => {
+        const result = await prepare(playable, options);
+        if (result.source?.id === 2 && !options.resolveOnly && oldSourcePinned)
+          return { ...result, state: 'cold' };
+        return result;
+      });
+
+      const session = await create();
+      expect(session?.source.id).toBe(2);
+      expect(session?.preparation.state).toBe('warm');
     });
 
     it('keeps a release whose TV version is being built, converting until it is ahead', async () => {

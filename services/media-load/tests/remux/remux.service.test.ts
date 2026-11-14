@@ -56,12 +56,20 @@ const setup = async (options: { complete?: boolean } = {}) => {
     stored.push({
       ...storage,
       encryptedLayout: {
-        files: [{ path: 'Show/E01.mkv', length: 10, offset: 0 }],
+        files: [
+          { path: 'Show/E01.mkv', length: 10, offset: 0 },
+          { path: 'Show/E02.mkv', length: 10, offset: 10 },
+        ],
       } as Storage['encryptedLayout'],
     });
   }
   let deleteListener: ((storage: Storage) => void) | null = null;
-  const complete = { value: options.complete ?? true };
+  const complete = {
+    value: options.complete ?? true,
+    /** Sources whose file is still downloading, whatever `value` says. */
+    downloading: new Set<number>(),
+    error: null as Error | null,
+  };
   const storage = {
     getStorageBySource: jest.fn(async (sourceId: number) => stored[sourceId - 1] ?? null),
     released: jest.fn(async () => undefined),
@@ -78,7 +86,10 @@ const setup = async (options: { complete?: boolean } = {}) => {
     repository: database.getRemuxRepository(),
     encryption: database.encryption,
     storage,
-    isFileComplete: async () => complete.value,
+    isFileComplete: async (sourceId: number) => {
+      if (complete.error) throw complete.error;
+      return complete.value && !complete.downloading.has(sourceId);
+    },
     readSource: async () => new Response('source bytes'),
     ffmpegPath: ffmpeg,
     retryMs: 20,
@@ -86,11 +97,12 @@ const setup = async (options: { complete?: boolean } = {}) => {
   cleanups.push(() => service.close());
   const events: RemuxStatus[] = [];
   service.onChange(status => events.push(status));
-  const settled = (sourceId: number) =>
+  const settled = (sourceId: number, filePath = 'Show/E01.mkv') =>
     new Promise<RemuxStatus>(resolve => {
       const stop = service.onChange(status => {
         if (
           status.sourceId === sourceId &&
+          status.filePath === filePath &&
           (status.state === 'complete' || status.state === 'failed')
         ) {
           stop();
@@ -160,7 +172,12 @@ describe('RemuxService', () => {
     expect(await ranged.text()).toBe('gme');
     // Room for the remux was reserved first, and the rest given back: its 10-byte file with
     // headroom, and its converted 5.1 track as 12 s of AC-3 at 640 kbit/s.
-    expect(storage.reserveAdditional).toHaveBeenCalledWith(1, 11 + 960_000, false);
+    expect(storage.reserveAdditional).toHaveBeenCalledWith(
+      1,
+      11 + 960_000,
+      false,
+      expect.stringContaining(join(root, 'source-1', 'remux'))
+    );
     expect(storage.released).toHaveBeenCalledTimes(1);
 
     // Nothing is stored in the clear, under names that say nothing.
@@ -181,7 +198,12 @@ describe('RemuxService', () => {
     const failed = settled(1);
     await service.request(1, 'Show/E01.mkv', plan, 'watching');
     expect(await failed).toMatchObject({ state: 'failed', error: 'Insufficient storage capacity' });
-    expect(storage.reserveAdditional).toHaveBeenCalledWith(1, 11 + 960_000, true);
+    expect(storage.reserveAdditional).toHaveBeenCalledWith(
+      1,
+      11 + 960_000,
+      true,
+      expect.stringContaining(join(root, 'source-1', 'remux'))
+    );
     expect(await readdir(join(root, 'source-1', 'remux')).catch(() => [])).toEqual([]);
   });
 
@@ -240,6 +262,54 @@ describe('RemuxService', () => {
     expect((await background).state).toBe('complete');
     const order = events.filter(event => event.state === 'complete').map(event => event.sourceId);
     expect(order).toEqual([2, 1]);
+  });
+
+  it('releases the reservation before a remux on the same source starts or retries', async () => {
+    const { service, settled, storage } = await setup();
+    let held = false;
+    storage.reserveAdditional.mockImplementation(async () => {
+      expect(held).toBe(false);
+      held = true;
+      return async () => {
+        await Bun.sleep(20);
+        held = false;
+      };
+    });
+
+    process.env.FAKE_FFMPEG_HANG = '1';
+    const background = settled(1);
+    await service.request(1, 'Show/E01.mkv', plan, 'background');
+    while (service.find(1, 'Show/E01.mkv')?.state !== 'running') await Bun.sleep(5);
+    delete process.env.FAKE_FFMPEG_HANG;
+    const watched = settled(1, 'Show/E02.mkv');
+    await service.request(1, 'Show/E02.mkv', plan, 'watching');
+    expect((await watched).state).toBe('complete');
+    expect((await background).state).toBe('complete');
+    expect(storage.reserveAdditional).toHaveBeenCalledTimes(3);
+  });
+
+  it('keeps a background remux running for one whose file is still downloading', async () => {
+    const { service, complete } = await setup();
+    process.env.FAKE_FFMPEG_HANG = '1';
+    await service.request(1, 'Show/E01.mkv', plan, 'background');
+    while (service.find(1, 'Show/E01.mkv')?.state !== 'running') await Bun.sleep(5);
+    complete.downloading.add(2);
+    await service.request(2, 'Show/E01.mkv', plan, 'watching');
+    await Bun.sleep(60);
+    expect(service.find(1, 'Show/E01.mkv')?.state).toBe('running');
+    expect(service.find(2, 'Show/E01.mkv')?.state).toBe('queued');
+    delete process.env.FAKE_FFMPEG_HANG;
+  });
+
+  it('checks a file again later when checking it fails', async () => {
+    const { service, settled, complete } = await setup();
+    complete.error = new Error('status unavailable');
+    const done = settled(1);
+    await service.request(1, 'Show/E01.mkv', plan, 'next');
+    await Bun.sleep(60);
+    expect(service.find(1, 'Show/E01.mkv')?.state).toBe('queued');
+    complete.error = null;
+    expect((await done).state).toBe('complete');
   });
 
   it('puts a running remux back in the queue before a shutdown returns', async () => {

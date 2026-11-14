@@ -241,11 +241,13 @@ export class StorageRepository {
     await this.update(id, accounting);
   }
 
+  /** Remux output can cross the download's reservation before the download has caught up. */
   async reconcileAllocation(id: number, allocatedBytes: number): Promise<void> {
     this.db
       .query(
         `UPDATE storage SET allocatedBytes = ?1,
-           reservedBytes = CASE WHEN ?1 >= reservedBytes THEN 0 ELSE reservedBytes END,
+           reservedBytes = CASE
+             WHEN remuxReservedBytes = 0 AND ?1 >= reservedBytes THEN 0 ELSE reservedBytes END,
            updatedAt = ?2
          WHERE id = ?3`
       )

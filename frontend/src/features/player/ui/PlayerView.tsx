@@ -283,7 +283,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     }
     media.addEventListener('playing', releasePicture);
     media.addEventListener('error', releasePicture);
-    const timer = window.setTimeout(releasePicture, PICTURE_HOLD_LIMIT_MS);
+    // Paused, the held picture stays until the viewer plays: AVPlay shows nothing before.
+    const timer = media.autoplay ? window.setTimeout(releasePicture, PICTURE_HOLD_LIMIT_MS) : 0;
     return () => {
       media.removeEventListener('playing', releasePicture);
       media.removeEventListener('error', releasePicture);
@@ -303,10 +304,15 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   // AVPlay opens a TV version still being built from near its newest segment: its playlist is
   // asked to start where playback will (the held picture, else the resume point), once per stream,
   // so it waits for the saved progress (null until then).
-  const avplayStart = useRef<{ streamUrl: string; src: string; start: number } | null>(null);
+  const avplayStart = useRef<{
+    streamUrl: string;
+    src: string;
+    start: number;
+    autoplay: boolean;
+  } | null>(null);
   const avplayOpen = (() => {
     if (!session || session.delivery?.mode !== 'remux')
-      return { src: session?.streamUrl ?? '', start: undefined };
+      return { src: session?.streamUrl ?? '', start: undefined, autoplay: true };
     if (avplayStart.current?.streamUrl === session.streamUrl) return avplayStart.current;
     const holding = pictureHeld && !!videoElement.current;
     if (!holding && !resume.progressSettled) return null;
@@ -319,7 +325,9 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
           ? resumePosition(saved, duration)
           : 0;
     const src = `${session.streamUrl}?start=${Math.floor(start)}`;
-    avplayStart.current = { streamUrl: session.streamUrl, src, start };
+    // A viewer who paused before the handoff finds it paused after.
+    const autoplay = !(holding && videoElement.current?.paused);
+    avplayStart.current = { streamUrl: session.streamUrl, src, start, autoplay };
     return avplayStart.current;
   })();
 
@@ -422,7 +430,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               startSeconds={avplayOpen.start}
               durationSeconds={session.delivery?.durationSeconds}
               aria-label={title}
-              autoPlay
+              autoPlay={avplayOpen.autoplay}
               subtitleCues={selectedSubtitle ? subtitles.avplayCues : []}
               subtitleOffset={subtitles.offset}
               subtitleRaise={subtitles.controlsInset}
