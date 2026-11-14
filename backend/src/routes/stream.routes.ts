@@ -96,9 +96,13 @@ export const createStreamRoutes = ({
           // A playback opening its playlist starts where the viewer is; once playing, it is whole.
           if (name !== 'index.m3u8' || start === undefined || !openedPlaylists.cut(token))
             return response;
+          // A shorter body: its length and range are recomputed, not the upstream ones.
+          const headers = new Headers(response.headers);
+          for (const name of ['content-length', 'content-range', 'content-encoding', 'etag'])
+            headers.delete(name);
           return new Response(playlistStartingAt(await response.text(), start), {
-            status: response.status,
-            headers: response.headers,
+            status: response.status === 206 ? 200 : response.status,
+            headers,
           });
         } catch (error) {
           if (error instanceof ContractError && error.code === 'remux_not_found')

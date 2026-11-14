@@ -669,7 +669,13 @@ describe('PlaybackSessionService', () => {
         { codec_type: 'audio', codec_name: 'truehd', channels: 6, tags: { language: 'eng' } },
       ],
     };
-    const plan = { videoCodec: 'hevc', durationSeconds: 600, audio: [], subtitles: [] };
+    const plan = {
+      videoCodec: 'hevc',
+      durationSeconds: 600,
+      // The TrueHD track, converted to AC-3.
+      audio: [{ audioIndex: 0, copy: false, channels: 6, language: 'eng', isDefault: true }],
+      subtitles: [],
+    };
     const status = (state: string, readySeconds = 0) => ({
       state,
       readySeconds,
@@ -686,6 +692,14 @@ describe('PlaybackSessionService', () => {
       current?: object | null;
       /** Holds the saved-position lookups until released. */
       slowProgress?: boolean;
+      /** Source 2 plays as it is, when source 1 is avoided. */
+      alternative?: boolean;
+      /** The file has a TV version this TV plays (built or being built). */
+      usable?: boolean;
+      /** Source 2's file cannot be resolved; source 3 plays as it is. */
+      unresolvedAlternative?: boolean;
+      /** The audio the client decodes; any when absent. */
+      supportedAudioCodecs?: string[];
     }) => {
       let changed: ((status: object) => void) | undefined;
       let resync: (() => void) | undefined;
@@ -704,16 +718,25 @@ describe('PlaybackSessionService', () => {
           resync = onResync;
           return () => undefined;
         }),
+        usable: jest.fn(async () => remuxState.usable ?? false),
         status: jest.fn(async (sourceId: number) =>
           remuxState.current ? { sourceId, filePath: 'movie.mkv', ...remuxState.current } : null
         ),
       };
       const preparation = {
-        prepare: jest.fn(async (_playable: unknown, options: { avoidSourceIds?: number[] }) =>
-          options.avoidSourceIds?.includes(1)
-            ? { source: null, target: null, state: 'cold' }
-            : { source: { id: 1 }, target: movie({ id: 1 }), state: 'ready' }
-        ),
+        prepare: jest.fn(async (_playable: unknown, options: { avoidSourceIds?: number[] }) => {
+          const avoided = options.avoidSourceIds ?? [];
+          if (!avoided.includes(1))
+            return { source: { id: 1 }, target: movie({ id: 1 }), state: 'ready' };
+          if (remuxState.unresolvedAlternative) {
+            if (!avoided.includes(2)) return { source: { id: 2 }, target: null, state: 'ready' };
+            if (!avoided.includes(3))
+              return { source: { id: 3 }, target: movie({ id: 3 }), state: 'ready' };
+          }
+          if (remuxState.alternative && !avoided.includes(2))
+            return { source: { id: 2 }, target: movie({ id: 2 }), state: 'ready' };
+          return { source: null, target: null, state: 'cold' };
+        }),
       };
       const service = new PlaybackSessionService({
         db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
@@ -721,8 +744,8 @@ describe('PlaybackSessionService', () => {
         config: { getOrThrow: () => 60000 } as never,
         warmup: { promote: jest.fn() } as never,
         audioPlaybackService: {
-          knownDelivery: jest.fn(async () => ({
-            mode: 'audio-transcode',
+          knownDelivery: jest.fn(async (target: { source: { id: number } }) => ({
+            mode: target.source.id === 1 ? 'audio-transcode' : 'direct',
             durationSeconds: 600,
             transcodeVideo: remuxState.transcodeVideo ?? false,
           })),
@@ -747,7 +770,15 @@ describe('PlaybackSessionService', () => {
         service.create(
           'user',
           { kind: 'movie', mediaId: 7 },
-          { quality: 'auto', allowHevc: true, avoidAudioConversion: true, playsRemux: true },
+          {
+            quality: 'auto',
+            allowHevc: true,
+            avoidAudioConversion: true,
+            playsRemux: true,
+            ...(remuxState.supportedAudioCodecs
+              ? { supportedAudioCodecs: remuxState.supportedAudioCodecs }
+              : {}),
+          },
           { sessionId: 'session' }
         );
       /** media-load reports a remux of `sourceId`'s movie.mkv. */
@@ -856,6 +887,63 @@ describe('PlaybackSessionService', () => {
       await settle();
       await settle();
       expect(listener).toHaveBeenCalledWith(recreated(session?.playbackId));
+    });
+
+    it('moves to a release that plays as it is when the file has no TV version', async () => {
+      const { create } = setupTest({ alternative: true });
+      const session = await create();
+      expect(session?.source.id).toBe(2);
+      expect(session?.delivery?.mode).toBe('direct');
+    });
+
+    it('keeps a release whose TV version is being built, converting until it is ahead', async () => {
+      const { create, remux, report, listener } = setupTest({
+        alternative: true,
+        usable: true,
+        requested: status('running', 30),
+        positionSeconds: 300,
+      });
+      const session = await create();
+      expect(session?.source.id).toBe(1);
+      expect(session?.delivery?.mode).toBe('audio-transcode');
+      expect(remux.request).toHaveBeenCalledWith(movie({ id: 1 }), 'watching');
+      report(1, 'running', 360);
+      await settle();
+      await settle();
+      expect(listener).toHaveBeenCalledWith(recreated(session?.playbackId));
+    });
+
+    it('keeps converting for a client that cannot decode the remux audio', async () => {
+      const { create, report, listener } = setupTest({
+        existing: status('complete', 600),
+        requested: status('complete', 600),
+        supportedAudioCodecs: ['aac'],
+      });
+      const session = await create();
+      expect(session?.delivery?.mode).toBe('audio-transcode');
+      report(1, 'complete', 600);
+      await settle();
+      expect(listener).not.toHaveBeenCalled();
+    });
+
+    it('checks the remux again once the session is registered', async () => {
+      // Queued when asked for, finished by the time the session exists: no event follows.
+      const { create, listener } = setupTest({
+        requested: status('queued'),
+        current: status('complete', 600),
+      });
+      const session = await create();
+      expect(session?.delivery?.mode).toBe('audio-transcode');
+      await settle();
+      await settle();
+      expect(listener).toHaveBeenCalledWith(recreated(session?.playbackId));
+    });
+
+    it('looks past a release whose file cannot be resolved', async () => {
+      const { create } = setupTest({ unresolvedAlternative: true });
+      const session = await create();
+      expect(session?.source.id).toBe(3);
+      expect(session?.delivery?.mode).toBe('direct');
     });
 
     it('converts as before when no remux can be built', async () => {

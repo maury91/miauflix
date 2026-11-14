@@ -13,6 +13,7 @@ interface StorageRow {
   verifiedBytes: number;
   allocatedBytes: number;
   reservedBytes: number;
+  remuxReservedBytes: number;
   totalPieces: number;
   pieceLength: number;
   lastInterestAt: number | null;
@@ -38,6 +39,7 @@ const COLUMNS = [
   'verifiedBytes',
   'allocatedBytes',
   'reservedBytes',
+  'remuxReservedBytes',
   'totalPieces',
   'pieceLength',
   'lastInterestAt',
@@ -309,9 +311,9 @@ export class StorageRepository {
     return this.sum('size');
   }
 
-  /** Application charge: physical allocation, or the reservation until measured. */
+  /** Application charge: physical allocation, or the reservations until measured. */
   async getChargedStorageUsage(): Promise<bigint> {
-    return this.sum('MAX(allocatedBytes, reservedBytes)');
+    return this.sum('MAX(allocatedBytes, reservedBytes, remuxReservedBytes)');
   }
 
   async getTotalReservedStorageUsage(): Promise<bigint> {

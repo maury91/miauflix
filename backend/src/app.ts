@@ -155,7 +155,12 @@ try {
     configurationService,
     db.getMediaProbeRepository()
   );
-  const tvRemuxService = new TvRemuxService(mediaLoadClient, audioPlaybackService);
+  const tvRemuxService = new TvRemuxService(
+    mediaLoadClient,
+    audioPlaybackService,
+    db.getMediaVariantRepository(),
+    db.getMediaProbeRepository()
+  );
   const sourceSubtitlesService = new SourceSubtitlesService(mediaLoadClient);
   const sourceWarmupController = new SourceWarmupController(
     mediaLoadClient,

@@ -196,6 +196,32 @@ describe('TV remux files', () => {
     expect(await lastSegment()).toBe('seg00019.ts');
   });
 
+  it('sends a shortened playlist with its own length', async () => {
+    const { app, mediaLoadClient } = setupTest();
+    const playlist = [
+      '#EXTM3U',
+      ...Array.from({ length: 20 }, (_, index) => [
+        '#EXTINF:6.000000,',
+        `seg${String(index).padStart(5, '0')}.ts`,
+      ]).flat(),
+      '',
+    ].join('\n');
+    mediaLoadClient.readRemux.mockResolvedValue(
+      new Response(playlist, {
+        headers: {
+          'content-type': 'application/vnd.apple.mpegurl',
+          'content-length': String(playlist.length),
+        },
+      })
+    );
+    const response = await app.request(`/${token}/remux/index.m3u8?start=31`);
+    const body = await response.text();
+    expect(body.length).toBeLessThan(playlist.length);
+    const length = response.headers.get('content-length');
+    expect(length === null || Number(length) === new TextEncoder().encode(body).length).toBe(true);
+    expect(response.headers.get('content-type')).toBe('application/vnd.apple.mpegurl');
+  });
+
   it('answers 404 for a file the remux does not have', async () => {
     const { app, mediaLoadClient } = setupTest();
     mediaLoadClient.readRemux.mockRejectedValue(

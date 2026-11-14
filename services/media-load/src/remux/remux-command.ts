@@ -17,23 +17,30 @@ export function sidecarFor(track: RemuxSubtitleTrack): RemuxSidecar {
   return { ...track, name: `s${track.subtitleIndex}.${format}`, format };
 }
 
+/** The channels and bitrate (kbit/s) a track converted to AC-3 gets. */
+export function ac3Layout(track: Pick<RemuxAudioTrack, 'channels'>): {
+  ac: number;
+  kbps: number;
+} {
+  const channels = track.channels ?? 2;
+  return channels >= 6
+    ? { ac: 6, kbps: 640 }
+    : channels > 2
+      ? { ac: channels, kbps: 448 }
+      : { ac: Math.max(channels, 1), kbps: 192 };
+}
+
 /**
  * A converted track, as AC-3: AVPlay (Tizen 5.5) ignores E-AC-3 in MPEG-TS. 5.1 at 640 kbit/s,
  * AC-3's ceiling (7.1 is downmixed), fewer channels less.
  */
 const ac3Args = (track: RemuxAudioTrack, output: number): string[] => {
-  const channels = track.channels ?? 2;
-  const layout =
-    channels >= 6
-      ? { ac: 6, bitrate: '640k' }
-      : channels > 2
-        ? { ac: channels, bitrate: '448k' }
-        : { ac: Math.max(channels, 1), bitrate: '192k' };
+  const layout = ac3Layout(track);
   return [
     `-c:a:${output}`,
     'ac3',
     `-b:a:${output}`,
-    layout.bitrate,
+    `${layout.kbps}k`,
     `-ac:a:${output}`,
     String(layout.ac),
   ];

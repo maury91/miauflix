@@ -1,3 +1,4 @@
+import { backfillMediaVariants } from './backfill-media-variants.migration';
 import { backfillSourceVideoVerdicts } from './backfill-source-video-verdicts.migration';
 import { backfillStreamingScores } from './backfill-streaming-scores.migration';
 import { encryptSensitiveColumns } from './encrypt-sensitive-columns.migration';
@@ -17,4 +18,5 @@ export const migrations: readonly Migration[] = [
   backfillSourceVideoVerdicts,
   resetSourceServiceSearches,
   generateMissingAvatars,
+  backfillMediaVariants,
 ];

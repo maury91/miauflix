@@ -64,7 +64,11 @@ const setup = async (options: { complete?: boolean } = {}) => {
   const complete = { value: options.complete ?? true };
   const storage = {
     getStorageBySource: jest.fn(async (sourceId: number) => stored[sourceId - 1] ?? null),
-    reconcileAllocation: jest.fn(async () => null),
+    released: jest.fn(async () => undefined),
+    reserveAdditional: jest.fn(
+      async (_sourceId: number, _bytes: number, _retained: boolean): Promise<() => Promise<void>> =>
+        storage.released
+    ),
     markAsAccessed: jest.fn(async () => undefined),
     on: jest.fn((_event: 'delete', listener: (storage: Storage) => void) => {
       deleteListener = listener;
@@ -154,7 +158,10 @@ describe('RemuxService', () => {
     expect(ranged.status).toBe(206);
     expect(ranged.headers.get('content-range')).toBe('bytes 2-4/9');
     expect(await ranged.text()).toBe('gme');
-    expect(storage.reconcileAllocation).toHaveBeenCalledWith(1);
+    // Room for the remux was reserved first, and the rest given back: its 10-byte file with
+    // headroom, and its converted 5.1 track as 12 s of AC-3 at 640 kbit/s.
+    expect(storage.reserveAdditional).toHaveBeenCalledWith(1, 11 + 960_000, false);
+    expect(storage.released).toHaveBeenCalledTimes(1);
 
     // Nothing is stored in the clear, under names that say nothing.
     const dir = join(root, 'source-1', 'remux', '1');
@@ -164,6 +171,18 @@ describe('RemuxService', () => {
       expect(name).toMatch(/^[0-9a-f]{32}$/);
       expect((await readFile(join(dir, name))).toString()).not.toContain('segment');
     }
+  });
+
+  it('fails a remux there is no room for, before writing anything', async () => {
+    const { root, service, settled, storage } = await setup();
+    storage.reserveAdditional.mockImplementationOnce(async () => {
+      throw new Error('Insufficient storage capacity');
+    });
+    const failed = settled(1);
+    await service.request(1, 'Show/E01.mkv', plan, 'watching');
+    expect(await failed).toMatchObject({ state: 'failed', error: 'Insufficient storage capacity' });
+    expect(storage.reserveAdditional).toHaveBeenCalledWith(1, 11 + 960_000, true);
+    expect(await readdir(join(root, 'source-1', 'remux')).catch(() => [])).toEqual([]);
   });
 
   it('refuses a file that is not stored and a remux that does not exist', async () => {

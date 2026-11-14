@@ -220,6 +220,14 @@ describe('AvplayMedia', () => {
     );
   });
 
+  it('keeps the file length when AVPlay reports only the part built so far', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(2_000_000);
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3600, 1800);
+    prepare();
+    expect(media.duration).toBe(3600);
+  });
+
   it('keeps the length AVPlay reports, and its start, for a finished file', () => {
     const { avplay, media, element, prepare } = setupTest();
     media.open('https://miauflix.example/api/stream/key', element, 3539.5);

@@ -2,8 +2,10 @@ import type { RemuxStatus } from '@miauflix/service-contracts';
 
 import type { PlaybackDelivery, ProbeResult } from './audio-playback.service';
 import {
+  codecsPlayable,
   OpenedPlaylists,
   playlistStartingAt,
+  remuxCodecs,
   remuxDelivery,
   remuxPlan,
   remuxPlayable,
@@ -257,5 +259,118 @@ describe('OpenedPlaylists', () => {
     expect(opened.cut('other')).toBe(true);
     now = 6 * 60 * 60_000;
     expect(opened.cut('key')).toBe(true);
+  });
+});
+
+describe('TV versions recorded as versions of their file', () => {
+  const target = { source: { id: 4 }, filePath: 'S01E02.mkv', matchKind: 'single' } as never;
+  const setupTest = () => {
+    const rows = new Map<
+      string,
+      { state: string; videoCodec: string | null; audioCodecs: string[] }
+    >();
+    const key = (sourceId: number, filePath: string, kind: string) =>
+      `${sourceId}:${filePath}:${kind}`;
+    const variants = {
+      find: jest.fn(
+        async (sourceId: number, filePath: string, kind: string) =>
+          rows.get(key(sourceId, filePath, kind)) ?? null
+      ),
+      save: jest.fn(
+        async (
+          sourceId: number,
+          filePath: string,
+          kind: string,
+          state: string,
+          codecs: { videoCodec: string | null; audioCodecs: string[] }
+        ) => {
+          rows.set(key(sourceId, filePath, kind), { state, ...codecs });
+        }
+      ),
+      setState: jest.fn(async (sourceId: number, filePath: string, kind: string, state: string) => {
+        const row = rows.get(key(sourceId, filePath, kind));
+        if (row) row.state = state;
+        return !!row;
+      }),
+      remove: jest.fn(async (sourceId: number, filePath: string, kind: string) => {
+        rows.delete(key(sourceId, filePath, kind));
+      }),
+    };
+    let changed: ((status: RemuxStatus) => void) | undefined;
+    const mediaLoad = {
+      requestRemux: jest.fn(async () => ({ state: 'running', readySeconds: 600 })),
+      getRemuxStatus: jest.fn(async () => null),
+      isFileComplete: jest.fn(async () => true),
+      onRemuxChanged: jest.fn((listener: (status: RemuxStatus) => void) => {
+        changed = listener;
+        return () => undefined;
+      }),
+    };
+    const audio = { knownProbe: jest.fn(async () => mobland), probeFile: jest.fn() };
+    const lookups: Array<() => void> = [];
+    let slowProbes = false;
+    const probes = {
+      find: jest.fn(async () => {
+        if (slowProbes) await new Promise<void>(resolve => lookups.push(resolve));
+        return JSON.stringify(mobland);
+      }),
+    };
+    const service = new TvRemuxService(
+      mediaLoad as never,
+      audio as never,
+      variants as never,
+      probes as never
+    );
+    const report = async (state: string, sourceId = 4) => {
+      changed?.({ sourceId, filePath: 'S01E02.mkv', state } as RemuxStatus);
+      await new Promise(resolve => setTimeout(resolve, 0));
+    };
+    const row = (sourceId = 4) => rows.get(key(sourceId, 'S01E02.mkv', 'remux'));
+    const holdProbes = () => {
+      slowProbes = true;
+      return () => lookups.splice(0).forEach(release => release());
+    };
+    return { service, report, row, holdProbes };
+  };
+  const tv = { supportedAudioCodecs: ['aac', 'ac3', 'eac3'], allowHevc: true };
+
+  it('records a requested TV version with its own codecs, and follows it until ready', async () => {
+    const { service, report, row } = setupTest();
+    await service.request(target, 'watching');
+    const codecs = remuxCodecs(remuxPlan(mobland)!, mobland);
+    expect(codecs.audioCodecs).not.toContain('truehd');
+    expect(row()).toEqual({ state: 'building', ...codecs, container: 'mpegts' });
+    // Usable while it is built: its source plays natively soon.
+    expect(await service.usable(target, tv)).toBe(true);
+    await report('complete');
+    expect(row()?.state).toBe('ready');
+    await report('failed');
+    expect(row()).toBeUndefined();
+    expect(await service.usable(target, tv)).toBe(false);
+  });
+
+  it('records a TV version media-load reports from the stored probe', async () => {
+    const { report, row } = setupTest();
+    await report('running', 9);
+    expect(row(9)).toMatchObject({ state: 'building', videoCodec: 'hevc' });
+  });
+
+  it('keeps a failure heard while an earlier status was still being recorded', async () => {
+    const { report, row, holdProbes } = setupTest();
+    const release = holdProbes();
+    await report('running', 9);
+    await report('failed', 9);
+    release();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(row(9)).toBeUndefined();
+  });
+
+  it('counts a version usable only when the client plays its codecs', () => {
+    const version = { videoCodec: 'hevc', audioCodecs: ['ac3'] };
+    expect(codecsPlayable(version, tv)).toBe(true);
+    expect(codecsPlayable(version, { ...tv, allowHevc: false })).toBe(false);
+    expect(codecsPlayable(version, { ...tv, supportedVideoCodecs: ['h264'] })).toBe(false);
+    expect(codecsPlayable(version, { ...tv, supportedAudioCodecs: ['aac'] })).toBe(false);
   });
 });

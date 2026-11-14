@@ -67,7 +67,8 @@ A single MKV or MP4 cannot be written into encrypted storage: both muxers seek b
 
 - FFmpeg writes MPEG-TS HLS (6-second segments, `hls_playlist_type event`), uploading each segment and the playlist with HTTP `PUT` to a loopback server inside media-load (`-method PUT`), so no file touches the disk unencrypted.
 - Each upload (segment, sidecar) is stored as its own file in the source's storage directory, `remux/<id>/`, encrypted whole with AES-256-GCM under the host's key, under a name keyed by it. Segments are small enough to decrypt whole for a range read; they are not padded. The segment table lives in the media-load database (`remux`, `remux_file`), and the playlist is built from it, listing only stored segments.
-- Segment bytes count toward the source's allocated bytes, and the remux is removed with the source, so eviction and the storage limit keep working unchanged.
+- Segment bytes count toward the source's allocated bytes, and the remux is removed with the source, so eviction and the storage limit keep working unchanged. Before FFmpeg starts, the source's reservation grows by the source file's size plus 5% (`StorageService.reserveAdditional`), evicting weaker storage as a download's reservation does (a remux a viewer waits for may evict prefetched storage; any other keeps the playback reserve and evicts only speculative storage); without room the remux fails before writing anything. Once it ends the storage is measured and the unused part of the reservation is given back.
+- The backend records each file's versions apart (`media_variant`: the original, and its remux while building and once ready), with the codecs each holds, so source selection judges a source by what it plays as: a source with a usable remux, even one still being built, is not swapped for another release to avoid converting audio.
 
 ### Streaming while it is built
 

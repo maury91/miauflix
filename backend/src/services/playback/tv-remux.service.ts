@@ -8,9 +8,12 @@ import type {
   RemuxSubtitleTrack,
 } from '@miauflix/service-contracts';
 
+import type { MediaProbeRepository } from '@repositories/media-probe.repository';
+import type { MediaVariantRepository, VariantCodecs } from '@repositories/media-variant.repository';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
 import type {
+  AudioPlaybackPreferences,
   AudioPlaybackService,
   PlaybackAudioTrack,
   PlaybackDelivery,
@@ -162,6 +165,35 @@ export function remuxDelivery(
   };
 }
 
+/** The codecs of a file's TV version: its video as it is, each kept audio track copied or AC-3. */
+export function remuxCodecs(plan: RemuxPlan, probe: ProbeResult): VariantCodecs {
+  const sourceAudio = (probe.streams ?? []).filter(stream => stream.codec_type === 'audio');
+  return {
+    container: 'mpegts',
+    videoCodec: plan.videoCodec,
+    audioCodecs: plan.audio.map(track =>
+      track.copy ? (sourceAudio[track.audioIndex]?.codec_name ?? 'unknown') : 'ac3'
+    ),
+  };
+}
+
+/** Whether a client plays a version's video and at least one of its audio tracks. */
+export function codecsPlayable(
+  codecs: Pick<VariantCodecs, 'audioCodecs' | 'videoCodec'>,
+  preferences: AudioPlaybackPreferences
+): boolean {
+  const { videoCodec, audioCodecs } = codecs;
+  if (videoCodec === 'hevc' && preferences.allowHevc === false) return false;
+  if (
+    videoCodec &&
+    preferences.supportedVideoCodecs &&
+    !preferences.supportedVideoCodecs.includes(videoCodec)
+  )
+    return false;
+  const audio = preferences.supportedAudioCodecs;
+  return !audio || !audioCodecs.length || audioCodecs.some(codec => audio.includes(codec));
+}
+
 /**
  * Whether a remux can stand in for this delivery: converted audio whose video plays as it is
  * (the remux copies the video; converted video means the client cannot decode it).
@@ -195,6 +227,8 @@ export interface RemuxRequest {
 export class TvRemuxService {
   /** Prefetched files waiting for their download to finish, with the next check. */
   private readonly waiting = new Map<string, ReturnType<typeof setTimeout> | null>();
+  /** The last recording of each file's TV version: the next one waits for it. */
+  private readonly recordings = new Map<string, Promise<void>>();
   private closed = false;
 
   constructor(
@@ -202,8 +236,36 @@ export class TvRemuxService {
       MediaLoadClientService,
       'getRemuxStatus' | 'isFileComplete' | 'onRemuxChanged' | 'requestRemux'
     >,
-    private readonly audio: Pick<AudioPlaybackService, 'knownProbe' | 'probeFile'>
-  ) {}
+    private readonly audio: Pick<AudioPlaybackService, 'knownProbe' | 'probeFile'>,
+    /** Where TV versions are recorded as versions of their file; none in tests that skip it. */
+    private readonly variants?: Pick<
+      MediaVariantRepository,
+      'find' | 'remove' | 'save' | 'setState'
+    >,
+    /** Probes, to record a TV version media-load reports before it was requested here. */
+    private readonly probes?: Pick<MediaProbeRepository, 'find'>
+  ) {
+    if (!variants) return;
+    try {
+      mediaLoad.onRemuxChanged(
+        status =>
+          void this.inOrder(status.sourceId, status.filePath, () => this.recordStatus(status))
+      );
+    } catch (error) {
+      logger.debug('TvRemuxService', 'Remux events are unavailable', error);
+    }
+  }
+
+  /**
+   * Whether a file has a TV version, built or being built, that this client plays: its source
+   * then plays natively (or soon will), and is no reason to look for another release.
+   */
+  async usable(target: PlaybackTarget, preferences: AudioPlaybackPreferences): Promise<boolean> {
+    const variant = await this.variants
+      ?.find(target.source.id, target.filePath, 'remux')
+      .catch(() => null);
+    return !!variant && codecsPlayable(variant, preferences);
+  }
 
   /** A file's remux when it has one, with its plan; null when it needs none or has none yet. */
   async existing(target: PlaybackTarget): Promise<RemuxRequest | null> {
@@ -213,6 +275,10 @@ export class TvRemuxService {
     const status = await this.mediaLoad
       .getRemuxStatus(target.source.id, target.filePath)
       .catch(() => null);
+    if (status)
+      await this.inOrder(target.source.id, target.filePath, () =>
+        this.record(target.source.id, target.filePath, status, remuxCodecs(plan, probe))
+      );
     return status && status.state !== 'failed' ? { status, plan, probe } : null;
   }
 
@@ -230,6 +296,69 @@ export class TvRemuxService {
     return probe ? this.requestFor(target, probe, priority) : null;
   }
 
+  /**
+   * Run a file's recordings one after another, so an older status (a lookup of the probe still in
+   * flight) cannot overwrite a newer one, such as its failure.
+   */
+  private inOrder(
+    sourceId: number,
+    filePath: string,
+    recording: () => Promise<void>
+  ): Promise<void> {
+    const key = `${sourceId}:${filePath}`;
+    const run = (this.recordings.get(key) ?? Promise.resolve()).then(recording);
+    const settled = run.catch(() => undefined);
+    this.recordings.set(key, settled);
+    void settled.then(() => {
+      if (this.recordings.get(key) === settled) this.recordings.delete(key);
+    });
+    return run;
+  }
+
+  /** Keep a file's TV version recorded as media-load reports it; failed ones are forgotten. */
+  private async record(
+    sourceId: number,
+    filePath: string,
+    status: Pick<RemuxStatus, 'state'>,
+    codecs: VariantCodecs
+  ): Promise<void> {
+    if (!this.variants) return;
+    try {
+      if (status.state === 'failed') await this.variants.remove(sourceId, filePath, 'remux');
+      else
+        await this.variants.save(
+          sourceId,
+          filePath,
+          'remux',
+          status.state === 'complete' ? 'ready' : 'building',
+          codecs
+        );
+    } catch (error) {
+      logger.debug('TvRemuxService', `Could not record the TV version of ${sourceId}`, error);
+    }
+  }
+
+  /** A status event: update the recorded version, or record it from the file's probe. */
+  private async recordStatus(status: RemuxStatus): Promise<void> {
+    const { variants } = this;
+    if (!variants) return;
+    try {
+      const { sourceId, filePath, state } = status;
+      if (state === 'failed') {
+        await variants.remove(sourceId, filePath, 'remux');
+        return;
+      }
+      const recorded = state === 'complete' ? 'ready' : 'building';
+      if (await variants.setState(sourceId, filePath, 'remux', recorded)) return;
+      const stored = await this.probes?.find(sourceId, filePath);
+      const probe = stored ? (JSON.parse(stored) as ProbeResult) : null;
+      const plan = probe && remuxPlan(probe);
+      if (probe && plan) await this.record(sourceId, filePath, status, remuxCodecs(plan, probe));
+    } catch (error) {
+      logger.debug('TvRemuxService', 'Could not record a TV version', error);
+    }
+  }
+
   private async requestFor(
     target: PlaybackTarget,
     probe: ProbeResult,
@@ -239,6 +368,9 @@ export class TvRemuxService {
     if (!plan) return null;
     try {
       const status = await this.mediaLoad.requestRemux(target, plan, priority);
+      await this.inOrder(target.source.id, target.filePath, () =>
+        this.record(target.source.id, target.filePath, status, remuxCodecs(plan, probe))
+      );
       return { status, plan, probe };
     } catch (error) {
       logger.debug('TvRemuxService', `No remux for source ${target.source.id}`, error);

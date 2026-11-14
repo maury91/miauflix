@@ -7,6 +7,7 @@ import {
   filterHevcSources,
   filterSources,
   filterStreamableSources,
+  filterVideoCodecSources,
   preferWithinBitrate,
 } from './source-filters';
 
@@ -91,6 +92,35 @@ describe('source-filters', () => {
     });
   });
 
+  describe('filterVideoCodecSources', () => {
+    const h264 = createMockContentSource({ videoCodec: VideoCodec.X264 });
+    const hevc = createMockContentSource({ videoCodec: VideoCodec.X265 });
+    const av1 = createMockContentSource({ videoCodec: VideoCodec.AV1_10BIT });
+    const vp9 = createMockContentSource({ videoCodec: VideoCodec.VP9 });
+    const unknown = createMockContentSource({ videoCodec: undefined });
+    const all = [h264, hevc, av1, vp9, unknown];
+
+    it('keeps every source when the client reported no codecs', () => {
+      expect(filterVideoCodecSources(all, { allowHevc: true })).toEqual(all);
+    });
+
+    it('drops sources whose video the TV reported it does not decode', () => {
+      expect(
+        filterVideoCodecSources(all, { allowHevc: true, supportedVideoCodecs: ['h264', 'hevc'] })
+      ).toEqual([h264, hevc, unknown]);
+    });
+
+    it('leaves HEVC to allowHevc, which a conversion can satisfy', () => {
+      // HEVC can be converted for a TV without it: allowHevc says whether it may be.
+      expect(
+        filterVideoCodecSources(all, { allowHevc: true, supportedVideoCodecs: ['h264', 'av1'] })
+      ).toEqual([h264, hevc, av1, unknown]);
+      expect(
+        filterVideoCodecSources(all, { allowHevc: false, supportedVideoCodecs: ['h264', 'av1'] })
+      ).toEqual([h264, av1, unknown]);
+    });
+  });
+
   describe('filterSources', () => {
     const streamableH264Source = createMockContentSource({
       file: Buffer.from('h264 file'),
@@ -130,7 +160,7 @@ describe('source-filters', () => {
       [[nonStreamableH264Source, nonStreamableHevcSource], []],
       [[], []],
     ])('should filter streamable sources, and sort by streaming score', (sources, expected) => {
-      const result = filterSources(sources, true);
+      const result = filterSources(sources, { allowHevc: true });
       expect(result).toEqual(expected);
     });
 

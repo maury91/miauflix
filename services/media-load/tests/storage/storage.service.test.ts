@@ -1493,6 +1493,56 @@ describe('StorageService', () => {
       }
     });
 
+    it('reserves room for a remux beside its source, evicting weaker storage first', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '50GB';
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+        const expiredSource = await testDataFactory.createTestContentSource(movie.id);
+        const targetSource = await testDataFactory.createTestContentSource(movie.id);
+        await storageService.createStorage({
+          sourceId: expiredSource.id,
+          location: '/tmp/test/remux-expired.mkv',
+          size: 700 * 1024,
+          speculative: true,
+          reservedBytes: 700 * 1024,
+        });
+        await storageService.createStorage({
+          sourceId: targetSource.id,
+          location: '/tmp/test/remux-target-missing',
+          size: 200 * 1024,
+          speculative: true,
+          reservedBytes: 200 * 1024,
+        });
+
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
+        const release = await storageService.reserveAdditional(targetSource.id, 500 * 1024, false);
+        // Held apart from the download's reservation, on top of what is on disk (nothing yet).
+        expect(await storageService.getStorageBySource(targetSource.id)).toMatchObject({
+          reservedBytes: 200 * 1024,
+          remuxReservedBytes: 500 * 1024,
+        });
+        expect(await storageService.getStorageBySource(expiredSource.id)).toBeNull();
+        // More than the limit holds: refused.
+        await expect(
+          storageService.reserveAdditional(targetSource.id, 2 * 1024 * 1024, false)
+        ).rejects.toThrow('Insufficient storage capacity');
+        // A download reserving meanwhile keeps its share once the remux room goes.
+        await storageService.reserveStorage(targetSource.id, 300 * 1024, true);
+
+        await release();
+        expect(await storageService.getStorageBySource(targetSource.id)).toMatchObject({
+          reservedBytes: 300 * 1024,
+          remuxReservedBytes: 0,
+        });
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
     it('serializes concurrent reservations for the same source', async () => {
       const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();

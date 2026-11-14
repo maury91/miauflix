@@ -11,6 +11,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 ### Fixes
 
 - Samsung TVs no longer jump every few seconds while playing a file whose audio is converted
+- Samsung TVs that report their codecs no longer get a release whose video they cannot play (AV1 on a TV without it, for example), and building a TV version no longer risks filling the disk: it makes room first, or is skipped when there is none. A release whose TV version exists, or is being built, is kept instead of being swapped for another release, since it plays natively (or soon will)
 - The server no longer fails to start when `CSP_IMAGE_ORIGINS` is not set
 - The catalog service no longer slows down to the point of not answering after the server restarts a few times, and it stops retrying SVG logos it cannot check every hour
 - Login is harder to abuse: an account refuses logins for up to 15 minutes after 10 wrong passwords, new accounts need passwords of at least 8 characters, and response times no longer reveal which emails have accounts

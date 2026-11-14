@@ -17,6 +17,7 @@ import { logger } from '../lib/logger';
 import type { Storage } from '../storage/types';
 import { PRIORITY_RANK, type RemuxRecord, type RemuxRepository } from './remux.repository';
 import {
+  ac3Layout,
   buildPlaylist,
   parsePlaylist,
   PLAYLIST_NAME,
@@ -39,13 +40,23 @@ const DURATION_TOLERANCE_SECONDS = 1.5;
 const SETTLE_MS = 5_000;
 /** FFmpeg's last error lines kept for a failed remux. */
 const STDERR_TAIL = 2_000;
+/**
+ * A remux's size as a share of its source file: the video is copied, converted audio is usually
+ * smaller than the TrueHD/DTS it replaces, and MPEG-TS adds a few percent of packet overhead.
+ */
+const REMUX_SIZE_RATIO = 1.05;
 
 export interface RemuxServiceDeps {
   repository: RemuxRepository;
   encryption: Encryption;
   storage: {
     getStorageBySource(sourceId: number): Promise<Storage | null>;
-    reconcileAllocation(sourceId: number): Promise<unknown>;
+    /** Reserve room for `bytes` more; resolves to the function that gives back what is unused. */
+    reserveAdditional(
+      sourceId: number,
+      bytes: number,
+      retained: boolean
+    ): Promise<() => Promise<void>>;
     markAsAccessed(sourceId: number): Promise<void>;
     on(event: 'delete', listener: (storage: Storage) => void): unknown;
   };
@@ -311,6 +322,8 @@ export class RemuxService {
     const queued = this.deps.repository.queued();
     for (const record of queued) {
       if (!(await this.deps.isFileComplete(record.sourceId, record.filePath))) continue;
+      // Shut down while the file was checked: nothing is left to stop a remux started now.
+      if (this.closed) return false;
       await this.run(record);
       return true;
     }
@@ -442,8 +455,16 @@ export class RemuxService {
       sidecarWrites: new Set(),
     };
     this.job = job;
+    let release: (() => Promise<void>) | null = null;
     try {
+      // What an earlier run left goes first, so it is not charged next to its replacement.
       await rm(job.dir, { recursive: true, force: true });
+      // Room for the remux beside its source, before anything is written (it fails without).
+      release = await this.deps.storage.reserveAdditional(
+        record.sourceId,
+        await this.estimatedBytes(record),
+        record.priority === 'watching'
+      );
       await mkdir(job.dir, { recursive: true });
       // Stopped while its directory was prepared (a viewer's remux, a removal, a shutdown): the
       // kill above found no FFmpeg to stop.
@@ -491,7 +512,6 @@ export class RemuxService {
         );
         this.emit(record.id);
       }
-      await this.deps.storage.reconcileAllocation(record.sourceId).catch(() => undefined);
     } catch (error) {
       if (!job.stopped) {
         const message = error instanceof Error ? error.message : String(error);
@@ -499,8 +519,26 @@ export class RemuxService {
         await this.discard(record, message).catch(() => undefined);
       }
     } finally {
+      // Charge what the remux wrote (or nothing, once discarded) instead of the estimate.
+      await release?.().catch(() => undefined);
       this.job = null;
     }
+  }
+
+  /**
+   * The room a remux of this file needs: its source file's size with some headroom, plus every
+   * converted track at its AC-3 bitrate (counted on top: the source audio it replaces is not
+   * known, and converting can make a track larger, E-AC-3 at 384 kbit/s to AC-3 at 640).
+   */
+  private async estimatedBytes(record: RemuxRecord): Promise<number> {
+    const storage = await this.deps.storage.getStorageBySource(record.sourceId);
+    const file = storage?.encryptedLayout?.files.find(entry => entry.path === record.filePath);
+    const { audio, durationSeconds } = record.plan;
+    const convertedKbps = audio
+      .filter(track => !track.copy)
+      .reduce((total, track) => total + ac3Layout(track).kbps, 0);
+    const convertedBytes = (convertedKbps * 1000 * Math.max(0, durationSeconds)) / 8;
+    return Math.ceil((file?.length ?? 0) * REMUX_SIZE_RATIO + convertedBytes);
   }
 
   /**
@@ -530,6 +568,9 @@ export class RemuxService {
     const segments = files.filter(file => file.kind === 'segment');
     if (!segments.length || segments.some(file => file.seq === null))
       return 'A segment is missing from the playlist';
+    // Every segment the closing playlist lists, stored: a lost last one still passes the length.
+    const lost = job.segments.filter(segment => !names.has(segment.name));
+    if (lost.length) return `Missing segments: ${lost.map(segment => segment.name).join(', ')}`;
     const record = this.deps.repository.findById(job.record.id);
     const expected = job.record.plan.durationSeconds;
     if (

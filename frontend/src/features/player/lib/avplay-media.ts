@@ -135,6 +135,8 @@ const DISPLAY_HEIGHT = 1080;
 /** AVPlay reports the position about every 100 ms; `<video>` fires timeupdate every 250 ms. */
 const TIME_UPDATE_INTERVAL_MS = 250;
 /** A seek this close to where a file opened, as it prepares, is that same start. */
+/** How much shorter than the file's length AVPlay's may be before it is taken as partial. */
+const PARTIAL_LENGTH_SECONDS = 5;
 const OPENED_AT_TOLERANCE_SECONDS = 1.5;
 /** Seconds AVPlay buffers before it plays an HLS playlist (a TV version). */
 const QUICK_START_SECONDS = 1;
@@ -283,7 +285,14 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
         this.prepared = true;
         const reported = this.avplay.getDuration() / 1000;
         const live = !(reported > 0);
-        this.length = live && durationSeconds ? durationSeconds : reported;
+        // A length short of the file's is only what is built so far (some firmware may report
+        // it for a playlist still being written): the file's length stands, so a resume measured
+        // against it lands where the viewer was.
+        const partial =
+          isHlsPlaylist(url) &&
+          durationSeconds !== undefined &&
+          reported < durationSeconds - PARTIAL_LENGTH_SECONDS;
+        this.length = (live || partial) && durationSeconds ? durationSeconds : reported;
         this.audioTracks = this.readAudioTracks();
         this.emit('durationchange');
         this.emit('loadedmetadata');
