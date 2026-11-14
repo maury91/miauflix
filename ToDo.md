@@ -15,7 +15,9 @@ See [TV source support plan](docs/architecture/tv-source-support.md).
 
 ## Player
 
-- [ ] Show downloaded torrent pieces in the progress bar
+- [ ] Debounce seek in TV player
+- [ ] When seeking pause the video
+- [ ] When seeking show thumbnails above the progress bar
 
 ## Storage page
 

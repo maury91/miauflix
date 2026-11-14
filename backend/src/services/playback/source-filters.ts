@@ -30,16 +30,59 @@ export function filterHevcSources(sources: ContentSource[], allowHevc = true): C
   );
 }
 
+/** The video codecs a client plays: HEVC by `allowHevc`, the rest by ffprobe name when known. */
+export interface VideoCodecPreferences {
+  allowHevc: boolean;
+  /** ffprobe names ("h264", "av1"); unknown (every codec plays) when absent. */
+  supportedVideoCodecs?: string[];
+}
+
+/** A release's video codec in ffprobe's names; HEVC is left to `allowHevc`. */
+const PROBE_VIDEO_CODEC: Record<VideoCodec, string | null> = {
+  [VideoCodec.X265]: null,
+  [VideoCodec.X265_10BIT]: null,
+  [VideoCodec.X264]: 'h264',
+  [VideoCodec.X264_10BIT]: 'h264',
+  [VideoCodec.AV1]: 'av1',
+  [VideoCodec.AV1_10BIT]: 'av1',
+  [VideoCodec.VP9]: 'vp9',
+  [VideoCodec.VP8]: 'vp8',
+  [VideoCodec.XVID]: 'mpeg4',
+  [VideoCodec.MPEG4]: 'mpeg4',
+  [VideoCodec.MPEG2]: 'mpeg2video',
+  [VideoCodec.VC1]: 'vc1',
+};
+
+/**
+ * Filter out sources whose video the client cannot play: HEVC as `filterHevcSources` does (it
+ * can be converted, so `allowHevc` decides), any other codec the client reported it does not
+ * decode (nothing converts it). A source whose codec is unknown stays.
+ */
+export function filterVideoCodecSources(
+  sources: ContentSource[],
+  { allowHevc, supportedVideoCodecs }: VideoCodecPreferences
+): ContentSource[] {
+  const compatible = filterHevcSources(sources, allowHevc);
+  if (!supportedVideoCodecs) return compatible;
+  return compatible.filter(source => {
+    const codec = source.videoCodec ? PROBE_VIDEO_CODEC[source.videoCodec] : null;
+    return codec === null || codec === undefined || supportedVideoCodecs.includes(codec);
+  });
+}
+
 /**
  * Filter and sort movie sources for streaming
  *
  * @param sources - Array of movie sources to filter
- * @param allowHevc - Whether to allow HEVC/H.265 codecs (default: true)
+ * @param codecs - The video codecs the client plays (default: every one)
  * @returns Filtered and sorted sources ready for streaming
  */
-export function filterSources(sources: ContentSource[], allowHevc = true): ContentSource[] {
+export function filterSources(
+  sources: ContentSource[],
+  codecs: VideoCodecPreferences = { allowHevc: true }
+): ContentSource[] {
   return (
-    filterHevcSources(filterStreamableSources(sources), allowHevc)
+    filterVideoCodecSources(filterStreamableSources(sources), codecs)
       // Best first: streaming score, boosted by a recent proven playback
       .sort(byPlaybackRank())
   );

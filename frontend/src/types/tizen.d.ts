@@ -203,6 +203,12 @@ export interface AVPlay {
   ) => void;
   setListener: (listener: AVPlayListeners) => void;
   setStreamingProperty: (property: 'SET_MODE_4K', value: 'TRUE' | 'FALSE') => void;
+  /** How much AVPlay buffers before it plays (`FOR_PLAY`) and after it ran dry (`FOR_RESUME`). */
+  setBufferingParam?: (
+    option: 'PLAYER_BUFFER_FOR_PLAY' | 'PLAYER_BUFFER_FOR_RESUME',
+    unit: 'PLAYER_BUFFER_SIZE_IN_SECOND' | 'PLAYER_BUFFER_SIZE_IN_BYTE',
+    amount: number
+  ) => void;
   getTotalTrackInfo: () => TrackInfo[];
   setSelectTrack: (type: 'AUDIO' | 'TEXT', index: number) => void;
   suspend: () => void;
@@ -215,6 +221,11 @@ export interface WebApis {
     isUdPanelSupported: () => boolean;
     /** Starts with the model year: `23_PTM_QTV_T09` is a 2023 TV. */
     getModelCode?: () => string;
+  };
+  /** Codec support queries, on Tizen 6.0 (2021 TVs) and newer. */
+  systeminfo?: {
+    isSupportedAudioCodec?: (codec: string) => boolean;
+    isSupportedVideoCodec?: (codec: string) => boolean;
   };
 }
 

@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs';
 import { Database } from 'bun:sqlite';
 
 import type { Encryption } from '../lib/encryption';
+import { RemuxRepository } from '../remux/remux.repository';
 import { SourceRepository } from '../storage/source.repository';
 import { StorageRepository } from '../storage/storage.repository';
 import { StorageFileRepository } from '../storage/storage-file.repository';
@@ -36,6 +37,7 @@ export class MediaLoadDatabase {
   private readonly storage: StorageRepository;
   private readonly storageFiles: StorageFileRepository;
   private readonly transfers: TransferRepository;
+  private readonly remuxes: RemuxRepository;
 
   constructor(
     readonly db: Database,
@@ -46,6 +48,7 @@ export class MediaLoadDatabase {
     this.storage = new StorageRepository(db, encryption, this.sources);
     this.storageFiles = new StorageFileRepository(db, encryption);
     this.transfers = new TransferRepository(db);
+    this.remuxes = new RemuxRepository(db, encryption);
   }
 
   /**
@@ -85,6 +88,10 @@ export class MediaLoadDatabase {
 
   getTransferRepository(): TransferRepository {
     return this.transfers;
+  }
+
+  getRemuxRepository(): RemuxRepository {
+    return this.remuxes;
   }
 
   close(): void {

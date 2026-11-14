@@ -59,12 +59,27 @@ function renderSource(handlers: PlaybackSessionHandlers) {
     <Provider store={store}>{children}</Provider>
   );
   return renderHook(
-    ({ title, subtitleKey }: { title: string; subtitleKey: string }) => {
-      const source = usePlaybackSource({ playable, title, avplay: false, subtitleKey });
+    ({
+      title,
+      subtitleKey,
+      target = playable,
+    }: {
+      title: string;
+      subtitleKey: string;
+      target?: typeof playable;
+    }) => {
+      const source = usePlaybackSource({ playable: target, title, avplay: false, subtitleKey });
       source.handlers.current = handlers;
       return source;
     },
-    { wrapper, initialProps: { title: 'Film', subtitleKey: 'subtitles' } }
+    {
+      wrapper,
+      initialProps: { title: 'Film', subtitleKey: 'subtitles' } as {
+        title: string;
+        subtitleKey: string;
+        target?: typeof playable;
+      },
+    }
   );
 }
 
@@ -105,6 +120,35 @@ describe('usePlaybackSource', () => {
     expect(handlers.onRequestStart).toHaveBeenCalledTimes(1);
     expect(handlers.onSessionCreated).toHaveBeenCalledTimes(1);
     expect(result.current.sessionSubtitleKey.current).toBe('user-subtitles');
+  });
+
+  it('lets the replacement of a held session arrive when the held one fails', async () => {
+    createSession.mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(1)) });
+    const { result } = renderSource(handlers);
+    await waitFor(() => expect(result.current.status).toBe('ready'));
+    let replace: (session: CreatePlaybackSessionResponse) => void = () => undefined;
+    createSession.mockReturnValueOnce({
+      unwrap: () => new Promise<CreatePlaybackSessionResponse>(resolve => (replace = resolve)),
+    });
+    act(() => result.current.restartSession(true));
+    expect(result.current.pictureHeld).toBe(true);
+
+    act(() => result.current.failPlayback('The held stream stopped'));
+    expect(result.current.status).not.toBe('error');
+    await act(async () => replace(sessionFor(2)));
+    expect(result.current.session?.playbackId).toBe('playback-2');
+  });
+
+  it('shows nothing of a held session once another title plays', async () => {
+    createSession.mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(1)) });
+    const { result, rerender } = renderSource(handlers);
+    await waitFor(() => expect(result.current.status).toBe('ready'));
+    createSession.mockReturnValue({ unwrap: () => new Promise(() => undefined) });
+    act(() => result.current.restartSession(true));
+
+    rerender({ title: 'Other', subtitleKey: 'subtitles', target: { kind: 'movie', mediaId: 8 } });
+    expect(result.current.pictureHeld).toBe(false);
+    expect(result.current.session).toBeNull();
   });
 
   it('asks for another source after a stream failure, and stops when it repeats', async () => {

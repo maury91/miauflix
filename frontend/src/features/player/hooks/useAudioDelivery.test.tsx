@@ -54,6 +54,7 @@ function renderAudio(session: PlaybackSource['session'], video: PlayerMedia, avp
     setStatus: vi.fn(),
     failPlayback: vi.fn(),
     restartSession: vi.fn(),
+    pictureHeld: false,
     settlePendingFailure: vi.fn(),
   };
   return { ...renderHook(props => useAudioDelivery(props), { initialProps: options }), options };
@@ -71,6 +72,39 @@ describe('useAudioDelivery', () => {
     expect(result.current.playsInAvplay).toBe(true);
     act(() => result.current.seekTo(42));
     expect(video.currentTime).toBe(42);
+  });
+
+  it('plays a remux through AVPlay and switches its tracks there', () => {
+    const enabled: boolean[] = [true, false];
+    const video = {
+      currentTime: 0,
+      paused: false,
+      audioTracks: enabled.map((_, index) => ({
+        get enabled() {
+          return enabled[index];
+        },
+        set enabled(value: boolean) {
+          enabled[index] = value;
+        },
+      })),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    } as unknown as PlayerMedia;
+    const remuxTracks = tracks.map(track => ({
+      ...track,
+      canPlayDirect: true,
+      mimeType: undefined,
+    }));
+    const { result } = renderAudio(
+      sessionWith({ mode: 'remux', audioTracks: remuxTracks }),
+      video,
+      true
+    );
+    expect(result.current.playsInAvplay).toBe(true);
+    act(() => result.current.selectAudioTrack(2));
+    expect(result.current.audioDelivery).toBeUndefined();
+    expect(startAudioPlayback).not.toHaveBeenCalled();
+    expect(enabled).toEqual([false, true]);
   });
 
   it('restarts converted audio at the new position instead of seeking the element', () => {
@@ -125,5 +159,22 @@ describe('useAudioDelivery', () => {
     const { rerender, options } = renderAudio(sessionWith({}), video);
     rerender({ ...options, deliveryUpdate: { type: 'recreate' } as never });
     expect(options.restartSession).toHaveBeenCalledTimes(1);
+    expect(options.restartSession).toHaveBeenCalledWith(false);
+  });
+
+  it('keeps the converted picture on a TV while the new session takes over', () => {
+    const stop = vi.fn();
+    startAudioPlayback.mockReturnValue(stop);
+    const video = document.createElement('video');
+    const converting = sessionWith({ mode: 'audio-transcode' });
+    const { rerender, options } = renderAudio(converting, video, true);
+    expect(startAudioPlayback).toHaveBeenCalledTimes(1);
+
+    rerender({ ...options, deliveryUpdate: { type: 'recreate' } as never });
+    expect(options.restartSession).toHaveBeenCalledWith(true);
+
+    // The new session plays the TV version in AVPlay: converted audio stops, its frame stays.
+    rerender({ ...options, session: sessionWith({ mode: 'remux' }), pictureHeld: true });
+    expect(stop).toHaveBeenCalledWith({ keepPicture: true });
   });
 });

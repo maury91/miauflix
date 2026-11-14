@@ -7,6 +7,7 @@ import { EpisodeSource } from '@entities/episode-source.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
 import { MediaProbe } from '@entities/media-probe.entity';
 import { MediaRating } from '@entities/media-rating.entity';
+import { MediaVariant } from '@entities/media-variant.entity';
 import { MigrationVersion } from '@entities/migration-version.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
@@ -48,6 +49,7 @@ export const ENTITIES = [
   Progress,
   PlaybackGrant,
   MediaProbe,
+  MediaVariant,
   RecentSearch,
   MigrationVersion,
 ];

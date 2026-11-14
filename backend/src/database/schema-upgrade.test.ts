@@ -51,7 +51,8 @@ describe('upgradeSchema', () => {
 
   /**
    * A database from before schema migrations: built by synchronize(), with the tables of entities
-   * removed since the baseline (synchronize() never dropped them), which the baseline still has.
+   * removed since the baseline (synchronize() never dropped them), which the baseline still has,
+   * and without the tables later migrations add (their entities did not exist yet).
    */
   const legacyDatabase = async () => {
     const legacy = await open([]);
@@ -69,8 +70,13 @@ describe('upgradeSchema', () => {
     const present = new Set(
       ((await legacy.query(tables)) as { name: string }[]).map(table => table.name)
     );
-    for (const table of (await baseline.query(tables)) as { name: string; sql: string }[]) {
+    const inBaseline = (await baseline.query(tables)) as { name: string; sql: string }[];
+    for (const table of inBaseline) {
       if (!present.has(table.name)) await legacy.query(table.sql);
+    }
+    const baselineNames = new Set(inBaseline.map(table => table.name));
+    for (const name of present) {
+      if (!baselineNames.has(name)) await legacy.query(`DROP TABLE "${name}"`);
     }
     return legacy;
   };
@@ -97,8 +103,7 @@ describe('upgradeSchema', () => {
   });
 
   it('moves a database built by synchronize() to migrations, keeping its data', async () => {
-    const legacy = await open([]);
-    await legacy.synchronize();
+    const legacy = await legacyDatabase();
     await legacy.query(`INSERT INTO migration_version (id, version) VALUES (1, 6)`);
     await legacy.destroy();
 
