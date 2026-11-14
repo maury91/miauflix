@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="896" height="630" viewBox="0 0 896 630" role="img" aria-labelledby="title description">
+  <title id="title">Miauflix palette</title>
+  <desc id="description">All color roles from the palette table. The translucent action swatch is composited over canvas and white.</desc>
+  <rect x="1" y="1" width="894" height="628" rx="15" fill="#0A0D0F" stroke="#30383B" stroke-width="2"/>
+  <style>
+    .role { font: 600 18px system-ui, sans-serif; fill: #F5F5F5; }
+    .value { font: 14px ui-monospace, monospace; fill: #A6ADAF; }
+  </style>
+  <g transform="translate(24 24)">
+    <rect width="200" height="60" rx="8" fill="#0A0D0F" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Canvas</text>
+    <text class="value" y="105">#0A0D0F</text>
+  </g>
+  <g transform="translate(240 24)">
+    <rect width="200" height="60" rx="8" fill="#111719" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Surface</text>
+    <text class="value" y="105">#111719</text>
+  </g>
+  <g transform="translate(456 24)">
+    <rect width="200" height="60" rx="8" fill="#182023" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Surface raised</text>
+    <text class="value" y="105">#182023</text>
+  </g>
+  <g transform="translate(672 24)">
+    <rect width="200" height="60" rx="8" fill="#202A2E" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Surface hover</text>
+    <text class="value" y="105">#202A2E</text>
+  </g>
+  <g transform="translate(24 144)">
+    <rect width="200" height="60" rx="8" fill="#242729" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Control</text>
+    <text class="value" y="105">#242729</text>
+  </g>
+  <g transform="translate(240 144)">
+    <rect width="200" height="60" rx="8" fill="#30383B" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Border subtle</text>
+    <text class="value" y="105">#30383B</text>
+  </g>
+  <g transform="translate(456 144)">
+    <rect width="200" height="60" rx="8" fill="#70777A" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Border control</text>
+    <text class="value" y="105">#70777A</text>
+  </g>
+  <g transform="translate(672 144)">
+    <rect width="200" height="60" rx="8" fill="#70777A" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Text disabled</text>
+    <text class="value" y="105">#70777A</text>
+  </g>
+  <g transform="translate(24 264)">
+    <rect width="200" height="60" rx="8" fill="#F5F5F5" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Text</text>
+    <text class="value" y="105">#F5F5F5</text>
+  </g>
+  <g transform="translate(240 264)">
+    <rect width="200" height="60" rx="8" fill="#A6ADAF" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Text secondary</text>
+    <text class="value" y="105">#A6ADAF</text>
+  </g>
+  <g transform="translate(456 264)">
+    <rect width="200" height="60" rx="8" fill="#D81F27" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Brand</text>
+    <text class="value" y="105">#D81F27</text>
+  </g>
+  <g transform="translate(672 264)">
+    <rect width="200" height="60" rx="8" fill="#91A7FF" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Link / info</text>
+    <text class="value" y="105">#91A7FF</text>
+  </g>
+  <g transform="translate(24 384)">
+    <rect width="200" height="60" rx="8" fill="#42B883" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Success</text>
+    <text class="value" y="105">#42B883</text>
+  </g>
+  <g transform="translate(240 384)">
+    <rect width="200" height="60" rx="8" fill="#E5A63B" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Warning</text>
+    <text class="value" y="105">#E5A63B</text>
+  </g>
+  <g transform="translate(456 384)">
+    <rect width="200" height="60" rx="8" fill="#EF4B52" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Danger</text>
+    <text class="value" y="105">#EF4B52</text>
+  </g>
+  <g transform="translate(672 384)">
+    <rect width="200" height="60" rx="8" fill="#0A0D0F"/>
+    <path d="M100 0H192Q200 0 200 8V52Q200 60 192 60H100Z" fill="#FFFFFF"/>
+    <rect width="200" height="60" rx="8" fill="#6D6D6E" fill-opacity="0.8" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Action translucent</text>
+    <text class="value" y="105">rgba(109, 109, 110, 0.8)</text>
+  </g>
+  <g transform="translate(24 504)">
+    <rect width="200" height="60" rx="8" fill="#FFFFFF" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Action focus</text>
+    <text class="value" y="105">#FFFFFF</text>
+  </g>
+  <g transform="translate(240 504)">
+    <rect width="200" height="60" rx="8" fill="#000000" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">On action focus</text>
+    <text class="value" y="105">#000000</text>
+  </g>
+  <g transform="translate(456 504)">
+    <rect width="200" height="60" rx="8" fill="#FFFFFF" stroke="#70777A" stroke-width="2"/>
+    <text class="role" y="84">Focus outline</text>
+    <text class="value" y="105">#FFFFFF</text>
+  </g>
+</svg>

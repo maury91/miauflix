@@ -1,4 +1,5 @@
 import '@shared/styles/global.css';
+import '@shared/design-system/density.css';
 
 import type { Preview } from '@storybook/react-vite';
 import { sb } from 'storybook/test';
@@ -15,9 +16,39 @@ sb.mock(import('../src/features/preload/api/preload.api.ts'));
 sb.mock(import('../src/features/progress/api/progress.api.ts'));
 
 const preview: Preview = {
+  // Design system density is only the root font size (docs/plans/style-guide.md)
+  globalTypes: {
+    density: {
+      description: 'Root font size: web 16px, TV 1080p 24px (TV 720p uses the web size)',
+      toolbar: {
+        title: 'Density',
+        icon: 'mirror',
+        items: [
+          { value: 'web', title: 'Web (16px)' },
+          { value: 'tv', title: 'TV 1080p (24px)' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: { density: 'web' },
+  decorators: [
+    (Story, context) => {
+      document.documentElement.dataset['density'] = String(context.globals['density'] ?? 'web');
+      return Story();
+    },
+  ],
   parameters: {
     options: {
-      storySort: { order: ['Miauflix UI', ['Introduction', 'Composition', 'Components'], '*'] },
+      storySort: {
+        order: [
+          'Miauflix UI',
+          ['Introduction', 'Composition', 'Components'],
+          'Design System',
+          ['Foundations', 'Controls'],
+          '*',
+        ],
+      },
     },
     controls: {
       matchers: {

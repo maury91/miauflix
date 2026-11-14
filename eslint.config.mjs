@@ -223,7 +223,11 @@ export default [
   {
     // Components migrated to build-time styles (docs/development/css-architecture.md); add each
     // folder as it migrates, so it can't go back to generating CSS at runtime.
-    files: ['frontend/src/**/*.css.ts', 'frontend/src/shared/ui/media-card/**/*.{ts,tsx}'],
+    files: [
+      'frontend/src/**/*.css.ts',
+      'frontend/src/shared/ui/media-card/**/*.{ts,tsx}',
+      'frontend/src/shared/design-system/**/*.{ts,tsx}',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',
