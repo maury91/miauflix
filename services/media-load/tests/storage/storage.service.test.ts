@@ -1537,6 +1537,16 @@ describe('StorageService', () => {
           reservedBytes: 300 * 1024,
           remuxReservedBytes: 0,
         });
+
+        // A pack still downloading: the remux room comes on top of what it may still write, so
+        // 600 KiB to download and a 500 KiB remux do not fit in 1 MiB.
+        await storageService.reserveStorage(targetSource.id, 600 * 1024, true);
+        await expect(
+          storageService.reserveAdditional(targetSource.id, 500 * 1024, false)
+        ).rejects.toThrow('Insufficient storage capacity');
+        expect((await storageService.getStorageBySource(targetSource.id))?.remuxReservedBytes).toBe(
+          0
+        );
       } finally {
         if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
         else delete process.env.STORAGE_THRESHOLD;

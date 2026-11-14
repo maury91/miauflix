@@ -61,6 +61,22 @@ describe('media versions', () => {
     }
   });
 
+  it('records the original from the probe kept when another report arrives', async () => {
+    const { dataSource, variants, probes } = await setupTest();
+    try {
+      await probes.save(7, 'Show/E01.mkv', JSON.stringify(probe));
+      const other = { ...probe, streams: [{ codec_type: 'video', codec_name: 'h264' }] };
+      await probes.save(7, 'Show/E01.mkv', JSON.stringify(other));
+      expect(JSON.parse((await probes.find(7, 'Show/E01.mkv'))!)).toEqual(probe);
+      expect(await variants.find(7, 'Show/E01.mkv', 'original')).toMatchObject({
+        videoCodec: 'hevc',
+        audioCodecs: ['truehd', 'ac3'],
+      });
+    } finally {
+      await dataSource.destroy();
+    }
+  });
+
   it('stores no probe without its original version', async () => {
     const { dataSource, variants, probes } = await setupTest();
     try {

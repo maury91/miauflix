@@ -222,6 +222,15 @@ describe('TV remux files', () => {
     expect(response.headers.get('content-type')).toBe('application/vnd.apple.mpegurl');
   });
 
+  it('reads a playlist it shortens whole, whatever range was asked for', async () => {
+    const { app, mediaLoadClient, source } = setupTest();
+    mediaLoadClient.readRemux.mockResolvedValue(new Response('#EXTM3U\n'));
+    await app.request(`/${token}/remux/index.m3u8?start=31`, {
+      headers: { range: 'bytes=10-20' },
+    });
+    expect(mediaLoadClient.readRemux).toHaveBeenCalledWith(source, 'index.m3u8', undefined);
+  });
+
   it('answers 404 for a file the remux does not have', async () => {
     const { app, mediaLoadClient } = setupTest();
     mediaLoadClient.readRemux.mockRejectedValue(

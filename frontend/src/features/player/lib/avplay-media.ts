@@ -159,6 +159,11 @@ class AvplayAudioTrack {
     if (!value) this.selected = false;
     else if (!this.selected) this.selected = this.select();
   }
+
+  /** The selection did not happen after all: enabling the track tries it again. */
+  reset(): void {
+    this.selected = false;
+  }
 }
 
 /**
@@ -183,7 +188,9 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
   /** Where the file was opened at, until it has prepared. */
   private startedAt: number | null = null;
   /** An audio track chosen while paused, selected when playback starts. */
-  private pendingAudioTrack: number | null = null;
+  private pendingAudioTrack: { index: number; track: AvplayAudioTrack } | null = null;
+  /** Seeks asked for since opening, so a late failure of the opening seek cannot undo them. */
+  private seekRequests = 0;
   private lastTimeUpdate = 0;
   /** Bumped on every open and close, so callbacks of an earlier file are ignored. */
   private generation = 0;
@@ -200,6 +207,7 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     if (!Number.isFinite(seconds)) return;
     // Where it opened: as it prepares, a resume to the same place needs no seek.
     if (this.openedAt(seconds)) return;
+    this.seekRequests += 1;
     this.position = Math.max(0, seconds);
     if (!this.prepared) {
       this.pendingSeek = this.position;
@@ -262,11 +270,14 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
       // Prepared without waiting for the seek: Tizen 5.5 prepares at the seek's target that way
       // (and calls its success callback), which Samsung's reference does not promise.
       let refusedOnce = false;
+      const requestsAtOpen = this.seekRequests;
       const refused = (): void => {
         if (generation !== this.generation || refusedOnce) return;
         refusedOnce = true;
-        // This AVPlay cannot seek before preparing: it seeks once prepared instead
         this.startedAt = null;
+        // A seek asked for since stands: going back to the start would undo it.
+        if (this.seekRequests !== requestsAtOpen) return;
+        // This AVPlay cannot seek before preparing: it seeks once prepared instead
         if (this.prepared) this.currentTime = startSeconds;
         else this.pendingSeek = startSeconds;
       };
@@ -396,9 +407,10 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     this.pendingAudioTrack = null;
     if (audioTrack !== null) {
       try {
-        this.avplay.setSelectTrack('AUDIO', audioTrack);
+        this.avplay.setSelectTrack('AUDIO', audioTrack.index);
       } catch {
-        // The track stays as AVPlay had it
+        // AVPlay kept its track: the one asked for is not selected, and can be asked for again
+        audioTrack.track.reset();
       }
     }
     if (this.isPaused) {
@@ -510,21 +522,21 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
       return this.avplay
         .getTotalTrackInfo()
         .filter((track: TrackInfo) => track.type === 'AUDIO')
-        .map(
-          (track: TrackInfo) =>
-            new AvplayAudioTrack(() => {
-              try {
-                this.avplay.setSelectTrack('AUDIO', track.index);
-                this.pendingAudioTrack = null;
-                return true;
-              } catch {
-                // AVPlay switches audio only while playing: a paused player switches on play.
-                if (!this.isPaused) return false;
-                this.pendingAudioTrack = track.index;
-                return true;
-              }
-            })
-        );
+        .map((track: TrackInfo) => {
+          const wrapper: AvplayAudioTrack = new AvplayAudioTrack(() => {
+            try {
+              this.avplay.setSelectTrack('AUDIO', track.index);
+              this.pendingAudioTrack = null;
+              return true;
+            } catch {
+              // AVPlay switches audio only while playing: a paused player switches on play.
+              if (!this.isPaused) return false;
+              this.pendingAudioTrack = { index: track.index, track: wrapper };
+              return true;
+            }
+          });
+          return wrapper;
+        });
     } catch {
       return [];
     }

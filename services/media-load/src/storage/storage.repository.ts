@@ -311,9 +311,12 @@ export class StorageRepository {
     return this.sum('size');
   }
 
-  /** Application charge: physical allocation, or the reservations until measured. */
+  /**
+   * Application charge: physical allocation, or the reservation until measured, plus the room a
+   * remux being written holds.
+   */
   async getChargedStorageUsage(): Promise<bigint> {
-    return this.sum('MAX(allocatedBytes, reservedBytes, remuxReservedBytes)');
+    return this.sum('MAX(allocatedBytes, reservedBytes) + remuxReservedBytes');
   }
 
   async getTotalReservedStorageUsage(): Promise<bigint> {

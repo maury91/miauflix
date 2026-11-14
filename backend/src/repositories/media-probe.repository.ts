@@ -21,8 +21,8 @@ export class MediaProbeRepository {
    * recorded as its source's original version, with its codecs.
    */
   async save(sourceId: number, filePath: string, result: string): Promise<void> {
-    const codecs = probeCodecs(JSON.parse(result));
-    // One transaction: a stored probe always has its original version recorded.
+    // One transaction: a stored probe always has its original version recorded, from the probe
+    // kept (the first one, when another was stored meanwhile).
     await this.db.transaction(async manager => {
       await manager
         .createQueryBuilder()
@@ -31,9 +31,17 @@ export class MediaProbeRepository {
         .values({ sourceId, filePath, result })
         .orIgnore()
         .execute();
+      const kept = await manager.findOne(MediaProbe, { where: { sourceId, filePath } });
       await this.db
         .getMediaVariantRepository()
-        .save(sourceId, filePath, 'original', 'ready', codecs, manager);
+        .save(
+          sourceId,
+          filePath,
+          'original',
+          'ready',
+          probeCodecs(JSON.parse(kept?.result ?? result)),
+          manager
+        );
     });
   }
 

@@ -228,6 +228,26 @@ describe('AvplayMedia', () => {
     expect(media.duration).toBe(3600);
   });
 
+  it('keeps a seek asked for before the opening seek reported its failure', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    let refused: (() => void) | undefined;
+    avplay.seekTo.mockImplementationOnce(
+      (_milliseconds: number, _onSuccess?: () => void, onError?: () => void) => {
+        refused = onError;
+      }
+    );
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    media.currentTime = 900;
+    refused?.();
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      900_000,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
   it('keeps the length AVPlay reports, and its start, for a finished file', () => {
     const { avplay, media, element, prepare } = setupTest();
     media.open('https://miauflix.example/api/stream/key', element, 3539.5);
@@ -337,6 +357,25 @@ describe('AvplayMedia', () => {
     await media.play();
     expect(avplay.setSelectTrack).toHaveBeenCalledTimes(2);
     expect(avplay.setSelectTrack).toHaveBeenLastCalledWith('AUDIO', 2);
+  });
+
+  it('lets an audio track be asked for again when switching to it on play fails', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/stream', element);
+    prepare();
+    avplay.setSelectTrack
+      .mockImplementationOnce(() => {
+        throw new Error('InvalidStateError');
+      })
+      .mockImplementationOnce(() => {
+        throw new Error('InvalidStateError');
+      });
+    media.audioTracks[1].enabled = true;
+    await media.play();
+    expect(media.audioTracks[1].enabled).toBe(false);
+    media.audioTracks[1].enabled = true;
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(3);
+    expect(media.audioTracks[1].enabled).toBe(true);
   });
 
   it('reports a file AVPlay cannot prepare', () => {

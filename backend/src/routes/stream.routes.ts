@@ -87,15 +87,16 @@ export const createStreamRoutes = ({
         if (unavailable) throw new HttpError(404, unavailable);
         if (!resolved) throw new HttpError(403, 'Playback grant does not match source');
         if (name.endsWith('.ts')) openedPlaylists.segmentRequested(token);
+        // A playback opening its playlist starts where the viewer is; once playing, it is whole.
+        const cutting = name === 'index.m3u8' && start !== undefined && openedPlaylists.cut(token);
         try {
+          // A playlist being shortened is read whole: a range of it would be cut as if complete.
           const response = await mediaLoadClient.readRemux(
             resolved.target,
             name,
-            c.req.header('range')
+            cutting ? undefined : c.req.header('range')
           );
-          // A playback opening its playlist starts where the viewer is; once playing, it is whole.
-          if (name !== 'index.m3u8' || start === undefined || !openedPlaylists.cut(token))
-            return response;
+          if (!cutting || start === undefined) return response;
           // A shorter body: its length and range are recomputed, not the upstream ones.
           const headers = new Headers(response.headers);
           for (const name of ['content-length', 'content-range', 'content-encoding', 'etag'])

@@ -115,7 +115,7 @@ export const migrations: string[] = [
   `DELETE FROM remux_file;
   UPDATE remux SET state = 'failed', error = 'Rebuilt as MPEG-TS', readySeconds = 0, bytes = 0,
     completedAt = NULL;`,
-  // Room held for a TV remux being written, apart from the download's own reservation: the total
-  // the storage may reach while it is built (what it held, plus the remux's estimate).
+  // Room held for a TV remux being written, on top of the download's own commitment (allocation
+  // or reservation): the remux's estimated size, charged until the remux ends.
   `ALTER TABLE storage ADD COLUMN remuxReservedBytes INTEGER NOT NULL DEFAULT 0;`,
 ];
