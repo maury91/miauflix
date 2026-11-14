@@ -16,6 +16,9 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     docs: {
+      // Each example in its own frame: dialogs portal to the body, so inline ones would all cover
+      // the Docs page (and its scroll lock and `inert` would apply to it)
+      story: { inline: false, height: '32rem' },
       description: {
         component:
           'A labelled modal overlay: title, optional description, a body that scrolls on its own, and actions with the primary one first (focus lands there). Back and a press on the scrim dismiss it when `onDismiss` is given; only the topmost dialog responds, and a field in edit mode leaves edit mode first. The navigation layer contains virtual focus in the dialog and restores the opener when it closes.',

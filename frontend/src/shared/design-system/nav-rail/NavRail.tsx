@@ -1,4 +1,4 @@
-import { type ButtonHTMLAttributes, type ReactNode, useId } from 'react';
+import { type ButtonHTMLAttributes, type MouseEventHandler, type ReactNode, useId } from 'react';
 
 import { visuallyHidden } from '../a11y.css';
 import * as actionStyles from '../action/action.css';
@@ -19,6 +19,13 @@ export interface NavRailProps {
   children: ReactNode;
   /** NavItems pinned to the bottom (Settings, or Back on inner pages). */
   end?: ReactNode;
+  /**
+   * The pointer entered the rail (its expanded panel included), so the navigation layer can expand
+   * it before an item takes focus.
+   */
+  onMouseEnter?: MouseEventHandler<HTMLElement>;
+  /** The pointer left the rail, so the navigation layer can give focus back to the page. */
+  onMouseLeave?: MouseEventHandler<HTMLElement>;
 }
 
 /**
@@ -26,10 +33,23 @@ export interface NavRailProps {
  * every platform, alongside the remote's Back key). Its items are inverted-fill actions; the
  * current route is separate from focus.
  */
-export function NavRail({ label, expanded = false, children, end }: NavRailProps) {
+export function NavRail({
+  label,
+  expanded = false,
+  children,
+  end,
+  onMouseEnter,
+  onMouseLeave,
+}: NavRailProps) {
   return (
     <SurfaceContextProvider value="solid">
-      <nav aria-label={label} className={styles.rail} data-expanded={expanded || undefined}>
+      <nav
+        aria-label={label}
+        className={styles.rail}
+        data-expanded={expanded || undefined}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
         <div className={styles.panel}>
           <div className={styles.items}>{children}</div>
           {end && <div className={`${styles.items} ${styles.end}`}>{end}</div>}
