@@ -104,17 +104,23 @@ export function tizenCodecs(): PlaybackPreferences['tizenCodecs'] {
   const audioQuery = systeminfo?.isSupportedAudioCodec;
   const videoQuery = systeminfo?.isSupportedVideoCodec;
   if (!audioQuery || !videoQuery) return undefined;
-  const supported = (query: (codec: string) => boolean, codec: string) => {
-    try {
-      return query.call(systeminfo, codec) === true;
-    } catch {
-      return false;
-    }
-  };
-  return {
-    audio: TIZEN_AUDIO_CODECS.filter(codec => supported(audioQuery, codec)),
-    video: TIZEN_VIDEO_CODECS.filter(codec => supported(videoQuery, codec)),
-  };
+  // `false` is a codec the TV does not decode. A name its firmware does not know throws (HEIC on
+  // some): skipped. When every query of a kind throws, nothing is known, and an empty list would
+  // turn away codecs the fixed list knows the TV plays: nothing is sent.
+  const answered = { audio: false, video: false };
+  const supported =
+    (kind: keyof typeof answered, query: (codec: string) => boolean) => (codec: string) => {
+      try {
+        const result = query.call(systeminfo, codec) === true;
+        answered[kind] = true;
+        return result;
+      } catch {
+        return false;
+      }
+    };
+  const audio = TIZEN_AUDIO_CODECS.filter(supported('audio', audioQuery));
+  const video = TIZEN_VIDEO_CODECS.filter(supported('video', videoQuery));
+  return answered.audio && answered.video ? { audio, video } : undefined;
 }
 
 /** AVPlay's capabilities, with the codecs this TV reports when it can be asked. */
@@ -174,6 +180,8 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
   private pendingSeek: number | null = null;
   /** Where the file was opened at, until it has prepared. */
   private startedAt: number | null = null;
+  /** An audio track chosen while paused, selected when playback starts. */
+  private pendingAudioTrack: number | null = null;
   private lastTimeUpdate = 0;
   /** Bumped on every open and close, so callbacks of an earlier file are ignored. */
   private generation = 0;
@@ -249,13 +257,23 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
       return;
     }
     if (startSeconds !== undefined && startSeconds > 0) {
-      try {
-        this.avplay.seekTo(Math.floor(startSeconds * 1000));
-        this.position = startSeconds;
-        this.startedAt = startSeconds;
-      } catch {
+      // Prepared without waiting for the seek: Tizen 5.5 prepares at the seek's target that way
+      // (and calls its success callback), which Samsung's reference does not promise.
+      let refusedOnce = false;
+      const refused = (): void => {
+        if (generation !== this.generation || refusedOnce) return;
+        refusedOnce = true;
         // This AVPlay cannot seek before preparing: it seeks once prepared instead
-        this.pendingSeek = startSeconds;
+        this.startedAt = null;
+        if (this.prepared) this.currentTime = startSeconds;
+        else this.pendingSeek = startSeconds;
+      };
+      this.position = startSeconds;
+      this.startedAt = startSeconds;
+      try {
+        this.avplay.seekTo(Math.floor(startSeconds * 1000), () => undefined, refused);
+      } catch {
+        refused();
       }
     }
     this.emit('loadstart');
@@ -338,6 +356,7 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
     this.seeking = false;
     this.pendingSeek = null;
     this.startedAt = null;
+    this.pendingAudioTrack = null;
     this.position = 0;
     this.length = Number.NaN;
     this.isPaused = true;
@@ -364,6 +383,15 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
 
   private start(): void {
     this.avplay.play();
+    const audioTrack = this.pendingAudioTrack;
+    this.pendingAudioTrack = null;
+    if (audioTrack !== null) {
+      try {
+        this.avplay.setSelectTrack('AUDIO', audioTrack);
+      } catch {
+        // The track stays as AVPlay had it
+      }
+    }
     if (this.isPaused) {
       this.isPaused = false;
       this.emit('play');
@@ -478,9 +506,13 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
             new AvplayAudioTrack(() => {
               try {
                 this.avplay.setSelectTrack('AUDIO', track.index);
+                this.pendingAudioTrack = null;
                 return true;
               } catch {
-                return false;
+                // AVPlay switches audio only while playing: a paused player switches on play.
+                if (!this.isPaused) return false;
+                this.pendingAudioTrack = track.index;
+                return true;
               }
             })
         );

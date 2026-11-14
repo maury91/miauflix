@@ -12,6 +12,7 @@ import type {
 } from '@miauflix/backend';
 import {
   realtimeActions,
+  selectPlaybackDelivered,
   selectPlaybackDelivery,
   selectPlaybackPieces,
   selectSourceAttempt,
@@ -67,8 +68,10 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
   // Streams start before the file is probed; the probe's delivery arrives over realtime.
   const deliveryUpdate = useSelector(selectPlaybackDelivery(createdSession?.playbackId));
   const downloadedRanges = useSelector(selectPlaybackPieces(createdSession?.playbackId));
-  // Only a delivery changes the session: a `recreate` must not restart what is playing.
-  const deliveredUpdate = deliveryUpdate?.type === 'delivery' ? deliveryUpdate : undefined;
+  // Only a delivery changes the session: a `recreate` must not restart what is playing, nor undo
+  // the delivery that came before it.
+  const deliveredUpdate =
+    useSelector(selectPlaybackDelivered(createdSession?.playbackId)) ?? undefined;
   const session = useMemo(
     () =>
       createdSession && deliveredUpdate

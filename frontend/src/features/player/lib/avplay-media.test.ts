@@ -173,7 +173,7 @@ describe('AvplayMedia', () => {
       media.currentTime = 851.5;
     });
     media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
-    expect(avplay.seekTo).toHaveBeenCalledWith(851_200);
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_200, expect.any(Function), expect.any(Function));
     expect(avplay.seekTo.mock.invocationCallOrder[0]).toBeLessThan(
       avplay.prepareAsync.mock.invocationCallOrder[0]
     );
@@ -193,6 +193,25 @@ describe('AvplayMedia', () => {
       throw new Error('InvalidStateError');
     });
     media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    prepare();
+    expect(avplay.seekTo).toHaveBeenLastCalledWith(
+      600_000,
+      expect.any(Function),
+      expect.any(Function)
+    );
+  });
+
+  it('seeks to the start once prepared when AVPlay reports the early seek failed', () => {
+    const { avplay, media, element, prepare } = setupTest();
+    avplay.getDuration.mockReturnValue(0);
+    let refused: (() => void) | undefined;
+    avplay.seekTo.mockImplementationOnce(
+      (_milliseconds: number, _onSuccess?: () => void, onError?: () => void) => {
+        refused = onError;
+      }
+    );
+    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    refused?.();
     prepare();
     expect(avplay.seekTo).toHaveBeenLastCalledWith(
       600_000,
@@ -296,6 +315,22 @@ describe('AvplayMedia', () => {
     expect(media.audioTracks[1].enabled).toBe(true);
   });
 
+  it('switches audio chosen while paused once playback starts', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauflix.example/stream', element);
+    prepare();
+    // AVPlay switches audio tracks only while playing.
+    avplay.setSelectTrack.mockImplementationOnce(() => {
+      throw new Error('InvalidStateError');
+    });
+    media.audioTracks[1].enabled = true;
+    expect(media.audioTracks[1].enabled).toBe(true);
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(1);
+    await media.play();
+    expect(avplay.setSelectTrack).toHaveBeenCalledTimes(2);
+    expect(avplay.setSelectTrack).toHaveBeenLastCalledWith('AUDIO', 2);
+  });
+
   it('reports a file AVPlay cannot prepare', () => {
     const { media, events, element, failPrepare } = setupTest();
     media.open('https://miauflix.example/stream', element);
@@ -329,6 +364,19 @@ describe('avplayCapabilities', () => {
 
   it('keeps the fixed codec list on a TV that cannot be asked (Tizen 5.5)', () => {
     window.webapis = { avplay: {} as AVPlay };
+    expect(avplayCapabilities()).toEqual(AVPLAY_CAPABILITIES);
+  });
+
+  it('keeps the fixed codec list when the TV cannot answer for a kind of codec', () => {
+    window.webapis = {
+      avplay: {} as AVPlay,
+      systeminfo: {
+        isSupportedAudioCodec: codec => codec === 'AAC',
+        isSupportedVideoCodec: () => {
+          throw new Error('NotSupportedError');
+        },
+      },
+    };
     expect(avplayCapabilities()).toEqual(AVPLAY_CAPABILITIES);
   });
 

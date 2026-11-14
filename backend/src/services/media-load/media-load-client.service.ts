@@ -417,9 +417,12 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
     return this.engine(() => this.client.remuxStatus({ sourceId, filePath }));
   }
 
-  /** Hear remuxes progress, finish or fail; returns the unsubscribe function. */
-  onRemuxChanged(listener: (status: RemuxStatus) => void): () => void {
-    return this.client.remuxChanged.on(listener);
+  /**
+   * Hear remuxes progress, finish or fail; `onResync` runs after a gap in which updates were
+   * lost. Returns the unsubscribe function.
+   */
+  onRemuxChanged(listener: (status: RemuxStatus) => void, onResync?: () => void): () => void {
+    return this.client.remuxChanged.on(listener, { onResync });
   }
 
   /* ---------- bytes ---------- */

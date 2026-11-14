@@ -109,6 +109,8 @@ export class RemuxService {
   private job: Job | null = null;
   private retryTimer: ReturnType<typeof setTimeout> | null = null;
   private scheduling = false;
+  /** The queue pass in progress, which a shutdown waits for. */
+  private draining: Promise<void> = Promise.resolve();
   private rescan = false;
   private closed = false;
   private readonly listeners = new Set<(status: RemuxStatus) => void>();
@@ -133,6 +135,8 @@ export class RemuxService {
     }
     this.server?.stop(true);
     this.server = null;
+    // The stopped job still puts its remux back in the queue: the database must stay open for it.
+    await this.draining;
   }
 
   onChange(listener: (status: RemuxStatus) => void): () => void {
@@ -285,7 +289,7 @@ export class RemuxService {
     this.rescan = true;
     if (this.scheduling) return;
     this.scheduling = true;
-    void this.drain()
+    this.draining = this.drain()
       .catch(error => logger.error('Remux', 'Remux scheduling failed', error))
       .finally(() => {
         this.scheduling = false;
@@ -441,6 +445,13 @@ export class RemuxService {
     try {
       await rm(job.dir, { recursive: true, force: true });
       await mkdir(job.dir, { recursive: true });
+      // Stopped while its directory was prepared (a viewer's remux, a removal, a shutdown): the
+      // kill above found no FFmpeg to stop.
+      if (job.stopped === 'drop') return;
+      if (job.stopped === 'requeue') {
+        await this.discard(record);
+        return;
+      }
       repository.setState(record.id, 'running');
       this.emit(record.id);
       const base = `http://127.0.0.1:${server.port}/${job.token}`;
@@ -461,7 +472,7 @@ export class RemuxService {
         child.on('error', reject);
         child.on('close', resolve);
       });
-      await this.settle(job);
+      await this.settle(job, code === 0);
       if (job.stopped === 'drop') return;
       if (job.stopped === 'requeue') {
         await this.discard(record);
@@ -494,16 +505,17 @@ export class RemuxService {
 
   /**
    * Wait for the uploads FFmpeg sent before exiting: it does not wait for the last ones to be
-   * received, so they can reach the loopback server after the process is gone.
+   * received, so they can reach the loopback server after the process is gone. After a clean
+   * exit that includes the closing playlist.
    */
-  private async settle(job: Job): Promise<void> {
+  private async settle(job: Job, succeeded: boolean): Promise<void> {
     const deadline = Date.now() + SETTLE_MS;
     for (;;) {
       await Promise.all([job.writes, ...job.sidecarWrites]);
       if (job.stopped || Date.now() >= deadline) return;
       const names = new Set(this.deps.repository.files(job.record.id).map(file => file.name));
       const expected = [...job.segments.map(segment => segment.name), ...job.sidecars.keys()];
-      if (expected.every(name => names.has(name))) return;
+      if ((job.ended || !succeeded) && expected.every(name => names.has(name))) return;
       await Bun.sleep(50);
     }
   }

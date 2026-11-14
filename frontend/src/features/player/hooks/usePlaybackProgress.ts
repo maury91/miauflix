@@ -22,6 +22,8 @@ export function useResumePoint(playable: PlayableRef) {
     resumeRef,
     /** The saved progress has loaded (it may hold nothing for this target). */
     hasProgress: !!progress.data,
+    /** The saved progress has loaded or failed to: waiting for it longer is pointless. */
+    progressSettled: !progress.isLoading,
     resumeApplied,
   };
 }

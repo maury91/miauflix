@@ -11,6 +11,7 @@ const {
   createSession,
   updateProgress,
   resumeEntry,
+  progressLoading,
   startAudioPlayback,
   stopAudioPlayback,
   searchSubtitles,
@@ -21,6 +22,7 @@ const {
   createSession: vi.fn(),
   updateProgress: vi.fn(),
   resumeEntry: { current: undefined as ProgressEntry | undefined },
+  progressLoading: { current: false },
   startAudioPlayback: vi.fn(),
   stopAudioPlayback: vi.fn(),
 }));
@@ -76,7 +78,10 @@ vi.mock('@features/notifications/api/notifications.api', async () => {
 vi.mock('@features/player/lib/audio-playback', () => ({ startAudioPlayback }));
 vi.mock('@features/progress/api/progress.api', () => ({
   progressForPlayable: () => resumeEntry.current,
-  useGetProgressQuery: () => ({ data: { progress: [] } }),
+  useGetProgressQuery: () =>
+    progressLoading.current
+      ? { data: undefined, isLoading: true }
+      : { data: { progress: [] }, isLoading: false },
   useUpdateProgressMutation: () => [updateProgress],
 }));
 vi.mock('@features/realtime/realtime.middleware', () => ({
@@ -162,6 +167,7 @@ describe('PlayerView on a Samsung TV', () => {
       unwrap: () => Promise.resolve({ configured: false, available: false, candidates: [] }),
     });
     resumeEntry.current = undefined;
+    progressLoading.current = false;
     startAudioPlayback.mockReset().mockReturnValue(stopAudioPlayback);
     stopAudioPlayback.mockReset();
   });
@@ -313,6 +319,47 @@ describe('PlayerView on a Samsung TV', () => {
     );
   });
 
+  it('waits for the saved position before opening a TV version', async () => {
+    const { avplay } = fakeAvplay();
+    window.webapis = { avplay };
+    progressLoading.current = true;
+    createSession.mockReturnValue({
+      unwrap: () =>
+        Promise.resolve({
+          ...session,
+          streamUrl: '/api/stream/streaming-key/remux/index.m3u8',
+          delivery: {
+            mode: 'remux',
+            audioCodec: 'ac3',
+            durationSeconds: 3540,
+            mimeType: 'application/vnd.apple.mpegurl',
+            audioTracks: [],
+            defaultAudioTrackIndex: 0,
+          },
+        }),
+    });
+    const view = render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
+    await waitFor(() => expect(createSession).toHaveBeenCalled());
+    await act(async () => undefined);
+    expect(avplay.open).not.toHaveBeenCalled();
+
+    resumeEntry.current = {
+      playable,
+      state: 'paused',
+      positionSeconds: 1200.7,
+      durationSeconds: 3540,
+      updatedAt: '2026-11-13T10:00:00Z',
+    };
+    progressLoading.current = false;
+    view.rerender(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
+    await waitFor(() =>
+      expect(avplay.open).toHaveBeenCalledWith(
+        'https://miauflix.example/api/stream/streaming-key/remux/index.m3u8?start=1200'
+      )
+    );
+    expect(avplay.open).toHaveBeenCalledTimes(1);
+  });
+
   it('holds the converted picture until the TV version plays from the same position', async () => {
     const { avplay } = fakeAvplay();
     let prepared: (() => void) | undefined;
@@ -385,7 +432,7 @@ describe('PlayerView on a Samsung TV', () => {
     expect(view.container.querySelector('video')).toBe(video);
     // AVPlay opens where the converted stream got to: seeked before it prepares.
     expect(avplay.seekTo).toHaveBeenCalledTimes(1);
-    expect(avplay.seekTo).toHaveBeenCalledWith(851_500);
+    expect(avplay.seekTo).toHaveBeenCalledWith(851_500, expect.any(Function), expect.any(Function));
     expect(avplay.prepareAsync.mock.invocationCallOrder[0]).toBeGreaterThan(
       avplay.seekTo.mock.invocationCallOrder[0]
     );

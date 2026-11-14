@@ -223,6 +223,16 @@ describe('RemuxService', () => {
     expect(order).toEqual([2, 1]);
   });
 
+  it('puts a running remux back in the queue before a shutdown returns', async () => {
+    const { service } = await setup();
+    process.env.FAKE_FFMPEG_HANG = '1';
+    await service.request(1, 'Show/E01.mkv', plan, 'next');
+    while (service.find(1, 'Show/E01.mkv')?.state !== 'running') await Bun.sleep(5);
+    await service.close();
+    // Nothing is left to touch the database once it is closed.
+    expect(service.find(1, 'Show/E01.mkv')?.state).toBe('queued');
+  });
+
   it('drops a running remux whose source is removed', async () => {
     const { service, stored, removeStorage, database } = await setup();
     process.env.FAKE_FFMPEG_HANG = '1';

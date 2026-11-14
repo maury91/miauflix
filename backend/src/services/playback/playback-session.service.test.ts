@@ -680,8 +680,16 @@ describe('PlaybackSessionService', () => {
       requested?: object | null;
       /** The viewer's saved position, out of 600 s. */
       positionSeconds?: number;
+      /** The TV cannot decode the file's video either: it is converted too. */
+      transcodeVideo?: boolean;
+      /** What media-load answers when asked for the remux directly. */
+      current?: object | null;
+      /** Holds the saved-position lookups until released. */
+      slowProgress?: boolean;
     }) => {
       let changed: ((status: object) => void) | undefined;
+      let resync: (() => void) | undefined;
+      const lookups: Array<() => void> = [];
       const remux = {
         existing: jest.fn(async () =>
           remuxState.existing ? { status: remuxState.existing, plan, probe } : null
@@ -691,10 +699,14 @@ describe('PlaybackSessionService', () => {
             ? null
             : { status: remuxState.requested ?? status('queued'), plan, probe }
         ),
-        onChange: jest.fn((listener: typeof changed) => {
+        onChange: jest.fn((listener: typeof changed, onResync?: () => void) => {
           changed = listener;
+          resync = onResync;
           return () => undefined;
         }),
+        status: jest.fn(async (sourceId: number) =>
+          remuxState.current ? { sourceId, filePath: 'movie.mkv', ...remuxState.current } : null
+        ),
       };
       const preparation = {
         prepare: jest.fn(async (_playable: unknown, options: { avoidSourceIds?: number[] }) =>
@@ -709,19 +721,24 @@ describe('PlaybackSessionService', () => {
         config: { getOrThrow: () => 60000 } as never,
         warmup: { promote: jest.fn() } as never,
         audioPlaybackService: {
-          knownDelivery: jest.fn(async () => ({ mode: 'audio-transcode', durationSeconds: 600 })),
+          knownDelivery: jest.fn(async () => ({
+            mode: 'audio-transcode',
+            durationSeconds: 600,
+            transcodeVideo: remuxState.transcodeVideo ?? false,
+          })),
         } as never,
         remux: remux as never,
         progress: {
-          findByKey: jest.fn(async () =>
-            remuxState.positionSeconds
+          findByKey: jest.fn(async () => {
+            if (remuxState.slowProgress) await new Promise<void>(resolve => lookups.push(resolve));
+            return remuxState.positionSeconds
               ? {
                   state: 'in_progress',
                   positionSeconds: remuxState.positionSeconds,
                   durationSeconds: 600,
                 }
-              : null
-          ),
+              : null;
+          }),
         } as never,
       });
       const listener = jest.fn();
@@ -736,7 +753,16 @@ describe('PlaybackSessionService', () => {
       /** media-load reports a remux of `sourceId`'s movie.mkv. */
       const report = (sourceId: number, state: string, readySeconds = 0) =>
         changed?.({ sourceId, filePath: 'movie.mkv', ...status(state, readySeconds) });
-      return { create, remux, preparation, listener, report };
+      const releaseLookups = () => lookups.splice(0).forEach(release => release());
+      return {
+        create,
+        remux,
+        preparation,
+        listener,
+        report,
+        resync: () => resync?.(),
+        releaseLookups,
+      };
     };
 
     it('plays a finished remux natively instead of converting or switching sources', async () => {
@@ -791,6 +817,45 @@ describe('PlaybackSessionService', () => {
       report(1, 'complete', 600);
       await settle();
       expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps converting the video for a TV that cannot decode it, remux or not', async () => {
+      const { create, remux } = setupTest({
+        existing: status('complete', 600),
+        transcodeVideo: true,
+      });
+      const session = await create();
+      expect(session?.delivery?.mode).toBe('audio-transcode');
+      expect(remux.existing).not.toHaveBeenCalled();
+      expect(remux.request).not.toHaveBeenCalled();
+    });
+
+    it('checks the remux a session waits for after missing its events', async () => {
+      const { create, listener, resync } = setupTest({ current: status('complete', 600) });
+      const session = await create();
+      expect(session?.delivery?.mode).toBe('audio-transcode');
+      resync();
+      await settle();
+      await settle();
+      expect(listener).toHaveBeenCalledWith(recreated(session?.playbackId));
+    });
+
+    it('checks a completion heard while the previous progress was being checked', async () => {
+      const { create, listener, report, releaseLookups } = setupTest({
+        positionSeconds: 300,
+        slowProgress: true,
+      });
+      const pending = create();
+      await settle();
+      releaseLookups();
+      const session = await pending;
+      report(1, 'running', 330);
+      await settle();
+      report(1, 'complete', 600);
+      releaseLookups();
+      await settle();
+      await settle();
+      expect(listener).toHaveBeenCalledWith(recreated(session?.playbackId));
     });
 
     it('converts as before when no remux can be built', async () => {

@@ -31,7 +31,12 @@ import {
 } from './audio-playback.service';
 import { withDeviceCodecs } from './device-codecs';
 import { assessSwarm, type SwarmSample } from './swarm-health';
-import { remuxDelivery, remuxPlayable, type TvRemuxService } from './tv-remux.service';
+import {
+  remuxDelivery,
+  remuxPlayable,
+  remuxReplaces,
+  type TvRemuxService,
+} from './tv-remux.service';
 
 /** How often live sessions' sources are sampled. */
 const HEALTH_SAMPLE_MS = 1_000;
@@ -173,7 +178,7 @@ export interface PlaybackSessionServiceOptions {
   >;
   progress?: Pick<ProgressRepository, 'findByKey'>;
   playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
-  remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request'>;
+  remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request' | 'status'>;
 }
 
 export class PlaybackSessionService {
@@ -184,6 +189,8 @@ export class PlaybackSessionService {
   private readonly liveSessions = new Map<string, LiveSession>();
   /** Sessions whose viewer position is being compared with their remux's progress. */
   private readonly checkingRemux = new Set<string>();
+  /** The latest remux status heard while a session was being checked, checked next. */
+  private readonly nextRemuxStatus = new Map<string, RemuxStatus>();
   private healthTimer: ReturnType<typeof setInterval> | undefined;
   private checkingHealth = false;
   private readonly ttlMs: number;
@@ -199,7 +206,7 @@ export class PlaybackSessionService {
   >;
   private readonly progress?: Pick<ProgressRepository, 'findByKey'>;
   private readonly playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
-  private readonly remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request'>;
+  private readonly remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request' | 'status'>;
 
   constructor({
     db,
@@ -226,7 +233,10 @@ export class PlaybackSessionService {
     this.grants = db.getPlaybackGrantRepository();
     this.ttlMs = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
     sourceHealth?.onFailed(sourceId => this.failOver(sourceId));
-    remux?.onChange(status => this.remuxChanged(status));
+    remux?.onChange(
+      status => this.remuxChanged(status),
+      () => void this.resyncRemuxes()
+    );
   }
 
   async create(
@@ -322,7 +332,7 @@ export class PlaybackSessionService {
     // A TV plays a file's remux natively instead of converted audio, once it is ready.
     let awaitingRemux = false;
     const startSeconds = (resumeFraction ?? 0) * (delivery?.durationSeconds ?? 0);
-    if (delivery?.mode === 'audio-transcode' && preferences.playsRemux && prepared.target) {
+    if (remuxReplaces(delivery) && preferences.playsRemux && prepared.target) {
       const existing = await this.remux?.existing(prepared.target);
       if (existing && remuxPlayable(existing.status, startSeconds))
         delivery = remuxDelivery(delivery, existing.plan, existing.probe);
@@ -356,7 +366,7 @@ export class PlaybackSessionService {
         pendingTarget = known ? undefined : switched.target;
       }
     }
-    if (delivery?.mode === 'audio-transcode' && preferences.playsRemux && prepared.target) {
+    if (remuxReplaces(delivery) && preferences.playsRemux && prepared.target) {
       const requested = await this.remux?.request(prepared.target, 'watching');
       if (requested && remuxPlayable(requested.status, startSeconds))
         delivery = remuxDelivery(delivery, requested.plan, requested.probe);
@@ -739,9 +749,10 @@ export class PlaybackSessionService {
             return;
           }
         }
-        if (delivery.mode === 'audio-transcode' && preferences.playsRemux && live) {
+        if (remuxReplaces(delivery) && preferences.playsRemux && live) {
           const requested = await this.remux?.request(target, 'watching');
-          if (requested && remuxPlayable(requested.status)) {
+          // Ready from where the viewer resumes, as the new session checks it.
+          if (requested && (await this.remuxReadyFor(live, requested.status))) {
             emit({ type: 'recreate', reason: 'A TV version of this file is ready.' });
             return;
           }
@@ -798,29 +809,55 @@ export class PlaybackSessionService {
     for (const [playbackId, live] of this.liveSessions) {
       if (!live.awaitingRemux || live.expiresAt <= now) continue;
       if (live.sourceId !== status.sourceId || live.filePath !== status.filePath) continue;
-      if (this.checkingRemux.has(playbackId)) continue;
-      this.checkingRemux.add(playbackId);
-      void this.remuxReadyFor(live, status)
-        .then(ready => {
-          if (!ready || !live.awaitingRemux) return;
-          live.awaitingRemux = false;
-          logger.info(
-            'PlaybackSessionService',
-            `TV remux of source ${status.sourceId} is ${status.state === 'complete' ? 'ready' : 'ahead of the viewer'}; recreating ${playbackId}`
-          );
-          for (const listener of this.deliveryListeners)
-            listener({
-              userId: live.userId,
-              sessionId: live.sessionId,
-              playbackId,
-              update: { type: 'recreate', reason: 'A TV version of this file is ready.' },
-            });
-        })
-        .catch(error =>
-          logger.debug('PlaybackSessionService', 'Could not check the TV remux', error)
-        )
-        .finally(() => this.checkingRemux.delete(playbackId));
+      this.checkRemux(playbackId, live, status);
     }
+  }
+
+  /** Events were lost (media-load reconnected): ask for the remux of every waiting session. */
+  private async resyncRemuxes(): Promise<void> {
+    const now = Date.now();
+    for (const [playbackId, live] of this.liveSessions) {
+      if (!live.awaitingRemux || live.expiresAt <= now || !live.filePath) continue;
+      const status = await this.remux?.status(live.sourceId, live.filePath);
+      if (status && (status.state === 'running' || status.state === 'complete'))
+        this.checkRemux(playbackId, live, status);
+    }
+  }
+
+  /**
+   * Move a session to its remux if it plays from where the viewer is. One check at a time per
+   * session: a status heard meanwhile (its completion, say) is checked once the current one ends.
+   */
+  private checkRemux(playbackId: string, live: LiveSession, status: RemuxStatus): void {
+    if (this.checkingRemux.has(playbackId)) {
+      this.nextRemuxStatus.set(playbackId, status);
+      return;
+    }
+    this.checkingRemux.add(playbackId);
+    void this.remuxReadyFor(live, status)
+      .then(ready => {
+        if (!ready || !live.awaitingRemux) return;
+        live.awaitingRemux = false;
+        logger.info(
+          'PlaybackSessionService',
+          `TV remux of source ${status.sourceId} is ${status.state === 'complete' ? 'ready' : 'ahead of the viewer'}; recreating ${playbackId}`
+        );
+        for (const listener of this.deliveryListeners)
+          listener({
+            userId: live.userId,
+            sessionId: live.sessionId,
+            playbackId,
+            update: { type: 'recreate', reason: 'A TV version of this file is ready.' },
+          });
+      })
+      .catch(error => logger.debug('PlaybackSessionService', 'Could not check the TV remux', error))
+      .finally(() => {
+        this.checkingRemux.delete(playbackId);
+        const next = this.nextRemuxStatus.get(playbackId);
+        this.nextRemuxStatus.delete(playbackId);
+        if (next && live.awaitingRemux && this.liveSessions.get(playbackId) === live)
+          this.checkRemux(playbackId, live, next);
+      });
   }
 
   private async remuxReadyFor(live: LiveSession, status: RemuxStatus): Promise<boolean> {

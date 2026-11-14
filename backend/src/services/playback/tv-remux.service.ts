@@ -162,6 +162,16 @@ export function remuxDelivery(
   };
 }
 
+/**
+ * Whether a remux can stand in for this delivery: converted audio whose video plays as it is
+ * (the remux copies the video; converted video means the client cannot decode it).
+ */
+export function remuxReplaces(
+  delivery: PlaybackDelivery | undefined
+): delivery is PlaybackDelivery {
+  return delivery?.mode === 'audio-transcode' && !delivery.transcodeVideo;
+}
+
 /** Whether a remux plays from `startSeconds`: finished, or built far enough past it. */
 export function remuxPlayable(status: RemuxStatus, startSeconds = 0): boolean {
   if (status.state === 'complete') return true;
@@ -204,6 +214,11 @@ export class TvRemuxService {
       .getRemuxStatus(target.source.id, target.filePath)
       .catch(() => null);
     return status && status.state !== 'failed' ? { status, plan, probe } : null;
+  }
+
+  /** A file's remux status, or null when it has none (or media-load cannot be asked). */
+  async status(sourceId: number, filePath: string): Promise<RemuxStatus | null> {
+    return this.mediaLoad.getRemuxStatus(sourceId, filePath).catch(() => null);
   }
 
   /**
@@ -267,11 +282,11 @@ export class TvRemuxService {
   }
 
   /** Hear remuxes progress and finish; returns the unsubscribe function. */
-  onChange(listener: (status: RemuxStatus) => void): () => void {
+  onChange(listener: (status: RemuxStatus) => void, onResync?: () => void): () => void {
     try {
       return this.mediaLoad.onRemuxChanged(status => {
         if (status.state === 'running' || status.state === 'complete') listener(status);
-      });
+      }, onResync);
     } catch (error) {
       logger.debug('TvRemuxService', 'Remux events are unavailable', error);
       return () => undefined;

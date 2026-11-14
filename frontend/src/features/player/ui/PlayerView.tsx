@@ -301,16 +301,19 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   ]);
 
   // AVPlay opens a TV version still being built from near its newest segment: its playlist is
-  // asked to start where playback will (the held picture, else the resume point), once per stream.
+  // asked to start where playback will (the held picture, else the resume point), once per stream,
+  // so it waits for the saved progress (null until then).
   const avplayStart = useRef<{ streamUrl: string; src: string; start: number } | null>(null);
   const avplayOpen = (() => {
     if (!session || session.delivery?.mode !== 'remux')
       return { src: session?.streamUrl ?? '', start: undefined };
     if (avplayStart.current?.streamUrl === session.streamUrl) return avplayStart.current;
+    const holding = pictureHeld && !!videoElement.current;
+    if (!holding && !resume.progressSettled) return null;
     const saved = resume.resumeRef.current;
     const duration = session.delivery.durationSeconds;
     const start =
-      pictureHeld && videoElement.current
+      holding && videoElement.current
         ? videoElement.current.currentTime
         : saved && saved.state !== 'completed' && saved.positionSeconds > 5 && duration > 0
           ? resumePosition(saved, duration)
@@ -411,7 +414,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       {!session && <PlayerHeader onBack={onBack} />}
       {session ? (
         <>
-          {avplay && playsInAvplay && (
+          {avplay && playsInAvplay && avplayOpen && (
             <AvplayVideo
               avplay={avplay}
               mediaRef={setMedia}
