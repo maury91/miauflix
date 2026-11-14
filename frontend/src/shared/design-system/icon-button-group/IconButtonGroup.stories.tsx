@@ -125,3 +125,51 @@ export const DescriptionAbove: Story = {
     </SurfaceStage>
   ),
 };
+
+function SingleButton() {
+  const [focused, setFocused] = useState<string | undefined>(undefined);
+  return (
+    <SurfaceStage surface="solid">
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '0 8rem' }}>
+        <IconButtonGroup
+          label="Episode options"
+          focusedId={focused}
+          onPointerFocus={setFocused}
+          items={[
+            {
+              id: 'download',
+              label: 'Download',
+              icon: <DownloadIcon />,
+              description: 'Download every episode of this season to watch offline',
+            },
+          ]}
+        />
+      </div>
+    </SurfaceStage>
+  );
+}
+
+/**
+ * A description much wider than the group: it is centred and runs past both ends, while the
+ * group keeps its width and the button never moves.
+ */
+export const LongDescription: Story = {
+  render: () => <SingleButton />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole('button', { name: 'Download' });
+    const group = canvas.getByRole('group', { name: 'Episode options' })
+      .parentElement as HTMLElement;
+    const before = { button: button.getBoundingClientRect(), group: group.getBoundingClientRect() };
+    await userEvent.hover(button);
+    const text = await canvas.findByText('Download every episode of this season to watch offline');
+    await expect(button.getBoundingClientRect()).toEqual(before.button);
+    await expect(group.getBoundingClientRect().width).toBe(before.group.width);
+    // Centred on the group
+    const textBox = text.getBoundingClientRect();
+    const groupBox = group.getBoundingClientRect();
+    await expect(
+      Math.abs(textBox.left + textBox.width / 2 - (groupBox.left + groupBox.width / 2))
+    ).toBeLessThan(1);
+  },
+};

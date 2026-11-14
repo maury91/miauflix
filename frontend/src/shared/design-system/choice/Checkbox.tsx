@@ -1,5 +1,6 @@
 import { forwardRef, type InputHTMLAttributes, type ReactNode, useEffect, useRef } from 'react';
 
+import { joinIds } from '../ids';
 import * as styles from './choice.css';
 import { ChoiceError, ChoiceFrame, type ChoiceProps } from './ChoiceFrame';
 import { useChoiceIds } from './useChoiceIds';
@@ -35,6 +36,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
     onCheckedChange,
     indeterminate = false,
     disabled = false,
+    'aria-describedby': callerDescribedBy,
     ...props
   },
   ref
@@ -75,9 +77,15 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
               checked={checked}
               disabled={disabled}
               aria-labelledby={labelId}
-              aria-describedby={describedBy}
+              aria-describedby={joinIds(callerDescribedBy, describedBy)}
               aria-invalid={error ? true : undefined}
-              onChange={event => onCheckedChange(event.target.checked)}
+              onChange={event => {
+                // Activating a mixed checkbox checks all; the native toggle would report false
+                onCheckedChange(indeterminate ? true : event.target.checked);
+                // Activation clears the native mixed state. Put it back: an owner keeping
+                // `indeterminate` may not re-render, and if it changes it the effect follows
+                event.target.indeterminate = indeterminate;
+              }}
             />
           </span>
         }

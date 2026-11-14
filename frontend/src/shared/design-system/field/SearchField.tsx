@@ -69,6 +69,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
     disabled = false,
     readOnly = false,
     onKeyDown,
+    'aria-describedby': ariaDescribedBy,
     ...props
   },
   ref
@@ -120,7 +121,14 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
   );
 
   return (
-    <Field label={label} indicator={indicator} description={description} error={error} id={id}>
+    <Field
+      label={label}
+      indicator={indicator}
+      description={description}
+      error={error}
+      id={id}
+      aria-describedby={ariaDescribedBy}
+    >
       {control => (
         <InputFrame
           size={size}

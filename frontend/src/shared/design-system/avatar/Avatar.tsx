@@ -4,32 +4,33 @@ import { useImageStatus } from '../artwork/useImageStatus';
 import * as styles from './avatar.css';
 
 export interface AvatarProps {
-  /** Whose avatar: its accessible name, and the source of the default fallback letter. */
+  /** Whose avatar: its accessible name. */
   name: string;
-  /** Picture URL. Absent, loading or failing, the fallback shows. */
-  src?: string | null;
+  /** The picture. An avatar is always a picture, never initials. */
+  src: string;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'fill';
   /** `contain` for pictures with their own shape (a profile's Plushie). */
   fit?: 'cover' | 'contain';
-  /** The fallback's background, such as a profile colour. A final value, set inline. */
+  /** Shown behind the picture while it loads (or if it fails), such as a profile colour. Set inline. */
   color?: string;
-  /** Custom fallback content instead of the name's first letter. Decorative. */
-  fallback?: ReactNode;
+  /** Decorative content over that colour until the picture shows, such as a Plushie silhouette. */
+  placeholder?: ReactNode;
   /** Hidden from assistive technology when the name is shown next to it (a tile, a row). */
   decorative?: boolean;
 }
 
-/** The first user-perceived letter, so an emoji or accented letter is not cut in half. */
-const initial = (name: string) => Array.from(name.trim())[0] ?? '';
-
-/** A passive circle with a person's or profile's picture, or a fallback. Never focusable. */
+/**
+ * A passive circle with a person's or profile's picture. Until the picture has loaded the circle
+ * keeps its size and shows its colour and placeholder, so loading never leaves a hole. Never
+ * focusable.
+ */
 export function Avatar({
   name,
   src,
   size = 'md',
   fit = 'cover',
   color,
-  fallback,
+  placeholder,
   decorative = false,
 }: AvatarProps) {
   const { status, imageProps } = useImageStatus(src);
@@ -45,12 +46,12 @@ export function Avatar({
       data-status={status}
       style={color ? { backgroundColor: color } : undefined}
     >
-      {status !== 'loaded' && (
-        <span className={styles.fallback} aria-hidden="true">
-          {fallback ?? initial(name)}
+      {placeholder && status !== 'loaded' && (
+        <span className={styles.placeholder} aria-hidden="true">
+          {placeholder}
         </span>
       )}
-      {src && status !== 'failed' && (
+      {status !== 'failed' && (
         <img
           {...imageProps}
           key={src}

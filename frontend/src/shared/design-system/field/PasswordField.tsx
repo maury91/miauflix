@@ -55,6 +55,7 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
       hideLabel,
       disabled = false,
       readOnly = false,
+      'aria-describedby': ariaDescribedBy,
       ...props
     },
     ref
@@ -86,7 +87,14 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
     const keepEditing = (event: MouseEvent) => event.preventDefault();
 
     return (
-      <Field label={label} indicator={indicator} description={description} error={error} id={id}>
+      <Field
+        label={label}
+        indicator={indicator}
+        description={description}
+        error={error}
+        id={id}
+        aria-describedby={ariaDescribedBy}
+      >
         {control => (
           <InputFrame
             size={size}

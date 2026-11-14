@@ -31,8 +31,17 @@ export function Artwork({
   fallback,
 }: ArtworkProps) {
   const { status, imageProps } = useImageStatus(src);
+  // A described image keeps its description when the picture is missing or fails
+  const describedFallback = status === 'failed' && alt !== '';
   return (
-    <span className={styles.artwork} data-ratio={ratio} data-fit={fit} data-status={status}>
+    <span
+      className={styles.artwork}
+      data-ratio={ratio}
+      data-fit={fit}
+      data-status={status}
+      role={describedFallback ? 'img' : undefined}
+      aria-label={describedFallback ? alt : undefined}
+    >
       {src && status !== 'failed' && (
         <img
           {...imageProps}

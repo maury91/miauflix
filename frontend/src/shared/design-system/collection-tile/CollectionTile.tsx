@@ -1,6 +1,7 @@
 import { type ButtonHTMLAttributes, forwardRef, type ReactNode, useId } from 'react';
 
 import { visuallyHidden } from '../a11y.css';
+import { joinIds } from '../ids';
 import { ProgressBar } from '../progress/Progress';
 import * as styles from './collectionTile.css';
 
@@ -52,19 +53,19 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
       onPointerFocus,
       type = 'button',
       onMouseMove,
+      'aria-describedby': callerDescribedBy,
       ...props
     },
     ref
   ) {
     const id = useId();
     const labelId = `${id}-label`;
-    const describedBy = [
+    const describedBy = joinIds(
+      callerDescribedBy,
       supportingText && `${id}-supporting`,
-      badge && `${id}-badge`,
-      progressText && `${id}-progress`,
-    ]
-      .filter(Boolean)
-      .join(' ');
+      Boolean(badge) && `${id}-badge`,
+      progressText && `${id}-progress`
+    );
     const hasProgress = progress !== undefined;
 
     return (
@@ -78,7 +79,7 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
         data-label={labelPlacement}
         data-progress={hasProgress || undefined}
         aria-labelledby={labelId}
-        aria-describedby={describedBy || undefined}
+        aria-describedby={describedBy}
         onMouseMove={event => {
           onPointerFocus?.();
           onMouseMove?.(event);

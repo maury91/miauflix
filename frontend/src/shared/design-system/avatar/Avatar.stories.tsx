@@ -16,11 +16,11 @@ const meta = {
     docs: {
       description: {
         component:
-          "A passive circle with a person's or profile's picture. Until the picture loads, when there is none and when it fails, the fallback shows: the name's first letter on a colour (a profile colour, set inline), or custom content. Sizes are 2, 2.5, 4 and 8rem, or `fill` to cover a square tile frame. Named by `name` (`role=\"img\"`), or `decorative` when the name is shown next to it.",
+          'A passive circle with a person\'s or profile\'s picture; an avatar is always a picture, never initials. Until the picture has loaded (and if it fails) the circle keeps its size and shows its colour (a profile colour, set inline) and an optional decorative placeholder. Sizes are 2, 2.5, 4 and 8rem, or `fill` to cover a square tile frame. Named by `name` (`role="img"`), or `decorative` when the name is shown next to it.',
       },
     },
   },
-  args: { name: 'Maria' },
+  args: { name: 'Maria', src: storyImage('#f4d58d', '#e07a5f') },
   decorators: [
     Story => (
       <SurfaceStage surface="solid">
@@ -40,7 +40,7 @@ const gap = { marginRight: '1rem', display: 'inline-flex' };
 export const States: Story = {
   render: () => (
     <div>
-      <StateCell name="Sizes, picture">
+      <StateCell name="Sizes">
         <div style={row}>
           {(['sm', 'md', 'lg', 'xl'] as const).map(size => (
             <span key={size} style={gap}>
@@ -49,21 +49,18 @@ export const States: Story = {
           ))}
         </div>
       </StateCell>
-      <StateCell name="Letter fallback on a profile colour">
-        <div style={row}>
-          {(['sm', 'md', 'lg', 'xl'] as const).map(size => (
-            <span key={size} style={gap}>
-              <Avatar name="Élodie" size={size} color="#6d4aa8" />
-            </span>
-          ))}
-        </div>
-      </StateCell>
-      <StateCell name="Failed picture, custom fallback">
+      <StateCell name="Picture failed: colour, and colour with placeholder">
         <div style={row}>
           <span style={gap}>
-            <Avatar name="Guest" src="/missing-avatar.png" size="lg" />
+            <Avatar name="Guest" src="/missing-avatar.png" size="lg" color="#6d4aa8" />
           </span>
-          <Avatar name="Kids" size="lg" color="#3d6b5c" fallback={<CatIcon />} />
+          <Avatar
+            name="Kids"
+            src="/missing-avatar-2.png"
+            size="lg"
+            color="#3d6b5c"
+            placeholder={<CatIcon style={{ fontSize: '2rem', color: '#f5f5f5' }} />}
+          />
         </div>
       </StateCell>
     </div>
@@ -72,14 +69,13 @@ export const States: Story = {
     const canvas = within(canvasElement);
     const guest = canvas.getByRole('img', { name: 'Guest' });
     await waitFor(() => expect(guest).toHaveAttribute('data-status', 'failed'));
-    await expect(guest).toHaveTextContent('G');
     await expect(guest.querySelector('img')).toBeNull();
+    await expect(guest).toHaveTextContent('');
     await waitFor(() =>
       expect(canvas.getAllByRole('img', { name: 'Maria' })[0]).toHaveAttribute(
         'data-status',
         'loaded'
       )
     );
-    await expect(canvas.getAllByRole('img', { name: 'Élodie' })[0]).toHaveTextContent('É');
   },
 };

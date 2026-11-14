@@ -245,8 +245,14 @@ function PopupSelect<Value extends string>({
   const rootRef = useRef<HTMLSpanElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const listId = useId();
-  const latest = useRef({ items, active, onChange, onOpenChange });
-  latest.current = { items, active, onChange, onOpenChange };
+  // The active option must still exist and be enabled: items can change while the popup is open
+  const options = flattenOptions(items);
+  const validActive =
+    active !== null && options.some(option => option.value === active && !option.disabled)
+      ? active
+      : stepOption(options, null, 1);
+  const latest = useRef({ items, active: validActive, disabled, onChange, onOpenChange });
+  latest.current = { items, active: validActive, disabled, onChange, onOpenChange };
 
   const setOpenState = (next: boolean) => {
     setOpen(next);
@@ -263,6 +269,7 @@ function PopupSelect<Value extends string>({
   const close = () => setOpenState(false);
 
   const choose = (next: Value) => {
+    if (latest.current.disabled) return;
     close();
     if (next !== value) latest.current.onChange(next);
   };
@@ -271,6 +278,11 @@ function PopupSelect<Value extends string>({
   const closeRef = useRef(close);
   closeRef.current = close;
 
+  // Becoming disabled closes an open popup (and `choose` already ignores it)
+  useEffect(() => {
+    if (open && disabled) closeRef.current();
+  }, [open, disabled]);
+
   useEffect(() => {
     if (!open) return;
     const listbox = document.getElementById(listId);
@@ -278,6 +290,11 @@ function PopupSelect<Value extends string>({
     listbox?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
+      // Tab moves DOM focus on (desktop keyboards): let it, and stop owning the keys
+      if (event.key === 'Tab') {
+        closeRef.current();
+        return;
+      }
       const keyAction = getKeyboardAction(event);
       if (!keyAction) return;
       const owned = ['up', 'down', 'left', 'right', 'confirm', 'back'].includes(keyAction);
@@ -286,7 +303,8 @@ function PopupSelect<Value extends string>({
       event.stopPropagation();
       if (keyAction === 'up' || keyAction === 'down') {
         const options = flattenOptions(latest.current.items);
-        setActive(current => stepOption(options, current, keyAction === 'up' ? -1 : 1));
+        const from = latest.current.active;
+        setActive(stepOption(options, from, keyAction === 'up' ? -1 : 1));
       } else if (keyAction === 'confirm') {
         if (latest.current.active !== null) chooseRef.current(latest.current.active);
       } else if (keyAction === 'back') {
@@ -298,11 +316,18 @@ function PopupSelect<Value extends string>({
         closeRef.current();
       }
     };
+    // DOM focus leaving the select (assistive technology, a script) closes the popup too
+    const onFocusOut = (event: FocusEvent) => {
+      const next = event.relatedTarget;
+      if (next instanceof Node && !rootRef.current?.contains(next)) closeRef.current();
+    };
     window.addEventListener('keydown', onKeyDown, true);
     document.addEventListener('mousedown', onPointerDown, true);
+    listbox?.addEventListener('focusout', onFocusOut);
     return () => {
       window.removeEventListener('keydown', onKeyDown, true);
       document.removeEventListener('mousedown', onPointerDown, true);
+      listbox?.removeEventListener('focusout', onFocusOut);
       // DOM focus follows the closed popup back to its trigger
       // (the listbox is already gone, so focus was left on the body)
       const active = document.activeElement;
@@ -336,7 +361,7 @@ function PopupSelect<Value extends string>({
               id={listId}
               items={items}
               value={value}
-              activeValue={active}
+              activeValue={validActive}
               labelledBy={labelledBy}
               onSelect={choose}
               onPointerActivate={setActive}

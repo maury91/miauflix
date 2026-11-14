@@ -1,5 +1,6 @@
 import { type ReactNode, useId } from 'react';
 
+import { joinIds } from '../ids';
 import { ErrorMessage } from './ErrorMessage';
 import * as styles from './field.css';
 
@@ -25,6 +26,8 @@ export interface FieldAnatomyProps {
   error?: ReactNode;
   /** The control's id. Generated when not given. */
   id?: string;
+  /** Further descriptions from the caller, read before the description and the error. */
+  'aria-describedby'?: string;
 }
 
 export interface FieldProps extends FieldAnatomyProps {
@@ -38,12 +41,20 @@ export interface FieldProps extends FieldAnatomyProps {
  * invalid. TextField, PasswordField and the other fields are built on it; use it directly only for
  * a control the library doesn't have yet.
  */
-export function Field({ label, indicator, description, error, id, children }: FieldProps) {
+export function Field({
+  label,
+  indicator,
+  description,
+  error,
+  id,
+  'aria-describedby': callerDescribedBy,
+  children,
+}: FieldProps) {
   const generatedId = useId();
   const controlId = id ?? generatedId;
   const descriptionId = description ? `${controlId}-description` : undefined;
   const errorId = error ? `${controlId}-error` : undefined;
-  const describedBy = [descriptionId, errorId].filter(Boolean).join(' ') || undefined;
+  const describedBy = joinIds(callerDescribedBy, descriptionId, errorId);
 
   return (
     <div className={styles.field}>
