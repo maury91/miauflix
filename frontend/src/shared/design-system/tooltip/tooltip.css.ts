@@ -62,7 +62,11 @@ export const rail = style({
     },
   },
   '@media': {
-    '(prefers-reduced-motion: reduce)': { transition: 'none' },
+    '(prefers-reduced-motion: reduce)': {
+      transition: 'none',
+      // As specific as the open rule, which sets its own transition
+      selectors: { [`${anchor}[data-open] &`]: { transition: 'none' } },
+    },
   },
 });
 

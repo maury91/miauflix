@@ -126,6 +126,12 @@ export const popup = style({
     '[dir="rtl"] &': { left: 'auto', right: 0 },
   },
   '@media': {
-    '(prefers-reduced-motion: reduce)': { animation: 'none' },
+    // As specific as the placement rules, which set the animation
+    '(prefers-reduced-motion: reduce)': {
+      selectors: {
+        '&[data-placement="bottom"]': { animation: 'none' },
+        '&[data-placement="top"]': { animation: 'none' },
+      },
+    },
   },
 });

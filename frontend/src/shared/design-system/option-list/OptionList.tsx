@@ -59,7 +59,8 @@ export function OptionList<Value extends string = string>({
     if (top < list.scrollTop) list.scrollTop = top;
     else if (bottom > list.scrollTop + list.clientHeight)
       list.scrollTop = bottom - list.clientHeight;
-  }, [activeId]);
+    // Items too: a longer label above the active option can push it out of view
+  }, [activeId, items]);
 
   const renderOption = (option: SelectOption<Value>): ReactNode => (
     <div

@@ -105,10 +105,11 @@ export const StatesOverMedia: Story = { render: () => <StateMatrix surface="over
 function TvSelect() {
   const [value, setValue] = useState<string | null>('auto');
   const [open, setOpen] = useState(false);
-  const { focus, isFocused } = useStoryVirtualFocus([['quality'], ['after']]);
+  const { containerRef, focus, isFocused } = useStoryVirtualFocus([['quality'], ['after']]);
   return (
     <SurfaceStage surface="solid">
-      <div style={{ minHeight: '22rem' }}>
+      {/* Scopes Confirm to this example on the Docs page, where other stories show focus too */}
+      <div ref={containerRef} style={{ minHeight: '22rem' }}>
         <Select
           label="Preferred quality"
           mode="popup"

@@ -159,11 +159,12 @@ function SelectControl<Value extends string>({
             {...control}
             aria-labelledby={labelledBy}
             className={styles.nativeSelect}
-            value={value ?? ''}
+            // A value missing from the items shows the placeholder, natively too
+            value={chosen ? chosen.value : ''}
             disabled={disabled}
             onChange={event => onChange(event.target.value as Value)}
           >
-            {value === null && (
+            {!chosen && (
               <option value="" disabled>
                 {placeholder ?? ''}
               </option>
