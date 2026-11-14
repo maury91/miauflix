@@ -39,7 +39,7 @@ export type ProgressButtonProps = Omit<
   /**
    * The action. Runs when the countdown fills, or at once on Confirm or click (the navigation layer
    * activates the focused element through a click). After an arrow key or a focus move ends the
-   * countdown, it runs only on Confirm or click, like any Button.
+   * countdown, it runs only on Confirm or click, like any Button. It runs at most once.
    */
   onAction: () => void;
 };
@@ -98,9 +98,17 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
       if (disabled) endCountdown();
     }, [disabled, endCountdown]);
 
+    // The action runs at most once, however it is triggered
+    const ranRef = useRef(false);
+    const runAction = () => {
+      if (ranRef.current) return;
+      ranRef.current = true;
+      onAction();
+    };
+
     const handleClick = () => {
       endCountdown();
-      onAction();
+      runAction();
     };
 
     // Focus is virtual: moving it to another element ends the countdown, like an arrow key
@@ -113,7 +121,7 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
     const handleAnimationEnd = (event: AnimationEvent<HTMLSpanElement>) => {
       // Only the clipping layer's own animation: the copy inside ends at the same time
       if (event.target !== event.currentTarget) return;
-      if (endCountdown() && !disabled) onAction();
+      if (endCountdown() && !disabled) runAction();
     };
 
     const clamped = Math.min(1, Math.max(0, initialProgress));

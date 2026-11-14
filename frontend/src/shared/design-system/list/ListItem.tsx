@@ -1,5 +1,6 @@
-import type { MouseEvent, ReactNode } from 'react';
+import { type MouseEvent, type ReactNode, useId } from 'react';
 
+import { joinIds } from '../ids';
 import * as styles from './list.css';
 import { useListItemRole } from './listContext';
 
@@ -73,6 +74,17 @@ export function ListItem({
   disabled = false,
 }: ListItemProps) {
   const role = useListItemRole();
+  const titleId = useId();
+  const descriptionId = useId();
+  const metadataId = useId();
+  // The title alone names the primary part; supporting text and metadata describe it
+  const naming = {
+    'aria-labelledby': titleId,
+    'aria-describedby': joinIds(
+      Boolean(description) && descriptionId,
+      Boolean(metadata) && metadataId
+    ),
+  };
   const content = (
     <>
       {leading && (
@@ -81,10 +93,20 @@ export function ListItem({
         </span>
       )}
       <span className={styles.text}>
-        <span className={styles.title}>{title}</span>
-        {description && <span className={styles.description}>{description}</span>}
+        <span id={titleId} className={styles.title}>
+          {title}
+        </span>
+        {description && (
+          <span id={descriptionId} className={styles.description}>
+            {description}
+          </span>
+        )}
       </span>
-      {metadata && <span className={styles.metadata}>{metadata}</span>}
+      {metadata && (
+        <span id={metadataId} className={styles.metadata}>
+          {metadata}
+        </span>
+      )}
     </>
   );
 
@@ -96,6 +118,7 @@ export function ListItem({
         className={styles.primary}
         disabled={disabled}
         aria-current={selected || undefined}
+        {...naming}
         onClick={onClick}
       >
         {content}
@@ -103,12 +126,16 @@ export function ListItem({
     );
   } else if (href !== undefined) {
     primaryPart = (
-      <a className={styles.primary} href={href} aria-current={selected || undefined}>
+      <a className={styles.primary} href={href} aria-current={selected || undefined} {...naming}>
         {content}
       </a>
     );
   } else {
-    primaryPart = <div className={styles.primary}>{content}</div>;
+    primaryPart = (
+      <div className={styles.primary} aria-current={selected || undefined}>
+        {content}
+      </div>
+    );
   }
 
   return (

@@ -1,6 +1,7 @@
 import { useId } from 'react';
 
 import { IconButton, type IconButtonProps } from '../icon-button/IconButton';
+import { joinIds } from '../ids';
 import * as styles from './iconButtonGroup.css';
 
 export type IconButtonGroupItem = Omit<
@@ -66,7 +67,7 @@ export function IconButtonGroup({
                 {...item}
                 size={size}
                 focused={focused}
-                aria-describedby={describes ? slotId : item['aria-describedby']}
+                aria-describedby={joinIds(item['aria-describedby'], describes && slotId)}
                 onMouseMove={() => onPointerFocus?.(id)}
               />
             </span>

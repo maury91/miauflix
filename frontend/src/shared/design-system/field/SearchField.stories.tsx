@@ -76,7 +76,10 @@ export const States: Story = {
 function LiveSearch() {
   const [value, setValue] = useState('');
   const [searched, setSearched] = useState<string | null>(null);
-  const { containerRef, focus, focusedId } = useStoryVirtualFocus([['input', 'clear', 'submit']]);
+  // Clear is hidden while the field is empty, so it is not a focus target then
+  const { containerRef, focus, focusedId } = useStoryVirtualFocus([
+    value ? ['input', 'clear', 'submit'] : ['input', 'submit'],
+  ]);
   return (
     <div ref={containerRef} style={{ width: '22rem' }}>
       <SearchField
@@ -107,6 +110,11 @@ export const ClearAndSubmit: Story = {
     // Hidden while empty, so not in the accessibility tree yet
     const clear = canvasElement.querySelector<HTMLButtonElement>('[aria-label="Clear search"]')!;
     await expect(clear).toBeDisabled();
+    const submit = canvas.getByRole('button', { name: 'Search' });
+    // Empty: Right skips the hidden clear action
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(submit).toHaveAttribute('data-focused');
+    await userEvent.keyboard('{ArrowLeft}');
     await userEvent.click(input);
     await userEvent.keyboard('Dune');
     await expect(clear).toBeEnabled();
@@ -116,5 +124,9 @@ export const ClearAndSubmit: Story = {
     await expect(input).toHaveValue('');
     await expect(input).toHaveFocus();
     await expect(input.parentElement).toHaveAttribute('data-focused');
+    // Cleared: leave edit mode, and Right skips the clear action again
+    await userEvent.keyboard('{Escape}{ArrowRight}');
+    await expect(submit).toHaveAttribute('data-focused');
+    await expect(clear).not.toHaveAttribute('data-focused');
   },
 };

@@ -1124,6 +1124,8 @@ describe('Review fixes', () => {
     );
     expect(document.body.style.overflow).toBe('auto');
     expect(outside).not.toHaveAttribute('inert');
+    // Second's own opener (First's panel) is gone: focus returns to the original opener
+    expect(outside).toHaveFocus();
     outside.remove();
     document.body.style.overflow = '';
   });
@@ -1137,6 +1139,7 @@ describe('Review fixes', () => {
           <>
             <Button>Keep</Button>
             <Button>Remove</Button>
+            <input type="hidden" name="intent" value="remove" />
           </>
         }
       />
@@ -1166,5 +1169,153 @@ describe('Review fixes', () => {
     expect(onDismiss).not.toHaveBeenCalled();
     fireEvent.keyDown(document.activeElement ?? document, { key: 'Escape' });
     expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps a nested dialog open from the start above its parent', () => {
+    const onDismissOuter = vi.fn();
+    const onDismissInner = vi.fn();
+    render(
+      <Dialog open title="Outer" onDismiss={onDismissOuter} actions={<Button>OK</Button>}>
+        <Dialog open title="Inner" onDismiss={onDismissInner} actions={<Button>OK</Button>} />
+      </Dialog>
+    );
+    const inner = screen.getByRole('dialog', { name: 'Inner' });
+    expect(inner).toHaveFocus();
+    expect(inner.parentElement).not.toHaveAttribute('inert');
+    expect(screen.getByRole('dialog', { name: 'Outer' }).parentElement).toHaveAttribute('inert');
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onDismissInner).toHaveBeenCalledTimes(1);
+    expect(onDismissOuter).not.toHaveBeenCalled();
+  });
+
+  it('makes content added behind an open dialog inert, and releases it', async () => {
+    const { rerender } = render(<Dialog open title="Remove?" actions={<Button>OK</Button>} />);
+    const late = document.createElement('div');
+    document.body.appendChild(late);
+    // MutationObserver callbacks run as a microtask
+    await Promise.resolve();
+    expect(late).toHaveAttribute('inert');
+    rerender(<Dialog open={false} title="Remove?" actions={<Button>OK</Button>} />);
+    expect(late).not.toHaveAttribute('inert');
+    late.remove();
+  });
+
+  it('runs a progress button’s action at most once', () => {
+    const onAction = vi.fn();
+    render(
+      <ProgressButton duration={1000} focused onAction={onAction}>
+        Next episode
+      </ProgressButton>
+    );
+    const button = screen.getByRole('button', { name: 'Next episode' });
+    fireEvent.animationEnd(button.lastElementChild as HTMLElement);
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(onAction).toHaveBeenCalledTimes(1);
+
+    const onSkip = vi.fn();
+    render(
+      <ProgressButton duration={1000} focused onAction={onSkip}>
+        Skip intro
+      </ProgressButton>
+    );
+    // An arrow ends the countdown; the first press still runs the action
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    const skip = screen.getByRole('button', { name: 'Skip intro' });
+    fireEvent.click(skip);
+    fireEvent.click(skip);
+    expect(onSkip).toHaveBeenCalledTimes(1);
+  });
+
+  it('never selects a radio on an arrow key', () => {
+    const onChange = vi.fn();
+    render(
+      <RadioGroup
+        label="Quality"
+        value="auto"
+        onChange={onChange}
+        options={[
+          { value: 'auto', label: 'Auto' },
+          { value: 'hd', label: 'HD' },
+        ]}
+      />
+    );
+    const auto = screen.getByRole('radio', { name: 'Auto' });
+    // fireEvent returns false when the default action was cancelled
+    expect(fireEvent.keyDown(auto, { key: 'ArrowDown' })).toBe(false);
+    expect(fireEvent.keyDown(auto, { key: 'Enter' })).toBe(true);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('adds tooltip and group descriptions to the caller’s', () => {
+    render(
+      <>
+        <p id="warning">Deletes the file</p>
+        <IconButton
+          label="Delete"
+          icon={<Icon />}
+          tooltip="Delete download"
+          aria-describedby="warning"
+        />
+        <IconButtonGroup
+          label="Actions"
+          focusedId="remove"
+          items={[
+            {
+              id: 'remove',
+              label: 'Remove',
+              icon: <Icon />,
+              description: 'Remove from list',
+              'aria-describedby': 'warning',
+            },
+          ]}
+        />
+      </>
+    );
+    expect(screen.getByRole('button', { name: 'Delete' })).toHaveAccessibleDescription(
+      'Deletes the file Delete download'
+    );
+    expect(screen.getByRole('button', { name: 'Remove' })).toHaveAccessibleDescription(
+      'Deletes the file Remove from list'
+    );
+  });
+
+  it('names a list row by its title and marks a passive current row', () => {
+    render(
+      <List label="Episodes">
+        <ListItem
+          title="Pilot"
+          description="A long synopsis"
+          metadata="42 min"
+          onClick={() => undefined}
+        />
+        <ListItem title="Notes" description="Read me" href="#notes" />
+        <ListItem title="Playing" selected />
+      </List>
+    );
+    expect(screen.getByRole('button', { name: 'Pilot' })).toHaveAccessibleDescription(
+      'A long synopsis 42 min'
+    );
+    expect(screen.getByRole('link', { name: 'Notes' })).toHaveAccessibleDescription('Read me');
+    expect(screen.getByText('Playing').closest('[aria-current]')).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+  });
+
+  it('shows the placeholder natively too when the value is not among the items', () => {
+    render(
+      <Select
+        label="Audio"
+        mode="native"
+        placeholder="Choose"
+        value="en"
+        onChange={() => undefined}
+        items={[{ value: 'it', label: 'Italian' }]}
+      />
+    );
+    const select = screen.getByRole('combobox', { name: 'Audio' }) as HTMLSelectElement;
+    expect(select.value).toBe('');
+    expect(select.selectedOptions[0]).toHaveTextContent('Choose');
   });
 });

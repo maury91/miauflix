@@ -1,4 +1,4 @@
-import { type ReactNode, useId } from 'react';
+import { type KeyboardEvent, type ReactNode, useId } from 'react';
 
 import * as fieldStyles from '../field/field.css';
 import * as styles from './choice.css';
@@ -35,6 +35,16 @@ export interface RadioGroupProps<Value extends string = string> {
   name?: string;
   disabled?: boolean;
 }
+
+const ARROW_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
+
+/**
+ * A DOM-focused native radio selects its neighbour on an arrow key (a simulated click). Focus only
+ * moves; Confirm selects, so the browser's arrow behaviour is cancelled.
+ */
+const preventArrowSelection = (event: KeyboardEvent<HTMLInputElement>) => {
+  if (ARROW_KEYS.has(event.key)) event.preventDefault();
+};
 
 /**
  * One choice among a few visible options. Moving focus never changes the choice; Confirm (or a
@@ -103,6 +113,7 @@ export function RadioGroup<Value extends string = string>({
                       disabled={optionDisabled}
                       className={styles.nativeInput}
                       onChange={() => onChange(option.value)}
+                      onKeyDown={preventArrowSelection}
                     />
                   </span>
                 }

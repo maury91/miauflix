@@ -1,5 +1,13 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
-import { type ReactNode, useEffect, useId, useRef } from 'react';
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 import { IconButton } from '../icon-button/IconButton';
@@ -42,7 +50,10 @@ export interface DialogProps {
 }
 
 const tabbable =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/** The enclosing dialog, so a nested dialog registers above it (see dialogStack). */
+const ParentDialogContext = createContext<symbol | undefined>(undefined);
 
 /** Tab and Shift+Tab cycle inside the dialog (desktop keyboards; TV remotes have no Tab). */
 function containTab(event: KeyboardEvent, panel: HTMLElement) {
@@ -97,16 +108,18 @@ export function Dialog({
   const titleId = useId();
   const descriptionId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
+  const [id] = useState(() => Symbol('dialog'));
+  const parent = useContext(ParentDialogContext);
   const onDismissRef = useRef(onDismiss);
   onDismissRef.current = onDismiss;
 
   useEffect(() => {
     if (!open) return;
-    const id = Symbol('dialog');
     const panel = panelRef.current;
     const previous = document.activeElement;
-    const pop = pushDialog(id, panel?.parentElement ?? null);
-    panel?.focus({ preventScroll: true });
+    const pop = pushDialog(id, panel?.parentElement ?? null, parent);
+    // A dialog under a nested one open from the start leaves focus in the nested one
+    if (isTopDialog(id)) panel?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isTopDialog(id)) return;
@@ -127,16 +140,22 @@ export function Dialog({
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       const wasTop = isTopDialog(id);
-      pop();
+      const opener = pop();
       // An underlying dialog closing leaves focus where it is, in the topmost one
       if (!wasTop) return;
-      const next = topDialogRoot()?.querySelector<HTMLElement>('[role="dialog"]');
-      if (next) next.focus({ preventScroll: true });
-      else if (previous instanceof HTMLElement && previous.isConnected) {
-        previous.focus({ preventScroll: true });
-      }
+      const nextRoot = topDialogRoot();
+      // Back to what opened this dialog if it is still there and reachable; otherwise the next
+      // dialog's panel, or the element that opened the first dialog
+      const fallback = nextRoot ? nextRoot.querySelector('[role="dialog"]') : opener;
+      const target = [previous, fallback].find(
+        element =>
+          element instanceof HTMLElement &&
+          element.isConnected &&
+          (!nextRoot || nextRoot.contains(element))
+      );
+      if (target instanceof HTMLElement) target.focus({ preventScroll: true });
     };
-  }, [open]);
+  }, [open, id, parent]);
 
   if (!open) return null;
 
@@ -157,37 +176,39 @@ export function Dialog({
         className={styles.panel}
         data-size={size}
       >
-        <SurfaceContextProvider value="solid">
-          <div className={styles.header}>
-            <h2 id={titleId} className={styles.title}>
-              {title}
-            </h2>
-            {closeLabel && onDismiss && (
-              <span className={styles.close}>
-                <IconButton
-                  label={closeLabel}
-                  icon={<CloseIcon />}
-                  focused={closeFocused}
-                  onMouseMove={onCloseFocus}
-                  onClick={() => onDismissRef.current?.()}
-                />
-              </span>
-            )}
-          </div>
-          {(description || children) && (
-            <div className={styles.body}>
-              {description && (
-                <p id={descriptionId} className={styles.description}>
-                  {description}
-                </p>
+        <ParentDialogContext.Provider value={id}>
+          <SurfaceContextProvider value="solid">
+            <div className={styles.header}>
+              <h2 id={titleId} className={styles.title}>
+                {title}
+              </h2>
+              {closeLabel && onDismiss && (
+                <span className={styles.close}>
+                  <IconButton
+                    label={closeLabel}
+                    icon={<CloseIcon />}
+                    focused={closeFocused}
+                    onMouseMove={onCloseFocus}
+                    onClick={() => onDismissRef.current?.()}
+                  />
+                </span>
               )}
-              {children}
             </div>
-          )}
-          <div className={styles.actions} data-layout={actionsLayout}>
-            {actions}
-          </div>
-        </SurfaceContextProvider>
+            {(description || children) && (
+              <div className={styles.body}>
+                {description && (
+                  <p id={descriptionId} className={styles.description}>
+                    {description}
+                  </p>
+                )}
+                {children}
+              </div>
+            )}
+            <div className={styles.actions} data-layout={actionsLayout}>
+              {actions}
+            </div>
+          </SurfaceContextProvider>
+        </ParentDialogContext.Provider>
       </div>
     </div>,
     document.body

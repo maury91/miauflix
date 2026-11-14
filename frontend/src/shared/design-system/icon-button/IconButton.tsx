@@ -3,6 +3,7 @@ import { type ButtonHTMLAttributes, forwardRef, type ReactNode, useId } from 're
 import * as styles from '../action/action.css';
 import { ActionIcon, type ActionStateProps } from '../action/actionInternals';
 import { guardLoading } from '../action/guardLoading';
+import { joinIds } from '../ids';
 import { useSurfaceContext } from '../surface';
 import { Tooltip, type TooltipProps } from '../tooltip/Tooltip';
 
@@ -59,7 +60,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       type={type}
       aria-label={label}
       aria-pressed={pressed}
-      aria-describedby={describes ? tooltipId : props['aria-describedby']}
+      aria-describedby={joinIds(props['aria-describedby'], describes && tooltipId)}
       aria-busy={loading || undefined}
       className={styles.action}
       data-surface={surface}
