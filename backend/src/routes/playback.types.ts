@@ -88,5 +88,6 @@ export interface CreatePlaybackSessionResponse {
 /** 404 from session creation: `exhausted` when every source found proved fake. */
 export interface PlaybackUnavailableResponse {
   error: string;
-  reason: 'exhausted' | 'not_found';
+  /** `insufficient_storage` (HTTP 507): sources exist, but none fits in storage. */
+  reason: 'exhausted' | 'insufficient_storage' | 'not_found';
 }

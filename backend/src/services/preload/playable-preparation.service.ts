@@ -61,6 +61,8 @@ export interface PreparedPlayable {
   warmup: PreloadWarmupSnapshot;
   /** Sources were found, but every one is known to hold no playable video. */
   exhausted?: boolean;
+  /** Sources were found, but none fits in storage, even after freeing what can be freed. */
+  noRoom?: boolean;
 }
 
 /** Which candidate is being tried: `position` of `total` compatible sources. */
@@ -94,17 +96,20 @@ export interface PlayablePreparationServiceOptions {
   mediaService: MediaService;
   sourceService: SourceService;
   warmup?: SourceWarmupController;
-  storage?: Pick<MediaLoadClientService, 'getStorageStates'>;
+  storage?: PreparationStorage;
   targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
   sourceHealth?: Pick<SourceHealthService, 'hasFailed'>;
 }
+
+/** Stored copies, and whether a playback has room (an engine without the check skips it). */
+type PreparationStorage = Partial<Pick<MediaLoadClientService, 'playbackFits'>> & Pick<MediaLoadClientService, 'getStorageStates'>;
 
 /** Shared inline preparation seam for focus, details, and Watch. */
 export class PlayablePreparationService {
   private readonly mediaService: MediaService;
   private readonly sourceService: SourceService;
   private readonly warmup?: SourceWarmupController;
-  private readonly storage?: Pick<MediaLoadClientService, 'getStorageStates'>;
+  private readonly storage?: PreparationStorage;
   private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
   private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>;
 
@@ -150,10 +155,10 @@ export class PlayablePreparationService {
       return { playable, source: null, target: null, state: 'metadata', warmup: emptyWarmup() };
     }
 
+    /** Sources that cannot fit in storage, found when playback is about to start. */
+    let noRoom = new Set<number>();
     const avoid = (list: ContentSource[]) =>
-      options.avoidSourceIds?.length
-        ? list.filter(source => !options.avoidSourceIds!.includes(source.id))
-        : list;
+      list.filter(source => !options.avoidSourceIds?.includes(source.id) && !noRoom.has(source.id));
     let sources = await this.sourceService
       .getSourcesForMovieWithOnDemandSearch(
         {
@@ -172,6 +177,13 @@ export class PlayablePreparationService {
       return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
     }
     if (!sources.some(isUsableSource)) return exhausted(playable);
+    if (options.through === 'warm') {
+      noRoom = await this.withoutRoom(
+        sources.filter(isUsableSource).map(source => ({ sourceId: source.id, bytes: source.size }))
+      );
+      sources = avoid(sources);
+      if (!sources.some(isUsableSource)) return withoutRoomResult(playable);
+    }
     if (!sources.some(source => source.hasVideo === true)) {
       // Nothing verified yet: check the candidates in the background, well before Watch.
       this.sourceService.requestMovieVerification(media.local.id, 10);
@@ -315,6 +327,21 @@ export class PlayablePreparationService {
     );
     if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
       return exhausted(playable);
+    if (options.through === 'warm' && compatible.length) {
+      // A season pack streams only the episode's file: its own size, once the torrent is known
+      const fileSize = await this.episodeFileSizes(compatible);
+      const noRoom = await this.withoutRoom(
+        compatible
+          .filter(match => isUsableSource(match.source))
+          .map(match => ({ sourceId: match.source.id, bytes: fileSize(match.source) ?? 0 }))
+      );
+      if (noRoom.size) {
+        const fitting = compatible.filter(match => !noRoom.has(match.source.id));
+        if (!fitting.some(match => isUsableSource(match.source)))
+          return withoutRoomResult(playable);
+        compatible.splice(0, compatible.length, ...fitting);
+      }
+    }
     const runtimeMinutes = show.local.episodeRuntime;
     const bitrate: BitrateBudget | undefined =
       options.preferences.maxBitrateKbps && runtimeMinutes
@@ -375,6 +402,27 @@ export class PlayablePreparationService {
         return result;
       }
     }
+  }
+
+  /**
+   * The sources whose file cannot fit in storage even once everything evictable is freed. A size
+   * still unknown (0), or an engine that cannot tell, rules nothing out: admission still decides.
+   */
+  private async withoutRoom(
+    items: Array<{ sourceId: number; bytes: number }>
+  ): Promise<Set<number>> {
+    const sized = items.filter(item => item.bytes > 0);
+    const fits = this.storage?.playbackFits ? await this.storage.playbackFits(sized) : null;
+    if (!fits) return new Set();
+    const tooLarge = new Set(
+      sized.filter((_, index) => fits[index] === false).map(i => i.sourceId)
+    );
+    if (tooLarge.size)
+      logger.info(
+        'PlayablePreparationService',
+        `Skipping ${tooLarge.size} of ${items.length} source(s): not enough storage to play them`
+      );
+    return tooLarge;
   }
 
   /** Tell the caller which candidate is tried, counting the ones already ruled out. */
@@ -629,6 +677,18 @@ function exhausted(playable: PlayableRef): PreparedPlayable {
     state: 'cold',
     warmup: emptyWarmup(),
     exhausted: true,
+  };
+}
+
+/** Sources exist, but none fits in storage. */
+function withoutRoomResult(playable: PlayableRef): PreparedPlayable {
+  return {
+    playable,
+    source: null,
+    target: null,
+    state: 'cold',
+    warmup: emptyWarmup(),
+    noRoom: true,
   };
 }
 

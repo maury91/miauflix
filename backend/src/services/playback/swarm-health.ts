@@ -37,9 +37,11 @@ export function assessSwarm({
 }): SwarmVerdict {
   const latest = samples.at(-1);
   if (!latest) return 'weak';
-  if (starvedForMs >= SWARM_HARD_CAP_MS) return 'failed';
   const factor = hedging ? ENOUGH_FACTOR_WHILE_HEDGING : ENOUGH_FACTOR;
+  // A swarm delivering more than the video needs is not why the viewer waits (a resume far into
+  // the file, a player that stopped reading): failing it would discard its data for nothing.
   if (latest.downloadSpeed >= requiredBytesPerSecond * factor) return 'healthy';
+  if (starvedForMs >= SWARM_HARD_CAP_MS) return 'failed';
   if (starvedForMs < SWARM_GRACE_MS) return 'weak';
   const base = samples.find(sample => sample.at >= latest.at - SWARM_TREND_WINDOW_MS) ?? latest;
   const improving =

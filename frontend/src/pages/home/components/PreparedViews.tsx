@@ -1,5 +1,5 @@
-import { MediaDetails, type MediaDetailsHandle } from '@features/details/ui/MediaDetails';
-import { type ComponentProps, forwardRef, memo } from 'react';
+import { MediaDetails } from '@features/details/ui/MediaDetails';
+import { type ComponentProps, memo } from 'react';
 
 import { type PreparationInputs, usePreparation } from '../hooks/useHomePreparation';
 import { MediaHero } from './MediaHero';
@@ -18,12 +18,12 @@ export const PreparedMediaHero = memo(function PreparedMediaHero({
   return <MediaHero {...props} preparation={preparation} />;
 });
 
-export const PreparedMediaDetails = forwardRef<
-  MediaDetailsHandle,
-  Omit<ComponentProps<typeof MediaDetails>, 'preparation' | 'ref'> & {
-    preparationInputs: PreparationInputs;
-  }
->(function PreparedMediaDetails({ preparationInputs, ...props }, ref) {
+export function PreparedMediaDetails({
+  preparationInputs,
+  ...props
+}: Omit<ComponentProps<typeof MediaDetails>, 'preparation'> & {
+  preparationInputs: PreparationInputs;
+}) {
   const preparation = usePreparation(props.media, preparationInputs);
-  return <MediaDetails ref={ref} {...props} preparation={preparation} />;
-});
+  return <MediaDetails {...props} preparation={preparation} />;
+}

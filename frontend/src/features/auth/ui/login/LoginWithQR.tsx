@@ -83,6 +83,7 @@ export const LoginWithQR: FC<{
   return (
     <PairingPanel
       navId={LOGIN_NAV.qrPanel}
+      fill
       title="Sign in with QR"
       instructions="Scan with phone to sign in"
       state={state}

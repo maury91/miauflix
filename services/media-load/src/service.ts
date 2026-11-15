@@ -243,6 +243,7 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
 
     storageStates: ({ sourceIds }) => runtime.storageStates(sourceIds),
     storageInventory: () => runtime.inventory(),
+    playbackFits: ({ items }) => engine().storage.playbackFits(items),
     removeStorage: ({ sourceId }) => engine().storage.removeStorageWithResult(sourceId),
     storageBitfields: ({ sourceIds }) => runtime.storageBitfields(sourceIds),
     piecesChanged: (emit, filter) => runtime.onPieces(emit, filter?.sourceIds),

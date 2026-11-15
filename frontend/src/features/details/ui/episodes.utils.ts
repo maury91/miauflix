@@ -1,21 +1,35 @@
 import type { ProgressEntry } from '@miauflix/backend';
 
-/** DOM id of an episode row, for focus and scrolling. */
-export const episodeElementId = (
-  showMediaId: number,
-  seasonNumber: number,
-  episodeNumber: number
-) => `episode-${showMediaId}-${seasonNumber}:${episodeNumber}`;
+type EpisodeProgress = Pick<ProgressEntry, 'state' | 'positionSeconds' | 'durationSeconds'>;
+
+/** An episode row's ID in the navigation layer. */
+export const episodeNavId = (seasonNumber: number, episodeNumber: number) =>
+  `episode:${seasonNumber}:${episodeNumber}`;
+
+/** The season and episode an `episodeNavId` names, or null for any other ID. */
+export function parseEpisodeNavId(
+  id: string | null
+): { seasonNumber: number; episodeNumber: number } | null {
+  const match = id?.match(/^episode:(\d+):(\d+)$/);
+  return match ? { seasonNumber: Number(match[1]), episodeNumber: Number(match[2]) } : null;
+}
+
+/** A season button's ID in the navigation layer. */
+export const seasonNavId = (seasonNumber: number) => `season:${seasonNumber}`;
+
+/** Watched share from 0 to 1, or undefined for an episode without progress. */
+export function episodeProgress(entry: EpisodeProgress | undefined): number | undefined {
+  if (!entry) return undefined;
+  if (entry.state === 'completed') return 1;
+  return entry.durationSeconds > 0
+    ? Math.min(1, Math.max(0, entry.positionSeconds / entry.durationSeconds))
+    : 0;
+}
 
 /** "Watched", "Resume N%", or nothing for an episode without progress. */
-export function episodeProgressLabel(
-  entry: Pick<ProgressEntry, 'state' | 'positionSeconds' | 'durationSeconds'> | undefined
-): string | null {
-  if (!entry) return null;
-  if (entry.state === 'completed') return 'Watched';
-  const percent =
-    entry.durationSeconds > 0
-      ? Math.min(100, (entry.positionSeconds / entry.durationSeconds) * 100)
-      : 0;
-  return `Resume ${Math.round(percent)}%`;
+export function episodeProgressLabel(entry: EpisodeProgress | undefined): string | null {
+  const share = episodeProgress(entry);
+  if (share === undefined) return null;
+  if (entry?.state === 'completed') return 'Watched';
+  return `Resume ${Math.round(share * 100)}%`;
 }

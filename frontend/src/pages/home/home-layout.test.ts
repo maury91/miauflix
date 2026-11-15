@@ -98,6 +98,20 @@ describe('homeMountedRows', () => {
     ]);
   });
 
+  it('loads the rows scrolled into view, away from the focused row', () => {
+    const { visible, prefetch, warm } = homeRowLoadState(0, 100, -1, 20);
+    expect([...visible].sort((a, b) => a - b)).toEqual([0, 1, 20, 21]);
+    expect([...prefetch].sort((a, b) => a - b)).toEqual([2, 3, 4, 5, 18, 19, 22, 23]);
+    expect([...warm]).toEqual([]);
+    // Every row that loads is mounted
+    const rows = homeMountedRows(0, 20, 100);
+    [...visible, ...prefetch].forEach(row => expect(rows).toContain(row));
+  });
+
+  it('loads as before while the focused row is the one in view', () => {
+    expect(homeRowLoadState(5, 100, 9, 5)).toEqual(homeRowLoadState(5, 100, 9));
+  });
+
   it('mounts every row that the final category prefetches', () => {
     const rows = homeMountedRows(9, 9, 10);
     const { visible, prefetch } = homeRowLoadState(9, 10);

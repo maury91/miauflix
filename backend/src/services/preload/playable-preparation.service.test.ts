@@ -533,6 +533,64 @@ describe('PlayablePreparationService', () => {
     ...(onSourceAttempt ? { onSourceAttempt } : {}),
   });
 
+  /** A media-load client where only sources of at most `room` bytes fit. */
+  const roomFor = (room: number) => ({
+    ...storageOf(() => null),
+    playbackFits: jest.fn(async (items: Array<{ sourceId: number; bytes: number }>) =>
+      items.map(item => item.bytes <= room)
+    ),
+  });
+
+  it('skips sources too large for storage and counts only the rest', async () => {
+    const huge = { ...candidate(1, 9), size: 43e9 };
+    const small = { ...candidate(2, 8), size: 4e9 };
+    const onSourceAttempt = jest.fn();
+    const storage = roomFor(10e9);
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: movieService([huge, small]) as never,
+      storage: storage as never,
+      targets: movieTargets as never,
+    });
+
+    const prepared = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      warmOptions(onSourceAttempt)
+    );
+
+    expect(storage.playbackFits).toHaveBeenCalledWith([
+      { sourceId: 1, bytes: 43e9 },
+      { sourceId: 2, bytes: 4e9 },
+    ]);
+    expect(prepared.source).toBe(small);
+    expect(onSourceAttempt.mock.calls.map(([attempt]) => attempt)).toEqual([
+      { sourceId: 2, position: 1, total: 1 },
+    ]);
+  });
+
+  it('reports no room when no source fits, and tries them all when the engine cannot tell', async () => {
+    const sources = () => [
+      { ...candidate(1, 9), size: 43e9 },
+      { ...candidate(2, 8), size: 42e9 },
+    ];
+    const prepare = (storage: unknown, list: unknown[]) =>
+      new PlayablePreparationService({
+        mediaService: {
+          getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+        } as never,
+        sourceService: movieService(list) as never,
+        storage: storage as never,
+        targets: movieTargets as never,
+      }).prepare({ kind: 'movie', mediaId: 42 }, warmOptions());
+
+    expect(await prepare(roomFor(10e9), sources())).toMatchObject({ source: null, noRoom: true });
+    const unknown = { ...storageOf(() => null), playbackFits: jest.fn(async () => null) };
+    const list = sources();
+    expect(await prepare(unknown, list)).toMatchObject({ source: list[0] });
+  });
+
   it('walks past every fake until a real source and reports each attempt', async () => {
     const sources = [candidate(1, 9), candidate(2, 8), candidate(3, 7), candidate(4, 6)];
     const targets = fakeAwareTargets([1, 2, 3]);
@@ -1006,6 +1064,46 @@ describe('PlayablePreparationService', () => {
           }
         );
     };
+
+    it('measures a season pack by its episode file when checking storage room', async () => {
+      // 5 GB of room: the 6 GB episode does not fit, the pack's 1.2 GB episode does
+      const playbackFits = jest.fn(async (items: Array<{ sourceId: number; bytes: number }>) =>
+        items.map(item => item.bytes <= 5 * GB)
+      );
+      const service = new PlayablePreparationService({
+        mediaService: {
+          getTVShowByMediaId: jest.fn().mockResolvedValue({
+            local: { id: 3, mediaId: 900, name: 'Show', imdbId: 'tt1', episodeRuntime: 45 },
+          }),
+          markShowAsWatching: jest.fn(),
+          getSeason: jest
+            .fn()
+            .mockResolvedValue({ episodes: [{ id: 81, episodeNumber: 2, airDate: null }] }),
+        } as never,
+        sourceService: {
+          getSourcesForEpisodeWithOnDemandSearch: jest.fn().mockResolvedValue([
+            { source: heavy, videoFilePath: 'Show.S01E02.2160p.mkv', matchKind: 'single' },
+            { source: pack, videoFilePath: 'Show S01/Show.S01E02.mkv', matchKind: 'single' },
+          ]),
+        } as never,
+        storage: { getStorageStates: jest.fn(async () => []), playbackFits } as never,
+      });
+
+      const prepared = await service.prepare(
+        { kind: 'episode', showMediaId: 900, seasonNumber: 1, episodeNumber: 2 },
+        {
+          through: 'warm',
+          preferences: { quality: 'auto', allowHevc: true },
+          workClass: 'interactive',
+        }
+      );
+
+      expect(playbackFits).toHaveBeenCalledWith([
+        { sourceId: 41, bytes: 6 * GB },
+        { sourceId: 42, bytes: 1.2 * GB },
+      ]);
+      expect(prepared.source).toBe(pack);
+    });
 
     it('ranks a season pack by its episode file, against the show episode length', async () => {
       const prepare = setup(45);

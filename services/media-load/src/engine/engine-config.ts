@@ -13,6 +13,8 @@ export interface EngineSettings {
   BEST_TRACKERS_DOWNLOAD_URL: string;
   BLACKLISTED_TRACKERS_DOWNLOAD_URL: string;
   DOWNLOAD_PATH: string;
+  /** Anything in DOWNLOAD_PATH that no storage record owns may be deleted. */
+  DOWNLOAD_PATH_EXCLUSIVE: boolean;
   STORAGE_THRESHOLD: bigint;
   STORAGE_PLAYBACK_RESERVE: bigint;
   /** Delivered with `attach`, never as a setting. */
@@ -89,6 +91,8 @@ export const parseEngineSettings = (
     BEST_TRACKERS_DOWNLOAD_URL: text('BEST_TRACKERS_DOWNLOAD_URL'),
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: text('BLACKLISTED_TRACKERS_DOWNLOAD_URL'),
     DOWNLOAD_PATH: text('DOWNLOAD_PATH', 1),
+    // On unless turned off, like the schema's default
+    DOWNLOAD_PATH_EXCLUSIVE: flag('DOWNLOAD_PATH_EXCLUSIVE', true),
     STORAGE_THRESHOLD: size('STORAGE_THRESHOLD', 50n * UNITS.GB),
     STORAGE_PLAYBACK_RESERVE: size('STORAGE_PLAYBACK_RESERVE', 0n),
     SOURCE_SECURITY_KEY: securityKey,

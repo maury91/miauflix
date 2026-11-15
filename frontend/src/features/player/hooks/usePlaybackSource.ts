@@ -301,7 +301,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
           return;
         }
         setStatus('error');
-        setError(describePlaybackFailure(reason, titleRef.current));
+        setError(describePlaybackFailure(reason, titleRef.current, playable.kind));
       });
 
     return () => {

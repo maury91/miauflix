@@ -58,4 +58,16 @@ describe('assessSwarm', () => {
       })
     ).toBe('failed');
   });
+
+  it('never fails a swarm delivering more than the bitrate, however long the viewer waits', () => {
+    // A resume far into a large file: 9 MB/s downloading, the first bytes there not yet in
+    expect(
+      assessSwarm({
+        samples: samples([8, 9 * 1024 * 1024], [9, 9 * 1024 * 1024]),
+        starvedForMs: SWARM_HARD_CAP_MS * 2,
+        requiredBytesPerSecond: 4.4 * 1024 * 1024,
+        hedging: false,
+      })
+    ).toBe('healthy');
+  });
 });

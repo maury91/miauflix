@@ -248,6 +248,23 @@ describe('PlayerView', () => {
     expect(screen.queryByRole('button', { name: 'Notify me' })).not.toBeInTheDocument();
   });
 
+  it('says there is not enough space when no source fits in storage', async () => {
+    createSession.mockReturnValue({
+      unwrap: () =>
+        Promise.reject({
+          status: 507,
+          data: { error: 'Not enough storage', reason: 'insufficient_storage' },
+        }),
+    });
+
+    render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
+
+    expect(
+      await screen.findByText(/There isn't enough space to play this movie\./)
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+  });
+
   it('keeps a remote working while preparing and after a failure', async () => {
     createSession.mockReturnValue({
       unwrap: () => Promise.reject({ status: 500, data: 'Internal server error' }),
@@ -855,6 +872,31 @@ describe('PlayerView', () => {
       );
     });
     await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+  });
+
+  it('moves to the next source when a held stream failure is settled by a probe that gave up', async () => {
+    createSession.mockReturnValue({
+      unwrap: () => Promise.resolve({ ...session, deliveryPending: true }),
+    });
+    const { store } = render(
+      <PlayerView playable={playable} title="Unprobed fixture" onBack={vi.fn()} />
+    );
+    const video = (await screen.findByLabelText('Unprobed fixture')) as HTMLVideoElement;
+    await waitFor(() => expect(video.getAttribute('src')).toBe('/api/stream/streaming-key'));
+    // Held: the delivery is not known yet
+    fireEvent.error(video);
+    expect(createSession).toHaveBeenCalledTimes(1);
+    act(() => {
+      store.dispatch(
+        realtimeActions.playbackDeliveryReceived({
+          type: 'playback-delivery',
+          playbackId: session.playbackId,
+          update: { type: 'unprobed' },
+        })
+      );
+    });
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+    expect(createSession.mock.lastCall?.[0].avoidSourceIds).toEqual([session.source.id]);
   });
 
   it('resumes converted audio on the full movie timeline and reports original progress', async () => {

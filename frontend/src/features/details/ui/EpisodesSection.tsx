@@ -1,125 +1,27 @@
 import { progressForPlayable } from '@features/progress/api/progress.api';
 import type { ProgressEntry, SeasonResponse } from '@miauflix/backend';
-import { Spinner } from '@shared/components';
-import { PALETTE } from '@shared/config/constants';
+import {
+  Badge,
+  Button,
+  EpisodeItem,
+  Heading,
+  List,
+  Message,
+  ProgressSpinner,
+  ScrollArea,
+} from '@shared/design-system';
 import { artworkUrl } from '@shared/lib/media.utils';
-import { Button as BaseButton } from '@shared/ui/button/Button';
+import { FocusGroup, type MoreRequest } from '@shared/navigation';
 import { realtimePlayableKey } from '@store/slices/realtime';
-import { type UIEvent, useCallback, useRef } from 'react';
-import styled from 'styled-components';
+import { useId } from 'react';
 
-import { ErrorState, PrimaryAction, SectionLabel } from './details.styles';
-import { episodeElementId, episodeProgressLabel } from './episodes.utils';
+import { episodeNavId, episodeProgress, episodeProgressLabel } from './episodes.utils';
+import * as styles from './mediaDetails.css';
 
 import NoSourceIcon from '~icons/mdi/video-off-outline';
 
-const EpisodePane = styled.section`
-  min-width: 0;
-  height: 100%;
-  overflow: hidden;
-
-  @media (max-width: 860px) {
-    height: 60vh;
-    margin-top: 4vh;
-  }
-`;
-
-const EpisodeList = styled.div`
-  height: calc(100% - 56px);
-  overflow: auto;
-  padding: 8px 6.4px 8vh 0;
-  scrollbar-width: thin;
-  scrollbar-color: ${PALETTE.background.border} transparent;
-`;
-
-const SeasonSection = styled.section`
-  scroll-margin-top: 16px;
-  margin-bottom: 2.5vh;
-`;
-
-const EpisodeHeading = styled.h3`
-  margin: 0 0 0.8vh;
-  color: ${PALETTE.text.primary};
-  font-size: clamp(16px, 2.5vh, 22.4px);
-`;
-
-// Flex, not grid: the 2020 TVs (Chromium 69) cannot lay out a button as a grid.
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const EpisodeRow = styled(BaseButton)<{ $selected: boolean; $image: string }>`
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-  min-height: 10vh;
-  margin-bottom: 0.8vh;
-  padding: 0;
-  overflow: hidden;
-  border: 0.25vh solid
-    ${({ $selected }) => ($selected ? PALETTE.color.interactive : 'rgba(255, 255, 255, 0.14)')};
-  border-radius: 0.6vh;
-  background: rgba(17, 23, 25, 0.8);
-  color: ${PALETTE.text.primary};
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
-
-  &::before {
-    display: block;
-    flex: 0 0 18vw;
-    min-width: 150px;
-    min-height: 10vh;
-    content: '';
-    background:
-      url(${({ $image }) => $image}) center / cover no-repeat,
-      ${PALETTE.background.surface2};
-  }
-
-  &:focus-visible {
-    outline: 0.3vh solid ${PALETTE.color.interactive};
-    outline-offset: 0.2vh;
-  }
-
-  @media (max-width: 860px) {
-    &::before {
-      flex-basis: 38vw;
-    }
-  }
-`;
-
-const EpisodeCaption = styled.span`
-  flex: 1 1 auto;
-  min-width: 0;
-  align-self: center;
-  padding: 16px;
-  font-size: clamp(13.6px, 2vh, 17.6px);
-  font-weight: 600;
-`;
-
-const ProgressMark = styled.span`
-  display: block;
-  margin-top: 8px;
-  color: ${PALETTE.text.secondary};
-  font-size: 0.78em;
-  font-weight: 400;
-`;
-
-const NoSourceMark = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 5.6px;
-  margin-top: 8px;
-  color: ${PALETTE.text.disabled};
-  font-size: 0.78em;
-  font-weight: 500;
-
-  svg {
-    flex: 0 0 auto;
-    width: 1.1em;
-    height: 1.1em;
-  }
-`;
-
-/** Seasons further down than this many screens of scrolling start loading. */
-const LOAD_NEXT_WITHIN_SCREENS = 1.5;
+/** The episodes' navigation group: one vertical column across the loaded seasons. */
+export const EPISODES_GROUP = 'details-episodes';
 
 interface EpisodesSectionProps {
   showMediaId: number;
@@ -130,125 +32,117 @@ interface EpisodesSectionProps {
   loading: boolean;
   /** Seasons whose load failed and that have nothing to show. */
   failedSeasons: readonly number[];
-  selectedEpisode: { seasonNumber: number; episodeNumber: number } | null;
   progress: ProgressEntry[];
   /** Shown for episodes without a still. */
   fallbackStill: string | null | undefined;
-  onSelectEpisode: (seasonNumber: number, episodeNumber: number, play?: boolean) => void;
+  onPlay: (seasonNumber: number, episodeNumber: number) => void;
   onRetrySeason: (seasonNumber: number) => void;
-  /** The season heading at the top of the list changed while scrolling. */
-  onVisibleSeasonChange: (seasonNumber: number) => void;
-  /** Scrolled close to the end of the loaded seasons. */
-  onNearEnd: () => void;
+  /** A season after the last loaded one exists: Down past the last episode loads it. */
+  hasMore: boolean;
+  onMore: (request: MoreRequest) => void;
   /** Availability pushed over realtime by playable key; newer than the season response. */
   pushedAvailability?: Readonly<Record<string, 'available' | 'pending' | 'unavailable'>>;
 }
 
-/** The scrolling list of a show's loaded seasons and their episodes. */
+/**
+ * The loaded seasons of a show and their episodes, one list per season in a scrolling pane. The
+ * rows play the episode; focus moving through them is the details screen's to follow.
+ */
 export function EpisodesSection({
   showMediaId,
   seasons,
   sections,
   loading,
   failedSeasons,
-  selectedEpisode,
   progress,
   fallbackStill,
-  onSelectEpisode,
+  onPlay,
   onRetrySeason,
-  onVisibleSeasonChange,
-  onNearEnd,
+  hasMore,
+  onMore,
   pushedAvailability = {},
 }: EpisodesSectionProps) {
-  const sectionRefs = useRef(new Map<number, HTMLElement>());
-
-  const handleScroll = useCallback(
-    (event: UIEvent<HTMLDivElement>) => {
-      const top = event.currentTarget.getBoundingClientRect().top + 24;
-      let visibleSeason: number | null = null;
-      sectionRefs.current.forEach((node, seasonNumber) => {
-        if (node.getBoundingClientRect().top <= top) visibleSeason = seasonNumber;
-      });
-      if (visibleSeason !== null) onVisibleSeasonChange(visibleSeason);
-      const element = event.currentTarget;
-      if (
-        element.scrollTop + element.clientHeight >=
-        element.scrollHeight - element.clientHeight * LOAD_NEXT_WITHIN_SCREENS
-      )
-        onNearEnd();
-    },
-    [onNearEnd, onVisibleSeasonChange]
-  );
-
+  const headingId = useId();
   return (
-    <EpisodePane>
-      <SectionLabel>Episodes</SectionLabel>
-      <EpisodeList aria-label="Episodes" onScroll={handleScroll}>
-        {sections.map(section => (
-          <SeasonSection
-            key={section.seasonNumber}
-            ref={node => {
-              if (node) sectionRefs.current.set(section.seasonNumber, node);
-              else sectionRefs.current.delete(section.seasonNumber);
-            }}
-          >
-            <EpisodeHeading>{section.name}</EpisodeHeading>
-            {section.episodes.map(episode => {
-              const selected =
-                selectedEpisode?.seasonNumber === section.seasonNumber &&
-                selectedEpisode.episodeNumber === episode.episodeNumber;
-              const playable = {
-                kind: 'episode' as const,
-                showMediaId,
-                seasonNumber: section.seasonNumber,
-                episodeNumber: episode.episodeNumber,
-              };
-              const label = episodeProgressLabel(progressForPlayable(progress, playable));
-              const unavailable =
-                (pushedAvailability[realtimePlayableKey(playable)] ??
-                  episode.sourceAvailability) === 'unavailable';
+    <section className={styles.episodes} aria-labelledby={headingId}>
+      <Heading level={2} id={headingId}>
+        Episodes
+      </Heading>
+      <div className={styles.episodeScroll}>
+        <ScrollArea>
+          <FocusGroup id={EPISODES_GROUP} layout="vertical" more={{ end: hasMore }} onMore={onMore}>
+            {sections.map(section => {
+              const seasonHeadingId = `${headingId}-season-${section.seasonNumber}`;
               return (
-                <EpisodeRow
-                  onFocus={() => onSelectEpisode(section.seasonNumber, episode.episodeNumber)}
-                  id={episodeElementId(showMediaId, section.seasonNumber, episode.episodeNumber)}
-                  key={episode.id}
-                  type="button"
-                  $selected={selected}
-                  $image={artworkUrl(episode.still ?? fallbackStill, 'still', 300)}
-                  onMouseEnter={() => onSelectEpisode(section.seasonNumber, episode.episodeNumber)}
-                  onClick={() => onSelectEpisode(section.seasonNumber, episode.episodeNumber, true)}
-                >
-                  <EpisodeCaption>
-                    E{episode.episodeNumber} · {episode.title}
-                    {label ? <ProgressMark>{label}</ProgressMark> : null}
-                    {unavailable ? (
-                      <NoSourceMark>
-                        <NoSourceIcon aria-hidden="true" />
-                        No source available
-                      </NoSourceMark>
-                    ) : null}
-                  </EpisodeCaption>
-                </EpisodeRow>
+                <div key={section.seasonNumber} className={styles.season}>
+                  <div className={styles.seasonHeading}>
+                    <Heading level={3} variant="heading" id={seasonHeadingId}>
+                      {section.name}
+                    </Heading>
+                  </div>
+                  <List labelledBy={seasonHeadingId}>
+                    {section.episodes.map(episode => {
+                      const playable = {
+                        kind: 'episode' as const,
+                        showMediaId,
+                        seasonNumber: section.seasonNumber,
+                        episodeNumber: episode.episodeNumber,
+                      };
+                      const entry = progressForPlayable(progress, playable);
+                      const unavailable =
+                        (pushedAvailability[realtimePlayableKey(playable)] ??
+                          episode.sourceAvailability) === 'unavailable';
+                      return (
+                        <EpisodeItem
+                          key={episode.id}
+                          navId={episodeNavId(section.seasonNumber, episode.episodeNumber)}
+                          title={`E${episode.episodeNumber} · ${episode.title}`}
+                          description={episode.overview ?? undefined}
+                          still={artworkUrl(episode.still ?? fallbackStill, 'still', 300)}
+                          progress={episodeProgress(entry)}
+                          progressText={episodeProgressLabel(entry) ?? undefined}
+                          badge={
+                            unavailable ? (
+                              <Badge icon={<NoSourceIcon />}>No source available</Badge>
+                            ) : undefined
+                          }
+                          // Still playable: the player offers to notify when a source is out
+                          onClick={() => onPlay(section.seasonNumber, episode.episodeNumber)}
+                        />
+                      );
+                    })}
+                  </List>
+                </div>
               );
             })}
-          </SeasonSection>
-        ))}
-        {loading && <Spinner text="Loading more episodes..." />}
-        {seasons
-          .filter(item => failedSeasons.includes(item.seasonNumber))
-          .map(item => (
-            <ErrorState key={`error-${item.seasonNumber}`}>
-              Failed to load {item.name}.
-              <PrimaryAction
-                type="button"
-                $selected={false}
-                onClick={() => onRetrySeason(item.seasonNumber)}
-              >
-                Retry
-              </PrimaryAction>
-            </ErrorState>
-          ))}
-      </EpisodeList>
-    </EpisodePane>
+            {seasons
+              .filter(item => failedSeasons.includes(item.seasonNumber))
+              .map(item => (
+                <div key={`error-${item.seasonNumber}`} className={styles.listStatus}>
+                  <Message
+                    tone="danger"
+                    toneLabel="Error"
+                    actions={
+                      <Button
+                        navId={`season-retry:${item.seasonNumber}`}
+                        onClick={() => onRetrySeason(item.seasonNumber)}
+                      >
+                        Retry
+                      </Button>
+                    }
+                  >
+                    Failed to load {item.name}.
+                  </Message>
+                </div>
+              ))}
+          </FocusGroup>
+          {loading && (
+            <div className={styles.listStatus}>
+              <ProgressSpinner label="Loading more episodes..." showLabel />
+            </div>
+          )}
+        </ScrollArea>
+      </div>
+    </section>
   );
 }
