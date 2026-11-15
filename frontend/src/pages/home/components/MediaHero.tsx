@@ -171,7 +171,7 @@ const Logo = styled.img`
 
 const Title = styled.h1`
   margin: 0 0 1vh;
-  font-size: clamp(2rem, 5vh, 4.6rem);
+  font-size: clamp(32px, 5vh, 73.6px);
   line-height: 1.05;
   font-weight: 600;
   text-transform: none;
@@ -180,7 +180,7 @@ const Title = styled.h1`
 const Metadata = styled.div`
   margin: 0 0 1vh;
   color: ${PALETTE.text.primary};
-  font-size: clamp(0.85rem, 2.1vh, 1.2rem);
+  font-size: clamp(13.6px, 2.1vh, 19.2px);
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -194,11 +194,11 @@ const MetadataRow = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
 
   @media (max-width: 860px) {
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 5.6px;
   }
 `;
 
@@ -213,7 +213,7 @@ const Overview = styled.p`
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
-  font-size: clamp(0.9rem, 2.3vh, 1.3rem);
+  font-size: clamp(14.4px, 2.3vh, 20.8px);
   line-height: 1.5;
 `;
 

@@ -34,7 +34,7 @@ export type KeyboardHandlers = {
   /** Tab and Shift+Tab (desktop keyboards), also from a field being edited. */
   onTab?: KeyboardHandler;
   /**
-   * Enter in a single-line field being edited (the TV keyboard's Done). The field keeps its native
+   * Enter or the TV keyboard's Done in a single-line field being edited. The field keeps its native
    * behavior (a form submits); the handler may end editing.
    */
   onEditConfirm?: KeyboardHandler;
@@ -121,6 +121,9 @@ export function getKeyAction(key: string): KeyboardAction | null {
 export function getKeyboardAction(event: KeyboardEvent): KeyboardAction | null {
   return getKeyAction(event.key) ?? TV_KEY_CODES[event.keyCode] ?? null;
 }
+
+/** Tizen's on-screen keyboard reports its Done key with this key code (and no key name). */
+export const TIZEN_IME_DONE = 65376;
 
 const scopes = new Set<KeyboardScope>();
 
@@ -244,7 +247,15 @@ let listening = false;
  */
 function isNativeEditingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
-  if (virtualFocusOwners > 0) return isEditable(target) || target instanceof HTMLSelectElement;
+  if (virtualFocusOwners > 0)
+    return (
+      isEditable(target) ||
+      target instanceof HTMLSelectElement ||
+      // A native range no navigation control owns (a legacy panel's) still steps with its keys
+      (target instanceof HTMLInputElement &&
+        target.type === 'range' &&
+        !target.closest('[data-focused]'))
+    );
   return (
     target.isContentEditable ||
     target instanceof HTMLInputElement ||
@@ -269,7 +280,7 @@ function dispatch(event: KeyboardEvent): void {
     return;
   }
   if (
-    event.key === 'Enter' &&
+    (event.key === 'Enter' || event.keyCode === TIZEN_IME_DONE) &&
     event.target instanceof HTMLInputElement &&
     isNativeEditingTarget(event.target)
   ) {

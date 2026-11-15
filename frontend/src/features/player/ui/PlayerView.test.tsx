@@ -120,6 +120,10 @@ const session: CreatePlaybackSessionResponse = {
 
 describe('PlayerView', () => {
   beforeEach(() => {
+    // jsdom lays nothing out; the navigation layer only focuses elements on screen
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
     window.localStorage.clear();
     createSession.mockReset();
     updateProgress.mockReset();
@@ -251,11 +255,12 @@ describe('PlayerView', () => {
 
     render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
 
-    expect(screen.getByRole('main', { name: 'Player' })).toHaveFocus();
+    // While preparing, Back holds the focus so a remote's Back works
+    expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
     expect(await screen.findByRole('button', { name: 'Retry' })).toHaveFocus();
   });
 
-  it('gives the focus back to the player when Retry removes its button', async () => {
+  it('gives the focus back to Back when Retry removes its button', async () => {
     createSession
       .mockReturnValueOnce({
         unwrap: () => Promise.reject({ status: 500, data: 'Internal server error' }),
@@ -271,7 +276,7 @@ describe('PlayerView', () => {
     await waitFor(() =>
       expect(screen.queryByRole('button', { name: 'Retry' })).not.toBeInTheDocument()
     );
-    expect(screen.getByRole('main', { name: 'Player' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
   });
 
   it('shows which source is being tried while the session is prepared', async () => {
@@ -306,7 +311,7 @@ describe('PlayerView', () => {
     expect(screen.getByLabelText('The Shawshank Redemption')).toBeInTheDocument();
   });
 
-  it('keeps Back available during playback and uses the paw controls', async () => {
+  it('keeps Back available during playback and uses the custom controls', async () => {
     createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
     const onBack = vi.fn();
     render(<PlayerView playable={playable} title="Toy Story 5" onBack={onBack} />);
@@ -334,7 +339,8 @@ describe('PlayerView', () => {
     Object.defineProperty(video, 'readyState', { configurable: true, value: 2 });
     fireEvent.loadedData(video);
     fireEvent.timeUpdate(video);
-    expect(screen.getByText('00:45 / 02:00')).toBeInTheDocument();
+    expect(screen.getByText('00:45')).toBeInTheDocument();
+    expect(screen.getByText('02:00')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Mute' }));
     expect(video.muted).toBe(true);
     fireEvent.volumeChange(video);
@@ -359,22 +365,55 @@ describe('PlayerView', () => {
     expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
     press('ArrowDown');
     expect(controls).toHaveFocus();
-    // Down goes to the seek bar, then to the buttons, and Left/Right move along them
+    // Down skips the seek bar for play/pause beside it, where Left and Right seek, as on the video
     press('ArrowDown');
-    expect(seek).toHaveFocus();
-    press('ArrowDown');
-    expect(screen.getByRole('button', { name: 'Play' })).toHaveFocus();
-    press('ArrowRight');
-    expect(screen.getByRole('button', { name: 'Play' })).not.toHaveFocus();
-    press('ArrowUp');
-    expect(seek).toHaveFocus();
-    // On the seek bar Left and Right seek, as on the video
+    const playButton = screen.getByRole('button', { name: 'Play' });
+    expect(playButton).toHaveFocus();
     press('ArrowRight');
     expect(video.currentTime).toBe(10);
-    expect(seek).toHaveFocus();
+    press('ArrowRight');
+    expect(video.currentTime).toBe(20);
+    fireEvent.timeUpdate(video);
+    press('ArrowLeft');
+    expect(video.currentTime).toBe(10);
+    expect(playButton).toHaveFocus();
+    // Down reaches the row under the bar, and Left/Right move along it
+    press('ArrowDown');
+    expect(screen.getByRole('button', { name: 'Subtitles' })).toHaveFocus();
+    press('ArrowRight');
+    expect(screen.getByRole('button', { name: 'Toggle fullscreen' })).toHaveFocus();
+    press('ArrowUp');
+    expect(playButton).toHaveFocus();
+    expect(seek).not.toHaveFocus();
   });
 
-  it('reaches Skip intro with the arrows, between the video and the seek bar', async () => {
+  it('includes the seek bar in desktop Tab order and lets its arrows seek', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
+    fireEvent.durationChange(video);
+    const seek = screen.getByRole('slider', { name: 'Seek' });
+    await waitFor(() => expect(seek).toBeEnabled());
+
+    const play = screen.getByRole('button', { name: 'Play' });
+    act(() => play.focus());
+    expect(fireEvent.keyDown(play, { key: 'Tab' })).toBe(false);
+    expect(seek).toHaveFocus();
+    fireEvent.keyDown(seek, { key: 'ArrowRight' });
+    expect(video.currentTime).toBe(10);
+    expect(seek).toHaveFocus();
+
+    const subtitles = screen.getByRole('button', { name: 'Subtitles' });
+    fireEvent.keyDown(seek, { key: 'Tab' });
+    expect(subtitles).toHaveFocus();
+    fireEvent.keyDown(subtitles, { key: 'Tab', shiftKey: true });
+    expect(seek).toHaveFocus();
+    fireEvent.keyDown(seek, { key: 'Tab', shiftKey: true });
+    expect(play).toHaveFocus();
+  });
+
+  it('reaches Skip intro with the arrows, between the video and play/pause', async () => {
     createSession.mockReturnValue({
       unwrap: () =>
         Promise.resolve({
@@ -406,7 +445,7 @@ describe('PlayerView', () => {
     const skip = screen.getByRole('button', { name: 'Skip intro' });
     expect(skip).toHaveFocus();
     press('ArrowDown');
-    expect(seek).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Play' })).toHaveFocus();
     press('ArrowUp');
     expect(skip).toHaveFocus();
     fireEvent.click(skip);
@@ -449,20 +488,189 @@ describe('PlayerView', () => {
       Object.defineProperty(video, 'paused', { configurable: true, value: false });
       fireEvent.play(video);
       act(() => vi.advanceTimersByTime(3000));
-      expect(screen.getByRole('banner', { hidden: true })).not.toBeVisible();
-      expect(screen.getByAltText('Miauflix logo')).not.toBeVisible();
+      // The header (Back and the logo) fades out with the controls
+      expect(screen.getByRole('banner', { hidden: true })).toHaveAttribute('data-hidden');
       expect(screen.queryByRole('slider', { name: 'Seek' })).not.toBeInTheDocument();
-      // With the controls hidden, a remote's Up or Down only shows them
+      // With the controls hidden, a remote's Up or Down shows them with the focus on play/pause
       const controls = screen.getByLabelText('Playback controls');
       act(() => controls.focus());
       fireEvent.keyDown(controls, { key: 'ArrowDown' });
       expect(screen.getByRole('slider', { name: 'Seek' })).toBeInTheDocument();
-      expect(controls).toHaveFocus();
+      expect(screen.getByRole('button', { name: 'Pause' })).toHaveFocus();
       act(() => vi.advanceTimersByTime(3000));
       fireEvent.pointerMove(controls);
-      expect(screen.getByRole('button', { name: /Back to details/ })).toBeVisible();
-      expect(screen.getByAltText('Miauflix logo')).toBeVisible();
+      expect(screen.getByRole('banner')).not.toHaveAttribute('data-hidden');
+      expect(screen.getByRole('button', { name: /Back to details/ })).toBeInTheDocument();
+      expect(screen.getByAltText('Miauflix logo')).toBeInTheDocument();
       expect(screen.getByRole('slider', { name: 'Seek' })).toBeInTheDocument();
+    } finally {
+      view.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it('hides the controls while playing wherever focus is, and the first key only shows them', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const view = render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    const pause = vi.spyOn(video, 'pause').mockImplementation(() => {});
+    Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
+    Object.defineProperty(video, 'paused', { configurable: true, value: false });
+    fireEvent.durationChange(video);
+    fireEvent.play(video);
+    await waitFor(() => expect(screen.getByRole('slider', { name: 'Seek' })).toBeEnabled());
+    const press = (key: string) =>
+      fireEvent.keyDown(document.activeElement ?? document.body, { key });
+    act(() => screen.getByLabelText('Playback controls').focus());
+    press('ArrowDown');
+    const pauseButton = screen.getByRole('button', { name: 'Pause' });
+    expect(pauseButton).toHaveFocus();
+
+    vi.useFakeTimers();
+    try {
+      // The wait starts again from the last input (under the fake clock)
+      fireEvent.pointerMove(screen.getByLabelText('Playback controls'));
+      act(() => vi.advanceTimersByTime(3000));
+      // Focus on a control doesn't keep them up
+      expect(screen.getByRole('banner', { hidden: true })).toHaveAttribute('data-hidden');
+      // Confirm on the hidden Pause button only shows the controls
+      press('Enter');
+      expect(pause).not.toHaveBeenCalled();
+      expect(screen.getByRole('banner')).not.toHaveAttribute('data-hidden');
+      expect(pauseButton).toHaveFocus();
+      // Once shown, it acts
+      press('Enter');
+      expect(pause).toHaveBeenCalledTimes(1);
+    } finally {
+      view.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it('seeks with Left and Right while the controls are hidden, then focuses play/pause', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const view = render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
+    Object.defineProperty(video, 'paused', { configurable: true, value: false });
+    fireEvent.durationChange(video);
+    fireEvent.play(video);
+    await waitFor(() => expect(screen.getByRole('slider', { name: 'Seek' })).toBeEnabled());
+    const controls = screen.getByLabelText('Playback controls');
+    act(() => controls.focus());
+    vi.useFakeTimers();
+    try {
+      // The wait starts again from the last input (under the fake clock)
+      fireEvent.pointerMove(controls);
+      act(() => vi.advanceTimersByTime(3000));
+      expect(screen.getByRole('banner', { hidden: true })).toHaveAttribute('data-hidden');
+      fireEvent.keyDown(controls, { key: 'ArrowRight' });
+      expect(video.currentTime).toBe(10);
+      const pauseButton = screen.getByRole('button', { name: 'Pause' });
+      expect(pauseButton).toHaveFocus();
+      // Shown now, play/pause keeps seeking
+      fireEvent.timeUpdate(video);
+      fireEvent.keyDown(pauseButton, { key: 'ArrowRight' });
+      expect(video.currentTime).toBe(20);
+      expect(pauseButton).toHaveFocus();
+    } finally {
+      view.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it('shows hidden controls before a focused volume slider takes Left or Right', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const view = render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
+    Object.defineProperty(video, 'paused', { configurable: true, value: false });
+    fireEvent.durationChange(video);
+    fireEvent.play(video);
+    await waitFor(() => expect(screen.getByRole('slider', { name: 'Seek' })).toBeEnabled());
+    const press = (key: string) =>
+      fireEvent.keyDown(document.activeElement ?? document.body, { key });
+    act(() => screen.getByLabelText('Playback controls').focus());
+    // Down to play/pause, Down to the row under the bar, then along it to the volume
+    press('ArrowDown');
+    press('ArrowDown');
+    press('ArrowRight');
+    press('ArrowRight');
+    press('ArrowRight');
+    const volume = screen.getByRole('slider', { name: 'Volume' });
+    expect(volume.closest('[data-focused]')).not.toBeNull();
+    vi.useFakeTimers();
+    try {
+      fireEvent.pointerMove(screen.getByLabelText('Playback controls'));
+      act(() => vi.advanceTimersByTime(3000));
+      expect(screen.getByRole('banner', { hidden: true })).toHaveAttribute('data-hidden');
+      press('ArrowLeft');
+      // The gate took it: the volume stays, and the press shows the controls on play/pause
+      expect(video.volume).toBe(1);
+      expect(screen.getByRole('banner')).not.toHaveAttribute('data-hidden');
+      expect(screen.getByRole('button', { name: 'Pause' })).toHaveFocus();
+    } finally {
+      view.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it('moves the focus from Back to the video when the header hides', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const onBack = vi.fn();
+    const view = render(<PlayerView playable={playable} title="Toy Story 5" onBack={onBack} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'paused', { configurable: true, value: false });
+    fireEvent.play(video);
+    const controls = screen.getByLabelText('Playback controls');
+    act(() => controls.focus());
+    fireEvent.keyDown(controls, { key: 'ArrowUp' });
+    expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
+    vi.useFakeTimers();
+    try {
+      fireEvent.pointerMove(controls);
+      act(() => vi.advanceTimersByTime(3000));
+      expect(screen.getByRole('banner', { hidden: true })).toHaveAttribute('data-hidden');
+      expect(controls).toHaveFocus();
+      // The remote's Back still leaves the player
+      fireEvent.keyDown(controls, { key: 'GoBack' });
+      expect(onBack).toHaveBeenCalledTimes(1);
+    } finally {
+      view.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it('keeps the controls up while paused', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const view = render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = await screen.findByLabelText('Toy Story 5');
+    vi.useFakeTimers();
+    try {
+      Object.defineProperty(video, 'paused', { configurable: true, value: true });
+      fireEvent.pause(video);
+      // Arms the hide timer under the fake clock, so the wait below would hide them if it could
+      fireEvent.pointerMove(screen.getByLabelText('Playback controls'));
+      act(() => vi.advanceTimersByTime(10_000));
+      expect(screen.getByRole('banner')).not.toHaveAttribute('data-hidden');
+    } finally {
+      view.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it('keeps the controls up while the subtitle panel is open', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const view = render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = await screen.findByLabelText('Toy Story 5');
+    Object.defineProperty(video, 'paused', { configurable: true, value: false });
+    fireEvent.play(video);
+    vi.useFakeTimers();
+    try {
+      fireEvent.pointerMove(screen.getByLabelText('Playback controls'));
+      fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
+      act(() => vi.advanceTimersByTime(10_000));
+      expect(screen.getByRole('banner')).not.toHaveAttribute('data-hidden');
     } finally {
       view.unmount();
       vi.useRealTimers();
@@ -1021,8 +1229,18 @@ describe('PlayerView', () => {
       startSeconds: 90,
       autoplay: true,
     });
+    const controls = screen.getByLabelText('Playback controls');
+    act(() => controls.focus());
+    act(() => {
+      fireEvent.keyDown(controls, { key: 'ArrowRight' });
+      fireEvent.keyDown(controls, { key: 'ArrowRight' });
+    });
+    expect(startAudioPlayback.mock.lastCall?.[0]).toMatchObject({
+      startSeconds: 110,
+      autoplay: true,
+    });
     view.unmount();
-    expect(stopAudioPlayback).toHaveBeenCalledTimes(3);
+    expect(stopAudioPlayback).toHaveBeenCalledTimes(4);
   });
 
   it('searches ahead at playback start and requests the next episode download at 70%', async () => {

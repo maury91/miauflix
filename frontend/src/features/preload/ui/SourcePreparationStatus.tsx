@@ -25,12 +25,12 @@ const Status = styled.div`
   flex: 0 1 auto;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.55rem 0.75rem;
+  gap: 8.8px 12px;
   min-width: max-content;
-  min-height: 1.8rem;
+  min-height: 28.8px;
   margin: 0;
   color: ${PALETTE.text.secondary};
-  font-size: clamp(0.76rem, 1.8vh, 1rem);
+  font-size: clamp(12.16px, 1.8vh, 16px);
 
   @media (max-width: 860px) {
     width: 100%;
@@ -42,11 +42,11 @@ const Status = styled.div`
 const NoSourceBadge = styled.span`
   display: inline-flex;
   align-items: center;
-  gap: 0.38rem;
-  min-height: 1.65rem;
-  padding: 0.15rem 0.58rem;
+  gap: 6.08px;
+  min-height: 26.4px;
+  padding: 2.4px 9.28px;
   border: 1px solid ${PALETTE.background.border};
-  border-radius: 0.35rem;
+  border-radius: 5.6px;
   background: rgba(17, 23, 25, 0.86);
   color: ${PALETTE.text.disabled};
   font-size: 1em;
@@ -75,7 +75,7 @@ const VisuallyHidden = styled.span`
 const Discovery = styled.span`
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 6.4px;
 `;
 
 const Loading = styled(LoadingIcon)`

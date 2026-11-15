@@ -23,6 +23,11 @@ export type CollectionTileProps = Omit<
   ratio?: 'landscape' | 'portrait' | 'square';
   /** Text under the frame, or over the artwork on the tile scrim. */
   labelPlacement?: 'below' | 'overlay';
+  /**
+   * The visual already shows the name (a title logo): the label only names the tile for assistive
+   * technology. Supporting text stays visible.
+   */
+  labelHidden?: boolean;
   /** A Badge at the frame's top start corner. Its text joins the description. */
   badge?: ReactNode;
   /** Watched share, 0 to 1: a decorative hairline at the frame's bottom. */
@@ -47,6 +52,7 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
       visual,
       ratio = 'landscape',
       labelPlacement = 'below',
+      labelHidden = false,
       badge,
       progress,
       progressText,
@@ -107,11 +113,21 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
             </span>
           )}
           {labelPlacement === 'overlay' && (
-            <TileText id={id} label={label} supportingText={supportingText} />
+            <TileText
+              id={id}
+              label={label}
+              labelHidden={labelHidden}
+              supportingText={supportingText}
+            />
           )}
         </span>
         {labelPlacement === 'below' && (
-          <TileText id={id} label={label} supportingText={supportingText} />
+          <TileText
+            id={id}
+            label={label}
+            labelHidden={labelHidden}
+            supportingText={supportingText}
+          />
         )}
         {progressText && (
           <span id={`${id}-progress`} className={visuallyHidden}>
@@ -126,15 +142,17 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
 function TileText({
   id,
   label,
+  labelHidden,
   supportingText,
 }: {
   id: string;
   label: string;
+  labelHidden: boolean;
   supportingText?: string;
 }): ReactNode {
   return (
     <span className={styles.text}>
-      <span id={`${id}-label`} className={styles.label}>
+      <span id={`${id}-label`} className={labelHidden ? visuallyHidden : styles.label}>
         {label}
       </span>
       {supportingText && (

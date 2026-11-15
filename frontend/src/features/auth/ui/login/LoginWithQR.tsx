@@ -1,22 +1,32 @@
 import { useClaimQrLoginMutation, useCreateQrLoginMutation } from '@features/auth/api/auth.api';
+import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
 import { qrApprovalUrl } from '@features/auth/lib/qrApprovalUrl';
-import type { FC, RefObject } from 'react';
+import { Button, Message, PairingPanel } from '@shared/design-system';
+import { useNavigation } from '@shared/navigation';
+import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
+import QRCode from 'react-qr-code';
 
-import { ErrorMessage } from './ErrorMessage';
-import { QRDisplay } from './QRDisplay';
-import { LoginSection, SectionTitle } from './Sections';
+import { LOGIN_NAV } from './loginNav';
 
+/** Fills the panel's white tile; the SVG scales by its view box. */
+const qrStyle = { width: '100%', height: '100%' };
+
+/**
+ * Sign in by scanning a code with a signed-in phone: the design system's PairingPanel. This
+ * feature requests the code, polls for the approval and counts down to its expiry; once it
+ * expired (or the request failed) the panel offers a new one.
+ */
 export const LoginWithQR: FC<{
-  refreshRef?: RefObject<HTMLButtonElement | null>;
-  /** Left from the new-code button, and after asking for a new code (its button goes away). */
-  onLeaveRefresh?: () => void;
-}> = ({ refreshRef, onLeaveRefresh }) => {
+  /** Where focus goes after asking for a new code, whose button then goes away. */
+  focusAfterNewCode?: string;
+}> = ({ focusAfterNewCode }) => {
   const [createQrLogin, { data: qrData, isLoading: isQrLoading, isError: isQrError }] =
     useCreateQrLoginMutation();
   const [claimQrLogin] = useClaimQrLoginMutation();
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const lastAuthStatusCheck = useRef<number>(0);
+  const navigation = useNavigation();
 
   useEffect(() => {
     createQrLogin();
@@ -62,24 +72,46 @@ export const LoginWithQR: FC<{
     return () => {};
   }, [claimQrLogin, qrData]);
 
+  const requestNewCode = () => {
+    createQrLogin();
+    if (focusAfterNewCode) navigation.focus(focusAfterNewCode);
+  };
+
+  const expired = isQrError || (Boolean(qrData) && timeRemaining <= 0);
+  const state = isQrLoading || (!qrData && !isQrError) ? 'loading' : expired ? 'expired' : 'ready';
+
   return (
-    <LoginSection>
-      <SectionTitle>Sign in with QR</SectionTitle>
-      {isQrError ? (
-        <ErrorMessage>Failed to generate QR code</ErrorMessage>
-      ) : (
-        <QRDisplay
-          codeUrl={qrData ? qrApprovalUrl(qrData.approvalPath) : ''}
-          isLoading={isQrLoading}
-          timeRemaining={timeRemaining}
-          onRefresh={() => {
-            createQrLogin();
-            onLeaveRefresh?.();
-          }}
-          refreshRef={refreshRef}
-          onRefreshLeft={onLeaveRefresh}
-        />
-      )}
-    </LoginSection>
+    <PairingPanel
+      navId={LOGIN_NAV.qrPanel}
+      title="Sign in with QR"
+      instructions="Scan with phone to sign in"
+      state={state}
+      loadingLabel="Getting a code"
+      qr={
+        qrData ? (
+          <QRCode
+            value={qrApprovalUrl(qrData.approvalPath)}
+            level="M"
+            style={qrStyle}
+            aria-label="Login QR code"
+          />
+        ) : undefined
+      }
+      status={state === 'ready' ? `Expires in ${formatTimeRemaining(timeRemaining)}` : undefined}
+      message={
+        state === 'expired' ? (
+          <Message tone={isQrError ? 'danger' : 'info'} toneLabel={isQrError ? 'Error' : undefined}>
+            {isQrError ? 'Failed to generate QR code' : 'Code expired'}
+          </Message>
+        ) : undefined
+      }
+      actions={
+        state === 'expired' ? (
+          <Button navId={LOGIN_NAV.qrNewCode} onClick={requestNewCode}>
+            Get a new code
+          </Button>
+        ) : undefined
+      }
+    />
   );
 };

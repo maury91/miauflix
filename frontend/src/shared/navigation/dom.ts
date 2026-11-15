@@ -54,7 +54,7 @@ export function isNativeControl(element: Element): boolean {
   return element instanceof HTMLSelectElement || element instanceof HTMLInputElement;
 }
 
-const editableSelector =
+export const editableSelector =
   'input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, [contenteditable="true"]';
 
 /**

@@ -1,6 +1,6 @@
 import type { MediaDto, ProgressEntry } from '@miauflix/backend';
+import { MediaTile } from '@shared/design-system';
 import { artworkUrl, getMediaTitle } from '@shared/lib/media.utils';
-import { MediaCard as ArtworkCard } from '@shared/ui/media-card/MediaCard';
 import type { RootState } from '@store/store';
 import { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -15,23 +15,23 @@ interface MediaCardProps {
   onSelect: () => void;
   /** This title's progress (see progressByMedia). */
   progress?: ProgressEntry;
-  /** Draw the focus treatment on the card itself; off when the row draws a ring for it. */
-  showFocus?: boolean;
 }
 
-/** Render a focusable media card with playback progress and the selected episode’s label when available. */
+/** The watched share, 0 to 1, or nothing before playback started. */
+function watchedShare(playback: ProgressEntry | undefined): number | undefined {
+  if (!playback) return undefined;
+  if (playback.state === 'completed') return 1;
+  const share = playback.positionSeconds / playback.durationSeconds;
+  return Number.isFinite(share) ? Math.max(0, Math.min(1, share)) : 0;
+}
+
+/**
+ * A Home row's media: the design system's MediaTile, adapted from the media DTO (live artwork,
+ * playback progress, the episode in progress). The row owns movement and passes the selection as
+ * the tile's focus; the tile draws it. Sized by the row's geometry in exact pixels.
+ */
 export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function MediaCard(
-  {
-    media,
-    onFocus,
-    onHover,
-    onSelect,
-    progress: playback,
-    selected,
-    showFocus = true,
-    tabIndex,
-    width,
-  },
+  { media, onFocus, onHover, onSelect, progress: playback, selected, tabIndex, width },
   ref
 ) {
   const title = getMediaTitle(media);
@@ -41,32 +41,32 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
   );
   const currentRevision = media.artworkRevision ?? 0;
   const selectedArtwork = artwork && artwork.artworkRevision >= currentRevision ? artwork : media;
-  const cardLogo = selectedArtwork.logo;
-  const percent = playback
-    ? playback.state === 'completed'
-      ? 100
-      : Math.max(0, Math.min(100, (playback.positionSeconds / playback.durationSeconds) * 100))
-    : 0;
-  const subtitle =
+  const share = watchedShare(playback);
+  const episode =
     media._type === 'tvshow' && playback?.playable.kind === 'episode'
       ? `S${playback.playable.seasonNumber} E${playback.playable.episodeNumber}`
       : undefined;
   return (
-    <ArtworkCard
-      ref={ref}
-      backdrop={artworkUrl(selectedArtwork.backdrop, 'card', width)}
-      logo={cardLogo ? artworkUrl(cardLogo, 'logo', width * 0.7) : undefined}
-      title={title}
-      subtitle={subtitle}
-      focused={selected}
-      externalFocus={!showFocus}
-      width={width}
-      progress={playback ? percent : undefined}
-      aria-current={selected ? 'true' : undefined}
-      tabIndex={tabIndex}
-      onFocus={onFocus}
-      onMouseEnter={onHover}
-      onClick={onSelect}
-    />
+    // The row lays cards out by their exact width; the tile fills it
+    <div style={{ flex: `0 0 ${width}px`, width }}>
+      <MediaTile
+        ref={ref}
+        title={title}
+        supportingText={episode}
+        artwork={
+          selectedArtwork.backdrop ? artworkUrl(selectedArtwork.backdrop, 'card', width) : null
+        }
+        logo={selectedArtwork.logo ? artworkUrl(selectedArtwork.logo, 'logo', width * 0.7) : null}
+        labelPlacement="overlay"
+        progress={share}
+        progressText={share === undefined ? undefined : `${Math.round(share * 100)}% watched`}
+        focused={selected}
+        aria-current={selected ? 'true' : undefined}
+        tabIndex={tabIndex}
+        onFocus={onFocus}
+        onMouseEnter={onHover}
+        onClick={onSelect}
+      />
+    </div>
   );
 });

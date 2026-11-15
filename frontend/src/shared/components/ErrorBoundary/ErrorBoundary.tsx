@@ -21,29 +21,29 @@ const ErrorContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  padding: 2rem;
+  padding: 32px;
   text-align: center;
   background-color: #1a1a1a;
   color: #ffffff;
   border-radius: 8px;
-  margin: 1rem;
+  margin: 16px;
 `;
 
 const ErrorTitle = styled.h2`
   color: #ff4444;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin-bottom: 16px;
+  font-size: 24px;
 `;
 
 const ErrorMessage = styled.p`
   color: #cccccc;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   max-width: 600px;
   line-height: 1.5;
 `;
 
 const ErrorDetails = styled.details`
-  margin-top: 1rem;
+  margin-top: 16px;
   text-align: left;
   max-width: 600px;
   width: 100%;
@@ -52,20 +52,20 @@ const ErrorDetails = styled.details`
 const ErrorSummary = styled.summary`
   cursor: pointer;
   color: #888888;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 `;
 
 const ErrorStack = styled.pre`
   background-color: #2a2a2a;
-  padding: 1rem;
+  padding: 16px;
   border-radius: 4px;
   overflow-x: auto;
-  font-size: 0.875rem;
+  font-size: 14px;
   color: #ff6666;
 `;
 
 const RetryArea = styled.div`
-  margin-top: 1rem;
+  margin-top: 16px;
 `;
 
 const DefaultErrorFallback: ComponentType<{ error?: Error; resetError: () => void }> = ({

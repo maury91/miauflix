@@ -14,7 +14,7 @@ const Card = styled.button`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.1rem;
+  gap: 17.6px;
   padding: 0;
   border: 0;
   background: none;
@@ -85,7 +85,7 @@ const EditBadge = styled.span`
 const Name = styled.span`
   max-width: ${CARD};
   overflow: hidden;
-  font-size: clamp(1rem, 1.7vw, 2rem);
+  font-size: clamp(16px, 1.7vw, 32px);
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;

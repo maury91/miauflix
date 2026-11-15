@@ -1,92 +1,31 @@
 import { useCreateAdminMutation } from '@features/setup/api/setup.api';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { Button, FieldLabel as Label, Input } from '@shared/ui';
+import {
+  Button,
+  FormSection,
+  Message,
+  PasswordField,
+  Surface,
+  TextField,
+} from '@shared/design-system';
+import { FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { useAppDispatch } from '@store';
 import { authSlice } from '@store/slices/auth';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
-import { useCallback, useState } from 'react';
-import styled from 'styled-components';
+import { useRef, useState } from 'react';
 
-const PageContainer = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: ${SETTINGS_PALETTE.background.primary};
-  color: ${SETTINGS_PALETTE.text.primary};
-  font-family: 'Poppins', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-`;
+import * as styles from './setupPage.css';
 
-const FormCard = styled.div`
-  background-color: ${SETTINGS_PALETTE.background.surface};
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 16px;
-  padding: 32px;
-  width: 100%;
-  max-width: 360px;
-`;
+const NAV = {
+  email: 'setup-email',
+  password: 'setup-password',
+  confirm: 'setup-confirm-password',
+  submit: 'setup-submit',
+} as const;
 
-// const Title = styled.h1`
-//   font-size: 24px;
-//   font-weight: 400;
-//   margin: 0 0 8px 0;
-//   color: #ffffff;
-// `;
+const MIN_PASSWORD_LENGTH = 8;
 
-const Subtitle = styled.p`
-  font-size: 13px;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  margin: 0 0 24px 0;
-  line-height: 1.5;
-`;
-
-const InputGroup = styled.div`
-  margin-bottom: 24px;
-`;
-
-const PasswordInputRow = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-const PasswordStrengthBar = styled.div`
-  height: 3px;
-  background-color: #333;
-  border-radius: 0 0 4px 4px;
-  overflow: hidden;
-  margin-top: -1px;
-`;
-
-const PasswordStrengthFill = styled.div<{ $strength: number }>`
-  height: 100%;
-  width: ${props => props.$strength * 25}%;
-  background-color: ${props => {
-    if (props.$strength <= 1) return SETTINGS_PALETTE.color.danger;
-    if (props.$strength === 2) return '#ff8c00';
-    if (props.$strength === 3) return '#a8c23a';
-    return SETTINGS_PALETTE.color.success;
-  }};
-  transition:
-    width 0.3s ease,
-    background-color 0.3s ease;
-`;
-
-const SubmitArea = styled.div`
-  margin-top: 24px;
-`;
-
-const ErrorMessage = styled.p`
-  color: ${SETTINGS_PALETTE.color.danger};
-  font-size: 13px;
-  margin: 12px 0 0 0;
-`;
+const STRENGTH_LABELS = ['Very weak', 'Weak', 'Fair', 'Good', 'Strong'] as const;
 
 function getPasswordStrength(password: string): number {
   if (password.length === 0) return 0;
@@ -99,144 +38,150 @@ function getPasswordStrength(password: string): number {
   return Math.min(4, score);
 }
 
-/** Create the initial admin account after password confirmation and store the returned login session. */
-const SetupPage: FC = () => {
+/** Which field a validation failure belongs to, and what it says. */
+type FieldName = 'email' | 'password' | 'confirm';
+type ValidationError = { field: FieldName; message: string } | null;
+
+/**
+ * The first-run form: create the admin account (password confirmed) and sign in with the session
+ * the server returns. The same design system fields and form as the login screen.
+ */
+function AdminAccountForm() {
   const [email, setEmail] = useState('');
+  const emailInput = useRef<HTMLInputElement>(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [validationError, setValidationError] = useState('');
-
+  const [validationError, setValidationError] = useState<ValidationError>(null);
   const [createAdmin, { isLoading, error }] = useCreateAdminMutation();
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setValidationError('');
+  const handleSubmit = async () => {
+    if (isLoading) return;
+    let invalid: ValidationError = null;
+    if (password !== confirmPassword) {
+      invalid = { field: 'confirm', message: 'Passwords do not match' };
+    }
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      invalid = {
+        field: 'password',
+        message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters`,
+      };
+    }
+    if (!emailInput.current?.validity.valid) {
+      invalid = { field: 'email', message: 'Enter a valid email address' };
+    }
+    setValidationError(invalid);
+    if (invalid) {
+      // After a failed submit, focus goes to the field to fix
+      navigation.focus(NAV[invalid.field]);
+      return;
+    }
 
-      if (password !== confirmPassword) {
-        setValidationError('Passwords do not match');
-        return;
-      }
+    const result = await createAdmin({ email, password });
+    if ('data' in result && result.data) {
+      // Auto-login: the setup endpoint returns a session, set it directly
+      dispatch(authSlice.actions.setSession(result.data.session));
+      dispatch(authSlice.actions.setCurrentUser(result.data.user));
+    }
+  };
 
-      if (password.length < 8) {
-        setValidationError('Password must be at least 8 characters');
-        return;
-      }
-
-      const result = await createAdmin({ email, password });
-      if ('data' in result && result.data) {
-        // Auto-login: the setup endpoint returns a session, set it directly
-        dispatch(authSlice.actions.setSession(result.data.session));
-        dispatch(authSlice.actions.setCurrentUser(result.data.user));
-      }
-    },
-    [email, password, confirmPassword, createAdmin, dispatch]
-  );
-
-  const passwordStrength = getPasswordStrength(password);
+  const strength = getPasswordStrength(password);
   const apiError = error && 'data' in error && typeof error.data === 'string' ? error.data : null;
+  const errorFor = (field: FieldName) =>
+    validationError?.field === field ? validationError.message : undefined;
 
   return (
-    <PageContainer
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+    <FormSection
+      title="Welcome to Miauflix"
+      description="Let's create your admin account!"
+      onSubmit={() => void handleSubmit()}
+      busy={isLoading}
+      message={
+        apiError ? (
+          <Message tone="danger" toneLabel="Error" live="assertive">
+            {apiError}
+          </Message>
+        ) : undefined
+      }
+      actions={
+        <Button
+          navId={NAV.submit}
+          type="submit"
+          fullWidth
+          loading={isLoading}
+          disabled={!email.trim() || !password.trim() || !confirmPassword.trim()}
+        >
+          Create admin account
+        </Button>
+      }
     >
-      <FormCard>
-        <Subtitle>Let's create your admin account!</Subtitle>
-
-        <form onSubmit={handleSubmit}>
-          <InputGroup>
-            <Label htmlFor="setup-email">Email</Label>
-            <Input
-              type="email"
-              id="setup-email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="admin@example.com"
-              required
-              autoComplete="email"
-            />
-          </InputGroup>
-
-          <InputGroup>
-            <Label htmlFor="setup-password">Password</Label>
-            <PasswordInputRow>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                id="setup-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="Minimum 8 characters"
-                required
-                autoComplete="new-password"
-              />
-              <Button
-                appearance="settings"
-                size="small"
-                type="button"
-                color="secondary"
-                aria-label="Show password"
-                aria-pressed={showPassword}
-                onClick={() => setShowPassword(current => !current)}
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </Button>
-            </PasswordInputRow>
-            <PasswordStrengthBar>
-              <PasswordStrengthFill $strength={passwordStrength} />
-            </PasswordStrengthBar>
-          </InputGroup>
-
-          <InputGroup>
-            <Label htmlFor="setup-confirm-password">Confirm Password</Label>
-            <PasswordInputRow>
-              <Input
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="setup-confirm-password"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                placeholder="Repeat your password"
-                required
-                autoComplete="new-password"
-              />
-              <Button
-                appearance="settings"
-                size="small"
-                type="button"
-                color="secondary"
-                aria-label="Show confirmation password"
-                aria-pressed={showConfirmPassword}
-                onClick={() => setShowConfirmPassword(current => !current)}
-              >
-                {showConfirmPassword ? 'Hide' : 'Show'}
-              </Button>
-            </PasswordInputRow>
-          </InputGroup>
-
-          <SubmitArea>
-            <Button
-              appearance="settings"
-              size="medium"
-              fullWidth
-              type="submit"
-              disabled={isLoading || !email.trim() || !password.trim() || !confirmPassword.trim()}
-            >
-              {isLoading ? 'Creating account...' : 'Create Admin Account'}
-            </Button>
-          </SubmitArea>
-
-          {(validationError || apiError) && (
-            <ErrorMessage>{validationError || apiError}</ErrorMessage>
-          )}
-        </form>
-      </FormCard>
-    </PageContainer>
+      <TextField
+        ref={emailInput}
+        navId={NAV.email}
+        id="setup-email"
+        label="Email"
+        type="email"
+        value={email}
+        onChange={event => setEmail(event.target.value)}
+        placeholder="admin@example.com"
+        required
+        error={errorFor('email')}
+        autoComplete="email"
+      />
+      <PasswordField
+        navId={NAV.password}
+        id="setup-password"
+        label="Password"
+        showLabel="Show password"
+        hideLabel="Hide password"
+        description={
+          password
+            ? `Strength: ${STRENGTH_LABELS[strength]}`
+            : `At least ${MIN_PASSWORD_LENGTH} characters`
+        }
+        error={errorFor('password')}
+        value={password}
+        onChange={event => setPassword(event.target.value)}
+        required
+        autoComplete="new-password"
+      />
+      <PasswordField
+        navId={NAV.confirm}
+        id="setup-confirm-password"
+        label="Confirm password"
+        showLabel="Show confirmation password"
+        hideLabel="Hide confirmation password"
+        error={errorFor('confirm')}
+        value={confirmPassword}
+        onChange={event => setConfirmPassword(event.target.value)}
+        placeholder="Repeat your password"
+        required
+        autoComplete="new-password"
+      />
+    </FormSection>
   );
-};
+}
+
+/** Create the initial admin account after password confirmation and store the returned login session. */
+const SetupPage: FC = () => (
+  <motion.div
+    className={styles.page}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+  >
+    <NavigationProvider>
+      <FocusScope initialId={NAV.email}>
+        <div className={styles.card}>
+          <Surface padding="xl" radius="lg" border>
+            <AdminAccountForm />
+          </Surface>
+        </div>
+      </FocusScope>
+    </NavigationProvider>
+  </motion.div>
+);
 
 export default SetupPage;

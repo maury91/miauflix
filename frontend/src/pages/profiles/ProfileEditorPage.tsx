@@ -46,7 +46,7 @@ const Page = styled(motion.main)`
   inset: 0;
   z-index: 1000;
   display: grid;
-  grid-template-columns: minmax(16rem, 0.75fr) minmax(0, 1.25fr);
+  grid-template-columns: minmax(256px, 0.75fr) minmax(0, 1.25fr);
   gap: 4vw;
   /* Clear of the back rail, as the other inner pages are. */
   padding: 11vh 6vw 4vh calc(${RAIL_COLLAPSED_WIDTH_CSS} + 2.4vw);
@@ -58,7 +58,7 @@ const Page = styled(motion.main)`
   @media (max-width: 760px) {
     grid-template-columns: 1fr;
     overflow: auto;
-    padding: 90px 1.25rem 2rem calc(${RAIL_COLLAPSED_WIDTH_CSS} + 1.25rem);
+    padding: 90px 20px 32px calc(${RAIL_COLLAPSED_WIDTH_CSS} + 20px);
   }
 `;
 
@@ -66,17 +66,17 @@ const Preview = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 24px;
   min-height: 0;
 `;
 
 const Heading = styled.h1`
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 20px;
   align-self: flex-start;
   margin: 0;
-  font-size: clamp(1.8rem, 3.2vw, 4rem);
+  font-size: clamp(28.8px, 3.2vw, 64px);
   font-weight: 600;
   text-transform: none;
 `;
@@ -105,40 +105,40 @@ const StageFill = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 22.4px;
   min-height: 0;
   overflow-y: auto;
-  padding: 0.5rem 0.75rem 1rem 0.25rem;
+  padding: 8px 12px 16px 4px;
 `;
 
 const Fields = styled.div`
   display: grid;
-  gap: 1rem;
+  gap: 16px;
 
   label {
-    font-size: clamp(0.95rem, 1.2vw, 1.45rem);
+    font-size: clamp(15.2px, 1.2vw, 23.2px);
     font-weight: 600;
   }
 
   input {
-    font-size: clamp(1rem, 1.5vw, 1.8rem);
+    font-size: clamp(16px, 1.5vw, 28.8px);
   }
 `;
 
 const Tabs = styled.div`
   display: flex;
-  gap: clamp(0.5rem, 2vw, 2.5rem);
+  gap: clamp(8px, 2vw, 40px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 `;
 
 const Tab = styled.button<{ $selected: boolean }>`
-  padding: 0.6rem 0.4rem 0.8rem;
+  padding: 9.6px 6.4px 12.8px;
   border: 0;
   border-bottom: 4px solid ${({ $selected }) => ($selected ? '#e50914' : 'transparent')};
   background: none;
   color: ${({ $selected }) => ($selected ? '#ffffff' : 'rgba(255, 255, 255, 0.65)')};
   font:
-    500 clamp(1rem, 1.3vw, 1.6rem) 'Poppins',
+    500 clamp(16px, 1.3vw, 25.6px) 'Poppins',
     sans-serif;
   cursor: pointer;
 
@@ -155,21 +155,21 @@ const Tab = styled.button<{ $selected: boolean }>`
 const Panel = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 `;
 
 const Disclosure = styled.button<{ $open: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 16px;
   border: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.18);
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
   background: none;
   color: inherit;
   font:
-    500 clamp(1rem, 1.25vw, 1.5rem) 'Poppins',
+    500 clamp(16px, 1.25vw, 24px) 'Poppins',
     sans-serif;
   cursor: pointer;
 
@@ -187,8 +187,8 @@ const Disclosure = styled.button<{ $open: boolean }>`
 const Buttons = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  padding-top: 0.5rem;
+  gap: 24px;
+  padding-top: 8px;
 `;
 
 type TabId = 'shape' | 'color' | 'face' | 'accessories';

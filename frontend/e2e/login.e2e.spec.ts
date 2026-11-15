@@ -1,3 +1,5 @@
+import type { Locator, Page } from '@playwright/test';
+
 import { navigateToLogin } from './utils/login';
 import { expect, test } from './fixtures';
 
@@ -5,6 +7,43 @@ const LOGIN_API_TIMEOUT = 10000;
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
 const adminPassword = process.env['E2E_ADMIN_PASSWORD'] ?? 'testpassword123';
+
+async function openLoginForScreenshot(page: Page) {
+  // QR content and the countdown are generated per login request, so serve a fixed QR
+  // request and freeze the clock to keep the screenshot stable. An absolute approval URL
+  // keeps the QR independent of the origin the backend runs on.
+  const now = new Date('2026-01-01T12:00:00.000Z');
+  await page.clock.setFixedTime(now);
+  await page.route('**/api/auth/qr', route =>
+    route.fulfill({
+      json: {
+        requestId: 'readme-qr-request',
+        claimToken: 'readme-qr-claim',
+        approvalPath: 'https://miauflix.example/auth/qr/readme-qr-approval',
+        expiresAt: new Date(now.getTime() + 4 * 60_000 + 32_000).toISOString(),
+        pollInterval: 5,
+      },
+    })
+  );
+  await page.route('**/api/auth/qr/*/claim', route =>
+    route.fulfill({ status: 202, json: { state: 'pending' } })
+  );
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await navigateToLogin(page);
+  // The login page fades in via a framer-motion opacity animation (JS-driven, not a
+  // CSS transition/animation), so Playwright's `animations: 'disabled'` option cannot
+  // fast-forward it. Wait for the fade-in to fully settle before comparing screenshots.
+  await page.waitForFunction(() => {
+    let node: Element | null = document.querySelector('#email');
+    while (node) {
+      if (getComputedStyle(node).position === 'fixed') {
+        return getComputedStyle(node).opacity === '1';
+      }
+      node = node.parentElement;
+    }
+    return true;
+  });
+}
 
 test.describe('Login flow', () => {
   test.beforeEach(async ({ page }) => {
@@ -17,44 +56,11 @@ test.describe('Login flow', () => {
     await expect(page.getByRole('button', { name: 'Continue' })).toBeDisabled();
   });
 
-  test('should display complete login page and take screenshot', async ({ page, isMobile }) => {
-    // QR content and the countdown are generated per login request, so serve a fixed QR
-    // request and freeze the clock to keep the screenshot stable. An absolute approval URL
-    // keeps the QR independent of the origin the backend runs on.
-    const now = new Date('2026-01-01T12:00:00.000Z');
-    await page.clock.setFixedTime(now);
-    await page.route('**/api/auth/qr', route =>
-      route.fulfill({
-        json: {
-          requestId: 'readme-qr-request',
-          claimToken: 'readme-qr-claim',
-          approvalPath: 'https://miauflix.example/auth/qr/readme-qr-approval',
-          expiresAt: new Date(now.getTime() + 4 * 60_000 + 32_000).toISOString(),
-          pollInterval: 5,
-        },
-      })
-    );
-    await page.route('**/api/auth/qr/*/claim', route =>
-      route.fulfill({ status: 202, json: { state: 'pending' } })
-    );
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await navigateToLogin(page);
-    // Phones hide the QR section, so only wait for the countdown where it is shown.
-    if (!isMobile) await expect(page.getByText('Expires in')).toBeVisible();
-
-    // The login page fades in via a framer-motion opacity animation (JS-driven, not a
-    // CSS transition/animation), so Playwright's `animations: 'disabled'` option cannot
-    // fast-forward it. Wait for the fade-in to fully settle before comparing screenshots.
-    await page.waitForFunction(() => {
-      let node: Element | null = document.querySelector('#email');
-      while (node) {
-        if (getComputedStyle(node).position === 'fixed') {
-          return getComputedStyle(node).opacity === '1';
-        }
-        node = node.parentElement;
-      }
-      return true;
-    });
+  test('captures the complete login page @snapshot', async ({ page, isMobile }) => {
+    await openLoginForScreenshot(page);
+    const countdown = page.getByText('Expires in');
+    if (isMobile) await expect(countdown).toBeHidden();
+    else await expect(countdown).toBeVisible();
 
     await expect(page).toHaveScreenshot('login-page-complete.png', {
       fullPage: true,
@@ -88,33 +94,28 @@ test.describe('Login flow', () => {
     await expect(submitButton).toBeEnabled();
   });
 
-  test.skip('should display responsive layout on different viewport sizes', async ({ page }) => {
+  test('captures responsive login layouts @snapshot', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'chromium-desktop', 'Compare viewport widths at one DPI');
     await page.setViewportSize({ width: 1920, height: 1080 });
-    // Wait a bit more for any animations to settle
-    await page.waitForTimeout(100);
-    await expect(page).toHaveScreenshot('login-page-desktop.png', {
-      fullPage: true,
-      animations: 'disabled',
-    });
+    await openLoginForScreenshot(page);
+    const countdown = page.getByText('Expires in');
+    await expect(countdown).toBeVisible();
 
-    await page.setViewportSize({ width: 768, height: 1024 });
-    // Wait a bit more for any animations to settle
-    await page.waitForTimeout(100);
-    await expect(page).toHaveScreenshot('login-page-tablet.png', {
-      fullPage: true,
-      animations: 'disabled',
-    });
-
-    await page.setViewportSize({ width: 375, height: 667 });
-    // Wait a bit more for any animations to settle
-    await page.waitForTimeout(100);
-    await expect(page).toHaveScreenshot('login-page-mobile.png', {
-      fullPage: true,
-      animations: 'disabled',
-    });
-
-    const emailInput = page.locator('#email').first();
-    await expect(emailInput).toBeVisible();
+    const layouts = [
+      { name: 'desktop', width: 1920, height: 1080, showQR: true },
+      { name: 'tablet', width: 768, height: 1024, showQR: true },
+      { name: 'mobile', width: 375, height: 667, showQR: false },
+    ] as const;
+    for (const { name, width, height, showQR } of layouts) {
+      await page.setViewportSize({ width, height });
+      if (showQR) await expect(countdown).toBeVisible();
+      else await expect(countdown).toBeHidden();
+      await expect(page.getByLabel('Email')).toBeVisible();
+      await expect(page).toHaveScreenshot(`login-page-${name}.png`, {
+        fullPage: true,
+        animations: 'disabled',
+      });
+    }
   });
 
   test('should handle keyboard navigation and accessibility', async ({ page }) => {
@@ -175,19 +176,19 @@ test.describe('Login flow', () => {
   test('should display proper visual feedback during form interaction', async ({ page }) => {
     const emailInput = page.locator('#email').first();
     const passwordInput = page.locator('#password').first();
+    const outlineOpacity = (input: Locator) =>
+      input.locator('..').evaluate(frame => getComputedStyle(frame, '::after').opacity);
 
-    const emailBorderColor = await emailInput.evaluate(el => getComputedStyle(el).borderColor);
+    await expect.poll(() => outlineOpacity(emailInput)).toBe('1');
+    await expect.poll(() => outlineOpacity(passwordInput)).toBe('0');
 
     await emailInput.focus();
-    const focusedBorderColor = await emailInput.evaluate(el => getComputedStyle(el).borderColor);
-    expect(focusedBorderColor).not.toBe(emailBorderColor);
-
     await emailInput.pressSequentially('visual@test.com');
     await expect(emailInput).toHaveValue('visual@test.com');
 
     await passwordInput.focus();
-    const passwordFocusColor = await passwordInput.evaluate(el => getComputedStyle(el).borderColor);
-    expect(passwordFocusColor).toBe(focusedBorderColor);
+    await expect.poll(() => outlineOpacity(passwordInput)).toBe('1');
+    await expect.poll(() => outlineOpacity(emailInput)).toBe('0');
   });
 
   test('should handle rapid typing and input changes correctly', async ({ page }) => {

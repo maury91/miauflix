@@ -64,7 +64,7 @@ const RowContainer = styled.section`
 const CategoryTitle = styled.h2`
   height: 5vh;
   margin: 0 0 1vh;
-  font-size: clamp(1rem, 2.4vh, 1.6rem);
+  font-size: clamp(16px, 2.4vh, 25.6px);
   font-weight: 500;
   text-transform: none;
 `;
@@ -89,33 +89,12 @@ const ScrollContainer = styled.div<{ $gap: number; $peekWidth: number }>`
      viewport: no layout or repaint per frame (see SmoothScrollerOptions). */
   ${builtForTizen ? 'width: max-content; will-change: transform;' : 'overflow-x: auto;'}
   overflow-y: visible;
-  padding: 0.8vh ${({ $peekWidth }) => `calc(${$peekWidth}px + 0.5vh)`} 1.4vh;
+  /* Room for the focused tile's outline and scale (the track clips) */
+  padding: 1vh ${({ $peekWidth }) => `calc(${$peekWidth}px + 0.5vh)`} 1.4vh;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
-  }
-`;
-
-/**
- * The TV's focus ring: one per row, over the leading slot, where the row always brings the
- * selected card, so it never moves. Scaling the cards instead lifts the two cards that change
- * onto layers of their own while they animate, then repaints the row's track under them, some
- * 60 ms of raster per move on a TV.
- */
-const FocusRing = styled.div<{ $peekWidth: number }>`
-  position: absolute;
-  z-index: 1;
-  top: 0.8vh;
-  left: calc(${({ $peekWidth }) => $peekWidth}px + 0.5vh);
-  margin: -3px;
-  border: 3px solid #fff;
-  border-radius: 9px;
-  pointer-events: none;
-  transition: opacity 150ms ease-out;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
   }
 `;
 
@@ -265,7 +244,6 @@ const RowCard = memo(function RowCard({
       media={media}
       width={width}
       selected={selected}
-      showFocus={!builtForTizen}
       tabIndex={selected ? 0 : -1}
       onFocus={() => handlers.current.activate(index, media)}
       onHover={() => handlers.current.hover(index, media)}
@@ -767,18 +745,6 @@ export const CategoryRow = memo(
             >
               <ChevronRightIcon aria-hidden="true" />
             </ArrowButton>
-          )}
-          {builtForTizen && (
-            <FocusRing
-              $peekWidth={peekWidth}
-              aria-hidden="true"
-              data-testid="category-row-focus-ring"
-              style={{
-                width: `${mediaWidth}px`,
-                height: `${Math.round((mediaWidth * 9) / 16)}px`,
-                opacity: active ? 1 : 0,
-              }}
-            />
           )}
           <ScrollContainer
             ref={scroller.ref}

@@ -592,6 +592,38 @@ describe('NavigationProvider', () => {
     expect(focusedText()).toBe('c');
   });
 
+  it('keeps focus on an item that remounts under the same id (a layout switch)', async () => {
+    function Switching() {
+      const [wide, setWide] = useState(false);
+      const items = (
+        <>
+          <Item id="a" />
+          <Item id="b" onClick={() => setWide(true)} />
+        </>
+      );
+      return (
+        <NavigationProvider>
+          <FocusScope>
+            <FocusGroup layout="horizontal">
+              {wide ? <section>{items}</section> : items}
+              <Item id="c" />
+            </FocusGroup>
+          </FocusScope>
+        </NavigationProvider>
+      );
+    }
+    render(<Switching />);
+    press('ArrowRight');
+    expect(focusedText()).toBe('b');
+    await act(async () => {
+      press('Enter');
+      await Promise.resolve();
+    });
+    expect(focusedText()).toBe('b');
+    // The remounted button has the DOM focus too, not only the focused state
+    expect(screen.getByText('b')).toHaveFocus();
+  });
+
   it('moves to the next row when the row group holding focus is removed', async () => {
     function Rows() {
       const [shown, setShown] = useState(true);

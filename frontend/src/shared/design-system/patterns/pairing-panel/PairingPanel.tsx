@@ -87,7 +87,7 @@ export function PairingPanel({
                 {status}
               </Text>
             )}
-            {message && <div className={styles.block}>{message}</div>}
+            {message && <div className={`${styles.block} ${styles.message}`}>{message}</div>}
             {actions && (
               <div className={styles.block}>
                 <ActionGroup align="center">{actions}</ActionGroup>

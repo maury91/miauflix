@@ -59,6 +59,7 @@ export interface ChildOptions {
   /** Explicit links out of this node, used sparingly. */
   overrides?: Partial<Record<Direction, string>>;
   disabled?: boolean;
+  tabOnly?: NavigationNode['tabOnly'];
   /** Composites: see NavigationNode. */
   stepPart?: NavigationNode['stepPart'];
   entryPart?: NavigationNode['entryPart'];

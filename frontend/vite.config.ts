@@ -29,7 +29,8 @@ if (tizenBuild) {
 /**
  * Make the built page load from the TV's local files (file://): Tizen 5.5 and older block
  * module scripts from file:// and the absolute <base href="/"> points at the filesystem root,
- * so the bundle is a single classic script with paths relative to index.html.
+ * so the bundle is a single classic script with paths relative to index.html. The page is
+ * marked as TV density, so design system sizes (rem) follow the TV's root font size.
  */
 const tizenHtml = {
   name: 'tizen-html',
@@ -38,6 +39,8 @@ const tizenHtml = {
     order: 'post' as const,
     handler: (html: string) =>
       html
+        // Design system density (docs/plans/style-guide.md): the TV's root font size
+        .replace('<html lang="en">', '<html lang="en" data-density="tv">')
         .replace(/\s*<base href="\/"\s*\/?>/, '')
         .replace(/<script type="module" crossorigin/g, '<script defer')
         .replace(/(<link rel="stylesheet") crossorigin/g, '$1')

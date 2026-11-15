@@ -1,7 +1,15 @@
+import { FocusScope, NavigationProvider } from '@shared/navigation';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 
 import { PlayerControls } from './PlayerControls';
+
+/** The player's navigation layer, as PlayerView provides it. */
+const PlayerScope = ({ children }: { children: ReactNode }) => (
+  <NavigationProvider>
+    <FocusScope id="player">{children}</FocusScope>
+  </NavigationProvider>
+);
 
 const cues = [
   { start: 0, end: 4, text: 'First subtitle' },
@@ -29,37 +37,39 @@ function RemoteSubtitleFlow() {
       {exited ? (
         <p>Returned to details</p>
       ) : (
-        <PlayerControls
-          videoRef={videoRef}
-          durationSeconds={100}
-          onBack={() => setExited(true)}
-          subtitleSearchPreferences={{ language: 'en', hearingImpaired: false }}
-          subtitleCues={selected ? cues : []}
-          subtitleCandidates={[
-            {
-              id: 'english-track',
-              provider: 'torrent',
-              fileId: '9:sidecar:1',
-              language: 'en',
-              languageLabel: 'English',
-              release: 'root',
-              hearingImpaired: false,
-              trusted: false,
-              match: 'file',
-              filenameSimilarity: 100,
-            },
-          ]}
-          subtitleConfigured={false}
-          subtitleAvailable={true}
-          subtitleLoading={false}
-          subtitleMessage=""
-          selectedSubtitleId={selected}
-          subtitleOffset={offset}
-          onSearchSubtitles={() => {}}
-          onSelectSubtitle={setSelected}
-          onSubtitleOffsetChange={setOffset}
-          subtitlePreferencesKey={null}
-        />
+        <PlayerScope>
+          <PlayerControls
+            videoRef={videoRef}
+            durationSeconds={100}
+            onBack={() => setExited(true)}
+            subtitleSearchPreferences={{ language: 'en', hearingImpaired: false }}
+            subtitleCues={selected ? cues : []}
+            subtitleCandidates={[
+              {
+                id: 'english-track',
+                provider: 'torrent',
+                fileId: '9:sidecar:1',
+                language: 'en',
+                languageLabel: 'English',
+                release: 'root',
+                hearingImpaired: false,
+                trusted: false,
+                match: 'file',
+                filenameSimilarity: 100,
+              },
+            ]}
+            subtitleConfigured={false}
+            subtitleAvailable={true}
+            subtitleLoading={false}
+            subtitleMessage=""
+            selectedSubtitleId={selected}
+            subtitleOffset={offset}
+            onSearchSubtitles={() => {}}
+            onSelectSubtitle={setSelected}
+            onSubtitleOffsetChange={setOffset}
+            subtitlePreferencesKey={null}
+          />
+        </PlayerScope>
       )}
     </div>
   );
@@ -86,24 +96,26 @@ function DownloadingFlow() {
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: 'black' }}>
       <video ref={videoRef} aria-label="Downloading fixture video" />
-      <PlayerControls
-        videoRef={videoRef}
-        durationSeconds={100}
-        pendingPosition={30}
-        onBack={() => {}}
-        subtitleCandidates={[]}
-        subtitleConfigured={false}
-        subtitleAvailable={false}
-        subtitleLoading={false}
-        subtitleMessage=""
-        selectedSubtitleId={null}
-        subtitleOffset={0}
-        onSearchSubtitles={() => {}}
-        onSelectSubtitle={() => {}}
-        onSubtitleOffsetChange={() => {}}
-        subtitlePreferencesKey={null}
-        downloadedRanges={ranges}
-      />
+      <PlayerScope>
+        <PlayerControls
+          videoRef={videoRef}
+          durationSeconds={100}
+          pendingPosition={30}
+          onBack={() => {}}
+          subtitleCandidates={[]}
+          subtitleConfigured={false}
+          subtitleAvailable={false}
+          subtitleLoading={false}
+          subtitleMessage=""
+          selectedSubtitleId={null}
+          subtitleOffset={0}
+          onSearchSubtitles={() => {}}
+          onSelectSubtitle={() => {}}
+          onSubtitleOffsetChange={() => {}}
+          subtitlePreferencesKey={null}
+          downloadedRanges={ranges}
+        />
+      </PlayerScope>
     </div>
   );
 }

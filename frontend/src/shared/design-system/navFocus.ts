@@ -38,6 +38,7 @@ interface NavFocusOptions {
   /** Virtual focus set by the caller instead of the layer. */
   focused?: boolean;
   disabled?: boolean;
+  tabOnly?: boolean;
   /** Current state (the current tab, a pressed filter): the layer enters a group here first. */
   selected?: boolean;
   /** Columns spanned in a grid group. */
@@ -57,11 +58,11 @@ export interface NavFocus<E extends HTMLElement> {
  */
 export function useNavFocus<E extends HTMLElement>(
   navId: string | undefined,
-  { focused = false, disabled, selected, span }: NavFocusOptions,
+  { focused = false, disabled, selected, span, tabOnly }: NavFocusOptions,
   forwardedRef?: Ref<E>
 ): NavFocus<E> {
   const inherited = useContext(InheritedFocusContext);
-  const nav = useFocusable<E>(navId, { disabled, selected, span });
+  const nav = useFocusable<E>(navId, { disabled, selected, span, tabOnly });
   const ref = useMergedRef(forwardedRef, nav.ref);
   return {
     ref,

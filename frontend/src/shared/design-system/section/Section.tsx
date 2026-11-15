@@ -1,5 +1,6 @@
 import { type HTMLAttributes, type ReactNode, useId } from 'react';
 
+import { visuallyHidden } from '../a11y.css';
 import type { Space } from '../tokens';
 import * as styles from './section.css';
 
@@ -11,6 +12,11 @@ export type SectionProps = Omit<
   title: string;
   /** Heading level in the page outline. */
   headingLevel?: 2 | 3;
+  /**
+   * Keep the heading for assistive technology only, when the page already shows what the section
+   * is (a sign-in form under a card's own title). It still names the section.
+   */
+  titleHidden?: boolean;
   /** One or two sentences under the heading. */
   description?: string;
   /** A few actions about the whole section ("Add server", "See all"), at the header's end. */
@@ -29,6 +35,7 @@ export type SectionProps = Omit<
 export function Section({
   title,
   headingLevel = 2,
+  titleHidden = false,
   description,
   actions,
   padding,
@@ -52,7 +59,7 @@ export function Section({
     >
       <div className={styles.header}>
         <div className={styles.headerText}>
-          <Heading id={headingId} className={styles.title}>
+          <Heading id={headingId} className={titleHidden ? visuallyHidden : styles.title}>
             {title}
           </Heading>
           {description && (

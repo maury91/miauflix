@@ -15,15 +15,15 @@ import AlertIcon from '~icons/line-md/alert';
 const Badges = styled.span`
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 8.8px;
   vertical-align: middle;
 `;
 
 const Badge = styled.span<{ $state: ReturnType<typeof sourceQualityState> }>`
   display: inline-flex;
   align-items: center;
-  min-height: 1.65rem;
-  padding: 0.15rem 0.58rem;
+  min-height: 26.4px;
+  padding: 2.4px 9.28px;
   border: 1px solid
     ${({ $state }) =>
       $state === 'clean'
@@ -31,7 +31,7 @@ const Badge = styled.span<{ $state: ReturnType<typeof sourceQualityState> }>`
         : $state === 'warning'
           ? 'rgba(166, 173, 175, 0.32)'
           : PALETTE.background.border};
-  border-radius: 0.35rem;
+  border-radius: 5.6px;
   background: ${({ $state }) =>
     $state === 'clean'
       ? 'rgba(91, 67, 7, 0.34)'
@@ -51,7 +51,7 @@ const Badge = styled.span<{ $state: ReturnType<typeof sourceQualityState> }>`
 `;
 
 const Sparkles = styled.span`
-  margin-right: 0.38rem;
+  margin-right: 6.08px;
   color: #ffe17a;
   font-size: 1.5em;
   line-height: 1;

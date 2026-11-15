@@ -65,7 +65,7 @@ const Header = styled.header`
   h2 {
     margin: 0;
     font-family: inherit;
-    font-size: 1.2rem;
+    font-size: 19.2px;
     font-weight: 600;
     text-transform: none;
   }
@@ -79,7 +79,7 @@ const PillButton = styled.button`
   background: rgba(255, 255, 255, 0.04);
   color: ${PALETTE.text.secondary};
   font: inherit;
-  font-size: 0.8rem;
+  font-size: 12.8px;
   cursor: pointer;
 
   &:hover,
@@ -174,27 +174,27 @@ const Text = styled.div`
   min-width: 0;
 
   strong {
-    font-size: 0.95rem;
+    font-size: 15.2px;
     font-weight: 600;
   }
 
   p {
     margin: 0;
     color: ${PALETTE.text.secondary};
-    font-size: 0.82rem;
+    font-size: 13.12px;
     line-height: 1.45;
   }
 
   time {
     color: ${PALETTE.text.muted};
-    font-size: 0.72rem;
+    font-size: 11.52px;
   }
 `;
 
 const InlineBadge = styled(QualityBadge)`
   margin: 0 0.3em;
-  font-size: 0.72rem;
-  gap: 0.35rem;
+  font-size: 11.52px;
+  gap: 5.6px;
 `;
 
 /** Holds the unread dot's column on read rows, so their text lines up. */
@@ -215,7 +215,7 @@ const Message = styled.p`
   margin: 0;
   padding: 14px 12px;
   color: ${PALETTE.text.muted};
-  font-size: 0.85rem;
+  font-size: 13.6px;
   text-align: center;
 `;
 
