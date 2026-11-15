@@ -1627,6 +1627,14 @@ describe('Slider', () => {
     expect(stepSliderValue(1.5, 1, { min: 0.5, max: 2.5, step: 1 })).toBe(2.5);
   });
 
+  it('never tops a maximum just below a grid point, and reads steps in exponent notation', () => {
+    // 0.2999999999 / 0.1 rounds to 3 at nine decimals; 0.3 is above the maximum
+    expect(snapSliderValue(1, { min: 0, max: 0.2999999999, step: 0.1 })).toBe(0.2);
+    expect(snapSliderValue(0.25, { min: 0, max: 1, step: 1e-7 })).toBe(0.25);
+    expect(snapSliderValue(0.00000034, { min: 0, max: 1, step: 1e-7 })).toBe(0.0000003);
+    expect(snapSliderValue(0.0000002, { min: 0, max: 1, step: 1.5e-7 })).toBe(0.00000015);
+  });
+
   it('owns Left/Right while focused, clamping instead of exiting, and leaves Up/Down', () => {
     const onChange = vi.fn();
     const outside = vi.fn();

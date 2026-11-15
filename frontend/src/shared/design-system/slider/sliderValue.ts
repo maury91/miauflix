@@ -5,10 +5,12 @@ export interface SliderRange {
   step: number;
 }
 
+/** Decimal places, also for exponent notation (`1e-7` has 7, `1.5e-7` has 8). */
 const decimals = (value: number) => {
-  const text = String(value);
-  const point = text.indexOf('.');
-  return point === -1 ? 0 : text.length - point - 1;
+  const [mantissa, exponent = '0'] = String(value).split('e');
+  const point = mantissa.indexOf('.');
+  const places = point === -1 ? 0 : mantissa.length - point - 1;
+  return Math.max(0, places - Number(exponent));
 };
 
 /** Snaps a value to the range's step grid and clamps it to the limits. */
@@ -21,8 +23,11 @@ export function snapSliderValue(value: number, { min, max, step }: SliderRange):
   // The highest value on the grid, when `max` is not on it. The quotient is rounded first, so a
   // floating-point error (0.3 / 0.1 = 2.9999999999999996) never drops a maximum that is on it
   const quotient = step > 0 ? Number(((max - min) / step).toFixed(9)) : 0;
-  const top = step > 0 ? min + Math.floor(quotient) * step : max;
-  return Math.min(Math.max(snapped, min), Number(top.toFixed(precision)));
+  const gridPoint = (steps: number) => Number((min + steps * step).toFixed(precision));
+  let top = step > 0 ? gridPoint(Math.floor(quotient)) : max;
+  // Rounding may lift the quotient over a maximum just below a grid point: one step back
+  if (step > 0 && top > max) top = gridPoint(Math.floor(quotient) - 1);
+  return Math.min(Math.max(snapped, min), top);
 }
 
 /**

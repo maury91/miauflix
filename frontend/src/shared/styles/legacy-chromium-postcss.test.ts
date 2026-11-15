@@ -49,11 +49,49 @@ describe('legacyChromiumPostcss', () => {
     expect(legacy('.a{display:flex;gap:1rem}')).toBe(
       '.a{display:flex}.a>:not(:last-child){margin-right:1rem}' +
         '[dir="rtl"] .a>:not(:last-child){margin-right:0;margin-left:1rem}' +
-        '[dir="rtl"] [dir="ltr"] .a>:not(:last-child){margin-left:0;margin-right:1rem}'
+        '[dir="rtl"] [dir="ltr"] .a>:not(:last-child),' +
+        '[dir="rtl"] .a[dir="ltr"]>:not(:last-child){margin-left:0;margin-right:1rem}'
     );
     expect(legacy('.a{display:flex;flex-direction:column;row-gap:2vh}')).toBe(
       '.a{display:flex;flex-direction:column}.a>:not(:last-child){margin-bottom:2vh}'
     );
+  });
+
+  it('puts the gap on the side a row runs to, for each direction of text', () => {
+    const root = postcss.parse(
+      postcss([legacyChromiumPostcss()]).process('.a{display:flex;gap:1rem}', { from: undefined })
+        .css
+    );
+    // The winning margins on a child: the highest specificity (here classes, attributes and
+    // pseudo-classes only), then the later rule
+    const marginsOf = (element: Element) => {
+      const won: Record<string, { specificity: number; value: string }> = {};
+      root.walkRules(rule => {
+        for (const selector of rule.selectors) {
+          if (!element.matches(selector)) continue;
+          const specificity = (selector.match(/[.[]|:(?!not\()/g) ?? []).length;
+          rule.walkDecls(({ prop, value }) => {
+            if (!won[prop] || specificity >= won[prop].specificity) {
+              won[prop] = { specificity, value };
+            }
+          });
+        }
+      });
+      return { left: won['margin-left']?.value ?? '0', right: won['margin-right']?.value ?? '0' };
+    };
+    document.body.innerHTML = `
+      <div class="a"><i id="ltr"></i><i></i></div>
+      <div dir="rtl">
+        <div class="a"><i id="rtl"></i><i></i></div>
+        <div class="a" dir="ltr"><i id="own"></i><i></i></div>
+        <p dir="ltr"><span class="a"><i id="island"></i><i></i></span></p>
+      </div>`;
+    const child = (id: string) => document.getElementById(id)!;
+    expect(marginsOf(child('ltr'))).toEqual({ left: '0', right: '1rem' });
+    expect(marginsOf(child('rtl'))).toEqual({ left: '1rem', right: '0' });
+    expect(marginsOf(child('own'))).toEqual({ left: '0', right: '1rem' });
+    expect(marginsOf(child('island'))).toEqual({ left: '0', right: '1rem' });
+    document.body.innerHTML = '';
   });
 
   it('keeps grid gap, which Chromium 69 supports', () => {
@@ -64,7 +102,8 @@ describe('legacyChromiumPostcss', () => {
     expect(legacy('@media (min-width:1px){.a{display:flex;gap:1px}}')).toBe(
       '@media (min-width:1px){.a{display:flex}.a>:not(:last-child){margin-right:1px}' +
         '[dir="rtl"] .a>:not(:last-child){margin-right:0;margin-left:1px}' +
-        '[dir="rtl"] [dir="ltr"] .a>:not(:last-child){margin-left:0;margin-right:1px}}'
+        '[dir="rtl"] [dir="ltr"] .a>:not(:last-child),' +
+        '[dir="rtl"] .a[dir="ltr"]>:not(:last-child){margin-left:0;margin-right:1px}}'
     );
     expect(legacy('@keyframes k{from{opacity:0}to{opacity:1}}')).toBe(
       '@keyframes k{from{opacity:0}to{opacity:1}}'

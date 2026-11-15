@@ -248,13 +248,15 @@ export const PagePaging: Story = {
       canvasElement.querySelector('li[data-focused] [id$="-label"]')?.textContent;
     await expect(focusedLabel()).toBe('Popular 1');
     await userEvent.keyboard('{ArrowRight}');
-    // A page further: the page size depends on the window, and the last page is always full
+    // A page further: the page size depends on the window, and the last page is always full.
+    // With every item on one page there is nothing to scroll, so focus moves one item
     const { perPage } = collectionGeometry({
       width: window.innerWidth,
       height: window.innerHeight,
     });
     const leading = Math.min(perPage, Math.max(0, 14 - perPage));
-    await waitFor(() => expect(focusedLabel()).toBe(`Popular ${leading + 1}`));
+    const expected = leading > 0 ? leading + 1 : 2;
+    await waitFor(() => expect(focusedLabel()).toBe(`Popular ${expected}`));
   },
 };
 

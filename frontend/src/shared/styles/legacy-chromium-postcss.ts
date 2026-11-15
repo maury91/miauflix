@@ -88,11 +88,13 @@ function replaceFlexGap(rule: Rule, selectors: string[], declarations: Declarati
       // A row runs the other way in right-to-left text, so the space goes on the other side
       const rtlBetween = selectors.map(selector => `[dir="rtl"] ${selector}>:not(:last-child)`);
       extra.push(`${rtlBetween.join(',')}{${side}:0;${otherSide}:${columnGap}}`);
-      // A nearer left-to-right ancestor wins back (descendant selectors only check ancestry); one
-      // level of nesting, which covers an LTR island (a code sample, a number) in RTL text
-      const ltrBetween = selectors.map(
-        selector => `[dir="rtl"] [dir="ltr"] ${selector}>:not(:last-child)`
-      );
+      // A nearer left-to-right ancestor, or the row itself, wins back (descendant selectors only
+      // check ancestry); one level of nesting, which covers an LTR island (a code sample, a
+      // number) in RTL text
+      const ltrBetween = selectors.flatMap(selector => [
+        `[dir="rtl"] [dir="ltr"] ${selector}>:not(:last-child)`,
+        `[dir="rtl"] ${selector}[dir="ltr"]>:not(:last-child)`,
+      ]);
       extra.push(`${ltrBetween.join(',')}{${otherSide}:0;${side}:${columnGap}}`);
     }
     if (wraps && !isZero(rowGap)) {

@@ -86,6 +86,7 @@ export function ScrollArea({
     });
     scrollerRef.current = scroller;
     // A mode change keeps one logical position (the outgoing mode cleared its own displacement)
+    const restored = carried.current !== null;
     if (carried.current !== null) {
       scroller.scrollTo(carried.current, { instant: true });
       carried.current = null;
@@ -112,8 +113,9 @@ export function ScrollArea({
       scroller.scrollTo(target, { instant });
     };
 
-    // Restoring a focused element on mount shows it at once
-    const initial = content.querySelector('[data-focused]');
+    // Restoring a focused element on mount shows it at once (not after a mode change: the
+    // carried position is where the user left the content)
+    const initial = restored ? null : content.querySelector('[data-focused]');
     if (initial instanceof HTMLElement) reveal(initial, true);
 
     // The focused element a record reports: one gaining the attribute, or one mounted already
