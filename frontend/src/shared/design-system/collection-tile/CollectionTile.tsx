@@ -2,6 +2,7 @@ import { type ButtonHTMLAttributes, forwardRef, type ReactNode, useId } from 're
 
 import { visuallyHidden } from '../a11y.css';
 import { joinIds } from '../ids';
+import { type NavigableProps, useNavFocus } from '../navFocus';
 import { ProgressBar } from '../progress/Progress';
 import * as styles from './collectionTile.css';
 
@@ -32,7 +33,7 @@ export type CollectionTileProps = Omit<
   focused?: boolean;
   /** Called when the pointer moves onto the tile. */
   onPointerFocus?: () => void;
-};
+} & NavigableProps;
 
 /**
  * One primary action led by artwork: media tiles, profile choices. Generic: it knows nothing about
@@ -53,12 +54,14 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
       onPointerFocus,
       type = 'button',
       onMouseMove,
+      navId,
       'aria-describedby': callerDescribedBy,
       ...props
     },
-    ref
+    forwardedRef
   ) {
     const id = useId();
+    const nav = useNavFocus(navId, { focused, disabled: props.disabled }, forwardedRef);
     const labelId = `${id}-label`;
     const describedBy = joinIds(
       callerDescribedBy,
@@ -71,16 +74,17 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
     return (
       <button
         {...props}
-        ref={ref}
+        ref={nav.ref}
         type={type}
         className={styles.tile}
-        data-focused={focused || undefined}
+        data-focused={nav.focused || undefined}
         data-ratio={ratio}
         data-label={labelPlacement}
         data-progress={hasProgress || undefined}
         aria-labelledby={labelId}
         aria-describedby={describedBy}
         onMouseMove={event => {
+          nav.onPointerFocus();
           onPointerFocus?.();
           onMouseMove?.(event);
         }}

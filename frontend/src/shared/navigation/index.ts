@@ -12,10 +12,13 @@ export {
 export {
   type CompositeResult,
   type FocusableResult,
+  useActiveIdWithin,
   useComposite,
   useFocusable,
+  useHasNavigation,
   useNavigation,
   useNavigationStore,
+  useOptionalPointerLock,
 } from './hooks';
 export { NavigationInspector } from './NavigationInspector';
 export {
@@ -35,9 +38,11 @@ export {
 } from './store';
 export type {
   Direction,
+  Edge,
   EdgePolicy,
   EntryPolicy,
   GroupLayout,
+  MoreRequest,
   NavigationNode,
   NavigationTree,
   Rect,

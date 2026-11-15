@@ -5,9 +5,8 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { List } from '../list/List';
 import { SettingRow } from '../list/SettingRow';
 import type { SelectItems } from '../option-list/selectItems';
-import { StateCell, SurfaceStage } from '../storyHelpers';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import type { SurfaceContextValue } from '../surface';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { Select } from './Select';
 
 const qualities: SelectItems = [
@@ -104,26 +103,23 @@ export const StatesOverMedia: Story = { render: () => <StateMatrix surface="over
 
 function TvSelect() {
   const [value, setValue] = useState<string | null>('auto');
-  const [open, setOpen] = useState(false);
-  const { containerRef, focus, isFocused } = useStoryVirtualFocus([['quality'], ['after']]);
   return (
-    <SurfaceStage surface="solid">
-      {/* Scopes Confirm to this example on the Docs page, where other stories show focus too */}
-      <div ref={containerRef} style={{ minHeight: '22rem' }}>
-        <Select
-          label="Preferred quality"
-          mode="popup"
-          size="lg"
-          items={qualities}
-          value={value}
-          onChange={setValue}
-          focused={isFocused('quality') && !open}
-          onPointerFocus={() => focus('quality')}
-          onOpenChange={setOpen}
-        />
-        <p style={{ color: '#a6adaf' }}>Chosen: {value}</p>
-      </div>
-    </SurfaceStage>
+    <NavigationStage>
+      <SurfaceStage surface="solid">
+        <div style={{ minHeight: '22rem' }}>
+          <Select
+            label="Preferred quality"
+            mode="popup"
+            size="lg"
+            items={qualities}
+            value={value}
+            onChange={setValue}
+            navId="quality"
+          />
+          <p style={{ color: '#a6adaf' }}>Chosen: {value}</p>
+        </div>
+      </SurfaceStage>
+    </NavigationStage>
   );
 }
 

@@ -25,6 +25,8 @@ function describe(snapshot: NavigationSnapshot): string {
   const lines = [
     `active: ${snapshot.activeId ?? '—'}${snapshot.part ? ` (${snapshot.part})` : ''}`,
     `scopes: ${snapshot.scopes.join(' › ') || '—'}`,
+    `pending: ${snapshot.pending ? `${snapshot.pending.groupId} (${snapshot.pending.edge})` : '—'}`,
+    `geometry: ${snapshot.geometry.join(', ') || '—'}`,
   ];
   if (snapshot.last) {
     const { key, resolution } = snapshot.last;

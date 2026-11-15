@@ -5,8 +5,7 @@ import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Button } from '../button/Button';
 import { TextField } from '../field/TextField';
 import { Message } from '../message/Message';
-import { SurfaceStage } from '../storyHelpers';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
+import { NavigationStage, SurfaceStage } from '../storyHelpers';
 import { Dialog } from './Dialog';
 
 const meta = {
@@ -40,56 +39,42 @@ const page = { minHeight: '100vh', boxSizing: 'border-box', padding: '1.5rem' } 
 function Confirmation() {
   const [open, setOpen] = useState(false);
   const [removed, setRemoved] = useState(false);
-  const { focus, isFocused } = useStoryVirtualFocus(
-    open ? [['close'], ['keep', 'remove']] : [['open']],
-    'open'
-  );
-  const close = () => {
-    setOpen(false);
-    focus('open');
-  };
+  // The navigation layer focuses the first action on opening and the opener on closing
+  const close = () => setOpen(false);
   return (
     <SurfaceStage surface="solid">
-      <div style={page}>
-        <Button
-          focused={isFocused('open')}
-          onMouseMove={() => focus('open')}
-          onClick={() => {
-            setOpen(true);
-            focus('keep');
-          }}
-        >
-          Remove server
-        </Button>
-        <p style={{ color: '#a6adaf' }}>{removed ? 'Removed' : 'Not removed'}</p>
-        <Dialog
-          open={open}
-          size="sm"
-          title="Remove this server?"
-          description="Its sources and download history go too. You can add it again later."
-          onDismiss={close}
-          closeLabel="Close"
-          closeFocused={isFocused('close')}
-          onCloseFocus={() => focus('close')}
-          actions={
-            <>
-              <Button focused={isFocused('keep')} onMouseMove={() => focus('keep')} onClick={close}>
-                Keep it
-              </Button>
-              <Button
-                focused={isFocused('remove')}
-                onMouseMove={() => focus('remove')}
-                onClick={() => {
-                  setRemoved(true);
-                  close();
-                }}
-              >
-                Remove
-              </Button>
-            </>
-          }
-        />
-      </div>
+      <NavigationStage>
+        <div style={page}>
+          <Button navId="open" onClick={() => setOpen(true)}>
+            Remove server
+          </Button>
+          <p style={{ color: '#a6adaf' }}>{removed ? 'Removed' : 'Not removed'}</p>
+          <Dialog
+            open={open}
+            size="sm"
+            title="Remove this server?"
+            description="Its sources and download history go too. You can add it again later."
+            onDismiss={close}
+            closeLabel="Close"
+            actions={
+              <>
+                <Button navId="keep" onClick={close}>
+                  Keep it
+                </Button>
+                <Button
+                  navId="remove"
+                  onClick={() => {
+                    setRemoved(true);
+                    close();
+                  }}
+                >
+                  Remove
+                </Button>
+              </>
+            }
+          />
+        </div>
+      </NavigationStage>
     </SurfaceStage>
   );
 }
@@ -129,67 +114,50 @@ function FormDialog() {
   const [open, setOpen] = useState(true);
   const [address, setAddress] = useState('');
   const [error, setError] = useState<string | null>(null);
-  // Closed, only the opener can be focused; the navigation layer restores focus to it
-  const { focus, isFocused } = useStoryVirtualFocus(
-    open ? [['address'], ['save', 'cancel']] : [['opener']],
-    'address'
-  );
-  const close = () => {
-    setOpen(false);
-    focus('opener');
-  };
+  // Opening focuses the field; closing restores the opener
+  const close = () => setOpen(false);
   return (
     <SurfaceStage surface="solid">
-      <div style={page}>
-        <Button
-          focused={isFocused('opener')}
-          onMouseMove={() => focus('opener')}
-          onClick={() => {
-            setOpen(true);
-            focus('address');
-          }}
-        >
-          Add server
-        </Button>
-        <Dialog
-          open={open}
-          title="Add a server"
-          description="Use the address shown in the server's setup screen."
-          onDismiss={close}
-          actions={
-            <>
-              <Button
-                focused={isFocused('save')}
-                onMouseMove={() => focus('save')}
-                onClick={() => {
-                  if (!address.startsWith('http'))
-                    setError('Start the address with http:// or https://.');
-                  else close();
-                }}
-              >
-                Save
-              </Button>
-              <Button
-                focused={isFocused('cancel')}
-                onMouseMove={() => focus('cancel')}
-                onClick={close}
-              >
-                Cancel
-              </Button>
-            </>
-          }
-        >
-          <TextField
-            label="Server address"
-            placeholder="http://192.168.1.20:3000"
-            value={address}
-            onChange={event => setAddress(event.target.value)}
-            error={error ?? undefined}
-            focused={isFocused('address')}
-            onPointerFocus={() => focus('address')}
-          />
-        </Dialog>
-      </div>
+      <NavigationStage>
+        <div style={page}>
+          <Button navId="opener" onClick={() => setOpen(true)}>
+            Add server
+          </Button>
+          <Dialog
+            open={open}
+            title="Add a server"
+            description="Use the address shown in the server's setup screen."
+            initialNavId="address"
+            onDismiss={close}
+            actions={
+              <>
+                <Button
+                  navId="save"
+                  onClick={() => {
+                    if (!address.startsWith('http'))
+                      setError('Start the address with http:// or https://.');
+                    else close();
+                  }}
+                >
+                  Save
+                </Button>
+                <Button navId="cancel" onClick={close}>
+                  Cancel
+                </Button>
+              </>
+            }
+          >
+            <TextField
+              label="Server address"
+              placeholder="http://192.168.1.20:3000"
+              value={address}
+              onChange={event => setAddress(event.target.value)}
+              error={error ?? undefined}
+              navId="address"
+            />
+          </Dialog>
+        </div>
+      </NavigationStage>
     </SurfaceStage>
   );
 }

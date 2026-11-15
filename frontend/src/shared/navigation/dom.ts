@@ -65,6 +65,11 @@ export function activate(element: HTMLElement): boolean {
     choice.click();
     return true;
   }
-  target.click();
+  // A wrapper (a carousel slot) activates the action inside it
+  const interactive = target.matches(
+    'button, a[href], input, select, textarea, label, [role="button"], [role="switch"], [role="tab"], [role="option"], [role="menuitem"]'
+  );
+  const inner = interactive ? null : target.querySelector<HTMLElement>('button, a[href]');
+  (inner ?? target).click();
   return true;
 }

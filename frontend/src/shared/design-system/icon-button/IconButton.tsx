@@ -4,6 +4,7 @@ import * as styles from '../action/action.css';
 import { ActionIcon, type ActionStateProps } from '../action/actionInternals';
 import { guardLoading } from '../action/guardLoading';
 import { joinIds } from '../ids';
+import { type NavigableProps, useNavFocus } from '../navFocus';
 import { useSurfaceContext } from '../surface';
 import { Tooltip, type TooltipProps } from '../tooltip/Tooltip';
 
@@ -11,7 +12,8 @@ export type IconButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   'color' | 'className' | 'style' | 'children' | 'aria-label' | 'aria-pressed'
 > &
-  ActionStateProps & {
+  ActionStateProps &
+  NavigableProps & {
     /** The accessible action name. Required: the button has no visible text. */
     label: string;
     /** Decorative icon. For a toggle, swap outline (off) and filled (on) icons with `pressed`. */
@@ -46,17 +48,20 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
     loading = false,
     type = 'button',
     onClick,
+    onMouseMove,
+    navId,
     ...props
   },
-  ref
+  forwardedRef
 ) {
   const surface = useSurfaceContext();
+  const nav = useNavFocus(navId, { focused, disabled: props.disabled, selected }, forwardedRef);
   const tooltipId = useId();
   const describes = tooltip !== undefined && tooltip !== label;
   const button = (
     <button
       {...props}
-      ref={ref}
+      ref={nav.ref}
       type={type}
       aria-label={label}
       aria-pressed={pressed}
@@ -65,10 +70,14 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       className={styles.action}
       data-surface={surface}
       data-size={size}
-      data-focused={focused || undefined}
+      data-focused={nav.focused || undefined}
       data-shape="circle"
       data-selected={selected || pressed || undefined}
       onClick={guardLoading(loading, onClick)}
+      onMouseMove={event => {
+        nav.onPointerFocus();
+        onMouseMove?.(event);
+      }}
     >
       <ActionIcon icon={icon} loading={loading} />
     </button>
@@ -77,7 +86,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   return (
     <Tooltip
       content={tooltip}
-      open={focused}
+      open={nav.focused}
       placement={tooltipPlacement}
       align={tooltipAlign}
       id={tooltipId}

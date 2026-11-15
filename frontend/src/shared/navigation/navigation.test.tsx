@@ -2,10 +2,11 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { type ReactNode, useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { useComposite, useFocusable, useNavigation } from './hooks';
+import { useComposite, useFocusable, useNavigation, useNavigationStore } from './hooks';
 import { FocusGroup, FocusScope, NavigationProvider } from './NavigationProvider';
 import { enter, resolveMove, spatialPick } from './resolve';
-import type { NavigationNode, NavigationTree, Rect } from './types';
+import type { NavigationStore } from './store';
+import type { MoreRequest, NavigationNode, NavigationTree, Rect } from './types';
 
 // ---------------------------------------------------------------------------------------------
 // The pure resolver, over a fake tree
@@ -112,6 +113,46 @@ describe('resolveMove', () => {
     expect(move(wrapping, 'submit', 'down')).toMatchObject({ type: 'move', targetId: 'email' });
     // Wrapping is along the axis only: Right still bubbles to the split
     expect(move(wrapping, 'email', 'right')).toMatchObject({ type: 'move', targetId: 'newCode' });
+  });
+
+  it('is pending past an edge with unloaded content, before wrapping or bubbling', () => {
+    const tree = fakeTree({
+      id: 'page',
+      kind: 'scope',
+      layout: 'vertical',
+      children: [
+        group('row', 'horizontal', [leaf('a'), leaf('b')], { more: { end: true }, edge: 'wrap' }),
+        group('grid', 'grid', [leaf('g1'), leaf('g2'), leaf('g3')], {
+          columns: 2,
+          more: { end: true },
+        }),
+        leaf('carousel', { parts: ['0', '1'], more: { end: true } }),
+      ],
+    });
+    expect(move(tree, 'b', 'right')).toEqual({
+      type: 'pending',
+      groupId: 'row',
+      edge: 'end',
+      reason: "loading past row's end",
+    });
+    // Only along the axis, and only at the edge that has more
+    expect(move(tree, 'a', 'left')).toMatchObject({ type: 'move', targetId: 'b' });
+    expect(move(tree, 'b', 'down')).toMatchObject({ type: 'move', targetId: 'g1' });
+    // A grid: Down past the last row, Right past the last child
+    expect(move(tree, 'g3', 'down')).toMatchObject({ type: 'pending', groupId: 'grid' });
+    expect(move(tree, 'g3', 'right')).toMatchObject({ type: 'pending', groupId: 'grid' });
+    // The end of a row that isn't the last one leaves the grid as usual
+    expect(move(tree, 'g2', 'right')).toMatchObject({ type: 'unhandled' });
+    // A composite past its last part
+    expect(resolveMove(tree, 'carousel', 'right', { scopeId: 'page', part: '1' })).toMatchObject({
+      type: 'pending',
+      groupId: 'carousel',
+      edge: 'end',
+    });
+    // Nothing is loading before its first part
+    expect(resolveMove(tree, 'carousel', 'left', { scopeId: 'page', part: '0' })).toMatchObject({
+      type: 'unhandled',
+    });
   });
 
   it('mirrors inline moves for right-to-left text', () => {
@@ -236,6 +277,18 @@ describe('resolveMove', () => {
     expect(move(tree, 'origin', 'right')).toMatchObject({ targetId: 'right' });
     expect(move(tree, 'origin', 'up')).toMatchObject({ type: 'unhandled' });
     expect(spatialPick(box(0, 0), [], 'down')).toBeNull();
+  });
+
+  it('enters a row below a wide element at its first item, whatever their widths', () => {
+    // A full-width field over Save and a wider Cancel
+    const field = box(0, 0, 400, 40);
+    const row = [
+      { id: 'save', rect: box(0, 60, 60, 40) },
+      { id: 'cancel', rect: box(70, 60, 90, 40) },
+    ];
+    expect(spatialPick(field, row, 'down')).toBe('save');
+    // A narrow element still picks the item it lies over
+    expect(spatialPick(box(100, 0, 20, 40), row, 'down')).toBe('cancel');
   });
 
   it('moves between composite parts before leaving, entering at the near part', () => {
@@ -372,6 +425,91 @@ describe('NavigationProvider', () => {
     expect(focusedText()).toBe('one');
   });
 
+  describe('pending moves', () => {
+    let loadPage: () => void;
+    function Paged({ onMore }: { onMore: NonNullable<NavigationNode['onMore']> }) {
+      const [count, setCount] = useState(2);
+      loadPage = () => setCount(current => current + 2);
+      return (
+        <NavigationProvider>
+          <FocusScope id="page">
+            <FocusGroup id="row" layout="horizontal" more={{ end: count < 6 }} onMore={onMore}>
+              {Array.from({ length: count }, (_, index) => (
+                <Item key={index} id={`item${index + 1}`} />
+              ))}
+            </FocusGroup>
+            <FocusGroup id="lower" layout="horizontal">
+              <Item id="below" />
+            </FocusGroup>
+          </FocusScope>
+        </NavigationProvider>
+      );
+    }
+    const arrive = () =>
+      act(async () => {
+        loadPage();
+        await Promise.resolve();
+      });
+
+    it('asks once, keeps focus, and moves on when the content arrives', async () => {
+      const onMore = vi.fn();
+      render(<Paged onMore={onMore} />);
+      press('ArrowRight');
+      press('ArrowRight');
+      expect(focusedText()).toBe('item2');
+      expect(onMore).toHaveBeenCalledTimes(1);
+      expect(onMore.mock.calls[0][0]).toMatchObject({ edge: 'end' });
+      // The same move again (a held key) waits on the same request
+      press('ArrowRight', { repeat: true });
+      press('ArrowRight');
+      expect(onMore).toHaveBeenCalledTimes(1);
+      await arrive();
+      expect(focusedText()).toBe('item3');
+    });
+
+    it('drops the wait when the user moves on, so late content never takes focus', async () => {
+      const onMore = vi.fn();
+      render(<Paged onMore={onMore} />);
+      press('ArrowRight');
+      press('ArrowRight');
+      press('ArrowDown');
+      expect(focusedText()).toBe('below');
+      expect((onMore.mock.calls[0][0] as MoreRequest).signal.aborted).toBe(true);
+      await arrive();
+      expect(focusedText()).toBe('below');
+
+      // Back is a new intent too
+      press('ArrowUp');
+      press('ArrowRight');
+      press('ArrowRight');
+      press('ArrowRight');
+      expect(focusedText()).toBe('item4');
+      expect(onMore).toHaveBeenCalledTimes(2);
+      press('Escape');
+      expect((onMore.mock.calls[1][0] as MoreRequest).signal.aborted).toBe(true);
+      await arrive();
+      expect(focusedText()).toBe('item4');
+    });
+
+    it('asks again once a load failed or settled without new content', async () => {
+      const onMore = vi
+        .fn()
+        .mockRejectedValueOnce(new Error('offline'))
+        .mockResolvedValue(undefined);
+      render(<Paged onMore={onMore} />);
+      press('ArrowRight');
+      await act(async () => {
+        press('ArrowRight');
+      });
+      press('ArrowRight');
+      expect(onMore).toHaveBeenCalledTimes(2);
+      await act(async () => {});
+      press('ArrowRight');
+      expect(onMore).toHaveBeenCalledTimes(3);
+      expect(focusedText()).toBe('item2');
+    });
+  });
+
   it('moves to the nearest sibling when the focused item is removed', async () => {
     function Removable() {
       const [shown, setShown] = useState(true);
@@ -397,7 +535,40 @@ describe('NavigationProvider', () => {
     expect(focusedText()).toBe('c');
   });
 
-  it('contains focus in an overlay scope and restores the opener when it closes', () => {
+  it('moves to the next row when the row group holding focus is removed', async () => {
+    function Rows() {
+      const [shown, setShown] = useState(true);
+      return (
+        <NavigationProvider>
+          <FocusScope>
+            <FocusGroup id="first" layout="horizontal">
+              <Item id="a" />
+            </FocusGroup>
+            {shown && (
+              <FocusGroup id="second" layout="horizontal">
+                <Item id="b" />
+                <Item id="remove" onClick={() => setShown(false)} />
+              </FocusGroup>
+            )}
+            <FocusGroup id="third" layout="horizontal">
+              <Item id="c" />
+            </FocusGroup>
+          </FocusScope>
+        </NavigationProvider>
+      );
+    }
+    render(<Rows />);
+    press('ArrowDown');
+    press('ArrowRight');
+    expect(focusedText()).toBe('remove');
+    await act(async () => {
+      press('Enter');
+      await Promise.resolve();
+    });
+    expect(focusedText()).toBe('c');
+  });
+
+  it('contains focus in an overlay scope, restores the opener and reopens at the start', () => {
     function WithOverlay() {
       const [open, setOpen] = useState(false);
       return (
@@ -406,9 +577,9 @@ describe('NavigationProvider', () => {
             <Item id="open" onClick={() => setOpen(true)} />
           </FocusGroup>
           {open && (
-            <FocusScope contain layout="horizontal">
+            <FocusScope id="overlay" contain layout="horizontal">
               <Item id="ok" onClick={() => setOpen(false)} />
-              <Item id="cancel" />
+              <Item id="cancel" onClick={() => setOpen(false)} />
             </FocusScope>
           )}
         </Page>
@@ -434,6 +605,21 @@ describe('NavigationProvider', () => {
       press('Enter');
     });
     expect(focusedText()).toBe('open');
+
+    // Reopened, it starts over instead of entering where it was left
+    act(() => {
+      press('Enter');
+    });
+    press('ArrowRight');
+    expect(focusedText()).toBe('cancel');
+    act(() => {
+      press('Enter');
+    });
+    expect(focusedText()).toBe('open');
+    act(() => {
+      press('Enter');
+    });
+    expect(focusedText()).toBe('ok');
   });
 
   it('derives the grid column from the cell Tab lands on', () => {
@@ -529,6 +715,102 @@ describe('NavigationProvider', () => {
     expect(focusedText()).toBe('after');
     press('ArrowLeft');
     expect(focusedText()).toBe('reveal');
+  });
+
+  describe('geometry', () => {
+    /** A 2×2 spatial grid of 50px items; `offset` scrolls it. */
+    const positions: Record<string, [number, number]> = {
+      a: [0, 0],
+      b: [100, 0],
+      c: [0, 100],
+      d: [100, 100],
+      e: [200, 0],
+    };
+    let offset = 0;
+    let reads = 0;
+    let store: NavigationStore;
+    beforeEach(() => {
+      offset = 0;
+      reads = 0;
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (
+        this: Element
+      ) {
+        const position = positions[this.textContent ?? ''];
+        reads += 1;
+        const [left, top] = position ?? [0, 0];
+        return {
+          left,
+          top: top + offset,
+          right: left + 50,
+          bottom: top + offset + 50,
+        } as DOMRect;
+      });
+    });
+    function Grab() {
+      store = useNavigationStore();
+      return null;
+    }
+    function Spatial({ extra = false }: { extra?: boolean }) {
+      return (
+        <NavigationProvider>
+          <Grab />
+          <FocusScope id="page">
+            <FocusGroup id="tiles" layout="spatial">
+              <Item id="a" />
+              <Item id="b" />
+              <Item id="c" />
+              <Item id="d" />
+              {extra && <Item id="e" />}
+            </FocusGroup>
+          </FocusScope>
+        </NavigationProvider>
+      );
+    }
+
+    it('measures a spatial group once, then reads one anchor per move', () => {
+      render(<Spatial />);
+      press('ArrowRight');
+      expect(focusedText()).toBe('b');
+      expect(store.cachedGeometry()).toEqual(['tiles']);
+      reads = 0;
+      press('ArrowDown');
+      expect(focusedText()).toBe('d');
+      expect(reads).toBe(1);
+    });
+
+    it('shifts the cache with its anchor, so a scroll costs no re-measuring', () => {
+      render(<Spatial />);
+      press('ArrowDown');
+      expect(focusedText()).toBe('c');
+      offset = -80;
+      reads = 0;
+      press('ArrowRight');
+      expect(focusedText()).toBe('d');
+      press('ArrowUp');
+      expect(focusedText()).toBe('b');
+      expect(reads).toBe(2);
+    });
+
+    it('measures again after a child is added or the window resizes', () => {
+      const { rerender } = render(<Spatial />);
+      press('ArrowRight');
+      rerender(<Spatial extra />);
+      expect(store.cachedGeometry()).toEqual([]);
+      press('ArrowRight');
+      expect(focusedText()).toBe('e');
+      expect(store.cachedGeometry()).toEqual(['tiles']);
+      fireEvent(window, new Event('resize'));
+      expect(store.cachedGeometry()).toEqual([]);
+    });
+
+    it('reads no geometry for axis moves', () => {
+      render(<Page />);
+      reads = 0;
+      press('ArrowRight');
+      press('ArrowRight');
+      expect(focusedText()).toBe('three');
+      expect(reads).toBe(0);
+    });
   });
 
   it('skips a disabled item', () => {

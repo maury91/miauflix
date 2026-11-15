@@ -1,11 +1,11 @@
+import { useNavigation } from '@shared/navigation/hooks';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
-import { StateCell, SurfaceStage } from '../storyHelpers';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import type { SurfaceContextValue } from '../surface';
-import { useStoryVirtualRow } from '../useStoryVirtualFocus';
 import { ProgressButton } from './ProgressButton';
 
 import SkipNextIcon from '~icons/mdi/skip-next';
@@ -40,22 +40,33 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 function CountdownRow(props: React.ComponentProps<typeof ProgressButton>) {
+  return (
+    <NavigationStage layout="horizontal">
+      <CountdownStage {...props} />
+    </NavigationStage>
+  );
+}
+
+function CountdownStage(props: React.ComponentProps<typeof ProgressButton>) {
   const [round, setRound] = useState(0);
   const [ran, setRan] = useState(0);
-  // Virtual focus starts on the progress button, as the feature would set it
-  const { itemProps } = useStoryVirtualRow(2);
+  const { focus } = useNavigation();
+  // Virtual focus is on the progress button whenever it appears, as the feature would set it
+  useLayoutEffect(() => {
+    focus('progress');
+  }, [round, focus]);
   return (
     <SurfaceStage surface="overMedia">
       <ProgressButton
         key={round}
         {...props}
-        {...itemProps(0)}
+        navId="progress"
         onAction={() => {
           setRan(count => count + 1);
           props.onAction();
         }}
       />{' '}
-      <Button size="lg" onClick={() => setRound(value => value + 1)} {...itemProps(1)}>
+      <Button navId="restart" size="lg" onClick={() => setRound(value => value + 1)}>
         Restart countdown
       </Button>
       <p style={{ color: '#a6adaf', fontFamily: "'Poppins', sans-serif" }}>

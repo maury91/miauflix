@@ -1,5 +1,8 @@
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
+import type { GroupLayout } from '@shared/navigation/types';
 import type { ReactNode } from 'react';
 
+import { useWindowClass } from '../layout/windowClass';
 import * as styles from './actionGroup.css';
 
 export interface ActionGroupProps {
@@ -21,6 +24,8 @@ export interface ActionGroupProps {
   divider?: boolean;
   /** Names the group for assistive technology when several groups share a screen. */
   label?: string;
+  /** The group's ID in the navigation layer (for defaults and overrides); generated if absent. */
+  navId?: string;
 }
 
 /**
@@ -35,18 +40,25 @@ export function ActionGroup({
   wrap = true,
   divider = false,
   label,
+  navId,
 }: ActionGroupProps) {
+  const compact = useWindowClass() === 'compact';
+  const stacked = layout === 'column' || (layout === 'auto' && compact);
+  // One line moves by its axis; wrapped rows by their rendered rectangles
+  const navLayout: GroupLayout = stacked ? 'vertical' : wrap ? 'spatial' : 'horizontal';
   return (
-    <div
-      className={styles.group}
-      role={label ? 'group' : undefined}
-      aria-label={label}
-      data-layout={layout}
-      data-align={align}
-      data-wrap={wrap || undefined}
-      data-divider={divider || undefined}
-    >
-      <div className={styles.list}>{children}</div>
-    </div>
+    <FocusGroup id={navId} layout={navLayout}>
+      <div
+        className={styles.group}
+        role={label ? 'group' : undefined}
+        aria-label={label}
+        data-layout={layout}
+        data-align={align}
+        data-wrap={wrap || undefined}
+        data-divider={divider || undefined}
+      >
+        <div className={styles.list}>{children}</div>
+      </div>
+    </FocusGroup>
   );
 }

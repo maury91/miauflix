@@ -22,17 +22,17 @@ export type NodeOptions = Omit<NavigationNode, 'id' | 'parent' | 'kind'>;
 
 /**
  * Registers a node under the enclosing group for as long as it is mounted. Nothing registers
- * without a provider (a component used on its own).
+ * without a provider or an ID (a component given only `focused`).
  */
 export function useNode(
-  id: string,
+  id: string | undefined,
   kind: NavigationNode['kind'],
   options: NodeOptions,
   element?: () => HTMLElement | null
 ): void {
   const store = useOptionalStore();
   const parent = useContext(ParentContext);
-  const node: NavigationNode = { id, parent, kind, ...options };
+  const node: NavigationNode = { id: id ?? '', parent, kind, ...options };
   const nodeRef = useRef(node);
   const elementRef = useRef(element);
 
@@ -43,11 +43,11 @@ export function useNode(
     elementRef.current = element;
   });
   useLayoutEffect(() => {
-    if (!store) return;
+    if (!store || id === undefined) return;
     return store.register(nodeRef.current, () => elementRef.current?.() ?? null);
   }, [store, id, parent]);
   useLayoutEffect(() => {
-    if (store) store.update(nodeRef.current);
+    if (store && id !== undefined) store.update(nodeRef.current);
   });
 }
 
@@ -59,4 +59,10 @@ export interface ChildOptions {
   /** Explicit links out of this node, used sparingly. */
   overrides?: Partial<Record<Direction, string>>;
   disabled?: boolean;
+  /** Composites: see NavigationNode. */
+  stepPart?: NavigationNode['stepPart'];
+  entryPart?: NavigationNode['entryPart'];
+  /** Groups and composites with unloaded content past an edge: see NavigationNode. */
+  more?: NavigationNode['more'];
+  onMore?: NavigationNode['onMore'];
 }

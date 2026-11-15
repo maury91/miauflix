@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
-import { SurfaceStage } from '../storyHelpers';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
+import { NavigationStage, SurfaceStage } from '../storyHelpers';
 import { IconButtonGroup, type IconButtonGroupItem } from './IconButtonGroup';
 
 import DownloadIcon from '~icons/mdi/download-outline';
@@ -38,9 +37,6 @@ type Story = StoryObj<typeof meta>;
 
 function DetailsActions() {
   const [liked, setLiked] = useState(false);
-  const { containerRef, focus, focusedId } = useStoryVirtualFocus([
-    ['play', 'trailer', 'list', 'like', 'download'],
-  ]);
   const items: IconButtonGroupItem[] = [
     { id: 'trailer', label: 'Trailer', icon: <TrailerIcon />, description: 'Watch the trailer' },
     { id: 'list', label: 'My list', icon: <PlusIcon />, description: 'Add to my list' },
@@ -55,32 +51,23 @@ function DetailsActions() {
     { id: 'download', label: 'Download', icon: <DownloadIcon />, disabled: true },
   ];
   return (
-    <SurfaceStage surface="overMedia">
-      <div ref={containerRef} style={{ display: 'flex', alignItems: 'flex-start' }}>
-        <Button
-          size="lg"
-          icon={<PlayIcon />}
-          focused={focusedId === 'play'}
-          onMouseMove={() => focus('play')}
-        >
-          Watch now
-        </Button>
-        <span style={{ width: '1rem' }} />
-        <IconButtonGroup
-          label="Title actions"
-          size="lg"
-          items={items}
-          focusedId={focusedId}
-          onPointerFocus={focus}
-        />
-      </div>
-    </SurfaceStage>
+    <NavigationStage layout="horizontal">
+      <SurfaceStage surface="overMedia">
+        <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+          <Button navId="play" size="lg" icon={<PlayIcon />}>
+            Watch now
+          </Button>
+          <span style={{ width: '1rem' }} />
+          <IconButtonGroup label="Title actions" size="lg" items={items} navId="actions" />
+        </div>
+      </SurfaceStage>
+    </NavigationStage>
   );
 }
 
 /**
  * The details action row: Watch now, then a group whose description sits below it. The disabled
- * Download is skipped by navigation in the real layer; here it is simply never described.
+ * Download is skipped by navigation, so Right from Like stays there.
  */
 export const DetailsRow: Story = {
   render: () => <DetailsActions />,
@@ -100,6 +87,8 @@ export const DetailsRow: Story = {
     await expect(like).toHaveAccessibleDescription('I like this');
     await userEvent.keyboard('{Enter}');
     await expect(slot).toHaveTextContent('Rated: I like this');
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(like).toHaveAttribute('data-focused');
 
     // Leaving the group empties the slot; nothing moved
     await userEvent.keyboard('{ArrowLeft}{ArrowLeft}{ArrowLeft}');

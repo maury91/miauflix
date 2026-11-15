@@ -1,6 +1,7 @@
 import { forwardRef, type InputHTMLAttributes, type KeyboardEvent, type MouseEvent } from 'react';
 
 import { IconButton } from '../icon-button/IconButton';
+import { type NavigableProps, useNavComposite } from '../navFocus';
 import type { ControlSize } from '../tokens';
 import { Field, type FieldAnatomyProps } from './Field';
 import * as styles from './field.css';
@@ -36,6 +37,7 @@ export type SearchFieldProps = Omit<
   'className' | 'style' | 'size' | 'type' | 'children' | 'id' | 'aria-invalid' | 'value'
 > &
   FieldAnatomyProps &
+  NavigableProps &
   ClearProps &
   SubmitProps & {
     /** Controlled: the clear action shows only while there is text. */
@@ -60,8 +62,9 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
     id,
     value,
     size = 'md',
-    focusedPart,
-    onPointerFocus,
+    focusedPart: focusedPartProp,
+    onPointerFocus: onPointerFocusProp,
+    navId,
     onClear,
     clearLabel,
     onSearch,
@@ -76,6 +79,16 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
 ) {
   const actionSize = fieldActionSize[size];
   const canClear = value !== '' && !disabled && !readOnly;
+  // Absent and unavailable actions are skipped (style guide, section 9)
+  const parts: SearchFieldPart[] = ['input'];
+  if (onClear && canClear) parts.push('clear');
+  if (onSearch && !disabled) parts.push('submit');
+  const nav = useNavComposite<SearchFieldPart, HTMLDivElement>(navId, parts, {
+    focusedPart: focusedPartProp,
+    onPointerFocus: onPointerFocusProp,
+    disabled,
+  });
+  const { focusedPart, onPointerFocus } = nav;
 
   // A press on an action keeps DOM focus (and edit mode) in the input
   const keepEditing = (event: MouseEvent) => event.preventDefault();
@@ -99,7 +112,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
             icon={<ClearIcon />}
             focused={focusedPart === 'clear'}
             disabled={!canClear}
-            onMouseMove={() => onPointerFocus?.('clear')}
+            onMouseMove={() => onPointerFocus('clear')}
             onMouseDown={keepEditing}
             onClick={onClear}
           />
@@ -112,7 +125,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
           icon={<SubmitIcon />}
           focused={focusedPart === 'submit'}
           disabled={disabled}
-          onMouseMove={() => onPointerFocus?.('submit')}
+          onMouseMove={() => onPointerFocus('submit')}
           onMouseDown={keepEditing}
           onClick={() => onSearch(value)}
         />
@@ -138,7 +151,8 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
           readOnly={readOnly}
           decoration={<SearchIcon />}
           end={actions}
-          onPointerFocus={() => onPointerFocus?.('input')}
+          onPointerFocus={() => onPointerFocus('input')}
+          frameRef={nav.ref}
         >
           <input
             enterKeyHint="search"

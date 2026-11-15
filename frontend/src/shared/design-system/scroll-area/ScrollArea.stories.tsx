@@ -1,10 +1,11 @@
+import { useActiveIdWithin } from '@shared/navigation/hooks';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 
 import { List } from '../list/List';
 import { ListItem } from '../list/ListItem';
+import { NavigationStage } from '../storyHelpers';
 import { color, fontFamily, space, typeScale } from '../tokens';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { ScrollArea } from './ScrollArea';
 
 import ServerIcon from '~icons/mdi/server-outline';
@@ -32,24 +33,28 @@ const rows = Array.from({ length: 30 }, (_, index) => `server-${index + 1}`);
 const headerHeight = '4rem';
 
 function SettingsPage({ mode }: { mode: 'scroll' | 'transform' }) {
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus(rows.map(id => [id]));
   return (
-    <div
-      ref={containerRef}
-      style={{ position: 'relative', height: '24rem', background: color.canvas }}
-    >
+    <NavigationStage>
+      <SettingsBody mode={mode} />
+    </NavigationStage>
+  );
+}
+
+function SettingsBody({ mode }: { mode: 'scroll' | 'transform' }) {
+  const focusedId = useActiveIdWithin('servers');
+  return (
+    <div style={{ position: 'relative', height: '24rem', background: color.canvas }}>
       <ScrollArea label="Servers" stickyStart={headerHeight} mode={mode}>
         {/* Room under the sticky header for the first row */}
         <div style={{ height: headerHeight }} />
-        <List label="Servers">
+        <List label="Servers" navId="servers">
           {rows.map((id, index) => (
             <ListItem
               key={id}
               title={`Server ${index + 1}`}
               description={`192.168.1.${index + 10}`}
               leading={<ServerIcon />}
-              focused={isFocused(id)}
-              onPointerFocus={() => focus(id)}
+              navId={id}
               onClick={() => undefined}
             />
           ))}

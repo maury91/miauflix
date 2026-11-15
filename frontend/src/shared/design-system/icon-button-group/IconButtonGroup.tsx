@@ -1,3 +1,5 @@
+import { useActiveIdWithin } from '@shared/navigation/hooks';
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import { useId } from 'react';
 
 import { IconButton, type IconButtonProps } from '../icon-button/IconButton';
@@ -27,6 +29,11 @@ export interface IconButtonGroupProps {
   focusedId?: string;
   /** Called when the pointer moves onto a button, so the navigation layer can focus it. */
   onPointerFocus?: (id: string) => void;
+  /**
+   * Registers the buttons as a group with the navigation layer (each `<navId>:<item id>`), which
+   * then also drives the shared slot. See NavigableProps.
+   */
+  navId?: string;
 }
 
 /**
@@ -41,46 +48,54 @@ export function IconButtonGroup({
   size,
   orientation = 'horizontal',
   descriptionPlacement = 'below',
-  focusedId,
+  focusedId: focusedIdProp,
   onPointerFocus,
+  navId,
 }: IconButtonGroupProps) {
   const slotId = useId();
+  const itemNavId = (id: string) => (navId === undefined ? undefined : `${navId}:${id}`);
+  const activeId = useActiveIdWithin(navId);
+  const focusedId =
+    focusedIdProp ?? items.find(item => activeId !== null && itemNavId(item.id) === activeId)?.id;
   const focusedItem = items.find(item => item.id === focusedId && !item.disabled);
   const description = focusedItem ? (focusedItem.description ?? focusedItem.label) : undefined;
 
   return (
-    <div className={styles.group} data-description={descriptionPlacement}>
-      <div
-        role="group"
-        aria-label={label}
-        className={styles.buttons}
-        data-orientation={orientation}
-      >
-        {items.map(({ id, description: itemDescription, ...item }) => {
-          const focused = id === focusedItem?.id;
-          // The slot adds to the name only when it says something else
-          const describes =
-            focused && itemDescription !== undefined && itemDescription !== item.label;
-          return (
-            <span key={id} className={styles.item}>
-              <IconButton
-                {...item}
-                size={size}
-                focused={focused}
-                aria-describedby={joinIds(item['aria-describedby'], describes && slotId)}
-                onMouseMove={() => onPointerFocus?.(id)}
-              />
+    <FocusGroup id={navId} layout={orientation} disabled={navId === undefined}>
+      <div className={styles.group} data-description={descriptionPlacement}>
+        <div
+          role="group"
+          aria-label={label}
+          className={styles.buttons}
+          data-orientation={orientation}
+        >
+          {items.map(({ id, description: itemDescription, ...item }) => {
+            const focused = id === focusedItem?.id;
+            // The slot adds to the name only when it says something else
+            const describes =
+              focused && itemDescription !== undefined && itemDescription !== item.label;
+            return (
+              <span key={id} className={styles.item}>
+                <IconButton
+                  {...item}
+                  size={size}
+                  focused={focused}
+                  navId={itemNavId(id)}
+                  aria-describedby={joinIds(item['aria-describedby'], describes && slotId)}
+                  onMouseMove={() => onPointerFocus?.(id)}
+                />
+              </span>
+            );
+          })}
+        </div>
+        <div id={slotId} className={styles.slot}>
+          {description && (
+            <span key={focusedItem?.id} className={styles.slotText}>
+              {description}
             </span>
-          );
-        })}
+          )}
+        </div>
       </div>
-      <div id={slotId} className={styles.slot}>
-        {description && (
-          <span key={focusedItem?.id} className={styles.slotText}>
-            {description}
-          </span>
-        )}
-      </div>
-    </div>
+    </FocusGroup>
   );
 }

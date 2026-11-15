@@ -1,9 +1,13 @@
+import { IS_TV } from '@shared/config/constants';
+import { useActiveIdWithin } from '@shared/navigation/hooks';
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import { type ButtonHTMLAttributes, type MouseEventHandler, type ReactNode, useId } from 'react';
 
 import { visuallyHidden } from '../a11y.css';
 import * as actionStyles from '../action/action.css';
 import { Badge } from '../badge/Badge';
 import { joinIds } from '../ids';
+import { type NavigableProps, useNavFocus } from '../navFocus';
 import { SurfaceContextProvider } from '../surface';
 import * as styles from './navRail.css';
 
@@ -26,6 +30,11 @@ export interface NavRailProps {
   onMouseEnter?: MouseEventHandler<HTMLElement>;
   /** The pointer left the rail, so the navigation layer can give focus back to the page. */
   onMouseLeave?: MouseEventHandler<HTMLElement>;
+  /**
+   * Registers the rail as a vertical group with the navigation layer (its items carry their own
+   * `navId`); on TV it then expands while it holds focus. See NavigableProps.
+   */
+  navId?: string;
 }
 
 /**
@@ -40,22 +49,26 @@ export function NavRail({
   end,
   onMouseEnter,
   onMouseLeave,
+  navId,
 }: NavRailProps) {
+  const holdsFocus = useActiveIdWithin(navId) !== null;
   return (
-    <SurfaceContextProvider value="solid">
-      <nav
-        aria-label={label}
-        className={styles.rail}
-        data-expanded={expanded || undefined}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-      >
-        <div className={styles.panel}>
-          <div className={styles.items}>{children}</div>
-          {end && <div className={`${styles.items} ${styles.end}`}>{end}</div>}
-        </div>
-      </nav>
-    </SurfaceContextProvider>
+    <FocusGroup id={navId} layout="vertical" disabled={navId === undefined}>
+      <SurfaceContextProvider value="solid">
+        <nav
+          aria-label={label}
+          className={styles.rail}
+          data-expanded={expanded || (IS_TV && holdsFocus) || undefined}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+        >
+          <div className={styles.panel}>
+            <div className={styles.items}>{children}</div>
+            {end && <div className={`${styles.items} ${styles.end}`}>{end}</div>}
+          </div>
+        </nav>
+      </SurfaceContextProvider>
+    </FocusGroup>
   );
 }
 
@@ -75,7 +88,7 @@ export type NavItemProps = Omit<
   badge?: string;
   /** What the badge means, read after the name ("3 unread"). Required with `badge`. */
   badgeLabel?: string;
-};
+} & NavigableProps;
 
 /** One destination or action in a NavRail. */
 export function NavItem({
@@ -87,19 +100,31 @@ export function NavItem({
   badgeLabel,
   type = 'button',
   'aria-describedby': callerDescribedBy,
+  onMouseMove,
+  navId,
   ...props
 }: NavItemProps) {
   const badgeId = useId();
+  const nav = useNavFocus<HTMLButtonElement>(navId, {
+    focused,
+    disabled: props.disabled,
+    selected: current,
+  });
   return (
     <button
       {...props}
+      ref={nav.ref}
       type={type}
       className={`${actionStyles.action} ${styles.navItem}`}
       data-surface="solid"
       data-size="md"
-      data-focused={focused || undefined}
+      data-focused={nav.focused || undefined}
       data-selected={current || undefined}
       aria-current={current ? 'page' : undefined}
+      onMouseMove={event => {
+        nav.onPointerFocus();
+        onMouseMove?.(event);
+      }}
       aria-describedby={joinIds(callerDescribedBy, badge && badgeLabel && badgeId)}
     >
       <span className={styles.icon} aria-hidden="true">
