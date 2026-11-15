@@ -65,6 +65,8 @@ export function SeekControl({
         </span>
         <Slider
           id={`${id}-input`}
+          navId={id}
+          tabOnly
           aria-labelledby={`${id}-label`}
           value={known ? Math.min(position, duration) : 0}
           onChange={onSeek}

@@ -39,6 +39,8 @@ interface SliderBaseProps extends NavigableProps {
   /** Ticks under the track, optionally labelled. */
   marks?: readonly SliderMark[];
   disabled?: boolean;
+  /** Register with Tab traversal only when a navigation ID is supplied. */
+  tabOnly?: boolean;
   /** Virtual focus (white outline), from the navigation layer. While set, it owns Left/Right. */
   focused?: boolean;
   /** Called when the pointer moves onto the slider. */
@@ -118,6 +120,7 @@ export function Slider({
   valueText,
   marks,
   disabled = false,
+  tabOnly = false,
   focused: focusedProp = false,
   onPointerFocus,
   tone = 'neutral',
@@ -137,8 +140,12 @@ export function Slider({
   const labelId = `${id}-label`;
   const descriptionId = `${id}-description`;
   const rootRef = useRef<HTMLDivElement>(null);
-  const nav = useNavFocus<HTMLDivElement>(navId, { focused: focusedProp, disabled }, rootRef);
-  const focused = nav.focused;
+  const nav = useNavFocus<HTMLDivElement>(
+    navId,
+    { focused: focusedProp, disabled, tabOnly },
+    rootRef
+  );
+  const focused = !tabOnly && nav.focused;
   const range = { min, max, step };
   const current = snapSliderValue(value, range);
   const share = sliderShare(current, range);
@@ -233,7 +240,7 @@ export function Slider({
       <div
         className={styles.control}
         onMouseMove={() => {
-          nav.onPointerFocus();
+          if (!tabOnly) nav.onPointerFocus();
           onPointerFocus?.();
         }}
         onPointerMove={onPreviewMove}

@@ -371,7 +371,6 @@ describe('PlayerView', () => {
     expect(playButton).toHaveFocus();
     press('ArrowRight');
     expect(video.currentTime).toBe(10);
-    fireEvent.timeUpdate(video);
     press('ArrowRight');
     expect(video.currentTime).toBe(20);
     fireEvent.timeUpdate(video);
@@ -386,6 +385,32 @@ describe('PlayerView', () => {
     press('ArrowUp');
     expect(playButton).toHaveFocus();
     expect(seek).not.toHaveFocus();
+  });
+
+  it('includes the seek bar in desktop Tab order and lets its arrows seek', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
+    fireEvent.durationChange(video);
+    const seek = screen.getByRole('slider', { name: 'Seek' });
+    await waitFor(() => expect(seek).toBeEnabled());
+
+    const play = screen.getByRole('button', { name: 'Play' });
+    act(() => play.focus());
+    expect(fireEvent.keyDown(play, { key: 'Tab' })).toBe(false);
+    expect(seek).toHaveFocus();
+    fireEvent.keyDown(seek, { key: 'ArrowRight' });
+    expect(video.currentTime).toBe(10);
+    expect(seek).toHaveFocus();
+
+    const subtitles = screen.getByRole('button', { name: 'Subtitles' });
+    fireEvent.keyDown(seek, { key: 'Tab' });
+    expect(subtitles).toHaveFocus();
+    fireEvent.keyDown(subtitles, { key: 'Tab', shiftKey: true });
+    expect(seek).toHaveFocus();
+    fireEvent.keyDown(seek, { key: 'Tab', shiftKey: true });
+    expect(play).toHaveFocus();
   });
 
   it('reaches Skip intro with the arrows, between the video and play/pause', async () => {
@@ -1204,8 +1229,18 @@ describe('PlayerView', () => {
       startSeconds: 90,
       autoplay: true,
     });
+    const controls = screen.getByLabelText('Playback controls');
+    act(() => controls.focus());
+    act(() => {
+      fireEvent.keyDown(controls, { key: 'ArrowRight' });
+      fireEvent.keyDown(controls, { key: 'ArrowRight' });
+    });
+    expect(startAudioPlayback.mock.lastCall?.[0]).toMatchObject({
+      startSeconds: 110,
+      autoplay: true,
+    });
     view.unmount();
-    expect(stopAudioPlayback).toHaveBeenCalledTimes(3);
+    expect(stopAudioPlayback).toHaveBeenCalledTimes(4);
   });
 
   it('searches ahead at playback start and requests the next episode download at 70%', async () => {

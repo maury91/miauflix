@@ -171,7 +171,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
   const elementOf = (id: string) => registrations.get(id)?.element() ?? null;
 
   /** A tree over the registry for one operation, caching what it reads from the DOM. */
-  function tree(): NavigationTree {
+  function tree(includeTabOnly = false): NavigationTree {
     const eligibleCache = new Map<string, boolean>();
     const anchorCache = new Map<string, HTMLElement | null>();
     const orderCache = new Map<string, readonly string[]>();
@@ -217,7 +217,11 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
       if (eligibleCache.has(id)) return eligibleCache.get(id)!;
       const registration = registrations.get(id);
       let result = false;
-      if (registration && !registration.node.disabled) {
+      if (
+        registration &&
+        !registration.node.disabled &&
+        (includeTabOnly || !registration.node.tabOnly)
+      ) {
         if (registration.node.kind === 'leaf') {
           const element = registration.element();
           result = Boolean(element && isShown(element));
@@ -362,7 +366,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     generation += 1;
     // A move that isn't a grid step forgets the grid's kept column
     if (input !== 'key') gridColumns.clear();
-    if (id !== null) {
+    if (id !== null && !registrations.get(id)?.node.tabOnly) {
       // Up to an overlay's boundary: what is behind it keeps its own memory
       for (let node = registrations.get(id)?.node; node?.parent; ) {
         if (node.edge === 'contain' && node.kind === 'scope') break;
@@ -598,7 +602,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
 
   /** Tab and Shift+Tab: the eligible leaves of the topmost scope in document order. */
   function tab(backward: boolean): boolean {
-    const view = tree();
+    const view = tree(true);
     const scope = topScope();
     // Tab stops: each leaf, or each part of a composite that is its own native control (marked
     // with `data-nav-part`), in document order like native Tab
@@ -694,7 +698,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
             ? activePart
             : parts?.[0];
     if (found.id === activeId && part === activePart) return;
-    const view = tree();
+    const view = tree(true);
     if (!view.eligible(found.id) || !isWithin(view, found.id, topScope())) return;
     setActive(found.id, part, 'pointer');
   }
@@ -768,7 +772,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
         if (
           activeId !== null &&
           registrations.has(activeId) &&
-          view.eligible(activeId) &&
+          tree(true).eligible(activeId) &&
           isWithin(view, activeId, topScope())
         ) {
           const element = elementOf(activeId);
@@ -822,6 +826,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     // its eligible children) are stale
     if (
       previous.disabled !== node.disabled ||
+      previous.tabOnly !== node.tabOnly ||
       previous.layout !== node.layout ||
       previous.columns !== node.columns ||
       previous.span !== node.span

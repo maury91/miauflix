@@ -197,6 +197,10 @@ export function PlayerControls({
   const loading = preparing || !mediaReady;
   const [nativePosition, setPosition] = useState(0);
   const position = pendingPosition ?? nativePosition;
+  const requestedPosition = useRef(pendingPosition);
+  useLayoutEffect(() => {
+    requestedPosition.current = pendingPosition;
+  }, [pendingPosition]);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [muted, setMuted] = useState(false);
@@ -285,6 +289,7 @@ export function PlayerControls({
     if (media && duration > 0) {
       const target = Math.min(Math.max(0, duration - 0.1), Math.max(0, value));
       if (onSeek) {
+        requestedPosition.current = target;
         setPosition(target);
         onSeek(target);
       } else media.currentTime = target;
@@ -302,7 +307,12 @@ export function PlayerControls({
 
   const shown = visible || paused;
 
-  const seekBy = (delta: number) => seek(position + delta);
+  const seekBy = (delta: number) => {
+    // A converted stream restarts asynchronously. Native media exposes its seek target immediately.
+    const requested = onSeek ? requestedPosition.current : undefined;
+    const base = requested ?? videoRef.current?.currentTime ?? 0;
+    seek(base + delta);
+  };
   // Play/pause takes the focus once the controls it was hidden with are back (a hidden control
   // can't take DOM focus)
   const [focusPlayWhenShown, setFocusPlayWhenShown] = useState(false);
