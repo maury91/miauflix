@@ -1,4 +1,4 @@
-import { activate, canMirror, isEditable, isShown } from './dom';
+import { activate, isEditable, isNativeControl, isShown, mirrorTarget } from './dom';
 import { enter, isWithin, resolveMove } from './resolve';
 import type { Direction, Edge, NavigationNode, NavigationTree, Rect, Resolution } from './types';
 
@@ -355,16 +355,35 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     }
     const element = id === null ? null : elementOf(id);
     endEditingOutside(element);
-    if (mirrorDomFocus) {
-      if (element && canMirror(element)) {
-        if (document.activeElement !== element) element.focus({ preventScroll: true });
-        mirrored = element;
-      } else if (mirrored && document.activeElement === mirrored) {
-        mirrored.blur();
-        mirrored = null;
-      }
-    }
+    if (mirrorDomFocus) mirrorFocus(element);
     notify(previous === id ? [id] : [previous, id]);
+    // A part rendered by this move (a carousel item scrolled in): mirror once React committed
+    if (mirrorDomFocus && element && part !== undefined && mirrored === null) {
+      const at = generation;
+      queueMicrotask(() => {
+        if (generation === at && mirrored === null) mirrorFocus(elementOf(id!));
+      });
+    }
+  }
+
+  /** DOM focus follows virtual focus where that doesn't enter edit mode (style guide, section 10). */
+  function mirrorFocus(element: HTMLElement | null) {
+    const target = element && mirrorTarget(element, activePart);
+    const current = document.activeElement;
+    if (target) {
+      if (current !== target) target.focus({ preventScroll: true });
+      mirrored = target;
+    } else if (
+      current instanceof HTMLElement &&
+      // What we focused, or a native control left focused outside the new target (a select or
+      // range the pointer focused): its keys would stay its own
+      (current === mirrored || (isNativeControl(current) && !element?.contains(current)))
+    ) {
+      current.blur();
+      mirrored = null;
+    } else {
+      mirrored = null;
+    }
   }
 
   /** Focus a node: a leaf directly, a group or scope at its entry. */
@@ -408,7 +427,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
         scopeId: topScope(),
         part: activePart,
       });
-      if (resolution.type === 'pending') requestMore(resolution, direction);
+      if (resolution.type === 'pending') requestMore(resolution, direction, event?.repeat ?? false);
       else {
         // Any other result is a new intent
         cancelPending();
@@ -434,14 +453,19 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
 
   /**
    * A move reached unloaded content (style guide, section 10, dynamic content): ask the group
-   * once, with a token aborted by any newer intent. Repeating the same move (a held key) waits on
-   * the same request until its loader settles.
+   * once, with a token aborted by any newer intent. Repeating the same move waits on the same
+   * request until its loader settles (or returned nothing); a held key never asks twice.
    */
-  function requestMore(resolution: Extract<Resolution, { type: 'pending' }>, direction: Direction) {
+  function requestMore(
+    resolution: Extract<Resolution, { type: 'pending' }>,
+    direction: Direction,
+    repeat: boolean
+  ) {
     const { groupId, edge } = resolution;
     if (
       pending &&
-      !pending.settled &&
+      // A held key never asks twice; a new press asks again once the loader settled
+      (!pending.settled || repeat) &&
       pending.groupId === groupId &&
       pending.edge === edge &&
       pending.direction === direction &&
@@ -462,19 +486,28 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
       settled: false,
     };
     pending = request;
-    const loading = registrations.get(groupId)?.node.onMore?.({
-      edge,
-      signal: request.controller.signal,
-    });
-    loading?.then(
-      () => {
+    // Failed: focus stays, and the next press asks again
+    const failed = () => {
+      if (pending === request) pending = null;
+    };
+    let loading: ReturnType<NonNullable<NavigationNode['onMore']>>;
+    try {
+      loading = registrations.get(groupId)?.node.onMore?.({
+        edge,
+        signal: request.controller.signal,
+      });
+    } catch (error) {
+      failed();
+      console.error(error);
+      return;
+    }
+    // A loader returning nothing is done asking: a new press may ask again, while new content
+    // registering still completes this move
+    if (!loading) request.settled = true;
+    else
+      loading.then(() => {
         request.settled = true;
-      },
-      () => {
-        // Failed: focus stays, and the next press asks again
-        if (pending === request) pending = null;
-      }
-    );
+      }, failed);
   }
 
   function cancelPending() {
@@ -678,8 +711,20 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
   function update(node: NavigationNode) {
     const registration = registrations.get(node.id);
     if (!registration) return;
-    const previousParts = registration.node.parts;
+    const previous = registration.node;
+    const previousParts = previous.parts;
     registration.node = node;
+    // Eligibility or arrangement changed: cached rectangles here and above (a group's union of
+    // its eligible children) are stale
+    if (
+      previous.disabled !== node.disabled ||
+      previous.layout !== node.layout ||
+      previous.columns !== node.columns ||
+      previous.span !== node.span
+    ) {
+      dropGeometry(node.id);
+      dropGeometryAbove(node.parent);
+    }
     // The pending group re-rendered: new parts, or `more` turned off
     if (pending?.groupId === node.id) queueRetry();
     // The focused part went away (a search's clear action once the field is empty): the part

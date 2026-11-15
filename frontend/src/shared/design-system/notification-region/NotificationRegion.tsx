@@ -48,7 +48,11 @@ export function NotificationRegion({
   onExpire,
   placement = 'bottom',
 }: NotificationRegionProps) {
-  const [announced, setAnnounced] = useState<{ polite?: Notification; urgent?: Notification }>({});
+  // The latest arrivals, all of them: several added in one update are each announced
+  const [announced, setAnnounced] = useState<{ polite: Notification[]; urgent: Notification[] }>({
+    polite: [],
+    urgent: [],
+  });
   const seen = useRef(new Set<string>());
   const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
   const latestExpire = useRef(onExpire);
@@ -64,13 +68,18 @@ export function NotificationRegion({
         timers.current.delete(id);
       }
     }
-    for (const notification of notifications) {
-      if (seen.current.has(notification.id)) continue;
-      seen.current.add(notification.id);
+    const arrived = notifications.filter(notification => !seen.current.has(notification.id));
+    if (arrived.length > 0) {
+      const polite = arrived.filter(notification => !notification.urgent);
+      const urgent = arrived.filter(notification => notification.urgent);
+      // A region with no new arrival keeps what it last said
       setAnnounced(current => ({
-        ...current,
-        [notification.urgent ? 'urgent' : 'polite']: notification,
+        polite: polite.length > 0 ? polite : current.polite,
+        urgent: urgent.length > 0 ? urgent : current.urgent,
       }));
+    }
+    for (const notification of arrived) {
+      seen.current.add(notification.id);
       const time = notification.duration === undefined ? DEFAULT_DURATION : notification.duration;
       if (time !== null) {
         timers.current.set(
@@ -96,10 +105,14 @@ export function NotificationRegion({
   return (
     <>
       <div className={visuallyHidden} role="status" aria-label={label}>
-        {announced.polite && <span key={announced.polite.id}>{spoken(announced.polite)}</span>}
+        {announced.polite.map(notification => (
+          <span key={notification.id}>{spoken(notification)} </span>
+        ))}
       </div>
       <div className={visuallyHidden} role="alert" aria-label={label}>
-        {announced.urgent && <span key={announced.urgent.id}>{spoken(announced.urgent)}</span>}
+        {announced.urgent.map(notification => (
+          <span key={notification.id}>{spoken(notification)} </span>
+        ))}
       </div>
       <div className={styles.region} data-placement={placement} aria-hidden="true">
         {notifications.map(notification => (

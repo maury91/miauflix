@@ -213,6 +213,7 @@ function SelectControl<Value extends string>({
       valueId={valueId}
       triggerAttributes={triggerAttributes}
       fullWidth={fullWidth}
+      focused={focused}
       navRef={nav.ref}
     >
       {content}
@@ -233,6 +234,8 @@ interface PopupSelectProps<Value extends string> {
   valueId: string;
   triggerAttributes: Record<string, string | boolean | undefined>;
   fullWidth: boolean;
+  /** Virtual focus: losing it (the pointer moved to another control) closes the popup. */
+  focused: boolean;
   /** The navigation layer's ref for the root. */
   navRef: RefCallback<HTMLSpanElement>;
   children: ReactNode;
@@ -251,6 +254,7 @@ function PopupSelect<Value extends string>({
   valueId,
   triggerAttributes,
   fullWidth,
+  focused,
   navRef,
   children,
 }: PopupSelectProps<Value>) {
@@ -297,6 +301,17 @@ function PopupSelect<Value extends string>({
   useEffect(() => {
     if (open && disabled) closeRef.current();
   }, [open, disabled]);
+
+  // Virtual focus moving to another control (the pointer) closes it, so its keys aren't kept
+  const wasFocused = useRef(focused);
+  const focusMovedAway = useRef(false);
+  useEffect(() => {
+    if (open && wasFocused.current && !focused) {
+      focusMovedAway.current = true;
+      closeRef.current();
+    }
+    wasFocused.current = focused;
+  }, [open, focused]);
 
   useEffect(() => {
     if (!open) return;
@@ -345,8 +360,12 @@ function PopupSelect<Value extends string>({
       listbox?.removeEventListener('focusout', onFocusOut);
       // DOM focus follows the closed popup back to its trigger
       // (the listbox is already gone, so focus was left on the body)
+      // unless focus moved to another control
       const active = document.activeElement;
-      if (!active || active === document.body || listbox?.contains(active)) {
+      if (focusMovedAway.current) {
+        focusMovedAway.current = false;
+        if (active instanceof HTMLElement && listbox?.contains(active)) active.blur();
+      } else if (!active || active === document.body || listbox?.contains(active)) {
         trigger?.focus({ preventScroll: true });
       }
     };

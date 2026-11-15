@@ -58,9 +58,9 @@ export interface NavigationNode {
   more?: Partial<Record<Edge, boolean>>;
   /**
    * Loads the content past `request.edge`, once per pending move. Stop when `request.signal`
-   * aborts (the user moved on). A returned promise settling lets the next press ask again (after
-   * a failure, or a page that brought nothing focusable); content arriving after the user moved
-   * on never takes focus.
+   * aborts (the user moved on). A returned promise settling, or returning nothing, lets the next
+   * press ask again (after a failure, or a page that brought nothing focusable); a held key never
+   * asks twice. Content arriving after the user moved on never takes focus.
    */
   onMore?: (request: MoreRequest) => Promise<unknown> | void;
 }

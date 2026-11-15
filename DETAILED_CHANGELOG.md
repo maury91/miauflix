@@ -55,6 +55,16 @@ Every change in full, for developers and self-hosters. The short version for use
 
 ### Bug fixes
 
+- Design system and navigation layer, from the review of part 3 (neither is used by the app yet):
+  - Native DOM focus now follows virtual focus when the registered element is only a wrapper. It goes to a composite part marked with `data-nav-part`, or else to the wrapper's single focusable control. Checkboxes, radios, switches, sliders, removable chip parts and carousel tiles now get native focus, so assistive technology can follow them. A carousel part that a move scrolls into view is focused once React has committed it.
+  - When focus moves to a target that can't take DOM focus, a native select or range left focused elsewhere is blurred. Its keys no longer block the next control: Left adjusts the second slider, and Confirm opens the second select.
+  - A loader (`onMore`) that throws before returning a promise now clears the pending move, so the next press asks again.
+  - `useActiveIdWithin` has a server snapshot, so `NavRail` renders on the server.
+  - `NotificationRegion` announces every notification added in one update, not only the last one.
+  - A loader (`onMore`) that returns nothing now counts as settled, so a new press asks again when that page brought nothing focusable. Content that arrives later still completes the move. A held key never asks twice.
+  - When a node's `disabled`, `layout`, `columns` or `span` changes, cached spatial rectangles for it and its ancestors are dropped. A group's union no longer includes a leaf that was disabled.
+  - The popup `Select` closes when virtual focus leaves it, for example when the pointer moves to another control, so it no longer takes that control's Confirm. When focus moved away, the trigger doesn't take DOM focus back.
+
 - Design system and navigation layer, from the review of part 2 (neither is used by the app yet):
   - Tab now clears the kept grid column and anchors the pointer, so the next Down follows the cell Tab reached.
   - A `FocusScope` with `autoFocus` no longer takes focus from an open contained scope.

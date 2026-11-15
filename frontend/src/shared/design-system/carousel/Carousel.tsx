@@ -265,6 +265,8 @@ const CarouselSlot = memo(function CarouselSlot({
       aria-setsize={count}
       aria-posinset={index + 1}
       data-focused={focused || undefined}
+      // The composite part: DOM focus mirrors onto the item inside it
+      data-nav-part={index}
       style={{ width, height, transform: `translateX(${x}px)` }}
       onMouseMove={event => onPointer(index, event)}
     >

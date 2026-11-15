@@ -126,6 +126,8 @@ export function RemovableChip({
     'data-surface': surface,
     'data-size': size,
     'data-focused': focusedPart === part || undefined,
+    // Where the navigation layer mirrors DOM focus for this part
+    'data-nav-part': part,
     onMouseMove: () => onPointerFocus(part),
   });
   return (

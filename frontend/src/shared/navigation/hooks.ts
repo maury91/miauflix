@@ -107,7 +107,9 @@ export function useActiveIdWithin(groupId: string | undefined): string | null {
       [store]
     ),
     () =>
-      store && groupId !== undefined && store.activeWithin(groupId) ? store.getActiveId() : null
+      store && groupId !== undefined && store.activeWithin(groupId) ? store.getActiveId() : null,
+    // Server render: nothing is focused before hydration
+    () => null
   );
 }
 

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
+import { Button } from '../button/Button';
 import { List } from '../list/List';
 import { SettingRow } from '../list/SettingRow';
 import type { SelectItems } from '../option-list/selectItems';
@@ -103,6 +104,7 @@ export const StatesOverMedia: Story = { render: () => <StateMatrix surface="over
 
 function TvSelect() {
   const [value, setValue] = useState<string | null>('auto');
+  const [saved, setSaved] = useState(0);
   return (
     <NavigationStage>
       <SurfaceStage surface="solid">
@@ -117,6 +119,10 @@ function TvSelect() {
             navId="quality"
           />
           <p style={{ color: '#a6adaf' }}>Chosen: {value}</p>
+          <Button navId="save" onClick={() => setSaved(count => count + 1)}>
+            Save
+          </Button>
+          <p style={{ color: '#a6adaf' }}>Saved: {saved}</p>
         </div>
       </SurfaceStage>
     </NavigationStage>
@@ -156,6 +162,22 @@ export const PopupWithVirtualFocus: Story = {
     // The pointer makes options active; a press chooses
     await userEvent.click(trigger);
     await userEvent.click(await canvas.findByRole('option', { name: '720p' }));
+    await expect(canvas.getByText('Chosen: 720p')).toBeInTheDocument();
+
+    // The popup owns Down even with a control below it
+    await userEvent.keyboard('{Enter}');
+    await canvas.findByRole('listbox');
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    const save = canvas.getByRole('button', { name: 'Save' });
+    await expect(save).not.toHaveAttribute('data-focused');
+
+    // The pointer moving focus to another control closes it: Confirm goes there
+    await userEvent.hover(save);
+    await waitFor(() => expect(canvas.queryByRole('listbox')).toBeNull());
+    await expect(save).toHaveAttribute('data-focused');
+    await userEvent.keyboard('{Enter}');
+    await expect(canvas.getByText('Saved: 1')).toBeInTheDocument();
     await expect(canvas.getByText('Chosen: 720p')).toBeInTheDocument();
   },
 };

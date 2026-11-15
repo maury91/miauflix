@@ -1,8 +1,11 @@
+import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Button } from './button/Button';
+import { RemovableChip } from './chip/Chip';
+import { Checkbox } from './choice/Checkbox';
 import { Disclosure } from './disclosure/Disclosure';
 import { Icon } from './icon/Icon';
 import { Link } from './link/Link';
@@ -20,6 +23,8 @@ import {
   applyKey,
   type KeyboardKey,
 } from './patterns/search-keyboard/searchKeys';
+import { Select } from './select/Select';
+import { Slider } from './slider/Slider';
 import { Surface } from './surface-panel/Surface';
 import { Heading, Text } from './text/Text';
 import { SurfaceContextProvider } from './surface';
@@ -194,6 +199,22 @@ describe('NotificationRegion', () => {
       vi.advanceTimersByTime(60_000);
     });
     expect(screen.getByText('Connection lost', { selector: '[data-placement] *' })).toBeTruthy();
+  });
+
+  it('announces every notification added in one update', () => {
+    render(
+      <NotificationRegion
+        label="Notifications"
+        notifications={[
+          { id: 'a', body: 'Added to list', duration: null },
+          { id: 'b', body: 'Download started', duration: null },
+        ]}
+        onExpire={() => undefined}
+      />
+    );
+    const status = screen.getByRole('status', { name: 'Notifications' });
+    expect(status).toHaveTextContent('Added to list');
+    expect(status).toHaveTextContent('Download started');
   });
 });
 
@@ -391,5 +412,98 @@ describe('SeekControl', () => {
     expect(container.querySelector('[data-tone="brand"]')).not.toBeNull();
     const block = container.querySelector<HTMLElement>('[style*="width: 50%"]');
     expect(block?.style.left).toBe('0%');
+  });
+});
+
+describe('DOM focus under the navigation layer', () => {
+  it('follows virtual focus onto native controls and composite parts', () => {
+    // jsdom lays nothing out: every element gets one client rect
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
+    const onBrightness = vi.fn();
+    const onRemove = vi.fn();
+    render(
+      <NavigationProvider>
+        <FocusScope id="page">
+          <Checkbox navId="terms" label="Accept" checked={false} onCheckedChange={() => {}} />
+          <Slider navId="volume" label="Volume" value={50} onChange={() => {}} />
+          <Slider navId="brightness" label="Brightness" value={50} onChange={onBrightness} />
+          <Select
+            navId="quality"
+            label="Quality"
+            mode="native"
+            items={[{ value: 'hd', label: 'HD' }]}
+            value="hd"
+            onChange={() => {}}
+          />
+          <RemovableChip
+            navId="recent"
+            removeLabel="Remove dune"
+            onRemove={onRemove}
+            onClick={() => {}}
+          >
+            dune
+          </RemovableChip>
+        </FocusScope>
+      </NavigationProvider>
+    );
+    const press = (key: string) =>
+      fireEvent.keyDown(document.activeElement ?? document.body, { key });
+    expect(document.activeElement).toBe(screen.getByRole('checkbox', { name: 'Accept' }));
+    press('ArrowDown');
+    expect(document.activeElement).toBe(screen.getByRole('slider', { name: 'Volume' }));
+    // Slider to slider: the second one's keys work
+    press('ArrowDown');
+    expect(document.activeElement).toBe(screen.getByRole('slider', { name: 'Brightness' }));
+    press('ArrowLeft');
+    expect(onBrightness).toHaveBeenCalledTimes(1);
+    // A select isn't mirrored (its keys would be its own), and the range lets go
+    press('ArrowDown');
+    expect(document.activeElement).toBe(document.body);
+    // A select the pointer focused lets go when focus moves on
+    screen.getByRole('combobox', { name: 'Quality' }).focus();
+    act(() => {
+      press('Tab');
+    });
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'dune' }));
+    press('ArrowRight');
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Remove dune' }));
+    press('Enter');
+    expect(onRemove).toHaveBeenCalledTimes(1);
+    vi.restoreAllMocks();
+  });
+
+  it('opens a native select’s picker on Confirm', () => {
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
+    const showPicker = vi.fn();
+    Object.defineProperty(HTMLSelectElement.prototype, 'showPicker', {
+      configurable: true,
+      value: showPicker,
+    });
+    render(
+      <NavigationProvider>
+        <FocusScope id="page">
+          <Select
+            navId="language"
+            label="Language"
+            mode="native"
+            items={[
+              { value: 'en', label: 'English' },
+              { value: 'fr', label: 'French' },
+            ]}
+            value="en"
+            onChange={() => {}}
+          />
+        </FocusScope>
+      </NavigationProvider>
+    );
+    fireEvent.keyDown(document.body, { key: 'Enter' });
+    expect(showPicker).toHaveBeenCalledTimes(1);
+    expect(showPicker.mock.contexts[0]).toBe(screen.getByRole('combobox', { name: 'Language' }));
+    delete (HTMLSelectElement.prototype as { showPicker?: unknown }).showPicker;
+    vi.restoreAllMocks();
   });
 });

@@ -425,6 +425,33 @@ describe('NavigationProvider', () => {
     expect(focusedText()).toBe('one');
   });
 
+  it('drops cached rectangles above a child whose eligibility changes', () => {
+    let store: NavigationStore | undefined;
+    function Grab() {
+      store = useNavigationStore();
+      return null;
+    }
+    function Spatial({ disabled }: { disabled: boolean }) {
+      return (
+        <NavigationProvider>
+          <Grab />
+          <FocusScope id="page" layout="spatial">
+            <Item id="alone" />
+            <FocusGroup id="pair" layout="horizontal">
+              <Item id="kept" />
+              <Item id="toggled" disabled={disabled} />
+            </FocusGroup>
+          </FocusScope>
+        </NavigationProvider>
+      );
+    }
+    const { rerender } = render(<Spatial disabled={false} />);
+    press('ArrowRight');
+    expect(store!.snapshot().geometry).toContain('page');
+    rerender(<Spatial disabled />);
+    expect(store!.snapshot().geometry).not.toContain('page');
+  });
+
   describe('pending moves', () => {
     let loadPage: () => void;
     function Paged({ onMore }: { onMore: NonNullable<NavigationNode['onMore']> }) {
@@ -452,7 +479,8 @@ describe('NavigationProvider', () => {
       });
 
     it('asks once, keeps focus, and moves on when the content arrives', async () => {
-      const onMore = vi.fn();
+      // Still loading: a promise that hasn't settled
+      const onMore = vi.fn((_request: MoreRequest) => new Promise<void>(() => undefined));
       render(<Paged onMore={onMore} />);
       press('ArrowRight');
       press('ArrowRight');
@@ -465,6 +493,35 @@ describe('NavigationProvider', () => {
       expect(onMore).toHaveBeenCalledTimes(1);
       await arrive();
       expect(focusedText()).toBe('item3');
+    });
+
+    it('asks again on a new press after a loader that returned nothing, never on a held key', async () => {
+      const onMore = vi.fn();
+      render(<Paged onMore={onMore} />);
+      press('ArrowRight');
+      press('ArrowRight');
+      press('ArrowRight', { repeat: true });
+      expect(onMore).toHaveBeenCalledTimes(1);
+      // Nothing arrived: a new press asks again, and content arriving still completes the move
+      press('ArrowRight');
+      expect(onMore).toHaveBeenCalledTimes(2);
+      expect(focusedText()).toBe('item2');
+      await arrive();
+      expect(focusedText()).toBe('item3');
+    });
+
+    it('asks again after a loader that throws before returning a promise', () => {
+      const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      const onMore = vi.fn(() => {
+        throw new Error('offline');
+      });
+      render(<Paged onMore={onMore} />);
+      press('ArrowRight');
+      press('ArrowRight');
+      press('ArrowRight');
+      expect(focusedText()).toBe('item2');
+      expect(onMore).toHaveBeenCalledTimes(2);
+      expect(error).toHaveBeenCalledTimes(2);
     });
 
     it('drops the wait when the user moves on, so late content never takes focus', async () => {
