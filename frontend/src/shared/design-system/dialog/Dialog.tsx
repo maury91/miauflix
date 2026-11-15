@@ -10,7 +10,9 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
+import { ActionGroup } from '../action-group/ActionGroup';
 import { IconButton } from '../icon-button/IconButton';
+import { containTab, isEditing } from '../overlayFocus';
 import { SurfaceContextProvider } from '../surface';
 import * as styles from './dialog.css';
 import { isTopDialog, pushDialog, topDialogRoot } from './dialogStack';
@@ -49,40 +51,8 @@ export interface DialogProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-const tabbable =
-  'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
 /** The enclosing dialog, so a nested dialog registers above it (see dialogStack). */
 const ParentDialogContext = createContext<symbol | undefined>(undefined);
-
-/** Tab and Shift+Tab cycle inside the dialog (desktop keyboards; TV remotes have no Tab). */
-function containTab(event: KeyboardEvent, panel: HTMLElement) {
-  const items = Array.from(panel.querySelectorAll<HTMLElement>(tabbable));
-  if (items.length === 0) {
-    event.preventDefault();
-    panel.focus({ preventScroll: true });
-    return;
-  }
-  const first = items[0];
-  const last = items[items.length - 1];
-  const active = document.activeElement;
-  const outside = !(active instanceof Node) || !panel.contains(active);
-  if (event.shiftKey && (outside || active === first || active === panel)) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && (outside || active === last)) {
-    event.preventDefault();
-    first.focus();
-  }
-}
-
-const isEditing = () => {
-  const active = document.activeElement;
-  return (
-    active instanceof HTMLTextAreaElement ||
-    (active instanceof HTMLInputElement && active.type !== 'checkbox' && active.type !== 'radio')
-  );
-};
 
 /**
  * A labelled modal overlay with a scrollable body and actions. Nothing behind it can be reached:
@@ -118,8 +88,10 @@ export function Dialog({
     const panel = panelRef.current;
     const previous = document.activeElement;
     const pop = pushDialog(id, panel?.parentElement ?? null, parent);
-    // A dialog under a nested one open from the start leaves focus in the nested one
-    if (isTopDialog(id)) panel?.focus({ preventScroll: true });
+    // A dialog under a nested one open from the start leaves focus in the nested one, and content
+    // that already took focus inside the panel (a popover open from the start) keeps it
+    const focusedInside = panel?.contains(document.activeElement) ?? false;
+    if (isTopDialog(id) && !focusedInside) panel?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isTopDialog(id)) return;
@@ -204,8 +176,8 @@ export function Dialog({
                 {children}
               </div>
             )}
-            <div className={styles.actions} data-layout={actionsLayout}>
-              {actions}
+            <div className={styles.actions}>
+              <ActionGroup layout={actionsLayout}>{actions}</ActionGroup>
             </div>
           </SurfaceContextProvider>
         </ParentDialogContext.Provider>

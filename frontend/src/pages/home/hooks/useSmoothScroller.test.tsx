@@ -7,7 +7,7 @@ const { createSmoothScroller, scrollTo, dispose } = vi.hoisted(() => ({
   dispose: vi.fn(),
 }));
 
-vi.mock('../smooth-scroll', () => ({
+vi.mock('@shared/lib/smooth-scroll', () => ({
   createSmoothScroller,
 }));
 

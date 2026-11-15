@@ -1,4 +1,4 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 
 import { color, fontFamily, space, typeScale } from '../tokens';
 
@@ -56,11 +56,5 @@ export const message = style({
 });
 
 export const actions = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
   marginTop: space.md,
 });
-
-// Actions are spaced without wrappers; the first is the primary one (focus lands there)
-globalStyle(`${actions} > *`, { margin: `${space.xs} ${space.xs} 0` });

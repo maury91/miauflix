@@ -15,7 +15,7 @@ import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { selectCurrentUser } from '@store/slices/auth';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -401,7 +401,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   }, []);
   // A remote needs something focused: the failure's action, else the player (for Back).
   // Retry unmounts its own button, dropping the focus on the body: hand it back to the player.
-  useEffect(() => {
+  // In the commit that shows the action, so nothing sees it unfocused.
+  useLayoutEffect(() => {
     if (error || status === 'exhausted') {
       (retryRef.current ?? notifyRef.current ?? pageRef.current)?.focus({ preventScroll: true });
       return;
