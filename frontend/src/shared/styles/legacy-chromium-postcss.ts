@@ -82,7 +82,13 @@ function replaceFlexGap(rule: Rule, selectors: string[], declarations: Declarati
     if (!isZero(rowGap)) extra.push(`${between}{${side}:${rowGap}}`);
   } else {
     const side = direction === 'row-reverse' ? 'margin-left' : 'margin-right';
-    if (!isZero(columnGap)) extra.push(`${between}{${side}:${columnGap}}`);
+    const otherSide = side === 'margin-left' ? 'margin-right' : 'margin-left';
+    if (!isZero(columnGap)) {
+      extra.push(`${between}{${side}:${columnGap}}`);
+      // A row runs the other way in right-to-left text, so the space goes on the other side
+      const rtlBetween = selectors.map(selector => `[dir="rtl"] ${selector}>:not(:last-child)`);
+      extra.push(`${rtlBetween.join(',')}{${side}:0;${otherSide}:${columnGap}}`);
+    }
     if (wraps && !isZero(rowGap)) {
       // Space the lines apart and take the space under the last line back from the container
       extra.push(`${forEachSelector(selectors, '>:nth-child(n)')}{margin-bottom:${rowGap}}`);

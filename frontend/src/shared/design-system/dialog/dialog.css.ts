@@ -124,20 +124,8 @@ export const description = style({
   },
 });
 
+/** The actions' room in the panel; ActionGroup lays them out, primary first. */
 export const actions = style({
-  display: 'flex',
   flex: 'none',
-  flexWrap: 'wrap',
-  alignItems: 'center',
   padding: `${space.sm} ${space.lg} ${space.lg}`,
-  selectors: {
-    '&[data-layout="column"]': { flexDirection: 'column', alignItems: 'stretch' },
-  },
 });
-
-// Actions are spaced without wrappers; the first is the primary one (focus lands there)
-globalStyle(`${actions}[data-layout="row"] > *`, { margin: `${space.xs} ${space.sm} 0 0` });
-globalStyle(`[dir="rtl"] ${actions}[data-layout="row"] > *`, {
-  margin: `${space.xs} 0 0 ${space.sm}`,
-});
-globalStyle(`${actions}[data-layout="column"] > * + *`, { marginTop: space.sm });

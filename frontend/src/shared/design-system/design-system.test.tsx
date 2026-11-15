@@ -1,16 +1,23 @@
+import { mediaBoxSizes } from '@pages/home/home-layout';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { createRef } from 'react';
+import { act, createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
+import { ActionGroup } from './action-group/ActionGroup';
 import { Artwork } from './artwork/Artwork';
 import { Avatar } from './avatar/Avatar';
 import { Badge } from './badge/Badge';
 import { Button } from './button/Button';
+import { Carousel } from './carousel/Carousel';
+import { revealItem, stepCarousel } from './carousel/carouselNavigation';
+import { collectionGeometry } from './carousel/collectionGeometry';
+import { Chip, FilterChip, RemovableChip } from './chip/Chip';
 import { Checkbox } from './choice/Checkbox';
 import { RadioGroup } from './choice/RadioGroup';
 import { Switch } from './choice/Switch';
 import { CollectionTile } from './collection-tile/CollectionTile';
 import { Dialog } from './dialog/Dialog';
+import { Divider } from './divider/Divider';
 import { EmptyState } from './empty-state/EmptyState';
 import { NumberField } from './field/NumberField';
 import { PasswordField } from './field/PasswordField';
@@ -18,14 +25,38 @@ import { SearchField } from './field/SearchField';
 import { TextField } from './field/TextField';
 import { IconButton } from './icon-button/IconButton';
 import { IconButtonGroup } from './icon-button-group/IconButtonGroup';
+import { KeyHint } from './key-hint/KeyHint';
+import { Container, SafeArea } from './layout/Container';
+import { Grid, GridItem } from './layout/Grid';
+import { gridLayout, stepGrid } from './layout/gridNavigation';
+import { Inline } from './layout/Inline';
+import { SplitLayout } from './layout/SplitLayout';
+import {
+  isSplitStacked,
+  paneEntry,
+  paneOf,
+  rememberPaneFocus,
+  stepSplit,
+} from './layout/splitNavigation';
+import { Stack } from './layout/Stack';
+import { resolveResponsive } from './layout/windowClass';
 import { List } from './list/List';
 import { ListItem } from './list/ListItem';
 import { SettingRow } from './list/SettingRow';
+import { Menu } from './menu/Menu';
+import { stepAction } from './menu/menuItems';
 import { Message } from './message/Message';
 import { NavItem, NavRail } from './nav-rail/NavRail';
+import { Popover } from './popover/Popover';
 import { ProgressBar, ProgressSpinner } from './progress/Progress';
 import { ProgressButton } from './progress-button/ProgressButton';
+import { revealOffset } from './scroll-area/revealOffset';
+import { ScrollArea } from './scroll-area/ScrollArea';
+import { Section } from './section/Section';
 import { Select } from './select/Select';
+import { Skeleton, SkeletonGroup } from './skeleton/Skeleton';
+import { Slider } from './slider/Slider';
+import { snapSliderValue, stepSliderValue } from './slider/sliderValue';
 import { TabPanel, Tabs } from './tabs/Tabs';
 import { SurfaceContextProvider } from './surface';
 
@@ -1342,5 +1373,714 @@ describe('Review fixes', () => {
     const select = screen.getByRole('combobox', { name: 'Audio' }) as HTMLSelectElement;
     expect(select.value).toBe('');
     expect(select.selectedOptions[0]).toHaveTextContent('Choose');
+  });
+});
+
+describe('Chip', () => {
+  it('is passive text, a toggle, or two sibling actions', () => {
+    const onSelectedChange = vi.fn();
+    const onRemove = vi.fn();
+    const onClick = vi.fn();
+    render(
+      <>
+        <Chip>Drama</Chip>
+        <FilterChip selected={false} focused onSelectedChange={onSelectedChange}>
+          4K
+        </FilterChip>
+        <RemovableChip
+          removeLabel="Remove dune"
+          onRemove={onRemove}
+          onClick={onClick}
+          focusedPart="remove"
+        >
+          dune
+        </RemovableChip>
+      </>
+    );
+    expect(screen.queryByRole('button', { name: 'Drama' })).toBeNull();
+    const filter = screen.getByRole('button', { name: '4K' });
+    expect(filter).toHaveAttribute('aria-pressed', 'false');
+    expect(filter).toHaveAttribute('data-focused');
+    fireEvent.click(filter);
+    expect(onSelectedChange).toHaveBeenCalledWith(true);
+
+    const body = screen.getByRole('button', { name: 'dune' });
+    const remove = screen.getByRole('button', { name: 'Remove dune' });
+    expect(body.contains(remove)).toBe(false);
+    expect(body).not.toHaveAttribute('data-focused');
+    expect(remove).toHaveAttribute('data-focused');
+    fireEvent.click(body);
+    expect(onClick).toHaveBeenCalled();
+    fireEvent.click(remove);
+    expect(onRemove).toHaveBeenCalled();
+  });
+
+  it('has a passive body when nothing runs from it', () => {
+    render(
+      <RemovableChip removeLabel="Remove dune" onRemove={vi.fn()}>
+        dune
+      </RemovableChip>
+    );
+    expect(screen.getAllByRole('button')).toHaveLength(1);
+  });
+});
+
+describe('Menu', () => {
+  const items = [
+    { id: 'a', label: 'Edit' },
+    { id: 'b', label: 'Manage', disabled: true },
+    { type: 'separator' as const, id: 's' },
+    { id: 'c', label: 'Sign out' },
+  ];
+
+  it('steps over disabled actions and separators, clamping at the ends', () => {
+    expect(stepAction(items, null, 1)).toBe('a');
+    expect(stepAction(items, 'a', 1)).toBe('c');
+    expect(stepAction(items, 'c', 1)).toBe('c');
+    expect(stepAction(items, 'c', -1)).toBe('a');
+    expect(stepAction(items, 'a', -1)).toBe('a');
+  });
+
+  it('opens from its trigger, runs an action and closes', () => {
+    const onAction = vi.fn();
+    render(
+      <Menu
+        label="Profile actions"
+        items={items}
+        onAction={onAction}
+        trigger={props => (
+          <button type="button" {...props}>
+            More
+          </button>
+        )}
+      />
+    );
+    const trigger = screen.getByRole('button', { name: 'More' });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(trigger);
+    const menu = screen.getByRole('menu', { name: 'Profile actions' });
+    expect(trigger).toHaveAttribute('aria-controls', menu.id);
+    expect(screen.getByRole('separator')).toBeInTheDocument();
+    const edit = screen.getByRole('menuitem', { name: 'Edit' });
+    expect(menu).toHaveAttribute('aria-activedescendant', edit.id);
+
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Manage' }));
+    expect(onAction).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Sign out' }));
+    expect(onAction).toHaveBeenCalledWith('c');
+    expect(screen.queryByRole('menu')).toBeNull();
+  });
+});
+
+describe('Carousel', () => {
+  it('keeps the collection geometry in step with Home', () => {
+    for (const size of [
+      { width: 1920, height: 1080 },
+      { width: 1280, height: 720 },
+      { width: 390, height: 844 },
+    ]) {
+      const home = mediaBoxSizes(size);
+      expect(collectionGeometry(size)).toEqual({
+        itemWidth: home.mediaWidth,
+        gap: home.gap,
+        perPage: home.mediaPerPage,
+        peek: home.peekWidth,
+        contentWidth: home.width,
+      });
+    }
+  });
+
+  it('moves one item into the leading slot, keeping the last page full, and exits at the ends', () => {
+    const layout = { count: 10, perPage: 4, paging: 'item' as const };
+    expect(stepCarousel({ focused: 0, leading: 0 }, -1, layout)).toBeNull();
+    expect(stepCarousel({ focused: 0, leading: 0 }, 1, layout)).toEqual({ focused: 1, leading: 1 });
+    expect(stepCarousel({ focused: 7, leading: 6 }, 1, layout)).toEqual({ focused: 8, leading: 6 });
+    expect(stepCarousel({ focused: 9, leading: 6 }, 1, layout)).toBeNull();
+    // Back from the end, the track waits until focus reaches the leading slot
+    expect(stepCarousel({ focused: 9, leading: 6 }, -1, layout)).toEqual({
+      focused: 8,
+      leading: 6,
+    });
+    expect(stepCarousel({ focused: 6, leading: 6 }, -1, layout)).toEqual({
+      focused: 5,
+      leading: 5,
+    });
+  });
+
+  it('pages and focuses the leading item, then steps to the end', () => {
+    const layout = { count: 10, perPage: 4, paging: 'page' as const };
+    expect(stepCarousel({ focused: 2, leading: 0 }, 1, layout)).toEqual({ focused: 4, leading: 4 });
+    expect(stepCarousel({ focused: 4, leading: 4 }, 1, layout)).toEqual({ focused: 6, leading: 6 });
+    expect(stepCarousel({ focused: 6, leading: 6 }, 1, layout)).toEqual({ focused: 7, leading: 6 });
+    expect(stepCarousel({ focused: 9, leading: 6 }, 1, layout)).toBeNull();
+    expect(stepCarousel({ focused: 1, leading: 0 }, -1, layout)).toEqual({
+      focused: 0,
+      leading: 0,
+    });
+  });
+
+  it('reveals a remembered item, moving the track only when it is out of view', () => {
+    const layout = { count: 10, perPage: 4, paging: 'item' as const };
+    expect(revealItem({ focused: 0, leading: 0 }, 2, layout)).toEqual({ focused: 2, leading: 0 });
+    expect(revealItem({ focused: 0, leading: 0 }, 9, layout)).toEqual({ focused: 9, leading: 6 });
+  });
+
+  it('mounts the items near the visible ones and locks the pointer while the track moves', () => {
+    vi.useFakeTimers();
+    const geometry = { itemWidth: 100, gap: 10, perPage: 3, peek: 50, contentWidth: 320 };
+    const onPointerFocus = vi.fn();
+    const renderItem = (index: number) => <span>{`Item ${index}`}</span>;
+    const props = { label: 'Row', count: 40, geometry, renderItem, onPointerFocus };
+    const { rerender } = render(<Carousel {...props} focusedIndex={0} leadingIndex={0} />);
+    expect(screen.getByRole('region', { name: 'Row' })).toHaveAttribute(
+      'aria-roledescription',
+      'carousel'
+    );
+    // The visible page and one page beyond it
+    expect(screen.getAllByRole('listitem')).toHaveLength(6);
+
+    const slot = () => screen.getByText('Item 4').parentElement as HTMLElement;
+    rerender(<Carousel {...props} focusedIndex={4} leadingIndex={4} />);
+    expect(slot()).toHaveAttribute('aria-posinset', '5');
+    expect(screen.getByRole('list').style.transform).toBe('translateX(-440px)');
+    fireEvent.mouseMove(slot(), { clientX: 10, clientY: 10 });
+    expect(onPointerFocus).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(500);
+    // The same coordinates after the scroll: content stopped under a resting pointer
+    fireEvent.mouseMove(slot(), { clientX: 10, clientY: 10 });
+    expect(onPointerFocus).not.toHaveBeenCalled();
+    fireEvent.mouseMove(slot(), { clientX: 12, clientY: 10 });
+    expect(onPointerFocus).toHaveBeenCalledWith(4);
+    vi.useRealTimers();
+  });
+});
+
+describe('Skeleton', () => {
+  it('draws placeholder geometry hidden from assistive technology', () => {
+    const { container } = render(
+      <SkeletonGroup>
+        <Skeleton shape="box" ratio="portrait" />
+        <Skeleton shape="text" type="heading" lines={3} width="12rem" />
+        <Skeleton shape="circle" size="lg" />
+      </SkeletonGroup>
+    );
+    const group = container.firstElementChild as HTMLElement;
+    expect(group).toHaveAttribute('aria-hidden', 'true');
+    const [box, text, circle] = Array.from(group.children) as HTMLElement[];
+    expect(box).toHaveAttribute('data-ratio', 'portrait');
+    expect(text).toHaveAttribute('data-type', 'heading');
+    expect(text.style.width).toBe('12rem');
+    expect(text.children).toHaveLength(3);
+    expect(circle).toHaveAttribute('data-size', 'lg');
+  });
+
+  it('takes the fill over media from the surface', () => {
+    const { container } = render(
+      <SurfaceContextProvider value="overMedia">
+        <Skeleton shape="box" height="3rem" />
+      </SurfaceContextProvider>
+    );
+    const box = container.firstElementChild as HTMLElement;
+    expect(box).toHaveAttribute('data-surface', 'overMedia');
+    expect(box).toHaveAttribute('aria-hidden', 'true');
+    expect(box.style.height).toBe('3rem');
+  });
+});
+
+describe('Slider', () => {
+  it('snaps to the step grid and clamps at the limits', () => {
+    const range = { min: 0, max: 10, step: 0.1 };
+    expect(stepSliderValue(0.2, 1, range)).toBe(0.3);
+    expect(stepSliderValue(9.95, 1, range)).toBe(10);
+    expect(stepSliderValue(0, -1, range)).toBe(0);
+    expect(stepSliderValue(5, 1, range, 2)).toBe(7);
+    // The highest value on the grid when the maximum is off it
+    expect(snapSliderValue(100, { min: 0, max: 10, step: 3 })).toBe(9);
+    expect(snapSliderValue(Number.NaN, range)).toBe(0);
+  });
+
+  it('owns Left/Right while focused, clamping instead of exiting, and leaves Up/Down', () => {
+    const onChange = vi.fn();
+    const outside = vi.fn();
+    window.addEventListener('keydown', outside);
+    const { rerender } = render(
+      <Slider label="Volume" value={95} keyStep={10} valueText="95%" onChange={onChange} focused />
+    );
+    const slider = screen.getByRole('slider', { name: 'Volume' });
+    expect(slider).toHaveAttribute('aria-valuetext', '95%');
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    expect(onChange).toHaveBeenLastCalledWith(100);
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    expect(onChange).toHaveBeenLastCalledWith(85);
+    expect(outside).not.toHaveBeenCalled();
+    fireEvent.keyDown(window, { key: 'ArrowDown' });
+    expect(outside).toHaveBeenCalledTimes(1);
+
+    // At the limit the key is still the slider's, and nothing changes
+    onChange.mockClear();
+    rerender(<Slider label="Volume" value={100} onChange={onChange} focused />);
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    expect(onChange).not.toHaveBeenCalled();
+    expect(outside).toHaveBeenCalledTimes(1);
+
+    rerender(<Slider label="Volume" value={50} onChange={onChange} />);
+    fireEvent.keyDown(window, { key: 'ArrowRight' });
+    expect(onChange).not.toHaveBeenCalled();
+    expect(outside).toHaveBeenCalledTimes(2);
+    window.removeEventListener('keydown', outside);
+  });
+
+  it('reports native changes on the grid and the pointer moving onto it', () => {
+    const onChange = vi.fn();
+    const onPointerFocus = vi.fn();
+    render(
+      <Slider
+        label="Brightness"
+        value={50}
+        step={10}
+        onChange={onChange}
+        onPointerFocus={onPointerFocus}
+      />
+    );
+    const slider = screen.getByRole('slider', { name: 'Brightness' });
+    fireEvent.change(slider, { target: { value: '70' } });
+    expect(onChange).toHaveBeenCalledWith(70);
+    fireEvent.mouseMove(slider);
+    expect(onPointerFocus).toHaveBeenCalled();
+  });
+
+  it('takes its name from a row without reading its own value', () => {
+    render(
+      <SettingRow
+        title="Subtitle size"
+        description="Every title on this profile."
+        control={props => <Slider {...props} value={100} min={50} max={200} onChange={vi.fn()} />}
+      />
+    );
+    const slider = screen.getByRole('slider', { name: 'Subtitle size' });
+    expect(slider).toHaveAccessibleDescription('Every title on this profile.');
+  });
+});
+
+describe('Stack and Grid', () => {
+  it('lays out passively as the element it is given', () => {
+    render(
+      <Stack as="ul" direction="row" gap="md" align="center" aria-label="Genres">
+        <li>Drama</li>
+        <li>Comedy</li>
+      </Stack>
+    );
+    const list = screen.getByRole('list', { name: 'Genres' });
+    expect(list).toHaveAttribute('data-direction', 'row');
+    expect(list).toHaveAttribute('data-gap', 'md');
+    expect(list).toHaveAttribute('data-align', 'center');
+    expect(list).not.toHaveAttribute('tabindex');
+  });
+
+  it('puts responsive columns and spans in static attributes', () => {
+    const { container } = render(
+      <Grid columns={{ compact: 1, expanded: 3 }} gap="sm" rowGap="lg">
+        <GridItem span={{ compact: 1, expanded: 2 }}>Wide</GridItem>
+        <div>Narrow</div>
+      </Grid>
+    );
+    const grid = container.firstElementChild as HTMLElement;
+    expect(grid).toHaveAttribute('data-columns', '1');
+    expect(grid).toHaveAttribute('data-columns-expanded', '3');
+    expect(grid).not.toHaveAttribute('data-columns-medium');
+    expect(grid).toHaveAttribute('data-row-gap', 'lg');
+    expect(screen.getByText('Wide')).toHaveAttribute('data-span-expanded', '2');
+  });
+
+  it('resolves a responsive value from the nearest smaller window class', () => {
+    const columns = { compact: 1, expanded: 3 };
+    expect(resolveResponsive(columns, 'compact')).toBe(1);
+    expect(resolveResponsive(columns, 'medium')).toBe(1);
+    expect(resolveResponsive(columns, 'large')).toBe(3);
+    expect(resolveResponsive(4, 'medium')).toBe(4);
+  });
+
+  it('places items as CSS grid does, wrapping a span that does not fit', () => {
+    expect(gridLayout([1, 2, 2, 1, 9], 4)).toEqual([
+      { row: 0, column: 0, span: 1 },
+      { row: 0, column: 1, span: 2 },
+      { row: 1, column: 0, span: 2 },
+      { row: 1, column: 2, span: 1 },
+      { row: 2, column: 0, span: 4 },
+    ]);
+  });
+
+  it('moves within rows, aligns across them, clamps a short row and exits at the edges', () => {
+    // a b c d / space(2) e: the last row is short
+    const cells = gridLayout([1, 1, 1, 1, 2, 1], 4);
+    expect(stepGrid(cells, 0, 'right')).toBe(1);
+    expect(stepGrid(cells, 3, 'right')).toBeNull();
+    expect(stepGrid(cells, 0, 'left')).toBeNull();
+    expect(stepGrid(cells, 1, 'left', { rtl: true })).toBe(2);
+    // b (column 1) down lands on the space spanning columns 0 and 1
+    expect(stepGrid(cells, 1, 'down')).toBe(4);
+    // Back up from the space with the remembered column returns to b, not a
+    expect(stepGrid(cells, 4, 'up', { column: 1 })).toBe(1);
+    expect(stepGrid(cells, 4, 'up')).toBe(0);
+    // d (column 3) down: nothing covers column 3, so the nearest item, e at column 2
+    expect(stepGrid(cells, 3, 'down')).toBe(5);
+    expect(stepGrid(cells, 5, 'down')).toBeNull();
+    expect(stepGrid(cells, 0, 'up')).toBeNull();
+  });
+});
+
+describe('Inline, Container and SafeArea', () => {
+  it('wraps a list, dropping a row gap equal to the gap', () => {
+    render(
+      <Inline as="ul" gap="sm" rowGap="sm" justify="between" aria-label="Genres">
+        <li>Drama</li>
+      </Inline>
+    );
+    const list = screen.getByRole('list', { name: 'Genres' });
+    expect(list).toHaveAttribute('data-gap', 'sm');
+    expect(list).not.toHaveAttribute('data-row-gap');
+    expect(list).toHaveAttribute('data-align', 'center');
+    expect(list).toHaveAttribute('data-justify', 'between');
+  });
+
+  it('names its width and gutters, and the safe area its edges', () => {
+    render(
+      <SafeArea as="main" edges="x" fill>
+        <Container as="section" width="form" gutters="none" aria-label="Sign in">
+          Fields
+        </Container>
+      </SafeArea>
+    );
+    const main = screen.getByRole('main');
+    expect(main).toHaveAttribute('data-edges', 'x');
+    expect(main).toHaveAttribute('data-fill');
+    const region = screen.getByRole('region', { name: 'Sign in' });
+    expect(region).toHaveAttribute('data-width', 'form');
+    expect(region).toHaveAttribute('data-gutters', 'none');
+  });
+});
+
+describe('ScrollArea', () => {
+  it('moves as little as possible to show an item whole, clear of sticky chrome', () => {
+    const base = { viewport: 500, content: 2000, itemHeight: 100, startInset: 50, margin: 20 };
+    // Already visible: no move
+    expect(revealOffset({ ...base, current: 0, itemTop: 200 })).toBe(0);
+    // Below: its bottom over the bottom edge
+    expect(revealOffset({ ...base, current: 0, itemTop: 600 })).toBe(220);
+    // Above, or under the sticky header: its top under the header
+    expect(revealOffset({ ...base, current: 800, itemTop: 790 })).toBe(720);
+    // Clamped to the scrollable range
+    expect(revealOffset({ ...base, current: 0, itemTop: 1950 })).toBe(1500);
+    expect(revealOffset({ ...base, current: 300, itemTop: 10 })).toBe(0);
+    // Taller than the view: its top
+    expect(revealOffset({ ...base, current: 0, itemTop: 900, itemHeight: 800 })).toBe(830);
+  });
+
+  it('reveals key focus, not pointer focus, and locks the pointer while it moves', async () => {
+    vi.useFakeTimers();
+    const onPointerFocus = vi.fn();
+    const Item = ({ id, focused }: { id: string; focused: boolean }) => (
+      <div data-testid={id} data-focused={focused || undefined} onMouseMove={onPointerFocus}>
+        {id}
+      </div>
+    );
+    const { rerender } = render(
+      <ScrollArea label="Settings" mode="transform">
+        <Item id="first" focused />
+        <Item id="far" focused={false} />
+        <Item id="farther" focused={false} />
+      </ScrollArea>
+    );
+    const area = screen.getByRole('region', { name: 'Settings' });
+    const content = area.firstElementChild as HTMLElement;
+    const layout = (element: HTMLElement, values: Record<string, unknown>) => {
+      for (const [key, value] of Object.entries(values)) {
+        Object.defineProperty(element, key, { configurable: true, value });
+      }
+    };
+    layout(area, { clientHeight: 400 });
+    layout(content, { offsetHeight: 3000 });
+    layout(screen.getByTestId('far'), {
+      offsetTop: 1000,
+      offsetHeight: 100,
+      offsetParent: content,
+    });
+    layout(screen.getByTestId('farther'), {
+      offsetTop: 2000,
+      offsetHeight: 100,
+      offsetParent: content,
+    });
+
+    fireEvent.keyDown(window, { key: 'ArrowDown' });
+    rerender(
+      <ScrollArea label="Settings" mode="transform">
+        <Item id="first" focused={false} />
+        <Item id="far" focused />
+        <Item id="farther" focused={false} />
+      </ScrollArea>
+    );
+    await act(async () => {});
+    // 1000 + 100 - 400 + the lg margin (24px at 16px)
+    expect(content.style.transform).toBe('translate3d(0, -724px, 0)');
+
+    const far = screen.getByTestId('far');
+    fireEvent.mouseMove(far, { clientX: 10, clientY: 10 });
+    expect(onPointerFocus).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(400);
+    // The content stopped under a resting pointer
+    fireEvent.mouseMove(far, { clientX: 10, clientY: 10 });
+    expect(onPointerFocus).not.toHaveBeenCalled();
+    fireEvent.mouseMove(far, { clientX: 12, clientY: 10 });
+    expect(onPointerFocus).toHaveBeenCalledTimes(1);
+
+    // Focus moved by the pointer never scrolls
+    rerender(
+      <ScrollArea label="Settings" mode="transform">
+        <Item id="first" focused={false} />
+        <Item id="far" focused={false} />
+        <Item id="farther" focused />
+      </ScrollArea>
+    );
+    await act(async () => {});
+    expect(content.style.transform).toBe('translate3d(0, -724px, 0)');
+    vi.useRealTimers();
+  });
+});
+
+describe('Section', () => {
+  it('is a region named by its heading and described by its description', () => {
+    render(
+      <Section
+        title="Servers"
+        headingLevel={3}
+        description="Where your library is stored."
+        actions={<Button>Add server</Button>}
+        padding="lg"
+      >
+        <p>List</p>
+      </Section>
+    );
+    const region = screen.getByRole('region', { name: 'Servers' });
+    expect(region).toHaveAccessibleDescription('Where your library is stored.');
+    expect(region).toHaveAttribute('data-padding', 'lg');
+    expect(screen.getByRole('heading', { level: 3, name: 'Servers' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Add server' })).toBeInTheDocument();
+  });
+});
+
+describe('Popover', () => {
+  const renderPopover = (
+    props: Partial<Parameters<typeof Popover>[0]> & { onDismiss: () => void },
+    outside?: () => void
+  ) =>
+    render(
+      <div>
+        <button type="button" onClick={outside}>
+          Outside
+        </button>
+        <Popover
+          open
+          modality="modal"
+          title="Audio"
+          trigger={triggerProps => (
+            <button type="button" {...triggerProps}>
+              Tracks
+            </button>
+          )}
+          {...props}
+        >
+          <input aria-label="Search tracks" />
+          <button type="button">English</button>
+        </Popover>
+      </div>
+    );
+
+  it('is a dialog named by its title, described to its trigger, holding DOM focus', () => {
+    renderPopover({ onDismiss: vi.fn() });
+    const panel = screen.getByRole('dialog', { name: 'Audio' });
+    expect(panel).toHaveAttribute('aria-modal', 'true');
+    expect(panel).toHaveFocus();
+    const trigger = screen.getByRole('button', { name: 'Tracks' });
+    expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger).toHaveAttribute('aria-controls', panel.id);
+  });
+
+  it('closes on Back, but not while a field inside is in edit mode', () => {
+    const onDismiss = vi.fn();
+    renderPopover({ onDismiss });
+    screen.getByRole('textbox', { name: 'Search tracks' }).focus();
+    fireEvent.keyDown(document.activeElement as Element, { key: 'Escape' });
+    expect(onDismiss).not.toHaveBeenCalled();
+    screen.getByRole('button', { name: 'English' }).focus();
+    fireEvent.keyDown(document.activeElement as Element, { key: 'Escape' });
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it('swallows an outside press when modal, and lets it act when not', () => {
+    const onDismiss = vi.fn();
+    const outside = vi.fn();
+    const { unmount } = renderPopover({ onDismiss }, outside);
+    const press = () => {
+      const button = screen.getByRole('button', { name: 'Outside' });
+      fireEvent.mouseDown(button);
+      fireEvent.click(button);
+    };
+    press();
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+    expect(outside).not.toHaveBeenCalled();
+    unmount();
+
+    renderPopover({ onDismiss, modality: 'nonModal' }, outside);
+    expect(screen.getByRole('dialog', { name: 'Audio' })).not.toHaveAttribute('aria-modal');
+    press();
+    expect(onDismiss).toHaveBeenCalledTimes(2);
+    expect(outside).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes before a Dialog around it, and gives DOM focus back to its trigger', () => {
+    const onPopoverDismiss = vi.fn();
+    const onDialogDismiss = vi.fn();
+    const content = (open: boolean) => (
+      <Dialog open title="Settings" actions={<Button>Done</Button>} onDismiss={onDialogDismiss}>
+        <Popover
+          open={open}
+          modality="nonModal"
+          title="Audio"
+          onDismiss={onPopoverDismiss}
+          trigger={triggerProps => (
+            <button type="button" {...triggerProps}>
+              Tracks
+            </button>
+          )}
+        >
+          <button type="button">English</button>
+        </Popover>
+      </Dialog>
+    );
+    const { rerender } = render(content(true));
+    fireEvent.keyDown(screen.getByRole('dialog', { name: 'Audio' }), { key: 'Escape' });
+    expect(onPopoverDismiss).toHaveBeenCalledTimes(1);
+    expect(onDialogDismiss).not.toHaveBeenCalled();
+    rerender(content(false));
+    expect(screen.getByRole('button', { name: 'Tracks' })).toHaveFocus();
+  });
+});
+
+describe('KeyHint', () => {
+  it('shows platform glyphs hidden from assistive technology, and the label', () => {
+    const { container } = render(
+      <>
+        <KeyHint keys="confirm" label="Select" keyLabel="Enter" device="keyboard" />
+        <KeyHint keys={['red', 'left']} label="Seek" device="remote" />
+      </>
+    );
+    expect(screen.getByText('Select')).toBeInTheDocument();
+    expect(screen.getByText('Enter', { exact: false })).toBeInTheDocument();
+    const caps = container.querySelectorAll('[aria-hidden="true"]');
+    expect(caps).toHaveLength(3);
+    expect(caps[1]).toHaveAttribute('data-color', 'red');
+    expect(container.querySelector('[tabindex]')).toBeNull();
+  });
+});
+
+describe('ActionGroup and Divider', () => {
+  it('keeps the actions in order, primary first, and names the group when labelled', () => {
+    render(
+      <ActionGroup label="Episode actions" layout="auto" align="end" divider>
+        <Button>Play</Button>
+        <Button>Download</Button>
+      </ActionGroup>
+    );
+    const group = screen.getByRole('group', { name: 'Episode actions' });
+    expect(group).toHaveAttribute('data-layout', 'auto');
+    expect(group).toHaveAttribute('data-align', 'end');
+    expect(group).toHaveAttribute('data-wrap');
+    expect(group).toHaveAttribute('data-divider');
+    expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual([
+      'Play',
+      'Download',
+    ]);
+  });
+
+  it('is a separator unless decorative', () => {
+    render(
+      <>
+        <Divider spacing="md" />
+        <Divider orientation="vertical" />
+        <Divider decorative />
+      </>
+    );
+    const [horizontal, vertical] = screen.getAllByRole('separator');
+    expect(horizontal.tagName).toBe('HR');
+    expect(horizontal).toHaveAttribute('data-spacing', 'md');
+    expect(vertical).toHaveAttribute('aria-orientation', 'vertical');
+    expect(screen.getAllByRole('separator')).toHaveLength(2);
+  });
+});
+
+describe('SplitLayout', () => {
+  it('renders the panes in reading order, named as regions when labelled', () => {
+    render(
+      <SplitLayout
+        split="rail"
+        stackBelow="medium"
+        gap="lg"
+        align="start"
+        fill
+        startLabel="Keyboard"
+        start={<button type="button">A</button>}
+        end={<p>Results</p>}
+      />
+    );
+    const start = screen.getByRole('region', { name: 'Keyboard' });
+    expect(start).toHaveAttribute('data-pane', 'start');
+    const root = start.parentElement;
+    expect(root).toHaveAttribute('data-split', 'rail');
+    expect(root).toHaveAttribute('data-stack-below', 'medium');
+    expect(root).toHaveAttribute('data-gap', 'lg');
+    expect(root).toHaveAttribute('data-align', 'start');
+    expect(root).toHaveAttribute('data-fill');
+    // An unlabelled pane is not a region
+    expect(screen.getAllByRole('region')).toHaveLength(1);
+    expect(paneOf(screen.getByRole('button'))).toBe('start');
+    expect(paneOf(screen.getByText('Results'))).toBe('end');
+    expect(paneOf(root)).toBeNull();
+  });
+
+  it('stacks below its window class', () => {
+    expect(isSplitStacked('compact', 'expanded')).toBe(true);
+    expect(isSplitStacked('medium', 'expanded')).toBe(true);
+    expect(isSplitStacked('expanded', 'expanded')).toBe(false);
+    expect(isSplitStacked('large', 'large')).toBe(false);
+    expect(isSplitStacked('expanded', 'large')).toBe(true);
+  });
+
+  it('crosses between the panes along the split axis only', () => {
+    expect(stepSplit('start', 'right')).toBe('end');
+    expect(stepSplit('end', 'left')).toBe('start');
+    expect(stepSplit('end', 'right')).toBeNull();
+    expect(stepSplit('start', 'down')).toBeNull();
+    // Right-to-left: the start pane is on the right
+    expect(stepSplit('start', 'left', { rtl: true })).toBe('end');
+    expect(stepSplit('start', 'right', { rtl: true })).toBeNull();
+    // Stacked: Up/Down cross, Left/Right stay
+    expect(stepSplit('start', 'down', { stacked: true })).toBe('end');
+    expect(stepSplit('end', 'up', { stacked: true, rtl: true })).toBe('start');
+    expect(stepSplit('start', 'right', { stacked: true })).toBeNull();
+  });
+
+  it('enters a pane at its last focused item while it is still there', () => {
+    let memory = rememberPaneFocus({}, 'start', 'password');
+    expect(rememberPaneFocus(memory, 'start', 'password')).toBe(memory);
+    memory = rememberPaneFocus(memory, 'end', 'refresh');
+    expect(paneEntry(memory, 'start', ['email', 'password', 'submit'])).toBe('password');
+    expect(paneEntry(memory, 'end', ['refresh'])).toBe('refresh');
+    // Gone (or no longer eligible): the default entry, else the first item
+    expect(paneEntry(memory, 'start', ['email', 'submit'], 'submit')).toBe('submit');
+    expect(paneEntry(memory, 'start', ['email', 'submit'], 'missing')).toBe('email');
+    expect(paneEntry({}, 'end', [])).toBeUndefined();
   });
 });

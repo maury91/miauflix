@@ -29,6 +29,13 @@ export type KeyboardHandlers = {
   onPlayPause?: KeyboardHandler;
   onPlay?: KeyboardHandler;
   onPause?: KeyboardHandler;
+  /** Tab and Shift+Tab (desktop keyboards), also from a field being edited. */
+  onTab?: KeyboardHandler;
+  /**
+   * Enter in a single-line field being edited (the TV keyboard's Done). The field keeps its native
+   * behavior (a form submits); the handler may end editing.
+   */
+  onEditConfirm?: KeyboardHandler;
 };
 
 export type KeyboardOptions = KeyboardHandlers & {
@@ -114,6 +121,23 @@ export function getKeyboardAction(event: KeyboardEvent): KeyboardAction | null {
 }
 
 const scopes = new Set<KeyboardScope>();
+
+/**
+ * Virtual focus owners (the navigation layer's providers). While one is mounted, a direction key
+ * with no DOM focus is theirs to resolve: DOM focus is not where the user is.
+ */
+let virtualFocusOwners = 0;
+
+/** Marks virtual focus as owning focus; the returned function releases it. */
+export function claimVirtualFocus(): () => void {
+  virtualFocusOwners += 1;
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    virtualFocusOwners -= 1;
+  };
+}
 
 const DIRECTIONS: ReadonlySet<KeyboardAction> = new Set(['up', 'down', 'left', 'right']);
 const FOCUSABLE =
@@ -232,6 +256,19 @@ function dispatch(event: KeyboardEvent): void {
   if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey)
     return;
 
+  if (event.key === 'Tab') {
+    runScopes(event, 'onTab');
+    return;
+  }
+  if (
+    event.key === 'Enter' &&
+    event.target instanceof HTMLInputElement &&
+    isNativeEditingTarget(event.target)
+  ) {
+    runScopes(event, 'onEditConfirm');
+    return;
+  }
+
   const action = getKeyboardAction(event);
   if (!action) return;
   const remoteOnly =
@@ -243,12 +280,17 @@ function dispatch(event: KeyboardEvent): void {
   if (isNativeEditingTarget(event.target) && !remoteOnly) return;
 
   // A direction key with nothing focused only brings the focus back.
-  if (DIRECTIONS.has(action) && hasNoFocus() && restoreFocus()) {
+  if (DIRECTIONS.has(action) && virtualFocusOwners === 0 && hasNoFocus() && restoreFocus()) {
     event.preventDefault();
     event.stopPropagation();
     return;
   }
 
+  runScopes(event, HANDLERS[action]);
+}
+
+/** Offers a key to the matching scopes, innermost first; the first true result consumes it. */
+function runScopes(event: KeyboardEvent, handlerName: keyof KeyboardHandlers): void {
   const target = event.target instanceof Node ? event.target : document.activeElement;
   const matching = [...scopes]
     .filter(
@@ -266,7 +308,7 @@ function dispatch(event: KeyboardEvent): void {
     });
 
   for (const scope of matching) {
-    const handler = scope.options.current[HANDLERS[action]];
+    const handler = scope.options.current[handlerName];
     if (handler?.(event) === true) {
       event.preventDefault();
       event.stopPropagation();

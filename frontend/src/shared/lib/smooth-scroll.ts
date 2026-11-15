@@ -1,5 +1,5 @@
 /**
- * Animated scrolling for Home's rows and row list.
+ * Animated scrolling: Home's rows and row list, and the design system's ScrollArea.
  *
  * The scroll position follows its target like a critically damped spring: it moves quickly,
  * slows into place and never overshoots. A new target set mid-animation keeps the current speed,
