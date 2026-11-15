@@ -282,7 +282,7 @@ const mediaRef = (media: MediaDto) => ({
 
 /**
  * A navigable media row. The selected card sits in the leading slot: moving the selection
- * scrolls the row (animated, see smooth-scroll.ts) so the selection lands there. Only the cards
+ * scrolls the row (animated, see shared/lib/smooth-scroll.ts) so the selection lands there. Only the cards
  * around the selection are rendered, and only the list pages around it are loaded (see
  * row-pages.ts). Supplying mediaOverride bypasses list fetching and promotion, including for an
  * empty array.

@@ -25,7 +25,7 @@ vi.mock('@features/home-feed/listPages', () => ({
 }));
 vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
 // jsdom has no layout to animate; land every scroll immediately (the spring has its own tests).
-vi.mock('../smooth-scroll', () => ({
+vi.mock('@shared/lib/smooth-scroll', () => ({
   createSmoothScroller: (element: HTMLElement) => ({
     scrollTo: (target: number) => {
       element.scrollLeft = target;

@@ -1,6 +1,5 @@
+import { createSmoothScroller, type SmoothScroller } from '@shared/lib/smooth-scroll';
 import { useCallback, useRef } from 'react';
-
-import { createSmoothScroller, type SmoothScroller } from '../smooth-scroll';
 
 /**
  * A callback ref for a scrollable element plus a stable `scrollTo` that animates it on `axis`.

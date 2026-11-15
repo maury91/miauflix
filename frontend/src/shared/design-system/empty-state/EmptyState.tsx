@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { ActionGroup } from '../action-group/ActionGroup';
 import * as styles from './emptyState.css';
 
 export interface EmptyStateProps {
@@ -41,7 +42,11 @@ export function EmptyState({
       <Heading className={styles.heading}>{heading}</Heading>
       {children && <p className={styles.body}>{children}</p>}
       {message && <div className={styles.message}>{message}</div>}
-      {actions && <div className={styles.actions}>{actions}</div>}
+      {actions && (
+        <div className={styles.actions}>
+          <ActionGroup align="center">{actions}</ActionGroup>
+        </div>
+      )}
     </section>
   );
 }
