@@ -32,21 +32,23 @@ const progress: ProgressEntry[] = [
   },
 ];
 
+const renderProps = (overrides: Partial<Parameters<typeof EpisodesSection>[0]> = {}) => ({
+  showMediaId: 7,
+  seasons: [1, 2, 3].map(number => ({ seasonNumber: number, name: `Season ${number}` })),
+  sections: [season(1, [1, 2]), season(2, [1])],
+  loading: false,
+  failedSeasons: [] as number[],
+  progress,
+  fallbackStill: '/backdrop.jpg',
+  onPlay: vi.fn(),
+  onRetrySeason: vi.fn(),
+  hasMore: false,
+  onMore: vi.fn(),
+  ...overrides,
+});
+
 const renderSection = (overrides: Partial<Parameters<typeof EpisodesSection>[0]> = {}) => {
-  const props = {
-    showMediaId: 7,
-    seasons: [1, 2, 3].map(number => ({ seasonNumber: number, name: `Season ${number}` })),
-    sections: [season(1, [1, 2]), season(2, [1])],
-    loading: false,
-    failedSeasons: [] as number[],
-    progress,
-    fallbackStill: '/backdrop.jpg',
-    onPlay: vi.fn(),
-    onRetrySeason: vi.fn(),
-    hasMore: false,
-    onMore: vi.fn(),
-    ...overrides,
-  };
+  const props = renderProps(overrides);
   render(<EpisodesSection {...props} />);
   return props;
 };
@@ -78,6 +80,28 @@ describe('EpisodesSection', () => {
     expect(screen.getByText(/Failed to load Season 3/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
     expect(props.onRetrySeason).toHaveBeenCalledWith(3);
+  });
+
+  it('loads the next season when scrolled near the end, while there is one', () => {
+    const scrollTo = (hasMore: boolean, scrollTop: number) => {
+      const onNearEnd = vi.fn();
+      const { unmount } = render(<EpisodesSection {...renderProps({ hasMore, onNearEnd })} />);
+      const viewport = screen.getByText('Season 1').closest('[data-mode]') as HTMLElement;
+      Object.defineProperties(viewport, {
+        clientHeight: { configurable: true, value: 500 },
+        scrollHeight: { configurable: true, value: 2000 },
+        scrollTop: { configurable: true, writable: true, value: scrollTop },
+      });
+      fireEvent.scroll(viewport);
+      unmount();
+      return onNearEnd;
+    };
+    // Far from the end: nothing yet
+    expect(scrollTo(true, 200)).not.toHaveBeenCalled();
+    // Within a screen of the end
+    expect(scrollTo(true, 1000)).toHaveBeenCalledTimes(1);
+    // No season after the loaded ones
+    expect(scrollTo(false, 1500)).not.toHaveBeenCalled();
   });
 
   it('shows that more episodes are loading', () => {

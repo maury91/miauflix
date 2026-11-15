@@ -541,9 +541,20 @@ describe('PlayablePreparationService', () => {
     ),
   });
 
+  /** A source whose torrent lists these files. */
+  const withFiles = (
+    id: number,
+    score: number,
+    files: Array<{ path: string; length: number }>
+  ) => ({
+    ...candidate(id, score),
+    size: files.reduce((sum, file) => sum + file.length, 0),
+    file: Buffer.from(JSON.stringify(files)),
+  });
+
   it('skips sources too large for storage and counts only the rest', async () => {
-    const huge = { ...candidate(1, 9), size: 43e9 };
-    const small = { ...candidate(2, 8), size: 4e9 };
+    const huge = withFiles(1, 9, [{ path: 'Movie/movie.mkv', length: 43e9 }]);
+    const small = withFiles(2, 8, [{ path: 'Movie/movie.mkv', length: 4e9 }]);
     const onSourceAttempt = jest.fn();
     const storage = roomFor(10e9);
     const service = new PlayablePreparationService({
@@ -570,10 +581,34 @@ describe('PlayablePreparationService', () => {
     ]);
   });
 
+  it('sizes a movie by its main video, and leaves a source with unknown files to admission', async () => {
+    // The whole pack would not fit, but only its largest video is streamed
+    const pack = withFiles(1, 9, [
+      { path: 'Movie/movie.mkv', length: 8e9 },
+      { path: 'Movie/extras/making-of.mkv', length: 6e9 },
+      { path: 'Movie/movie.srt', length: 1e5 },
+    ]);
+    const unknown = { ...candidate(2, 8), size: 43e9, file: null };
+    const storage = roomFor(10e9);
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: movieService([pack, unknown]) as never,
+      storage: storage as never,
+      targets: movieTargets as never,
+    });
+
+    const prepared = await service.prepare({ kind: 'movie', mediaId: 42 }, warmOptions());
+
+    expect(storage.playbackFits).toHaveBeenCalledWith([{ sourceId: 1, bytes: 8e9 }]);
+    expect(prepared.source).toBe(pack);
+  });
+
   it('reports no room when no source fits, and tries them all when the engine cannot tell', async () => {
     const sources = () => [
-      { ...candidate(1, 9), size: 43e9 },
-      { ...candidate(2, 8), size: 42e9 },
+      withFiles(1, 9, [{ path: 'movie.mkv', length: 43e9 }]),
+      withFiles(2, 8, [{ path: 'movie.mkv', length: 42e9 }]),
     ];
     const prepare = (storage: unknown, list: unknown[]) =>
       new PlayablePreparationService({

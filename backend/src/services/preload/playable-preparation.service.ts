@@ -20,7 +20,7 @@ import {
 import type { SourceService } from '@services/source/source.service';
 import { isUsableSource } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
-import { isVideoFile } from '@services/source/video-files';
+import { isVideoFile, mainVideoPath } from '@services/source/video-files';
 import {
   madeForOtherLanguage,
   viewerLanguageFirst,
@@ -102,7 +102,8 @@ export interface PlayablePreparationServiceOptions {
 }
 
 /** Stored copies, and whether a playback has room (an engine without the check skips it). */
-type PreparationStorage = Partial<Pick<MediaLoadClientService, 'playbackFits'>> & Pick<MediaLoadClientService, 'getStorageStates'>;
+type PreparationStorage = Partial<Pick<MediaLoadClientService, 'playbackFits'>> &
+  Pick<MediaLoadClientService, 'getStorageStates'>;
 
 /** Shared inline preparation seam for focus, details, and Watch. */
 export class PlayablePreparationService {
@@ -178,8 +179,11 @@ export class PlayablePreparationService {
     }
     if (!sources.some(isUsableSource)) return exhausted(playable);
     if (options.through === 'warm') {
+      // Playback streams only the main video: size by it, once the torrent's files are known
+      const usable = sources.filter(isUsableSource);
+      const fileSizes = await Promise.all(usable.map(source => this.movieFileSize(source)));
       noRoom = await this.withoutRoom(
-        sources.filter(isUsableSource).map(source => ({ sourceId: source.id, bytes: source.size }))
+        usable.map((source, index) => ({ sourceId: source.id, bytes: fileSizes[index] ?? 0 }))
       );
       sources = avoid(sources);
       if (!sources.some(isUsableSource)) return withoutRoomResult(playable);
@@ -629,6 +633,29 @@ export class PlayablePreparationService {
    * Each candidate's episode file size, from its torrent file; null while the torrent is unknown.
    * A season pack's size is the whole season, so it cannot stand for the episode.
    */
+  /**
+   * The length of the movie's main video (the largest video file, as playback picks it), or null
+   * while the torrent's files are unknown: fetching them is left to playback.
+   */
+  private async movieFileSize(source: ContentSource): Promise<number | null> {
+    if (!source.file) return null;
+    const key = `${source.id}:movie`;
+    let size = this.episodeFileSizeCache.get(key);
+    if (size === undefined) {
+      try {
+        const files = (await parseTorrent(source.file)).files ?? [];
+        const path = mainVideoPath(files);
+        size = files.find(file => file.path === path)?.length ?? null;
+      } catch {
+        size = null;
+      }
+      if (this.episodeFileSizeCache.size >= EPISODE_FILE_SIZES_LIMIT)
+        this.episodeFileSizeCache.clear();
+      this.episodeFileSizeCache.set(key, size);
+    }
+    return size;
+  }
+
   private async episodeFileSizes(matches: EpisodeSource[]): Promise<PlayedSize> {
     const sizes = new Map<number, number | null>();
     for (const match of matches) {

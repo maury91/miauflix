@@ -20,6 +20,9 @@ import * as styles from './mediaDetails.css';
 
 import NoSourceIcon from '~icons/mdi/video-off-outline';
 
+/** Scrolling within this many screens of the end of the loaded seasons loads the next one. */
+const LOAD_NEXT_WITHIN_SCREENS = 1;
+
 /** The episodes' navigation group: one vertical column across the loaded seasons. */
 export const EPISODES_GROUP = 'details-episodes';
 
@@ -40,6 +43,8 @@ interface EpisodesSectionProps {
   /** A season after the last loaded one exists: Down past the last episode loads it. */
   hasMore: boolean;
   onMore: (request: MoreRequest) => void;
+  /** Scrolled (wheel, touch, scrollbar) close to the end of the loaded seasons. */
+  onNearEnd?: () => void;
   /** Availability pushed over realtime by playable key; newer than the season response. */
   pushedAvailability?: Readonly<Record<string, 'available' | 'pending' | 'unavailable'>>;
 }
@@ -60,16 +65,26 @@ export function EpisodesSection({
   onRetrySeason,
   hasMore,
   onMore,
+  onNearEnd,
   pushedAvailability = {},
 }: EpisodesSectionProps) {
   const headingId = useId();
+  // Pointer users scroll without moving focus: near the end, the next season loads too
+  const handleScroll = (viewport: HTMLDivElement) => {
+    if (
+      hasMore &&
+      viewport.scrollTop + viewport.clientHeight >=
+        viewport.scrollHeight - viewport.clientHeight * LOAD_NEXT_WITHIN_SCREENS
+    )
+      onNearEnd?.();
+  };
   return (
     <section className={styles.episodes} aria-labelledby={headingId}>
       <Heading level={2} id={headingId}>
         Episodes
       </Heading>
       <div className={styles.episodeScroll}>
-        <ScrollArea>
+        <ScrollArea onScroll={onNearEnd ? handleScroll : undefined}>
           <FocusGroup id={EPISODES_GROUP} layout="vertical" more={{ end: hasMore }} onMore={onMore}>
             {sections.map(section => {
               const seasonHeadingId = `${headingId}-season-${section.seasonNumber}`;

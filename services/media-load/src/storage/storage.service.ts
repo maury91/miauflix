@@ -60,6 +60,7 @@ const FILESYSTEM_HEADROOM_BYTES = 256n * 1024n * 1024n;
 
 /** Name prefix of the allocation probe's temporary file in the download directory. */
 const ALLOCATION_PROBE_PREFIX = '.allocation-probe-';
+const SQLITE_SIDECAR_SUFFIXES = ['-wal', '-shm', '-journal'];
 
 /** Speculative admission may evict storage held only by warmups and watchlist downloads. */
 const SPECULATIVE_EVICTION_RANK = CLAIM_RANK.watchlist;
@@ -164,9 +165,14 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       for (const entry of entries) {
         // Another check of the allocation mode may be writing its probe right now
         if (owned.has(entry) || entry.startsWith(ALLOCATION_PROBE_PREFIX)) continue;
-        // The database itself may live in the download directory
+        // The database itself, and its SQLite sidecars (-wal holds uncheckpointed commits), may
+        // live in the download directory
         const entryPath = join(downloadPath, entry);
-        if (this.databaseFile === entryPath || this.databaseFile.startsWith(entryPath + sep))
+        if (
+          this.databaseFile === entryPath ||
+          SQLITE_SIDECAR_SUFFIXES.some(suffix => this.databaseFile + suffix === entryPath) ||
+          this.databaseFile.startsWith(entryPath + sep)
+        )
           continue;
         try {
           await rm(entryPath, { recursive: true, force: true });
@@ -1095,7 +1101,9 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       // Its own reservation is replaced, not added to; its own data is kept, not evicted
       const budgetRoom = budget + (own && ownPinned ? chargeOf(own) : 0);
       const diskRoom = disk - (own && !ownPinned ? ownAllocated : 0);
-      return needed <= budgetRoom && needed - ownAllocated <= diskRoom;
+      // Headroom guards new allocation only: a source that already holds its file needs no disk
+      const additional = needed - ownAllocated;
+      return needed <= budgetRoom && (additional <= 0 || additional <= diskRoom);
     });
   }
 

@@ -1,3 +1,6 @@
+import * as fsPromises from 'node:fs/promises';
+
+import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -5,6 +8,17 @@ import path from 'path';
 import { createSource, mockEngineModules, testConfig, testDatabase } from '../helpers/engine';
 
 mockEngineModules();
+
+/** Free bytes `statfs` reports; null reports the real filesystem. */
+let freeBytes: number | null = null;
+const realStatfs = fsPromises.statfs;
+mock.module('node:fs/promises', () => ({
+  ...fsPromises,
+  statfs: async (...args: Parameters<typeof realStatfs>) => {
+    const result = await realStatfs(...args);
+    return freeBytes === null ? result : { ...result, bsize: 1, bavail: freeBytes };
+  },
+}));
 
 const { StorageService } = await import('../../src/storage/storage.service');
 
@@ -22,6 +36,7 @@ describe('StorageService.playbackFits', () => {
   });
 
   afterEach(() => {
+    freeBytes = null;
     database?.close();
     fs.rmSync(downloadPath, { recursive: true, force: true });
   });
@@ -93,5 +108,21 @@ describe('StorageService.playbackFits', () => {
     expect(await storageService.playbackFits([{ sourceId: other, bytes }])).toEqual([true]);
     config.set('STORAGE_PAD_FILE_SIZES', true);
     expect(await storageService.playbackFits([{ sourceId: other, bytes }])).toEqual([false]);
+  });
+
+  it('keeps a stored file playable when the disk is below headroom', async () => {
+    const { storageService, stored } = await setup();
+    const other = (await createSource(database)).id;
+    // The stored source holds its whole file
+    fs.mkdirSync(path.join(downloadPath, 'stored'));
+    fs.writeFileSync(path.join(downloadPath, 'stored', 'movie.mkv'), Buffer.alloc(6 * MB));
+    await storageService.reconcileAllocation(stored);
+    // Less free space than the 256 MiB headroom: nothing new can be allocated...
+    freeBytes = 128 * MB;
+    expect(await storageService.playbackFits([{ sourceId: other, bytes: MB }])).toEqual([false]);
+    // ...but the stored source already holds its file and needs no new room
+    expect(await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB }])).toEqual([
+      true,
+    ]);
   });
 });

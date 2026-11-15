@@ -378,6 +378,15 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
 
   // Where focus starts: back on the episode left for the player, else the opening season (shows)
   // or the main action (movies). Shows wait for their seasons and episodes to mount.
+  // Focus moved by the user while the show loads (to Back, say) is theirs to keep: where focus
+  // was on opening is the origin, recorded once the screen's scope has taken it.
+  const { getActiveId } = useNavigation();
+  const initialFocusFrom = useRef<string | null>(null);
+  useEffect(() => {
+    initialFocusFrom.current = getActiveId();
+    // Once, on opening
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const initialFocusAsked = useRef(false);
   useEffect(() => {
     if (initialFocusAsked.current || media._type !== 'tvshow' || initialSeason === undefined)
@@ -385,15 +394,25 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
     initialFocusAsked.current = true;
     if (activeSeasonNumber === null)
       dispatch(detailsNavigationActions.setActiveSeasonNumber(initialSeason));
+    // The remembered episode's season may not be the opening one: load it so its episode mounts
+    if (selectedEpisode) requestSeason(selectedEpisode.seasonNumber);
     focusWhenReady(
       selectedEpisode
         ? episodeNavId(selectedEpisode.seasonNumber, selectedEpisode.episodeNumber)
-        : seasonNavId(activeSeasonNumber ?? initialSeason)
+        : seasonNavId(activeSeasonNumber ?? initialSeason),
+      initialFocusFrom.current
     );
-  }, [activeSeasonNumber, dispatch, focusWhenReady, initialSeason, media._type, selectedEpisode]);
+  }, [
+    activeSeasonNumber,
+    dispatch,
+    focusWhenReady,
+    initialSeason,
+    media._type,
+    requestSeason,
+    selectedEpisode,
+  ]);
 
   // Choosing a season loads it, then focus goes to its episode to watch next
-  const { getActiveId } = useNavigation();
   const [jumpToSeason, setJumpToSeason] = useState<{
     seasonNumber: number;
     from: string | null;
@@ -735,6 +754,7 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
                       onRetrySeason={retrySeason}
                       hasMore={!!nextSeason}
                       onMore={loadNextSeason}
+                      onNearEnd={loadNextSeason}
                       pushedAvailability={pushedEpisodeAvailability}
                     />
                   ) : undefined

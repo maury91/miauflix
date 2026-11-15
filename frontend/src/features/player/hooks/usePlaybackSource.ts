@@ -84,6 +84,8 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
         : createdSession && { ...createdSession, streamUrl: backendUrl(createdSession.streamUrl) },
     [createdSession, deliveredUpdate]
   );
+  /** The probe ended without a delivery: the direct stream is all there will be. */
+  const probeGaveUp = deliveryUpdate?.type === 'unprobed';
   /** The direct stream failed before the probe said how this file must be delivered. */
   const directFailedWhilePending = useRef(false);
   /**
@@ -210,13 +212,14 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
       return;
     }
     // The browser may reject an unprobed file whose audio needs transcoding;
-    // the pending delivery decides whether that is a real failure.
-    if (session?.deliveryPending) {
+    // the pending delivery decides whether that is a real failure. A probe that gave up
+    // (`unprobed`) brings no delivery: nothing is pending any more.
+    if (session?.deliveryPending && !probeGaveUp) {
       directFailedWhilePending.current = true;
       return;
     }
     failSource();
-  }, [failSource, releasePicture, session?.deliveryPending]);
+  }, [failSource, probeGaveUp, releasePicture, session?.deliveryPending]);
 
   /** The probe decided how the file is delivered: settle a direct-stream failure seen meanwhile. */
   const settlePendingFailure = useCallback(

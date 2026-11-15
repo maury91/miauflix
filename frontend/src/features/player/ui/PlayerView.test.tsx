@@ -899,6 +899,30 @@ describe('PlayerView', () => {
     expect(createSession.mock.lastCall?.[0].avoidSourceIds).toEqual([session.source.id]);
   });
 
+  it('moves to the next source when the stream fails after the probe gave up', async () => {
+    createSession.mockReturnValue({
+      unwrap: () => Promise.resolve({ ...session, deliveryPending: true }),
+    });
+    const { store } = render(
+      <PlayerView playable={playable} title="Unprobed fixture" onBack={vi.fn()} />
+    );
+    const video = (await screen.findByLabelText('Unprobed fixture')) as HTMLVideoElement;
+    await waitFor(() => expect(video.getAttribute('src')).toBe('/api/stream/streaming-key'));
+    act(() => {
+      store.dispatch(
+        realtimeActions.playbackDeliveryReceived({
+          type: 'playback-delivery',
+          playbackId: session.playbackId,
+          update: { type: 'unprobed' },
+        })
+      );
+    });
+    // No delivery will come: the failure is final at once, not held
+    fireEvent.error(video);
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+    expect(createSession.mock.lastCall?.[0].avoidSourceIds).toEqual([session.source.id]);
+  });
+
   it('resumes converted audio on the full movie timeline and reports original progress', async () => {
     resumeEntry.current = {
       playable,

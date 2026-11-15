@@ -101,4 +101,38 @@ describe('StorageService.removeUnknownDownloads with the database in the downloa
       fs.rmSync(downloadPath, { recursive: true, force: true });
     }
   });
+
+  it('keeps the database and its SQLite sidecars when it sits in the download directory', async () => {
+    const downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauflix-downloads-'));
+    try {
+      const [{ MediaLoadDatabase, openDatabase }, { Encryption }] = await Promise.all([
+        import('../../src/db/database'),
+        import('../../src/lib/encryption'),
+      ]);
+      const databaseFile = path.join(downloadPath, 'media-load.sqlite');
+      const database = new MediaLoadDatabase(
+        openDatabase(databaseFile),
+        new Encryption(TEST_SETTINGS.SOURCE_SECURITY_KEY)
+      );
+      const storageService = new StorageService(
+        database,
+        testConfig({ DOWNLOAD_PATH: downloadPath, DOWNLOAD_PATH_EXCLUSIVE: true })
+      );
+      await storageService.reload();
+      new StorageImporter(database).seal();
+      fs.writeFileSync(`${databaseFile}-journal`, 'x');
+      fs.writeFileSync(path.join(downloadPath, 'stray-file'), 'x');
+
+      expect(await storageService.removeUnknownDownloads()).toBe(1);
+      expect(fs.readdirSync(downloadPath).sort()).toEqual([
+        'media-load.sqlite',
+        'media-load.sqlite-journal',
+        'media-load.sqlite-shm',
+        'media-load.sqlite-wal',
+      ]);
+      database.db.close();
+    } finally {
+      fs.rmSync(downloadPath, { recursive: true, force: true });
+    }
+  });
 });
