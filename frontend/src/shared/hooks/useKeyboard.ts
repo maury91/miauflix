@@ -1,6 +1,8 @@
 import type { MutableRefObject } from 'react';
 import { useEffect, useRef } from 'react';
 
+import { isEditable } from '../navigation/dom';
+
 /** What a key means to the app, whether it came from a keyboard or a TV remote. */
 export type KeyboardAction =
   | 'left'
@@ -234,9 +236,15 @@ function restoreFocus(): boolean {
 }
 let listening = false;
 
-/** Identify text-editable elements and native inputs, textareas, or selects whose keys need native handling. */
+/**
+ * Identify text-editable elements and native inputs, textareas, or selects whose keys need native
+ * handling. While the navigation layer owns focus, only text editing and selects keep the keys
+ * (its `isEditable`): a range, checkbox or radio is navigated like a button, and a Slider adjusts
+ * its own value before the keys get here.
+ */
 function isNativeEditingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
+  if (virtualFocusOwners > 0) return isEditable(target) || target instanceof HTMLSelectElement;
   return (
     target.isContentEditable ||
     target instanceof HTMLInputElement ||

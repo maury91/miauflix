@@ -48,7 +48,8 @@ describe('legacyChromiumPostcss', () => {
   it('replaces flex gap with margins between the children', () => {
     expect(legacy('.a{display:flex;gap:1rem}')).toBe(
       '.a{display:flex}.a>:not(:last-child){margin-right:1rem}' +
-        '[dir="rtl"] .a>:not(:last-child){margin-right:0;margin-left:1rem}'
+        '[dir="rtl"] .a>:not(:last-child){margin-right:0;margin-left:1rem}' +
+        '[dir="rtl"] [dir="ltr"] .a>:not(:last-child){margin-left:0;margin-right:1rem}'
     );
     expect(legacy('.a{display:flex;flex-direction:column;row-gap:2vh}')).toBe(
       '.a{display:flex;flex-direction:column}.a>:not(:last-child){margin-bottom:2vh}'
@@ -62,7 +63,8 @@ describe('legacyChromiumPostcss', () => {
   it('adds rules inside the same media query and leaves keyframes alone', () => {
     expect(legacy('@media (min-width:1px){.a{display:flex;gap:1px}}')).toBe(
       '@media (min-width:1px){.a{display:flex}.a>:not(:last-child){margin-right:1px}' +
-        '[dir="rtl"] .a>:not(:last-child){margin-right:0;margin-left:1px}}'
+        '[dir="rtl"] .a>:not(:last-child){margin-right:0;margin-left:1px}' +
+        '[dir="rtl"] [dir="ltr"] .a>:not(:last-child){margin-left:0;margin-right:1px}}'
     );
     expect(legacy('@keyframes k{from{opacity:0}to{opacity:1}}')).toBe(
       '@keyframes k{from{opacity:0}to{opacity:1}}'

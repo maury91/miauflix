@@ -48,6 +48,7 @@ import { stepAction } from './menu/menuItems';
 import { Message } from './message/Message';
 import { NavItem, NavRail } from './nav-rail/NavRail';
 import { Popover } from './popover/Popover';
+import { isTopPopover, pushPopover } from './popover/popoverStack';
 import { ProgressBar, ProgressSpinner } from './progress/Progress';
 import { ProgressButton } from './progress-button/ProgressButton';
 import { revealOffset } from './scroll-area/revealOffset';
@@ -1161,7 +1162,11 @@ describe('Review fixes', () => {
     document.body.style.overflow = '';
   });
 
-  it('cycles Tab inside the topmost dialog', () => {
+  it('cycles Tab inside the topmost dialog, over what Tab can reach', () => {
+    // jsdom lays nothing out: rendered elements get one client rect, a hidden one none
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(function (this: Element) {
+      return (this.closest('[data-unrendered]') ? [] : [{}]) as unknown as DOMRectList;
+    });
     render(
       <Dialog
         open
@@ -1171,6 +1176,14 @@ describe('Review fixes', () => {
             <Button>Keep</Button>
             <Button>Remove</Button>
             <input type="hidden" name="intent" value="remove" />
+            {/* After the last visible button: not rendered, out of the order, or inert */}
+            <span data-unrendered>
+              <Button>Hidden</Button>
+            </span>
+            <span tabIndex={-1}>Not in the order</span>
+            <span inert>
+              <Button>Inert</Button>
+            </span>
           </>
         }
       />
@@ -1182,6 +1195,7 @@ describe('Review fixes', () => {
     expect(keep).toHaveFocus();
     fireEvent.keyDown(keep, { key: 'Tab', shiftKey: true });
     expect(remove).toHaveFocus();
+    vi.restoreAllMocks();
   });
 
   it('spends Escape on a tooltip before the dialog around it', () => {
@@ -1526,6 +1540,12 @@ describe('Carousel', () => {
     expect(revealItem({ focused: 0, leading: 0 }, 9, layout)).toEqual({ focused: 9, leading: 6 });
   });
 
+  it('clamps the leading item when the count shrinks or the page grows', () => {
+    const layout = { count: 5, perPage: 4, paging: 'item' as const };
+    expect(revealItem({ focused: 4, leading: 6 }, 4, layout)).toEqual({ focused: 4, leading: 1 });
+    expect(revealItem({ focused: 1, leading: 3 }, 1, layout)).toEqual({ focused: 1, leading: 1 });
+  });
+
   it('mounts the items near the visible ones and locks the pointer while the track moves', () => {
     vi.useFakeTimers();
     const geometry = { itemWidth: 100, gap: 10, perPage: 3, peek: 50, contentWidth: 320 };
@@ -1599,6 +1619,12 @@ describe('Slider', () => {
     // The highest value on the grid when the maximum is off it
     expect(snapSliderValue(100, { min: 0, max: 10, step: 3 })).toBe(9);
     expect(snapSliderValue(Number.NaN, range)).toBe(0);
+  });
+
+  it('finds the top of the grid without floating-point drift', () => {
+    expect(snapSliderValue(1, { min: 0, max: 0.3, step: 0.1 })).toBe(0.3);
+    expect(snapSliderValue(9, { min: 0.5, max: 2.5, step: 1 })).toBe(2.5);
+    expect(stepSliderValue(1.5, 1, { min: 0.5, max: 2.5, step: 1 })).toBe(2.5);
   });
 
   it('owns Left/Right while focused, clamping instead of exiting, and leaves Up/Down', () => {
@@ -1871,6 +1897,18 @@ describe('Section', () => {
 });
 
 describe('Popover', () => {
+  it('keeps a nested popover above its parent whatever order they open in', () => {
+    const parent = Symbol('parent');
+    const child = Symbol('child');
+    // React runs the child's effects first
+    const popChild = pushPopover(child, parent);
+    const popParent = pushPopover(parent);
+    expect(isTopPopover(child)).toBe(true);
+    popChild();
+    expect(isTopPopover(parent)).toBe(true);
+    popParent();
+  });
+
   const renderPopover = (
     props: Partial<Parameters<typeof Popover>[0]> & { onDismiss: () => void },
     outside?: () => void

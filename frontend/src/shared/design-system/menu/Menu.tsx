@@ -85,6 +85,11 @@ export function Menu({
     menu?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
+      // Tab moves DOM focus on (desktop keyboards): let it, and stop owning the keys
+      if (event.key === 'Tab') {
+        closeRef.current();
+        return;
+      }
       const keyAction = getKeyboardAction(event);
       if (!keyAction) return;
       if (!['up', 'down', 'left', 'right', 'confirm', 'back'].includes(keyAction)) return;
@@ -107,11 +112,19 @@ export function Menu({
         closeRef.current();
       }
     };
+    // DOM focus leaving the menu (assistive technology, a script) closes it too, so its keys never
+    // act on what has focus now
+    const onFocusOut = (event: FocusEvent) => {
+      const next = event.relatedTarget;
+      if (next instanceof Node && !rootRef.current?.contains(next)) closeRef.current();
+    };
     window.addEventListener('keydown', onKeyDown, true);
     document.addEventListener('mousedown', onPointerDown, true);
+    menu?.addEventListener('focusout', onFocusOut);
     return () => {
       window.removeEventListener('keydown', onKeyDown, true);
       document.removeEventListener('mousedown', onPointerDown, true);
+      menu?.removeEventListener('focusout', onFocusOut);
       // DOM focus returns to the trigger (the menu is gone, so focus was left on the body)
       const focused = document.activeElement;
       if (!focused || focused === document.body || menu?.contains(focused)) {

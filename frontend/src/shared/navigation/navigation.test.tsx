@@ -436,6 +436,27 @@ describe('NavigationProvider', () => {
     expect(focusedText()).toBe('open');
   });
 
+  it('derives the grid column from the cell Tab lands on', () => {
+    render(
+      <NavigationProvider>
+        <FocusScope>
+          <FocusGroup layout="grid" columns={2}>
+            {['a', 'b', 'c', 'd', 'e', 'f'].map(id => (
+              <Item key={id} id={id} />
+            ))}
+          </FocusGroup>
+        </FocusScope>
+      </NavigationProvider>
+    );
+    press('ArrowRight');
+    expect(focusedText()).toBe('b');
+    press('Tab');
+    expect(focusedText()).toBe('c');
+    // Not the column kept from b
+    press('ArrowDown');
+    expect(focusedText()).toBe('e');
+  });
+
   it('enters edit mode on Confirm and leaves it on Back before anything else', () => {
     function Field() {
       const { ref, focused, onMouseMove } = useFocusable<HTMLInputElement>('email');

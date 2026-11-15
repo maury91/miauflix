@@ -1,7 +1,13 @@
 import { claimVirtualFocus, useKeyboard } from '@shared/hooks/useKeyboard';
 import { type ReactNode, useEffect, useId, useLayoutEffect, useState } from 'react';
 
-import { type ChildOptions, ParentContext, StoreContext, useNode, useStore } from './context';
+import {
+  type ChildOptions,
+  ParentContext,
+  StoreContext,
+  useNode,
+  useOptionalStore,
+} from './context';
 import { createNavigationStore } from './store';
 import type { Direction, EdgePolicy, EntryPolicy, GroupLayout } from './types';
 
@@ -75,6 +81,7 @@ export function FocusGroup({ id: idProp, children, ...options }: FocusGroupProps
   const ownId = useId();
   const id = idProp ?? ownId;
   useNode(id, 'group', options);
+  if (!useOptionalStore()) return children;
   return <ParentContext.Provider value={id}>{children}</ParentContext.Provider>;
 }
 
@@ -97,7 +104,8 @@ export interface FocusScopeProps {
 
 /**
  * A page, pane or overlay boundary. A root scope takes focus when nothing has it; a contained
- * scope takes it on open and gives it back to its opener on close.
+ * scope takes it on open and gives it back to its opener on close. Like FocusGroup, it only
+ * renders its children without a NavigationProvider.
  */
 export function FocusScope({
   id: idProp,
@@ -108,7 +116,7 @@ export function FocusScope({
   autoFocus = false,
   children,
 }: FocusScopeProps) {
-  const store = useStore();
+  const store = useOptionalStore();
   const ownId = useId();
   const id = idProp ?? ownId;
   useNode(id, 'scope', {
@@ -120,15 +128,20 @@ export function FocusScope({
 
   // After the children registered (their layout effects run first)
   useLayoutEffect(() => {
+    if (!store) return;
     const close = contain ? store.pushScope(id) : undefined;
     const active = store.getActiveId();
-    // A nested overlay open from the start already took focus inside this scope
-    const take = contain ? !store.activeWithin(id) : autoFocus || active === null;
+    // A nested overlay open from the start already took focus inside this scope, and keeps it
+    // over this scope's own autoFocus
+    const take = contain
+      ? !store.activeWithin(id)
+      : (autoFocus && !store.scopeOpenWithin(id)) || active === null;
     if (take) store.focus(id);
     return close;
     // Opening and closing only; the initial target is read once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store, id, contain]);
 
+  if (!store) return children;
   return <ParentContext.Provider value={id}>{children}</ParentContext.Provider>;
 }

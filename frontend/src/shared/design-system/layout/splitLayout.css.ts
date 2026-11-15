@@ -61,7 +61,10 @@ const paneSideBySide = (from: SideBySideClass): StyleRule => {
   for (const [name, value] of Object.entries(space)) {
     const end = `${split}[data-gap="${name}"] > &[data-pane="end"]`;
     rules[end] = { marginTop: 0, marginLeft: value };
-    rules[`[dir="rtl"] ${end}`] = { marginLeft: 0, marginRight: value };
+    const mirrored = { marginLeft: 0, marginRight: value };
+    // Right-to-left from an ancestor, or set on the split itself
+    rules[`[dir="rtl"] ${end}`] = mirrored;
+    rules[`${split}[dir="rtl"][data-gap="${name}"] > &[data-pane="end"]`] = mirrored;
   }
   return { selectors: rules };
 };

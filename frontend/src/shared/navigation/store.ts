@@ -311,6 +311,9 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
       next = backward ? leaves.length - 1 : 0;
     }
     const target = registrations.get(leaves[next].id)!.node;
+    // Keys took over: the pointer resting here is not movement, and no grid column is kept
+    pointerAnchor = pointer;
+    gridColumns.clear();
     setActive(target.id, target.parts?.[0], 'key');
     return true;
   }
@@ -465,6 +468,11 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     isActive: (id: string) => activeId === id,
     /** Whether the focused leaf is inside a node. */
     activeWithin: (id: string) => activeId !== null && isWithin(tree(), activeId, id),
+    /** Whether an overlay scope inside this node is open (it owns focus until it closes). */
+    scopeOpenWithin: (id: string) => {
+      const view = tree();
+      return scopes.some(scope => scope.id !== id && isWithin(view, scope.id, id));
+    },
     activePartOf: (id: string) => (activeId === id ? activePart : undefined),
     getActiveId: () => activeId,
     subscribe(id: string, listener: () => void) {

@@ -24,7 +24,9 @@ export function useFocusable<E extends HTMLElement = HTMLElement>(
   useNode(id, 'leaf', options, () => elementRef.current);
   const focused = useSyncExternalStore(
     useCallback(listener => store.subscribe(id, listener), [store, id]),
-    () => store.isActive(id)
+    () => store.isActive(id),
+    // Server render: nothing is focused before hydration
+    () => false
   );
   return {
     ref: useCallback((element: E | null) => {
@@ -58,7 +60,8 @@ export function useComposite<E extends HTMLElement = HTMLElement>(
   useNode(id, 'leaf', { ...options, parts }, () => elementRef.current);
   const focusedPart = useSyncExternalStore(
     useCallback(listener => store.subscribe(id, listener), [store, id]),
-    () => store.activePartOf(id)
+    () => store.activePartOf(id),
+    () => undefined
   );
   return {
     ref: useCallback((element: E | null) => {

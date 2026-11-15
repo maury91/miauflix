@@ -13,31 +13,42 @@ export function useStore(): NavigationStore {
   return store;
 }
 
+/** The store when a NavigationProvider is above; library components work without one too. */
+export function useOptionalStore(): NavigationStore | null {
+  return useContext(StoreContext);
+}
+
 export type NodeOptions = Omit<NavigationNode, 'id' | 'parent' | 'kind'>;
 
-/** Registers a node under the enclosing group for as long as it is mounted. */
+/**
+ * Registers a node under the enclosing group for as long as it is mounted. Nothing registers
+ * without a provider (a component used on its own).
+ */
 export function useNode(
   id: string,
   kind: NavigationNode['kind'],
   options: NodeOptions,
   element?: () => HTMLElement | null
-): NavigationNode {
-  const store = useStore();
+): void {
+  const store = useOptionalStore();
   const parent = useContext(ParentContext);
   const node: NavigationNode = { id, parent, kind, ...options };
   const nodeRef = useRef(node);
-  nodeRef.current = node;
   const elementRef = useRef(element);
-  elementRef.current = element;
 
-  useLayoutEffect(
-    () => store.register(nodeRef.current, () => elementRef.current?.() ?? null),
-    [store, id, parent]
-  );
+  // Published on commit, never during render (a discarded render must not leave its closures);
+  // declared first, so a re-registration below reads this commit's node
   useLayoutEffect(() => {
-    store.update(nodeRef.current);
+    nodeRef.current = node;
+    elementRef.current = element;
   });
-  return node;
+  useLayoutEffect(() => {
+    if (!store) return;
+    return store.register(nodeRef.current, () => elementRef.current?.() ?? null);
+  }, [store, id, parent]);
+  useLayoutEffect(() => {
+    if (store) store.update(nodeRef.current);
+  });
 }
 
 export interface ChildOptions {

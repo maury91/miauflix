@@ -1,11 +1,18 @@
 /** Focus helpers shared by the overlays (Dialog, Popover). */
 
 const tabbable =
-  'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]';
+
+/** What Tab can actually reach: rendered, not inert or hidden, and not taken out of the order. */
+const reachable = (element: HTMLElement) =>
+  element.tabIndex >= 0 &&
+  !element.closest('[inert], [hidden]') &&
+  element.getClientRects().length > 0 &&
+  getComputedStyle(element).visibility !== 'hidden';
 
 /** Tab and Shift+Tab cycle inside `panel` (desktop keyboards; TV remotes have no Tab). */
 export function containTab(event: KeyboardEvent, panel: HTMLElement) {
-  const items = Array.from(panel.querySelectorAll<HTMLElement>(tabbable));
+  const items = Array.from(panel.querySelectorAll<HTMLElement>(tabbable)).filter(reachable);
   if (items.length === 0) {
     event.preventDefault();
     panel.focus({ preventScroll: true });

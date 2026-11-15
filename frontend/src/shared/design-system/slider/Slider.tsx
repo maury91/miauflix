@@ -1,5 +1,5 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef } from 'react';
 
 import { joinIds } from '../ids';
 import { useSurfaceContext } from '../surface';
@@ -102,7 +102,10 @@ export function Slider({
   const share = sliderShare(current, range);
 
   const latest = useRef({ current, range, keyStep, onChange });
-  latest.current = { current, range, keyStep, onChange };
+  // Published on commit: the key handler never reads a render React discarded
+  useLayoutEffect(() => {
+    latest.current = { current, range, keyStep, onChange };
+  });
 
   // Component-intrinsic keys come before navigation (style guide, section 10)
   useEffect(() => {
@@ -110,9 +113,19 @@ export function Slider({
     const onKeyDown = (event: KeyboardEvent) => {
       const keyAction = getKeyboardAction(event);
       if (keyAction !== 'left' && keyAction !== 'right') return;
+      const root = rootRef.current;
+      // Another native control has DOM focus (Tab moved it there): its keys are its own
+      const target = event.target;
+      const otherControl =
+        target instanceof HTMLElement &&
+        !root?.contains(target) &&
+        (target instanceof HTMLInputElement ||
+          target instanceof HTMLSelectElement ||
+          target instanceof HTMLTextAreaElement ||
+          target.isContentEditable);
+      if (otherControl) return;
       event.preventDefault();
       event.stopPropagation();
-      const root = rootRef.current;
       const rtl = root ? getComputedStyle(root).direction === 'rtl' : false;
       const towardEnd = (keyAction === 'right') !== rtl;
       const { current, range, keyStep, onChange } = latest.current;

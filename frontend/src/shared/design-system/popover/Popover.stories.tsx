@@ -1,5 +1,6 @@
+import { getKeyboardAction } from '@shared/hooks/useKeyboard';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
@@ -48,15 +49,33 @@ const tracks = [
 function AudioPopover() {
   const [open, setOpen] = useState(false);
   const [track, setTrack] = useState('en');
-  const [active, setActive] = useState('en');
-  const grid = open ? [['list'], ['done']] : [['audio', 'next']];
+  const [nextPresses, setNextPresses] = useState(0);
+  // Each track is a row of its own, so Up/Down move through them before reaching Done
+  const grid = open
+    ? [...tracks.map(item => [`track:${item.value}`]), ['done']]
+    : [['audio', 'next']];
   const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus(grid, 'audio');
+  const activeTrack = focusedId.startsWith('track:') ? focusedId.slice('track:'.length) : null;
+
+  // Confirm on a track selects it: the list owns no keys, its owner does
+  const latestTrack = useRef(activeTrack);
+  latestTrack.current = activeTrack;
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const value = latestTrack.current;
+      if (value === null || getKeyboardAction(event) !== 'confirm') return;
+      event.preventDefault();
+      event.stopPropagation();
+      setTrack(value);
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, []);
 
   const show = (next: boolean) => {
     setOpen(next);
     // The navigation layer enters the popover's group, and restores the trigger on close
-    focus(next ? 'list' : 'audio');
-    if (next) setActive(track);
+    focus(next ? `track:${track}` : 'audio');
   };
 
   return (
@@ -85,12 +104,9 @@ function AudioPopover() {
               labelledBy="audio-tracks-label"
               items={tracks}
               value={track}
-              activeValue={isFocused('list') ? active : null}
+              activeValue={activeTrack}
               onSelect={value => setTrack(value)}
-              onPointerActivate={value => {
-                setActive(value);
-                focus('list');
-              }}
+              onPointerActivate={value => focus(`track:${value}`)}
             />
             <span id="audio-tracks-label" hidden>
               Audio tracks
@@ -105,12 +121,16 @@ function AudioPopover() {
             </Button>
           </Stack>
         </Popover>
-        <Button focused={isFocused('next')} onMouseMove={() => focus('next')}>
+        <Button
+          focused={isFocused('next')}
+          onMouseMove={() => focus('next')}
+          onClick={() => setNextPresses(count => count + 1)}
+        >
           Next episode
         </Button>
       </Stack>
       <p style={{ color: color.textSecondary, fontFamily, fontSize: typeScale.caption.fontSize }}>
-        {`Focused: ${focusedId} · Track: ${track}`}
+        {`Focused: ${focusedId} · Track: ${track} · Next episode pressed: ${nextPresses}`}
       </p>
     </div>
   );
@@ -138,10 +158,22 @@ export const Modal: Story = {
     await expect(trigger).toHaveAttribute('data-focused');
     await expect(trigger).toHaveFocus();
 
+    // The tracks by keys: Down moves through them, Confirm selects one
+    await userEvent.keyboard('{Enter}');
+    await expect(canvas.getByRole('option', { name: 'English · 5.1' })).toHaveAttribute(
+      'data-active'
+    );
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    const italian = canvas.getByRole('option', { name: 'Italian · Stereo' });
+    await expect(italian).toHaveAttribute('aria-selected', 'true');
+    await expect(canvas.getByText(/Track: it/)).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+
     // An outside press closes it and does not reach the button underneath
     await userEvent.click(trigger);
     await userEvent.click(canvas.getByRole('button', { name: 'Next episode' }));
     await expect(canvas.queryByRole('dialog')).toBeNull();
+    await expect(canvas.getByText(/Next episode pressed: 0/)).toBeInTheDocument();
   },
 };
 

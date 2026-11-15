@@ -248,9 +248,13 @@ export const PagePaging: Story = {
       canvasElement.querySelector('li[data-focused] [id$="-label"]')?.textContent;
     await expect(focusedLabel()).toBe('Popular 1');
     await userEvent.keyboard('{ArrowRight}');
-    // A page further than one item (at least two items fit in the story's window)
-    await waitFor(() => expect(focusedLabel()).not.toBe('Popular 1'));
-    await expect(focusedLabel()).not.toBe('Popular 2');
+    // A page further: the page size depends on the window, and the last page is always full
+    const { perPage } = collectionGeometry({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    const leading = Math.min(perPage, Math.max(0, 14 - perPage));
+    await waitFor(() => expect(focusedLabel()).toBe(`Popular ${leading + 1}`));
   },
 };
 

@@ -14,12 +14,15 @@ const decimals = (value: number) => {
 /** Snaps a value to the range's step grid and clamps it to the limits. */
 export function snapSliderValue(value: number, { min, max, step }: SliderRange): number {
   if (!Number.isFinite(value)) return min;
+  // Fixed to the precision of the step and `min`, so 0.1 steps never drift to 0.30000000000000004
+  const precision = Math.max(decimals(step), decimals(min));
   const steps = step > 0 ? Math.round((value - min) / step) : 0;
-  // Fixed to the step's precision, so 0.1 steps never drift to 0.30000000000000004
-  const snapped = Number((min + steps * step).toFixed(Math.max(decimals(step), decimals(min))));
-  // The highest value on the grid, when `max` is not on it
-  const top = step > 0 ? min + Math.floor((max - min) / step) * step : max;
-  return Math.min(Math.max(snapped, min), Number(top.toFixed(decimals(step))));
+  const snapped = Number((min + steps * step).toFixed(precision));
+  // The highest value on the grid, when `max` is not on it. The quotient is rounded first, so a
+  // floating-point error (0.3 / 0.1 = 2.9999999999999996) never drops a maximum that is on it
+  const quotient = step > 0 ? Number(((max - min) / step).toFixed(9)) : 0;
+  const top = step > 0 ? min + Math.floor(quotient) * step : max;
+  return Math.min(Math.max(snapped, min), Number(top.toFixed(precision)));
 }
 
 /**

@@ -171,6 +171,11 @@ function Keyboard() {
                 setFocused(index);
                 setColumn(cells[index].column);
               }}
+              // Tab moved DOM focus here (desktop keyboards): Confirm presses this key
+              onFocus={() => {
+                setFocused(index);
+                setColumn(cells[index].column);
+              }}
               onClick={() => press(index)}
             >
               {key.label}

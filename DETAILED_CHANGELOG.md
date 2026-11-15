@@ -45,6 +45,25 @@ Every change in full, for developers and self-hosters. The short version for use
 
 ### Bug fixes
 
+- Design system and navigation layer, from the review of part 2 (neither is used by the app yet):
+  - Tab now clears the kept grid column and anchors the pointer, so the next Down follows the cell Tab reached.
+  - A `FocusScope` with `autoFocus` no longer takes focus from an open contained scope.
+  - `useNode`, `FocusGroup` and `FocusScope` work without a provider.
+  - The hooks have server snapshots.
+  - Overlay Tab cycling skips hidden, inert, unrendered and `tabindex="-1"` elements.
+  - Nested popovers stack above their parent whatever order they open in.
+  - Modal popovers contain focus in a `FocusScope`.
+  - The click after a pointer dismissal is swallowed once, document-wide.
+  - `Menu` closes on Tab and when focus leaves it.
+  - `Carousel` clamps its leading item when the count shrinks or the page size changes.
+  - `ScrollArea` follows focus into added nodes and keeps its position across a mode change.
+  - `Slider`'s top value avoids floating-point drift and keeps `min`'s precision.
+  - `Slider` leaves keys from other native controls alone.
+  - Under virtual focus a range input is no longer treated as text editing.
+  - `Skeleton` ratios use a `::before` spacer.
+  - `Section` actions wrap.
+  - `SplitLayout` gaps mirror in right-to-left text.
+  - The legacy-Chromium gap rewrite resets the gap inside a left-to-right island in right-to-left text.
 - Samsung TVs no longer jump every few seconds while audio is converted: the stall watchdog took a moving playhead with no newly decoded frame for 1 s as a frozen picture and seeked in place (`frozen-seek`), but Tizen 5.5 updates `getVideoPlaybackQuality().totalVideoFrames` in batches of about 48 frames (2 s at 24 fps). A frozen picture now needs 5 s without a new frame.
 - The backend crashed on startup when `CSP_IMAGE_ORIGINS` was unset: configuration transforms do not run on empty values, so `get('CSP_IMAGE_ORIGINS')` returned `''`, which `?? []` let through, and `cspOrigins` called `.map` on it. `createRoutes` now uses `|| []`.
 - media-catalog piled up catalog instances. `CatalogRuntime`'s `activate`, run every time the backend pushes its configuration (each time it connects), built a new `CatalogService` and replaced `ctx.catalog` without stopping the previous one, whose artwork pump, artwork worker thread and background timers kept running. A backend in a restart loop left dozens running in one process: the main thread stayed at 100% CPU, HTTP requests timed out (the backend reported the catalog unavailable) and Bunqueue jobs lost their locks (`Job not found or not in processing state`). `CatalogRuntime` now keeps a single active instance: activation retires the previous one (`stopArtworkBackground`) before installing the next, a rejected configuration leaves the active one serving, and activate, deactivate and stop run one at a time on the runtime's own chain, even for callers that bypass `ServiceConfiguration`'s queue. Testing a configuration only builds a provider. Artwork subscribers are held by the runtime and shared by every instance (`ArtworkSelectionService` takes the set), so the host's `artwork` subscription, made once while the service is ready, keeps receiving updates after a configuration push replaces the instance. A replaced instance is retired for good: a database artwork scan still waiting on a provider request when it is replaced stops instead of resuming, drops the metadata it fetched with the old configuration, and its `ArtworkSelectionService` rejects enqueues and publications, so in-flight work cannot overwrite artwork state or announce it to the shared subscribers. Retirement also cancels the instance's queued background backdrop-focus analyses and refuses new ones (`BackdropFocusService.stopBackground`; running analyses and requests it is still serving finish), so a replaced instance's queue no longer runs alongside the new one's. Cancelled tasks leave the in-flight map at once, so an `ensure` for the same image schedules a fresh analysis instead of receiving the cancellation (the map's cleanup only removes an entry that still belongs to its own task). If the replaced instance fails to shut down, the activation still succeeds and the failure is logged: the replacement is already serving, and reporting failure made the configuration activate yet another instance with the previous values. `ctx.catalog` is never null during a replacement (the new instance is installed in the same step the old one is retired, only the old one's worker-thread shutdown is awaited afterwards), and deactivation and stop drain the queue workers before detaching it: a Bunqueue job that found no catalog was acknowledged without running. sources, media-load and list-service were checked: none builds a new instance on activation.

@@ -1,5 +1,15 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
-import { type ReactNode, type Ref, useEffect, useId, useRef, useState } from 'react';
+import { FocusScope } from '@shared/navigation/NavigationProvider';
+import {
+  createContext,
+  type ReactNode,
+  type Ref,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from 'react';
 
 import { visuallyHidden } from '../a11y.css';
 import { containTab, isEditing } from '../overlayFocus';
@@ -39,6 +49,29 @@ export interface PopoverProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
+/** The enclosing popover, so a nested one stays above it (see popoverStack). */
+const ParentPopoverContext = createContext<symbol | undefined>(undefined);
+
+/**
+ * A modal popover's outside press is swallowed with its click. The click comes after the release,
+ * once the popover may already be gone, so this outlives the popover: it ends with that click, or
+ * just after the release when no click follows (the press moved off its target).
+ */
+function swallowNextClick() {
+  const onClick = (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    stop();
+  };
+  const onRelease = () => window.setTimeout(stop);
+  const stop = () => {
+    document.removeEventListener('click', onClick, true);
+    document.removeEventListener('mouseup', onRelease, true);
+  };
+  document.addEventListener('click', onClick, true);
+  document.addEventListener('mouseup', onRelease, true);
+}
+
 /**
  * An interactive panel next to its trigger: a few settings, a short form, a choice of tracks. Its
  * content is a child group the navigation layer enters; the popover itself handles only closing.
@@ -59,6 +92,7 @@ export function Popover({
   size = 'md',
 }: PopoverProps) {
   const [id] = useState(() => Symbol('popover'));
+  const parent = useContext(ParentPopoverContext);
   const panelId = useId();
   const titleId = `${panelId}-title`;
   const rootRef = useRef<HTMLSpanElement>(null);
@@ -71,8 +105,9 @@ export function Popover({
     if (!open) return;
     const panel = panelRef.current;
     const triggerElement = triggerRef.current;
-    const pop = pushPopover(id);
-    panel?.focus({ preventScroll: true });
+    const pop = pushPopover(id, parent);
+    // The navigation layer may already have mirrored focus onto the first item inside
+    if (!panel?.contains(document.activeElement)) panel?.focus({ preventScroll: true });
     const inside = (target: EventTarget | null) =>
       target instanceof Node && Boolean(rootRef.current?.contains(target));
 
@@ -90,21 +125,14 @@ export function Popover({
       latest.current.onDismiss();
     };
     // Outside presses: a modal popover swallows the press (and its click), a non-modal one lets it act
-    let swallowClick = false;
     const onPointerDown = (event: MouseEvent) => {
       if (!isTopPopover(id) || inside(event.target)) return;
       if (latest.current.modality === 'modal') {
         event.preventDefault();
         event.stopPropagation();
-        swallowClick = true;
+        swallowNextClick();
       }
       latest.current.onDismiss();
-    };
-    const onClick = (event: MouseEvent) => {
-      if (!swallowClick) return;
-      swallowClick = false;
-      event.preventDefault();
-      event.stopPropagation();
     };
     // DOM focus leaving a non-modal popover (Tab, assistive technology) closes it
     const onFocusOut = (event: FocusEvent) => {
@@ -116,13 +144,11 @@ export function Popover({
     // Document capture: after a tooltip's Escape (window capture), before a Dialog's Back (bubble)
     document.addEventListener('keydown', onKeyDown, true);
     document.addEventListener('mousedown', onPointerDown, true);
-    document.addEventListener('click', onClick, true);
     panel?.addEventListener('focusout', onFocusOut);
     return () => {
       pop();
       document.removeEventListener('keydown', onKeyDown, true);
       document.removeEventListener('mousedown', onPointerDown, true);
-      document.removeEventListener('click', onClick, true);
       panel?.removeEventListener('focusout', onFocusOut);
       // DOM focus returns to the trigger when it was inside (or left on the body)
       const focused = document.activeElement;
@@ -130,6 +156,8 @@ export function Popover({
         triggerElement?.focus({ preventScroll: true });
       }
     };
+    // The enclosing popover is fixed for this one's lifetime
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, id]);
 
   return (
@@ -157,7 +185,11 @@ export function Popover({
             <h2 id={titleId} className={hideTitle ? visuallyHidden : styles.title}>
               {title}
             </h2>
-            {children}
+            {/* Modal contains virtual focus (Tab included) and restores the opener; non-modal only
+                takes it */}
+            <FocusScope contain={modality === 'modal'} autoFocus>
+              <ParentPopoverContext.Provider value={id}>{children}</ParentPopoverContext.Provider>
+            </FocusScope>
           </div>
         </SurfaceContextProvider>
       )}

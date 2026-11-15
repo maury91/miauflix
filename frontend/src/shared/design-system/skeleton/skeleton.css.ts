@@ -47,7 +47,9 @@ const selectors: StyleRule['selectors'] = {
   [`${group} &`]: { animation: 'none' },
 };
 for (const [ratio, paddingTop] of Object.entries(ratios)) {
-  selectors[`&[data-ratio="${ratio}"]`] = { height: 0, paddingTop };
+  // On a child, so the percentage resolves against the placeholder's own width, not its parent's
+  // (a given `width` keeps the ratio)
+  selectors[`&[data-ratio="${ratio}"]::before`] = { content: '""', display: 'block', paddingTop };
 }
 for (const [size, side] of Object.entries(avatarSizes)) {
   selectors[`&[data-size="${size}"]`] = { width: side, height: side };

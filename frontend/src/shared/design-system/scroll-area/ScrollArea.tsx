@@ -72,6 +72,8 @@ export function ScrollArea({
   const lastInput = useRef<'key' | 'pointer'>('key');
   const lockedUntil = useRef(0);
   const lastPointer = useRef<{ x: number; y: number } | null>(null);
+  /** The content position carried across a mode change. */
+  const carried = useRef<number | null>(null);
   const latest = useRef({ stickyStart, stickyEnd, revealMargin });
   latest.current = { stickyStart, stickyEnd, revealMargin };
 
@@ -83,6 +85,11 @@ export function ScrollArea({
       transform: mode === 'transform',
     });
     scrollerRef.current = scroller;
+    // A mode change keeps one logical position (the outgoing mode cleared its own displacement)
+    if (carried.current !== null) {
+      scroller.scrollTo(carried.current, { instant: true });
+      carried.current = null;
+    }
 
     const reveal = (element: HTMLElement, instant: boolean) => {
       const itemTop = offsetWithin(element, content);
@@ -109,12 +116,28 @@ export function ScrollArea({
     const initial = content.querySelector('[data-focused]');
     if (initial instanceof HTMLElement) reveal(initial, true);
 
+    // The focused element a record reports: one gaining the attribute, or one mounted already
+    // focused (a replaced or virtualized item), itself or inside what was added
+    const focusedIn = (record: MutationRecord): HTMLElement | null => {
+      if (record.type === 'attributes') {
+        const { target } = record;
+        return target instanceof HTMLElement && target.hasAttribute('data-focused') ? target : null;
+      }
+      for (let index = record.addedNodes.length - 1; index >= 0; index--) {
+        const node = record.addedNodes[index];
+        if (!(node instanceof HTMLElement)) continue;
+        if (node.hasAttribute('data-focused')) return node;
+        const inside = node.querySelector('[data-focused]');
+        if (inside instanceof HTMLElement) return inside;
+      }
+      return null;
+    };
     const observer = new MutationObserver(records => {
       // Pointer focus never scrolls: the pointer is already on what it focused
       if (lastInput.current === 'pointer') return;
       for (let index = records.length - 1; index >= 0; index--) {
-        const target = records[index].target;
-        if (target instanceof HTMLElement && target.hasAttribute('data-focused')) {
+        const target = focusedIn(records[index]);
+        if (target) {
           reveal(target, false);
           return;
         }
@@ -122,6 +145,7 @@ export function ScrollArea({
     });
     observer.observe(content, {
       subtree: true,
+      childList: true,
       attributes: true,
       attributeFilter: ['data-focused'],
     });
@@ -132,7 +156,16 @@ export function ScrollArea({
     return () => {
       observer.disconnect();
       window.removeEventListener('keydown', onKeyDown, true);
+      // Hand the position to the next mode, clearing this mode's displacement so it is not applied
+      // twice (a mode change; on unmount nothing reads it)
+      carried.current = scroller.position();
       scroller.dispose();
+      if (mode === 'transform') {
+        content.style.transition = '';
+        content.style.transform = '';
+      } else {
+        viewport.scrollTop = 0;
+      }
       scrollerRef.current = null;
     };
   }, [mode]);

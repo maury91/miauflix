@@ -54,7 +54,8 @@ export function revealItem(
   layout: CarouselLayout
 ): CarouselPosition {
   const focused = clamp(index, 0, Math.max(0, layout.count - 1));
-  const { leading } = position;
+  // A shorter row (fewer items) may have moved the furthest leading slot below the kept one
+  const leading = clamp(position.leading, 0, maxLeading(layout));
   if (focused >= leading && focused < leading + layout.perPage) return { focused, leading };
   return { focused, leading: clamp(focused, 0, maxLeading(layout)) };
 }
@@ -67,9 +68,20 @@ export function useCarouselNavigation(layout: CarouselLayout, initialIndex = 0) 
   const [position, setPosition] = useState<CarouselPosition>(() =>
     revealItem({ focused: 0, leading: 0 }, initialIndex, layout)
   );
-  // The item count can shrink under the focus (a reload): keep both inside it
+  // The item count can shrink under the focus (a reload): keep both inside it. A smaller page (a
+  // resize) also brings the focused item back into view; otherwise an item outside the page stays
+  // where it is, since the pointer focuses peeking items without scrolling. revealItem's result
+  // satisfies every condition, so this settles after one update.
+  const [pagedBy, setPagedBy] = useState(layout.perPage);
+  const resized = pagedBy !== layout.perPage;
+  if (resized) setPagedBy(layout.perPage);
+  const outOfView =
+    position.focused < position.leading || position.focused >= position.leading + layout.perPage;
   const bounded =
-    layout.count > 0 && (position.focused >= layout.count || position.leading > maxLeading(layout))
+    layout.count > 0 &&
+    (position.focused >= layout.count ||
+      position.leading > maxLeading(layout) ||
+      (resized && outOfView))
       ? revealItem(position, position.focused, layout)
       : position;
   if (bounded !== position) setPosition(bounded);

@@ -69,13 +69,26 @@ export const description = style({
   lineHeight: typeScale.body.lineHeight,
 });
 
+/**
+ * Actions shrink to the header's width and wrap there (a narrow section). Like the header, every
+ * action carries its start and top spacing and the container takes it back, so wrapped rows keep
+ * it and nothing is left before the first action of a row.
+ */
 export const actions = style({
   display: 'flex',
-  flex: 'none',
+  flex: '0 1 auto',
+  flexWrap: 'wrap',
   alignItems: 'center',
-  ...headerItem,
+  minWidth: 0,
+  // The header's width, less the start margin below
+  maxWidth: `calc(100% - ${space.md} + ${space.xs})`,
+  marginTop: `calc(${space.sm} - ${space.xs})`,
+  marginLeft: `calc(${space.md} - ${space.xs})`,
+  selectors: {
+    '[dir="rtl"] &': { marginLeft: 0, marginRight: `calc(${space.md} - ${space.xs})` },
+  },
 });
 
 /** Actions are spaced without wrappers, mirrored for right-to-left text. */
-globalStyle(`${actions} > * + *`, { marginLeft: space.xs });
-globalStyle(`[dir="rtl"] ${actions} > * + *`, { marginLeft: 0, marginRight: space.xs });
+globalStyle(`${actions} > *`, { marginTop: space.xs, marginLeft: space.xs });
+globalStyle(`[dir="rtl"] ${actions} > *`, { marginLeft: 0, marginRight: space.xs });
