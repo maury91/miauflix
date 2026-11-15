@@ -1,4 +1,5 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
+import { useFocusable } from '@shared/navigation/hooks';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useEffect, useRef, useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
@@ -7,9 +8,8 @@ import { Button } from '../button/Button';
 import { IconButton } from '../icon-button/IconButton';
 import { Stack } from '../layout/Stack';
 import { OptionList } from '../option-list/OptionList';
-import { SurfaceStage } from '../storyHelpers';
+import { NavigationStage, SurfaceStage } from '../storyHelpers';
 import { color, fontFamily, typeScale } from '../tokens';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { Popover } from './Popover';
 
 import AudioIcon from '~icons/mdi/volume-high';
@@ -46,93 +46,95 @@ const tracks = [
   { value: 'ja', label: 'Japanese · Stereo' },
 ];
 
+/**
+ * The track list as one navigation leaf: its active option shows only while it holds focus. While
+ * focused it owns Up/Down between its tracks (the layer takes over past either end) and Confirm.
+ */
+function TrackList({ value, onSelect }: { value: string; onSelect: (value: string) => void }) {
+  const nav = useFocusable<HTMLDivElement>('list');
+  const [active, setActive] = useState(value);
+  const latest = useRef({ active, onSelect });
+  latest.current = { active, onSelect };
+  useEffect(() => {
+    if (!nav.focused) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      const keyAction = getKeyboardAction(event);
+      if (keyAction === 'up' || keyAction === 'down') {
+        const index = tracks.findIndex(track => track.value === latest.current.active);
+        const next = tracks[index + (keyAction === 'down' ? 1 : -1)];
+        if (!next) return;
+        event.preventDefault();
+        event.stopPropagation();
+        setActive(next.value);
+      } else if (keyAction === 'confirm') {
+        event.preventDefault();
+        event.stopPropagation();
+        latest.current.onSelect(latest.current.active);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [nav.focused]);
+  return (
+    <div ref={nav.ref} onMouseMove={nav.onMouseMove}>
+      <OptionList
+        id="audio-tracks"
+        labelledBy="audio-tracks-label"
+        items={tracks}
+        value={value}
+        activeValue={nav.focused ? active : null}
+        onSelect={onSelect}
+        onPointerActivate={setActive}
+      />
+    </div>
+  );
+}
+
 function AudioPopover() {
   const [open, setOpen] = useState(false);
   const [track, setTrack] = useState('en');
   const [nextPresses, setNextPresses] = useState(0);
-  // Each track is a row of its own, so Up/Down move through them before reaching Done
-  const grid = open
-    ? [...tracks.map(item => [`track:${item.value}`]), ['done']]
-    : [['audio', 'next']];
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus(grid, 'audio');
-  const activeTrack = focusedId.startsWith('track:') ? focusedId.slice('track:'.length) : null;
-
-  // Confirm on a track selects it: the list owns no keys, its owner does
-  const latestTrack = useRef(activeTrack);
-  latestTrack.current = activeTrack;
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      const value = latestTrack.current;
-      if (value === null || getKeyboardAction(event) !== 'confirm') return;
-      event.preventDefault();
-      event.stopPropagation();
-      setTrack(value);
-    };
-    window.addEventListener('keydown', onKeyDown, true);
-    return () => window.removeEventListener('keydown', onKeyDown, true);
-  }, []);
-
-  const show = (next: boolean) => {
-    setOpen(next);
-    // The navigation layer enters the popover's group, and restores the trigger on close
-    focus(next ? `track:${track}` : 'audio');
-  };
 
   return (
-    <div ref={containerRef} style={{ minHeight: '20rem' }}>
-      <Stack direction="row" gap="sm" align="center">
-        <Popover
-          open={open}
-          onDismiss={() => show(false)}
-          modality="modal"
-          title="Audio"
-          size="sm"
-          trigger={triggerProps => (
-            <IconButton
-              {...triggerProps}
-              label="Audio"
-              icon={<AudioIcon />}
-              focused={isFocused('audio')}
-              onMouseMove={() => focus('audio')}
-              onClick={() => show(!open)}
-            />
-          )}
-        >
-          <Stack gap="sm">
-            <OptionList
-              id="audio-tracks"
-              labelledBy="audio-tracks-label"
-              items={tracks}
-              value={track}
-              activeValue={activeTrack}
-              onSelect={value => setTrack(value)}
-              onPointerActivate={value => focus(`track:${value}`)}
-            />
-            <span id="audio-tracks-label" hidden>
-              Audio tracks
-            </span>
-            <Button
-              fullWidth
-              focused={isFocused('done')}
-              onMouseMove={() => focus('done')}
-              onClick={() => show(false)}
-            >
-              Done
-            </Button>
-          </Stack>
-        </Popover>
-        <Button
-          focused={isFocused('next')}
-          onMouseMove={() => focus('next')}
-          onClick={() => setNextPresses(count => count + 1)}
-        >
-          Next episode
-        </Button>
-      </Stack>
-      <p style={{ color: color.textSecondary, fontFamily, fontSize: typeScale.caption.fontSize }}>
-        {`Focused: ${focusedId} · Track: ${track} · Next episode pressed: ${nextPresses}`}
-      </p>
-    </div>
+    <NavigationStage layout="horizontal" initialId="audio">
+      <div style={{ minHeight: '20rem' }}>
+        <Stack direction="row" gap="sm" align="center">
+          <Popover
+            open={open}
+            // The navigation layer enters the popover's content and restores the trigger on close
+            onDismiss={() => setOpen(false)}
+            modality="modal"
+            title="Audio"
+            size="sm"
+            trigger={triggerProps => (
+              <IconButton
+                {...triggerProps}
+                label="Audio"
+                icon={<AudioIcon />}
+                navId="audio"
+                onClick={() => setOpen(value => !value)}
+              />
+            )}
+          >
+            <Stack gap="sm">
+              <TrackList value={track} onSelect={setTrack} />
+              <span id="audio-tracks-label" hidden>
+                Audio tracks
+              </span>
+              <Button fullWidth navId="done" onClick={() => setOpen(false)}>
+                Done
+              </Button>
+            </Stack>
+          </Popover>
+          <Button navId="next" onClick={() => setNextPresses(count => count + 1)}>
+            Next episode
+          </Button>
+        </Stack>
+        <p style={{ color: color.textSecondary, fontFamily, fontSize: typeScale.caption.fontSize }}>
+          {`Track: ${track} · Next episode pressed: ${nextPresses}`}
+        </p>
+      </div>
+    </NavigationStage>
   );
 }
 
@@ -153,6 +155,17 @@ export const Modal: Story = {
     const panel = canvas.getByRole('dialog', { name: 'Audio' });
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await expect(panel).toHaveFocus();
+    // The layer entered the content at the track list; Down walks the tracks, reaches Done and
+    // stays inside
+    await expect(canvas.getByRole('option', { name: 'English · 5.1' })).toHaveAttribute(
+      'data-active'
+    );
+    await userEvent.keyboard('{ArrowDown}{ArrowDown}');
+    await expect(canvas.getByRole('option', { name: 'Japanese · Stereo' })).toHaveAttribute(
+      'data-active'
+    );
+    await userEvent.keyboard('{ArrowDown}{ArrowDown}');
+    await expect(canvas.getByRole('button', { name: 'Done' })).toHaveAttribute('data-focused');
     await userEvent.keyboard('{Escape}');
     await expect(canvas.queryByRole('dialog')).toBeNull();
     await expect(trigger).toHaveAttribute('data-focused');

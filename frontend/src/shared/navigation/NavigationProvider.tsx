@@ -49,10 +49,15 @@ export function NavigationProvider({ children, mirrorDomFocus = true }: Navigati
   useEffect(() => {
     const release = claimVirtualFocus();
     const onMove = (event: MouseEvent) => store.trackPointer(event.clientX, event.clientY);
+    // A resize can re-wrap items without resizing any of them: cached geometry is stale
+    const onResize = () => store.invalidateGeometry();
     window.addEventListener('mousemove', onMove, { capture: true, passive: true });
+    window.addEventListener('resize', onResize);
     return () => {
       release();
       window.removeEventListener('mousemove', onMove, true);
+      window.removeEventListener('resize', onResize);
+      store.dispose();
     };
   }, [store]);
 

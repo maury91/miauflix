@@ -13,6 +13,7 @@ import {
 
 import * as actionStyles from '../action/action.css';
 import { ActionIcon } from '../action/actionInternals';
+import { type NavigableProps, useNavFocus } from '../navFocus';
 import { useSurfaceContext } from '../surface';
 import * as styles from './progressButton.css';
 
@@ -42,7 +43,7 @@ export type ProgressButtonProps = Omit<
    * countdown, it runs only on Confirm or click, like any Button. It runs at most once.
    */
   onAction: () => void;
-};
+} & NavigableProps;
 
 const DIRECTIONS = new Set(['up', 'down', 'left', 'right']);
 
@@ -59,17 +60,21 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
       icon,
       size = 'md',
       fullWidth = false,
-      focused = false,
+      focused: focusedProp = false,
       duration,
       paused = false,
       initialProgress = 0,
       onAction,
       disabled = false,
+      onMouseMove,
+      navId,
       ...props
     },
-    ref
+    forwardedRef
   ) {
     const surface = useSurfaceContext();
+    const nav = useNavFocus(navId, { focused: focusedProp, disabled }, forwardedRef);
+    const focused = nav.focused;
     // A disabled button never counts down
     const [counting, setCounting] = useState(!disabled);
     // The animation's end and a key press can arrive in the same frame: read the latest state
@@ -133,7 +138,7 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
     return (
       <button
         {...props}
-        ref={ref}
+        ref={nav.ref}
         type="button"
         className={`${actionStyles.action} ${styles.progressRoot}`}
         data-surface={surface}
@@ -144,6 +149,10 @@ export const ProgressButton = forwardRef<HTMLButtonElement, ProgressButtonProps>
         data-paused={(counting && paused) || undefined}
         disabled={disabled}
         onClick={handleClick}
+        onMouseMove={event => {
+          nav.onPointerFocus();
+          onMouseMove?.(event);
+        }}
       >
         <ActionIcon icon={icon} loading={false} />
         <span className={actionStyles.label}>{children}</span>

@@ -1,9 +1,10 @@
 import { IS_TV } from '@shared/config/constants';
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
-import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { type ReactNode, type RefCallback, useEffect, useId, useRef, useState } from 'react';
 
 import * as actionStyles from '../action/action.css';
 import { Field, type FieldAnatomyProps, type FieldControlProps } from '../field/Field';
+import { type NavigableProps, useMergedRef, useNavFocus } from '../navFocus';
 import { OptionList } from '../option-list/OptionList';
 import { flattenOptions, isGroup, type SelectItems, stepOption } from '../option-list/selectItems';
 import { SurfaceContextProvider, useSurfaceContext } from '../surface';
@@ -12,7 +13,7 @@ import * as styles from './select.css';
 
 import ChevronIcon from '~icons/mdi/chevron-down';
 
-interface SelectBaseProps<Value extends string> {
+interface SelectBaseProps<Value extends string> extends NavigableProps {
   items: SelectItems<Value>;
   /** The chosen value; `null` shows the placeholder. */
   value: Value | null;
@@ -109,14 +110,22 @@ function SelectControl<Value extends string>({
   disabled = false,
   mode = IS_TV ? 'popup' : 'native',
   placement = 'bottom',
-  focused = false,
-  onPointerFocus,
+  focused: focusedProp = false,
+  onPointerFocus: onPointerFocusProp,
   onOpenChange,
   control,
   labelledBy,
   invalid,
+  navId,
 }: SelectControlProps<Value>) {
   const surface = useSurfaceContext();
+  // The root holds the trigger: Confirm opens the platform picker or the popup through it
+  const nav = useNavFocus<HTMLSpanElement>(navId, { focused: focusedProp, disabled });
+  const focused = nav.focused;
+  const onPointerFocus = () => {
+    nav.onPointerFocus();
+    onPointerFocusProp?.();
+  };
   const options = flattenOptions(items);
   const chosen = options.find(option => option.value === value);
   const valueId = `${control.id}-value`;
@@ -148,7 +157,7 @@ function SelectControl<Value extends string>({
 
   if (mode === 'native') {
     return (
-      <span className={styles.root} data-full-width={fullWidth || undefined}>
+      <span ref={nav.ref} className={styles.root} data-full-width={fullWidth || undefined}>
         <span
           {...triggerAttributes}
           data-disabled={disabled || undefined}
@@ -204,6 +213,8 @@ function SelectControl<Value extends string>({
       valueId={valueId}
       triggerAttributes={triggerAttributes}
       fullWidth={fullWidth}
+      focused={focused}
+      navRef={nav.ref}
     >
       {content}
     </PopupSelect>
@@ -223,6 +234,10 @@ interface PopupSelectProps<Value extends string> {
   valueId: string;
   triggerAttributes: Record<string, string | boolean | undefined>;
   fullWidth: boolean;
+  /** Virtual focus: losing it (the pointer moved to another control) closes the popup. */
+  focused: boolean;
+  /** The navigation layer's ref for the root. */
+  navRef: RefCallback<HTMLSpanElement>;
   children: ReactNode;
 }
 
@@ -239,11 +254,14 @@ function PopupSelect<Value extends string>({
   valueId,
   triggerAttributes,
   fullWidth,
+  focused,
+  navRef,
   children,
 }: PopupSelectProps<Value>) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<Value | null>(null);
   const rootRef = useRef<HTMLSpanElement>(null);
+  const mergedRootRef = useMergedRef(rootRef, navRef);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const listId = useId();
   // The active option must still exist and be enabled: items can change while the popup is open
@@ -283,6 +301,17 @@ function PopupSelect<Value extends string>({
   useEffect(() => {
     if (open && disabled) closeRef.current();
   }, [open, disabled]);
+
+  // Virtual focus moving to another control (the pointer) closes it, so its keys aren't kept
+  const wasFocused = useRef(focused);
+  const focusMovedAway = useRef(false);
+  useEffect(() => {
+    if (open && wasFocused.current && !focused) {
+      focusMovedAway.current = true;
+      closeRef.current();
+    }
+    wasFocused.current = focused;
+  }, [open, focused]);
 
   useEffect(() => {
     if (!open) return;
@@ -331,18 +360,24 @@ function PopupSelect<Value extends string>({
       listbox?.removeEventListener('focusout', onFocusOut);
       // DOM focus follows the closed popup back to its trigger
       // (the listbox is already gone, so focus was left on the body)
+      // unless focus moved to another control
       const active = document.activeElement;
-      if (!active || active === document.body || listbox?.contains(active)) {
+      if (focusMovedAway.current) {
+        focusMovedAway.current = false;
+        if (active instanceof HTMLElement && listbox?.contains(active)) active.blur();
+      } else if (!active || active === document.body || listbox?.contains(active)) {
         trigger?.focus({ preventScroll: true });
       }
     };
   }, [open, listId]);
 
   return (
-    <span ref={rootRef} className={styles.root} data-full-width={fullWidth || undefined}>
+    <span ref={mergedRootRef} className={styles.root} data-full-width={fullWidth || undefined}>
       <button
         {...control}
         {...triggerAttributes}
+        // While the popup is open its active option shows focus, not the trigger
+        data-focused={open ? undefined : triggerAttributes['data-focused']}
         ref={triggerRef}
         type="button"
         aria-haspopup="listbox"

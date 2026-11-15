@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { ErrorMessage } from '../field/ErrorMessage';
+import { useNavFocus } from '../navFocus';
 import * as styles from './choice.css';
 
 /** Text and state every choice shares. All text comes from the feature (it is translated there). */
@@ -16,6 +17,8 @@ export interface ChoiceProps {
   focused?: boolean;
   /** Called when the pointer moves onto the choice, so the navigation layer can focus it. */
   onPointerFocus?: () => void;
+  /** See NavigableProps: registers the whole choice with the navigation layer. */
+  navId?: string;
 }
 
 interface ChoiceFrameProps extends Omit<ChoiceProps, 'description'> {
@@ -44,6 +47,7 @@ export function ChoiceFrame({
   labelId,
   focused = false,
   onPointerFocus,
+  navId,
   checked,
   mixed = false,
   invalid = false,
@@ -51,16 +55,22 @@ export function ChoiceFrame({
   indicatorAtEnd = false,
   indicator,
 }: ChoiceFrameProps) {
+  // A radio option is the selected child its group is entered at
+  const nav = useNavFocus<HTMLLabelElement>(navId, { focused, disabled, selected: checked });
   return (
     <label
+      ref={nav.ref}
       className={styles.choice}
-      data-focused={focused || undefined}
+      data-focused={nav.focused || undefined}
       data-checked={(checked && !mixed) || undefined}
       data-mixed={mixed || undefined}
       data-invalid={invalid || undefined}
       data-disabled={disabled || undefined}
       data-end={indicatorAtEnd || undefined}
-      onMouseMove={onPointerFocus}
+      onMouseMove={() => {
+        nav.onPointerFocus();
+        onPointerFocus?.();
+      }}
     >
       <span className={styles.indicatorSlot}>{indicator}</span>
       <span className={styles.text}>

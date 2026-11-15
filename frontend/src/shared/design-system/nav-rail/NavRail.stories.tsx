@@ -1,13 +1,14 @@
-import { getKeyboardAction } from '@shared/hooks/useKeyboard';
+import { useKeyboard } from '@shared/hooks/useKeyboard';
+import { useActiveIdWithin, useNavigation } from '@shared/navigation/hooks';
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
-import { StateCell } from '../storyHelpers';
+import { NavigationStage, StateCell } from '../storyHelpers';
 import { storyImage } from '../storyImage';
 import { color, fontFamily, space, typeScale } from '../tokens';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { NavItem, NavRail } from './NavRail';
 
 import BackIcon from '~icons/mdi/arrow-left';
@@ -116,84 +117,64 @@ const pageText = {
 };
 
 function Home() {
-  const [route, setRoute] = useState('home');
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus(
-    [
-      ['nav:home', 'page:play', 'page:info'],
-      ['nav:search'],
-      ['nav:notifications'],
-      ['nav:settings'],
-    ],
-    'page:play'
+  return (
+    <NavigationStage layout="horizontal" initialId="page:play">
+      <HomeBody />
+    </NavigationStage>
   );
+}
+
+function HomeBody() {
+  const [route, setRoute] = useState('home');
+  const { focus } = useNavigation();
   // The pointer over the rail expands it before an item takes focus
   const [hovered, setHovered] = useState(false);
-  const inRail = focusedId.startsWith('nav:');
+  const inRail = useActiveIdWithin('rail') !== null;
   const expanded = inRail || hovered;
 
-  // Right or Back from any rail item (none has a submenu) leaves the rail for the page element it
-  // was entered from, as the navigation layer restores a scope's last focus
-  const lastPage = useRef('page:play');
-  if (focusedId.startsWith('page:')) lastPage.current = focusedId;
-  const inRailRef = useRef(inRail);
-  inRailRef.current = inRail;
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (!inRailRef.current) return;
-      const keyAction = getKeyboardAction(event);
-      if (keyAction !== 'right' && keyAction !== 'back') return;
-      event.preventDefault();
-      // Before the story's grid navigation, which listens in the bubble phase
-      event.stopImmediatePropagation();
-      focus(lastPage.current);
-    };
-    window.addEventListener('keydown', onKeyDown, true);
-    return () => window.removeEventListener('keydown', onKeyDown, true);
-  }, [focus]);
+  // Right reaches the page by the layer (it remembers the element the rail was entered from); Back
+  // from any rail item (none has a submenu) does the same
+  useKeyboard({ onBack: () => inRail && focus('page') });
   const item = (id: string) => ({
     current: route === id,
-    focused: isFocused(`nav:${id}`),
-    onMouseMove: () => focus(`nav:${id}`),
+    navId: `nav:${id}`,
     onClick: () => setRoute(id),
   });
 
   return (
-    <div ref={containerRef}>
-      <Stage>
-        <NavRail
-          label="Main"
-          expanded={expanded}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => {
-            setHovered(false);
-            // Leaving the rail gives focus back to the page, like Right
-            if (inRailRef.current) focus(lastPage.current);
-          }}
-          end={<NavItem icon={<SettingsIcon />} label="Settings" {...item('settings')} />}
-        >
-          <NavItem icon={<HomeIcon />} label="Home" {...item('home')} />
-          <NavItem icon={<SearchIcon />} label="Search" {...item('search')} />
-          <NavItem
-            icon={<BellIcon />}
-            label="Notifications"
-            badge="3"
-            badgeLabel="3 unread"
-            {...item('notifications')}
-          />
-        </NavRail>
+    <Stage>
+      <NavRail
+        label="Main"
+        navId="rail"
+        expanded={expanded}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => {
+          setHovered(false);
+          // Leaving the rail gives focus back to the page, like Right
+          if (inRail) focus('page');
+        }}
+        end={<NavItem icon={<SettingsIcon />} label="Settings" {...item('settings')} />}
+      >
+        <NavItem icon={<HomeIcon />} label="Home" {...item('home')} />
+        <NavItem icon={<SearchIcon />} label="Search" {...item('search')} />
+        <NavItem
+          icon={<BellIcon />}
+          label="Notifications"
+          badge="3"
+          badgeLabel="3 unread"
+          {...item('notifications')}
+        />
+      </NavRail>
+      <FocusGroup id="page" layout="horizontal">
         <main style={{ padding: space.xl }}>
           <p style={pageText}>Route: {route}</p>
           <span style={{ marginRight: space.xs }}>
-            <Button focused={isFocused('page:play')} onMouseMove={() => focus('page:play')}>
-              Play
-            </Button>
+            <Button navId="page:play">Play</Button>
           </span>
-          <Button focused={isFocused('page:info')} onMouseMove={() => focus('page:info')}>
-            More info
-          </Button>
+          <Button navId="page:info">More info</Button>
         </main>
-      </Stage>
-    </div>
+      </FocusGroup>
+    </Stage>
   );
 }
 
@@ -231,11 +212,16 @@ export const HomeNavigation: Story = {
     await expect(canvas.getByRole('button', { name: 'Play' })).toHaveAttribute('data-focused');
 
     // Back (Escape) leaves it as well, to the element the rail was entered from
-    await userEvent.keyboard('{ArrowRight}{ArrowDown}');
+    await userEvent.keyboard('{ArrowRight}');
+    await userEvent.keyboard('{ArrowLeft}');
+    await userEvent.keyboard('{ArrowLeft}');
     await expect(nav).toHaveAttribute('data-expanded');
-    await userEvent.keyboard('{ArrowDown}{ArrowDown}{Escape}');
+    // Entered again at the item focused there last
+    await expect(notifications).toHaveAttribute('data-focused');
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{Escape}');
     await expect(nav).not.toHaveAttribute('data-expanded');
-    await expect(canvas.getByRole('button', { name: 'More info' })).toHaveAttribute('data-focused');
+    await expect(canvas.getByRole('button', { name: 'Play' })).toHaveAttribute('data-focused');
 
     // The pointer expands the rail on entering it and collapses it on leaving
     await userEvent.hover(nav);
@@ -244,7 +230,7 @@ export const HomeNavigation: Story = {
     await expect(canvas.getByRole('button', { name: 'Search' })).toHaveAttribute('data-focused');
     await userEvent.unhover(nav);
     await expect(nav).not.toHaveAttribute('data-expanded');
-    await expect(canvas.getByRole('button', { name: 'More info' })).toHaveAttribute('data-focused');
+    await expect(canvas.getByRole('button', { name: 'Play' })).toHaveAttribute('data-focused');
   },
 };
 

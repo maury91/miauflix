@@ -5,8 +5,7 @@ import { expect, fireEvent, userEvent, within } from 'storybook/test';
 import { Button } from '../button/Button';
 import { List } from '../list/List';
 import { SettingRow } from '../list/SettingRow';
-import { StateCell, SurfaceStage } from '../storyHelpers';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import { Slider } from './Slider';
 
 const meta = {
@@ -106,43 +105,36 @@ export const OverMedia: Story = {
 const percent = (value: number) => `${value}%`;
 
 function Playback() {
-  const { containerRef, focus, isFocused } = useStoryVirtualFocus([
-    ['volume'],
-    ['brightness'],
-    ['done'],
-  ]);
   const [volume, setVolume] = useState(90);
   const [brightness, setBrightness] = useState(50);
   return (
-    <div ref={containerRef} style={{ maxWidth: '24rem' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <Slider
-          label="Volume"
-          value={volume}
-          step={1}
-          keyStep={5}
-          valueText={percent(volume)}
-          onChange={setVolume}
-          focused={isFocused('volume')}
-          onPointerFocus={() => focus('volume')}
-        />
+    <NavigationStage>
+      <div style={{ maxWidth: '24rem' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <Slider
+            label="Volume"
+            value={volume}
+            step={1}
+            keyStep={5}
+            valueText={percent(volume)}
+            onChange={setVolume}
+            navId="volume"
+          />
+        </div>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <Slider
+            label="Brightness"
+            value={brightness}
+            step={10}
+            valueText={percent(brightness)}
+            marks={[{ value: 0, label: 'Dark' }, { value: 50 }, { value: 100, label: 'Bright' }]}
+            onChange={setBrightness}
+            navId="brightness"
+          />
+        </div>
+        <Button navId="done">Done</Button>
       </div>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <Slider
-          label="Brightness"
-          value={brightness}
-          step={10}
-          valueText={percent(brightness)}
-          marks={[{ value: 0, label: 'Dark' }, { value: 50 }, { value: 100, label: 'Bright' }]}
-          onChange={setBrightness}
-          focused={isFocused('brightness')}
-          onPointerFocus={() => focus('brightness')}
-        />
-      </div>
-      <Button focused={isFocused('done')} onMouseMove={() => focus('done')}>
-        Done
-      </Button>
-    </div>
+    </NavigationStage>
   );
 }
 

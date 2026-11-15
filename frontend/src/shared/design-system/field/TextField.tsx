@@ -1,5 +1,7 @@
+import { useComposite } from '@shared/navigation/hooks';
 import { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
 
+import { InheritedFocusContext } from '../navFocus';
 import { Field, type FieldAnatomyProps } from './Field';
 import * as styles from './field.css';
 import { type FieldStateProps, InputFrame } from './InputFrame';
@@ -40,11 +42,29 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
     trailing,
     disabled = false,
     readOnly = false,
+    navId,
     'aria-describedby': ariaDescribedBy,
     ...props
   },
   ref
 ) {
+  // A composite: the input, then the trailing action when there is one
+  const nav = useComposite<HTMLDivElement>(navId, trailing ? ['input', 'trailing'] : ['input'], {
+    disabled,
+  });
+  const action =
+    trailing && navId !== undefined ? (
+      <InheritedFocusContext.Provider
+        value={{
+          focused: nav.focusedPart === 'trailing',
+          onPointerFocus: () => nav.onPointerFocus('trailing'),
+        }}
+      >
+        {trailing}
+      </InheritedFocusContext.Provider>
+    ) : (
+      trailing
+    );
   return (
     <Field
       label={label}
@@ -57,13 +77,17 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
       {control => (
         <InputFrame
           size={size}
-          focused={focused}
+          focused={focused || nav.focusedPart === 'input'}
           invalid={Boolean(error)}
           disabled={disabled}
           readOnly={readOnly}
           decoration={leading}
-          end={trailing}
-          onPointerFocus={onPointerFocus}
+          end={action}
+          frameRef={nav.ref}
+          onPointerFocus={() => {
+            nav.onPointerFocus('input');
+            onPointerFocus?.();
+          }}
         >
           <input
             {...props}

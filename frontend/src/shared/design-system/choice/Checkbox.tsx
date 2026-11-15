@@ -32,6 +32,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
     error,
     focused,
     onPointerFocus,
+    navId,
     checked,
     onCheckedChange,
     indeterminate = false,
@@ -57,6 +58,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
         descriptionId={descriptionId}
         labelId={labelId}
         focused={focused}
+        navId={navId}
         onPointerFocus={onPointerFocus}
         checked={checked}
         mixed={indeterminate}

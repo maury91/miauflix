@@ -108,6 +108,12 @@ export function useCarouselNavigation(layout: CarouselLayout, initialIndex = 0) 
     },
     [bounded.leading, count, perPage]
   );
+  /** Where a Left/Right press would focus, without moving (null when it exits). */
+  const peek = useCallback(
+    (direction: -1 | 1) =>
+      stepCarousel(bounded, direction, { count, perPage, paging })?.focused ?? null,
+    [bounded, count, perPage, paging]
+  );
   const pointerFocus = useCallback(
     (index: number) => setPosition(current => ({ ...current, focused: index })),
     []
@@ -122,8 +128,12 @@ export function useCarouselNavigation(layout: CarouselLayout, initialIndex = 0) 
     focusedIndex: bounded.focused,
     leadingIndex: bounded.leading,
     move,
+    peek,
     page,
     pointerFocus,
     reveal,
   };
 }
+
+/** What `useCarouselNavigation` returns; give it to a Carousel with a `navId`. */
+export type CarouselNavigation = ReturnType<typeof useCarouselNavigation>;

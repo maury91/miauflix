@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import { IconButton } from '../icon-button/IconButton';
+import { type NavigableProps, useNavComposite } from '../navFocus';
 import type { ControlSize } from '../tokens';
 import { Field, type FieldAnatomyProps } from './Field';
 import * as styles from './field.css';
@@ -45,6 +46,7 @@ export type NumberFieldProps = Omit<
   | 'step'
 > &
   FieldAnatomyProps &
+  NavigableProps &
   StepperProps & {
     /** Controlled value; `null` when empty. */
     value: number | null;
@@ -95,8 +97,9 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     decrementLabel,
     incrementLabel,
     size = 'md',
-    focusedPart,
-    onPointerFocus,
+    focusedPart: focusedPartProp,
+    onPointerFocus: onPointerFocusProp,
+    navId,
     disabled = false,
     readOnly = false,
     onFocus,
@@ -162,6 +165,12 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   const keepEditing = (event: MouseEvent) => event.preventDefault();
   const steppers = decrementLabel !== undefined;
   const stepDisabled = disabled || readOnly;
+  const nav = useNavComposite<NumberFieldPart, HTMLDivElement>(
+    navId,
+    stepDisabled ? ['input'] : ['decrement', 'input', 'increment'],
+    { focusedPart: focusedPartProp, onPointerFocus: onPointerFocusProp, disabled }
+  );
+  const { focusedPart, onPointerFocus } = nav;
   const actionSize = fieldActionSize[size];
   const negativeAllowed = min === undefined || min < 0;
 
@@ -182,7 +191,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
           disabled={disabled}
           readOnly={readOnly}
           centered={steppers}
-          onPointerFocus={() => onPointerFocus?.('input')}
+          onPointerFocus={() => onPointerFocus('input')}
+          frameRef={nav.ref}
           start={
             steppers && (
               <IconButton
@@ -192,7 +202,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
                 focused={focusedPart === 'decrement'}
                 disabled={stepDisabled}
                 aria-controls={control.id}
-                onMouseMove={() => onPointerFocus?.('decrement')}
+                onMouseMove={() => onPointerFocus('decrement')}
                 onMouseDown={keepEditing}
                 onClick={() => stepBy(-1)}
               />
@@ -207,7 +217,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
                 focused={focusedPart === 'increment'}
                 disabled={stepDisabled}
                 aria-controls={control.id}
-                onMouseMove={() => onPointerFocus?.('increment')}
+                onMouseMove={() => onPointerFocus('increment')}
                 onMouseDown={keepEditing}
                 onClick={() => stepBy(1)}
               />

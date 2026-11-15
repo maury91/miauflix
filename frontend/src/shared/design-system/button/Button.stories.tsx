@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
-import { StateCell, SurfaceStage } from '../storyHelpers';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import type { SurfaceContextValue } from '../surface';
-import { useStoryVirtualRow } from '../useStoryVirtualFocus';
 import { Button } from './Button';
 
 import InfoIcon from '~icons/mdi/information-outline';
@@ -149,19 +148,20 @@ export const IgnoresActivationWhileLoading: Story = {
 };
 
 function VirtualFocusRow({ onClick }: { onClick: () => void }) {
-  const { itemProps } = useStoryVirtualRow(3);
   return (
-    <SurfaceStage surface="overMedia">
-      <Button size="lg" icon={<PlayIcon />} onClick={onClick} {...itemProps(0)}>
-        Watch now
-      </Button>{' '}
-      <Button size="lg" icon={<PlusIcon />} onClick={onClick} {...itemProps(1)}>
-        My list
-      </Button>{' '}
-      <Button size="lg" icon={<InfoIcon />} onClick={onClick} {...itemProps(2)}>
-        More info
-      </Button>
-    </SurfaceStage>
+    <NavigationStage layout="horizontal">
+      <SurfaceStage surface="overMedia">
+        <Button navId="watch" size="lg" icon={<PlayIcon />} onClick={onClick}>
+          Watch now
+        </Button>{' '}
+        <Button navId="list" size="lg" icon={<PlusIcon />} onClick={onClick}>
+          My list
+        </Button>{' '}
+        <Button navId="info" size="lg" icon={<InfoIcon />} onClick={onClick}>
+          More info
+        </Button>
+      </SurfaceStage>
+    </NavigationStage>
   );
 }
 

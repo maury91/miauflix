@@ -2,9 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
 
-import { StateCell, SurfaceStage } from '../storyHelpers';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
-import { NumberField, type NumberFieldPart } from './NumberField';
+import { InitialFocus, NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
+import { NumberField } from './NumberField';
 
 const meta = {
   title: 'Design System/Fields/NumberField',
@@ -67,25 +66,23 @@ export const States: Story = {
 
 function LiveNumber() {
   const [value, setValue] = useState<number | null>(98);
-  const { containerRef, focus, focusedId } = useStoryVirtualFocus(
-    [['decrement', 'input', 'increment']],
-    'increment'
-  );
   return (
-    <div ref={containerRef} style={{ width: '14rem' }}>
-      <NumberField
-        label="Volume"
-        value={value}
-        onChange={setValue}
-        min={0}
-        max={100}
-        step={1}
-        {...steps}
-        focusedPart={focusedId as NumberFieldPart}
-        onPointerFocus={focus}
-      />
-      <p style={{ color: '#a6adaf' }}>Value: {String(value)}</p>
-    </div>
+    <NavigationStage>
+      <div style={{ width: '14rem' }}>
+        <NumberField
+          label="Volume"
+          value={value}
+          onChange={setValue}
+          min={0}
+          max={100}
+          step={1}
+          {...steps}
+          navId="volume"
+        />
+        <p style={{ color: '#a6adaf' }}>Value: {String(value)}</p>
+      </div>
+      <InitialFocus id="volume" part="increment" />
+    </NavigationStage>
   );
 }
 

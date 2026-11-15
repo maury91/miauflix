@@ -1,3 +1,4 @@
+import { useComposite } from '@shared/navigation/hooks';
 import { forwardRef, type TextareaHTMLAttributes } from 'react';
 
 import { Field, type FieldAnatomyProps } from './Field';
@@ -31,11 +32,13 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
     rows = 3,
     disabled = false,
     readOnly = false,
+    navId,
     'aria-describedby': ariaDescribedBy,
     ...props
   },
   ref
 ) {
+  const nav = useComposite<HTMLDivElement>(navId, ['input'], { disabled });
   return (
     <Field
       label={label}
@@ -48,11 +51,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
       {control => (
         <InputFrame
           size={size}
-          focused={focused}
+          focused={focused || nav.focusedPart === 'input'}
           invalid={Boolean(error)}
           disabled={disabled}
           readOnly={readOnly}
-          onPointerFocus={onPointerFocus}
+          frameRef={nav.ref}
+          onPointerFocus={() => {
+            nav.onPointerFocus('input');
+            onPointerFocus?.();
+          }}
           multiline
         >
           <textarea

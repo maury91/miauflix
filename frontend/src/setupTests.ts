@@ -37,11 +37,10 @@ vi.mock('styled-components', async () => {
   };
 });
 
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+// A function, not an arrow: code under test constructs it with `new`
+global.ResizeObserver = vi.fn().mockImplementation(function () {
+  return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() };
+});
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

@@ -43,6 +43,34 @@ export interface NavigationNode {
   disabled?: boolean;
   /** Composite leaves: internal parts along the inline axis (input, then its actions). */
   parts?: readonly string[];
+  /**
+   * A composite's own stepping (a carousel paging through items): the part one step toward the
+   * end (1) or the start (-1), or null at its edge. Called once per key; it may update the
+   * composite's own state. Defaults to the neighbouring part.
+   */
+  stepPart?: (part: string, step: 1 | -1) => string | null;
+  /** The part a composite is entered at (a carousel's kept item); defaults to the near end. */
+  entryPart?: () => string | undefined;
+  /**
+   * Axis and grid groups, and composites: content past an edge that is not mounted yet (the next
+   * page of a row). A move reaching that edge is `pending` instead of leaving.
+   */
+  more?: Partial<Record<Edge, boolean>>;
+  /**
+   * Loads the content past `request.edge`, once per pending move. Stop when `request.signal`
+   * aborts (the user moved on). A returned promise settling, or returning nothing, lets the next
+   * press ask again (after a failure, or a page that brought nothing focusable); a held key never
+   * asks twice. Content arriving after the user moved on never takes focus.
+   */
+  onMore?: (request: MoreRequest) => Promise<unknown> | void;
+}
+
+/** A group's start or end, along its axis (mirrored for right-to-left text). */
+export type Edge = 'start' | 'end';
+
+export interface MoreRequest {
+  edge: Edge;
+  signal: AbortSignal;
 }
 
 export interface Rect {
@@ -54,13 +82,15 @@ export interface Rect {
 
 /**
  * The result of a key: `move` to a leaf, `handled` inside the focused element (a composite part),
- * `blocked` by a containing boundary (it never reaches background handlers), or `unhandled` (the
- * owning feature may act). Pending moves to unloaded content are not implemented yet.
+ * `blocked` by a containing boundary (it never reaches background handlers), `pending` on content
+ * past a group's edge that is still loading (see NavigationNode.more), or `unhandled` (the owning
+ * feature may act).
  */
 export type Resolution =
   | { type: 'move'; targetId: string; part?: string; reason: string; gridColumn?: GridMemo }
   | { type: 'handled'; part: string; reason: string }
   | { type: 'blocked'; reason: string }
+  | { type: 'pending'; groupId: string; edge: Edge; reason: string }
   | { type: 'unhandled'; reason: string };
 
 /** The column a grid keeps aligned with across vertical moves (so a wide key doesn't pull it). */

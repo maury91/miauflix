@@ -19,6 +19,8 @@ export interface SettingToggle {
   /** Virtual focus on the switch (outline around the row's content). */
   focused?: boolean;
   onPointerFocus?: () => void;
+  /** See NavigableProps: registers the switch with the navigation layer. */
+  navId?: string;
 }
 
 interface SettingRowBaseProps {
@@ -72,6 +74,7 @@ export function SettingRow({ title, description, toggle, value, control }: Setti
             disabled={toggle.disabled}
             focused={toggle.focused}
             onPointerFocus={toggle.onPointerFocus}
+            navId={toggle.navId}
           />
         </div>
       </div>

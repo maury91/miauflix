@@ -1,3 +1,4 @@
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import type { ReactNode } from 'react';
 
 import { Button } from '../button/Button';
@@ -33,6 +34,11 @@ export interface TabsProps<Id extends string = string> {
    */
   orientation?: 'horizontal' | 'vertical';
   size?: ControlSize;
+  /**
+   * Registers the tabs as a group with the navigation layer (each `<navId>:<tab id>`), moving along
+   * `orientation` and entered at the selected tab. See NavigableProps.
+   */
+  navId?: string;
 }
 
 /**
@@ -49,42 +55,46 @@ export function Tabs<Id extends string = string>({
   onPointerFocus,
   orientation = 'horizontal',
   size = 'md',
+  navId,
 }: TabsProps<Id>) {
   return (
-    <div
-      role="tablist"
-      aria-label={label}
-      aria-orientation={orientation}
-      className={styles.tablist}
-      data-orientation={orientation}
-    >
-      {items.map(item => {
-        const selected = item.id === selectedId;
-        return (
-          <Button
-            key={item.id}
-            id={tabId(id, item.id)}
-            role="tab"
-            aria-selected={selected}
-            aria-controls={panelId(id, item.id)}
-            // Assistive technology reaches the tablist through its selected tab
-            tabIndex={selected ? 0 : -1}
-            size={size}
-            icon={item.icon}
-            selected={selected}
-            focused={item.id === focusedId}
-            disabled={item.disabled}
-            fullWidth={orientation === 'vertical'}
-            onMouseMove={() => onPointerFocus?.(item.id)}
-            onClick={() => {
-              if (!selected) onSelect(item.id);
-            }}
-          >
-            {item.label}
-          </Button>
-        );
-      })}
-    </div>
+    <FocusGroup id={navId} layout={orientation} disabled={navId === undefined}>
+      <div
+        role="tablist"
+        aria-label={label}
+        aria-orientation={orientation}
+        className={styles.tablist}
+        data-orientation={orientation}
+      >
+        {items.map(item => {
+          const selected = item.id === selectedId;
+          return (
+            <Button
+              key={item.id}
+              id={tabId(id, item.id)}
+              role="tab"
+              aria-selected={selected}
+              aria-controls={panelId(id, item.id)}
+              // Assistive technology reaches the tablist through its selected tab
+              tabIndex={selected ? 0 : -1}
+              size={size}
+              icon={item.icon}
+              selected={selected}
+              focused={item.id === focusedId}
+              navId={navId === undefined ? undefined : `${navId}:${item.id}`}
+              disabled={item.disabled}
+              fullWidth={orientation === 'vertical'}
+              onMouseMove={() => onPointerFocus?.(item.id)}
+              onClick={() => {
+                if (!selected) onSelect(item.id);
+              }}
+            >
+              {item.label}
+            </Button>
+          );
+        })}
+      </div>
+    </FocusGroup>
   );
 }
 

@@ -2,8 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
-import { StateCell, SurfaceStage } from '../storyHelpers';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import { Checkbox } from './Checkbox';
 import { RadioGroup } from './RadioGroup';
 import { Switch } from './Switch';
@@ -132,44 +131,30 @@ export const RadioGroupStates: Story = {
 };
 
 function PlaybackSettings() {
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus([
-    ['sync'],
-    ['quality:auto'],
-    ['quality:1080p'],
-    ['quality:720p'],
-    ['subtitles'],
-  ]);
   const [sync, setSync] = useState(false);
   const [quality, setQuality] = useState<string | null>('auto');
   const [subtitles, setSubtitles] = useState(false);
-  const focusedQuality = focusedId.startsWith('quality:') ? focusedId.slice(8) : undefined;
   return (
-    <div ref={containerRef} style={{ width: '22rem' }}>
-      <Switch
-        label="Episode syncing"
-        checked={sync}
-        onCheckedChange={setSync}
-        focused={isFocused('sync')}
-        onPointerFocus={() => focus('sync')}
-      />
-      <div style={{ height: '1.5rem' }} />
-      <RadioGroup
-        label="Preferred quality"
-        options={qualities.slice(0, 3)}
-        value={quality}
-        onChange={setQuality}
-        focusedValue={focusedQuality}
-        onPointerFocus={value => focus(`quality:${value}`)}
-      />
-      <div style={{ height: '1rem' }} />
-      <Checkbox
-        label="Always show subtitles"
-        checked={subtitles}
-        onCheckedChange={setSubtitles}
-        focused={isFocused('subtitles')}
-        onPointerFocus={() => focus('subtitles')}
-      />
-    </div>
+    <NavigationStage>
+      <div style={{ width: '22rem' }}>
+        <Switch label="Episode syncing" checked={sync} onCheckedChange={setSync} navId="sync" />
+        <div style={{ height: '1.5rem' }} />
+        <RadioGroup
+          label="Preferred quality"
+          options={qualities.slice(0, 3)}
+          value={quality}
+          onChange={setQuality}
+          navId="quality"
+        />
+        <div style={{ height: '1rem' }} />
+        <Checkbox
+          label="Always show subtitles"
+          checked={subtitles}
+          onCheckedChange={setSubtitles}
+          navId="subtitles"
+        />
+      </div>
+    </NavigationStage>
   );
 }
 

@@ -5,10 +5,9 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Artwork } from '../artwork/Artwork';
 import { Avatar } from '../avatar/Avatar';
 import { Badge } from '../badge/Badge';
-import { StateCell, SurfaceStage } from '../storyHelpers';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import { storyImage } from '../storyImage';
 import { space } from '../tokens';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { CollectionTile } from './CollectionTile';
 
 const meta = {
@@ -122,10 +121,8 @@ export const States: Story = {
 const titles = ['Dune: Part Two', 'The Expanse', 'Arrival', 'Severance'];
 
 function Row() {
-  const ids = titles.map((_, index) => String(index));
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus([ids]);
   return (
-    <div ref={containerRef}>
+    <NavigationStage layout="horizontal">
       <div style={{ padding: `${space.xs} 0` }}>
         {titles.map((title, index) => (
           <div key={title} style={slot('14rem')}>
@@ -136,14 +133,12 @@ function Row() {
               labelPlacement="overlay"
               progress={index === 1 ? 0.65 : undefined}
               progressText={index === 1 ? '65% watched' : undefined}
-              focused={isFocused(String(index))}
-              onPointerFocus={() => focus(String(index))}
+              navId={title}
             />
           </div>
         ))}
       </div>
-      <p style={{ color: '#a6adaf' }}>Opened: {focusedId}</p>
-    </div>
+    </NavigationStage>
   );
 }
 
