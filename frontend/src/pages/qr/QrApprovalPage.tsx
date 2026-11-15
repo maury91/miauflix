@@ -4,6 +4,7 @@ import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { authenticatedRequest, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { Alert, Button, PALETTE, Spinner } from '@shared/ui';
 import { NARROW_MAX_WIDTH_PX } from '@shared/ui/logo/logoGeometry';
 import { useAppDispatch, useAppSelector } from '@store';
@@ -169,13 +170,6 @@ const SignInForm = styled.div`
   width: 100%;
   margin-top: 8px;
   text-align: left;
-
-  > div {
-    min-height: 0;
-    padding: 0;
-    border: 0;
-    background: none;
-  }
 `;
 
 const DEVICE_ICONS: Record<DeviceDescription['kind'], ComponentType> = {
@@ -377,7 +371,12 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
           <Text>Sign in to your Miauflix account here to approve this device.</Text>
           <DeviceRow request={current} secondsLeft={secondsLeft} />
           <SignInForm>
-            <LoginWithEmail showTitle={false} />
+            {/* The form is on the design system, under its own navigation layer */}
+            <NavigationProvider>
+              <FocusScope>
+                <LoginWithEmail showTitle={false} />
+              </FocusScope>
+            </NavigationProvider>
           </SignInForm>
         </Card>
       );

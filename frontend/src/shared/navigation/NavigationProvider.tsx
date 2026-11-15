@@ -51,12 +51,18 @@ export function NavigationProvider({ children, mirrorDomFocus = true }: Navigati
     const onMove = (event: MouseEvent) => store.trackPointer(event.clientX, event.clientY);
     // A resize can re-wrap items without resizing any of them: cached geometry is stale
     const onResize = () => store.invalidateGeometry();
+    // A tap or click into a field focuses it without moving the pointer first
+    const onFocusIn = (event: FocusEvent) => {
+      if (event.target instanceof Element) store.domFocus(event.target);
+    };
     window.addEventListener('mousemove', onMove, { capture: true, passive: true });
     window.addEventListener('resize', onResize);
+    document.addEventListener('focusin', onFocusIn);
     return () => {
       release();
       window.removeEventListener('mousemove', onMove, true);
       window.removeEventListener('resize', onResize);
+      document.removeEventListener('focusin', onFocusIn);
       store.dispose();
     };
   }, [store]);

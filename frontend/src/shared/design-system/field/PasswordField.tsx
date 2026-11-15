@@ -122,6 +122,7 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
                 focused={focusedPart === 'reveal'}
                 disabled={disabled}
                 aria-controls={control.id}
+                data-nav-part="reveal"
                 onMouseMove={() => onPointerFocus('reveal')}
                 onMouseDown={keepEditing}
                 onClick={toggle}

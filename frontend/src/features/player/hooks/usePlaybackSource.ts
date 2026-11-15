@@ -102,6 +102,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
   } | null>(null);
   /** The subtitle key of the current session; null while it is being requested. */
   const sessionSubtitleKey = useRef<string | null>(null);
+  const [subtitleKeyVersion, setSubtitleKeyVersion] = useState(0);
   const handlers = useRef<PlaybackSessionHandlers>(noHandlers);
   // Read when a session settles, not dependencies of the session effect: a new title or subtitle
   // key must not rerun the request lifecycle (status, progress and audio resets) on a live session.
@@ -280,6 +281,9 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
         setStatus(result.preparation.state === 'warm' ? 'ready' : 'preparing');
         onSessionCreated(result);
         sessionSubtitleKey.current = subtitleKeyRef.current;
+        // The session can render before this settles (its store update may flush first): the
+        // version lets effects reading the key run again once it is set
+        setSubtitleKeyVersion(version => version + 1);
       })
       .catch((reason: unknown) => {
         if (currentRequest !== requestId.current) return;
@@ -342,6 +346,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
     handleMediaError,
     settlePendingFailure,
     sessionSubtitleKey,
+    subtitleKeyVersion,
     /** Set by the player during render; read when the request effect runs. */
     handlers,
   };

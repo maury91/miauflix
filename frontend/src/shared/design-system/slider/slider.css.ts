@@ -196,6 +196,28 @@ export const thumb = style({
   },
 });
 
+/**
+ * A custom thumb glyph (an icon in `1em`), centred on the value by its own size and coloured like
+ * the fill; it grows like the round thumb under focus.
+ */
+export const thumbGlyph = style({
+  position: 'absolute',
+  top: '50%',
+  left: 0,
+  display: 'flex',
+  color: color.text,
+  transform: 'translate(-50%, -50%)',
+  transition: `transform ${duration.fast} ${easing.standard}`,
+  selectors: {
+    [`${root}[data-tone="brand"] &`]: { color: color.brand },
+    [`${root}[data-focused] &`]: { transform: 'translate(-50%, -50%) scale(1.2)' },
+    [`${root}[data-disabled] &`]: { color: color.textDisabled },
+  },
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { transition: 'none' },
+  },
+});
+
 /** A tick under the track for each mark. */
 export const tick = style({
   position: 'absolute',

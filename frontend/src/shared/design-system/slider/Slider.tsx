@@ -42,6 +42,11 @@ interface SliderBaseProps extends NavigableProps {
    * bar's downloaded blocks). Position children by a share of the width.
    */
   trackLayers?: ReactNode;
+  /**
+   * A decorative glyph drawn in place of the round thumb, centred on the value and coloured like
+   * the fill (the seek bar's paw). Size it with `font-size`; the native thumb keeps its size.
+   */
+  thumb?: ReactNode;
 }
 
 /** Labelled by its own label above the track… */
@@ -95,6 +100,7 @@ export function Slider({
   onPointerFocus,
   tone = 'neutral',
   trackLayers,
+  thumb,
   navId,
   label,
   description,
@@ -210,7 +216,11 @@ export function Slider({
               className={styles.thumbPosition}
               style={{ transform: `translateX(${share * 100}%)` }}
             >
-              <span className={styles.thumb} />
+              {thumb ? (
+                <span className={styles.thumbGlyph}>{thumb}</span>
+              ) : (
+                <span className={styles.thumb} />
+              )}
             </span>
           </span>
         </div>

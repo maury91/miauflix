@@ -33,7 +33,7 @@ const UnreadBadge = styled.span`
   background: #e60019;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.85);
   color: white;
-  font-size: 0.66rem;
+  font-size: 10.56px;
   line-height: 17px;
   text-align: center;
 `;

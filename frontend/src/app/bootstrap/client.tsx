@@ -1,6 +1,7 @@
 // Runs first: registers the TV remote's media keys when running as a Tizen app.
 import '@app/startup/tizen';
 import '@shared/styles/global.css';
+import '@shared/design-system/density.css';
 
 import { AppShell } from '@app/AppShell';
 import { installBrowserMeasurements } from '@app/browserMeasurements';

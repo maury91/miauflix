@@ -5,6 +5,8 @@ import { Slider } from '../../slider/Slider';
 import * as styles from './playback.css';
 import type { SeekRange } from './seekRanges';
 
+import PawIcon from '~icons/mdi/paw';
+
 export interface SeekControlProps {
   /** The bar's name ("Seek"). From the feature (i18n), like every text here. */
   label: string;
@@ -34,8 +36,8 @@ export interface SeekControlProps {
 const clampShare = (value: number) => Math.min(1, Math.max(0, value));
 
 /**
- * The player's seek bar: a Slider in the brand colour with the downloaded blocks under the watched
- * fill and the times at its ends. Left/Right seek by `keyStep` and clamp at the ends; Up/Down
+ * The player's seek bar: a Slider in the brand colour with Miauflix's paw as its thumb, the
+ * downloaded blocks under the watched fill and the times at its ends. Left/Right seek by `keyStep` and clamp at the ends; Up/Down
  * leave it. The player adapter owns playback and the downloaded data.
  */
 export function SeekControl({
@@ -81,6 +83,7 @@ export function SeekControl({
           focused={focused}
           onPointerFocus={onPointerFocus}
           navId={navId}
+          thumb={<PawIcon className={styles.paw} />}
           trackLayers={downloaded?.map(range => (
             <span
               key={range.start}

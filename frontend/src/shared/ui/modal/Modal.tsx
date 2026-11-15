@@ -12,7 +12,7 @@ const Overlay = styled.div`
   z-index: 20;
   display: grid;
   place-items: center;
-  padding: 1.5rem;
+  padding: 24px;
   background: rgba(0, 0, 0, 0.72);
   backdrop-filter: blur(3px);
 `;
@@ -22,30 +22,30 @@ const Dialog = styled.div`
   transform: scale(${IS_TV ? 0.8 : 600 / 840});
   transform-origin: center;
   box-sizing: border-box;
-  width: min(52.5rem, 100%);
-  max-height: calc((100dvh - 3rem) * ${1 / (IS_TV ? 0.8 : 600 / 840)});
+  width: min(840px, 100%);
+  max-height: calc((100dvh - 48px) * ${1 / (IS_TV ? 0.8 : 600 / 840)});
   overflow-y: auto;
-  padding: 5.75rem 3.5rem 2.875rem;
+  padding: 92px 56px 46px;
   border: 2px solid rgba(255, 255, 255, 0.18);
-  border-radius: 1.75rem;
+  border-radius: 28px;
   background:
     radial-gradient(ellipse at top right, rgba(126, 20, 44, 0.16), transparent 55%),
     linear-gradient(125deg, #151b24, #101419 55%, #0d1114);
   box-shadow:
-    0 1.5rem 5rem rgba(0, 0, 0, 0.6),
+    0 24px 80px rgba(0, 0, 0, 0.6),
     inset 0 1px rgba(255, 255, 255, 0.04);
   font-family: 'Poppins', sans-serif;
 
   @media (max-width: 600px) {
-    padding: 4.5rem 1.5rem 1.5rem;
-    border-radius: 1.25rem;
+    padding: 72px 24px 24px;
+    border-radius: 20px;
   }
 `;
 
 const CloseArea = styled.div`
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: 20px;
+  right: 20px;
 `;
 
 export interface ModalProps {

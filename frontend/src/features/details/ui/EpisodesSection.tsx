@@ -25,22 +25,22 @@ const EpisodePane = styled.section`
 `;
 
 const EpisodeList = styled.div`
-  height: calc(100% - 3.5rem);
+  height: calc(100% - 56px);
   overflow: auto;
-  padding: 0.5rem 0.4rem 8vh 0;
+  padding: 8px 6.4px 8vh 0;
   scrollbar-width: thin;
   scrollbar-color: ${PALETTE.background.border} transparent;
 `;
 
 const SeasonSection = styled.section`
-  scroll-margin-top: 1rem;
+  scroll-margin-top: 16px;
   margin-bottom: 2.5vh;
 `;
 
 const EpisodeHeading = styled.h3`
   margin: 0 0 0.8vh;
   color: ${PALETTE.text.primary};
-  font-size: clamp(1rem, 2.5vh, 1.4rem);
+  font-size: clamp(16px, 2.5vh, 22.4px);
 `;
 
 // Flex, not grid: the 2020 TVs (Chromium 69) cannot lay out a button as a grid.
@@ -89,14 +89,14 @@ const EpisodeCaption = styled.span`
   flex: 1 1 auto;
   min-width: 0;
   align-self: center;
-  padding: 1rem;
-  font-size: clamp(0.85rem, 2vh, 1.1rem);
+  padding: 16px;
+  font-size: clamp(13.6px, 2vh, 17.6px);
   font-weight: 600;
 `;
 
 const ProgressMark = styled.span`
   display: block;
-  margin-top: 0.5rem;
+  margin-top: 8px;
   color: ${PALETTE.text.secondary};
   font-size: 0.78em;
   font-weight: 400;
@@ -105,8 +105,8 @@ const ProgressMark = styled.span`
 const NoSourceMark = styled.span`
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-top: 0.5rem;
+  gap: 5.6px;
+  margin-top: 8px;
   color: ${PALETTE.text.disabled};
   font-size: 0.78em;
   font-weight: 500;

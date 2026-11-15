@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 export const SectionLabel = styled.h2`
   margin: 3vh 0 1vh;
-  font-size: clamp(1rem, 2.5vh, 1.45rem);
+  font-size: clamp(16px, 2.5vh, 23.2px);
   font-weight: 500;
 `;
 
@@ -27,7 +27,7 @@ export const PrimaryAction = styled(BaseButton)<{ $selected: boolean }>`
     $selected ? PALETTE.color.interactive : PALETTE.background.surface2};
   color: ${PALETTE.text.primary};
   font:
-    600 clamp(0.9rem, 2.1vh, 1.2rem) 'Poppins',
+    600 clamp(14.4px, 2.1vh, 19.2px) 'Poppins',
     sans-serif;
   cursor: pointer;
   box-shadow: none;

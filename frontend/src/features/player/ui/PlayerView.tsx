@@ -12,8 +12,9 @@ import { getAvplay, type PlayerMedia } from '@features/player/lib/avplay-media';
 import { mediaSubtitleKey } from '@features/player/lib/media-subtitles';
 import type { PlayableRef } from '@miauflix/backend';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
+import { Button } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { Button as BaseButton } from '@shared/ui/button/Button';
+import { FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { selectCurrentUser } from '@store/slices/auth';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -25,7 +26,7 @@ import {
   getSourceAttemptMessage,
 } from '../lib/playback-copy';
 import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
-import { PlayerControls, PlayerHeader } from './PlayerControls';
+import { PlayerControls, PlayerHeader, PlayerPrompt } from './PlayerControls';
 import { SubtitleCaption } from './SubtitleCaption';
 
 import BellIcon from '~icons/mdi/bell-ring-outline';
@@ -60,8 +61,8 @@ const Video = styled.video<{ $held?: boolean }>`
 
 const Message = styled.div`
   display: grid;
-  gap: 1rem;
-  width: min(90vw, 36rem);
+  gap: 16px;
+  width: min(90vw, 576px);
   color: ${PALETTE.text.primary};
   text-align: center;
 `;
@@ -69,14 +70,14 @@ const Message = styled.div`
 const Title = styled.h1`
   margin: 0;
   color: ${PALETTE.text.primary};
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-size: clamp(22.4px, 3vw, 35.2px);
 `;
 
 const VideoStatus = styled.p<{ $ready: boolean }>`
   position: fixed;
-  right: 1rem;
-  top: 5rem;
-  left: 1rem;
+  right: 16px;
+  top: 80px;
+  left: 16px;
   z-index: 1;
   margin: 0 auto;
   color: ${PALETTE.text.secondary};
@@ -92,69 +93,6 @@ const VideoStatus = styled.p<{ $ready: boolean }>`
   `}
 `;
 
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const BackButton = styled(BaseButton)`
-  min-width: 0;
-  min-height: 0;
-  justify-self: center;
-  padding: 0.7rem 1.2rem;
-  border: 1px solid ${PALETTE.background.border};
-  border-radius: 0.35rem;
-  background: ${PALETTE.background.surface2};
-  color: ${PALETTE.text.primary};
-  box-shadow: none;
-  cursor: pointer;
-`;
-
-const RetryButton = styled(BackButton)`
-  background: ${PALETTE.color.interactive};
-`;
-
-const NotifyButton = styled(RetryButton)`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  svg {
-    width: 1.2em;
-    height: 1.2em;
-  }
-`;
-
-const NextEpisodePrompt = styled.div`
-  position: fixed;
-  z-index: 6;
-  left: 50%;
-  bottom: 16vh;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  transform: translateX(-50%);
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  background: rgba(0, 0, 0, 0.82);
-`;
-
-/** Netflix-style: a plain button at the bottom right, above the controls, with no countdown. */
-const SkipIntroButton = styled(BackButton)`
-  position: fixed;
-  z-index: 6;
-  right: 4vw;
-  bottom: 16vh;
-  background: rgba(0, 0, 0, 0.82);
-  border: 2px solid rgba(255, 255, 255, 0.85);
-
-  /* Selected with the remote: filled, so it reads from across the room. */
-  &:focus {
-    background: #fff;
-    color: #000;
-  }
-`;
-
-const NextEpisodeButton = styled(BackButton)`
-  background: ${PALETTE.color.interactive};
-`;
-
 interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
@@ -163,12 +101,23 @@ interface PlayerViewProps {
   onPlayNext: () => void;
 }
 
+const NAV = { scope: 'player', retry: 'player-retry', notify: 'player-notify' } as const;
+
 /**
  * Play a target: create its playback session (walking its sources on failure, with a retry),
  * deliver its audio, report and resume progress, draw subtitles, and offer intro/credits skips
- * and the next episode. Each concern lives in a hook under `features/player/hooks`.
+ * and the next episode. Each concern lives in a hook under `features/player/hooks`. The player is
+ * one navigation scope on the design system.
  */
-export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }: PlayerViewProps) {
+export function PlayerView(props: PlayerViewProps) {
+  return (
+    <NavigationProvider>
+      <PlayerScreen {...props} />
+    </NavigationProvider>
+  );
+}
+
+function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: PlayerViewProps) {
   const currentUser = useSelector(selectCurrentUser);
   /** Samsung TVs play through AVPlay, which decodes far more than their browser does. */
   const [avplay] = useState(() => (builtForTizen ? getAvplay() : undefined));
@@ -243,6 +192,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     session,
     storageKey: subtitleStorageKey,
     sessionStorageKey: source.sessionSubtitleKey,
+    sessionKeyVersion: source.subtitleKeyVersion,
     videoRef,
     mediaElement,
     resumeRef: resume.resumeRef,
@@ -372,44 +322,23 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     onError: () => source.handleMediaError(),
   };
 
-  const pageRef = useRef<HTMLElement | null>(null);
-  const retryRef = useRef<HTMLButtonElement>(null);
-  const notifyRef = useRef<HTMLButtonElement>(null);
-  const navigationRef = useKeyboardNavigation({
-    // A remote needs something focused: the failure's action, else the player (for Back).
-    onRestoreFocus: () => {
-      const target = retryRef.current ?? notifyRef.current ?? pageRef.current;
-      target?.focus({ preventScroll: true });
-      return !!target;
-    },
+  const navigation = useNavigation();
+  // Back leaves the player, after whatever is open inside it (the subtitle panel) took it. An
+  // element scope, so it wins over page-wide handlers of the screens underneath.
+  const pageRef = useKeyboardNavigation({
     onBack: () => {
       onBack();
       return true;
     },
   });
-  const setPage = useCallback(
-    (element: HTMLElement | null) => {
-      pageRef.current = element;
-      navigationRef(element);
-    },
-    [navigationRef]
-  );
-  // While preparing, the player itself takes the focus, so a remote's Back works
-  useEffect(() => {
-    if (!document.activeElement || document.activeElement === document.body)
-      pageRef.current?.focus({ preventScroll: true });
-  }, []);
-  // A remote needs something focused: the failure's action, else the player (for Back).
-  // Retry unmounts its own button, dropping the focus on the body: hand it back to the player.
-  // In the commit that shows the action, so nothing sees it unfocused.
+  // A failure's action takes the focus, in the commit that shows it
+  const notifyShown = status === 'exhausted' && !availabilityRequest.isSuccess;
   useLayoutEffect(() => {
-    if (error || status === 'exhausted') {
-      (retryRef.current ?? notifyRef.current ?? pageRef.current)?.focus({ preventScroll: true });
-      return;
-    }
-    if (!document.activeElement || document.activeElement === document.body)
-      pageRef.current?.focus({ preventScroll: true });
-  }, [error, status, availabilityRequest.isSuccess]);
+    if (error) navigation.focus(NAV.retry);
+    else if (notifyShown) navigation.focus(NAV.notify);
+    // The store's focus is stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, notifyShown]);
 
   const { sourceAttempt } = source;
   const statusMessage =
@@ -419,161 +348,168 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const selectedSubtitle = subtitles.selected;
 
   return (
-    <Page ref={setPage} tabIndex={-1} aria-label="Player">
-      {!session && <PlayerHeader onBack={onBack} />}
-      {session ? (
-        <>
-          {avplay && playsInAvplay && avplayOpen && (
-            <AvplayVideo
-              avplay={avplay}
-              mediaRef={setMedia}
-              src={avplayOpen.src}
-              startSeconds={avplayOpen.start}
-              durationSeconds={session.delivery?.durationSeconds}
-              aria-label={title}
-              autoPlay={avplayOpen.autoplay}
-              subtitleCues={selectedSubtitle ? subtitles.avplayCues : []}
-              subtitleOffset={subtitles.offset}
-              subtitleRaise={subtitles.controlsInset}
-              subtitleFontFamily={subtitles.fontFamily}
-              {...mediaEvents}
-            />
-          )}
-          {(!(avplay && playsInAvplay) || holdingPicture) && (
-            <Video
-              ref={setVideoElement}
-              $held={holdingPicture}
-              src={audioDelivery || holdingPicture ? undefined : session.streamUrl}
-              // The TV app's backend is cross-origin, and subtitle tracks only load across origins with CORS
-              crossOrigin={builtForTizen ? 'anonymous' : undefined}
-              aria-label={title}
-              autoPlay={!audioDelivery && !holdingPicture}
-              playsInline
-              {...(holdingPicture ? {} : mediaEvents)}
-            >
-              {selectedSubtitle && subtitles.url && (
-                <track
-                  key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitles.subtitleWindow : 0}`}
-                  ref={node => {
-                    subtitles.trackRef.current = node;
-                    if (node) node.track.mode = 'hidden';
-                  }}
-                  kind="subtitles"
-                  srcLang={selectedSubtitle.language}
-                  label={`${selectedSubtitle.languageLabel}${selectedSubtitle.hearingImpaired ? ' (SDH)' : ''}`}
-                  src={subtitles.url}
-                  default
-                />
-              )}
-            </Video>
-          )}
-          {!playsInAvplay && selectedSubtitle && subtitles.nativeCaption && (
-            <SubtitleCaption
-              text={subtitles.nativeCaption}
-              raise={subtitles.controlsInset}
-              fontFamily={subtitles.fontFamily}
-              data-testid="subtitle-caption"
-            />
-          )}
-          <PlayerControls
-            // The controls listen to one media element; a switch to converted audio replaces it
-            key={playsInAvplay ? 'avplay' : 'video'}
-            prompts={
-              <>
-                {prompts.inIntro && (
-                  <SkipIntroButton type="button" onClick={prompts.skipIntro}>
-                    Skip intro
-                  </SkipIntroButton>
+    <Page ref={pageRef} aria-label="Player">
+      <FocusScope id={NAV.scope}>
+        {!session && <PlayerHeader onBack={onBack} />}
+        {session ? (
+          <>
+            {avplay && playsInAvplay && avplayOpen && (
+              <AvplayVideo
+                avplay={avplay}
+                mediaRef={setMedia}
+                src={avplayOpen.src}
+                startSeconds={avplayOpen.start}
+                durationSeconds={session.delivery?.durationSeconds}
+                aria-label={title}
+                autoPlay={avplayOpen.autoplay}
+                subtitleCues={selectedSubtitle ? subtitles.avplayCues : []}
+                subtitleOffset={subtitles.offset}
+                subtitleRaise={subtitles.controlsInset}
+                subtitleFontFamily={subtitles.fontFamily}
+                {...mediaEvents}
+              />
+            )}
+            {(!(avplay && playsInAvplay) || holdingPicture) && (
+              <Video
+                ref={setVideoElement}
+                $held={holdingPicture}
+                src={audioDelivery || holdingPicture ? undefined : session.streamUrl}
+                // The TV app's backend is cross-origin, and subtitle tracks only load across origins with CORS
+                crossOrigin={builtForTizen ? 'anonymous' : undefined}
+                aria-label={title}
+                autoPlay={!audioDelivery && !holdingPicture}
+                playsInline
+                {...(holdingPicture ? {} : mediaEvents)}
+              >
+                {selectedSubtitle && subtitles.url && (
+                  <track
+                    key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitles.subtitleWindow : 0}`}
+                    ref={node => {
+                      subtitles.trackRef.current = node;
+                      if (node) node.track.mode = 'hidden';
+                    }}
+                    kind="subtitles"
+                    srcLang={selectedSubtitle.language}
+                    label={`${selectedSubtitle.languageLabel}${selectedSubtitle.hearingImpaired ? ' (SDH)' : ''}`}
+                    src={subtitles.url}
+                    default
+                  />
                 )}
-                {prompts.skipCountdown !== null && (
-                  <NextEpisodePrompt role="group" aria-label="Credits">
-                    <NextEpisodeButton type="button" onClick={prompts.skipCredits}>
-                      Skip credits ({prompts.skipCountdown}s)
-                    </NextEpisodeButton>
-                    <BackButton type="button" onClick={prompts.watchCredits}>
-                      Watch credits
-                    </BackButton>
-                  </NextEpisodePrompt>
-                )}
-                {prompts.skipCountdown === null &&
-                  nextEpisode &&
-                  prompts.nextCountdown !== null && (
-                    <NextEpisodePrompt role="group" aria-label="Next episode">
-                      <NextEpisodeButton type="button" onClick={prompts.playNextEpisode}>
-                        Play next episode ({prompts.nextCountdown}s)
-                      </NextEpisodeButton>
-                      <BackButton type="button" onClick={prompts.stay}>
-                        Stay
-                      </BackButton>
-                    </NextEpisodePrompt>
+              </Video>
+            )}
+            {!playsInAvplay && selectedSubtitle && subtitles.nativeCaption && (
+              <SubtitleCaption
+                text={subtitles.nativeCaption}
+                raise={subtitles.controlsInset}
+                fontFamily={subtitles.fontFamily}
+                data-testid="subtitle-caption"
+              />
+            )}
+            <PlayerControls
+              // The controls listen to one media element; a switch to converted audio replaces it
+              key={playsInAvplay ? 'avplay' : 'video'}
+              prompts={
+                <>
+                  {prompts.inIntro && (
+                    <PlayerPrompt layout="intro">
+                      <Button navId="player-skip-intro" onClick={prompts.skipIntro}>
+                        Skip intro
+                      </Button>
+                    </PlayerPrompt>
                   )}
+                  {prompts.skipCountdown !== null && (
+                    <PlayerPrompt layout="group" label="Credits">
+                      <Button navId="player-skip-credits" onClick={prompts.skipCredits}>
+                        Skip credits ({prompts.skipCountdown}s)
+                      </Button>
+                      <Button navId="player-watch-credits" onClick={prompts.watchCredits}>
+                        Watch credits
+                      </Button>
+                    </PlayerPrompt>
+                  )}
+                  {prompts.skipCountdown === null &&
+                    nextEpisode &&
+                    prompts.nextCountdown !== null && (
+                      <PlayerPrompt layout="group" label="Next episode">
+                        <Button navId="player-next-episode" onClick={prompts.playNextEpisode}>
+                          Play next episode ({prompts.nextCountdown}s)
+                        </Button>
+                        <Button navId="player-stay" onClick={prompts.stay}>
+                          Stay
+                        </Button>
+                      </PlayerPrompt>
+                    )}
+                </>
+              }
+              videoRef={videoRef}
+              preparing={status !== 'ready' && !pictureHeld}
+              onBack={onBack}
+              subtitleSearchPreferences={subtitles.searchPreferences}
+              subtitleCues={subtitles.cues}
+              subtitleCandidates={subtitles.candidates}
+              subtitleConfigured={subtitles.configured}
+              subtitleAvailable={subtitles.available}
+              subtitleLoading={subtitles.loading}
+              subtitleMessage={subtitles.message}
+              selectedSubtitleId={subtitles.selectedId}
+              subtitleOffset={subtitles.offset}
+              onSearchSubtitles={subtitles.search}
+              onSelectSubtitle={subtitles.select}
+              onSubtitleOffsetChange={subtitles.changeOffset}
+              subtitlePreferencesKey={currentUser?.id ?? null}
+              onControlsInsetChange={subtitles.setControlsInset}
+              onHeaderInsetChange={subtitles.setHeaderInset}
+              downloadedRanges={source.downloadedRanges}
+              durationSeconds={audioDelivery?.durationSeconds}
+              pendingPosition={audio.pendingPosition}
+              audioTracks={audio.audioTracks}
+              selectedAudioTrackIndex={audio.audioTrackIndex}
+              onSelectAudioTrack={audio.selectAudioTrack}
+              onSeek={audioDelivery ? audio.seekConvertedAudio : undefined}
+            />
+            <VideoStatus
+              $ready={status === 'ready' || pictureHeld}
+              role="status"
+              aria-live="polite"
+            >
+              {statusMessage}
+            </VideoStatus>
+          </>
+        ) : (
+          <Message role={error ? 'alert' : 'status'} aria-live={error ? 'assertive' : 'polite'}>
+            <Title>{title}</Title>
+            {status === 'exhausted' ? (
+              <>
+                <span>
+                  {availabilityRequest.isSuccess
+                    ? `We'll notify you as soon as “${title}” is out.`
+                    : getNoSourceMessage(title)}
+                </span>
+                {!availabilityRequest.isSuccess && (
+                  <Button
+                    navId={NAV.notify}
+                    icon={<BellIcon />}
+                    loading={availabilityRequest.isLoading}
+                    onClick={() => void requestAvailability(playable)}
+                  >
+                    Notify me
+                  </Button>
+                )}
+                {availabilityRequest.isError && (
+                  <span role="alert">The notification could not be saved. Try again.</span>
+                )}
               </>
-            }
-            videoRef={videoRef}
-            preparing={status !== 'ready' && !pictureHeld}
-            onBack={onBack}
-            subtitleSearchPreferences={subtitles.searchPreferences}
-            subtitleCues={subtitles.cues}
-            subtitleCandidates={subtitles.candidates}
-            subtitleConfigured={subtitles.configured}
-            subtitleAvailable={subtitles.available}
-            subtitleLoading={subtitles.loading}
-            subtitleMessage={subtitles.message}
-            selectedSubtitleId={subtitles.selectedId}
-            subtitleOffset={subtitles.offset}
-            onSearchSubtitles={subtitles.search}
-            onSelectSubtitle={subtitles.select}
-            onSubtitleOffsetChange={subtitles.changeOffset}
-            subtitlePreferencesKey={currentUser?.id ?? null}
-            onControlsInsetChange={subtitles.setControlsInset}
-            onHeaderInsetChange={subtitles.setHeaderInset}
-            downloadedRanges={source.downloadedRanges}
-            durationSeconds={audioDelivery?.durationSeconds}
-            pendingPosition={audio.pendingPosition}
-            audioTracks={audio.audioTracks}
-            selectedAudioTrackIndex={audio.audioTrackIndex}
-            onSelectAudioTrack={audio.selectAudioTrack}
-            onSeek={audioDelivery ? audio.seekConvertedAudio : undefined}
-          />
-          <VideoStatus $ready={status === 'ready' || pictureHeld} role="status" aria-live="polite">
-            {statusMessage}
-          </VideoStatus>
-        </>
-      ) : (
-        <Message role={error ? 'alert' : 'status'} aria-live={error ? 'assertive' : 'polite'}>
-          <Title>{title}</Title>
-          {status === 'exhausted' ? (
-            <>
-              <span>
-                {availabilityRequest.isSuccess
-                  ? `We'll notify you as soon as “${title}” is out.`
-                  : getNoSourceMessage(title)}
-              </span>
-              {!availabilityRequest.isSuccess && (
-                <NotifyButton
-                  ref={notifyRef}
-                  type="button"
-                  disabled={availabilityRequest.isLoading}
-                  onClick={() => void requestAvailability(playable)}
-                >
-                  <BellIcon aria-hidden="true" />
-                  Notify me
-                </NotifyButton>
-              )}
-              {availabilityRequest.isError && (
-                <span role="alert">The notification could not be saved. Try again.</span>
-              )}
-            </>
-          ) : (
-            <span>{error ?? statusMessage}</span>
-          )}
-          {error && (
-            <RetryButton ref={retryRef} type="button" onClick={source.retry}>
-              Retry
-            </RetryButton>
-          )}
-        </Message>
-      )}
+            ) : (
+              <span>{error ?? statusMessage}</span>
+            )}
+            {error && (
+              <Button navId={NAV.retry} onClick={source.retry}>
+                Retry
+              </Button>
+            )}
+          </Message>
+        )}
+      </FocusScope>
     </Page>
   );
 }

@@ -47,7 +47,6 @@ vi.mock('./MediaCard', async () => {
         props: {
           media: { id: number };
           selected: boolean;
-          showFocus?: boolean;
           tabIndex: number;
           onFocus: () => void;
           onHover: () => void;
@@ -58,7 +57,7 @@ vi.mock('./MediaCard', async () => {
         <button
           ref={ref}
           aria-current={props.selected ? 'true' : undefined}
-          data-focused={props.showFocus === false ? undefined : props.selected || undefined}
+          data-focused={props.selected || undefined}
           data-testid={`media-${props.media.id}`}
           tabIndex={props.tabIndex}
           type="button"
@@ -160,15 +159,13 @@ describe('CategoryRow on the Samsung TV', () => {
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('marks the selection with one ring over the leading slot instead of on the card', () => {
+  it('marks the selection on the card only while the row is active', () => {
     const view = render(<CategoryRow {...props(true)} />);
-    const ring = screen.getByTestId('category-row-focus-ring');
-    expect(ring.style.opacity).toBe('0');
+    expect(screen.getByTestId('media-10').hasAttribute('data-focused')).toBe(false);
 
     view.rerender(<CategoryRow {...props(true)} active />);
-    expect(ring.style.opacity).toBe('1');
     expect(screen.getByTestId('media-10').getAttribute('aria-current')).toBe('true');
-    expect(screen.getByTestId('media-10').hasAttribute('data-focused')).toBe(false);
+    expect(screen.getByTestId('media-10').hasAttribute('data-focused')).toBe(true);
   });
 
   it('moves at once but reports a held run of moves once it pauses', () => {

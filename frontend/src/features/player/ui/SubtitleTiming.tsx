@@ -14,26 +14,26 @@ export interface SubtitleTimingCue {
 
 const Preview = styled.div`
   position: relative;
-  height: 16rem;
+  height: 256px;
   overflow: hidden;
-  border-radius: 0.35rem;
+  border-radius: 5.6px;
   background: ${PALETTE.background.surface1};
 `;
 const Now = styled.div`
   position: absolute;
   top: 50%;
-  left: 0.5rem;
-  right: 0.5rem;
+  left: 8px;
+  right: 8px;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 4px;
   transform: translateY(-50%);
   color: ${PALETTE.color.brand};
-  font-size: 0.8rem;
+  font-size: 12.8px;
   pointer-events: none;
   svg {
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 22.4px;
+    height: 22.4px;
   }
   &::after {
     content: '';
@@ -44,13 +44,13 @@ const Now = styled.div`
 const Line = styled.div<{ $distance: number; $active: boolean }>`
   position: absolute;
   top: 50%;
-  left: 4rem;
-  right: 0.5rem;
+  left: 64px;
+  right: 8px;
   transform: translateY(calc(-50% + ${({ $distance }) => $distance}rem));
   transition: transform 0.1s linear;
   color: ${({ $active }) => ($active ? PALETTE.text.primary : PALETTE.text.secondary)};
   font-weight: ${({ $active }) => ($active ? 600 : 400)};
-  font-size: 0.9rem;
+  font-size: 14.4px;
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -63,7 +63,7 @@ const Adjustment = styled.div`
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
   input {
     width: 100%;
     min-width: 0;
@@ -74,7 +74,7 @@ const Range = styled.div`
   display: flex;
   justify-content: space-between;
   color: ${PALETTE.text.secondary};
-  font-size: 0.8rem;
+  font-size: 12.8px;
 `;
 // eslint-disable-next-line no-restricted-syntax -- Existing media/player timing interaction; see shared/ui/README.md.
 const StepButton = styled(BaseButton)`
@@ -83,7 +83,7 @@ const StepButton = styled(BaseButton)`
   padding: 0;
   background: ${PALETTE.background.input};
   color: ${PALETTE.text.primary};
-  font-size: 1.5rem;
+  font-size: 24px;
   box-shadow: none;
 `;
 

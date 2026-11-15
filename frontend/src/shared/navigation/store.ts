@@ -1,4 +1,12 @@
-import { activate, isEditable, isNativeControl, isShown, mirrorTarget } from './dom';
+import {
+  activate,
+  canMirror,
+  editableSelector,
+  isEditable,
+  isNativeControl,
+  isShown,
+  mirrorTarget,
+} from './dom';
 import { enter, isWithin, resolveMove } from './resolve';
 import type { Direction, Edge, NavigationNode, NavigationTree, Rect, Resolution } from './types';
 
@@ -334,6 +342,11 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     }
   }
 
+  /** A composite's part that is its own native control, marked `data-nav-part` inside it. */
+  function partElement(element: HTMLElement, part: string): HTMLElement | null {
+    return element.querySelector<HTMLElement>(`[data-nav-part="${CSS.escape(part)}"]`);
+  }
+
   function setActive(id: string | null, part: string | undefined, input: InputKind) {
     lastInput = input;
     if (id === activeId && part === activePart) return;
@@ -583,32 +596,103 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
   function tab(backward: boolean): boolean {
     const view = tree();
     const scope = topScope();
-    const leaves: { id: string; element: HTMLElement }[] = [];
+    // Tab stops: each leaf, or each part of a composite that is its own native control (marked
+    // with `data-nav-part`), in document order like native Tab
+    const stops: { id: string; part: string | undefined; element: HTMLElement }[] = [];
     for (const [id, registration] of registrations) {
-      if (registration.node.kind !== 'leaf' || !view.eligible(id) || !isWithin(view, id, scope)) {
+      const { node } = registration;
+      if (node.kind !== 'leaf' || !view.eligible(id) || !isWithin(view, id, scope)) continue;
+      const element = registration.element();
+      if (!element) continue;
+      const parts = node.parts ?? [];
+      const marked = parts.map(part => partElement(element, part));
+      if (marked.every(own => own === null)) {
+        stops.push({ id, part: parts[0], element });
         continue;
       }
-      const element = registration.element();
-      if (element) leaves.push({ id, element });
+      // Unmarked parts stop at the leaf itself (before its marked parts, which it contains)
+      parts.forEach((part, index) => {
+        const own = marked[index];
+        if (own === null) stops.push({ id, part, element });
+        else if (!(own as HTMLButtonElement).disabled) stops.push({ id, part, element: own });
+      });
     }
-    if (leaves.length === 0) return false;
-    leaves.sort((a, b) =>
-      a.element.compareDocumentPosition(b.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    if (stops.length === 0) return false;
+    stops.sort((a, b) =>
+      a.element === b.element
+        ? 0
+        : a.element.compareDocumentPosition(b.element) & Node.DOCUMENT_POSITION_FOLLOWING
+          ? -1
+          : 1
     );
-    const index = leaves.findIndex(leaf => leaf.id === activeId);
-    let next = index === -1 ? (backward ? leaves.length - 1 : 0) : index + (backward ? -1 : 1);
-    if (next < 0 || next >= leaves.length) {
+    const exact = stops.findIndex(stop => stop.id === activeId && stop.part === activePart);
+    const index = exact !== -1 ? exact : stops.findIndex(stop => stop.id === activeId);
+    let next = index === -1 ? (backward ? stops.length - 1 : 0) : index + (backward ? -1 : 1);
+    if (next < 0 || next >= stops.length) {
       // Only a containing scope traps Tab; a page lets it leave natively
       const contained = scope !== null && registrations.get(scope)?.node.edge === 'contain';
       if (!contained) return false;
-      next = backward ? leaves.length - 1 : 0;
+      next = backward ? stops.length - 1 : 0;
     }
-    const target = registrations.get(leaves[next].id)!.node;
+    const target = stops[next];
     // Keys took over: the pointer resting here is not movement, and no grid column is kept
     pointerAnchor = pointer;
     gridColumns.clear();
-    setActive(target.id, target.parts?.[0], 'key');
+    setActive(target.id, target.part, 'key');
+    // A desktop keyboard tabbing onto a field types into it: Tab enters edit mode
+    const { element } = target;
+    const field = isEditable(element)
+      ? element
+      : target.part === 'input'
+        ? element.querySelector<HTMLElement>(editableSelector)
+        : null;
+    field?.focus({ preventScroll: true });
     return true;
+  }
+
+  /**
+   * DOM focus arrived without the layer (a tap or click into a field, a browser autofill): the
+   * leaf holding it becomes the focused one, at the part holding it (`data-nav-part`), or its
+   * input part when the focus is in a text field.
+   * Focus on an unregistered control clears virtual focus.
+   */
+  function domFocus(target: Element) {
+    let found: { id: string; element: HTMLElement } | null = null;
+    for (const [id, registration] of registrations) {
+      if (registration.node.kind !== 'leaf') continue;
+      const element = registration.element();
+      // The innermost leaf holding the target
+      if (element?.contains(target) && (!found || found.element.contains(element))) {
+        found = { id, element };
+      }
+    }
+    if (!found) {
+      // A control outside the layer took focus (a panel still moving DOM focus itself): virtual
+      // focus steps aside, so nothing else looks focused, and comes back when a leaf is focused
+      if (activeId !== null && target instanceof HTMLElement && canMirror(target)) {
+        setActive(null, undefined, 'pointer');
+      }
+      return;
+    }
+    const parts = registrations.get(found.id)!.node.parts;
+    // A part that is its own native control (Tab or a click onto a field's reveal toggle)
+    const partHolder = target.closest('[data-nav-part]');
+    const marked =
+      partHolder && found.element.contains(partHolder)
+        ? partHolder.getAttribute('data-nav-part')
+        : null;
+    const part =
+      marked && parts?.includes(marked)
+        ? marked
+        : isEditable(target) && parts?.includes('input')
+          ? 'input'
+          : found.id === activeId
+            ? activePart
+            : parts?.[0];
+    if (found.id === activeId && part === activePart) return;
+    const view = tree();
+    if (!view.eligible(found.id) || !isWithin(view, found.id, topScope())) return;
+    setActive(found.id, part, 'pointer');
   }
 
   /** The pointer moved onto a registered element: it becomes the focused one, unless locked. */
@@ -676,6 +760,22 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
       queueMicrotask(() => {
         if (generation !== removedAt) return;
         const view = tree();
+        // Remounted under the same id in the same commit (a layout switch): focus stays there
+        if (
+          activeId !== null &&
+          registrations.has(activeId) &&
+          view.eligible(activeId) &&
+          isWithin(view, activeId, topScope())
+        ) {
+          const element = elementOf(activeId);
+          const target = mirrorDomFocus && element ? mirrorTarget(element, activePart) : null;
+          if (target && document.activeElement !== target) {
+            target.focus({ preventScroll: true });
+            mirrored = target;
+          }
+          notify([activeId]);
+          return;
+        }
         for (const candidate of fallbacks) {
           if (!registrations.has(candidate) || !isWithin(view, candidate, topScope())) continue;
           const entry = enter(view, candidate, null, null);
@@ -804,6 +904,7 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     confirm,
     back,
     tab,
+    domFocus,
     pointerFocus,
     lockPointer,
     trackPointer,

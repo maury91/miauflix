@@ -12,13 +12,13 @@ import ExternalIcon from '~icons/mdi/open-in-new';
 
 const ActivationInstructions = styled.div`
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 5.75rem minmax(0, 1.11fr);
+  grid-template-columns: minmax(0, 1fr) 92px minmax(0, 1.11fr);
   align-items: start;
-  margin-top: 2.75rem;
+  margin-top: 44px;
 
   @media (max-width: 600px) {
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
+    gap: 24px;
   }
 `;
 
@@ -29,10 +29,10 @@ const Option = styled.div`
 const Step = styled.div`
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  min-height: 2.625rem;
+  gap: 20px;
+  min-height: 42px;
   color: #f5f6f8;
-  font-size: 1.375rem;
+  font-size: 22px;
   line-height: 1.3;
   strong {
     font-weight: 700;
@@ -42,20 +42,20 @@ const Step = styled.div`
 const StepNumber = styled.span`
   display: grid;
   place-items: center;
-  flex: 0 0 2.625rem;
-  height: 2.625rem;
+  flex: 0 0 42px;
+  height: 42px;
   border-radius: 50%;
   background: linear-gradient(120deg, #ff263c, #eb0030);
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: 600;
 `;
 
 const QRPanel = styled.div`
   box-sizing: border-box;
   width: 100%;
-  margin: 0.75rem 0 0 0.5rem;
-  padding: 1.0625rem;
-  border-radius: 0.75rem;
+  margin: 12px 0 0 8px;
+  padding: 17px;
+  border-radius: 12px;
   background: #fff;
   line-height: 0;
   svg {
@@ -65,8 +65,8 @@ const QRPanel = styled.div`
   }
 
   @media (max-width: 600px) {
-    width: min(100%, 18.75rem);
-    margin: 0.75rem auto 0;
+    width: min(100%, 300px);
+    margin: 12px auto 0;
   }
 `;
 
@@ -75,10 +75,10 @@ const Divider = styled.div`
   flex-direction: column;
   align-items: center;
   align-self: stretch;
-  gap: 1.25rem;
-  min-height: 24rem;
+  gap: 20px;
+  min-height: 384px;
   color: #bac1ca;
-  font-size: 1.375rem;
+  font-size: 22px;
   line-height: 1;
   &::before,
   &::after {
@@ -103,10 +103,10 @@ const CodePanel = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  margin-top: 1.125rem;
-  padding: 0.5625rem 0.75rem 0.5625rem 1.5rem;
-  border-radius: 0.75rem;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 9px 12px 9px 24px;
+  border-radius: 12px;
   background: linear-gradient(120deg, #202428, #191d21);
 `;
 
@@ -114,19 +114,19 @@ const Code = styled.code`
   min-width: 0;
   color: #f5f6f8;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.25rem, 2.2vw, 1.875rem);
+  font-size: clamp(20px, 2.2vw, 30px);
   letter-spacing: 0.08em;
   overflow-wrap: anywhere;
 `;
 
 const OpenArea = styled.div`
-  margin-top: 1.75rem;
+  margin-top: 28px;
 `;
 
 const Expiry = styled.p`
-  margin: 0.75rem 0 0;
+  margin: 12px 0 0;
   color: #bac1ca;
-  font-size: 1rem;
+  font-size: 16px;
   text-align: center;
   font-variant-numeric: tabular-nums;
 `;

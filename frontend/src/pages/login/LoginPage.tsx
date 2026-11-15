@@ -1,92 +1,76 @@
+import { LOGIN_NAV } from '@features/auth/ui/login/loginNav';
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { LoginWithQR } from '@features/auth/ui/login/LoginWithQR';
-import { IS_TIZEN } from '@shared/config/constants';
+import { Icon, Inline, SplitLayout, Surface, Text } from '@shared/design-system';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { selectWindowSize } from '@store/slices/measurements';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+
+import * as styles from './loginPage.css';
 
 import RemoteIcon from '~icons/mdi/remote';
 
-const LoginContainer = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #0a0d0f;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-`;
+/** The QR panel needs room beside the form; phones sign in with email only. */
+const QR_MIN_WIDTH = 720;
 
-const LoginContent = styled.div`
-  display: flex;
-  gap: 24px;
-  align-items: flex-start;
-  max-width: 900px;
-  width: 100%;
-`;
-
-const BottomInstructions = styled.div`
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 12px;
-  color: #666;
-`;
-
+/**
+ * Sign in: the email form and, on wide screens, the QR pairing panel beside it. The screen is one
+ * navigation scope: the form and the panel are vertical groups side by side, so Right from the
+ * form reaches the panel (when it has an action) and Left comes back.
+ */
 const LoginPage: FC = () => {
-  // Email login state
   const [showQR, setShowQR] = useState(false);
   const { width: windowWidth } = useSelector(selectWindowSize);
-  // A remote moves right from the show-password toggle to the QR's new-code button, and back
-  const toggleRef = useRef<HTMLButtonElement>(null);
-  const refreshRef = useRef<HTMLButtonElement>(null);
-  const focusRefresh = () => {
-    if (!refreshRef.current) return false;
-    refreshRef.current.focus();
-    return true;
-  };
-  const focusToggle = () => toggleRef.current?.focus();
 
   useEffect(() => {
-    setShowQR(windowWidth > 720);
+    setShowQR(windowWidth > QR_MIN_WIDTH);
   }, [windowWidth]);
 
+  const form = (
+    <Surface padding="lg" radius="lg" border>
+      <LoginWithEmail showTitle={showQR} />
+    </Surface>
+  );
+
   return (
-    <LoginContainer
+    <motion.div
+      className={styles.page}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <LoginContent>
-        {/* Email Login Section */}
-        <LoginWithEmail
-          showTitle={showQR}
-          autoFocus={IS_TIZEN}
-          toggleRef={toggleRef}
-          onRightFromToggle={focusRefresh}
-        />
-        {showQR && <LoginWithQR refreshRef={refreshRef} onLeaveRefresh={focusToggle} />}
-      </LoginContent>
+      <NavigationProvider>
+        <FocusScope id={LOGIN_NAV.scope} layout="horizontal" initialId={LOGIN_NAV.email}>
+          <div className={styles.content}>
+            {showQR ? (
+              <SplitLayout
+                stackBelow="medium"
+                gap="lg"
+                start={form}
+                end={<LoginWithQR focusAfterNewCode={LOGIN_NAV.password} />}
+              />
+            ) : (
+              form
+            )}
+          </div>
+        </FocusScope>
+      </NavigationProvider>
 
-      <BottomInstructions>
-        <RemoteIcon aria-hidden="true" />
-        Use remote to navigate and focus
-      </BottomInstructions>
-    </LoginContainer>
+      <div className={styles.legend}>
+        <Inline gap="sm" justify="center">
+          <Icon>
+            <RemoteIcon />
+          </Icon>
+          <Text variant="caption" tone="secondary">
+            Use remote to navigate and focus
+          </Text>
+        </Inline>
+      </div>
+    </motion.div>
   );
 };
 

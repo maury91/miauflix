@@ -1,6 +1,7 @@
 // Import SSR mocks first to set up global mocks (including JSDOM)
 import './ssr-mocks';
 import '@shared/styles/global.css';
+import '@shared/design-system/density.css';
 
 import { AppShell } from '@app/AppShell';
 import { store } from '@store';

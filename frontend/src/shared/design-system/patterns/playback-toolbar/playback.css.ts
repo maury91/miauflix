@@ -100,3 +100,10 @@ export const downloaded = style({
   bottom: 0,
   backgroundColor: 'rgba(255, 255, 255, 0.55)',
 });
+
+/** The seek bar's thumb: the brand paw, its pads resting on the track. */
+export const paw = style({
+  display: 'block',
+  fontSize: '2rem',
+  transform: 'translateY(-13%)',
+});

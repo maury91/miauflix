@@ -52,3 +52,11 @@ export const code = style({
 export const block = style({
   width: '100%',
 });
+
+/** The message, centred as a whole: its icon stays beside its text in the centred panel. */
+export const message = style({
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+globalStyle(`${message} > *`, { flex: '0 1 auto', textAlign: 'start' });

@@ -60,7 +60,7 @@ const Header = styled.header`
     margin: 0;
     overflow: hidden;
     font-family: inherit;
-    font-size: 1.15rem;
+    font-size: 18.4px;
     font-weight: 600;
     text-overflow: ellipsis;
     text-transform: none;
@@ -70,7 +70,7 @@ const Header = styled.header`
   p {
     margin: 2px 0 0;
     color: ${PALETTE.text.muted};
-    font-size: 0.8rem;
+    font-size: 12.8px;
   }
 `;
 
@@ -96,7 +96,7 @@ const Row = styled.button`
   background: transparent;
   color: inherit;
   font: inherit;
-  font-size: 1rem;
+  font-size: 16px;
   text-align: left;
   cursor: pointer;
 

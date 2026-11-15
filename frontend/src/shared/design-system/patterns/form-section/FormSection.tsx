@@ -12,6 +12,8 @@ export interface FormSectionProps {
   title: string;
   description?: string;
   headingLevel?: 2 | 3;
+  /** Keep the title for assistive technology only (see Section). */
+  titleHidden?: boolean;
   /**
    * Called on submit (Enter in a field, the submit Button). The default page load is prevented;
    * validation and requests stay with the feature.
@@ -45,6 +47,7 @@ export function FormSection({
   title,
   description,
   headingLevel,
+  titleHidden,
   onSubmit,
   children,
   actions,
@@ -60,6 +63,7 @@ export function FormSection({
         title={title}
         description={description}
         headingLevel={headingLevel}
+        titleHidden={titleHidden}
         padding={padding}
       >
         <form

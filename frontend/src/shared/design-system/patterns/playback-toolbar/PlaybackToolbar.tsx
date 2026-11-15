@@ -82,7 +82,9 @@ export function PlaybackToolbar({
         <FocusGroup id={navId} layout="vertical">
           {seek}
           {(start || end) && (
-            <FocusGroup layout="horizontal">
+            // Entered at the main controls (the start), not at whatever sits under the seek bar's
+            // centre: the first control is the primary one
+            <FocusGroup layout="horizontal" entry="first">
               <div className={styles.controls}>
                 <div>{start}</div>
                 {end && <div className={styles.controlsEnd}>{end}</div>}

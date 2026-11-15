@@ -34,6 +34,8 @@ interface SubtitlesOptions {
   storageKey: string;
   /** The storage key the current session was created for; null while one is requested. */
   sessionStorageKey: RefObject<string | null>;
+  /** Changes when `sessionStorageKey` is set for a new session, which may render first. */
+  sessionKeyVersion?: number;
   videoRef: RefObject<PlayerMedia | null>;
   /** The same element as `videoRef`, for the styled (ASS) renderer that attaches to it. */
   mediaElement: PlayerMedia | null;
@@ -54,6 +56,7 @@ export function useSubtitles({
   session,
   storageKey,
   sessionStorageKey,
+  sessionKeyVersion,
   videoRef,
   mediaElement,
   resumeRef,
@@ -215,7 +218,7 @@ export function useSubtitles({
       setSubtitleWindow(minuteWindow(saved.positionSeconds));
     if (remembered) void search(remembered.language, remembered.hearingImpaired, true);
     else void search(navigator.language.split('-')[0] || 'en', false, true, true);
-  }, [session, storageKey, search, sessionStorageKey, resumeRef]);
+  }, [session, storageKey, search, sessionStorageKey, sessionKeyVersion, resumeRef]);
 
   const select = useCallback(
     (id: string | null) => {

@@ -5,14 +5,20 @@ import { Badge } from '../../badge/Badge';
 import { CollectionTile, type CollectionTileProps } from '../../collection-tile/CollectionTile';
 import * as styles from './mediaTile.css';
 
-export type MediaTileProps = Omit<CollectionTileProps, 'label' | 'visual' | 'ratio' | 'badge'> & {
+export type MediaTileProps = Omit<
+  CollectionTileProps,
+  'label' | 'labelHidden' | 'visual' | 'ratio' | 'badge'
+> & {
   /** The title, which names the tile. From the feature, already localized. */
   title: string;
   /** Backdrop (landscape) or poster (portrait) URL. Missing or failing, the title shows instead. */
   artwork?: string | null;
   /** `landscape` backdrops (Home rows) or `portrait` posters. */
   ratio?: 'landscape' | 'portrait';
-  /** The title's logo, drawn over a landscape backdrop. Decorative: the title names the tile. */
+  /**
+   * The title's logo, drawn over a landscape backdrop. Decorative: the title names the tile, and
+   * over the artwork (`labelPlacement="overlay"`) the logo stands in for the visible title.
+   */
   logo?: string | null;
   /** A short quality or availability label ("4K", "New"), top start corner. */
   badge?: { label: string; accessibleLabel?: string };
@@ -24,7 +30,7 @@ export type MediaTileProps = Omit<CollectionTileProps, 'label' | 'visual' | 'rat
  * the collection around it owns movement. Supporting text, progress and the badge describe it.
  */
 export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function MediaTile(
-  { title, artwork, ratio = 'landscape', logo, badge, ...props },
+  { title, artwork, ratio = 'landscape', logo, badge, labelPlacement, ...props },
   forwardedRef
 ) {
   const [logoFailed, setLogoFailed] = useState<string | null>(null);
@@ -34,6 +40,8 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
       {...props}
       ref={forwardedRef}
       label={title}
+      labelPlacement={labelPlacement}
+      labelHidden={Boolean(showLogo) && labelPlacement === 'overlay'}
       ratio={ratio}
       badge={
         badge ? <Badge accessibleLabel={badge.accessibleLabel}>{badge.label}</Badge> : undefined

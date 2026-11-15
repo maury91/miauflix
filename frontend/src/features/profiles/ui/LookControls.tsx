@@ -47,12 +47,12 @@ const focusRing = css`
 export const Section = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 14.4px;
 `;
 
 export const SectionTitle = styled.h3`
   margin: 0;
-  font-size: clamp(1rem, 1.25vw, 1.5rem);
+  font-size: clamp(16px, 1.25vw, 24px);
   font-weight: 600;
   text-transform: none;
 `;
@@ -60,22 +60,22 @@ export const SectionTitle = styled.h3`
 const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 12px;
 `;
 
 const Chip = styled.button<{ $selected: boolean }>`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0.45rem 1rem;
+  gap: 8px;
+  min-height: 44px;
+  padding: 7.2px 16px;
   border: 2px solid ${({ $selected }) => ($selected ? '#ffffff' : 'rgba(255, 255, 255, 0.16)')};
   border-radius: 999px;
   background: ${({ $selected }) =>
     $selected ? 'rgba(255, 255, 255, 0.14)' : 'rgba(255, 255, 255, 0.04)'};
   color: #f5f5f5;
   font:
-    500 clamp(0.85rem, 1vw, 1.15rem) 'Poppins',
+    500 clamp(13.6px, 1vw, 18.4px) 'Poppins',
     sans-serif;
   cursor: pointer;
   ${focusRing}
@@ -87,10 +87,10 @@ const ShapeChip = styled(Chip)`
      box that takes this alignment, so centring would shrink the picture to the label's width. */
   align-items: stretch;
   text-align: center;
-  width: clamp(4.5rem, 6.2vw, 7.5rem);
-  padding: 0.6rem 0.4rem;
+  width: clamp(72px, 6.2vw, 120px);
+  padding: 9.6px 6.4px;
   border-radius: 16px;
-  font-size: clamp(0.75rem, 0.85vw, 1rem);
+  font-size: clamp(12px, 0.85vw, 16px);
 `;
 
 /** A square (padding keeps the ratio on TVs without `aspect-ratio`). */
@@ -234,8 +234,8 @@ export function ShapePicker({
 }
 
 const Swatch = styled.button<{ $color: string; $selected: boolean }>`
-  width: clamp(2.6rem, 3.3vw, 4rem);
-  height: clamp(2.6rem, 3.3vw, 4rem);
+  width: clamp(41.6px, 3.3vw, 64px);
+  height: clamp(41.6px, 3.3vw, 64px);
   padding: 0;
   border: 3px solid ${({ $selected }) => ($selected ? '#ffffff' : 'transparent')};
   border-radius: 50%;
@@ -281,16 +281,16 @@ const PictureTile = styled.button<{ $selected: boolean }>`
      box that takes this alignment, so centring would shrink the picture to the label's width. */
   align-items: stretch;
   text-align: center;
-  gap: 0.35rem;
-  width: clamp(5.5rem, 7.2vw, 8.75rem);
-  padding: 0.45rem 0.45rem 0.55rem;
+  gap: 5.6px;
+  width: clamp(88px, 7.2vw, 140px);
+  padding: 7.2px 7.2px 8.8px;
   border: 2px solid ${({ $selected }) => ($selected ? '#ffffff' : 'rgba(255, 255, 255, 0.12)')};
   border-radius: 16px;
   background: ${({ $selected }) =>
     $selected ? 'rgba(255, 255, 255, 0.14)' : 'rgba(255, 255, 255, 0.04)'};
   color: #f5f5f5;
   font:
-    500 clamp(0.75rem, 0.85vw, 1rem) 'Poppins',
+    500 clamp(12px, 0.85vw, 16px) 'Poppins',
     sans-serif;
   cursor: pointer;
   ${focusRing}
@@ -425,10 +425,10 @@ export function FabricPicker({
 
 const Slider = styled.label`
   display: grid;
-  grid-template-columns: minmax(7rem, 11rem) 1fr;
+  grid-template-columns: minmax(112px, 176px) 1fr;
   align-items: center;
-  gap: 1rem;
-  font-size: clamp(0.85rem, 1vw, 1.15rem);
+  gap: 16px;
+  font-size: clamp(13.6px, 1vw, 18.4px);
 
   input {
     width: 100%;
