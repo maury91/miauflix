@@ -133,10 +133,7 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
   for (const kind of ['movie', 'show']) {
     if (kind === 'show') await page.keyboard.press('ArrowRight');
     const card = page.locator('button[aria-current="true"]');
-    await expect(card).toHaveAttribute(
-      'aria-label',
-      kind === 'movie' ? fixtureMovie.title : 'Fixture Show'
-    );
+    await expect(card).toHaveAccessibleName(kind === 'movie' ? fixtureMovie.title : 'Fixture Show');
     await expect(card).toBeFocused();
     await expect
       .poll(() =>

@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 import { navigateToLogin } from './utils/login';
 import { expect, test } from './fixtures';
@@ -176,19 +176,19 @@ test.describe('Login flow', () => {
   test('should display proper visual feedback during form interaction', async ({ page }) => {
     const emailInput = page.locator('#email').first();
     const passwordInput = page.locator('#password').first();
+    const outlineOpacity = (input: Locator) =>
+      input.locator('..').evaluate(frame => getComputedStyle(frame, '::after').opacity);
 
-    const emailBorderColor = await emailInput.evaluate(el => getComputedStyle(el).borderColor);
+    await expect.poll(() => outlineOpacity(emailInput)).toBe('1');
+    await expect.poll(() => outlineOpacity(passwordInput)).toBe('0');
 
     await emailInput.focus();
-    const focusedBorderColor = await emailInput.evaluate(el => getComputedStyle(el).borderColor);
-    expect(focusedBorderColor).not.toBe(emailBorderColor);
-
     await emailInput.pressSequentially('visual@test.com');
     await expect(emailInput).toHaveValue('visual@test.com');
 
     await passwordInput.focus();
-    const passwordFocusColor = await passwordInput.evaluate(el => getComputedStyle(el).borderColor);
-    expect(passwordFocusColor).toBe(focusedBorderColor);
+    await expect.poll(() => outlineOpacity(passwordInput)).toBe('1');
+    await expect.poll(() => outlineOpacity(emailInput)).toBe('0');
   });
 
   test('should handle rapid typing and input changes correctly', async ({ page }) => {
