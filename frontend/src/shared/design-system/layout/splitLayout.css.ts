@@ -54,8 +54,12 @@ const paneSideBySide = (from: SideBySideClass): StyleRule => {
   const split = `${root}[data-stack-below="${from}"]`;
   const rules: Selectors = {
     [`${split} > &`]: { flex: '1 1 0%' },
-    [`${split}[data-split="rail"] > &[data-pane="start"]`]: { flex: `0 0 ${railWidth}` },
-    [`${split}[data-split="narrow"] > &[data-pane="start"]`]: { flex: `0 0 ${narrowShare}` },
+    [`${split}[data-split="rail"] > &[data-pane="start"]:not(:only-child)`]: {
+      flex: `0 0 ${railWidth}`,
+    },
+    [`${split}[data-split="narrow"] > &[data-pane="start"]:not(:only-child)`]: {
+      flex: `0 0 ${narrowShare}`,
+    },
     [`${split}[data-fill] > &`]: { minHeight: 0, overflow: 'hidden' },
   };
   for (const [name, value] of Object.entries(space)) {

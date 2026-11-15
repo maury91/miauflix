@@ -6,7 +6,9 @@ import { color, controlSize, controlSizes, fontFamily, radius, typeScale } from 
  * The inverted-fill action recipe (docs/plans/style-guide.md, "Actions, focus and state"), shared by
  * Button and IconButton. Every state is a static rule selected by native state or an attribute:
  *
- * - `data-surface="solid" | "overMedia"`: rest look (transparent / translucent)
+ * - `data-surface="solid" | "overMedia"`: rest look (transparent / translucent). A text Button
+ *   (`data-button`, not a tab) on solid gets a control outline, so it reads as a button at rest;
+ *   rail items, chips, tabs and icon circles stay transparent
  * - `data-selected`: current state (translucent)
  * - `data-focused`: white fill with black content. Focus is virtual (the navigation layer owns it,
  *   and the pointer focuses what it moves onto), so neither `:focus` nor `:hover` styles anything
@@ -85,10 +87,19 @@ export const action = style({
   selectors: {
     ...sizeSelectors,
     '&[data-full-width]': { display: 'flex', width: '100%' },
+    // A text button on a solid surface needs an edge to read as a button before it is focused;
+    // an inset shadow keeps the size unchanged and follows the radius
+    '&[data-button][data-surface="solid"]:not([role="tab"])': {
+      boxShadow: `inset 0 0 0 1px ${color.borderControl}`,
+    },
+    '&[data-button][data-surface="solid"]:not([role="tab"]):disabled': {
+      boxShadow: `inset 0 0 0 1px ${color.borderSubtle}`,
+    },
     '&[data-surface="overMedia"]': { backgroundColor: color.actionTranslucent },
     '&[data-selected]': { backgroundColor: color.actionTranslucent },
-    '&[data-focused]:not(:disabled)': focusedLook,
+    '&[data-focused]:not(:disabled)': { ...focusedLook, boxShadow: 'none' },
     '&:active:not(:disabled):not([aria-busy="true"])': {
+      boxShadow: 'none',
       backgroundColor: color.actionPressed,
       color: color.onActionFocus,
     },

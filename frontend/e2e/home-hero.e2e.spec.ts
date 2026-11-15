@@ -165,7 +165,7 @@ async function focusHeroCase(
   });
 }
 
-test.describe('Home hero backdrop centering', () => {
+test.describe('Home hero backdrop centering @snapshot', () => {
   test.describe.configure({ mode: 'serial', timeout: 180000 });
 
   test('keeps representative E2E backdrops visible in the hero', async ({ page }, testInfo) => {

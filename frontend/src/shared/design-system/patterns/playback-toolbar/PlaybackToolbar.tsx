@@ -18,9 +18,11 @@ export interface PlaybackToolbarProps {
   /** A SeekControl. */
   seek: ReactNode;
   /**
-   * The main controls at the start (an IconButtonGroup: back 10 s, play/pause, forward 10 s), with
-   * their shared description.
+   * The play/pause button, at the start of the seek row. The seek bar isn't a stop for the remote,
+   * so the player makes Left/Right on this button seek.
    */
+  primary?: ReactNode;
+  /** More controls at the start of the row under the seek bar. */
   start?: ReactNode;
   /** Secondary controls at the end: audio and subtitle Popovers with OptionLists, full screen. */
   end?: ReactNode;
@@ -29,13 +31,13 @@ export interface PlaybackToolbarProps {
    * reveals them without moving, is the player's call.
    */
   hidden?: boolean;
-  /** The toolbar's navigation group (vertical: seek bar, then the controls row). */
+  /** The toolbar's navigation group (vertical: the primary control, then the controls row). */
   navId?: string;
 }
 
 /**
- * The player's controls over the video, on `overMedia`: title, seek bar, then the main controls at
- * the start and the secondary ones at the end. Composition only: the player adapter owns playback,
+ * The player's controls over the video, on `overMedia`: title, then the primary control (play/pause)
+ * beside the seek bar, then a row with more controls at the start and the secondary ones at the end. Composition only: the player adapter owns playback,
  * visibility timing and what each control does.
  */
 export function PlaybackToolbar({
@@ -44,6 +46,7 @@ export function PlaybackToolbar({
   subtitle,
   busyLabel,
   seek,
+  primary,
   start,
   end,
   hidden = false,
@@ -80,9 +83,17 @@ export function PlaybackToolbar({
           </div>
         )}
         <FocusGroup id={navId} layout="vertical">
-          {seek}
+          <div className={styles.seekRow}>
+            {primary && (
+              <FocusGroup layout="horizontal">
+                <div className={styles.primary}>{primary}</div>
+              </FocusGroup>
+            )}
+            <div className={styles.seekSlot}>{seek}</div>
+          </div>
           {(start || end) && (
-            <FocusGroup layout="horizontal">
+            // Entered at the first control, not at whatever sits under the one above
+            <FocusGroup layout="horizontal" entry="first">
               <div className={styles.controls}>
                 <div>{start}</div>
                 {end && <div className={styles.controlsEnd}>{end}</div>}

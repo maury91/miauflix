@@ -17,7 +17,7 @@ This document outlines the frontend directory structure after the migration from
 - `src/features/`
   - Domain-specific slices that compose state, APIs, and UI. A feature may import from `shared/`, `store/` and other features, never from `pages/`.
   - Each feature uses the same subfolders: `api/` (RTK Query), `hooks/`, `lib/` (pure logic), `ui/` (components).
-  - `auth/`: login and device authentication (`LoginWithEmail`, `LoginWithQR`, `QRDisplay`).
+  - `auth/`: login and device authentication (`LoginWithEmail`, `LoginWithQR`, on the design system).
   - `details/`: the title details view (`MediaDetails`, `EpisodesSection`, season loading).
   - `player/`: the player (`PlayerView`, `PlayerControls`, `AvplayVideo`, subtitles, audio delivery, playback messages).
   - `progress/`: watch progress and the episode rules built on it (continue watching, next episode).
@@ -51,6 +51,6 @@ This document outlines the frontend directory structure after the migration from
 ## Testing & Stories
 
 - Component and feature tests live beside their implementations.
-- Storybook stories follow the same co-location (e.g. `IntroAnimation.stories.tsx`, `QRDisplay.stories.tsx`).
+- Storybook stories follow the same co-location (e.g. `IntroAnimation.stories.tsx`).
 
 This structure keeps platform bootstrap, routes, and feature domains isolated while promoting reuse through the `shared/` namespace.

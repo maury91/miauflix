@@ -44,7 +44,8 @@ cd "$root_dir"
 # share one container with its own node_modules, as `npm run test:frontend:visual` does.
 container_steps=()
 if has_lane storybook; then
-  container_steps+=("npx playwright test --project=storybook-chromium --update-snapshots")
+  # Match CI's single worker so concurrent software-rendered stories don't stall captures.
+  container_steps+=("npx playwright test --project=storybook-chromium --workers=1 --update-snapshots")
 fi
 if has_lane details; then
   container_steps+=("npx playwright test --config=playwright.config.details.ts --update-snapshots")
@@ -65,7 +66,8 @@ fi
 
 if has_lane e2e; then
   echo "📸 Updating Docker E2E baselines..."
-  E2E_PLAYWRIGHT_IMAGE="$playwright_image" backend-e2e/scripts/env.sh test --frontend-only --update
+  E2E_PLAYWRIGHT_IMAGE="$playwright_image" backend-e2e/scripts/env.sh test --frontend-only --update \
+    --grep @snapshot --workers=1
 fi
 
 if has_lane initial-setup; then

@@ -5,8 +5,8 @@ import { color, duration, easing, fontFamily, space, typeScale } from '../../tok
 /**
  * PlaybackToolbar and SeekControl (docs/plans/style-guide.md, section 8.6): the player's chrome on
  * `overMedia`. The toolbar fades with opacity (visibility follows once the fade ends, so hidden
- * controls take no pointer); the seek bar draws the downloaded blocks under the brand-red watched
- * fill.
+ * controls take no pointer); the primary control sits on the seek bar's row; the seek bar draws the downloaded
+ * blocks under the brand-red watched fill.
  */
 
 export const toolbar = style({
@@ -69,6 +69,25 @@ export const controlsEnd = style({
   },
 });
 
+/** The primary control (play/pause), then the seek bar filling the rest. */
+export const seekRow = style({
+  display: 'flex',
+  alignItems: 'center',
+});
+
+export const primary = style({
+  flex: 'none',
+  marginRight: space.md,
+  selectors: {
+    '[dir="rtl"] &': { marginRight: 0, marginLeft: space.md },
+  },
+});
+
+export const seekSlot = style({
+  flex: '1 1 auto',
+  minWidth: 0,
+});
+
 export const seek = style({
   display: 'flex',
   alignItems: 'center',
@@ -99,4 +118,11 @@ export const downloaded = style({
   top: 0,
   bottom: 0,
   backgroundColor: 'rgba(255, 255, 255, 0.55)',
+});
+
+/** The seek bar's thumb: the brand paw, its pads resting on the track. */
+export const paw = style({
+  display: 'block',
+  fontSize: '2rem',
+  transform: 'translateY(-13%)',
 });

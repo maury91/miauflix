@@ -45,4 +45,4 @@ Storybook's documentation addon matches the existing Storybook 10.0.8 version. I
 
 ## Media artwork cards
 
-`MediaCard` owns its artwork, hover and focus styles independently of Button. It accepts backdrop/logo URLs, a title fallback, subtitle, percentage progress and interaction states. Its native button preserves activation, refs and roving tab indices. The home adapter selects media progress and episode information; backend DTOs stay out of the shared component. See **UI Elements/MediaCard** in Storybook for the styleguide, states and keyboard activation checks.
+Home's media tiles are the design system's `MediaTile` (`@shared/design-system`); the home adapter in `pages/home/components/MediaCard.tsx` selects live artwork, progress and episode information, so backend DTOs stay out of the shared component.

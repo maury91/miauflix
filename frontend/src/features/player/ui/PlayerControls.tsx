@@ -1,11 +1,20 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
-import { type DownloadedRanges, seekTrackBackground } from '@features/player/lib/seek-track';
+import { downloadedBlocks, type DownloadedRanges } from '@features/player/lib/seek-track';
 import type { SubtitleCandidateDto } from '@miauflix/backend';
-import { builtForTizen, PALETTE } from '@shared/config/constants';
-import { useKeyboard } from '@shared/hooks/useKeyboard';
-import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { Button as BaseButton } from '@shared/ui/button/Button';
-import { Spinner } from '@shared/ui/spinner/Spinner';
+import { builtForTizen } from '@shared/config/constants';
+import {
+  Button,
+  IconButton,
+  Inline,
+  Message,
+  PlaybackToolbar,
+  SeekControl,
+  Slider,
+} from '@shared/design-system';
+import { visuallyHidden } from '@shared/design-system/a11y.css';
+import { SurfaceContextProvider } from '@shared/design-system/surface';
+import { getKeyboardAction, useKeyboard } from '@shared/hooks/useKeyboard';
+import { FocusGroup, useActiveIdWithin, useFocusable, useNavigation } from '@shared/navigation';
 import {
   type ReactNode,
   type RefObject,
@@ -15,75 +24,36 @@ import {
   useRef,
   useState,
 } from 'react';
-import styled from 'styled-components';
 
+import * as styles from './playerControls.css';
 import { type AudioTrack, SubtitleMenu } from './SubtitleMenu';
 import type { SubtitleTimingCue } from './SubtitleTiming';
 
 import ArrowLeftIcon from '~icons/mdi/arrow-left';
 import FullscreenIcon from '~icons/mdi/fullscreen';
 import PauseIcon from '~icons/mdi/pause';
-import PawIcon from '~icons/mdi/paw';
+import PlayIcon from '~icons/mdi/play';
 import VolumeIcon from '~icons/mdi/volume-high';
 import MutedIcon from '~icons/mdi/volume-off';
-import PlayIcon from '~icons/octicon/play-16';
 
 /** How far Left and Right seek on the video and the seek bar. */
 const SEEK_STEP_SECONDS = 10;
+/** How long the controls stay up without input while the video plays. */
+const HIDE_AFTER_MS = 3000;
 
-const Overlay = styled.div<{ $visible: boolean; $paused: boolean }>`
-  position: absolute;
-  inset: 0;
-  color: ${PALETTE.text.primary};
-  background: ${({ $paused }) => ($paused ? 'rgba(0, 0, 0, 0.5)' : 'transparent')};
-  cursor: ${({ $visible }) => ($visible ? 'default' : 'none')};
-  outline: none;
-`;
-const Controls = styled.div<{ $visible: boolean }>`
-  position: absolute;
-  inset: auto 0 0;
-  padding: 5rem 5vw 3vh;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
-  transition: opacity 0.2s;
-`;
-const Header = styled.header<{ $visible: boolean }>`
-  position: absolute;
-  top: 3vh;
-  left: 5vw;
-  right: 5vw;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
-  transition: opacity 0.2s;
-  img {
-    width: 14.5vh;
-    height: 4vh;
-  }
-`;
-
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const HeaderButton = styled(BaseButton)`
-  min-width: auto;
-  min-height: 0;
-  padding: 0.7rem 1.2rem;
-  border: 1px solid ${PALETTE.background.border};
-  border-radius: 0.35rem;
-  background: ${PALETTE.background.surface2};
-  color: ${PALETTE.text.primary};
-  font-size: 1rem;
-  box-shadow: none;
-  /* Over video, from across the room: a heavier ring than the default keyline. */
-  &:focus-visible {
-    outline: 3px solid white;
-    outline-offset: 3px;
-  }
-`;
+/** Navigation IDs of the player's controls, top to bottom. */
+const PLAYER_NAV = {
+  header: 'player-header',
+  back: 'player-back',
+  video: 'player-video',
+  prompts: 'player-prompts',
+  toolbar: 'player-toolbar',
+  playPause: 'player-play-pause',
+  subtitles: 'player-subtitles',
+  fullscreen: 'player-fullscreen',
+  mute: 'player-mute',
+  volume: 'player-volume',
+} as const;
 
 /** Render the playback header with an action returning to details. */
 export function PlayerHeader({
@@ -94,107 +64,50 @@ export function PlayerHeader({
   visible?: boolean;
 }) {
   return (
-    <Header $visible={visible}>
-      <HeaderButton type="button" icon={<ArrowLeftIcon aria-hidden="true" />} onClick={onBack}>
-        Back to details
-      </HeaderButton>
-      <img src={`${import.meta.env.BASE_URL}assets/images/logo.svg`} alt="Miauflix logo" />
-    </Header>
+    <SurfaceContextProvider value="overMedia">
+      <header className={styles.header} data-hidden={visible ? undefined : true}>
+        <FocusGroup id={PLAYER_NAV.header} layout="horizontal">
+          <Button navId={PLAYER_NAV.back} icon={<ArrowLeftIcon />} onClick={onBack}>
+            Back to details
+          </Button>
+        </FocusGroup>
+        <img
+          className={styles.logo}
+          src={`${import.meta.env.BASE_URL}assets/images/logo.svg`}
+          alt="Miauflix logo"
+        />
+      </header>
+    </SurfaceContextProvider>
   );
 }
 
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const Button = styled(BaseButton)`
-  display: inline-grid;
-  place-items: center;
-  min-width: 44px;
-  min-height: 44px;
-  border: 0;
-  border-radius: 0.4rem;
-  background: transparent;
-  color: inherit;
-  font-size: 1.8rem;
-  box-shadow: none;
-  cursor: pointer;
-  &:hover {
-    background: rgba(255, 255, 255, 0.12);
-  }
-  &:focus-visible {
-    outline: 3px solid white;
-    outline-offset: 3px;
-  }
-`;
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const CenterPlay = styled(Button)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: clamp(3rem, 10vh, 7rem);
-  padding: 1rem;
-
-  > svg {
-    width: 1em;
-    height: 1em;
-  }
-`;
-const Seek = styled.div`
-  position: relative;
-  margin: 0 16px 1rem;
-  height: 32px;
-  display: flex;
-  align-items: center;
-`;
-// Inline style: the layers change every second, and a class per value would pile up.
-const Track = styled.div.attrs<{ $percent: number; $ranges?: DownloadedRanges | null }>(
-  ({ $percent, $ranges }) => ({
-    style: seekTrackBackground($percent, $ranges, PALETTE.color.brand),
-  })
-)`
-  width: 100%;
-  height: 4px;
-  border-radius: 2px;
-`;
-const Paw = styled(PawIcon)<{ $percent: number }>`
-  position: absolute;
-  left: ${({ $percent }) => $percent}%;
-  top: 50%;
-  transform: translate(-50%, -63%);
-  color: ${PALETTE.color.brand};
-  font-size: 32px;
-  pointer-events: none;
-`;
-const SeekInput = styled.input`
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-  &:focus-visible + svg {
-    filter: drop-shadow(0 0 3px white);
-  }
-`;
-const Row = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-variant-numeric: tabular-nums;
-`;
-const Time = styled.div`
-  flex: 1;
-  font-size: clamp(0.8rem, 2.5vh, 1.2rem);
-`;
-const Volume = styled.input`
-  width: clamp(50px, 8vw, 110px);
-  accent-color: ${PALETTE.color.brand};
-  outline: none;
-  &:focus-visible {
-    outline: 2px solid white;
-    outline-offset: 3px;
-  }
-`;
+/**
+ * Prompts over the video ("Skip intro", "Skip credits", the next episode): the player's own
+ * actions, on the design system over media. `layout` places them: `intro` at the bottom end,
+ * `group` centred. The first action is the main one.
+ */
+export function PlayerPrompt({
+  label,
+  layout,
+  children,
+}: {
+  /** Names a group of actions ("Next episode"). */
+  label?: string;
+  layout: 'intro' | 'group';
+  children: ReactNode;
+}) {
+  return (
+    <div
+      className={layout === 'intro' ? styles.skipIntro : styles.promptGroup}
+      role={label ? 'group' : undefined}
+      aria-label={label}
+    >
+      <Inline gap="sm" justify={layout === 'intro' ? 'end' : 'center'}>
+        {children}
+      </Inline>
+    </div>
+  );
+}
 
 function formatTime(seconds: number) {
   const value = Number.isFinite(seconds) ? Math.max(0, Math.floor(seconds)) : 0;
@@ -205,9 +118,14 @@ function formatTime(seconds: number) {
 }
 
 /**
- * Control the referenced video’s playback, seeking, volume, and fullscreen state.
- * Keyboard confirm and ten-second seeks apply when the overlay itself has focus.
- * Controls stay visible while paused; play/fullscreen failures appear as notices.
+ * Control the referenced video's playback, seeking, volume, and fullscreen state, on the design
+ * system under the player's navigation layer. A remote moves through the header, the video itself
+ * (where Confirm plays or pauses and Left/Right seek), the prompts, play/pause (beside the seek bar,
+ * which isn't a stop: Left/Right on play/pause seek) and the row of buttons. While the video plays,
+ * the controls hide after a few seconds without a key, a pointer move or the subtitle panel open,
+ * wherever focus is; paused, they stay. While they are hidden, an arrow shows them with the focus
+ * on play/pause (Left/Right also seek); Confirm on a hidden control only shows it (media keys and
+ * Back still act).
  */
 export function PlayerControls({
   videoRef,
@@ -269,8 +187,8 @@ export function PlayerControls({
   /** Pixels the visible header (back button, logo) covers at the top, 0 while it is hidden. */
   onHeaderInsetChange?: (pixels: number) => void;
   /**
-   * Prompts over the video ("Skip intro", "Skip credits", next episode). They are drawn inside the
-   * controls so the remote reaches them: a level of their own between the video and the seek bar.
+   * Prompts over the video (PlayerPrompt: "Skip intro", "Skip credits", next episode). A level of
+   * their own between the video and the seek bar.
    */
   prompts?: ReactNode;
 }) {
@@ -279,6 +197,10 @@ export function PlayerControls({
   const loading = preparing || !mediaReady;
   const [nativePosition, setPosition] = useState(0);
   const position = pendingPosition ?? nativePosition;
+  const requestedPosition = useRef(pendingPosition);
+  useLayoutEffect(() => {
+    requestedPosition.current = pendingPosition;
+  }, [pendingPosition]);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [muted, setMuted] = useState(false);
@@ -286,29 +208,40 @@ export function PlayerControls({
   const [notice, setNotice] = useState('');
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const overlay = useRef<HTMLDivElement>(null);
+  const navigation = useNavigation();
+  const video = useFocusable<HTMLDivElement>(PLAYER_NAV.video);
+  const videoFocused = useRef(video.focused);
+  videoFocused.current = video.focused;
 
+  // An open subtitle panel keeps the controls up
+  const menuOpen = useRef(false);
+  // Shown now; hidden after a while without input (paused, `shown` keeps them up regardless)
   const reveal = useCallback(() => {
     setVisible(true);
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      if (
-        document.activeElement === overlay.current ||
-        !overlay.current?.contains(document.activeElement)
-      )
-        setVisible(false);
-    }, 3000);
+      if (!menuOpen.current) setVisible(false);
+    }, HIDE_AFTER_MS);
   }, []);
+  const onMenuOpenChange = useCallback(
+    (open: boolean) => {
+      menuOpen.current = open;
+      // Closing it starts the wait again
+      if (!open) reveal();
+    },
+    [reveal]
+  );
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const media = videoRef.current;
+    if (!media) return;
     const sync = () => {
-      setPaused(video.paused);
-      setMediaReady(video.readyState >= 2);
-      setPosition(video.currentTime);
-      setDuration(durationSeconds ?? (Number.isFinite(video.duration) ? video.duration : 0));
-      setVolume(video.volume);
-      setMuted(video.muted);
+      setPaused(media.paused);
+      setMediaReady(media.readyState >= 2);
+      setPosition(media.currentTime);
+      setDuration(durationSeconds ?? (Number.isFinite(media.duration) ? media.duration : 0));
+      setVolume(media.volume);
+      setMuted(media.muted);
     };
     const events = [
       'play',
@@ -321,37 +254,45 @@ export function PlayerControls({
       'canplay',
       'emptied',
     ];
-    events.forEach(event => video.addEventListener(event, sync));
+    events.forEach(event => media.addEventListener(event, sync));
     sync();
-    overlay.current?.focus({ preventScroll: true });
-    video.addEventListener('play', reveal);
+    media.addEventListener('play', reveal);
     reveal();
     return () => {
-      events.forEach(event => video.removeEventListener(event, sync));
-      video.removeEventListener('play', reveal);
+      events.forEach(event => media.removeEventListener(event, sync));
+      media.removeEventListener('play', reveal);
       clearTimeout(timer.current);
     };
   }, [videoRef, reveal, durationSeconds]);
 
+  // The player starts on the video itself (after the commit: a focus change in a layout effect
+  // would flush the parent's effects before the session's own updates settle)
+  useEffect(() => {
+    navigation.focus(PLAYER_NAV.video);
+    // Once, on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toggle = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (video.paused) {
-      void video
+    const media = videoRef.current;
+    if (!media) return;
+    if (media.paused) {
+      void media
         .play()
         .then(() => setNotice(''))
         .catch(() => setNotice('Playback could not start. Try Play again.'));
-    } else video.pause();
+    } else media.pause();
     reveal();
   };
   const seek = (value: number) => {
-    const video = videoRef.current;
-    if (video && duration > 0) {
-      const position = Math.min(Math.max(0, duration - 0.1), Math.max(0, value));
+    const media = videoRef.current;
+    if (media && duration > 0) {
+      const target = Math.min(Math.max(0, duration - 0.1), Math.max(0, value));
       if (onSeek) {
-        setPosition(position);
-        onSeek(position);
-      } else video.currentTime = position;
+        requestedPosition.current = target;
+        setPosition(target);
+        onSeek(target);
+      } else media.currentTime = target;
     }
     reveal();
   };
@@ -363,64 +304,83 @@ export function PlayerControls({
     if (videoRef.current && !videoRef.current.paused) toggle();
     else reveal();
   };
+
+  const shown = visible || paused;
+
   const seekBy = (delta: number) => {
-    seek(position + delta);
-    return true;
+    // A converted stream restarts asynchronously. Native media exposes its seek target immediately.
+    const requested = onSeek ? requestedPosition.current : undefined;
+    const base = requested ?? videoRef.current?.currentTime ?? 0;
+    seek(base + delta);
   };
+  // Play/pause takes the focus once the controls it was hidden with are back (a hidden control
+  // can't take DOM focus)
+  const [focusPlayWhenShown, setFocusPlayWhenShown] = useState(false);
+  const playSlot = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!focusPlayWhenShown || !shown) return;
+    setFocusPlayWhenShown(false);
+    navigation.focus(PLAYER_NAV.playPause);
+    // Already the layer's focus when it hid (hiding dropped its DOM focus): the layer doesn't move
+    // to where it is, so give the DOM focus back here
+    const button = playSlot.current?.querySelector('button');
+    if (button && document.activeElement !== button) button.focus({ preventScroll: true });
+    // The store's focus is stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusPlayWhenShown, shown]);
+
+  // Back to details hiding with the header would drop the DOM focus to the page: the video takes
+  // it, so the remote keeps working (Back still leaves through the player's own handler)
+  useLayoutEffect(() => {
+    if (!shown && navigation.getActiveId() === PLAYER_NAV.back) navigation.focus(PLAYER_NAV.video);
+  }, [navigation, shown]);
+
+  // The latest values, for the key listener below
+  const keys = useRef({ shown, seekBy, reveal });
+  keys.current = { shown, seekBy, reveal };
 
   /**
-   * What a remote moves through, top to bottom: the header (Back), the video itself (the
-   * overlay, where Left and Right seek), any prompt, the seek bar and the row of buttons.
+   * Any key shows the controls again. On the video and on play/pause, Left and Right seek. While the
+   * controls are hidden, every arrow shows them with the focus on play/pause (Left and Right
+   * seek too), and Confirm on a hidden control only shows it; on the video it plays or pauses.
+   * Registered in a layout effect: those all run before any passive effect, so this listener comes
+   * before the controls' own (a focused Slider's), which skip a key it prevented.
    */
-  const controlsIn = (selector: string) =>
-    Array.from(overlay.current?.querySelectorAll<HTMLElement>(selector) ?? []).filter(
-      control => !control.closest('[aria-label="Subtitle settings"]')
-    );
-  const levels = () =>
-    [
-      controlsIn('header button:not(:disabled)'),
-      overlay.current ? [overlay.current] : [],
-      controlsIn('[data-player-prompts] button:not(:disabled)'),
-      controlsIn('input[aria-label="Seek"]:not(:disabled)'),
-      controlsIn(
-        '[data-control-row] button:not(:disabled), [data-control-row] input:not(:disabled)'
-      ),
-    ].filter(level => level.length);
-  /** Move up (-1) or down (1) a level. Hidden controls can't take the focus: show them first. */
-  const moveLevel = (delta: -1 | 1) => {
-    if (!visible && !paused) {
-      reveal();
-      return true;
-    }
-    const all = levels();
-    const current = all.findIndex(level => level.includes(document.activeElement as HTMLElement));
-    const from = current < 0 ? all.findIndex(level => level[0] === overlay.current) : current;
-    all[Math.max(0, Math.min(all.length - 1, from + delta))]?.[0]?.focus({ preventScroll: true });
-    reveal();
-    return true;
-  };
-  /** Move left (-1) or right (1) along the focused level; only the button row has several. */
-  const moveAlong = (delta: -1 | 1) => {
-    const active = document.activeElement as HTMLElement;
-    const level = levels().find(candidate => candidate.includes(active));
-    const index = level?.indexOf(active) ?? -1;
-    if (level && index >= 0)
-      level[Math.max(0, Math.min(level.length - 1, index + delta))]?.focus({ preventScroll: true });
-    reveal();
-    return true;
-  };
-  const navigationRef = useKeyboardNavigation({
-    onUp: () => moveLevel(-1),
-    onDown: () => moveLevel(1),
-    onConfirm: event => {
-      if (event.target !== overlay.current) return false;
-      toggle();
-      return true;
-    },
-    onLeft: event =>
-      event.target === overlay.current ? seekBy(-SEEK_STEP_SECONDS) : moveAlong(-1),
-    onRight: event => (event.target === overlay.current ? seekBy(SEEK_STEP_SECONDS) : moveAlong(1)),
-  });
+  useLayoutEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.isComposing) return;
+      const { shown: controlsShown, seekBy: seekStep, reveal: show } = keys.current;
+      const action = getKeyboardAction(event);
+      const horizontal = action === 'left' || action === 'right';
+      const vertical = action === 'up' || action === 'down';
+      if (!controlsShown && (horizontal || vertical)) {
+        event.preventDefault();
+        show();
+        setFocusPlayWhenShown(true);
+        if (horizontal) seekStep(action === 'left' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
+        return;
+      }
+      // Play/pause sits beside the seek bar, which the remote doesn't stop on: Left/Right on it seek
+      const playFocused = navigation.getActiveId() === PLAYER_NAV.playPause;
+      if (horizontal && (videoFocused.current || playFocused)) {
+        event.preventDefault();
+        seekStep(action === 'left' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
+        return;
+      }
+      if (!controlsShown && action === 'confirm' && !videoFocused.current) {
+        // A hidden control keeps focus; the first press only shows it, it doesn't act on it
+        event.preventDefault();
+        show();
+        return;
+      }
+      show();
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+    // The store's methods are stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // The remote's media keys work wherever the focus is while the player is open.
   useKeyboard({
     onPlayPause: () => {
@@ -436,26 +396,33 @@ export function PlayerControls({
       return true;
     },
   });
-  const shown = visible || paused;
+
+  // A prompt that held the focus can vanish (pressed, or the intro ends): give the focus back to
+  // the video, not to whatever the layer finds next, so the remote keeps controlling playback
   const promptsRef = useRef<HTMLDivElement>(null);
-  const promptFocused = useRef(false);
-  // A prompt that held the focus can vanish (the intro ends): give the focus back to the video
-  // so the remote keeps working.
-  useLayoutEffect(() => {
-    if (!promptFocused.current || promptsRef.current?.contains(document.activeElement)) return;
-    promptFocused.current = false;
-    const active = document.activeElement;
-    if (!active || active === document.body) overlay.current?.focus({ preventScroll: true });
-  });
+  const activeInPrompts = useActiveIdWithin(PLAYER_NAV.prompts);
+  const promptHeld = useRef(false);
+  useEffect(() => {
+    if (activeInPrompts) {
+      promptHeld.current = true;
+      return;
+    }
+    if (!promptHeld.current) return;
+    promptHeld.current = false;
+    if (!promptsRef.current?.querySelector('button')) navigation.focus(PLAYER_NAV.video);
+    // The store's focus is stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeInPrompts]);
+
   const controls = useRef<HTMLDivElement>(null);
   const onInsetRef = useRef(onControlsInsetChange);
   onInsetRef.current = onControlsInsetChange;
   const onHeaderInsetRef = useRef(onHeaderInsetChange);
   onHeaderInsetRef.current = onHeaderInsetChange;
-  // From the bottom of the player to the top of the bar's content, past its fade-in padding
+  // From the bottom of the player to the top of the controls' content
   useLayoutEffect(() => {
     const measure = (): void => {
-      const content = controls.current?.firstElementChild;
+      const content = controls.current;
       const area = overlay.current?.getBoundingClientRect();
       onInsetRef.current?.(
         shown && content && area
@@ -482,156 +449,146 @@ export function PlayerControls({
     },
     []
   );
-  const percent = duration > 0 ? Math.min(100, Math.max(0, (position / duration) * 100)) : 0;
 
   return (
-    <Overlay
-      ref={node => {
-        overlay.current = node;
-        navigationRef(node);
-      }}
-      $visible={shown}
-      $paused={paused}
+    <div
+      ref={overlay}
+      className={styles.overlay}
+      data-shown={shown || undefined}
       onPointerMove={reveal}
-      onClick={event => {
-        if (event.target === event.currentTarget) toggle();
-      }}
-      onFocus={reveal}
-      tabIndex={0}
-      aria-label="Playback controls"
     >
       <PlayerHeader onBack={onBack} visible={shown} />
       <div
-        ref={promptsRef}
-        data-player-prompts=""
-        onFocus={() => {
-          promptFocused.current = true;
-        }}
-        onBlur={event => {
-          // A removed button blurs with nowhere to go; that case is handled above.
-          if (event.relatedTarget) promptFocused.current = false;
-        }}
-      >
-        {prompts}
-      </div>
-      {paused && !loading && (
-        <CenterPlay type="button" aria-label="Resume playback" onClick={toggle}>
-          <PlayIcon aria-hidden="true" />
-        </CenterPlay>
-      )}
-      <Controls ref={controls} $visible={shown}>
-        {notice && <p role="alert">{notice}</p>}
-        <Seek>
-          <Track $percent={percent} $ranges={downloadedRanges} />
-          <SeekInput
-            type="range"
-            min={0}
-            max={duration || 0}
-            step={1}
-            value={position}
-            disabled={!duration}
-            aria-label="Seek"
-            onKeyDown={event => {
-              if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                event.preventDefault();
-                moveLevel(event.key === 'ArrowUp' ? -1 : 1);
-              } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-                event.preventDefault();
-                seekBy(event.key === 'ArrowLeft' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
-              }
-            }}
-            aria-valuetext={`${formatTime(position)} of ${formatTime(duration)}`}
-            onChange={event => seek(Number(event.target.value))}
-          />
-          <Paw $percent={percent} aria-hidden="true" />
-        </Seek>
-        <Row data-control-row="true">
-          <Button type="button" aria-label={paused ? 'Play' : 'Pause'} onClick={toggle}>
-            {paused ? <PlayIcon aria-hidden="true" /> : <PauseIcon aria-hidden="true" />}
-          </Button>
-          <Time>
-            {loading ? (
-              <Spinner text="Preparing playback…" />
-            ) : (
-              <>
-                {formatTime(position)} / {formatTime(duration)}
-              </>
-            )}
-          </Time>
-          <SubtitleMenu
-            searchPreferences={subtitleSearchPreferences}
-            videoRef={videoRef}
-            subtitleCues={subtitleCues}
-            pendingPosition={pendingPosition}
-            audioTracks={audioTracks}
-            selectedAudioTrackIndex={selectedAudioTrackIndex}
-            onSelectAudioTrack={onSelectAudioTrack}
-            candidates={subtitleCandidates}
-            configured={subtitleConfigured}
-            available={subtitleAvailable}
-            loading={subtitleLoading}
-            message={subtitleMessage}
-            selectedId={selectedSubtitleId}
-            offset={subtitleOffset}
-            onSearch={onSearchSubtitles}
-            onSelect={onSelectSubtitle}
-            onOffsetChange={onSubtitleOffsetChange}
-            preferencesKey={subtitlePreferencesKey}
-          />
-          {/* The remote sets the TV's volume, and the TV app is always full screen */}
-          {!builtForTizen && (
-            <>
-              <Button
-                type="button"
-                aria-label={muted ? 'Unmute' : 'Mute'}
-                onClick={() => {
-                  if (videoRef.current) videoRef.current.muted = !muted;
-                }}
-              >
-                {muted ? <MutedIcon aria-hidden="true" /> : <VolumeIcon aria-hidden="true" />}
-              </Button>
-              <Volume
-                type="range"
-                min={0}
-                max={1}
-                step={0.05}
-                value={muted ? 0 : volume}
-                aria-label="Volume"
-                onKeyDown={event => {
-                  if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                    event.preventDefault();
-                    moveLevel(event.key === 'ArrowUp' ? -1 : 1);
-                  }
-                  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-                    event.preventDefault();
-                    moveAlong(event.key === 'ArrowLeft' ? -1 : 1);
-                  }
-                }}
-                onChange={event => {
-                  if (videoRef.current) {
-                    videoRef.current.volume = Number(event.target.value);
-                    videoRef.current.muted = false;
-                  }
-                }}
+        ref={video.ref}
+        className={styles.surface}
+        data-paused={paused || undefined}
+        tabIndex={0}
+        role="button"
+        aria-label="Playback controls"
+        onMouseMove={video.onMouseMove}
+        onClick={toggle}
+      />
+      <SurfaceContextProvider value="overMedia">
+        <FocusGroup id={PLAYER_NAV.prompts} layout="horizontal">
+          <div ref={promptsRef}>{prompts}</div>
+        </FocusGroup>
+      </SurfaceContextProvider>
+      <div ref={controls} className={styles.controls}>
+        {notice && (
+          <div className={styles.notice}>
+            <Message tone="danger" toneLabel="Error" variant="banner" live="assertive">
+              {notice}
+            </Message>
+          </div>
+        )}
+        <PlaybackToolbar
+          navId={PLAYER_NAV.toolbar}
+          label="Playback toolbar"
+          hidden={!shown}
+          busyLabel={loading ? 'Preparing playback…' : undefined}
+          seek={
+            <SeekControl
+              label="Seek"
+              position={position}
+              duration={duration}
+              onSeek={seek}
+              keyStep={SEEK_STEP_SECONDS}
+              valueText={`${formatTime(position)} of ${formatTime(duration)}`}
+              elapsedText={formatTime(position)}
+              remainingText={formatTime(duration)}
+              downloaded={downloadedBlocks(downloadedRanges)}
+            />
+          }
+          primary={
+            <div ref={playSlot}>
+              <IconButton
+                navId={PLAYER_NAV.playPause}
+                size="lg"
+                label={paused ? 'Play' : 'Pause'}
+                icon={paused ? <PlayIcon /> : <PauseIcon />}
+                onClick={toggle}
               />
-              <Button
-                type="button"
-                aria-label="Toggle fullscreen"
-                onClick={() => {
-                  const request = document.fullscreenElement
-                    ? document.exitFullscreen()
-                    : videoRef.current?.parentElement?.requestFullscreen();
-                  void request?.catch(() =>
-                    setNotice('Fullscreen is unavailable in this browser.')
-                  );
-                }}
-              >
-                <FullscreenIcon aria-hidden="true" />
-              </Button>
-            </>
-          )}
-        </Row>
-      </Controls>
-    </Overlay>
+            </div>
+          }
+          end={
+            <Inline gap="sm" align="center">
+              <SubtitleMenu
+                navId={PLAYER_NAV.subtitles}
+                onOpenChange={onMenuOpenChange}
+                searchPreferences={subtitleSearchPreferences}
+                videoRef={videoRef}
+                subtitleCues={subtitleCues}
+                pendingPosition={pendingPosition}
+                audioTracks={audioTracks}
+                selectedAudioTrackIndex={selectedAudioTrackIndex}
+                onSelectAudioTrack={onSelectAudioTrack}
+                candidates={subtitleCandidates}
+                configured={subtitleConfigured}
+                available={subtitleAvailable}
+                loading={subtitleLoading}
+                message={subtitleMessage}
+                selectedId={selectedSubtitleId}
+                offset={subtitleOffset}
+                onSearch={onSearchSubtitles}
+                onSelect={onSelectSubtitle}
+                onOffsetChange={onSubtitleOffsetChange}
+                preferencesKey={subtitlePreferencesKey}
+              />
+              {/* The remote sets the TV's volume, and the TV app is always full screen */}
+              {!builtForTizen && (
+                <>
+                  <IconButton
+                    navId={PLAYER_NAV.fullscreen}
+                    size="lg"
+                    label="Toggle fullscreen"
+                    icon={<FullscreenIcon />}
+                    onClick={() => {
+                      const request = document.fullscreenElement
+                        ? document.exitFullscreen()
+                        : videoRef.current?.parentElement?.requestFullscreen();
+                      void request?.catch(() =>
+                        setNotice('Fullscreen is unavailable in this browser.')
+                      );
+                    }}
+                  />
+                  <IconButton
+                    navId={PLAYER_NAV.mute}
+                    size="lg"
+                    label={muted ? 'Unmute' : 'Mute'}
+                    icon={muted ? <MutedIcon /> : <VolumeIcon />}
+                    onClick={() => {
+                      if (videoRef.current) videoRef.current.muted = !muted;
+                    }}
+                  />
+                  {/* Last in the row: while focused, a slider owns Left and Right */}
+                  <div className={styles.volume}>
+                    {/* Named without a header, so it fits the row */}
+                    <span id="player-volume-label" className={visuallyHidden}>
+                      Volume
+                    </span>
+                    <Slider
+                      navId={PLAYER_NAV.volume}
+                      id="player-volume"
+                      aria-labelledby="player-volume-label"
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      value={muted ? 0 : volume}
+                      valueText={`${Math.round((muted ? 0 : volume) * 100)}%`}
+                      onChange={value => {
+                        if (videoRef.current) {
+                          videoRef.current.volume = value;
+                          videoRef.current.muted = false;
+                        }
+                      }}
+                    />
+                  </div>
+                </>
+              )}
+            </Inline>
+          }
+        />
+      </div>
+    </div>
   );
 }

@@ -49,6 +49,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       ref={nav.ref}
       type={type}
       className={styles.action}
+      data-button=""
       data-surface={surface}
       data-size={size}
       data-focused={nav.focused || undefined}

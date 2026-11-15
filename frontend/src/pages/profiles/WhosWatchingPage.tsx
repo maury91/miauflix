@@ -30,7 +30,7 @@ const Page = styled(motion.main)<{ $rail: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(2rem, 6vh, 5rem);
+  gap: clamp(32px, 6vh, 80px);
   padding: 12vh 5vw 6vh;
   /* Clear of the back rail, keeping the profiles centred in the room beside it. */
   padding-left: ${({ $rail }) => ($rail ? `calc(${RAIL_COLLAPSED_WIDTH_CSS} + 5vw)` : '5vw')};
@@ -42,7 +42,7 @@ const Page = styled(motion.main)<{ $rail: boolean }>`
 
 const Title = styled.h1`
   margin: 0;
-  font-size: clamp(2rem, 4.6vw, 5.5rem);
+  font-size: clamp(32px, 4.6vw, 88px);
   font-weight: 600;
   letter-spacing: -0.01em;
   text-align: center;
@@ -54,7 +54,7 @@ const Profiles = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: clamp(1.5rem, 3.4vw, 4.5rem);
+  gap: clamp(24px, 3.4vw, 72px);
   max-width: 100%;
 `;
 

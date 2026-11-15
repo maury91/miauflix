@@ -118,7 +118,7 @@ const Page = styled.main<{ $backdrop: string; $position: string; $size: string }
 const Layout = styled.div`
   display: grid;
   grid-template-columns: minmax(280px, 34vw) minmax(360px, 1fr);
-  gap: clamp(2rem, 5vw, 6rem);
+  gap: clamp(32px, 5vw, 96px);
   height: 100%;
   min-height: 0;
 
@@ -149,7 +149,7 @@ const Logo = styled.img`
 
 const Title = styled.h1`
   margin: 0 0 1vh;
-  font-size: clamp(2.4rem, 5vh, 4.8rem);
+  font-size: clamp(38.4px, 5vh, 76.8px);
   line-height: 1;
   font-weight: 600;
 `;
@@ -157,14 +157,14 @@ const Title = styled.h1`
 const Metadata = styled.div`
   margin: 0 0 1.2vh;
   color: ${PALETTE.text.secondary};
-  font-size: clamp(0.9rem, 2.3vh, 1.25rem);
+  font-size: clamp(14.4px, 2.3vh, 20px);
 `;
 
 const MetadataLine = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.9rem;
+  gap: 14.4px;
 
   > ${Metadata} {
     display: flex;
@@ -179,16 +179,16 @@ const MetadataRow = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
 
   @media (max-width: 860px) {
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 5.6px;
   }
 `;
 
 const MetadataBlock = styled.div`
-  flex: 1 1 20rem;
+  flex: 1 1 320px;
   min-width: 0;
 `;
 
@@ -196,7 +196,7 @@ const Overview = styled.p`
   max-width: 65ch;
   margin: 2vh 0;
   color: ${PALETTE.text.primary};
-  font-size: clamp(1rem, 2.4vh, 1.35rem);
+  font-size: clamp(16px, 2.4vh, 21.6px);
   line-height: 1.55;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -234,7 +234,7 @@ const SeasonButton = styled(BaseButton)<{ $selected: boolean; $focused: boolean 
     $selected ? PALETTE.color.interactiveSubtle : 'rgba(17, 23, 25, 0.76)'};
   color: ${PALETTE.text.primary};
   font:
-    600 clamp(0.85rem, 2vh, 1.2rem) 'Poppins',
+    600 clamp(13.6px, 2vh, 19.2px) 'Poppins',
     sans-serif;
   text-align: left;
   cursor: pointer;
@@ -242,7 +242,7 @@ const SeasonButton = styled(BaseButton)<{ $selected: boolean; $focused: boolean 
 
   @media (max-width: 860px) {
     flex: 0 0 auto;
-    min-width: 9rem;
+    min-width: 144px;
   }
 `;
 
@@ -315,8 +315,8 @@ const WarmupDescription = styled.span`
 const RatingActions = styled.div`
   display: flex;
   flex-wrap: wrap;
-  column-gap: 1.25rem;
-  row-gap: 0.7rem;
+  column-gap: 20px;
+  row-gap: 11.2px;
   margin: 2vh 0;
 `;
 
@@ -324,7 +324,7 @@ const RatingActions = styled.div`
 const RatingAction = styled(BaseButton).attrs({ collapseWhenNotFocused: true })<{
   $selected: boolean;
 }>`
-  gap: 0.5rem;
+  gap: 8px;
   min-width: 0;
   min-height: 4.5vh;
   padding: 0.75vh 1vw;
@@ -335,7 +335,7 @@ const RatingAction = styled(BaseButton).attrs({ collapseWhenNotFocused: true })<
     $selected ? PALETTE.color.interactiveSubtle : 'rgba(17, 23, 25, 0.76)'};
   color: ${PALETTE.text.primary};
   font:
-    500 clamp(0.78rem, 1.8vh, 1rem) 'Poppins',
+    500 clamp(12.48px, 1.8vh, 16px) 'Poppins',
     sans-serif;
   box-shadow: none;
   cursor: pointer;

@@ -11,39 +11,39 @@ import ProgressIcon from '~icons/mdi/progress-clock';
 const Benefits = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem;
+  gap: 24px;
   padding: 0;
-  margin: 2.375rem 0 0;
+  margin: 38px 0 0;
   list-style: none;
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 16px;
   }
 `;
 
 const Benefit = styled.li`
   display: flex;
   align-items: center;
-  gap: 1.125rem;
+  gap: 18px;
   color: #e1e4e9;
-  font-size: 1.125rem;
+  font-size: 18px;
   line-height: 1.4;
 `;
 
 const IconTile = styled.span`
-  flex: 0 0 3.5rem;
-  height: 3.5rem;
+  flex: 0 0 56px;
+  height: 56px;
   display: grid;
   place-items: center;
   //border: 2px solid rgba(255, 255, 255, 0.08);
-  border-radius: 0.75rem;
+  border-radius: 12px;
   //background: linear-gradient(135deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
   color: #fa438a;
 
   svg {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 28px;
+    height: 28px;
   }
 `;
 
@@ -51,25 +51,25 @@ const Actions = styled(ActionRow)`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
-  gap: 1.5rem;
-  margin-top: 2.5rem;
-  padding-top: 1.875rem;
+  gap: 24px;
+  margin-top: 40px;
+  padding-top: 30px;
   border-top: 0;
 
   @media (max-width: 600px) {
     grid-template-columns: 1fr;
     grid-auto-rows: 1fr;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
   }
 `;
 
 const BenefitsSubtitle = styled.p`
   color: #bac1ca;
-  font-size: clamp(1rem, 1.65vw, 1.5rem);
+  font-size: clamp(16px, 1.65vw, 24px);
   line-height: 1.4;
-  margin: 3rem 0 0;
+  margin: 48px 0 0;
   font-weight: 600;
 `;
 

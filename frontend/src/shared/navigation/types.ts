@@ -41,6 +41,8 @@ export interface NavigationNode {
   /** Explicit cross-region links, used sparingly; validated for eligibility and scope. */
   overrides?: Partial<Record<Direction, string>>;
   disabled?: boolean;
+  /** A leaf reachable by Tab and DOM focus, skipped by directional navigation. */
+  tabOnly?: boolean;
   /** Composite leaves: internal parts along the inline axis (input, then its actions). */
   parts?: readonly string[];
   /**

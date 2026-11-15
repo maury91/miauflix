@@ -2,6 +2,7 @@ import { audioLanguage } from '@features/player/lib/audio-language';
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import type { CreatePlaybackSessionResponse, SubtitleCandidateDto } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
+import { Button as TriggerButton } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { type RefObject, useEffect, useRef, useState } from 'react';
@@ -67,33 +68,33 @@ function savePreferences(key: string | null, preferences: Preferences): void {
 const Button = styled(BaseButton)`
   min-width: 44px;
   min-height: 44px;
-  padding: 0.45rem 0.7rem;
+  padding: 7.2px 11.2px;
   border: 0;
   background: transparent;
   color: inherit;
-  font-size: 1rem;
+  font-size: 16px;
   box-shadow: none;
 `;
 
 const Panel = styled.div`
   position: absolute;
   right: 5vw;
-  bottom: calc(100% + 0.5rem);
+  bottom: calc(100% + 8px);
   z-index: 3;
   display: grid;
-  gap: 0.7rem;
+  gap: 11.2px;
   box-sizing: border-box;
-  width: min(32rem, 90vw);
+  width: min(512px, 90vw);
   min-width: 0;
-  max-height: min(70vh, 42rem);
+  max-height: min(70vh, 672px);
   overflow: auto;
   color-scheme: dark;
-  padding: 1rem;
+  padding: 16px;
   border: 1px solid ${PALETTE.background.border};
-  border-radius: 1rem;
+  border-radius: 16px;
   background: ${PALETTE.background.surface2};
   color: ${PALETTE.text.primary};
-  box-shadow: 0 0.5rem 2rem #0009;
+  box-shadow: 0 8px 32px #0009;
   scrollbar-width: thin;
   overscroll-behavior: contain;
   button {
@@ -103,7 +104,7 @@ const Panel = styled.div`
     white-space: normal;
     overflow-wrap: anywhere;
     line-height: 1.5;
-    border-radius: 0.5rem;
+    border-radius: 8px;
     font-weight: 500;
   }
   button:hover {
@@ -120,13 +121,13 @@ const Panel = styled.div`
   small {
     display: block;
     width: 100%;
-    font-size: 0.75rem;
+    font-size: 12px;
     font-weight: 400;
   }
   h3 {
-    margin: 0.6rem 0 0.35rem;
-    padding: 0 0.7rem;
-    font-size: 0.75rem;
+    margin: 9.6px 0 5.6px;
+    padding: 0 11.2px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -135,17 +136,17 @@ const Panel = styled.div`
   label {
     display: grid;
     min-width: 0;
-    gap: 0.35rem;
+    gap: 5.6px;
   }
   select,
   input[type='number'] {
     box-sizing: border-box;
     width: 100%;
     min-width: 0;
-    min-height: 2.5rem;
-    padding: 0.4rem 0.6rem;
+    min-height: 40px;
+    padding: 6.4px 9.6px;
     border: 1px solid ${PALETTE.background.border};
-    border-radius: 0.25rem;
+    border-radius: 4px;
     background: ${PALETTE.background.surface1};
     color: ${PALETTE.text.primary};
     font: inherit;
@@ -162,7 +163,7 @@ const Panel = styled.div`
   }
   p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 14.4px;
   }
 `;
 
@@ -206,6 +207,11 @@ function audioLabel(track: AudioTrack) {
     .join(' · ');
 }
 
+/**
+ * Audio and subtitle choices. The trigger is a design system Button in the player's controls row;
+ * the panel is still the old one, moving DOM focus itself (its keys win while it holds focus, and
+ * the navigation layer steps aside), until the player's menus move to Popover and OptionList.
+ */
 export function SubtitleMenu({
   searchPreferences,
   videoRef,
@@ -225,7 +231,13 @@ export function SubtitleMenu({
   onSelect,
   onOffsetChange,
   preferencesKey,
+  navId,
+  onOpenChange,
 }: {
+  /** The trigger's navigation ID in the player's controls row. */
+  navId?: string;
+  /** The panel opened or closed (the player keeps its controls up while it is open). */
+  onOpenChange?: (open: boolean) => void;
   searchPreferences?: { language: string; hearingImpaired: boolean };
   videoRef?: RefObject<PlayerMedia | null>;
   subtitleCues?: SubtitleTimingCue[];
@@ -247,6 +259,11 @@ export function SubtitleMenu({
 }) {
   const [open, setOpen] = useState(false);
   const [timingOpen, setTimingOpen] = useState(false);
+  const onOpenChangeRef = useRef(onOpenChange);
+  onOpenChangeRef.current = onOpenChange;
+  useEffect(() => {
+    onOpenChangeRef.current?.(open);
+  }, [open]);
   const [preferences, setPreferences] = useState(() => readPreferences(preferencesKey));
   const language = preferences.language;
   const hearingImpaired = preferences.hearingImpaired;
@@ -343,9 +360,11 @@ export function SubtitleMenu({
   );
   return (
     <>
-      <Button
+      <TriggerButton
         ref={trigger}
-        type="button"
+        navId={navId}
+        size="lg"
+        selected={open}
         aria-label={audioTracks && audioTracks.length > 1 ? 'Audio and subtitles' : 'Subtitles'}
         aria-expanded={open}
         onClick={() => {
@@ -354,7 +373,7 @@ export function SubtitleMenu({
         }}
       >
         {audioTracks && audioTracks.length > 1 ? 'Audio / CC' : 'CC'}
-      </Button>
+      </TriggerButton>
       {open && (
         <Panel
           ref={node => {

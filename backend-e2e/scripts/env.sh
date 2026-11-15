@@ -422,6 +422,10 @@ else
         elif [[ "$UPDATE_SNAPSHOTS" == "true" && -n "${E2E_PLAYWRIGHT_IMAGE:-}" ]]; then
             # Committed baselines are Linux renders, so render them in the image CI uses.
             echo "🧪 Updating frontend snapshots in $E2E_PLAYWRIGHT_IMAGE..."
+            frontend_test_args=()
+            if [[ "$FRONTEND_ONLY" == "true" ]]; then
+                frontend_test_args=("$@")
+            fi
             # Install inside the container so host-built native packages never reach Linux.
             docker run --rm --ipc=host --network=host \
                 -v "$root_dir:/workspace" \
@@ -430,7 +434,7 @@ else
                 -w /workspace \
                 -e BACKEND_URL="http://127.0.0.1:$PORT" \
                 "$E2E_PLAYWRIGHT_IMAGE" \
-                bash -lc 'npm install -g bun@1.4.0 && bun install --frozen-lockfile && cd frontend && npx playwright test --config=playwright.config.e2e.ts --update-snapshots' \
+                bash -lc 'npm install -g bun@1.4.0 && bun install --frozen-lockfile && cd frontend && npx playwright test --config=playwright.config.e2e.ts --update-snapshots=changed "$@"' bash "${frontend_test_args[@]}" \
                 || FRONTEND_TEST_PASSED=false
         elif [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
             echo "🧪 Running frontend integration tests with snapshot updates..."

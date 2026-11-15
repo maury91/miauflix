@@ -211,7 +211,7 @@ const StyledButton = styled.button<{
 
       &:focus > [data-button-label] {
         grid-template-columns: 1fr;
-        margin-inline-start: 0.5rem;
+        margin-inline-start: 8px;
       }
 
       @media (prefers-reduced-motion: reduce) {

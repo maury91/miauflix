@@ -10,8 +10,12 @@ export type SplitLayoutProps = Omit<
 > & {
   /** The first pane: the rail, the form, the preview. First in reading order, also stacked. */
   start: ReactNode;
-  /** The second pane: the content, the pairing panel, the settings. */
-  end: ReactNode;
+  /**
+   * The second pane: the content, the pairing panel, the settings. Without it (null or undefined)
+   * the start pane takes the whole width, and stays where it was in the tree: a pane that comes
+   * and goes (login's pairing panel on narrow windows) never remounts the start pane's content.
+   */
+  end?: ReactNode;
   /**
    * The start pane's share side by side: `rail` a fixed 20rem (search's keyboard), `narrow`
    * 37.5% (the profile editor's preview), `even` half each (login's form and pairing panel).
@@ -77,7 +81,7 @@ export function SplitLayout({
       data-fill={fill || undefined}
     >
       {pane('start', startLabel, start)}
-      {pane('end', endLabel, end)}
+      {end != null && pane('end', endLabel, end)}
     </div>
   );
 }

@@ -66,11 +66,12 @@ test('contains keyboard navigation and returns control to Home after closing', a
   await expect(dialog).toBeHidden();
 
   const selected = page.locator('main section button[aria-current="true"]');
-  await expect(selected).toBeVisible();
-  const title = await selected.getAttribute('aria-label');
-  await selected.focus();
+  await expect(selected).toBeFocused();
+  await expect(selected).toHaveAttribute('aria-labelledby', /\S/);
+  const labelId = await selected.getAttribute('aria-labelledby');
   await page.keyboard.press('ArrowRight');
-  await expect(selected).not.toHaveAttribute('aria-label', title!);
+  await expect(selected).not.toHaveAttribute('aria-labelledby', labelId!);
+  await expect(selected).toBeFocused();
 });
 
 test('remembers Don’t ask again when the page reloads', async ({ page }) => {

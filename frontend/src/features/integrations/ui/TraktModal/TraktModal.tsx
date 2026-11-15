@@ -13,13 +13,13 @@ import TraktIcon from '~icons/cib/trakt';
 
 const Introduction = styled.div`
   display: grid;
-  grid-template-columns: 10rem minmax(0, 1fr);
+  grid-template-columns: 160px minmax(0, 1fr);
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 
   @media (max-width: 600px) {
-    grid-template-columns: 4.5rem minmax(0, 1fr);
-    gap: 1rem;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 16px;
   }
 `;
 
@@ -29,19 +29,19 @@ const TraktMark = styled(TraktIcon)`
   aspect-ratio: 1/1;
   width: 1em;
   height: 1em;
-  font-size: 6.5rem;
+  font-size: 104px;
   justify-self: center;
-  filter: drop-shadow(0 0 1.5rem rgba(255, 24, 67, 0.5));
+  filter: drop-shadow(0 0 24px rgba(255, 24, 67, 0.5));
 
   @media (max-width: 600px) {
-    font-size: 4.5rem;
+    font-size: 72px;
   }
 `;
 
 const Title = styled.h2`
-  margin: 0 0 0.75rem;
+  margin: 0 0 12px;
   color: #f5f6f8;
-  font-size: clamp(1.6rem, 3vw, 2.625rem);
+  font-size: clamp(25.6px, 3vw, 42px);
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: 0;

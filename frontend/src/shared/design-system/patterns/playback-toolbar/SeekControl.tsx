@@ -5,6 +5,8 @@ import { Slider } from '../../slider/Slider';
 import * as styles from './playback.css';
 import type { SeekRange } from './seekRanges';
 
+import PawIcon from '~icons/mdi/paw';
+
 export interface SeekControlProps {
   /** The bar's name ("Seek"). From the feature (i18n), like every text here. */
   label: string;
@@ -25,18 +27,16 @@ export interface SeekControlProps {
   /** The downloaded stretches of the playing file (see `piecesToRanges`), drawn as light blocks. */
   downloaded?: readonly SeekRange[];
   disabled?: boolean;
-  /** Virtual focus (outline), from the navigation layer. While set, it owns Left/Right. */
-  focused?: boolean;
-  onPointerFocus?: () => void;
-  navId?: string;
 }
 
 const clampShare = (value: number) => Math.min(1, Math.max(0, value));
 
 /**
- * The player's seek bar: a Slider in the brand colour with the downloaded blocks under the watched
- * fill and the times at its ends. Left/Right seek by `keyStep` and clamp at the ends; Up/Down
- * leave it. The player adapter owns playback and the downloaded data.
+ * The player's seek bar: a Slider in the brand colour with Miauflix's paw as its thumb, the
+ * downloaded blocks under the watched fill and the times at its ends. Not a stop for the remote:
+ * the toolbar's primary control (play/pause, beside it) seeks with Left/Right. A mouse drags it
+ * and previews up to the pointer; Tab reaches it, and its arrows then seek by `keyStep`. The
+ * player adapter owns playback and the downloaded data.
  */
 export function SeekControl({
   label,
@@ -49,9 +49,6 @@ export function SeekControl({
   remainingText,
   downloaded,
   disabled = false,
-  focused,
-  onPointerFocus,
-  navId,
 }: SeekControlProps) {
   const id = useId();
   const known = duration > 0;
@@ -68,6 +65,8 @@ export function SeekControl({
         </span>
         <Slider
           id={`${id}-input`}
+          navId={id}
+          tabOnly
           aria-labelledby={`${id}-label`}
           value={known ? Math.min(position, duration) : 0}
           onChange={onSeek}
@@ -78,9 +77,8 @@ export function SeekControl({
           valueText={valueText}
           tone="brand"
           disabled={disabled || !known}
-          focused={focused}
-          onPointerFocus={onPointerFocus}
-          navId={navId}
+          pointerPreview
+          thumb={<PawIcon className={styles.paw} />}
           trackLayers={downloaded?.map(range => (
             <span
               key={range.start}

@@ -10,8 +10,6 @@ export { ErrorNotice } from './error-notice/ErrorNotice';
 export type { InputProps, SelectProps } from './form-controls/FormControls';
 export { FieldLabel, Input, Select } from './form-controls/FormControls';
 export { LoadingIndicator } from './loading-indicator/LoadingIndicator';
-export type { MediaCardProps } from './media-card/MediaCard';
-export { MediaCard } from './media-card/MediaCard';
 export type { ModalProps } from './modal/Modal';
 export { Modal } from './modal/Modal';
 export type { PosterCardProps } from './poster-card/PosterCard';
