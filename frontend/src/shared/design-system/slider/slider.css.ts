@@ -19,6 +19,8 @@ import {
  * composites. Right-to-left mirrors the drawing; the native input mirrors itself.
  *
  * - `data-focused`: virtual focus (outline, larger thumb)
+ * - `data-keyboard-focus`: DOM focus from the keyboard (Tab): a ring on the track only
+ * - `data-hovered`: the mouse over a `pointerPreview` slider (thicker track, preview fill)
  * - `data-disabled`: dimmed, not adjustable
  * - `data-surface="solid" | "overMedia"`: the track on the canvas or over artwork
  *
@@ -125,10 +127,31 @@ export const track = style({
   borderRadius: radius.full,
   backgroundColor: color.borderControl,
   overflow: 'hidden',
+  transition: `transform ${duration.fast} ${easing.standard}`,
   selectors: {
     [`${root}[data-surface="overMedia"] &`]: { backgroundColor: 'rgba(255, 255, 255, 0.4)' },
     [`${root}[data-disabled] &`]: { backgroundColor: color.borderSubtle },
+    // Under the mouse (pointerPreview): thicker, by transform so nothing reflows
+    [`${root}[data-hovered] &`]: { transform: 'scaleY(1.75)' },
+    // Keyboard focus without the layer's: a quiet ring on the track, not around the control
+    [`${root}[data-keyboard-focus] &`]: {
+      boxShadow: `0 0 0 0.125rem ${color.canvas}, 0 0 0 0.25rem ${color.focusOutline}`,
+    },
   },
+  '@media': {
+    '(prefers-reduced-motion: reduce)': { transition: 'none' },
+  },
+});
+
+/** The value under the mouse (pointerPreview): lighter than the downloaded blocks, under the fill. */
+export const preview = style({
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  width: '100%',
+  transformOrigin: 'left center',
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
 });
 
 /** The thumb travels between half a thumb from each end, where the native thumb's centre does. */
@@ -211,6 +234,8 @@ export const thumbGlyph = style({
   selectors: {
     [`${root}[data-tone="brand"] &`]: { color: color.brand },
     [`${root}[data-focused] &`]: { transform: 'translate(-50%, -50%) scale(1.2)' },
+    [`${root}[data-keyboard-focus] &`]: { transform: 'translate(-50%, -50%) scale(1.2)' },
+    [`${root}[data-hovered] &`]: { transform: 'translate(-50%, -50%) scale(1.25)' },
     [`${root}[data-disabled] &`]: { color: color.textDisabled },
   },
   '@media': {

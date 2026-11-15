@@ -48,7 +48,6 @@ const PLAYER_NAV = {
   video: 'player-video',
   prompts: 'player-prompts',
   toolbar: 'player-toolbar',
-  seek: 'player-seek',
   playPause: 'player-play-pause',
   subtitles: 'player-subtitles',
   fullscreen: 'player-fullscreen',
@@ -121,10 +120,12 @@ function formatTime(seconds: number) {
 /**
  * Control the referenced video's playback, seeking, volume, and fullscreen state, on the design
  * system under the player's navigation layer. A remote moves through the header, the video itself
- * (where Confirm plays or pauses and Left/Right seek), the prompts, the seek bar and the row of
- * buttons. While the video plays, the controls hide after a few seconds without a key, a pointer
- * move or the subtitle panel open, wherever focus is; paused, they stay. The first key while they
- * are hidden only shows them again (media keys and Back still act; on the video Left/Right seek).
+ * (where Confirm plays or pauses and Left/Right seek), the prompts, play/pause (beside the seek bar,
+ * which isn't a stop: Left/Right on play/pause seek) and the row of buttons. While the video plays,
+ * the controls hide after a few seconds without a key, a pointer move or the subtitle panel open,
+ * wherever focus is; paused, they stay. While they are hidden, an arrow shows them with the focus
+ * on play/pause (Left/Right also seek); Confirm on a hidden control only shows it (media keys and
+ * Back still act).
  */
 export function PlayerControls({
   videoRef,
@@ -302,39 +303,54 @@ export function PlayerControls({
   const shown = visible || paused;
 
   const seekBy = (delta: number) => seek(position + delta);
+  // Play/pause takes the focus once the controls it was hidden with are back (a hidden control
+  // can't take DOM focus)
+  const [focusPlayWhenShown, setFocusPlayWhenShown] = useState(false);
+  const playSlot = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!focusPlayWhenShown || !shown) return;
+    setFocusPlayWhenShown(false);
+    navigation.focus(PLAYER_NAV.playPause);
+    // Already the layer's focus when it hid (hiding dropped its DOM focus): the layer doesn't move
+    // to where it is, so give the DOM focus back here
+    const button = playSlot.current?.querySelector('button');
+    if (button && document.activeElement !== button) button.focus({ preventScroll: true });
+    // The store's focus is stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusPlayWhenShown, shown]);
+
   // The latest values, for the key listener below
   const keys = useRef({ shown, seekBy, reveal });
   keys.current = { shown, seekBy, reveal };
 
   /**
    * Before the navigation layer sees a key (component-intrinsic keys listen earlier): any key
-   * shows the controls again; on the video, Left and Right seek and, while the controls are
-   * hidden, Up and Down only show them. Confirm and a press play or pause (the video's click).
+   * shows the controls again. On the video and on play/pause, Left and Right seek. While the
+   * controls are hidden, every arrow shows them with the focus on play/pause (Left and Right
+   * seek too), and Confirm on a hidden control only shows it; on the video it plays or pauses.
    */
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.isComposing) return;
       const { shown: controlsShown, seekBy: seekStep, reveal: show } = keys.current;
       const action = getKeyboardAction(event);
-      if (videoFocused.current) {
-        if (action === 'left' || action === 'right') {
-          event.preventDefault();
-          seekStep(action === 'left' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
-          return;
-        }
-        if ((action === 'up' || action === 'down') && !controlsShown) {
-          event.preventDefault();
-          show();
-          return;
-        }
-      } else if (
-        !controlsShown &&
-        (action === 'left' ||
-          action === 'right' ||
-          action === 'up' ||
-          action === 'down' ||
-          action === 'confirm')
-      ) {
+      const horizontal = action === 'left' || action === 'right';
+      const vertical = action === 'up' || action === 'down';
+      if (!controlsShown && (horizontal || vertical)) {
+        event.preventDefault();
+        show();
+        setFocusPlayWhenShown(true);
+        if (horizontal) seekStep(action === 'left' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
+        return;
+      }
+      // Play/pause sits beside the seek bar, which the remote doesn't stop on: Left/Right on it seek
+      const playFocused = navigation.getActiveId() === PLAYER_NAV.playPause;
+      if (horizontal && (videoFocused.current || playFocused)) {
+        event.preventDefault();
+        seekStep(action === 'left' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
+        return;
+      }
+      if (!controlsShown && action === 'confirm' && !videoFocused.current) {
         // A hidden control keeps focus; the first press only shows it, it doesn't act on it
         event.preventDefault();
         show();
@@ -344,6 +360,8 @@ export function PlayerControls({
     };
     window.addEventListener('keydown', onKey, true);
     return () => window.removeEventListener('keydown', onKey, true);
+    // The store's methods are stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // The remote's media keys work wherever the focus is while the player is open.
@@ -453,7 +471,6 @@ export function PlayerControls({
           busyLabel={loading ? 'Preparing playback…' : undefined}
           seek={
             <SeekControl
-              navId={PLAYER_NAV.seek}
               label="Seek"
               position={position}
               duration={duration}
@@ -465,14 +482,16 @@ export function PlayerControls({
               downloaded={downloadedBlocks(downloadedRanges)}
             />
           }
-          start={
-            <IconButton
-              navId={PLAYER_NAV.playPause}
-              size="lg"
-              label={paused ? 'Play' : 'Pause'}
-              icon={paused ? <PlayIcon /> : <PauseIcon />}
-              onClick={toggle}
-            />
+          primary={
+            <div ref={playSlot}>
+              <IconButton
+                navId={PLAYER_NAV.playPause}
+                size="lg"
+                label={paused ? 'Play' : 'Pause'}
+                icon={paused ? <PlayIcon /> : <PauseIcon />}
+                onClick={toggle}
+              />
+            </div>
           }
           end={
             <Inline gap="sm" align="center">

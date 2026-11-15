@@ -1,7 +1,10 @@
+import { getKeyboardAction } from '@shared/hooks/useKeyboard';
+import { useNavigation } from '@shared/navigation';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
+import { IconButton } from '../../icon-button/IconButton';
 import { IconButtonGroup } from '../../icon-button-group/IconButtonGroup';
 import { InitialFocus, NavigationStage } from '../../storyHelpers';
 import { storyImage } from '../../storyImage';
@@ -9,11 +12,9 @@ import { PlaybackToolbar } from './PlaybackToolbar';
 import { SeekControl } from './SeekControl';
 import { piecesToRanges } from './seekRanges';
 
-import ForwardIcon from '~icons/mdi/fast-forward-10';
 import FullscreenIcon from '~icons/mdi/fullscreen';
 import PauseIcon from '~icons/mdi/pause';
 import PlayIcon from '~icons/mdi/play';
-import BackIcon from '~icons/mdi/rewind-10';
 import SubtitlesIcon from '~icons/mdi/subtitles-outline';
 
 const meta = {
@@ -25,7 +26,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The player’s controls over the video, on `overMedia`: title and episode, the SeekControl, then the main controls (an IconButtonGroup with its shared description) at the start and the secondary ones (audio and subtitle Popovers with OptionLists, full screen) at the end. The seek bar is a brand-red Slider with the downloaded blocks of the playing file under the watched fill; Left/Right seek by 10 s and clamp, Up/Down leave it. Hidden controls fade out and take no pointer. Composition only: the player adapter owns playback, visibility timing and the downloaded data (`piecesToRanges` turns a piece bitfield into blocks).',
+          'The player’s controls over the video, on `overMedia`: title and episode, then play/pause (the `primary` slot) beside the SeekControl, then a row with the secondary controls (audio and subtitle Popovers with OptionLists, full screen) at the end. The seek bar is a brand-red Slider with the downloaded blocks of the playing file under the watched fill. It is not a stop for the remote: Left/Right on play/pause seek by 10 s (the player wires it). Under a mouse the bar thickens and previews up to the pointer; Tab reaches it with a ring on the track only. Hidden controls fade out and take no pointer. Composition only: the player adapter owns playback, visibility timing and the downloaded data (`piecesToRanges` turns a piece bitfield into blocks).',
       },
     },
   },
@@ -51,79 +52,79 @@ const clock = (seconds: number) => {
 };
 
 function Player() {
+  return (
+    <NavigationStage>
+      <PlayerBody />
+      <InitialFocus id="play" />
+    </NavigationStage>
+  );
+}
+
+function PlayerBody() {
+  const navigation = useNavigation();
   const [position, setPosition] = useState(45 * 60);
   const [playing, setPlaying] = useState(true);
   const seekBy = (delta: number) =>
     setPosition(current => Math.min(DURATION, Math.max(0, current + delta)));
+  // Left/Right on play/pause seek, as the player wires it
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const action = getKeyboardAction(event);
+      if (navigation.getActiveId() !== 'play' || (action !== 'left' && action !== 'right')) return;
+      event.preventDefault();
+      seekBy(action === 'left' ? -10 : 10);
+    };
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [navigation]);
   return (
-    <NavigationStage>
-      <div
-        style={{
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'flex-end',
-          minHeight: '28rem',
-          background: `url("${storyImage('#3d405b', '#0b132b')}") center / cover`,
-        }}
-      >
-        <PlaybackToolbar
-          label="Playback controls"
-          title="Dune: Part Two"
-          subtitle="2024 · 2 h 46 min"
-          navId="toolbar"
-          seek={
-            <SeekControl
-              navId="seek"
-              label="Seek"
-              position={position}
-              duration={DURATION}
-              onSeek={setPosition}
-              valueText={`${clock(position)} of ${clock(DURATION)}`}
-              elapsedText={clock(position)}
-              remainingText={`-${clock(DURATION - position)}`}
-              downloaded={downloaded}
-            />
-          }
-          start={
-            <IconButtonGroup
-              navId="main"
-              label="Playback"
-              items={[
-                {
-                  id: 'back',
-                  label: 'Back 10 seconds',
-                  icon: <BackIcon />,
-                  onClick: () => seekBy(-10),
-                },
-                {
-                  id: 'play',
-                  label: playing ? 'Pause' : 'Play',
-                  icon: playing ? <PauseIcon /> : <PlayIcon />,
-                  onClick: () => setPlaying(value => !value),
-                },
-                {
-                  id: 'forward',
-                  label: 'Forward 10 seconds',
-                  icon: <ForwardIcon />,
-                  onClick: () => seekBy(10),
-                },
-              ]}
-            />
-          }
-          end={
-            <IconButtonGroup
-              navId="more"
-              label="More"
-              items={[
-                { id: 'subtitles', label: 'Subtitles', icon: <SubtitlesIcon /> },
-                { id: 'fullscreen', label: 'Full screen', icon: <FullscreenIcon /> },
-              ]}
-            />
-          }
-        />
-      </div>
-      <InitialFocus id="main:play" />
-    </NavigationStage>
+    <div
+      style={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'flex-end',
+        minHeight: '28rem',
+        background: `url("${storyImage('#3d405b', '#0b132b')}") center / cover`,
+      }}
+    >
+      <PlaybackToolbar
+        label="Playback controls"
+        title="Dune: Part Two"
+        subtitle="2024 · 2 h 46 min"
+        navId="toolbar"
+        seek={
+          <SeekControl
+            label="Seek"
+            position={position}
+            duration={DURATION}
+            onSeek={setPosition}
+            valueText={`${clock(position)} of ${clock(DURATION)}`}
+            elapsedText={clock(position)}
+            remainingText={`-${clock(DURATION - position)}`}
+            downloaded={downloaded}
+          />
+        }
+        primary={
+          <IconButton
+            navId="play"
+            size="lg"
+            label={playing ? 'Pause' : 'Play'}
+            icon={playing ? <PauseIcon /> : <PlayIcon />}
+            onClick={() => setPlaying(value => !value)}
+          />
+        }
+        end={
+          <IconButtonGroup
+            navId="more"
+            label="More"
+            items={[
+              { id: 'subtitles', label: 'Subtitles', icon: <SubtitlesIcon /> },
+              { id: 'fullscreen', label: 'Full screen', icon: <FullscreenIcon /> },
+            ]}
+          />
+        }
+      />
+    </div>
   );
 }
 
@@ -135,13 +136,14 @@ export const Controls: Story = {
     await expect(canvas.getByRole('button', { name: 'Pause' })).toHaveAttribute('data-focused');
     await userEvent.keyboard('{Enter}');
     await expect(canvas.getByRole('button', { name: 'Play' })).toBeInTheDocument();
-    // Up reaches the seek bar, which owns Left/Right: 10 s a press
-    await userEvent.keyboard('{ArrowUp}');
+    // Left/Right on play/pause seek: 10 s a press
     await expect(seek).toHaveAttribute('aria-valuetext', '0:45:00 of 2:46:00');
     await userEvent.keyboard('{ArrowRight}{ArrowRight}');
     await expect(seek).toHaveAttribute('aria-valuetext', '0:45:20 of 2:46:00');
-    // Down leaves it for the controls row, entered at the remembered button
+    // Down reaches the row under the bar; Up comes back to play/pause
     await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('button', { name: 'Subtitles' })).toHaveAttribute('data-focused');
+    await userEvent.keyboard('{ArrowUp}');
     await expect(canvas.getByRole('button', { name: 'Play' })).toHaveAttribute('data-focused');
     // The downloaded blocks are drawn as merged ranges
     await expect(downloaded.length).toBeLessThan(20);

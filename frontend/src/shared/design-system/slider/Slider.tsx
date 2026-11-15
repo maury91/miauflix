@@ -1,5 +1,13 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
-import { type ReactNode, useEffect, useId, useLayoutEffect, useRef } from 'react';
+import {
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { joinIds } from '../ids';
 import { type NavigableProps, useNavFocus } from '../navFocus';
@@ -47,6 +55,11 @@ interface SliderBaseProps extends NavigableProps {
    * the fill (the seek bar's paw). Size it with `font-size`; the native thumb keeps its size.
    */
   thumb?: ReactNode;
+  /**
+   * Under a mouse, the track thickens, the thumb grows and a lighter fill previews the value up to
+   * the pointer (the seek bar). Remote and touch see nothing of it.
+   */
+  pointerPreview?: boolean;
 }
 
 /** Labelled by its own label above the track… */
@@ -68,6 +81,15 @@ type RowLabelledProps = {
 };
 
 export type SliderProps = SliderBaseProps & (LabelledProps | RowLabelledProps);
+
+/** `:focus-visible`, where the browser knows it (Chromium 69 doesn't: no ring until a key). */
+const matchesFocusVisible = (element: HTMLElement) => {
+  try {
+    return element.matches(':focus-visible');
+  } catch {
+    return false;
+  }
+};
 
 /**
  * A row may name its control with the title and the control's own text (SettingRow's "<title>
@@ -101,6 +123,7 @@ export function Slider({
   tone = 'neutral',
   trackLayers,
   thumb,
+  pointerPreview = false,
   navId,
   label,
   description,
@@ -119,6 +142,20 @@ export function Slider({
   const range = { min, max, step };
   const current = snapSliderValue(value, range);
   const share = sliderShare(current, range);
+
+  // The share under the mouse, while it hovers (pointerPreview)
+  const [hoverShare, setHoverShare] = useState<number | null>(null);
+  // DOM focus from the keyboard (Tab on a desktop): a ring around the track only
+  const [keyboardFocus, setKeyboardFocus] = useState(false);
+  const onPreviewMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!pointerPreview || disabled || event.pointerType !== 'mouse') return;
+    const box = event.currentTarget.getBoundingClientRect();
+    const thumbPixels =
+      styles.thumbSize * parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const along = (event.clientX - box.left - thumbPixels / 2) / (box.width - thumbPixels);
+    const rtl = getComputedStyle(event.currentTarget).direction === 'rtl';
+    setHoverShare(Math.min(1, Math.max(0, rtl ? 1 - along : along)));
+  };
 
   const latest = useRef({ current, range, keyStep, onChange });
   // Published on commit: the key handler never reads a render React discarded
@@ -170,6 +207,8 @@ export function Slider({
       data-tone={tone === 'brand' ? tone : undefined}
       data-focused={focused || undefined}
       data-disabled={disabled || undefined}
+      data-hovered={hoverShare !== null || undefined}
+      data-keyboard-focus={keyboardFocus || undefined}
     >
       {label !== undefined && (
         <div className={styles.header}>
@@ -195,11 +234,18 @@ export function Slider({
           nav.onPointerFocus();
           onPointerFocus?.();
         }}
+        onPointerMove={onPreviewMove}
+        onPointerLeave={() => setHoverShare(null)}
       >
         <div className={styles.drawing} aria-hidden="true">
           <span className={styles.track}>
             <span className={styles.fillCap} />
             {trackLayers && <span className={styles.rail}>{trackLayers}</span>}
+            {hoverShare !== null && (
+              <span className={styles.rail}>
+                <span className={styles.preview} style={{ transform: `scaleX(${hoverShare})` }} />
+              </span>
+            )}
             <span className={styles.rail}>
               <span className={styles.fill} style={{ transform: `scaleX(${share})` }} />
             </span>
@@ -236,6 +282,27 @@ export function Slider({
           aria-labelledby={label !== undefined ? labelId : ownName(labelledBy, id)}
           aria-describedby={joinIds(description && descriptionId, describedBy)}
           aria-valuetext={valueText}
+          onFocus={event => setKeyboardFocus(matchesFocusVisible(event.currentTarget))}
+          onBlur={() => setKeyboardFocus(false)}
+          onKeyDown={event => {
+            // DOM focus without the layer's (Tab): the arrows step by `keyStep`, not the fine `step`
+            if (focused || disabled) return;
+            const towardEnd =
+              event.key === 'ArrowRight' || event.key === 'ArrowUp'
+                ? true
+                : event.key === 'ArrowLeft' || event.key === 'ArrowDown'
+                  ? false
+                  : null;
+            if (towardEnd === null) return;
+            event.preventDefault();
+            setKeyboardFocus(true);
+            // The native input mirrors Left/Right itself; Up/Down don't mirror
+            const rtl = getComputedStyle(event.currentTarget).direction === 'rtl';
+            const horizontal = event.key === 'ArrowLeft' || event.key === 'ArrowRight';
+            const forward = horizontal && rtl ? !towardEnd : towardEnd;
+            const next = stepSliderValue(current, forward ? 1 : -1, range, keyStep);
+            if (next !== current) onChange(next);
+          }}
           onChange={event => {
             const next = snapSliderValue(event.target.valueAsNumber, range);
             if (next !== current) onChange(next);
