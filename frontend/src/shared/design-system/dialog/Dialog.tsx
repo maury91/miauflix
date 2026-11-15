@@ -1,4 +1,5 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
+import { FocusScope } from '@shared/navigation/NavigationProvider';
 import {
   createContext,
   type ReactNode,
@@ -35,6 +36,11 @@ export interface DialogProps {
   actions: ReactNode;
   actionsLayout?: 'row' | 'column';
   /**
+   * The navId focused on opening (a form's first field). Defaults to the first action. The
+   * navigation layer restores the opener on closing.
+   */
+  initialNavId?: string;
+  /**
    * Back (Escape, remote Back) and a press on the scrim call this when the dialog is dismissible.
    * Without it, the dialog closes only through its actions (a required choice).
    */
@@ -69,6 +75,7 @@ export function Dialog({
   children,
   actions,
   actionsLayout = 'row',
+  initialNavId,
   onDismiss,
   closeLabel,
   closeFocused = false,
@@ -77,6 +84,9 @@ export function Dialog({
 }: DialogProps) {
   const titleId = useId();
   const descriptionId = useId();
+  // Navigation IDs: the scope starts on the actions (the primary first)
+  const navBase = useId();
+  const actionsNavId = `${navBase}-actions`;
   const panelRef = useRef<HTMLDivElement>(null);
   const [id] = useState(() => Symbol('dialog'));
   const parent = useContext(ParentDialogContext);
@@ -149,37 +159,42 @@ export function Dialog({
         data-size={size}
       >
         <ParentDialogContext.Provider value={id}>
-          <SurfaceContextProvider value="solid">
-            <div className={styles.header}>
-              <h2 id={titleId} className={styles.title}>
-                {title}
-              </h2>
-              {closeLabel && onDismiss && (
-                <span className={styles.close}>
-                  <IconButton
-                    label={closeLabel}
-                    icon={<CloseIcon />}
-                    focused={closeFocused}
-                    onMouseMove={onCloseFocus}
-                    onClick={() => onDismissRef.current?.()}
-                  />
-                </span>
-              )}
-            </div>
-            {(description || children) && (
-              <div className={styles.body}>
-                {description && (
-                  <p id={descriptionId} className={styles.description}>
-                    {description}
-                  </p>
+          <FocusScope id={`${navBase}-scope`} contain initialId={initialNavId ?? actionsNavId}>
+            <SurfaceContextProvider value="solid">
+              <div className={styles.header}>
+                <h2 id={titleId} className={styles.title}>
+                  {title}
+                </h2>
+                {closeLabel && onDismiss && (
+                  <span className={styles.close}>
+                    <IconButton
+                      label={closeLabel}
+                      icon={<CloseIcon />}
+                      focused={closeFocused}
+                      navId={`${navBase}-close`}
+                      onMouseMove={onCloseFocus}
+                      onClick={() => onDismissRef.current?.()}
+                    />
+                  </span>
                 )}
-                {children}
               </div>
-            )}
-            <div className={styles.actions}>
-              <ActionGroup layout={actionsLayout}>{actions}</ActionGroup>
-            </div>
-          </SurfaceContextProvider>
+              {(description || children) && (
+                <div className={styles.body}>
+                  {description && (
+                    <p id={descriptionId} className={styles.description}>
+                      {description}
+                    </p>
+                  )}
+                  {children}
+                </div>
+              )}
+              <div className={styles.actions}>
+                <ActionGroup layout={actionsLayout} navId={actionsNavId}>
+                  {actions}
+                </ActionGroup>
+              </div>
+            </SurfaceContextProvider>
+          </FocusScope>
         </ParentDialogContext.Provider>
       </div>
     </div>,

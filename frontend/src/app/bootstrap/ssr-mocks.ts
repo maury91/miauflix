@@ -134,21 +134,3 @@ export const useMotionValue = () => ({ get: () => 0, set: () => {} });
 export const useTransform = () => 0;
 export const useSpring = () => 0;
 export const animate = () => ({ stop: () => {} });
-
-// Mock spatial navigation for SSR
-export const init = () => {};
-export const pause = () => {};
-export const resume = () => {};
-export const useFocusable = () => ({
-  ref: { current: null },
-  focused: false,
-  hasFocusedChild: false,
-  focusKey: '',
-  focusSelf: () => {},
-});
-export const FocusContext = {
-  Provider: ({ children }: { children: React.ReactNode; value?: unknown }) => children,
-};
-export const setFocus = () => {};
-export const getCurrentFocusKey = () => '';
-export const updateAllLayouts = () => {};

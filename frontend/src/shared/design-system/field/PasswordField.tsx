@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import { IconButton } from '../icon-button/IconButton';
+import { type NavigableProps, useNavComposite } from '../navFocus';
 import type { ControlSize } from '../tokens';
 import { Field, type FieldAnatomyProps } from './Field';
 import * as styles from './field.css';
@@ -24,7 +25,8 @@ export type PasswordFieldProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'className' | 'style' | 'size' | 'type' | 'children' | 'id' | 'aria-invalid'
 > &
-  FieldAnatomyProps & {
+  FieldAnatomyProps &
+  NavigableProps & {
     size?: ControlSize;
     /** The part holding virtual focus: the input (outline) or the reveal toggle (white fill). */
     focusedPart?: PasswordFieldPart;
@@ -49,8 +51,9 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
       error,
       id,
       size = 'md',
-      focusedPart,
-      onPointerFocus,
+      focusedPart: focusedPartProp,
+      onPointerFocus: onPointerFocusProp,
+      navId,
       showLabel,
       hideLabel,
       disabled = false,
@@ -61,6 +64,12 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
     ref
   ) {
     const [revealed, setRevealed] = useState(false);
+    const nav = useNavComposite<PasswordFieldPart, HTMLDivElement>(
+      navId,
+      disabled ? ['input'] : ['input', 'reveal'],
+      { focusedPart: focusedPartProp, onPointerFocus: onPointerFocusProp, disabled }
+    );
+    const { focusedPart, onPointerFocus } = nav;
     const inputRef = useRef<HTMLInputElement>(null);
     const selection = useRef<[number | null, number | null] | null>(null);
     useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
@@ -102,7 +111,8 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
             invalid={Boolean(error)}
             disabled={disabled}
             readOnly={readOnly}
-            onPointerFocus={() => onPointerFocus?.('input')}
+            onPointerFocus={() => onPointerFocus('input')}
+            frameRef={nav.ref}
             end={
               <IconButton
                 size={fieldActionSize[size]}
@@ -112,7 +122,7 @@ export const PasswordField = forwardRef<HTMLInputElement, PasswordFieldProps>(
                 focused={focusedPart === 'reveal'}
                 disabled={disabled}
                 aria-controls={control.id}
-                onMouseMove={() => onPointerFocus?.('reveal')}
+                onMouseMove={() => onPointerFocus('reveal')}
                 onMouseDown={keepEditing}
                 onClick={toggle}
               />

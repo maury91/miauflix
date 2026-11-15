@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
 import { IconButton } from '../icon-button/IconButton';
-import { SurfaceStage } from '../storyHelpers';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
+import { NavigationStage, SurfaceStage } from '../storyHelpers';
 import { List } from './List';
 import { ListItem } from './ListItem';
 import { SettingRow } from './SettingRow';
@@ -132,11 +131,8 @@ function Servers() {
   const [current, setCurrent] = useState<string>('home');
   const [removed, setRemoved] = useState<string[]>([]);
   const shown = servers.filter(id => !removed.includes(id));
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus(
-    shown.map(id => [id, `${id}:remove`])
-  );
   return (
-    <div ref={containerRef}>
+    <NavigationStage>
       <List label="Servers">
         {shown.map(id => (
           <ListItem
@@ -145,28 +141,21 @@ function Servers() {
             description={current === id ? 'In use' : 'Available'}
             leading={<ServerIcon />}
             selected={current === id}
-            focused={isFocused(id)}
-            onPointerFocus={() => focus(id)}
+            navId={id}
             onClick={() => setCurrent(id)}
             trailing={
               <IconButton
                 label={`Remove ${names[id]}`}
                 icon={<DeleteIcon />}
-                focused={isFocused(`${id}:remove`)}
-                onMouseMove={() => focus(`${id}:remove`)}
-                onClick={() => {
-                  setRemoved(list => [...list, id]);
-                  // The navigation layer restores focus to the nearest row
-                  const next = shown[shown.indexOf(id) + 1] ?? shown[shown.indexOf(id) - 1];
-                  if (next) focus(next);
-                }}
+                navId={`${id}:remove`}
+                // The navigation layer restores focus to the nearest row
+                onClick={() => setRemoved(list => [...list, id])}
               />
             }
           />
         ))}
       </List>
-      <p style={{ color: '#a6adaf' }}>Focused: {focusedId}</p>
-    </div>
+    </NavigationStage>
   );
 }
 
@@ -195,19 +184,15 @@ export const VirtualFocus: Story = {
     await expect(rowOf('Office server')).not.toHaveAttribute('data-focused');
     await userEvent.keyboard('{Enter}');
     await expect(canvas.queryByText('Office server')).toBeNull();
-    await expect(rowOf('Backup server')).toHaveAttribute('data-focused');
+    // The navigation layer moves focus to the nearest row once the removed one is gone
+    await waitFor(() => expect(rowOf('Backup server')).toHaveAttribute('data-focused'));
   },
 };
 
 function Settings() {
-  const { containerRef, focus, isFocused } = useStoryVirtualFocus([
-    ['sync'],
-    ['quality'],
-    ['wipe'],
-  ]);
   const [sync, setSync] = useState(true);
   return (
-    <div ref={containerRef}>
+    <NavigationStage>
       <List label="Playback" divided>
         <SettingRow
           title="Episode syncing"
@@ -215,8 +200,7 @@ function Settings() {
           toggle={{
             checked: sync,
             onCheckedChange: setSync,
-            focused: isFocused('sync'),
-            onPointerFocus: () => focus('sync'),
+            navId: 'sync',
           }}
         />
         <SettingRow
@@ -224,7 +208,7 @@ function Settings() {
           description="Used when several sources are available."
           value="1080p"
           control={props => (
-            <Button {...props} focused={isFocused('quality')} onMouseMove={() => focus('quality')}>
+            <Button {...props} navId="quality">
               Change
             </Button>
           )}
@@ -233,13 +217,13 @@ function Settings() {
           title="Clear watch history"
           description="Removes progress for every title on this profile. This cannot be undone."
           control={props => (
-            <Button {...props} focused={isFocused('wipe')} onMouseMove={() => focus('wipe')}>
+            <Button {...props} navId="wipe">
               Clear
             </Button>
           )}
         />
       </List>
-    </div>
+    </NavigationStage>
   );
 }
 

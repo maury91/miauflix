@@ -32,6 +32,7 @@ export { RadioGroup, type RadioGroupProps, type RadioOption } from './choice/Rad
 export { Switch, type SwitchProps } from './choice/Switch';
 export { CollectionTile, type CollectionTileProps } from './collection-tile/CollectionTile';
 export { Dialog, type DialogProps } from './dialog/Dialog';
+export { Disclosure, type DisclosureProps } from './disclosure/Disclosure';
 export { Divider, type DividerProps } from './divider/Divider';
 export { EmptyState, type EmptyStateProps } from './empty-state/EmptyState';
 export {
@@ -50,6 +51,7 @@ export {
 export { SearchField, type SearchFieldPart, type SearchFieldProps } from './field/SearchField';
 export { TextArea, type TextAreaProps } from './field/TextArea';
 export { TextField, type TextFieldProps } from './field/TextField';
+export { Icon, type IconProps } from './icon/Icon';
 export { IconButton, type IconButtonProps } from './icon-button/IconButton';
 export {
   IconButtonGroup,
@@ -85,6 +87,7 @@ export {
   useWindowClass,
   type WindowClass,
 } from './layout/windowClass';
+export { Link, type LinkProps } from './link/Link';
 export { List, type ListProps } from './list/List';
 export { ListItem, type ListItemProps } from './list/ListItem';
 export {
@@ -97,8 +100,33 @@ export { Menu, type MenuProps, type MenuTriggerProps } from './menu/Menu';
 export type { MenuAction, MenuEntry, MenuSeparator } from './menu/menuItems';
 export { Message, type MessageProps, type MessageTone } from './message/Message';
 export { NavItem, type NavItemProps, NavRail, type NavRailProps } from './nav-rail/NavRail';
+export {
+  type Notification,
+  NotificationRegion,
+  type NotificationRegionProps,
+} from './notification-region/NotificationRegion';
 export { OptionList, type OptionListProps } from './option-list/OptionList';
 export type { SelectItems, SelectOption, SelectOptionGroup } from './option-list/selectItems';
+export { EpisodeItem, type EpisodeItemProps } from './patterns/episode-item/EpisodeItem';
+export { FormSection, type FormSectionProps } from './patterns/form-section/FormSection';
+export { MediaTile, type MediaTileProps } from './patterns/media-tile/MediaTile';
+export { PairingPanel, type PairingPanelProps } from './patterns/pairing-panel/PairingPanel';
+export {
+  PlaybackToolbar,
+  type PlaybackToolbarProps,
+} from './patterns/playback-toolbar/PlaybackToolbar';
+export { SeekControl, type SeekControlProps } from './patterns/playback-toolbar/SeekControl';
+export { piecesToRanges, type SeekRange } from './patterns/playback-toolbar/seekRanges';
+export { ProfileTile, type ProfileTileProps } from './patterns/profile-tile/ProfileTile';
+export {
+  SearchKeyboard,
+  type SearchKeyboardProps,
+} from './patterns/search-keyboard/SearchKeyboard';
+export {
+  alphanumericKeys,
+  applyKey,
+  type KeyboardKey,
+} from './patterns/search-keyboard/searchKeys';
 export { Popover, type PopoverProps, type PopoverTriggerProps } from './popover/Popover';
 export {
   ProgressBar,
@@ -125,6 +153,8 @@ export {
   stepSliderValue,
 } from './slider/sliderValue';
 export { SurfaceContextProvider, type SurfaceContextValue, useSurfaceContext } from './surface';
+export { Surface, type SurfaceProps } from './surface-panel/Surface';
 export { type TabItem, TabPanel, type TabPanelProps, Tabs, type TabsProps } from './tabs/Tabs';
+export { Heading, type HeadingProps, Text, type TextProps } from './text/Text';
 export * as tokens from './tokens';
 export { Tooltip, type TooltipProps } from './tooltip/Tooltip';

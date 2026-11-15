@@ -1,6 +1,8 @@
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import { type MouseEvent, type ReactNode, useId } from 'react';
 
 import { joinIds } from '../ids';
+import { useNavFocus } from '../navFocus';
 import * as styles from './list.css';
 import { useListItemRole } from './listContext';
 
@@ -27,6 +29,11 @@ interface ListItemContentProps {
   onPointerFocus?: () => void;
   /** The current item (the active server, the playing episode): a quiet fill and `aria-current`. */
   selected?: boolean;
+  /**
+   * See NavigableProps: registers the primary part (rows with `onClick` or `href`). With trailing
+   * actions (given their own `navId`), the row is a horizontal group entered at the primary part.
+   */
+  navId?: string;
 }
 
 type ListItemSemanticsProps =
@@ -60,7 +67,18 @@ const isInTrailing = (event: MouseEvent) =>
  * siblings of the primary part, never nested in it. Generic: features adapt their data (episodes,
  * providers, notifications) into these slots instead of adding props.
  */
-export function ListItem({
+export function ListItem(props: ListItemProps) {
+  const { trailing, navId } = props;
+  if (!trailing || navId === undefined) return <ListRow {...props} />;
+  // The primary part registers inside the row's group, beside the trailing actions
+  return (
+    <FocusGroup id={`${navId}:row`} layout="horizontal" entry="first" defaultId={navId}>
+      <ListRow {...props} />
+    </FocusGroup>
+  );
+}
+
+function ListRow({
   title,
   description,
   leading,
@@ -72,8 +90,16 @@ export function ListItem({
   onClick,
   href,
   disabled = false,
+  navId,
 }: ListItemProps) {
   const role = useListItemRole();
+  const interactive = Boolean(onClick) || href !== undefined;
+  // A passive row is not a focus target: only its trailing actions act
+  const nav = useNavFocus<HTMLElement>(interactive ? navId : undefined, {
+    focused,
+    disabled,
+    selected,
+  });
   const titleId = useId();
   const descriptionId = useId();
   const metadataId = useId();
@@ -114,6 +140,7 @@ export function ListItem({
   if (onClick) {
     primaryPart = (
       <button
+        ref={nav.ref}
         type="button"
         className={styles.primary}
         disabled={disabled}
@@ -126,7 +153,13 @@ export function ListItem({
     );
   } else if (href !== undefined) {
     primaryPart = (
-      <a className={styles.primary} href={href} aria-current={selected || undefined} {...naming}>
+      <a
+        ref={nav.ref}
+        className={styles.primary}
+        href={href}
+        aria-current={selected || undefined}
+        {...naming}
+      >
         {content}
       </a>
     );
@@ -142,14 +175,16 @@ export function ListItem({
     <div
       role={role}
       className={styles.row}
-      data-focused={focused || undefined}
+      data-focused={nav.focused || undefined}
       data-selected={selected || undefined}
       data-disabled={disabled || undefined}
       data-interactive={onClick || href !== undefined ? true : undefined}
       data-trailing={trailing ? true : undefined}
       onMouseMove={event => {
         // Trailing actions focus themselves
-        if (!isInTrailing(event)) onPointerFocus?.();
+        if (isInTrailing(event)) return;
+        nav.onPointerFocus();
+        onPointerFocus?.();
       }}
     >
       {primaryPart}

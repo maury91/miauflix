@@ -1,5 +1,6 @@
 import { IS_TV } from '@shared/config/constants';
 import { createSmoothScroller, type SmoothScroller } from '@shared/lib/smooth-scroll';
+import { useOptionalPointerLock } from '@shared/navigation/hooks';
 import { type MouseEvent, type ReactNode, useEffect, useRef } from 'react';
 
 import { type Space, space } from '../tokens';
@@ -71,6 +72,10 @@ export function ScrollArea({
   const scrollerRef = useRef<SmoothScroller | null>(null);
   const lastInput = useRef<'key' | 'pointer'>('key');
   const lockedUntil = useRef(0);
+  // The navigation layer's pointer lock, when there is one: held for the reveal's motion too
+  const layerLock = useOptionalPointerLock();
+  const layerLockRef = useRef(layerLock);
+  layerLockRef.current = layerLock;
   const lastPointer = useRef<{ x: number; y: number } | null>(null);
   /** The content position carried across a mode change. */
   const carried = useRef<number | null>(null);
@@ -109,7 +114,11 @@ export function ScrollArea({
         margin: lengthInPx(space[revealMargin], rootPx),
       });
       if (Math.abs(target - current) < 0.5) return;
-      if (!instant) lockedUntil.current = Date.now() + POINTER_LOCK_MS;
+      if (!instant) {
+        lockedUntil.current = Date.now() + POINTER_LOCK_MS;
+        const release = layerLockRef.current?.();
+        if (release) window.setTimeout(release, POINTER_LOCK_MS);
+      }
       scroller.scrollTo(target, { instant });
     };
 

@@ -1,6 +1,6 @@
-import { activate, canMirror, isEditable, isShown } from './dom';
+import { activate, isEditable, isNativeControl, isShown, mirrorTarget } from './dom';
 import { enter, isWithin, resolveMove } from './resolve';
-import type { Direction, NavigationNode, NavigationTree, Rect, Resolution } from './types';
+import type { Direction, Edge, NavigationNode, NavigationTree, Rect, Resolution } from './types';
 
 /** Home's held-arrow stepping: repeats faster than this are swallowed. */
 export const heldKeyInterval = 90;
@@ -10,6 +10,28 @@ export type InputKind = 'key' | 'pointer' | 'program';
 interface Registration {
   node: NavigationNode;
   element: () => HTMLElement | null;
+}
+
+/** A move waiting for content past a group's edge, and the intent it was made with. */
+interface PendingMove {
+  groupId: string;
+  edge: Edge;
+  fromId: string;
+  part: string | undefined;
+  direction: Direction;
+  scopeId: string | null;
+  controller: AbortController;
+  /** The loader's promise settled: a new press asks again. */
+  settled: boolean;
+}
+
+interface GroupGeometry {
+  rects: ReadonlyMap<string, Rect | null>;
+  /** One child element, re-read on later moves to shift the cached rectangles. */
+  anchor: HTMLElement | null;
+  anchorAt: { left: number; top: number } | null;
+  /** Every leaf element read, watched for size changes. */
+  elements: readonly HTMLElement[];
 }
 
 interface Scope {
@@ -23,6 +45,10 @@ export interface NavigationSnapshot {
   part: string | undefined;
   scopes: readonly string[];
   last: { key: string; resolution: Resolution } | null;
+  /** The move waiting for content, if any. */
+  pending: { groupId: string; edge: Edge } | null;
+  /** Spatial groups whose child rectangles are cached. */
+  geometry: readonly string[];
   nodes: readonly NavigationNode[];
   remembered: Readonly<Record<string, string>>;
 }
@@ -70,6 +96,62 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
   let pointerAnchor: { x: number; y: number } | null = null;
   let mirrored: HTMLElement | null = null;
   let generation = 0;
+  let pending: PendingMove | null = null;
+  let retryQueued = false;
+
+  /**
+   * Spatial groups' child rectangles (style guide, section 10: geometry is cached per group, only
+   * for spatial layouts, and recalculated on layout change). Measured in one batch on the first
+   * move that needs them; later moves read one anchor element and shift the cache by how far it
+   * moved, so scrolling and transform reveals cost one read.
+   */
+  const geometry = new Map<string, GroupGeometry>();
+  /** The groups each observed element was measured for. */
+  const measuredFor = new Map<Element, Set<string>>();
+  /** Elements past ResizeObserver's initial notification, which reports no change. */
+  const observing = new WeakSet<Element>();
+  const resizeObserver =
+    typeof ResizeObserver === 'undefined'
+      ? null
+      : new ResizeObserver(entries => {
+          for (const { target } of entries) {
+            if (!observing.has(target)) {
+              observing.add(target);
+              continue;
+            }
+            for (const groupId of [...(measuredFor.get(target) ?? [])]) dropGeometry(groupId);
+          }
+        });
+
+  function dropGeometry(groupId: string) {
+    const entry = geometry.get(groupId);
+    if (!entry) return;
+    geometry.delete(groupId);
+    for (const element of entry.elements) {
+      const groups = measuredFor.get(element);
+      groups?.delete(groupId);
+      if (groups?.size === 0) {
+        measuredFor.delete(element);
+        observing.delete(element);
+        resizeObserver?.unobserve(element);
+      }
+    }
+  }
+
+  /** A structural change inside these groups (a child added or removed) moves their children. */
+  function dropGeometryAbove(parent: string | null) {
+    for (let id = parent; id !== null; id = registrations.get(id)?.node.parent ?? null) {
+      dropGeometry(id);
+    }
+  }
+
+  /** Layout changed in a way no element's size shows (a window resize re-wrapping items). */
+  function invalidateGeometry() {
+    if (geometry.size === 0) return;
+    for (const groupId of [...geometry.keys()]) dropGeometry(groupId);
+    // The inspector shows the cache
+    anyListeners.forEach(listener => listener());
+  }
 
   const notify = (ids: readonly (string | null)[]) => {
     for (const id of ids) {
@@ -86,6 +168,9 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     const anchorCache = new Map<string, HTMLElement | null>();
     const orderCache = new Map<string, readonly string[]>();
     const rectCache = new Map<string, Rect | null>();
+    const groupRectsCache = new Map<string, ReadonlyMap<string, Rect | null>>();
+    /** Leaf elements read by `measure` while a group's cache is being filled. */
+    let collecting: HTMLElement[] | null = null;
 
     const anchor = (id: string): HTMLElement | null => {
       if (anchorCache.has(id)) return anchorCache.get(id)!;
@@ -136,25 +221,93 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
       return result;
     };
 
-    const rect = (id: string): Rect | null => {
+    /** A fresh rectangle: a leaf's box, or the union of a group's eligible descendants. */
+    const measure = (id: string): Rect | null => {
       if (rectCache.has(id)) return rectCache.get(id)!;
       const registration = registrations.get(id);
       let result: Rect | null = null;
       if (registration?.node.kind === 'leaf') {
-        const box = registration.element()?.getBoundingClientRect();
+        const element = registration.element();
+        const box = element?.getBoundingClientRect();
+        if (element && collecting) collecting.push(element);
         result = box
           ? { top: box.top, right: box.right, bottom: box.bottom, left: box.left }
           : null;
       } else if (registration) {
         result = unionRect(
           ordered(id).flatMap(child => {
-            const childRect = eligible(child) ? rect(child) : null;
+            const childRect = eligible(child) ? measure(child) : null;
             return childRect ? [childRect] : [];
           })
         );
       }
       rectCache.set(id, result);
       return result;
+    };
+
+    /** A spatial group's child rectangles: cached, shifted by its anchor's movement since. */
+    const groupRects = (groupId: string): ReadonlyMap<string, Rect | null> => {
+      const memo = groupRectsCache.get(groupId);
+      if (memo) return memo;
+      let entry = geometry.get(groupId);
+      if (entry && !entry.anchor?.isConnected) {
+        dropGeometry(groupId);
+        entry = undefined;
+      }
+      let result: ReadonlyMap<string, Rect | null>;
+      if (!entry) {
+        // One batch of reads, no writes in between
+        const elements: HTMLElement[] = [];
+        collecting = elements;
+        const rects = new Map<string, Rect | null>();
+        for (const child of ordered(groupId)) rects.set(child, measure(child));
+        collecting = null;
+        const anchorElement = elements.find(element => element.getClientRects().length > 0);
+        const anchorBox = anchorElement?.getBoundingClientRect();
+        geometry.set(groupId, {
+          rects,
+          anchor: anchorElement ?? null,
+          anchorAt: anchorBox ? { left: anchorBox.left, top: anchorBox.top } : null,
+          elements,
+        });
+        for (const element of elements) {
+          if (!measuredFor.has(element)) {
+            measuredFor.set(element, new Set());
+            resizeObserver?.observe(element);
+          }
+          measuredFor.get(element)!.add(groupId);
+        }
+        result = rects;
+      } else {
+        const box = entry.anchor?.getBoundingClientRect();
+        const dx = box && entry.anchorAt ? box.left - entry.anchorAt.left : 0;
+        const dy = box && entry.anchorAt ? box.top - entry.anchorAt.top : 0;
+        result =
+          dx === 0 && dy === 0
+            ? entry.rects
+            : new Map(
+                [...entry.rects].map(([child, cached]) => [
+                  child,
+                  cached && {
+                    top: cached.top + dy,
+                    right: cached.right + dx,
+                    bottom: cached.bottom + dy,
+                    left: cached.left + dx,
+                  },
+                ])
+              );
+      }
+      groupRectsCache.set(groupId, result);
+      return result;
+    };
+
+    const rect = (id: string): Rect | null => {
+      const parent = registrations.get(id)?.node.parent ?? null;
+      if (parent !== null && registrations.get(parent)?.node.layout === 'spatial') {
+        const rects = groupRects(parent);
+        if (rects.has(id)) return rects.get(id)!;
+      }
+      return measure(id);
     };
 
     return {
@@ -184,6 +337,8 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
   function setActive(id: string | null, part: string | undefined, input: InputKind) {
     lastInput = input;
     if (id === activeId && part === activePart) return;
+    // Focus moved on: a move still waiting for content is stale
+    cancelPending();
     const previous = activeId;
     activeId = id;
     activePart = part;
@@ -200,16 +355,35 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     }
     const element = id === null ? null : elementOf(id);
     endEditingOutside(element);
-    if (mirrorDomFocus) {
-      if (element && canMirror(element)) {
-        if (document.activeElement !== element) element.focus({ preventScroll: true });
-        mirrored = element;
-      } else if (mirrored && document.activeElement === mirrored) {
-        mirrored.blur();
-        mirrored = null;
-      }
-    }
+    if (mirrorDomFocus) mirrorFocus(element);
     notify(previous === id ? [id] : [previous, id]);
+    // A part rendered by this move (a carousel item scrolled in): mirror once React committed
+    if (mirrorDomFocus && element && part !== undefined && mirrored === null) {
+      const at = generation;
+      queueMicrotask(() => {
+        if (generation === at && mirrored === null) mirrorFocus(elementOf(id!));
+      });
+    }
+  }
+
+  /** DOM focus follows virtual focus where that doesn't enter edit mode (style guide, section 10). */
+  function mirrorFocus(element: HTMLElement | null) {
+    const target = element && mirrorTarget(element, activePart);
+    const current = document.activeElement;
+    if (target) {
+      if (current !== target) target.focus({ preventScroll: true });
+      mirrored = target;
+    } else if (
+      current instanceof HTMLElement &&
+      // What we focused, or a native control left focused outside the new target (a select or
+      // range the pointer focused): its keys would stay its own
+      (current === mirrored || (isNativeControl(current) && !element?.contains(current)))
+    ) {
+      current.blur();
+      mirrored = null;
+    } else {
+      mirrored = null;
+    }
   }
 
   /** Focus a node: a leaf directly, a group or scope at its entry. */
@@ -253,19 +427,136 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
         scopeId: topScope(),
         part: activePart,
       });
-      if (resolution.type === 'move') {
-        setActive(resolution.targetId, resolution.part, 'key');
-        if (resolution.gridColumn) {
-          gridColumns.clear();
-          gridColumns.set(resolution.gridColumn.groupId, resolution.gridColumn.column);
-        } else gridColumns.clear();
-      } else if (resolution.type === 'handled') {
-        setActive(activeId, resolution.part, 'key');
+      if (resolution.type === 'pending') requestMore(resolution, direction, event?.repeat ?? false);
+      else {
+        // Any other result is a new intent
+        cancelPending();
+        apply(resolution);
       }
     }
     last = { key: direction, resolution };
     anyListeners.forEach(listener => listener());
     return resolution;
+  }
+
+  function apply(resolution: Resolution) {
+    if (resolution.type === 'move') {
+      setActive(resolution.targetId, resolution.part, 'key');
+      gridColumns.clear();
+      if (resolution.gridColumn) {
+        gridColumns.set(resolution.gridColumn.groupId, resolution.gridColumn.column);
+      }
+    } else if (resolution.type === 'handled') {
+      setActive(activeId, resolution.part, 'key');
+    }
+  }
+
+  /**
+   * A move reached unloaded content (style guide, section 10, dynamic content): ask the group
+   * once, with a token aborted by any newer intent. Repeating the same move waits on the same
+   * request until its loader settles (or returned nothing); a held key never asks twice.
+   */
+  function requestMore(
+    resolution: Extract<Resolution, { type: 'pending' }>,
+    direction: Direction,
+    repeat: boolean
+  ) {
+    const { groupId, edge } = resolution;
+    if (
+      pending &&
+      // A held key never asks twice; a new press asks again once the loader settled
+      (!pending.settled || repeat) &&
+      pending.groupId === groupId &&
+      pending.edge === edge &&
+      pending.direction === direction &&
+      pending.fromId === activeId &&
+      pending.part === activePart
+    ) {
+      return;
+    }
+    cancelPending();
+    const request: PendingMove = {
+      groupId,
+      edge,
+      fromId: activeId!,
+      part: activePart,
+      direction,
+      scopeId: topScope(),
+      controller: new AbortController(),
+      settled: false,
+    };
+    pending = request;
+    // Failed: focus stays, and the next press asks again
+    const failed = () => {
+      if (pending === request) pending = null;
+    };
+    let loading: ReturnType<NonNullable<NavigationNode['onMore']>>;
+    try {
+      loading = registrations.get(groupId)?.node.onMore?.({
+        edge,
+        signal: request.controller.signal,
+      });
+    } catch (error) {
+      failed();
+      console.error(error);
+      return;
+    }
+    // A loader returning nothing is done asking: a new press may ask again, while new content
+    // registering still completes this move
+    if (!loading) request.settled = true;
+    else
+      loading.then(() => {
+        request.settled = true;
+      }, failed);
+  }
+
+  function cancelPending() {
+    if (!pending) return;
+    pending.controller.abort();
+    pending = null;
+  }
+
+  /** New content registered in the pending group: once the commit is over, try the move again. */
+  function queueRetry() {
+    if (retryQueued) return;
+    retryQueued = true;
+    queueMicrotask(() => {
+      retryQueued = false;
+      retryPending();
+    });
+  }
+
+  function retryPending() {
+    const request = pending;
+    if (!request) return;
+    // Only while the intent still matches: focus where the move started, the same overlay on top
+    if (
+      activeId !== request.fromId ||
+      activePart !== request.part ||
+      topScope() !== request.scopeId
+    ) {
+      cancelPending();
+      return;
+    }
+    const resolution = resolveMove(tree(), request.fromId, request.direction, {
+      scopeId: request.scopeId,
+      part: request.part,
+    });
+    // Still nothing focusable past the edge: keep waiting
+    if (
+      resolution.type === 'pending' &&
+      resolution.groupId === request.groupId &&
+      resolution.edge === request.edge
+    ) {
+      return;
+    }
+    // Done; nothing to abort
+    pending = null;
+    if (resolution.type === 'move' || resolution.type === 'handled') {
+      apply(resolution);
+      last = { key: request.direction, resolution };
+      anyListeners.forEach(listener => listener());
+    }
   }
 
   /** Confirm: activates the focused element once; held Confirm never repeats. */
@@ -280,6 +571,8 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
 
   /** Back leaves the edit layer first; otherwise it belongs to overlays and the page. */
   function back(): boolean {
+    // Back is a new intent: a move waiting for content is dropped
+    cancelPending();
     const editing = document.activeElement;
     if (!(editing instanceof HTMLElement) || !isEditable(editing)) return false;
     editing.blur();
@@ -361,14 +654,22 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     registrations.set(node.id, registration);
     if (!childrenOf.has(node.parent)) childrenOf.set(node.parent, new Set());
     childrenOf.get(node.parent)!.add(node.id);
+    dropGeometryAbove(node.parent);
+    if (pending && isWithin(tree(), node.id, pending.groupId)) queueRetry();
 
     return () => {
       if (registrations.get(node.id) !== registration) return;
-      const wasActive = activeId === node.id;
+      // The group a move waits on went away (a route change)
+      if (pending?.groupId === node.id) cancelPending();
+      // A group holding focus counts too: it may unregister before the focused leaf inside it,
+      // which could then no longer walk up past it
+      const wasActive = activeId !== null && isWithin(tree(), activeId, node.id);
       // Candidates while the DOM is still there (layout cleanups run before nodes are removed)
       const fallbacks = wasActive ? removalCandidates(node.id) : [];
       registrations.delete(node.id);
       childrenOf.get(node.parent)?.delete(node.id);
+      dropGeometryAbove(node.parent);
+      dropGeometry(node.id);
       if (!wasActive) return;
       const removedAt = generation;
       // After the whole commit: a closing scope restores its opener first
@@ -409,11 +710,43 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
   /** Updates a node's options in place (each render); its parent never changes. */
   function update(node: NavigationNode) {
     const registration = registrations.get(node.id);
-    if (registration) registration.node = node;
+    if (!registration) return;
+    const previous = registration.node;
+    const previousParts = previous.parts;
+    registration.node = node;
+    // Eligibility or arrangement changed: cached rectangles here and above (a group's union of
+    // its eligible children) are stale
+    if (
+      previous.disabled !== node.disabled ||
+      previous.layout !== node.layout ||
+      previous.columns !== node.columns ||
+      previous.span !== node.span
+    ) {
+      dropGeometry(node.id);
+      dropGeometryAbove(node.parent);
+    }
+    // The pending group re-rendered: new parts, or `more` turned off
+    if (pending?.groupId === node.id) queueRetry();
+    // The focused part went away (a search's clear action once the field is empty): the part
+    // before it, else the first
+    if (
+      activeId === node.id &&
+      activePart !== undefined &&
+      node.parts &&
+      !node.parts.includes(activePart)
+    ) {
+      const index = previousParts?.indexOf(activePart) ?? 0;
+      const kept = previousParts
+        ?.slice(0, Math.max(0, index))
+        .reverse()
+        .find(part => node.parts!.includes(part));
+      setActive(node.id, kept ?? node.parts[0], 'program');
+    }
   }
 
   /** Opens an overlay scope above the others; the returned function closes it. */
   function pushScope(id: string): () => void {
+    cancelPending();
     const view = tree();
     // A scope open from the start inside this one registered first; this one goes below it
     const descendant = scopes.findIndex(other => isWithin(view, other.id, id));
@@ -423,9 +756,14 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     };
     if (descendant === -1) scopes.push(scope);
     else scopes.splice(descendant, 0, scope);
+    // An overlay opens fresh at its initial target: forget what was focused in it last time
+    for (const groupId of [...memory.keys()]) {
+      if (isWithin(view, groupId, id)) memory.delete(groupId);
+    }
     return () => {
       const index = scopes.indexOf(scope);
       if (index === -1) return;
+      cancelPending();
       scopes.splice(index, 1);
       // Only the topmost scope closing moves focus: back to its opener, else into what is now on top
       if (index !== scopes.length) return;
@@ -446,8 +784,14 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
       if (openerUsable && isWithin(view, opener!, topScope())) {
         setActive(opener!, registrations.get(opener!)?.node.parts?.[0], 'program');
       } else {
-        // The opener is gone: focus waits for the removal fallback or the next direction
-        if (!recover()) setActive(null, undefined, 'program');
+        // No opener (gone, or the overlay opened before anything had focus): the topmost scope
+        // takes focus after the commit, once the page behind is no longer `inert`, unless the
+        // removal fallback placed it first
+        const closedAt = generation;
+        queueMicrotask(() => {
+          if (generation !== closedAt) return;
+          if (!recover()) setActive(null, undefined, 'program');
+        });
       }
     };
   }
@@ -465,6 +809,14 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     trackPointer,
     pushScope,
     recover,
+    invalidateGeometry,
+    /** Stops watching element sizes (the provider unmounting). */
+    dispose: () => {
+      invalidateGeometry();
+      resizeObserver?.disconnect();
+    },
+    /** Spatial groups with cached geometry, for the inspector and tests. */
+    cachedGeometry: () => [...geometry.keys()],
     isActive: (id: string) => activeId === id,
     /** Whether the focused leaf is inside a node. */
     activeWithin: (id: string) => activeId !== null && isWithin(tree(), activeId, id),
@@ -495,6 +847,8 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
         part: activePart,
         scopes: scopes.map(scope => scope.id),
         last,
+        pending: pending && { groupId: pending.groupId, edge: pending.edge },
+        geometry: [...geometry.keys()],
         nodes: [...registrations.values()].map(registration => registration.node),
         remembered: Object.fromEntries(memory),
       };

@@ -2,9 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
-import { StateCell, SurfaceStage } from '../storyHelpers';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import type { SurfaceContextValue } from '../surface';
-import { useStoryVirtualRow } from '../useStoryVirtualFocus';
 import { IconButton } from './IconButton';
 
 import ClosedCaptionIcon from '~icons/mdi/closed-caption';
@@ -181,25 +180,26 @@ export const TooltipStates: Story = {
 };
 
 function PlayerControls() {
-  const { itemProps } = useStoryVirtualRow(3, 1);
   return (
-    <SurfaceStage surface="overMedia">
-      <div style={{ paddingTop: '2.5rem' }}>
-        <IconButton
-          label="Back 10 seconds"
-          icon={<SkipBackIcon />}
-          tooltip="Back 10 seconds"
-          {...itemProps(0)}
-        />{' '}
-        <IconButton label="Mute" icon={<VolumeIcon />} tooltip="Mute" {...itemProps(1)} />{' '}
-        <IconButton
-          label="Forward 10 seconds"
-          icon={<SkipForwardIcon />}
-          tooltip="Forward 10 seconds"
-          {...itemProps(2)}
-        />
-      </div>
-    </SurfaceStage>
+    <NavigationStage layout="horizontal" initialId="mute">
+      <SurfaceStage surface="overMedia">
+        <div style={{ paddingTop: '2.5rem' }}>
+          <IconButton
+            label="Back 10 seconds"
+            icon={<SkipBackIcon />}
+            tooltip="Back 10 seconds"
+            navId="back"
+          />{' '}
+          <IconButton navId="mute" label="Mute" icon={<VolumeIcon />} tooltip="Mute" />{' '}
+          <IconButton
+            label="Forward 10 seconds"
+            icon={<SkipForwardIcon />}
+            tooltip="Forward 10 seconds"
+            navId="forward"
+          />
+        </div>
+      </SurfaceStage>
+    </NavigationStage>
   );
 }
 

@@ -25,6 +25,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
     description,
     focused,
     onPointerFocus,
+    navId,
     checked,
     onCheckedChange,
     disabled = false,
@@ -42,6 +43,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(function Switch
       descriptionId={descriptionId}
       labelId={labelId}
       focused={focused}
+      navId={navId}
       onPointerFocus={onPointerFocus}
       checked={checked}
       disabled={disabled}

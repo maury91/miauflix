@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import * as actionStyles from '../action/action.css';
 import { ActionIcon } from '../action/actionInternals';
+import { useNavComposite, useNavFocus } from '../navFocus';
 import { useSurfaceContext } from '../surface';
 import * as styles from './chip.css';
 
@@ -42,6 +43,8 @@ export interface FilterChipProps {
   onPointerFocus?: () => void;
   disabled?: boolean;
   size?: ChipSize;
+  /** See NavigableProps. A selected filter is where its group is entered. */
+  navId?: string;
 }
 
 /** A toggleable filter: an inverted-fill action whose selection is carried by fill and check. */
@@ -54,19 +57,25 @@ export function FilterChip({
   onPointerFocus,
   disabled = false,
   size = defaultSize,
+  navId,
 }: FilterChipProps) {
   const surface = useSurfaceContext();
+  const nav = useNavFocus<HTMLButtonElement>(navId, { focused, disabled, selected });
   return (
     <button
+      ref={nav.ref}
       type="button"
       className={`${actionStyles.action} ${styles.filter}`}
       data-surface={surface}
       data-size={size}
-      data-focused={focused || undefined}
+      data-focused={nav.focused || undefined}
       data-selected={selected || undefined}
       aria-pressed={selected}
       disabled={disabled}
-      onMouseMove={onPointerFocus}
+      onMouseMove={() => {
+        nav.onPointerFocus();
+        onPointerFocus?.();
+      }}
       onClick={() => onSelectedChange(!selected)}
     >
       <ActionIcon icon={selected ? <CheckIcon /> : icon} loading={false} />
@@ -87,6 +96,8 @@ export interface RemovableChipProps {
   focusedPart?: 'body' | 'remove';
   onPointerFocus?: (part: 'body' | 'remove') => void;
   size?: ChipSize;
+  /** See NavigableProps: a composite of the body (when it acts) and the remove action. */
+  navId?: string;
 }
 
 /**
@@ -98,20 +109,29 @@ export function RemovableChip({
   removeLabel,
   onRemove,
   onClick,
-  focusedPart,
-  onPointerFocus,
+  focusedPart: focusedPartProp,
+  onPointerFocus: onPointerFocusProp,
   size = defaultSize,
+  navId,
 }: RemovableChipProps) {
   const surface = useSurfaceContext();
+  const parts: ('body' | 'remove')[] = onClick ? ['body', 'remove'] : ['remove'];
+  const { ref, focusedPart, onPointerFocus } = useNavComposite<'body' | 'remove', HTMLSpanElement>(
+    navId,
+    parts,
+    { focusedPart: focusedPartProp, onPointerFocus: onPointerFocusProp }
+  );
   const partProps = (part: 'body' | 'remove') => ({
     type: 'button' as const,
     'data-surface': surface,
     'data-size': size,
     'data-focused': focusedPart === part || undefined,
-    onMouseMove: () => onPointerFocus?.(part),
+    // Where the navigation layer mirrors DOM focus for this part
+    'data-nav-part': part,
+    onMouseMove: () => onPointerFocus(part),
   });
   return (
-    <span className={styles.removable} data-size={size} data-surface={surface}>
+    <span ref={ref} className={styles.removable} data-size={size} data-surface={surface}>
       {onClick ? (
         <button
           {...partProps('body')}

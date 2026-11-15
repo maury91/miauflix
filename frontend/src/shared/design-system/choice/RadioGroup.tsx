@@ -1,3 +1,4 @@
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import { type KeyboardEvent, type ReactNode, useId } from 'react';
 
 import * as fieldStyles from '../field/field.css';
@@ -34,6 +35,11 @@ export interface RadioGroupProps<Value extends string = string> {
   /** Form field name. Generated when not given. */
   name?: string;
   disabled?: boolean;
+  /**
+   * Registers the options as a group with the navigation layer (each `<navId>:<value>`), moving
+   * along `orientation` and entered at the chosen option. See NavigableProps.
+   */
+  navId?: string;
 }
 
 const ARROW_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
@@ -64,6 +70,7 @@ export function RadioGroup<Value extends string = string>({
   onPointerFocus,
   name,
   disabled = false,
+  navId,
 }: RadioGroupProps<Value>) {
   const generatedName = useId();
   const { descriptionId, errorId, describedBy } = useChoiceIds(description, error);
@@ -83,45 +90,50 @@ export function RadioGroup<Value extends string = string>({
           {description}
         </p>
       )}
-      <div className={styles.options} data-orientation={orientation}>
-        {options.map((option, index) => {
-          const optionDisabled = disabled || Boolean(option.disabled);
-          // By position: a value may hold a space, which would split an ID reference list
-          const optionId = `${generatedName}-${index}`;
-          return (
-            <div key={option.value} className={styles.option}>
-              <ChoiceFrame
-                label={option.label}
-                description={option.description}
-                labelId={`${optionId}-label`}
-                descriptionId={option.description ? `${optionId}-description` : undefined}
-                focused={focusedValue === option.value}
-                onPointerFocus={() => onPointerFocus?.(option.value)}
-                checked={value === option.value}
-                invalid={Boolean(error)}
-                disabled={optionDisabled}
-                indicator={
-                  <span className={styles.radio}>
-                    <span className={styles.radioDot} />
-                    <input
-                      type="radio"
-                      name={name ?? generatedName}
-                      aria-labelledby={`${optionId}-label`}
-                      aria-describedby={option.description ? `${optionId}-description` : undefined}
-                      value={option.value}
-                      checked={value === option.value}
-                      disabled={optionDisabled}
-                      className={styles.nativeInput}
-                      onChange={() => onChange(option.value)}
-                      onKeyDown={preventArrowSelection}
-                    />
-                  </span>
-                }
-              />
-            </div>
-          );
-        })}
-      </div>
+      <FocusGroup id={navId} layout={orientation} disabled={navId === undefined}>
+        <div className={styles.options} data-orientation={orientation}>
+          {options.map((option, index) => {
+            const optionDisabled = disabled || Boolean(option.disabled);
+            // By position: a value may hold a space, which would split an ID reference list
+            const optionId = `${generatedName}-${index}`;
+            return (
+              <div key={option.value} className={styles.option}>
+                <ChoiceFrame
+                  label={option.label}
+                  description={option.description}
+                  labelId={`${optionId}-label`}
+                  descriptionId={option.description ? `${optionId}-description` : undefined}
+                  focused={focusedValue === option.value}
+                  navId={navId === undefined ? undefined : `${navId}:${option.value}`}
+                  onPointerFocus={() => onPointerFocus?.(option.value)}
+                  checked={value === option.value}
+                  invalid={Boolean(error)}
+                  disabled={optionDisabled}
+                  indicator={
+                    <span className={styles.radio}>
+                      <span className={styles.radioDot} />
+                      <input
+                        type="radio"
+                        name={name ?? generatedName}
+                        aria-labelledby={`${optionId}-label`}
+                        aria-describedby={
+                          option.description ? `${optionId}-description` : undefined
+                        }
+                        value={option.value}
+                        checked={value === option.value}
+                        disabled={optionDisabled}
+                        className={styles.nativeInput}
+                        onChange={() => onChange(option.value)}
+                        onKeyDown={preventArrowSelection}
+                      />
+                    </span>
+                  }
+                />
+              </div>
+            );
+          })}
+        </div>
+      </FocusGroup>
       <ChoiceError id={errorId}>{error}</ChoiceError>
     </fieldset>
   );

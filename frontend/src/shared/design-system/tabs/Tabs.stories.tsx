@@ -1,11 +1,11 @@
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
-import { StateCell, SurfaceStage } from '../storyHelpers';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import { color, fontFamily, space, typeScale } from '../tokens';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { TabPanel, Tabs } from './Tabs';
 
 import AccountIcon from '~icons/mdi/account-outline';
@@ -112,42 +112,33 @@ type Section = keyof typeof panels;
 
 function ProfileEditor() {
   const [selected, setSelected] = useState<Section>('profile');
-  const { actions } = panels[selected];
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus([
-    items.map(item => `tab:${item.id}`),
-    actions.map(action => `panel:${action}`),
-  ]);
-  const focusedTab = focusedId.startsWith('tab:') ? (focusedId.slice(4) as Section) : undefined;
 
   return (
-    <div ref={containerRef}>
+    <NavigationStage>
       <Tabs
         id="editor"
+        navId="tabs"
         label="Profile sections"
         items={items}
         selectedId={selected}
-        focusedId={focusedTab}
-        onPointerFocus={id => focus(`tab:${id}`)}
         onSelect={setSelected}
       />
       {items.map(item => (
         <TabPanel key={item.id} tabsId="editor" tab={item.id} selected={item.id === selected}>
           <p style={panelText}>{panels[item.id].text}</p>
-          <div style={{ display: 'flex' }}>
-            {panels[item.id].actions.map(action => (
-              <span key={action} style={{ marginRight: space.xs }}>
-                <Button
-                  focused={item.id === selected && isFocused(`panel:${action}`)}
-                  onMouseMove={() => focus(`panel:${action}`)}
-                >
-                  {action}
-                </Button>
-              </span>
-            ))}
-          </div>
+          {/* Hidden panels' actions are skipped */}
+          <FocusGroup id={`panel:${item.id}`} layout="horizontal">
+            <div style={{ display: 'flex' }}>
+              {panels[item.id].actions.map(action => (
+                <span key={action} style={{ marginRight: space.xs }}>
+                  <Button navId={`panel:${action}`}>{action}</Button>
+                </span>
+              ))}
+            </div>
+          </FocusGroup>
         </TabPanel>
       ))}
-    </div>
+    </NavigationStage>
   );
 }
 

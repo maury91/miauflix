@@ -4,9 +4,8 @@ import { expect, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
 import { IconButton } from '../icon-button/IconButton';
-import { SurfaceStage } from '../storyHelpers';
+import { NavigationStage, SurfaceStage } from '../storyHelpers';
 import { space } from '../tokens';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { Menu } from './Menu';
 import type { MenuEntry } from './menuItems';
 
@@ -57,30 +56,23 @@ const names: Record<string, string> = Object.fromEntries(
 
 function ProfileActions() {
   const [last, setLast] = useState('');
-  const { containerRef, focus, isFocused } = useStoryVirtualFocus([['more', 'play']]);
   return (
-    <div ref={containerRef} style={{ display: 'flex', alignItems: 'flex-start' }}>
-      <Menu
-        label="Profile actions"
-        items={items}
-        onAction={id => setLast(names[id])}
-        trigger={props => (
-          <IconButton
-            {...props}
-            label="Profile actions"
-            icon={<MoreIcon />}
-            focused={isFocused('more')}
-            onMouseMove={() => focus('more')}
-          />
-        )}
-      />
-      <span style={{ marginLeft: space.md }}>
-        <Button focused={isFocused('play')} onMouseMove={() => focus('play')}>
-          Play
-        </Button>
-      </span>
-      <p style={{ marginLeft: space.lg, color: '#a6adaf' }}>Last action: {last}</p>
-    </div>
+    <NavigationStage layout="horizontal">
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+        <Menu
+          label="Profile actions"
+          items={items}
+          onAction={id => setLast(names[id])}
+          trigger={props => (
+            <IconButton {...props} label="Profile actions" icon={<MoreIcon />} navId="more" />
+          )}
+        />
+        <span style={{ marginLeft: space.md }}>
+          <Button navId="play">Play</Button>
+        </span>
+        <p style={{ marginLeft: space.lg, color: '#a6adaf' }}>Last action: {last}</p>
+      </div>
+    </NavigationStage>
   );
 }
 

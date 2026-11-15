@@ -1,4 +1,7 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useNavigation } from '@shared/navigation/hooks';
+import { FocusScope, NavigationProvider } from '@shared/navigation/NavigationProvider';
+import type { GroupLayout } from '@shared/navigation/types';
+import { type CSSProperties, type ReactNode, useLayoutEffect } from 'react';
 
 import { SurfaceContextProvider, type SurfaceContextValue } from './surface';
 import { color, fontFamily, space, typeScale } from './tokens';
@@ -49,4 +52,40 @@ export function StateCell({ name, children }: { name: string; children: ReactNod
       {children}
     </div>
   );
+}
+
+/**
+ * Story-only: the navigation layer around an example. One root scope, its children arranged by
+ * `layout`; the components inside register themselves with their `navId`.
+ */
+export function NavigationStage({
+  layout = 'vertical',
+  initialId,
+  children,
+}: {
+  layout?: GroupLayout;
+  initialId?: string;
+  children: ReactNode;
+}) {
+  return (
+    <NavigationProvider>
+      <FocusScope layout={layout} initialId={initialId}>
+        {children}
+      </FocusScope>
+    </NavigationProvider>
+  );
+}
+
+/**
+ * Story-only: focuses a node (at a part) when the example mounts, as a feature would. Put it after
+ * the components it targets, so they have registered.
+ */
+export function InitialFocus({ id, part }: { id: string; part?: string }) {
+  const { focus } = useNavigation();
+  useLayoutEffect(() => {
+    focus(id, { part });
+    // Once, on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return null;
 }

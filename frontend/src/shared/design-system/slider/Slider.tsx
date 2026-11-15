@@ -1,7 +1,8 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
-import { useEffect, useId, useLayoutEffect, useRef } from 'react';
+import { type ReactNode, useEffect, useId, useLayoutEffect, useRef } from 'react';
 
 import { joinIds } from '../ids';
+import { type NavigableProps, useNavFocus } from '../navFocus';
 import { useSurfaceContext } from '../surface';
 import * as styles from './slider.css';
 import { sliderShare, snapSliderValue, stepSliderValue } from './sliderValue';
@@ -12,7 +13,7 @@ export interface SliderMark {
   label?: string;
 }
 
-interface SliderBaseProps {
+interface SliderBaseProps extends NavigableProps {
   value: number;
   /** Called with the new value, already on the step grid and within the limits. */
   onChange: (value: number) => void;
@@ -34,6 +35,13 @@ interface SliderBaseProps {
   focused?: boolean;
   /** Called when the pointer moves onto the slider. */
   onPointerFocus?: () => void;
+  /** `brand` fills in the brand colour: the player's seek bar only (style guide, section 3). */
+  tone?: 'neutral' | 'brand';
+  /**
+   * Decorative layers on the track, under the fill and spanning the same rail as the thumb (a seek
+   * bar's downloaded blocks). Position children by a share of the width.
+   */
+  trackLayers?: ReactNode;
 }
 
 /** Labelled by its own label above the track… */
@@ -83,8 +91,11 @@ export function Slider({
   valueText,
   marks,
   disabled = false,
-  focused = false,
+  focused: focusedProp = false,
   onPointerFocus,
+  tone = 'neutral',
+  trackLayers,
+  navId,
   label,
   description,
   id: idProp,
@@ -97,6 +108,8 @@ export function Slider({
   const labelId = `${id}-label`;
   const descriptionId = `${id}-description`;
   const rootRef = useRef<HTMLDivElement>(null);
+  const nav = useNavFocus<HTMLDivElement>(navId, { focused: focusedProp, disabled }, rootRef);
+  const focused = nav.focused;
   const range = { min, max, step };
   const current = snapSliderValue(value, range);
   const share = sliderShare(current, range);
@@ -145,9 +158,10 @@ export function Slider({
 
   return (
     <div
-      ref={rootRef}
+      ref={nav.ref}
       className={styles.root}
       data-surface={surface}
+      data-tone={tone === 'brand' ? tone : undefined}
       data-focused={focused || undefined}
       data-disabled={disabled || undefined}
     >
@@ -169,10 +183,17 @@ export function Slider({
           {description}
         </span>
       )}
-      <div className={styles.control} onMouseMove={onPointerFocus}>
+      <div
+        className={styles.control}
+        onMouseMove={() => {
+          nav.onPointerFocus();
+          onPointerFocus?.();
+        }}
+      >
         <div className={styles.drawing} aria-hidden="true">
           <span className={styles.track}>
             <span className={styles.fillCap} />
+            {trackLayers && <span className={styles.rail}>{trackLayers}</span>}
             <span className={styles.rail}>
               <span className={styles.fill} style={{ transform: `scaleX(${share})` }} />
             </span>

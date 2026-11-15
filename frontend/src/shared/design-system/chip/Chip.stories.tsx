@@ -1,10 +1,10 @@
+import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 
-import { StateCell, SurfaceStage } from '../storyHelpers';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import { space } from '../tokens';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
 import { Chip, FilterChip, RemovableChip } from './Chip';
 
 import TranslateIcon from '~icons/mdi/translate';
@@ -118,58 +118,45 @@ function SearchChips() {
   const [filters, setFilters] = useState<string[]>([]);
   const [recents, setRecents] = useState(['dune', 'arrival', 'severance']);
   const [searched, setSearched] = useState('');
-  const { containerRef, focus, isFocused } = useStoryVirtualFocus([
-    filterIds.map(id => `filter:${id}`),
-    recents.flatMap(query => [`recent:${query}:body`, `recent:${query}:remove`]),
-  ]);
 
   return (
-    <div ref={containerRef}>
-      <div style={{ marginBottom: space.md }}>
-        {filterIds.map(id => (
-          <span key={id} style={spaced}>
-            <FilterChip
-              selected={filters.includes(id)}
-              onSelectedChange={on =>
-                setFilters(list => (on ? [...list, id] : list.filter(item => item !== id)))
-              }
-              focused={isFocused(`filter:${id}`)}
-              onPointerFocus={() => focus(`filter:${id}`)}
-            >
-              {filterLabels[id]}
-            </FilterChip>
-          </span>
-        ))}
-      </div>
-      <div>
-        {recents.map((query, index) => (
-          <span key={query} style={spaced}>
-            <RemovableChip
-              removeLabel={`Remove ${query}`}
-              onClick={() => setSearched(query)}
-              onRemove={() => {
-                setRecents(list => list.filter(item => item !== query));
-                // The collection focuses the nearest chip
-                const next = recents[index + 1] ?? recents[index - 1];
-                if (next) focus(`recent:${next}:body`);
-                else focus(`filter:${filterIds[0]}`);
-              }}
-              focusedPart={
-                isFocused(`recent:${query}:body`)
-                  ? 'body'
-                  : isFocused(`recent:${query}:remove`)
-                    ? 'remove'
-                    : undefined
-              }
-              onPointerFocus={part => focus(`recent:${query}:${part}`)}
-            >
-              {query}
-            </RemovableChip>
-          </span>
-        ))}
-      </div>
+    <NavigationStage>
+      <FocusGroup id="filters" layout="horizontal">
+        <div style={{ marginBottom: space.md }}>
+          {filterIds.map(id => (
+            <span key={id} style={spaced}>
+              <FilterChip
+                selected={filters.includes(id)}
+                onSelectedChange={on =>
+                  setFilters(list => (on ? [...list, id] : list.filter(item => item !== id)))
+                }
+                navId={`filter:${id}`}
+              >
+                {filterLabels[id]}
+              </FilterChip>
+            </span>
+          ))}
+        </div>
+      </FocusGroup>
+      <FocusGroup id="recents" layout="horizontal">
+        <div>
+          {recents.map(query => (
+            <span key={query} style={spaced}>
+              <RemovableChip
+                removeLabel={`Remove ${query}`}
+                onClick={() => setSearched(query)}
+                // The navigation layer focuses the nearest chip once it is gone
+                onRemove={() => setRecents(list => list.filter(item => item !== query))}
+                navId={`recent:${query}`}
+              >
+                {query}
+              </RemovableChip>
+            </span>
+          ))}
+        </div>
+      </FocusGroup>
       <p style={{ color: '#a6adaf' }}>Searched: {searched}</p>
-    </div>
+    </NavigationStage>
   );
 }
 

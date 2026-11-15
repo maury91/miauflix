@@ -4,8 +4,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { Button } from '../button/Button';
 import { IconButton } from '../icon-button/IconButton';
-import { StateCell, SurfaceStage } from '../storyHelpers';
-import { useStoryVirtualFocus } from '../useStoryVirtualFocus';
+import { NavigationStage, StateCell, SurfaceStage } from '../storyHelpers';
 import { fieldActionSize } from './fieldParts';
 import { PasswordField } from './PasswordField';
 import { TextField } from './TextField';
@@ -117,47 +116,31 @@ export const Sizes: Story = {
 
 function SignInForm() {
   const [submitted, setSubmitted] = useState(0);
-  const { containerRef, focus, isFocused, focusedId } = useStoryVirtualFocus([
-    ['email'],
-    ['password:input', 'password:reveal'],
-    ['continue'],
-  ]);
   const [email, setEmail] = useState('');
   return (
-    <div ref={containerRef} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <TextField
-        label="Email"
-        type="email"
-        placeholder="name@example.com"
-        value={email}
-        onChange={event => setEmail(event.target.value)}
-        focused={isFocused('email')}
-        onPointerFocus={() => focus('email')}
-      />
-      <PasswordField
-        label="Password"
-        showLabel="Show password"
-        hideLabel="Hide password"
-        defaultValue="hunter2"
-        focusedPart={
-          focusedId === 'password:input'
-            ? 'input'
-            : focusedId === 'password:reveal'
-              ? 'reveal'
-              : undefined
-        }
-        onPointerFocus={part => focus(`password:${part}`)}
-      />
-      <Button
-        fullWidth
-        focused={isFocused('continue')}
-        onMouseMove={() => focus('continue')}
-        onClick={() => setSubmitted(count => count + 1)}
-      >
-        Continue
-      </Button>
-      <p style={{ margin: 0, color: '#a6adaf' }}>Submitted: {submitted}</p>
-    </div>
+    <NavigationStage>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <TextField
+          label="Email"
+          type="email"
+          placeholder="name@example.com"
+          value={email}
+          onChange={event => setEmail(event.target.value)}
+          navId="email"
+        />
+        <PasswordField
+          label="Password"
+          showLabel="Show password"
+          hideLabel="Hide password"
+          defaultValue="hunter2"
+          navId="password"
+        />
+        <Button fullWidth navId="continue" onClick={() => setSubmitted(count => count + 1)}>
+          Continue
+        </Button>
+        <p style={{ margin: 0, color: '#a6adaf' }}>Submitted: {submitted}</p>
+      </div>
+    </NavigationStage>
   );
 }
 

@@ -1,3 +1,5 @@
+import { useComposite, useHasNavigation } from '@shared/navigation/hooks';
+import type { MoreRequest } from '@shared/navigation/types';
 import {
   memo,
   type MouseEvent,
@@ -5,6 +7,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
 } from 'react';
 
@@ -12,7 +15,7 @@ import { IconButton } from '../icon-button/IconButton';
 import { SurfaceContextProvider } from '../surface';
 import { duration } from '../tokens';
 import * as styles from './carousel.css';
-import { maxLeading } from './carouselNavigation';
+import { type CarouselNavigation, maxLeading } from './carouselNavigation';
 import type { CollectionGeometry } from './collectionGeometry';
 
 import ChevronLeftIcon from '~icons/mdi/chevron-left';
@@ -43,9 +46,28 @@ export interface CarouselProps {
   /** Item height (px); a 16:9 frame of the item width by default. */
   itemHeight?: number;
   /** The focused item, or `null` while focus is outside the row (it keeps its position). */
-  focusedIndex: number | null;
+  focusedIndex?: number | null;
   /** The item in the left-most visible slot: the track's position, from `useCarouselNavigation`. */
-  leadingIndex: number;
+  leadingIndex?: number;
+  /**
+   * With `navigation` (what `useCarouselNavigation` returns), registers the row with the navigation
+   * layer as one composite of its items: Left/Right step or page through `navigation`, leaving at
+   * the ends, and entering lands on the kept item. `focusedIndex` and `leadingIndex` then come from
+   * the layer and `navigation`. See NavigableProps.
+   */
+  navId?: string;
+  navigation?: CarouselNavigation;
+  /**
+   * Items exist past the last one given (a paginated row). With `navId`, Right from the last item
+   * waits on `onLoadMore` instead of leaving the row, and moves on once the new items arrive,
+   * unless the user went elsewhere meanwhile.
+   */
+  hasMore?: boolean;
+  /**
+   * Loads the next page once per waiting move; stop when `request.signal` aborts. A returned
+   * promise settling (or failing) lets the next Right ask again.
+   */
+  onLoadMore?: (request: MoreRequest) => Promise<unknown> | void;
   /**
    * The pointer moved onto an item: focus it without scrolling. Ignored while a scroll animates
    * and for synthetic events after it (content that stopped under a resting pointer).
@@ -74,12 +96,46 @@ export function Carousel({
   renderItem,
   geometry,
   itemHeight,
-  focusedIndex,
-  leadingIndex,
-  onPointerFocus,
+  focusedIndex: focusedIndexProp = null,
+  leadingIndex: leadingIndexProp,
+  onPointerFocus: onPointerFocusProp,
   pageButtons,
   overscan,
+  navId,
+  navigation,
+  hasMore = false,
+  onLoadMore,
 }: CarouselProps) {
+  const layered = useHasNavigation() && navId !== undefined && navigation !== undefined;
+  const latestNavigation = useRef(navigation);
+  latestNavigation.current = navigation;
+  const parts = useMemo(() => Array.from({ length: count }, (_, index) => String(index)), [count]);
+  const composite = useComposite<HTMLElement>(layered ? navId : undefined, parts, {
+    stepPart: (_part, direction) => {
+      const current = latestNavigation.current;
+      const next = current?.peek(direction) ?? null;
+      if (next === null) return null;
+      current?.move(direction);
+      return String(next);
+    },
+    entryPart: () =>
+      latestNavigation.current ? String(latestNavigation.current.focusedIndex) : undefined,
+    more: { end: hasMore },
+    onMore: onLoadMore,
+  });
+  const focusedIndex = layered
+    ? composite.focusedPart === undefined
+      ? null
+      : Number(composite.focusedPart)
+    : focusedIndexProp;
+  const leadingIndex = leadingIndexProp ?? navigation?.leadingIndex ?? 0;
+  const onPointerFocus = (index: number) => {
+    if (layered) {
+      navigation?.pointerFocus(index);
+      composite.onPointerFocus(String(index));
+    }
+    onPointerFocusProp?.(index);
+  };
   const { itemWidth, gap, perPage, peek, contentWidth } = geometry;
   const step = itemWidth + gap;
   const height = itemHeight ?? (itemWidth * 9) / 16;
@@ -134,6 +190,7 @@ export function Carousel({
   const canGoForward = leadingIndex < maxLeading({ count, perPage });
   return (
     <section
+      ref={composite.ref}
       className={styles.root}
       aria-roledescription="carousel"
       aria-labelledby={labelledBy}
@@ -208,6 +265,8 @@ const CarouselSlot = memo(function CarouselSlot({
       aria-setsize={count}
       aria-posinset={index + 1}
       data-focused={focused || undefined}
+      // The composite part: DOM focus mirrors onto the item inside it
+      data-nav-part={index}
       style={{ width, height, transform: `translateX(${x}px)` }}
       onMouseMove={event => onPointer(index, event)}
     >

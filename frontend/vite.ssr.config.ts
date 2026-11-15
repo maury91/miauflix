@@ -41,10 +41,6 @@ export default defineConfig(async env => {
           find: 'framer-motion',
           replacement: ssrMocks,
         },
-        {
-          find: '@noriginmedia/norigin-spatial-navigation',
-          replacement: ssrMocks,
-        },
       ],
     },
     build: {

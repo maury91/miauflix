@@ -143,6 +143,7 @@ export const rail = style({
 const fillColor = {
   backgroundColor: color.text,
   selectors: {
+    [`${root}[data-tone="brand"] &`]: { backgroundColor: color.brand },
     [`${root}[data-disabled] &`]: { backgroundColor: color.textDisabled },
   },
 } as const;

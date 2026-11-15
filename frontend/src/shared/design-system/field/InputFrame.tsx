@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactNode, Ref } from 'react';
 
 import { SurfaceContextProvider } from '../surface';
 import type { ControlSize } from '../tokens';
@@ -15,6 +15,11 @@ export interface FieldStateProps {
   focused?: boolean;
   /** Called when the pointer moves onto the input part, so the navigation layer can focus it. */
   onPointerFocus?: () => void;
+  /**
+   * See NavigableProps: registers the field (a composite of the input and its actions) with the
+   * navigation layer.
+   */
+  navId?: string;
 }
 
 interface InputFrameProps {
@@ -32,6 +37,8 @@ interface InputFrameProps {
   /** Actions after the input, such as reveal, clear or submit. */
   end?: ReactNode;
   onPointerFocus?: () => void;
+  /** The frame, containing every part: a field registers it as its composite. */
+  frameRef?: Ref<HTMLDivElement>;
   /** The native input or textarea. */
   children: ReactNode;
 }
@@ -56,6 +63,7 @@ export function InputFrame({
   start,
   end,
   onPointerFocus,
+  frameRef,
   children,
 }: InputFrameProps) {
   const onMouseMove = (event: MouseEvent) => {
@@ -73,6 +81,7 @@ export function InputFrame({
 
   return (
     <div
+      ref={frameRef}
       className={styles.frame}
       data-size={size}
       data-focused={focused || undefined}
