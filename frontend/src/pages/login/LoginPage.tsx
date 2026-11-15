@@ -46,16 +46,14 @@ const LoginPage: FC = () => {
       <NavigationProvider>
         <FocusScope id={LOGIN_NAV.scope} layout="horizontal" initialId={LOGIN_NAV.email}>
           <div className={styles.content}>
-            {showQR ? (
-              <SplitLayout
-                stackBelow="medium"
-                gap="lg"
-                start={form}
-                end={<LoginWithQR focusAfterNewCode={LOGIN_NAV.password} />}
-              />
-            ) : (
-              form
-            )}
+            {/* Always a SplitLayout, so the form keeps its place (and what was typed) when the
+                window crosses the QR panel's width */}
+            <SplitLayout
+              stackBelow="medium"
+              gap="lg"
+              start={form}
+              end={showQR ? <LoginWithQR focusAfterNewCode={LOGIN_NAV.password} /> : undefined}
+            />
           </div>
         </FocusScope>
       </NavigationProvider>

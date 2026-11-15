@@ -12,7 +12,7 @@ import { useAppDispatch } from '@store';
 import { authSlice } from '@store/slices/auth';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import * as styles from './setupPage.css';
 
@@ -39,7 +39,8 @@ function getPasswordStrength(password: string): number {
 }
 
 /** Which field a validation failure belongs to, and what it says. */
-type ValidationError = { field: 'password' | 'confirm'; message: string } | null;
+type FieldName = 'email' | 'password' | 'confirm';
+type ValidationError = { field: FieldName; message: string } | null;
 
 /**
  * The first-run form: create the admin account (password confirmed) and sign in with the session
@@ -47,6 +48,7 @@ type ValidationError = { field: 'password' | 'confirm'; message: string } | null
  */
 function AdminAccountForm() {
   const [email, setEmail] = useState('');
+  const emailInput = useRef<HTMLInputElement>(null);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [validationError, setValidationError] = useState<ValidationError>(null);
@@ -66,10 +68,13 @@ function AdminAccountForm() {
         message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters`,
       };
     }
+    if (!emailInput.current?.validity.valid) {
+      invalid = { field: 'email', message: 'Enter a valid email address' };
+    }
     setValidationError(invalid);
     if (invalid) {
       // After a failed submit, focus goes to the field to fix
-      navigation.focus(invalid.field === 'password' ? NAV.password : NAV.confirm);
+      navigation.focus(NAV[invalid.field]);
       return;
     }
 
@@ -83,7 +88,7 @@ function AdminAccountForm() {
 
   const strength = getPasswordStrength(password);
   const apiError = error && 'data' in error && typeof error.data === 'string' ? error.data : null;
-  const errorFor = (field: 'password' | 'confirm') =>
+  const errorFor = (field: FieldName) =>
     validationError?.field === field ? validationError.message : undefined;
 
   return (
@@ -112,6 +117,7 @@ function AdminAccountForm() {
       }
     >
       <TextField
+        ref={emailInput}
         navId={NAV.email}
         id="setup-email"
         label="Email"
@@ -120,6 +126,7 @@ function AdminAccountForm() {
         onChange={event => setEmail(event.target.value)}
         placeholder="admin@example.com"
         required
+        error={errorFor('email')}
         autoComplete="email"
       />
       <PasswordField

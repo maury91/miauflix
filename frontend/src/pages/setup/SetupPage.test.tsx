@@ -105,4 +105,19 @@ describe('SetupPage', () => {
       password: 'password123',
     });
   });
+
+  it('shows an error and focuses a malformed email without creating the account', async () => {
+    const user = userEvent.setup();
+    render(<SetupPage />);
+
+    const email = screen.getByLabelText('Email');
+    await user.type(email, 'malformed');
+    await user.type(screen.getByLabelText('Password'), 'password123');
+    await user.type(screen.getByLabelText('Confirm password'), 'password123');
+    await user.click(screen.getByRole('button', { name: 'Create admin account' }));
+
+    expect(email).toHaveAccessibleDescription('Enter a valid email address');
+    expect(fieldFocused('Email')).toBe(true);
+    expect(mocks.createAdmin).not.toHaveBeenCalled();
+  });
 });

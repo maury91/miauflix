@@ -167,6 +167,8 @@ export function Slider({
   useEffect(() => {
     if (!focused || disabled) return;
     const onKeyDown = (event: KeyboardEvent) => {
+      // A gate listening earlier took the key (a player showing its hidden controls)
+      if (event.defaultPrevented) return;
       const keyAction = getKeyboardAction(event);
       if (keyAction !== 'left' && keyAction !== 'right') return;
       const root = rootRef.current;
@@ -286,7 +288,7 @@ export function Slider({
           onBlur={() => setKeyboardFocus(false)}
           onKeyDown={event => {
             // DOM focus without the layer's (Tab): the arrows step by `keyStep`, not the fine `step`
-            if (focused || disabled) return;
+            if (event.defaultPrevented || focused || disabled) return;
             const towardEnd =
               event.key === 'ArrowRight' || event.key === 'ArrowUp'
                 ? true

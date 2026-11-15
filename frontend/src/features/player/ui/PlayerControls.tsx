@@ -319,17 +319,24 @@ export function PlayerControls({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusPlayWhenShown, shown]);
 
+  // Back to details hiding with the header would drop the DOM focus to the page: the video takes
+  // it, so the remote keeps working (Back still leaves through the player's own handler)
+  useLayoutEffect(() => {
+    if (!shown && navigation.getActiveId() === PLAYER_NAV.back) navigation.focus(PLAYER_NAV.video);
+  }, [navigation, shown]);
+
   // The latest values, for the key listener below
   const keys = useRef({ shown, seekBy, reveal });
   keys.current = { shown, seekBy, reveal };
 
   /**
-   * Before the navigation layer sees a key (component-intrinsic keys listen earlier): any key
-   * shows the controls again. On the video and on play/pause, Left and Right seek. While the
+   * Any key shows the controls again. On the video and on play/pause, Left and Right seek. While the
    * controls are hidden, every arrow shows them with the focus on play/pause (Left and Right
    * seek too), and Confirm on a hidden control only shows it; on the video it plays or pauses.
+   * Registered in a layout effect: those all run before any passive effect, so this listener comes
+   * before the controls' own (a focused Slider's), which skip a key it prevented.
    */
-  useEffect(() => {
+  useLayoutEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.isComposing) return;
       const { shown: controlsShown, seekBy: seekStep, reveal: show } = keys.current;

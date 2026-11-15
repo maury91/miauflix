@@ -620,6 +620,8 @@ describe('NavigationProvider', () => {
       await Promise.resolve();
     });
     expect(focusedText()).toBe('b');
+    // The remounted button has the DOM focus too, not only the focused state
+    expect(screen.getByText('b')).toHaveFocus();
   });
 
   it('moves to the next row when the row group holding focus is removed', async () => {

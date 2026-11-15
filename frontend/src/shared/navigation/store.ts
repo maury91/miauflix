@@ -344,7 +344,11 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
 
   /** A composite's part that is its own native control, marked `data-nav-part` inside it. */
   function partElement(element: HTMLElement, part: string): HTMLElement | null {
-    return element.querySelector<HTMLElement>(`[data-nav-part="${CSS.escape(part)}"]`);
+    // Compared, not interpolated into a selector, so no part name needs escaping
+    for (const candidate of element.querySelectorAll<HTMLElement>('[data-nav-part]')) {
+      if (candidate.dataset['navPart'] === part) return candidate;
+    }
+    return null;
   }
 
   function setActive(id: string | null, part: string | undefined, input: InputKind) {
