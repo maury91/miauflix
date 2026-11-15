@@ -62,7 +62,7 @@ What exists and is worth keeping, reusing or measuring against:
 - Home row geometry in `frontend/src/pages/home/home-layout.ts` (`mediaBoxSizes`) is tuned and scales correctly across resolutions; MediaCard's focus scale (1.03, 150 ms ease-out) is tuned too. Both are kept (section 5).
 - Keyboard: `useKeyboard` normalizes arrows, Confirm, Back, Search and media keys; supports nested/exclusive scopes, native-editing guards and lost-focus recovery. `useKeyboardNavigation` registers element scopes. These are foundations, not yet a layout-driven focus tree.
 - Navigation behaviors to preserve: Home remembers category/card focus, loads rows asynchronously and steps held arrows every 90 ms; Search has a deterministic zone/grid resolver with spanning keyboard keys; profiles use geometry-based region navigation; player controls have their own levels (header → video → prompt → seek → action row); login has a show/hide password control, TV arrow handling and Tizen IME Done.
-- `@noriginmedia/norigin-spatial-navigation` is still listed as a dependency but nothing imports it; it is removed (phase 0).
+- `@noriginmedia/norigin-spatial-navigation` was listed as a dependency with nothing importing it; it has been removed (phase 0).
 - There is no i18n library yet; all copy is hard-coded. i18n will be integrated (section 11).
 - Modal implements a two-action contract only; general form dialogs need real focus containment.
 
