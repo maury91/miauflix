@@ -30,7 +30,7 @@ const LoginPage: FC = () => {
   }, [windowWidth]);
 
   const form = (
-    <Surface padding="lg" radius="lg" border>
+    <Surface padding="lg" radius="lg" border fill>
       <LoginWithEmail showTitle={showQR} />
     </Surface>
   );

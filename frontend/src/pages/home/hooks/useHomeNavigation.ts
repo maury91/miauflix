@@ -1,5 +1,4 @@
 import { type AppRoute, getRouteParent, navigate, navigateBack } from '@app/router';
-import type { MediaDetailsHandle } from '@features/details/ui/MediaDetails';
 import type { MediaDto, PlayableRef } from '@miauflix/backend';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import type { HomeAction, NavigationOutcome } from '@shared/lib/homeNavigation';
@@ -58,7 +57,6 @@ export function useHomeNavigation({
   );
   const pageRef = useRef<HTMLElement | null>(null);
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
-  const detailsRef = useRef<MediaDetailsHandle>(null);
   const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
   const browseFocusState = useRef({ activeCategory, categories, selectedByCategory, onRowFocus });
   browseFocusState.current = { activeCategory, categories, selectedByCategory, onRowFocus };
@@ -257,10 +255,9 @@ export function useHomeNavigation({
       if (view === 'player') {
         return action === 'back' ? (returnToDetails(), { type: 'handled' }) : { type: 'ignored' };
       }
+      // Details and the player are navigation scopes of their own; Home keeps only Back
       if (view === 'details') {
-        const outcome = detailsRef.current?.handleAction(action) ?? { type: 'ignored' as const };
-        if (action === 'back' && outcome.type === 'escape') returnToBrowse();
-        return outcome;
+        return action === 'back' ? (returnToBrowse(), { type: 'handled' }) : { type: 'ignored' };
       }
       if (activeRegion === 'sidebar') return onSidebarAction(action);
       // The panels beside the rail handle their own keys.
@@ -308,11 +305,11 @@ export function useHomeNavigation({
 
   const navigationRef = useKeyboardNavigation({
     enabled,
-    // Focus lost: back to the selected card, or the details page's primary action. The player,
-    // sidebar and the panels beside it restore their own.
+    // Focus lost: back to the selected card. Details, the player, the sidebar and the panels
+    // beside it restore their own.
     onRestoreFocus: () => {
-      if (view === 'details') return detailsRef.current?.restoreFocus() ?? false;
       if (
+        view === 'details' ||
         view === 'player' ||
         activeRegion === 'sidebar' ||
         activeRegion === 'notifications' ||
@@ -345,7 +342,6 @@ export function useHomeNavigation({
     activeCategory,
     selectedByCategory,
     rowRefs,
-    detailsRef,
     attachPage,
     onCardActive,
     openDetails,

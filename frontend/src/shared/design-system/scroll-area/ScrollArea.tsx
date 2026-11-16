@@ -27,6 +27,8 @@ export interface ScrollAreaProps {
    * `transform` moves the content by a compositor transition instead: the TV default.
    */
   mode?: 'scroll' | 'transform';
+  /** The viewport scrolled natively (`scroll` mode: wheel, touch, scrollbar or a reveal). */
+  onScroll?: (viewport: HTMLDivElement) => void;
 }
 
 /** A CSS length in px: `rem` against the root font size, otherwise a number of px. */
@@ -66,6 +68,7 @@ export function ScrollArea({
   stickyEnd,
   revealMargin = 'lg',
   mode = IS_TV ? 'transform' : 'scroll',
+  onScroll,
 }: ScrollAreaProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -203,6 +206,7 @@ export function ScrollArea({
       role={label ? 'region' : undefined}
       aria-label={label}
       onMouseMoveCapture={onMouseMoveCapture}
+      onScroll={onScroll ? event => onScroll(event.currentTarget) : undefined}
       onWheel={() => {
         // The wheel scrolls (web): the pointer is in charge until a key is pressed again
         lastInput.current = 'pointer';

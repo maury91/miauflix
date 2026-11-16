@@ -248,6 +248,18 @@ export class StorageFileRepository {
       .map(row => Number(row.id));
   }
 
+  /** Storages no admission may evict: an open stream, or a live playback claim. */
+  async findPinnedStorageIds(now = new Date()): Promise<number[]> {
+    return this.db
+      .query<{ id: number }, Record<string, number>>(
+        `SELECT s.id AS id FROM storage s
+         WHERE s.activeStreams > 0
+            OR EXISTS (SELECT 1 FROM storage_file_claim c WHERE ${LIVE_CLAIM} AND c.kind = 'playback')`
+      )
+      .all({ $now: now.getTime() })
+      .map(row => Number(row.id));
+  }
+
   /** Sources whose live claims are all speculative (nobody is watching or has watched them). */
   async findSpeculativeSourceIds(now = new Date()): Promise<number[]> {
     return this.db

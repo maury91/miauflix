@@ -1,5 +1,5 @@
 import type { ProgressEntry, SeasonResponse } from '@miauflix/backend';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { EpisodesSection } from './EpisodesSection';
@@ -32,25 +32,28 @@ const progress: ProgressEntry[] = [
   },
 ];
 
+const renderProps = (overrides: Partial<Parameters<typeof EpisodesSection>[0]> = {}) => ({
+  showMediaId: 7,
+  seasons: [1, 2, 3].map(number => ({ seasonNumber: number, name: `Season ${number}` })),
+  sections: [season(1, [1, 2]), season(2, [1])],
+  loading: false,
+  failedSeasons: [] as number[],
+  progress,
+  fallbackStill: '/backdrop.jpg',
+  onPlay: vi.fn(),
+  onRetrySeason: vi.fn(),
+  hasMore: false,
+  onMore: vi.fn(),
+  ...overrides,
+});
+
 const renderSection = (overrides: Partial<Parameters<typeof EpisodesSection>[0]> = {}) => {
-  const props = {
-    showMediaId: 7,
-    seasons: [1, 2, 3].map(number => ({ seasonNumber: number, name: `Season ${number}` })),
-    sections: [season(1, [1, 2]), season(2, [1])],
-    loading: false,
-    failedSeasons: [] as number[],
-    selectedEpisode: { seasonNumber: 1, episodeNumber: 2 },
-    progress,
-    fallbackStill: '/backdrop.jpg',
-    onSelectEpisode: vi.fn(),
-    onRetrySeason: vi.fn(),
-    onVisibleSeasonChange: vi.fn(),
-    onNearEnd: vi.fn(),
-    ...overrides,
-  };
+  const props = renderProps(overrides);
   render(<EpisodesSection {...props} />);
   return props;
 };
+
+const row = (title: string) => screen.getByRole('button', { name: new RegExp(title) });
 
 describe('EpisodesSection', () => {
   it('lists the loaded seasons with their episodes and progress', () => {
@@ -59,19 +62,17 @@ describe('EpisodesSection', () => {
       'Season 1',
       'Season 2',
     ]);
-    const resumed = document.getElementById('episode-7-1:2')!;
-    expect(resumed).toHaveTextContent('E2 · Episode title 2');
-    expect(resumed).toHaveTextContent('Resume 25%');
-    expect(document.getElementById('episode-7-1:1')).not.toHaveTextContent('Resume');
+    const [seasonOne] = screen.getAllByRole('list');
+    const rows = within(seasonOne!).getAllByRole('button');
+    expect(rows[1]).toHaveAccessibleName(/E2 · Episode title 2/);
+    expect(rows[1]).toHaveTextContent('Resume 25%');
+    expect(rows[0]).not.toHaveTextContent('Resume');
   });
 
-  it('selects an episode on focus and plays it on click', () => {
-    const props = renderSection();
-    const row = document.getElementById('episode-7-2:1')!;
-    fireEvent.focus(row);
-    expect(props.onSelectEpisode).toHaveBeenLastCalledWith(2, 1);
-    fireEvent.click(row);
-    expect(props.onSelectEpisode).toHaveBeenLastCalledWith(2, 1, true);
+  it('plays an episode on click', () => {
+    const props = renderSection({ sections: [season(2, [1])] });
+    fireEvent.click(row('E1 · Episode title 1'));
+    expect(props.onPlay).toHaveBeenCalledWith(2, 1);
   });
 
   it('offers a retry for a season that failed to load', () => {
@@ -81,9 +82,31 @@ describe('EpisodesSection', () => {
     expect(props.onRetrySeason).toHaveBeenCalledWith(3);
   });
 
+  it('loads the next season when scrolled near the end, while there is one', () => {
+    const scrollTo = (hasMore: boolean, scrollTop: number) => {
+      const onNearEnd = vi.fn();
+      const { unmount } = render(<EpisodesSection {...renderProps({ hasMore, onNearEnd })} />);
+      const viewport = screen.getByText('Season 1').closest('[data-mode]') as HTMLElement;
+      Object.defineProperties(viewport, {
+        clientHeight: { configurable: true, value: 500 },
+        scrollHeight: { configurable: true, value: 2000 },
+        scrollTop: { configurable: true, writable: true, value: scrollTop },
+      });
+      fireEvent.scroll(viewport);
+      unmount();
+      return onNearEnd;
+    };
+    // Far from the end: nothing yet
+    expect(scrollTo(true, 200)).not.toHaveBeenCalled();
+    // Within a screen of the end
+    expect(scrollTo(true, 1000)).toHaveBeenCalledTimes(1);
+    // No season after the loaded ones
+    expect(scrollTo(false, 1500)).not.toHaveBeenCalled();
+  });
+
   it('shows that more episodes are loading', () => {
     renderSection({ loading: true });
-    expect(screen.getByText('Loading more episodes...')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Loading more episodes...');
   });
 
   it('marks episodes without any real source, preferring pushed availability', () => {
@@ -95,8 +118,8 @@ describe('EpisodesSection', () => {
       pushedAvailability: { 'e:7:1:1': 'available', 'e:7:1:2': 'unavailable' },
     });
 
-    const rows = screen.getAllByRole('button', { name: /Episode title/ });
-    expect(rows[0]).not.toHaveTextContent('No source available');
-    expect(rows[1]).toHaveTextContent('No source available');
+    const items = screen.getAllByRole('listitem');
+    expect(items[0]).not.toHaveTextContent('No source available');
+    expect(items[1]).toHaveTextContent('No source available');
   });
 });

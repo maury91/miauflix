@@ -9,6 +9,7 @@ import { color, radius, space } from '../tokens';
  * - `data-level="surface" | "raised"`: the ladder step (raised also reads as elevation)
  * - `data-border`: a `borderSubtle` hairline
  * - `data-radius`, `data-padding`: shape and space tokens
+ * - `data-fill`: the parent's full height
  */
 
 const tokens: NonNullable<StyleRule['selectors']> = {};
@@ -29,6 +30,7 @@ export const surface = style({
   selectors: {
     '&[data-level="raised"]': { backgroundColor: color.surfaceRaised },
     '&[data-border]': { borderColor: color.borderSubtle },
+    '&[data-fill]': { height: '100%' },
     ...tokens,
   },
 });

@@ -99,6 +99,7 @@ export const TEST_SETTINGS: EngineSettings = {
   BEST_TRACKERS_DOWNLOAD_URL: 'https://example.com/trackers_best.txt',
   BLACKLISTED_TRACKERS_DOWNLOAD_URL: 'https://example.com/blacklist.txt',
   DOWNLOAD_PATH: '/tmp/test-downloads',
+  DOWNLOAD_PATH_EXCLUSIVE: true,
   STORAGE_THRESHOLD: 10n * 1024n ** 3n,
   STORAGE_PLAYBACK_RESERVE: 0n,
   SOURCE_SECURITY_KEY: Buffer.alloc(32, 7).toString('base64'),

@@ -39,7 +39,7 @@ export const createPlaybackRoutes = ({
         if (error instanceof PlaybackUnavailableError)
           return c.json(
             { error: error.message, reason: error.reason } satisfies PlaybackUnavailableResponse,
-            404
+            error.reason === 'insufficient_storage' ? 507 : 404
           );
         throw error;
       }

@@ -61,6 +61,22 @@ describe('Database Encryption E2E Tests', () => {
       throw new Error(`Database file not found at ${tempDbPath} after docker cp`);
     }
 
+    // The backend runs SQLite in WAL mode, so recent rows may live only in the -wal file until
+    // the next checkpoint. Copy it alongside the main file so the copy sees committed writes.
+    for (const suffix of ['-wal', '-shm']) {
+      try {
+        execFileSync(
+          'docker',
+          ['cp', `${containerName}:${DATABASE_FILE}${suffix}`, `${tempDbPath}${suffix}`],
+          {
+            stdio: 'ignore',
+          }
+        );
+      } catch {
+        // The sidecar does not exist when the WAL has been fully checkpointed.
+      }
+    }
+
     return new sqlite3.Database(tempDbPath);
   };
 

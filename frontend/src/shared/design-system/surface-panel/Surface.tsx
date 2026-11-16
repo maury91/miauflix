@@ -21,6 +21,8 @@ export type SurfaceProps = Omit<
   padding?: Space;
   /** The element that keeps the content's meaning (`section`, `article`, `li`). */
   as?: LayoutElement;
+  /** Fills its parent's height: side-by-side panels of one height (login's form and QR panel). */
+  fill?: boolean;
 };
 
 /**
@@ -35,6 +37,7 @@ export function Surface({
   radius = 'md',
   padding,
   as = 'div',
+  fill = false,
   ...props
 }: SurfaceProps) {
   return createElement(
@@ -46,6 +49,7 @@ export function Surface({
       'data-border': border || undefined,
       'data-radius': radius,
       'data-padding': padding,
+      'data-fill': fill || undefined,
     },
     <SurfaceContextProvider value="solid">{children}</SurfaceContextProvider>
   );

@@ -412,7 +412,11 @@ export function audioConversionArgs(
           '-g',
           '60',
         ]
-      : ['copy', ...(videoMode === 'hevc' ? ['-tag:v', 'hvc1'] : [])]),
+      : videoMode === 'hevc'
+        ? ['copy', '-tag:v', 'hvc1']
+        : // Blu-ray H.264 repeats its PPS with a different initial QP; Chrome's macOS hardware
+          // decoder fails on the change a few seconds in. The filter makes them all identical.
+          ['copy', '-bsf:v', 'h264_redundant_pps']),
     '-c:a',
     ...(copyAudio ? ['copy'] : ['aac', '-ac', '2', '-b:a', '192k']),
     '-threads',

@@ -57,6 +57,13 @@ describe('audio playback delivery', () => {
     expect(audioConversionArgs('http://localhost/input', 45, 1)).toContain('0:a:1');
   });
 
+  it('evens out repeated PPS only in copied H.264, which Blu-ray streams vary', () => {
+    expect(audioConversionArgs('http://localhost/input', 0)).toContain('h264_redundant_pps');
+    expect(audioConversionArgs('http://localhost/input', 0, 0, false, 'hevc')).not.toContain(
+      'h264_redundant_pps'
+    );
+  });
+
   it('rejects missing duration and video that would require video transcoding', () => {
     expect(() => deliveryFromProbe({ ...setupTest(), format: { duration: 'NaN' } })).toThrow(
       AudioPlaybackError
@@ -288,6 +295,8 @@ describe('audio playback delivery', () => {
     expect(args.slice(args.indexOf('-c:v'), args.indexOf('-ac'))).toEqual([
       '-c:v',
       'copy',
+      '-bsf:v',
+      'h264_redundant_pps',
       '-c:a',
       'aac',
     ]);

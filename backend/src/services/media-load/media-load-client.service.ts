@@ -373,6 +373,24 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
     return (await this.getStorageStates([sourceId]))[0] ?? null;
   }
 
+  /**
+   * Whether streaming each item's file (`bytes`, its length in the torrent) could be admitted once
+   * evictable storage is freed. `path` (the file in the torrent) lets a source already stored
+   * count only what it holds of that file as allocated. Null when the engine cannot say (unreachable, or an older
+   * media-load): callers then try the source as before, and admission still decides.
+   */
+  async playbackFits(
+    items: Array<{ sourceId: number; bytes: number; path?: string }>
+  ): Promise<boolean[] | null> {
+    if (!items.length) return [];
+    try {
+      return await this.engine(() => this.client.playbackFits({ items }));
+    } catch (error) {
+      logger.debug('MediaLoadClient', 'Could not check storage room for playback', error);
+      return null;
+    }
+  }
+
   getInventory(): Promise<StorageInventory> {
     return this.engine(() => this.client.storageInventory());
   }

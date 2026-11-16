@@ -19,20 +19,19 @@ test.describe('details page preparation contract', () => {
     await page.keyboard.press('Enter');
 
     await expect(page.getByRole('main', { name: `${fixtureMovie.title} details` })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Watch now' })).toBeVisible();
+    const watch = page.getByRole('button', { name: 'Watch now' });
+    await expect(watch).toBeVisible();
     await expect(page.getByRole('button', { name: 'Back to browse' })).toBeVisible();
     await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
-    const warmupBorder = page.locator('[data-warmup-state]');
-    await expect(warmupBorder).toHaveAttribute('data-warmup-state', 'warming');
-    await expect(warmupBorder).toHaveAttribute('data-warmup-progress', '50');
-    await expect(page.getByText('Initial buffer ready')).not.toBeVisible();
+    const warmupProgress = page.locator('[data-warmup-state="warming"]');
+    await expect(warmupProgress).toBeVisible();
+    await expect(watch).toHaveAccessibleDescription('Warming up torrent, 50% ready');
 
     await expect
       .poll(() => harness.torrentEvents.includes('warmup:ready'), { timeout: 12_000 })
       .toBe(true);
-    await expect(warmupBorder).toHaveAttribute('data-warmup-state', 'ready');
-    await expect(warmupBorder).toHaveAttribute('data-warmup-progress', '100');
-    await expect(page.getByText('Initial buffer ready')).not.toBeVisible();
+    await expect(watch).toHaveAccessibleDescription('Torrent warmup ready');
+    await expect(warmupProgress).toBeHidden();
     await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
 
     const screenshot = await page.screenshot({ animations: 'disabled', fullPage: true });
@@ -43,7 +42,7 @@ test.describe('details page preparation contract', () => {
     await expect(page).toHaveScreenshot('details-page-source-ready.png', {
       animations: 'disabled',
       fullPage: true,
-      // Allow the Linux fallback-star glyph to shift the adjacent quality badge.
+      // Allow small font rendering differences between Linux environments.
       maxDiffPixels: 700,
     });
 
