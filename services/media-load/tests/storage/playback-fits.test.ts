@@ -110,19 +110,67 @@ describe('StorageService.playbackFits', () => {
     expect(await storageService.playbackFits([{ sourceId: other, bytes }])).toEqual([false]);
   });
 
+  /** The stored source as a 2-file pack: movie.mkv (6 MiB), then extra.mkv (2 MiB). */
+  const recordPack = async (
+    storageService: InstanceType<typeof StorageService>,
+    sourceId: number
+  ) => {
+    await storageService.recordFiles(sourceId, {
+      storeName: 'stored',
+      filenameSalt: 'salt',
+      pieceLength: MB,
+      files: [
+        { path: 'movie.mkv', offset: 0, length: 6 * MB },
+        { path: 'extra.mkv', offset: 6 * MB, length: 2 * MB },
+      ],
+    });
+  };
+
+  /** Write `bytes` into the stored source's directory and measure it. */
+  const holdOnDisk = async (
+    storageService: InstanceType<typeof StorageService>,
+    sourceId: number,
+    bytes: number
+  ) => {
+    fs.mkdirSync(path.join(downloadPath, 'stored'), { recursive: true });
+    fs.writeFileSync(path.join(downloadPath, 'stored', 'data'), Buffer.alloc(bytes));
+    await storageService.reconcileAllocation(sourceId);
+  };
+
   it('keeps a stored file playable when the disk is below headroom', async () => {
     const { storageService, stored } = await setup();
     const other = (await createSource(database)).id;
     // The stored source holds its whole file
-    fs.mkdirSync(path.join(downloadPath, 'stored'));
-    fs.writeFileSync(path.join(downloadPath, 'stored', 'movie.mkv'), Buffer.alloc(6 * MB));
-    await storageService.reconcileAllocation(stored);
+    await recordPack(storageService, stored);
+    await storageService.markFilesComplete(stored, ['movie.mkv']);
+    await holdOnDisk(storageService, stored, 6 * MB);
     // Less free space than the 256 MiB headroom: nothing new can be allocated...
     freeBytes = 128 * MB;
     expect(await storageService.playbackFits([{ sourceId: other, bytes: MB }])).toEqual([false]);
     // ...but the stored source already holds its file and needs no new room
+    expect(
+      await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
+    ).toEqual([true]);
+  });
+
+  it('does not count other files of the source as the requested one', async () => {
+    const { storageService, stored } = await setup();
+    // The source's directory holds 6 MiB, but of the extra (and a remux), not of the movie
+    await recordPack(storageService, stored);
+    await storageService.markFilesComplete(stored, ['extra.mkv']);
+    await holdOnDisk(storageService, stored, 6 * MB);
+    freeBytes = 128 * MB;
+    expect(
+      await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
+    ).toEqual([false]);
+    // Without the file's path nothing is credited: the disk check always applies
     expect(await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB }])).toEqual([
-      true,
+      false,
     ]);
+    // With room on disk it fits as any new file would
+    freeBytes = 512 * MB;
+    expect(
+      await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
+    ).toEqual([true]);
   });
 });

@@ -130,7 +130,7 @@ export class PlayablePreparationService {
     this.sourceHealth = sourceHealth;
   }
 
-  private readonly episodeFileSizeCache = new Map<string, number | null>();
+  private readonly episodeFileSizeCache = new Map<string, PlayedFile | null>();
 
   /**
    * Prepare a playable through catalog lookup, source discovery, metadata resolution, or payload warmup.
@@ -181,9 +181,13 @@ export class PlayablePreparationService {
     if (options.through === 'warm') {
       // Playback streams only the main video: size by it, once the torrent's files are known
       const usable = sources.filter(isUsableSource);
-      const fileSizes = await Promise.all(usable.map(source => this.movieFileSize(source)));
+      const files = await Promise.all(usable.map(source => this.movieFile(source)));
       noRoom = await this.withoutRoom(
-        usable.map((source, index) => ({ sourceId: source.id, bytes: fileSizes[index] ?? 0 }))
+        usable.map((source, index) => ({
+          sourceId: source.id,
+          bytes: files[index]?.length ?? 0,
+          path: files[index]?.path,
+        }))
       );
       sources = avoid(sources);
       if (!sources.some(isUsableSource)) return withoutRoomResult(playable);
@@ -333,11 +337,14 @@ export class PlayablePreparationService {
       return exhausted(playable);
     if (options.through === 'warm' && compatible.length) {
       // A season pack streams only the episode's file: its own size, once the torrent is known
-      const fileSize = await this.episodeFileSizes(compatible);
+      const fileOf = await this.episodeFiles(compatible);
       const noRoom = await this.withoutRoom(
         compatible
           .filter(match => isUsableSource(match.source))
-          .map(match => ({ sourceId: match.source.id, bytes: fileSize(match.source) ?? 0 }))
+          .map(match => {
+            const file = fileOf(match.source);
+            return { sourceId: match.source.id, bytes: file?.length ?? 0, path: file?.path };
+          })
       );
       if (noRoom.size) {
         const fitting = compatible.filter(match => !noRoom.has(match.source.id));
@@ -413,7 +420,7 @@ export class PlayablePreparationService {
    * still unknown (0), or an engine that cannot tell, rules nothing out: admission still decides.
    */
   private async withoutRoom(
-    items: Array<{ sourceId: number; bytes: number }>
+    items: Array<{ sourceId: number; bytes: number; path?: string }>
   ): Promise<Set<number>> {
     const sized = items.filter(item => item.bytes > 0);
     const fits = this.storage?.playbackFits ? await this.storage.playbackFits(sized) : null;
@@ -637,31 +644,39 @@ export class PlayablePreparationService {
    * The length of the movie's main video (the largest video file, as playback picks it), or null
    * while the torrent's files are unknown: fetching them is left to playback.
    */
-  private async movieFileSize(source: ContentSource): Promise<number | null> {
+  private async movieFile(source: ContentSource): Promise<PlayedFile | null> {
     if (!source.file) return null;
     const key = `${source.id}:movie`;
-    let size = this.episodeFileSizeCache.get(key);
-    if (size === undefined) {
+    let played = this.episodeFileSizeCache.get(key);
+    if (played === undefined) {
       try {
         const files = (await parseTorrent(source.file)).files ?? [];
         const path = mainVideoPath(files);
-        size = files.find(file => file.path === path)?.length ?? null;
+        played = playedFile(files.find(file => file.path === path));
       } catch {
-        size = null;
+        played = null;
       }
       if (this.episodeFileSizeCache.size >= EPISODE_FILE_SIZES_LIMIT)
         this.episodeFileSizeCache.clear();
-      this.episodeFileSizeCache.set(key, size);
+      this.episodeFileSizeCache.set(key, played);
     }
-    return size;
+    return played;
   }
 
   private async episodeFileSizes(matches: EpisodeSource[]): Promise<PlayedSize> {
-    const sizes = new Map<number, number | null>();
+    const fileOf = await this.episodeFiles(matches);
+    return source => fileOf(source)?.length ?? null;
+  }
+
+  /** Each candidate's episode file in its torrent; null while the torrent is unknown. */
+  private async episodeFiles(
+    matches: EpisodeSource[]
+  ): Promise<(source: ContentSource) => PlayedFile | null> {
+    const played = new Map<number, PlayedFile | null>();
     for (const match of matches) {
       const key = `${match.source.id}:${match.videoFilePath ?? ''}`;
-      let size = this.episodeFileSizeCache.get(key);
-      if (size === undefined && match.source.file) {
+      let entry = this.episodeFileSizeCache.get(key);
+      if (entry === undefined && match.source.file) {
         try {
           const files = (await parseTorrent(match.source.file)).files ?? [];
           const videos = files.filter(file => isVideoFile(file.path));
@@ -677,23 +692,32 @@ export class PlayablePreparationService {
             : videos.length === 1
               ? videos[0]
               : undefined;
-          size = file?.length ?? null;
+          entry = playedFile(file);
         } catch {
-          size = null;
+          entry = null;
         }
         if (this.episodeFileSizeCache.size >= EPISODE_FILE_SIZES_LIMIT)
           this.episodeFileSizeCache.clear();
-        this.episodeFileSizeCache.set(key, size);
+        this.episodeFileSizeCache.set(key, entry);
       }
-      sizes.set(match.source.id, size ?? null);
+      played.set(match.source.id, entry ?? null);
     }
-    return source => sizes.get(source.id) ?? null;
+    return source => played.get(source.id) ?? null;
   }
 
   private throwIfAborted(signal?: AbortSignal): void {
     if (signal?.aborted) throw new DOMException('Preparation cancelled', 'AbortError');
   }
 }
+
+/** The file playback streams from a torrent: its path there (as media-load records it) and length. */
+interface PlayedFile {
+  path: string;
+  length: number;
+}
+
+const playedFile = (file?: { path: string; length: number }): PlayedFile | null =>
+  file ? { path: file.path, length: file.length } : null;
 
 /** Every source found for the playable proved fake. */
 function exhausted(playable: PlayableRef): PreparedPlayable {

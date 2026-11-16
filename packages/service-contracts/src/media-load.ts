@@ -383,9 +383,13 @@ export const mediaLoad = contract('media-load', '1.3', {
    * could be admitted once every evictable download is freed: within the storage threshold and
    * the disk's free space, less what live playback of other sources holds (the items are one
    * title's alternatives, so playing one replaces the others). A source already stored counts what
-   * it holds.
+   * it holds against the threshold; on disk, only what it holds of `path` (the file's path in the
+   * torrent) counts as already allocated. Without `path` none does: the disk check always applies.
    */
-  playbackFits: call<{ items: Array<{ sourceId: number; bytes: number }> }, boolean[]>({
+  playbackFits: call<
+    { items: Array<{ sourceId: number; bytes: number; path?: string }> },
+    boolean[]
+  >({
     since: 3,
   }),
   removeStorage: call<SourceInput, StorageRemovalResult>(),

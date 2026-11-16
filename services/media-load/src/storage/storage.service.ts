@@ -1066,9 +1066,13 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * stays, so its charge and disk space are not available, except for the sources asked about:
    * they are one title's alternatives, so playing one replaces the others (a failing source and
    * its backup must not crowd out the rest). Admission still decides when a stream starts. The
-   * file is padded as its reservation would be; a source already stored counts what it holds.
+   * file is padded as its reservation would be. A source already stored counts what it holds
+   * against the threshold; on disk only what it holds of the item's own file (`path`) counts as
+   * already allocated, since its directory may hold other files (episodes, extras, remuxes).
    */
-  async playbackFits(items: Array<{ sourceId: number; bytes: number }>): Promise<boolean[]> {
+  async playbackFits(
+    items: Array<{ sourceId: number; bytes: number; path?: string }>
+  ): Promise<boolean[]> {
     if (!items.length) return [];
     const storages = await this.storageRepository.findAll();
     const candidates = new Set(items.map(item => item.sourceId));
@@ -1093,18 +1097,47 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     }
     const pad = this.config.get('STORAGE_PAD_FILE_SIZES') !== false;
     const bySource = new Map(storages.map(storage => [storage.sourceId, storage]));
-    return items.map(({ sourceId, bytes }) => {
-      const needed = pad && bytes > 0 ? paddedLength(bytes) : bytes;
-      const own = bySource.get(sourceId);
-      const ownPinned = !!own && pinned.has(own.id);
-      const ownAllocated = own?.allocatedBytes ?? 0;
-      // Its own reservation is replaced, not added to; its own data is kept, not evicted
-      const budgetRoom = budget + (own && ownPinned ? chargeOf(own) : 0);
-      const diskRoom = disk - (own && !ownPinned ? ownAllocated : 0);
-      // Headroom guards new allocation only: a source that already holds its file needs no disk
-      const additional = needed - ownAllocated;
-      return needed <= budgetRoom && (additional <= 0 || additional <= diskRoom);
-    });
+    return Promise.all(
+      items.map(async ({ sourceId, bytes, path }) => {
+        const needed = pad && bytes > 0 ? paddedLength(bytes) : bytes;
+        const own = bySource.get(sourceId);
+        const ownPinned = !!own && pinned.has(own.id);
+        const ownAllocated = own?.allocatedBytes ?? 0;
+        // Its own reservation is replaced, not added to; its own data is kept, not evicted
+        const budgetRoom = budget + (own && ownPinned ? chargeOf(own) : 0);
+        const diskRoom = disk - (own && !ownPinned ? ownAllocated : 0);
+        // Only what the source holds of this very file is already allocated for it
+        const held =
+          own && path ? Math.min(needed, await this.fileHeldBytes(own, path, needed)) : 0;
+        // Headroom guards new allocation only: a source that already holds its file needs no disk
+        const additional = needed - held;
+        return needed <= budgetRoom && (additional <= 0 || additional <= diskRoom);
+      })
+    );
+  }
+
+  /**
+   * What a storage holds on disk of one file: all of it (`stored`, its size as stored) once the
+   * file is complete, else the bytes of its verified pieces that fall within the file. Never more
+   * than the storage's measured source data, so files it no longer holds are not credited.
+   */
+  private async fileHeldBytes(storage: Storage, path: string, stored: number): Promise<number> {
+    const row = (await this.storageFiles.findFiles(storage.id)).find(file => file.path === path);
+    const file = storage.encryptedLayout?.files.find(entry => entry.path === path) ?? row;
+    if (!file) return 0;
+    const onDisk = Math.max(0, (storage.allocatedBytes ?? 0) - (storage.remuxBytes ?? 0));
+    if (row?.completedAt) return Math.min(stored, onDisk);
+    const pieceLength = storage.encryptedLayout?.pieceLength || storage.pieceLength;
+    const range = pieceRangeOf(pieceLength, file.offset, file.length);
+    if (!range) return 0;
+    const end = file.offset + file.length;
+    let verified = 0;
+    for (let piece = range.first; piece <= range.last; piece++) {
+      if (!isPieceInBitfield(storage.downloadedPieces, piece)) continue;
+      const start = piece * pieceLength;
+      verified += Math.min(end, start + pieceLength) - Math.max(file.offset, start);
+    }
+    return Math.min(verified, onDisk);
   }
 
   private async assertCapacity(bytes: number, preservePlaybackReserve = false): Promise<void> {

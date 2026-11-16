@@ -572,8 +572,8 @@ describe('PlayablePreparationService', () => {
     );
 
     expect(storage.playbackFits).toHaveBeenCalledWith([
-      { sourceId: 1, bytes: 43e9 },
-      { sourceId: 2, bytes: 4e9 },
+      { sourceId: 1, bytes: 43e9, path: 'Movie/movie.mkv' },
+      { sourceId: 2, bytes: 4e9, path: 'Movie/movie.mkv' },
     ]);
     expect(prepared.source).toBe(small);
     expect(onSourceAttempt.mock.calls.map(([attempt]) => attempt)).toEqual([
@@ -601,7 +601,9 @@ describe('PlayablePreparationService', () => {
 
     const prepared = await service.prepare({ kind: 'movie', mediaId: 42 }, warmOptions());
 
-    expect(storage.playbackFits).toHaveBeenCalledWith([{ sourceId: 1, bytes: 8e9 }]);
+    expect(storage.playbackFits).toHaveBeenCalledWith([
+      { sourceId: 1, bytes: 8e9, path: 'Movie/movie.mkv' },
+    ]);
     expect(prepared.source).toBe(pack);
   });
 
@@ -1134,8 +1136,8 @@ describe('PlayablePreparationService', () => {
       );
 
       expect(playbackFits).toHaveBeenCalledWith([
-        { sourceId: 41, bytes: 6 * GB },
-        { sourceId: 42, bytes: 1.2 * GB },
+        { sourceId: 41, bytes: 6 * GB, path: 'Show.S01E02.2160p.mkv' },
+        { sourceId: 42, bytes: 1.2 * GB, path: 'Show S01/Show.S01E02.mkv' },
       ]);
       expect(prepared.source).toBe(pack);
     });
