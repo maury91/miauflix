@@ -7,14 +7,12 @@ interface HomeNavigationState {
   activeRegion: HomeRegion;
   activeCategory: number;
   selectedByCategory: Record<string, number>;
-  pendingCategoryAdvance: boolean;
 }
 
 export const initialHomeNavigationState: HomeNavigationState = {
   activeRegion: 'carousel',
   activeCategory: 0,
   selectedByCategory: {},
-  pendingCategoryAdvance: false,
 };
 
 export const homeNavigationSlice = createSlice({
@@ -29,9 +27,6 @@ export const homeNavigationSlice = createSlice({
     },
     setCategorySelection(state, action: PayloadAction<{ slug: string; index: number }>) {
       state.selectedByCategory[action.payload.slug] = Math.max(0, action.payload.index);
-    },
-    setPendingCategoryAdvance(state, action: PayloadAction<boolean>) {
-      state.pendingCategoryAdvance = action.payload;
     },
     resetHomeNavigation() {
       return initialHomeNavigationState;

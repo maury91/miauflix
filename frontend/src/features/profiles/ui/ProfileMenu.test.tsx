@@ -24,9 +24,8 @@ const setupTest = (focused = true) => {
     onLogout: vi.fn(),
     onExit: vi.fn(),
     onPointerEnter: vi.fn(),
-    onPointerLeave: vi.fn(),
   };
-  render(<ProfileMenu profile={profile} focused={focused} railExpanded {...handlers} />);
+  render(<ProfileMenu profile={profile} focused={focused} {...handlers} />);
   return handlers;
 };
 

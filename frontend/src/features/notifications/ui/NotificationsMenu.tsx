@@ -4,8 +4,7 @@ import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { artworkUrl } from '@shared/lib/media.utils';
 import { formatRelativeTime } from '@shared/lib/relative-time';
 import { QualityBadge } from '@shared/ui/quality-badge/QualityBadge';
-import { RAIL_COLLAPSED_WIDTH_CSS, RAIL_EXPANDED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
-import { type FC, type MouseEvent, type RefObject, useEffect, useRef } from 'react';
+import { type FC, type RefObject, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { notificationCopy } from '../lib/notification-copy';
@@ -17,27 +16,14 @@ export const NOTIFICATIONS_PANEL_ATTRIBUTE = 'data-notifications-panel';
 
 const POSTER_SIZE = 84;
 
-const Dim = styled.div`
-  position: fixed;
-  inset: 0;
-  /* Below the rail and the app logo (1002). */
-  z-index: 1001;
-  background: rgba(0, 0, 0, 0.45);
-  pointer-events: none;
-`;
-
 /**
- * Starts right at the rail's edge and at the top of the screen, so the pointer can travel from
- * the bell into the panel without crossing the page.
+ * In the rail's flyout (NavRail), at the top of the screen: it starts right at the rail's edge, so
+ * the pointer travels from the bell into the panel without leaving the rail.
  */
-const HoverZone = styled.div<{ $railExpanded: boolean }>`
-  --rail-width: ${({ $railExpanded }) =>
-    $railExpanded ? RAIL_EXPANDED_WIDTH_CSS : RAIL_COLLAPSED_WIDTH_CSS};
-  position: fixed;
-  /* Above the app logo (1002), which would otherwise sit on the panel's header. */
-  z-index: 1003;
+const HoverZone = styled.div`
+  position: absolute;
   top: 0;
-  left: var(--rail-width);
+  left: 0;
   padding: 3vh 0 0 0;
   outline: none;
 `;
@@ -45,7 +31,8 @@ const HoverZone = styled.div<{ $railExpanded: boolean }>`
 const Panel = styled.section`
   display: flex;
   flex-direction: column;
-  width: min(440px, calc(100vw - var(--rail-width) - 24px));
+  width: 440px;
+  max-width: calc(100vw - 160px);
   max-height: 88vh;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -244,15 +231,13 @@ export interface NotificationsMenuProps {
   showRead: boolean;
   /** The keyboard is in the panel (rather than on the rail). */
   focused: boolean;
-  railExpanded: boolean;
   onToggleShowRead: () => void;
   onMarkAllRead: () => void;
   onOpen: (notification: NotificationItem) => void;
   /** Left or Back: hand the keyboard back to the rail, keeping the panel open. */
   onExit: () => void;
+  /** The pointer moved onto the panel. Leaving it is the rail's: the panel sits in its flyout. */
   onPointerEnter: () => void;
-  /** The pointer left for the page (not the rail). */
-  onPointerLeave: () => void;
 }
 
 const FOCUSABLE = '[data-notification-focusable]:not([disabled])';
@@ -335,13 +320,11 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
   hasRead,
   showRead,
   focused,
-  railExpanded,
   onToggleShowRead,
   onMarkAllRead,
   onOpen,
   onExit,
   onPointerEnter,
-  onPointerLeave,
 }) => {
   const zoneRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -406,28 +389,20 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
     },
   });
 
-  const leftForRail = (event: MouseEvent) =>
-    event.relatedTarget instanceof Element && !!event.relatedTarget.closest('[data-home-rail]');
-
   const lastUnread = unread.items[unread.items.length - 1];
   const lastRead = read.items[read.items.length - 1];
   const unreadExhausted = !unread.hasMore;
 
   return (
     <>
-      <Dim aria-hidden="true" />
       <HoverZone
         ref={node => {
           zoneRef.current = node;
           navigationRef(node);
         }}
         {...{ [NOTIFICATIONS_PANEL_ATTRIBUTE]: '' }}
-        $railExpanded={railExpanded}
         tabIndex={-1}
         onMouseEnter={onPointerEnter}
-        onMouseLeave={event => {
-          if (!leftForRail(event)) onPointerLeave();
-        }}
       >
         <Panel aria-label="Notifications">
           <Header>

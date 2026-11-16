@@ -56,6 +56,7 @@ export type SearchFieldProps = Omit<
 export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(function SearchField(
   {
     label,
+    labelHidden,
     indicator,
     description,
     error,
@@ -136,6 +137,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
   return (
     <Field
       label={label}
+      labelHidden={labelHidden}
       indicator={indicator}
       description={description}
       error={error}

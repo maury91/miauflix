@@ -24,6 +24,7 @@ import {
   getNoSourceMessage,
   getPlaybackStatusMessage,
   getSourceAttemptMessage,
+  getStreamStageMessage,
 } from '../lib/playback-copy';
 import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
 import { PlayerControls, PlayerHeader, PlayerPrompt } from './PlayerControls';
@@ -344,11 +345,15 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, notifyShown]);
 
-  const { sourceAttempt } = source;
+  const { sourceAttempt, streamStage } = source;
+  // Sources are tried only while a session is being created: once one plays, a wait (a seek, a
+  // track switch) is its stream restarting, and the backend says where that stands.
   const statusMessage =
-    sourceAttempt && (status === 'checking' || status === 'preparing')
+    !session && sourceAttempt && (status === 'checking' || status === 'preparing')
       ? getSourceAttemptMessage(sourceAttempt, title)
-      : getPlaybackStatusMessage(status, title);
+      : session && status === 'preparing' && streamStage && streamStage !== 'ready'
+        ? getStreamStageMessage(streamStage, title)
+        : getPlaybackStatusMessage(status, title);
   const selectedSubtitle = subtitles.selected;
 
   return (

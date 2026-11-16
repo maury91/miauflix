@@ -43,6 +43,8 @@ export interface FilterChipProps {
   onPointerFocus?: () => void;
   disabled?: boolean;
   size?: ChipSize;
+  /** Fills its container's width, content at the start: a list of filters, one per line. */
+  fullWidth?: boolean;
   /** See NavigableProps. A selected filter is where its group is entered. */
   navId?: string;
 }
@@ -57,6 +59,7 @@ export function FilterChip({
   onPointerFocus,
   disabled = false,
   size = defaultSize,
+  fullWidth = false,
   navId,
 }: FilterChipProps) {
   const surface = useSurfaceContext();
@@ -68,6 +71,7 @@ export function FilterChip({
       className={`${actionStyles.action} ${styles.filter}`}
       data-surface={surface}
       data-size={size}
+      data-full-width={fullWidth || undefined}
       data-focused={nav.focused || undefined}
       data-selected={selected || undefined}
       aria-pressed={selected}

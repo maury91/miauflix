@@ -21,6 +21,7 @@ import type {
   PlaybackDeliveryUpdate,
   PlaybackSessionService,
   PlaybackSourceAttempt,
+  PlaybackStreamStage,
 } from '@services/playback/playback-session.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProgressService } from '@services/progress/progress.service';
@@ -147,7 +148,7 @@ export interface RealtimeGatewayOptions {
   progress: ProgressService;
   catalog: CatalogClientService;
   playback:
-    | (Partial<Pick<PlaybackSessionService, 'onSourceAttempt'>> &
+    | (Partial<Pick<PlaybackSessionService, 'onSourceAttempt' | 'onStreamStage'>> &
         Pick<PlaybackSessionService, 'onDeliveryUpdate'>)
     | null;
   search: RealtimeSearchChannel;
@@ -205,6 +206,8 @@ export class RealtimeGateway {
       playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;
     this.removeAttemptListener =
       playback?.onSourceAttempt?.(event => this.deliverSourceAttempt(event)) ?? null;
+    this.removeStageListener =
+      playback?.onStreamStage?.(event => this.deliverStreamStage(event)) ?? null;
     this.removeAvailabilityListener = availability.onChange(change =>
       this.deliverAvailability(change)
     );
@@ -278,6 +281,7 @@ export class RealtimeGateway {
     this.removeDeliveryListener?.();
     this.removePiecesListener?.();
     this.removeAttemptListener?.();
+    this.removeStageListener?.();
     this.removeAvailabilityListener?.();
     this.removeRevocationListener();
     clearInterval(this.sessionRecheckTimer);
@@ -307,6 +311,7 @@ export class RealtimeGateway {
   private readonly removeDeliveryListener: (() => void) | null;
   private readonly removePiecesListener: (() => void) | null;
   private readonly removeAttemptListener: (() => void) | null;
+  private readonly removeStageListener: (() => void) | null;
   private readonly removeAvailabilityListener: () => void;
   private removeArtworkListener: (() => void) | null = null;
   private removeArtworkStreamReadyListener: (() => void) | null = null;
@@ -552,6 +557,22 @@ export class RealtimeGateway {
       playbackId: update.playbackId,
       ranges: update.ranges,
     });
+  }
+
+  /** Where a playback's stream is while its player waits for it, for that session only. */
+  private deliverStreamStage(event: PlaybackStreamStage): void {
+    for (const client of this.clients) {
+      if (
+        client.userId === event.userId &&
+        (!event.sessionId || client.sessionId === event.sessionId)
+      ) {
+        this.send(client, {
+          type: 'playback-stage',
+          playbackId: event.playbackId,
+          stage: event.stage,
+        });
+      }
+    }
   }
 
   /** Which candidate source a viewer's starting playback is trying, for that session only. */

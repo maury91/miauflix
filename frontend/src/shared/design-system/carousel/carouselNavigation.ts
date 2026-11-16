@@ -65,8 +65,12 @@ export function revealItem(
  * pointer moves focus only (never scrolls); `reveal` restores a remembered item.
  */
 export function useCarouselNavigation(layout: CarouselLayout, initialIndex = 0) {
+  // A row whose size isn't known yet (its first page is loading) keeps the item it starts on, at
+  // the leading slot; the bounds below apply once the count arrives
   const [position, setPosition] = useState<CarouselPosition>(() =>
-    revealItem({ focused: 0, leading: 0 }, initialIndex, layout)
+    layout.count > 0
+      ? revealItem({ focused: 0, leading: 0 }, initialIndex, layout)
+      : { focused: Math.max(0, initialIndex), leading: Math.max(0, initialIndex) }
   );
   // The item count can shrink under the focus (a reload): keep both inside it. A smaller page (a
   // resize) also brings the focused item back into view; otherwise an item outside the page stays

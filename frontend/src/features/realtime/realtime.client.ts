@@ -108,6 +108,16 @@ export interface RealtimePlaybackPieces {
   ranges: Array<[number, number]>;
 }
 
+/**
+ * Where a playback's converted stream is while its player waits for it: `downloading` the file's
+ * bytes at the requested position, `converting` them, or `ready` with its first media sent.
+ */
+export interface RealtimePlaybackStage {
+  type: 'playback-stage';
+  playbackId: string;
+  stage: 'downloading' | 'converting' | 'ready';
+}
+
 export interface RealtimeFocus {
   type: 'focus';
   subtitleLanguage?: string;
@@ -166,7 +176,8 @@ export class RealtimeClient {
     private readonly onPlaybackDelivery?: (message: RealtimePlaybackDelivery) => void,
     private readonly onSearch?: (message: SearchServerMessage) => void,
     private readonly onSource?: (message: RealtimeSourceMessage) => void,
-    private readonly onPlaybackPieces?: (message: RealtimePlaybackPieces) => void
+    private readonly onPlaybackPieces?: (message: RealtimePlaybackPieces) => void,
+    private readonly onPlaybackStage?: (message: RealtimePlaybackStage) => void
   ) {}
 
   start(): void {
@@ -314,6 +325,7 @@ export class RealtimeClient {
       if (isArtworkUpdate(message)) this.onArtworkUpdate?.(message);
       if (isPlaybackDelivery(message)) this.onPlaybackDelivery?.(message);
       if (isPlaybackPieces(message)) this.onPlaybackPieces?.(message);
+      if (isPlaybackStage(message)) this.onPlaybackStage?.(message);
       if (isSearchMessage(message)) this.onSearch?.(message);
       if (isSourceMessage(message)) this.onSource?.(message);
       if (isReady(message)) {
@@ -476,6 +488,18 @@ function isPlaybackPieces(value: unknown): value is RealtimePlaybackPieces {
         typeof range[0] === 'number' &&
         typeof range[1] === 'number'
     )
+  );
+}
+
+const PLAYBACK_STAGES = new Set<unknown>(['downloading', 'converting', 'ready']);
+
+function isPlaybackStage(value: unknown): value is RealtimePlaybackStage {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Partial<RealtimePlaybackStage>;
+  return (
+    candidate.type === 'playback-stage' &&
+    typeof candidate.playbackId === 'string' &&
+    PLAYBACK_STAGES.has(candidate.stage)
   );
 }
 

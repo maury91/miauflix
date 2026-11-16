@@ -30,12 +30,23 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Results for a query, with the recent searches the backend returned. */
+/** TV: results for a query beside the on-screen keyboard and the recent searches. */
 export const Results: Story = {
+  args: { tv: true },
   decorators: [withSearchState(searchStateFixture)],
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('heading', { name: 'Results for “Dune”' })).toBeVisible();
-    await expect(canvas.getByRole('button', { name: 'A' })).toHaveFocus();
+    await expect(canvas.getByRole('button', { name: 'a' })).toHaveFocus();
+  },
+};
+
+/** Desktop: no on-screen keyboard; the field starts ready to type and has the submit arrow. */
+export const DesktopResults: Story = {
+  args: { tv: false },
+  decorators: [withSearchState(searchStateFixture)],
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('searchbox', { name: 'Search' })).toHaveFocus();
+    await expect(canvas.queryByRole('button', { name: 'a' })).not.toBeInTheDocument();
   },
 };
 

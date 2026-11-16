@@ -11,13 +11,11 @@ const meta = {
   args: {
     profile: profilesFixture[0],
     focused: true,
-    railExpanded: true,
     onSwitch: fn(),
     onEdit: fn(),
     onLogout: fn(),
     onExit: fn(),
     onPointerEnter: fn(),
-    onPointerLeave: fn(),
   },
   parameters: { layout: 'fullscreen', backgrounds: { default: 'dark' } },
 } satisfies Meta<typeof ProfileMenu>;

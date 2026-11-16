@@ -45,4 +45,4 @@ Storybook's documentation addon matches the existing Storybook 10.0.8 version. I
 
 ## Media artwork cards
 
-Home's media tiles are the design system's `MediaTile` (`@shared/design-system`); the home adapter in `pages/home/components/MediaCard.tsx` selects live artwork, progress and episode information, so backend DTOs stay out of the shared component.
+Home's media tiles are the design system's `MediaTile` (`@shared/design-system`); the home adapter in `pages/home/components/MediaCard.tsx` selects live artwork, progress and episode information, so backend DTOs stay out of the shared component. Search results use the same `MediaTile` with portrait posters (`pages/search/components/SearchResults.tsx`).

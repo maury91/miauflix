@@ -1,6 +1,6 @@
 # Miauflix design system and adoption plan
 
-Status: phases 0–3 built, phase 4 under way (see the adoption plan). Last updated 2026-11-15. Repository findings refer to `maury91/miauflix` main at `c84c4fcd112939ef140c36baf317c2abfe3dc2d3` unless stated otherwise.
+Status: phases 0–4 built, phase 5 in progress (Home browse and Search moved; profiles left; see the adoption plan). Last updated 2026-11-15. Repository findings refer to `maury91/miauflix` main at `c84c4fcd112939ef140c36baf317c2abfe3dc2d3` unless stated otherwise.
 
 The target architecture is designed independently of today's component extractions. Existing code supplies product requirements, platform constraints, tuned behavior and migration locations; its component boundaries and names are not constraints. Decisions already taken are listed in section 15; open questions in section 16.
 
@@ -705,7 +705,7 @@ Design the target once; adopt incrementally. Do not preserve a weak public API m
 | 6. Migrate web flows      | Setup/configuration, pairing approval, integrations, service settings                                                                                                                                      | Native editing, touch targets, responsive forms and validation pass                         |
 | 7. Remove and enforce     | Delete old UI families, local CSS controls, old resolvers and adapters; ESLint bans per migrated folder; accessibility stories fail on violations; uninstall styled-components when no consumer remains    | No duplicate control implementation in migrated areas                                       |
 
-Phase 4 status (2026-11-15): sign-in, the QR approval form, first-time setup, Home's media tiles, the details page and the player's actions run on design-system components, each screen but Home under its own `NavigationProvider`. Details, the first phase 5 path after browse, came early: Home hands it every key but Back, like the player. Provider credentials, Search tiles and settings rows are still to do. Home renders `MediaTile` through a DTO adapter while its rows and rail keep `useHomeNavigation`; moving browse to the navigation layer is phase 5's first path, with the Tizen performance pass that has to confirm the tile's own focus scale (the TV row's single focus ring, kept to avoid repainting the track on each move, was removed so the tile owns focus without overrides). Architecture adjustments it took:
+Phase 4 status (2026-11-15, done for the migrated screens). Sign-in, QR approval, first-time setup, Home and Search tiles, title details, Settings, the provider credential form and the player's actions use design-system components. Sign-in, QR approval, setup, title details, Settings and the player each have their own `NavigationProvider`. Settings uses `ListItem` rows in a `List` beside the `NavRail`. Sources maps DOM focus onto the provider fields' `focused` state until Sources moves in phase 6. Home renders `MediaTile` through a DTO adapter. Each tile owns its focus outline and scale, which still need a Tizen performance pass.
 
 - Density is applied: the Tizen HTML sets `data-density="tv"`, and screens not yet migrated were converted from `rem` to pixels so the larger root leaves them unchanged.
 - Text editing on TV: Enter and the TV keyboard's Done (`keyCode` 65376) end editing; a feature can move on from Done (email to password).
@@ -716,6 +716,14 @@ Phase 4 status (2026-11-15): sign-in, the QR approval form, first-time setup, Ho
 - A text Button resting on `solid` has a 1px `borderControl` outline (an inset shadow; `borderSubtle` when disabled): transparent, a form's Continue read as plain text. Tabs, rail items, chips and icon circles stay transparent.
 - PairingPanel centres its message as a whole, so the icon stays beside the text.
 - `titleHidden` on Section/FormSection, `labelHidden` on CollectionTile (MediaTile's overlay title yields to its logo), PlaybackToolbar's row entered at Play.
+
+Phase 5 status (2026-11-15, in progress): Home browse and Search run on the navigation layer. The profile screens (Who's watching, the profile editor) still use `features/profiles/ui/spatialFocus.ts`. Home is a horizontal scope of the `NavRail` (`home-rail`) and a vertical group of rows (`home-rows`, `more`/`onMore` for the next page of lists); each row is a `Carousel` of `MediaTile`s (`home-row:<slug>`). Back switches between rail and rows; the notifications and profile panels open in the rail's `flyout` and still move DOM focus themselves (adapters, until they become `List`s in this phase). Search is a horizontal scope of a back `NavRail` and the content: `SearchField`, then the `SearchKeyboard` beside a column of `FilterChip` genres (grid), `RemovableChip` recents and the results row, with an `EmptyState` (and a technical-details `Disclosure`) in place of results; Redux remembers the opened result's navigation id. Who's watching waits on a `ProfileTile` that can show the live Plushie avatar (today it takes an image URL). Still to do for the gate: the Tizen performance pass for Home's carousel and Search on a device, and regenerating the Home, notifications and Search Storybook screenshots. Adjustments it took:
+
+- A composite with no parts that gains some (a carousel whose items arrive) becomes active at its entry part.
+- The store exposes `lastInput()` (`useNavigation().lastInput`), so a screen can tell a key move (animate, lock the pointer) from a pointer or programmatic one; `useOptionalNavigation()` returns null outside a provider.
+- `NavRail` takes `defaultNavId` (where the rail is entered) and `flyout` (a panel drawn beside it, inside the rail's panel so the rail stays expanded while the pointer is over either).
+- `useCarouselNavigation` keeps its initial index while the count is 0, so a row restores its card before its first page arrives.
+- Virtual focus on a text field never moves DOM focus (section 10): on Search, Up from the keyboard reaches the field, OK starts typing and a second OK submits.
 
 Do not rewrite fetching, playback engines or backend contracts as part of this work. Keep useful Redux media/route selection state; remove only duplicated transient focus ownership once an adapter proves parity.
 

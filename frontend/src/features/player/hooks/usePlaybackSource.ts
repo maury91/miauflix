@@ -15,6 +15,7 @@ import {
   selectPlaybackDelivered,
   selectPlaybackDelivery,
   selectPlaybackPieces,
+  selectPlaybackStage,
   selectSourceAttempt,
 } from '@store/slices/realtime';
 import type { AppDispatch } from '@store/store';
@@ -68,6 +69,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
   // Streams start before the file is probed; the probe's delivery arrives over realtime.
   const deliveryUpdate = useSelector(selectPlaybackDelivery(createdSession?.playbackId));
   const downloadedRanges = useSelector(selectPlaybackPieces(createdSession?.playbackId));
+  const streamStage = useSelector(selectPlaybackStage(createdSession?.playbackId));
   // Only a delivery changes the session: a `recreate` must not restart what is playing, nor undo
   // the delivery that came before it.
   const deliveredUpdate =
@@ -339,6 +341,8 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
     downloadedRanges,
     /** The realtime source attempt, else the one the session was created with. */
     sourceAttempt: pushedAttempt ?? session?.sourceAttempt ?? null,
+    /** Where the session's converted stream is while the player waits for it (a seek, say). */
+    streamStage,
     status,
     setStatus,
     error,

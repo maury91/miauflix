@@ -120,12 +120,20 @@ async function focusHeroCase(
   expect(media, `E2E list is missing TMDB ${heroCase.mediaId}`).toBeTruthy();
   expect(media?.backdrop, `TMDB ${heroCase.mediaId} has no backdrop`).toBeTruthy();
 
-  const row = page.locator('section').filter({
-    has: page.getByRole('heading', { name: heroCase.rowName, exact: true }),
+  const row = page.getByRole('region', { name: heroCase.rowName, exact: true });
+  const focusedSlot = row.getByRole('listitem').filter({
+    has: page.locator('[aria-current="true"]'),
   });
+  await expect(focusedSlot).toBeVisible();
+  // Move the carousel one slot at a time so it mounts and reveals offscreen cards.
+  const currentIndex = Number(await focusedSlot.getAttribute('aria-posinset')) - 1;
+  const direction = Math.sign(targetIndex - currentIndex);
+  for (let index = currentIndex; index !== targetIndex; ) {
+    await page.keyboard.press(direction > 0 ? 'ArrowRight' : 'ArrowLeft');
+    index += direction;
+    await expect(focusedSlot).toHaveAttribute('aria-posinset', String(index + 1));
+  }
   const card = row.getByRole('button', { name: mediaTitle(media!), exact: true });
-  await expect(card).toBeVisible();
-  await card.hover();
   await expect(card).toHaveAttribute('aria-current', 'true');
 
   const hero = page.locator('header[aria-live="polite"]');
@@ -179,7 +187,12 @@ test.describe('Home hero backdrop centering @snapshot', () => {
     await waitForListBody(listBodies, 'trakt-movies-popular');
     await waitForListBody(listBodies, 'trakt-movies-trending');
 
+    let rowName: HeroCase['rowName'] = 'Popular Movies';
     for (const heroCase of heroCases) {
+      if (heroCase.rowName !== rowName) {
+        await page.keyboard.press('ArrowDown');
+        rowName = heroCase.rowName;
+      }
       await focusHeroCase(page, heroCase, listBodies);
     }
   });

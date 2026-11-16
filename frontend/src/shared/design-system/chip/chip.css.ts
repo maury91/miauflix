@@ -57,6 +57,7 @@ export const filter = style({
     '&[data-surface="solid"]': { border: `${border} solid ${color.borderControl}` },
     '&[data-surface="solid"][data-focused]': { borderColor: color.actionFocus },
     '&[data-surface="solid"]:disabled': { borderColor: color.borderSubtle },
+    '&[data-full-width]': { justifyContent: 'flex-start' },
   },
 });
 

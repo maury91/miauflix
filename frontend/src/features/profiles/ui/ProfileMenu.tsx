@@ -1,9 +1,8 @@
 import { ProfileAvatar } from '@features/profiles/avatar/ProfileAvatar';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { RAIL_COLLAPSED_WIDTH_CSS, RAIL_EXPANDED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
 import type { SessionInfo } from '@store/slices/auth';
-import { type FC, type MouseEvent, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { type FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import SwitchIcon from '~icons/mdi/account-switch-outline';
@@ -17,29 +16,20 @@ export const PROFILE_PANEL_ATTRIBUTE = 'data-profile-panel';
 /** The rail item the panel lines up with. */
 export const PROFILE_RAIL_ITEM_ATTRIBUTE = 'data-rail-profile';
 
-const Dim = styled.div`
-  position: fixed;
-  inset: 0;
-  /* Below the rail and the app logo (1002). */
-  z-index: 1001;
-  background: rgba(0, 0, 0, 0.45);
-  pointer-events: none;
-`;
-
-/** Starts right at the rail's edge, so the pointer can travel from the avatar into the panel. */
-const HoverZone = styled.div<{ $railExpanded: boolean }>`
-  --rail-width: ${({ $railExpanded }) =>
-    $railExpanded ? RAIL_EXPANDED_WIDTH_CSS : RAIL_COLLAPSED_WIDTH_CSS};
-  position: fixed;
-  z-index: 1003;
-  left: var(--rail-width);
+/**
+ * In the rail's flyout (NavRail): it starts right at the rail's edge, so the pointer travels from
+ * the avatar into the panel without leaving the rail.
+ */
+const HoverZone = styled.div`
+  position: absolute;
+  left: 0;
   outline: none;
 `;
 
 const Panel = styled.section`
   /* Not min(): the 2020 TVs do not have it. */
   width: 340px;
-  max-width: calc(100vw - var(--rail-width) - 24px);
+  max-width: calc(100vw - 160px);
   padding: 8px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 14px;
@@ -139,16 +129,14 @@ export interface ProfileMenuProps {
   profile: SessionInfo;
   /** The keyboard is in the panel (rather than on the rail). */
   focused: boolean;
-  railExpanded: boolean;
   onSwitch: () => void;
   onEdit: () => void;
   /** Sign this profile out of the device. */
   onLogout: () => void;
   /** Left or Back: hand the keyboard back to the rail, keeping the panel open. */
   onExit: () => void;
+  /** The pointer moved onto the panel. Leaving it is the rail's: the panel sits in its flyout. */
   onPointerEnter: () => void;
-  /** The pointer left for the page (not the rail). */
-  onPointerLeave: () => void;
 }
 
 const ROW = '[data-profile-menu-row]';
@@ -184,13 +172,11 @@ function useRailItemBottom(): number | string | null {
 export const ProfileMenu: FC<ProfileMenuProps> = ({
   profile,
   focused,
-  railExpanded,
   onSwitch,
   onEdit,
   onLogout,
   onExit,
   onPointerEnter,
-  onPointerLeave,
 }) => {
   const zoneRef = useRef<HTMLDivElement | null>(null);
   const bottom = useRailItemBottom();
@@ -231,27 +217,19 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
     },
   });
 
-  const leftForRail = (event: MouseEvent) =>
-    event.relatedTarget instanceof Element && !!event.relatedTarget.closest('[data-home-rail]');
-
   const name = profile.user.displayName || profile.user.email;
   return (
     <>
-      <Dim aria-hidden="true" />
       <HoverZone
         ref={node => {
           zoneRef.current = node;
           navigationRef(node);
         }}
         {...{ [PROFILE_PANEL_ATTRIBUTE]: '' }}
-        $railExpanded={railExpanded}
         tabIndex={-1}
         // Bottom-aligned with the avatar on the rail; hidden for the moment before it is measured
         style={{ bottom: bottom ?? undefined, visibility: bottom === null ? 'hidden' : undefined }}
         onMouseEnter={onPointerEnter}
-        onMouseLeave={event => {
-          if (!leftForRail(event)) onPointerLeave();
-        }}
       >
         <Panel aria-label="Profile">
           <Header>

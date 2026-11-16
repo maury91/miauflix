@@ -77,7 +77,7 @@ test.describe('Notifications stories - visual regression', () => {
         await expect(search).toBeFocused({ timeout: 1_000 });
       }).toPass({ timeout: 15_000 });
       await page.keyboard.press('ArrowUp');
-      const bell = page.getByRole('button', { name: /^Notifications, \d+ unread$/ });
+      const bell = page.getByRole('button', { name: 'Notifications', exact: true });
       await expect(bell).toBeFocused();
       const panel = page.getByRole('region', { name: 'Notifications' });
       await expect(panel).toBeVisible();

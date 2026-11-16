@@ -18,6 +18,7 @@ export {
   useHasNavigation,
   useNavigation,
   useNavigationStore,
+  useOptionalNavigation,
   useOptionalPointerLock,
 } from './hooks';
 export { NavigationInspector } from './NavigationInspector';
@@ -33,6 +34,7 @@ export { enter, resolveMove, spatialPick } from './resolve';
 export {
   createNavigationStore,
   heldKeyInterval,
+  type InputKind,
   type NavigationSnapshot,
   type NavigationStore,
 } from './store';

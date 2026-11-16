@@ -1,94 +1,92 @@
-import { PALETTE } from '@shared/config/constants';
-import type { FC, ReactNode } from 'react';
-import styled from 'styled-components';
+import { FilterChip, Heading, RemovableChip } from '@shared/design-system';
+import { FocusGroup } from '@shared/navigation';
 
-import { focusRing, SectionTitle } from './search.styles';
+import { SEARCH_NAV } from '../searchNav';
+import * as styles from './searchChips.css';
 
-const Chips = styled.div<{ $columns: number }>`
-  display: grid;
-  grid-template-columns: repeat(${({ $columns }) => $columns}, minmax(0, 1fr));
-  gap: 1.1vh 0.9vw;
-`;
+import SearchIcon from '~icons/mdi/magnify';
 
-const Chip = styled.button<{ $focused: boolean }>`
-  ${focusRing};
-  display: flex;
-  align-items: center;
-  gap: 0.9vw;
-  min-width: 0;
-  height: 5.6vh;
-  padding: 0 1vw;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 0.5vw;
-  color: ${PALETTE.text.primary};
-  font:
-    400 1.05vw 'Poppins',
-    sans-serif;
-  text-align: left;
-  cursor: pointer;
-
-  > svg {
-    flex: none;
-    width: 1.35vw;
-    height: 1.35vw;
-  }
-
-  > span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-`;
-
-const Section = styled.section`
-  margin-bottom: 3vh;
-`;
-
-export interface SearchChipItem {
+export interface SearchShortcut {
   key: string;
   label: string;
 }
 
-interface SearchChipsProps {
-  title: string;
-  items: ReadonlyArray<SearchChipItem>;
-  icon: ReactNode;
-  columns: number;
-  focusedIndex: number | null;
+/**
+ * The catalog's genres as full-width filter chips, one per line; the browsed genre is the selected one (and where
+ * the group is entered).
+ */
+export function PopularSearches({
+  genres,
+  selected,
+  onSelect,
+}: {
+  genres: readonly SearchShortcut[];
+  selected: string | null;
   onSelect: (index: number) => void;
-  onFocusChip: (index: number) => void;
-  registerChip: (index: number, element: HTMLButtonElement | null) => void;
+}) {
+  return (
+    <section className={styles.section} aria-labelledby="search-popular-title">
+      <div className={styles.title}>
+        <Heading level={2} variant="heading" id="search-popular-title">
+          Popular searches
+        </Heading>
+      </div>
+      {/* One genre per line, as wide as the column */}
+      <FocusGroup id={SEARCH_NAV.popular} layout="vertical">
+        <div className={styles.list}>
+          {genres.map((genre, index) => (
+            <div key={genre.key} className={styles.cell}>
+              <FilterChip
+                navId={SEARCH_NAV.genre(genre.key)}
+                icon={<SearchIcon />}
+                fullWidth
+                selected={genre.key === selected}
+                // Choosing the browsed genre again browses it again; it never clears
+                onSelectedChange={() => onSelect(index)}
+              >
+                {genre.label}
+              </FilterChip>
+            </div>
+          ))}
+        </div>
+      </FocusGroup>
+    </section>
+  );
 }
 
-/** A titled grid of search shortcuts (popular genres or recent searches). */
-export const SearchChips: FC<SearchChipsProps> = ({
-  title,
-  items,
-  icon,
-  columns,
-  focusedIndex,
+/** Recent searches, wrapping: the body runs one again, the circle forgets it. */
+export function RecentSearches({
+  recents,
   onSelect,
-  onFocusChip,
-  registerChip,
-}) => (
-  <Section aria-label={title}>
-    <SectionTitle>{title}</SectionTitle>
-    <Chips $columns={columns}>
-      {items.map((item, index) => (
-        <Chip
-          key={item.key}
-          ref={element => registerChip(index, element)}
-          type="button"
-          tabIndex={focusedIndex === index ? 0 : -1}
-          $focused={focusedIndex === index}
-          onFocus={() => onFocusChip(index)}
-          onMouseEnter={() => onFocusChip(index)}
-          onClick={() => onSelect(index)}
-        >
-          {icon}
-          <span>{item.label}</span>
-        </Chip>
-      ))}
-    </Chips>
-  </Section>
-);
+  onRemove,
+}: {
+  recents: readonly SearchShortcut[];
+  onSelect: (index: number) => void;
+  onRemove: (index: number) => void;
+}) {
+  return (
+    <section className={styles.section} aria-labelledby="search-recents-title">
+      <div className={styles.title}>
+        <Heading level={2} variant="heading" id="search-recents-title">
+          Recent searches
+        </Heading>
+      </div>
+      <FocusGroup id={SEARCH_NAV.recents} layout="spatial">
+        <div className={styles.row}>
+          {recents.map((recent, index) => (
+            <div key={recent.key} className={styles.rowItem}>
+              <RemovableChip
+                navId={SEARCH_NAV.recent(recent.key)}
+                removeLabel={`Remove “${recent.label}”`}
+                onClick={() => onSelect(index)}
+                onRemove={() => onRemove(index)}
+              >
+                {recent.label}
+              </RemovableChip>
+            </div>
+          ))}
+        </div>
+      </FocusGroup>
+    </section>
+  );
+}
