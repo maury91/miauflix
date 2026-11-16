@@ -326,7 +326,7 @@ export interface RemuxStatus {
 /** A remux file name that is not part of the remux. */
 export type RemuxReadError = MediaLoadError | 'remux_not_found';
 
-export const mediaLoad = contract('media-load', '1.2', {
+export const mediaLoad = contract('media-load', '1.3', {
   /**
    * The key that encrypts media and the service's records (the backend's `SOURCE_SECURITY_KEY`).
    * The host sends it on every connection, before the configuration; engine calls wait for it.
@@ -378,6 +378,20 @@ export const mediaLoad = contract('media-load', '1.2', {
 
   storageStates: call<{ sourceIds: number[] }, StorageState[]>(),
   storageInventory: call<void, StorageInventory>(),
+  /**
+   * For each item, whether streaming a file of `bytes` (its length in the torrent) from the source
+   * could be admitted once every evictable download is freed: within the storage threshold and
+   * the disk's free space, less what live playback of other sources holds (the items are one
+   * title's alternatives, so playing one replaces the others). A source already stored counts what
+   * it holds against the threshold; on disk, only what it holds of `path` (the file's path in the
+   * torrent) counts as already allocated. Without `path` none does: the disk check always applies.
+   */
+  playbackFits: call<
+    { items: Array<{ sourceId: number; bytes: number; path?: string }> },
+    boolean[]
+  >({
+    since: 3,
+  }),
   removeStorage: call<SourceInput, StorageRemovalResult>(),
 
   /** The verified pieces of stored sources; `piecesChanged` reports every change after this. */

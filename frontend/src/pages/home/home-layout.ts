@@ -66,7 +66,8 @@ export const PREFETCH_ROWS = 4;
 export const WARM_ROWS = 10;
 
 export interface RowLoadState {
-  /** The focused row and the one below it: on screen, fully loaded and promoted. */
+  /** The rows on screen (the focused row, the first row in view, and the one below each): fully
+   * loaded and promoted. */
   visible: Set<number>;
   /** The nearest other rows, fetched at prefetch priority. */
   prefetch: Set<number>;
@@ -79,26 +80,36 @@ export interface RowLoadState {
 }
 
 /**
- * Which Home rows load, from the focused row. The nearest rows are prefetched, the row below
- * before the row above at the same distance; every other row stays dormant.
+ * Which Home rows load, from the focused row and, when the content was scrolled away from it (a
+ * mouse wheel or touch scroll), from the first row in view. The rows on screen are visible; the
+ * nearest rows are prefetched, the row below before the row above at the same distance; every
+ * other row stays dormant.
  */
 export function homeRowLoadState(
   activeCategory: number,
   categoryCount: number,
-  warmUntil = -1
+  warmUntil = -1,
+  shownRow = activeCategory
 ): RowLoadState {
   const inRange = (index: number) => index >= 0 && index < categoryCount;
-  const visible = new Set([activeCategory, activeCategory + 1].filter(inRange));
+  const anchors = shownRow === activeCategory ? [activeCategory] : [activeCategory, shownRow];
+  const visible = new Set(anchors.flatMap(anchor => [anchor, anchor + 1]).filter(inRange));
   const prefetch = new Set<number>();
-  for (let distance = 1; prefetch.size < PREFETCH_ROWS && distance <= categoryCount; distance++) {
-    for (const index of [activeCategory + 1 + distance, activeCategory - distance]) {
-      if (inRange(index) && prefetch.size < PREFETCH_ROWS) prefetch.add(index);
+  for (const anchor of anchors) {
+    let added = 0;
+    for (let distance = 1; added < PREFETCH_ROWS && distance <= categoryCount; distance++) {
+      for (const index of [anchor + 1 + distance, anchor - distance]) {
+        if (inRange(index) && added < PREFETCH_ROWS && !visible.has(index)) {
+          if (!prefetch.has(index)) prefetch.add(index);
+          added++;
+        }
+      }
     }
   }
   const warm = new Set<number>();
   const lastWarm = Math.min(warmUntil, activeCategory + 1 + WARM_ROWS);
   for (let index = activeCategory + 2; index <= lastWarm; index++) {
-    if (inRange(index)) warm.add(index);
+    if (inRange(index) && !visible.has(index)) warm.add(index);
   }
   return { visible, prefetch, warm };
 }

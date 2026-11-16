@@ -220,7 +220,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     onRest: builtForTizen ? () => contentRest.current() : undefined,
   });
   const scrollToRow = useCallback(
-    (categoryIndex: number) => content.scrollTo(categoryIndex * rowHeight),
+    (categoryIndex: number) => {
+      content.scrollTo(categoryIndex * rowHeight);
+      // On the web the focused row is the one coming into view; scroll events refine it. The TV
+      // waits for the content to rest (contentRest), so rows do not load mid-slide.
+      if (!builtForTizen) setFirstShownRow(categoryIndex);
+    },
     [content, rowHeight]
   );
   const navigation = useHomeNavigation({
@@ -272,8 +277,9 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   // rows has ended (the content's onRest), not during it or on every move of a quick run.
   const { restedRow: loadAnchor, rested: rowsRested } = useRestedRow(activeCategory, builtForTizen);
   const rowLoadState = useMemo(
-    () => homeRowLoadState(loadAnchor, displayCategories.length, warmUntil),
-    [loadAnchor, displayCategories.length, warmUntil]
+    // Rows scrolled into view (a wheel or touch scroll moves no focus) load like the focused one
+    () => homeRowLoadState(loadAnchor, displayCategories.length, warmUntil, firstShownRow),
+    [loadAnchor, displayCategories.length, warmUntil, firstShownRow]
   );
   const { onRowDataReady, onHeroReady } = useIntroReadiness({
     onHydrated,
@@ -511,7 +517,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
           </>
         ) : view === 'details' && selectedMedia ? (
           <PreparedMediaDetails
-            ref={navigation.detailsRef}
             media={selectedMedia}
             onBack={navigation.returnToBrowse}
             onWatch={navigation.openPlayer}

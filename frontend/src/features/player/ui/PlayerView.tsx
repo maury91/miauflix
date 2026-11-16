@@ -137,14 +137,18 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
         setMedia(element);
         return;
       }
+      const detached = videoElement.current;
       // A held picture going away must not drop the player that replaced it.
-      if (videoRef.current === videoElement.current) setMedia(null);
-      // A held picture kept its converted stream attached: let the decoder go.
-      if (videoElement.current?.getAttribute('src')?.startsWith('blob:')) {
-        videoElement.current.removeAttribute('src');
-        videoElement.current.load();
-      }
+      if (videoRef.current === detached) setMedia(null);
       videoElement.current = null;
+      // A held picture kept its converted stream attached: let the decoder go. The ref also
+      // detaches while a Suspense boundary hides the player, with the element kept and its stream
+      // playing on: only an element the commit removed from the page is emptied.
+      queueMicrotask(() => {
+        if (detached?.isConnected || !detached?.getAttribute('src')?.startsWith('blob:')) return;
+        detached.removeAttribute('src');
+        detached.load();
+      });
     },
     [setMedia]
   );

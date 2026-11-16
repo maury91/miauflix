@@ -8,35 +8,37 @@ import { PlaybackSessionService, PlaybackUnavailableError } from './playback-ses
 const movie = <T>(source: T) => ({ source, filePath: 'movie.mkv', matchKind: 'movie' as const });
 
 describe('PlaybackSessionService', () => {
-  it.each([new AudioPlaybackError('busy'), new AudioPlaybackError('duration missing', 422)])(
-    'keeps direct playback available on inspection failure: %s',
-    async error => {
-      const grants = { create: jest.fn() };
-      const service = new PlaybackSessionService({
-        db: { getPlaybackGrantRepository: () => grants } as never,
-        preparation: {
-          prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
-        } as never,
-        config: { getOrThrow: () => 60000 } as never,
-        audioPlaybackService: {
-          knownDelivery: jest.fn().mockResolvedValue(null),
-          inspect: jest.fn().mockRejectedValue(error),
-        } as never,
-      });
-      const listener = jest.fn();
-      service.onDeliveryUpdate(listener);
-      const session = await service.create(
-        'user',
-        { kind: 'movie', mediaId: 1 },
-        { quality: 'auto', allowHevc: false }
-      );
-      await new Promise(resolve => setImmediate(resolve));
-      expect(session?.streamUrl).not.toContain('/audio');
-      expect(session?.deliveryPending).toBe(true);
-      expect(grants.create).toHaveBeenCalled();
-      expect(listener).not.toHaveBeenCalled();
-    }
-  );
+  it.each([
+    // Retried later: nothing to tell the client yet
+    [new AudioPlaybackError('busy'), []],
+    // Final: the client learns that the direct stream stands
+    [new AudioPlaybackError('duration missing', 422), [{ type: 'unprobed' }]],
+  ])('keeps direct playback available on inspection failure: %s', async (error, updates) => {
+    const grants = { create: jest.fn() };
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => grants } as never,
+      preparation: {
+        prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
+      } as never,
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
+        knownDelivery: jest.fn().mockResolvedValue(null),
+        inspect: jest.fn().mockRejectedValue(error),
+      } as never,
+    });
+    const listener = jest.fn();
+    service.onDeliveryUpdate(listener);
+    const session = await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false }
+    );
+    await new Promise(resolve => setImmediate(resolve));
+    expect(session?.streamUrl).not.toContain('/audio');
+    expect(session?.deliveryPending).toBe(true);
+    expect(grants.create).toHaveBeenCalled();
+    expect(listener.mock.calls.map(([event]) => event.update)).toEqual(updates);
+  });
 
   it('inspects again while the session plays after a failed inspection', async () => {
     jest.useFakeTimers();
@@ -113,18 +115,21 @@ describe('PlaybackSessionService', () => {
     expect(session?.sourceAttempt).toEqual({ position: 2, total: 3 });
   });
 
-  it('reports exhaustion when every source proved fake', async () => {
+  it.each([
+    ['every source proved fake', { exhausted: true }, 'exhausted'],
+    ['no source fits in storage', { noRoom: true }, 'insufficient_storage'],
+  ] as const)('reports unavailability when %s', async (_case, outcome, reason) => {
     const service = new PlaybackSessionService({
       db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
       preparation: {
-        prepare: async () => ({ source: null, target: null, state: 'cold', exhausted: true }),
+        prepare: async () => ({ source: null, target: null, state: 'cold', ...outcome }),
       } as never,
       config: { getOrThrow: () => 60000 } as never,
     });
 
     await expect(
       service.create('user', { kind: 'movie', mediaId: 1 }, { quality: 'auto', allowHevc: false })
-    ).rejects.toEqual(new PlaybackUnavailableError('exhausted'));
+    ).rejects.toEqual(new PlaybackUnavailableError(reason));
   });
 
   it('leaves out the sources the player already failed to play', async () => {

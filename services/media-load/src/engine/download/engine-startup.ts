@@ -75,6 +75,7 @@ export class EngineStartup {
         this._initStatus = { status: 'ready' };
         // Nothing is streaming yet; playback claims from a previous run are stale.
         await this.storageService.deleteClaims({ kind: 'playback' });
+        await this.removeUnknownDownloads();
         await this.restoreCompletedDownloads();
       } catch (err) {
         this._initStatus = {
@@ -91,8 +92,17 @@ export class EngineStartup {
    * seeding period has not ended, detach expired ones, and schedule the rest.
    */
   async adoptStorage(): Promise<void> {
+    // The import is sealed now: whatever it did not adopt is no download of ours
+    await this.removeUnknownDownloads();
     await this.restoreCompletedDownloads();
     await this.seeding.rescheduleSeedExpiry();
+  }
+
+  /** A failed sweep never blocks startup: the files are only taking space. */
+  private async removeUnknownDownloads(): Promise<void> {
+    await this.storageService.removeUnknownDownloads().catch(error => {
+      logger.warn('DownloadService', 'Could not clear unknown downloads', error);
+    });
   }
 
   async reload(): Promise<void> {

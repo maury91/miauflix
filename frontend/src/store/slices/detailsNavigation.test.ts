@@ -21,7 +21,6 @@ describe('details navigation state', () => {
     expect(
       selectDetailsNavigationForMedia({ detailsNavigation: state }, 41, 'tvshow')
     ).toMatchObject({
-      focusedArea: 'episodes',
       activeSeasonNumber: 2,
       selectedEpisode: { seasonNumber: 2, episodeNumber: 3 },
     });
@@ -30,7 +29,6 @@ describe('details navigation state', () => {
     ).toMatchObject({
       mediaId: 42,
       mediaType: 'movie',
-      focusedArea: 'action',
       activeSeasonNumber: null,
       selectedEpisode: null,
     });
@@ -40,7 +38,7 @@ describe('details navigation state', () => {
       detailsNavigationActions.activateDetails({ mediaId: 42, mediaType: 'movie' })
     );
     expect(state.selectedEpisode).toBeNull();
-    expect(state.focusedSeasonIndex).toBe(0);
+    expect(state.activeSeasonNumber).toBeNull();
   });
 
   it('clears media selection on session changes', () => {

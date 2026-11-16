@@ -188,6 +188,11 @@ export function useAudioDelivery({
       restartSession(avplay && !!audioDeliveryRef.current);
       return;
     }
+    if (deliveryUpdate.type === 'unprobed') {
+      // No delivery will come: a direct-stream failure held meanwhile is final
+      settlePendingFailure('direct');
+      return;
+    }
     const { delivery } = deliveryUpdate;
     setAudioTrackIndex(delivery.defaultAudioTrackIndex);
     if (delivery.mode === 'audio-transcode') {

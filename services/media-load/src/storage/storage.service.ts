@@ -1,10 +1,11 @@
 import { randomUUID } from 'node:crypto';
-import { mkdir, open, readdir, stat, statfs, unlink } from 'node:fs/promises';
-import { join } from 'node:path';
+import { mkdir, open, readdir, rm, stat, statfs, unlink } from 'node:fs/promises';
+import { basename, dirname, join, resolve, sep } from 'node:path';
 
 import { EventEmitter } from 'events';
 import type TypedEmitter from 'typed-emitter';
 
+import { paddedLength } from '../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
 import type { MediaLoadDatabase } from '../db/database';
 import {
   clearPiecesInBitfield,
@@ -17,6 +18,7 @@ import { humanReadableBytes } from '../lib/bytes';
 import { logger } from '../lib/logger';
 import type { StorageRepository } from './storage.repository';
 import type { StorageFileRepository } from './storage-file.repository';
+import { StorageImporter } from './storage-import';
 import {
   CLAIM_RANK,
   type ClaimInput,
@@ -52,6 +54,13 @@ export interface ReclaimHandler {
   /** Called after the lock is released: reapply selection and refetch what claimed files lost. */
   reselect(storage: Storage): Promise<void>;
 }
+
+/** Disk space admission always leaves free. */
+const FILESYSTEM_HEADROOM_BYTES = 256n * 1024n * 1024n;
+
+/** Name prefix of the allocation probe's temporary file in the download directory. */
+const ALLOCATION_PROBE_PREFIX = '.allocation-probe-';
+const SQLITE_SIDECAR_SUFFIXES = ['-wal', '-shm', '-journal'];
 
 /** Speculative admission may evict storage held only by warmups and watchlist downloads. */
 const SPECULATIVE_EVICTION_RANK = CLAIM_RANK.watchlist;
@@ -93,6 +102,9 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
 }>) {
   private readonly storageRepository: StorageRepository;
   private readonly storageFiles: StorageFileRepository;
+  private readonly importer: StorageImporter;
+  /** The database file, absolute; empty when it lives in memory. */
+  private readonly databaseFile: string;
   private maxStorageBytes: bigint;
   private playbackReserveBytes: bigint;
   private readonly config: EngineConfig;
@@ -110,6 +122,9 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     this.config = config;
     this.storageRepository = db.getStorageRepository();
     this.storageFiles = db.getStorageFileRepository();
+    this.importer = new StorageImporter(db);
+    const filename = db.db.filename;
+    this.databaseFile = filename && filename !== ':memory:' ? resolve(filename) : '';
     this.maxStorageBytes = config.getOrThrow('STORAGE_THRESHOLD');
     this.playbackReserveBytes = config.get('STORAGE_PLAYBACK_RESERVE') ?? 0n;
     void this.probeAllocationMode();
@@ -119,6 +134,60 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     this.maxStorageBytes = this.config.getOrThrow('STORAGE_THRESHOLD');
     this.playbackReserveBytes = this.config.get('STORAGE_PLAYBACK_RESERVE') ?? 0n;
     await this.probeAllocationMode();
+  }
+
+  /**
+   * With DOWNLOAD_PATH_EXCLUSIVE, deletes every entry of the download directory that no storage
+   * record owns, such as downloads left behind when the database was deleted: they take disk space
+   * the storage threshold cannot see. Waits for the backend's storage import to be sealed, so a
+   * download still to be adopted is never mistaken for one. Runs under admission: a storage
+   * record is written there before its directory exists, so a directory listed first always
+   * finds its record.
+   */
+  async removeUnknownDownloads(): Promise<number> {
+    if (this.config.get('DOWNLOAD_PATH_EXCLUSIVE') === false) return 0;
+    if (!this.importer.status().sealed) return 0;
+    return this.withAdmission(async () => {
+      const downloadPath = resolve(this.config.getOrThrow('DOWNLOAD_PATH'));
+      let entries: string[];
+      try {
+        entries = await readdir(downloadPath);
+      } catch {
+        return 0; // Not created yet: nothing to remove
+      }
+      const owned = new Set(
+        (await this.storageRepository.findAll())
+          .map(storage => resolve(storage.location))
+          .filter(location => dirname(location) === downloadPath)
+          .map(location => basename(location))
+      );
+      let removed = 0;
+      for (const entry of entries) {
+        // Another check of the allocation mode may be writing its probe right now
+        if (owned.has(entry) || entry.startsWith(ALLOCATION_PROBE_PREFIX)) continue;
+        // The database itself, and its SQLite sidecars (-wal holds uncheckpointed commits), may
+        // live in the download directory
+        const entryPath = join(downloadPath, entry);
+        if (
+          this.databaseFile === entryPath ||
+          SQLITE_SIDECAR_SUFFIXES.some(suffix => this.databaseFile + suffix === entryPath) ||
+          this.databaseFile.startsWith(entryPath + sep)
+        )
+          continue;
+        try {
+          await rm(entryPath, { recursive: true, force: true });
+          removed += 1;
+        } catch (error) {
+          logger.warn('StorageService', 'Could not delete an unknown download entry', error);
+        }
+      }
+      if (removed)
+        logger.info(
+          'StorageService',
+          `Deleted ${removed} unknown entr${removed === 1 ? 'y' : 'ies'} from the download directory`
+        );
+      return removed;
+    });
   }
 
   registerDeleteHandler(handler: (storage: Storage) => Promise<void> | void): void {
@@ -991,6 +1060,94 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     return run;
   }
 
+  /**
+   * For each item, whether streaming a file of `bytes` from the source could be admitted once
+   * every evictable download is freed. Live playback (an open stream or a live playback claim)
+   * stays, so its charge and disk space are not available, except for the sources asked about:
+   * they are one title's alternatives, so playing one replaces the others (a failing source and
+   * its backup must not crowd out the rest). Admission still decides when a stream starts. The
+   * file is padded as its reservation would be, unless the source's stored layout is version 1
+   * (never padded). A source already stored keeps its charge (admission does not evict it) but
+   * for its reservation, which the request replaces; only what it holds of the item's own file
+   * (`path`) counts as already allocated, on disk and against the threshold, since its directory
+   * may hold other files (episodes, extras, remuxes).
+   */
+  async playbackFits(
+    items: Array<{ sourceId: number; bytes: number; path?: string }>
+  ): Promise<boolean[]> {
+    if (!items.length) return [];
+    const storages = await this.storageRepository.findAll();
+    const candidates = new Set(items.map(item => item.sourceId));
+    const pinned = new Set(await this.storageFiles.findPinnedStorageIds());
+    for (const storage of storages) if (candidates.has(storage.sourceId)) pinned.delete(storage.id);
+    let pinnedCharge = 0;
+    let evictableAllocated = 0;
+    for (const storage of storages) {
+      if (pinned.has(storage.id)) pinnedCharge += chargeOf(storage);
+      else evictableAllocated += storage.allocatedBytes ?? 0;
+    }
+    const budget = Number(this.maxStorageBytes) - pinnedCharge;
+    let disk = Number.POSITIVE_INFINITY;
+    try {
+      const filesystem = await statfs(this.config.getOrThrow('DOWNLOAD_PATH'));
+      disk =
+        Number(BigInt(filesystem.bavail) * BigInt(filesystem.bsize)) +
+        evictableAllocated -
+        Number(FILESYSTEM_HEADROOM_BYTES);
+    } catch {
+      // Unknown free space: the threshold alone decides, as admission does
+    }
+    const pad = this.config.get('STORAGE_PAD_FILE_SIZES') !== false;
+    const bySource = new Map(storages.map(storage => [storage.sourceId, storage]));
+    return Promise.all(
+      items.map(async ({ sourceId, bytes, path }) => {
+        const own = bySource.get(sourceId);
+        // Sized as the source stores it: version 1 stores never pad; without a stored layout
+        // version the store will be a padded one, as the download sizes it
+        const padded = pad && (own?.encryptedLayout?.encryptionVersion ?? 2) !== 1;
+        const needed = padded && bytes > 0 ? paddedLength(bytes) : bytes;
+        const ownPinned = !!own && pinned.has(own.id);
+        const ownAllocated = own?.allocatedBytes ?? 0;
+        // Admission never evicts the source it admits for: its charge stays, except for its
+        // reservation, which this request replaces (charged without one, it is what it holds)
+        const budgetRoom = budget + (own && ownPinned ? chargeOf(own) : 0);
+        const retained = own ? chargeOf({ ...own, reservedBytes: 0 }) : 0;
+        const diskRoom = disk - (own && !ownPinned ? ownAllocated : 0);
+        // Only what the source holds of this very file is already allocated for it
+        const held =
+          own && path ? Math.min(needed, await this.fileHeldBytes(own, path, needed)) : 0;
+        // Headroom guards new allocation only: a source that already holds its file needs no disk
+        const additional = needed - held;
+        // What it holds of the file is in its retained charge already: only the rest is added
+        return retained + additional <= budgetRoom && (additional <= 0 || additional <= diskRoom);
+      })
+    );
+  }
+
+  /**
+   * What a storage holds on disk of one file: all of it (`stored`, its size as stored) once the
+   * file is complete, else the bytes of its verified pieces that fall within the file. Never more
+   * than the storage's measured source data, so files it no longer holds are not credited.
+   */
+  private async fileHeldBytes(storage: Storage, path: string, stored: number): Promise<number> {
+    const row = (await this.storageFiles.findFiles(storage.id)).find(file => file.path === path);
+    const file = storage.encryptedLayout?.files.find(entry => entry.path === path) ?? row;
+    if (!file) return 0;
+    const onDisk = Math.max(0, (storage.allocatedBytes ?? 0) - (storage.remuxBytes ?? 0));
+    if (row?.completedAt) return Math.min(stored, onDisk);
+    const pieceLength = storage.encryptedLayout?.pieceLength || storage.pieceLength;
+    const range = pieceRangeOf(pieceLength, file.offset, file.length);
+    if (!range) return 0;
+    const end = file.offset + file.length;
+    let verified = 0;
+    for (let piece = range.first; piece <= range.last; piece++) {
+      if (!isPieceInBitfield(storage.downloadedPieces, piece)) continue;
+      const start = piece * pieceLength;
+      verified += Math.min(end, start + pieceLength) - Math.max(file.offset, start);
+    }
+    return Math.min(verified, onDisk);
+  }
+
   private async assertCapacity(bytes: number, preservePlaybackReserve = false): Promise<void> {
     const charged = await this.storageRepository.getChargedStorageUsage();
     const reserve = preservePlaybackReserve ? this.playbackReserveBytes : 0n;
@@ -1001,7 +1158,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     try {
       const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
       const filesystem = await statfs(downloadPath);
-      const filesystemReserve = 256n * 1024n * 1024n + reserve;
+      const filesystemReserve = FILESYSTEM_HEADROOM_BYTES + reserve;
       if (
         BigInt(filesystem.bavail) * BigInt(filesystem.bsize) <
         BigInt(bytes) + filesystemReserve
@@ -1021,7 +1178,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     try {
       const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
       await mkdir(downloadPath, { recursive: true });
-      probePath = `${downloadPath}/.allocation-probe-${randomUUID()}`;
+      probePath = `${downloadPath}/${ALLOCATION_PROBE_PREFIX}${randomUUID()}`;
       const logicalSize = 64 * 1024 * 1024;
       handle = await open(probePath, 'w+');
       await handle.truncate(logicalSize);

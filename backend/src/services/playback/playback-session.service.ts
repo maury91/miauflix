@@ -73,6 +73,8 @@ export interface PlaybackSessionSource {
 /**
  * The delivery found once a session's background probe finishes. `recreate` means the
  * optimistic source cannot play here; the client asks for a new session, which now knows why.
+ * `unprobed` means the probe gave up: the direct stream stands, so a direct-stream failure the
+ * client held while waiting is now final.
  */
 export interface PlaybackDeliveryUpdate {
   userId: string;
@@ -80,7 +82,8 @@ export interface PlaybackDeliveryUpdate {
   playbackId: string;
   update:
     | { type: 'delivery'; delivery: PlaybackDelivery; streamUrl: string }
-    | { type: 'recreate'; reason: string };
+    | { type: 'recreate'; reason: string }
+    | { type: 'unprobed' };
 }
 
 /** A session that may still be playing, for per-playback pushes. */
@@ -103,11 +106,13 @@ export interface PlaybackSourceAttempt {
 
 /** No session could be created: no source exists, or every source proved fake. */
 export class PlaybackUnavailableError extends Error {
-  constructor(readonly reason: 'exhausted' | 'not_found') {
+  constructor(readonly reason: 'exhausted' | 'insufficient_storage' | 'not_found') {
     super(
       reason === 'exhausted'
         ? 'Every source found for this title is fake'
-        : 'No playable source available'
+        : reason === 'insufficient_storage'
+          ? 'There is not enough storage to play any source of this title'
+          : 'No playable source available'
     );
   }
 }
@@ -285,6 +290,7 @@ export class PlaybackSessionService {
       (this.audioPlaybackService?.canConvertHevc?.() ?? false);
     let prepared = await prepare(allowHevc);
     if (prepared.exhausted) throw new PlaybackUnavailableError('exhausted');
+    if (prepared.noRoom) throw new PlaybackUnavailableError('insufficient_storage');
     if (!prepared.source) return null;
     // Each viewer keeps what they started watching; another viewer's claim is independent.
     const ownerKey = this.watchOwnerKey(userId, playable);
@@ -869,6 +875,8 @@ export class PlaybackSessionService {
           'Audio inspection failed; keeping direct delivery',
           error
         );
+        // The client holds a direct-stream failure until the delivery is known: settle it.
+        if (this.liveSessions.has(address.playbackId)) emit({ type: 'unprobed' });
       });
   }
 

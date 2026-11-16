@@ -21,337 +21,63 @@ import type {
 } from '@miauflix/backend';
 import { createSelector } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { Spinner } from '@shared/components';
-import { PALETTE } from '@shared/config/constants';
+import {
+  Button,
+  Heading,
+  IconButtonGroup,
+  type IconButtonGroupItem,
+  isSplitStacked,
+  Message,
+  NavItem,
+  NavRail,
+  ProgressBar,
+  ProgressSpinner,
+  ScrollArea,
+  SplitLayout,
+  SurfaceContextProvider,
+  Text,
+  useWindowClass,
+} from '@shared/design-system';
+import { visuallyHidden } from '@shared/design-system/a11y.css';
+import { presentError } from '@shared/lib/api-error';
 import type { BackdropPositionContext } from '@shared/lib/backdrop-focus';
 import { getBackdropPlacement } from '@shared/lib/backdrop-focus';
-import { type HomeAction, type NavigationOutcome } from '@shared/lib/homeNavigation';
 import { imagePreloader, URGENT } from '@shared/lib/image-preloader';
 import { artworkUrl, formatRuntime, getMediaTitle } from '@shared/lib/media.utils';
-import { Button as BaseButton } from '@shared/ui/button/Button';
-import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
-import { MetadataDot, MetadataRating } from '@shared/ui/metadata/metadata.styles';
-import { BackRail } from '@shared/ui/rail/BackRail';
-import { RAIL_COLLAPSED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
+import {
+  FocusGroup,
+  FocusScope,
+  NavigationProvider,
+  useActiveIdWithin,
+  useNavigation,
+} from '@shared/navigation';
 import {
   detailsNavigationActions,
   selectDetailsNavigationForMedia,
 } from '@store/slices/detailsNavigation';
 import { selectPushedAvailability, selectSourceAvailability } from '@store/slices/realtime';
 import type { RootState } from '@store/store';
-import { forwardRef } from 'react';
-import {
-  Fragment,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 
 import { useShowSeasons } from '../hooks/useShowSeasons';
 import { firstSeason } from '../lib/first-season';
-import { ErrorState, PrimaryAction, SectionLabel } from './details.styles';
-import { navigateDetails } from './detailsNavigation';
-import { episodeElementId } from './episodes.utils';
-import { EpisodesSection } from './EpisodesSection';
+import { episodeNavId, parseEpisodeNavId, seasonNavId } from './episodes.utils';
+import { EPISODES_GROUP, EpisodesSection } from './EpisodesSection';
+import * as styles from './mediaDetails.css';
 
+import ArrowLeftIcon from '~icons/mdi/arrow-left';
 import BellIcon from '~icons/mdi/bell-ring-outline';
-import BookmarkIcon from '~icons/mdi/bookmark-outline';
-import CardsHeartIcon from '~icons/mdi/cards-heart-outline';
+import BookmarkIcon from '~icons/mdi/bookmark';
+import BookmarkOutlineIcon from '~icons/mdi/bookmark-outline';
+import HeartIcon from '~icons/mdi/cards-heart';
+import HeartOutlineIcon from '~icons/mdi/cards-heart-outline';
+import CheckIcon from '~icons/mdi/check';
 import StarIcon from '~icons/mdi/star';
-import ThumbDownIcon from '~icons/mdi/thumb-down-outline';
-import ThumbUpIcon from '~icons/mdi/thumb-up-outline';
-
-const Page = styled.main<{ $backdrop: string; $position: string; $size: string }>`
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  overflow: hidden;
-  /* Clear the back rail on the left. */
-  padding: 15vh 5vw 5vh calc(${RAIL_COLLAPSED_WIDTH_CSS} + 3vw);
-  background: #000;
-  outline: none;
-
-  &::before {
-    position: absolute;
-    inset: 0;
-    z-index: -3;
-    content: '';
-    background: url(${({ $backdrop }) => JSON.stringify($backdrop)})
-      ${({ $position }) => $position} / ${({ $size }) => $size} no-repeat;
-  }
-
-  &::after {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    content: '';
-    background:
-      linear-gradient(
-        90deg,
-        #000 0%,
-        rgba(0, 0, 0, 0.94) 29%,
-        rgba(0, 0, 0, 0.22) 57%,
-        rgba(0, 0, 0, 0.92) 100%
-      ),
-      linear-gradient(0deg, #000 0%, transparent 30%),
-      linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 18%);
-  }
-
-  @media (max-width: 860px) {
-    overflow: hidden auto;
-    padding: 13vh 6vw 7vh calc(${RAIL_COLLAPSED_WIDTH_CSS} + 4vw);
-
-    &::after {
-      background:
-        linear-gradient(90deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.56) 80%, rgba(0, 0, 0, 0.92)),
-        linear-gradient(0deg, #000 0%, transparent 35%);
-    }
-  }
-`;
-
-const Layout = styled.div`
-  display: grid;
-  grid-template-columns: minmax(280px, 34vw) minmax(360px, 1fr);
-  gap: clamp(32px, 5vw, 96px);
-  height: 100%;
-  min-height: 0;
-
-  @media (max-width: 860px) {
-    display: block;
-    height: auto;
-  }
-`;
-
-const Content = styled.div`
-  min-width: 0;
-  overflow: hidden auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const Logo = styled.img`
-  display: block;
-  width: min(25vw, 380px);
-  max-height: 13vh;
-  margin-bottom: 2vh;
-  object-fit: contain;
-  object-position: left bottom;
-`;
-
-const Title = styled.h1`
-  margin: 0 0 1vh;
-  font-size: clamp(38.4px, 5vh, 76.8px);
-  line-height: 1;
-  font-weight: 600;
-`;
-
-const Metadata = styled.div`
-  margin: 0 0 1.2vh;
-  color: ${PALETTE.text.secondary};
-  font-size: clamp(14.4px, 2.3vh, 20px);
-`;
-
-const MetadataLine = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14.4px;
-
-  > ${Metadata} {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0;
-    color: ${PALETTE.text.primary};
-  }
-`;
-
-const MetadataRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-
-  @media (max-width: 860px) {
-    flex-wrap: wrap;
-    gap: 5.6px;
-  }
-`;
-
-const MetadataBlock = styled.div`
-  flex: 1 1 320px;
-  min-width: 0;
-`;
-
-const Overview = styled.p`
-  max-width: 65ch;
-  margin: 2vh 0;
-  color: ${PALETTE.text.primary};
-  font-size: clamp(16px, 2.4vh, 21.6px);
-  line-height: 1.55;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
-`;
-
-const SeasonMenu = styled.nav`
-  display: grid;
-  gap: 0.65vh;
-  max-height: 30vh;
-  overflow: auto;
-  padding-right: 0.4vw;
-  scrollbar-width: thin;
-
-  @media (max-width: 860px) {
-    display: flex;
-    max-height: none;
-    overflow-x: auto;
-    padding-bottom: 0.8vh;
-  }
-`;
-
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const SeasonButton = styled(BaseButton)<{ $selected: boolean; $focused: boolean }>`
-  min-width: 0;
-  min-height: 4.8vh;
-  padding: 0.9vh 1vw;
-  border: 0.2vh solid
-    ${({ $focused, $selected }) =>
-      $focused || $selected ? PALETTE.color.interactive : PALETTE.background.border};
-  border-left-width: 0.55vh;
-  border-radius: 0.55vh;
-  background: ${({ $selected }) =>
-    $selected ? PALETTE.color.interactiveSubtle : 'rgba(17, 23, 25, 0.76)'};
-  color: ${PALETTE.text.primary};
-  font:
-    600 clamp(13.6px, 2vh, 19.2px) 'Poppins',
-    sans-serif;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
-
-  @media (max-width: 860px) {
-    flex: 0 0 auto;
-    min-width: 144px;
-  }
-`;
-
-const WatchAction = styled(PrimaryAction)`
-  border-color: transparent;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-
-  svg {
-    width: 1.2em;
-    height: 1.2em;
-  }
-`;
-
-type WarmupState = PreloadPreparationSnapshot['warmup']['state'];
-
-const WarmupBorder = styled.div<{ $progress: number; $state: WarmupState }>`
-  display: inline-flex;
-  margin-top: 4vh;
-  padding: ${({ $state }) => ($state === 'not_requested' ? '0' : '0.32vh')};
-  border-radius: 0.9vh;
-  background: ${({ $progress, $state }) => {
-    if ($state === 'not_requested') return 'transparent';
-    const color =
-      $state === 'ready'
-        ? PALETTE.text.primary
-        : $state === 'failed'
-          ? PALETTE.color.danger
-          : $state === 'paused'
-            ? PALETTE.color.warning
-            : PALETTE.color.interactive;
-    return `conic-gradient(from -90deg, ${color} 0 ${$progress}%, rgba(166, 173, 175, 0.4) ${$progress}% 100%)`;
-  }};
-  box-shadow: ${({ $state }) =>
-    $state === 'not_requested' ? 'none' : `0 0 0.9vh ${PALETTE.color.interactiveSubtle}`};
-  transition:
-    background 180ms ease,
-    filter 180ms ease;
-
-  ${({ $state }) =>
-    $state === 'warming'
-      ? `
-          animation: warmup-pulse 1.4s ease-in-out infinite alternate;
-
-          @keyframes warmup-pulse {
-            from { filter: brightness(0.85); }
-            to { filter: brightness(1.2); }
-          }
-        `
-      : ''}
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
-
-const WarmupDescription = styled.span`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-`;
-
-const RatingActions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 20px;
-  row-gap: 11.2px;
-  margin: 2vh 0;
-`;
-
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const RatingAction = styled(BaseButton).attrs({ collapseWhenNotFocused: true })<{
-  $selected: boolean;
-}>`
-  gap: 8px;
-  min-width: 0;
-  min-height: 4.5vh;
-  padding: 0.75vh 1vw;
-  border: 0.2vh solid
-    ${({ $selected }) => ($selected ? PALETTE.color.interactive : PALETTE.background.border)};
-  border-radius: 0.6vh;
-  background: ${({ $selected }) =>
-    $selected ? PALETTE.color.interactiveSubtle : 'rgba(17, 23, 25, 0.76)'};
-  color: ${PALETTE.text.primary};
-  font:
-    500 clamp(12.48px, 1.8vh, 16px) 'Poppins',
-    sans-serif;
-  box-shadow: none;
-  cursor: pointer;
-
-  &:hover,
-  &:focus-visible {
-    border-color: ${PALETTE.color.interactive};
-    outline: none;
-  }
-
-  && > span[aria-hidden='true'],
-  && > span[aria-hidden='true'] > svg {
-    width: 1.25em;
-    height: 1.25em;
-  }
-`;
+import ThumbDownIcon from '~icons/mdi/thumb-down';
+import ThumbDownOutlineIcon from '~icons/mdi/thumb-down-outline';
+import ThumbUpIcon from '~icons/mdi/thumb-up';
+import ThumbUpOutlineIcon from '~icons/mdi/thumb-up-outline';
 
 interface MediaDetailsProps {
   media: MediaDto;
@@ -360,11 +86,24 @@ interface MediaDetailsProps {
   preparation?: PreloadPreparationSnapshot | null;
 }
 
-export interface MediaDetailsHandle {
-  handleAction: (action: HomeAction) => NavigationOutcome;
-  /** Focus the default item (the primary action, else the page) after focus was lost. */
-  restoreFocus: () => boolean;
-}
+/** IDs in the navigation layer. */
+const NAV = {
+  scope: 'details',
+  rail: 'details-rail',
+  back: 'details-back',
+  content: 'details-content',
+  info: 'details-info',
+  actions: 'details-actions',
+  ratingRetry: 'details-rating-retry',
+  watch: 'details-watch',
+  seasons: 'details-seasons',
+} as const;
+
+/** Focusing an episode this close to the end of the loaded ones loads the next season. */
+const LOAD_NEXT_WITHIN_EPISODES = 3;
+
+type WarmupState = PreloadPreparationSnapshot['warmup']['state'];
+type Rating = 'dislike' | 'like' | 'love';
 
 const formatYear = (value: string | null | undefined) => value?.slice(0, 4) ?? '';
 
@@ -385,11 +124,51 @@ function warmupDescription(state: WarmupState, progress: number): string {
   }
 }
 
-/** Show movie preparation or selectable show episodes, exposing directional navigation through the ref. */
-export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(function MediaDetails(
-  { media, onBack, onWatch, preparation = null },
-  forwardedRef
-) {
+/** The failure in one or two sentences: the server's message and, when there is one, the fix. */
+function errorText(error: unknown, fallback: string): string {
+  const { message, hint } = presentError(error, fallback);
+  return hint ? `${message} ${hint}` : message;
+}
+
+/**
+ * Focuses a node once it is mounted (a season's episodes arrive after the press that asked for
+ * them), unless the user moved on in the meantime: focus must still be where it was when asked.
+ */
+function useFocusWhenReady() {
+  const { focus, getActiveId } = useNavigation();
+  const pending = useRef<{ id: string; from: string | null } | null>(null);
+  const attempt = useCallback(() => {
+    const wanted = pending.current;
+    if (!wanted) return;
+    if (getActiveId() !== wanted.from) pending.current = null;
+    else if (focus(wanted.id)) pending.current = null;
+  }, [focus, getActiveId]);
+  // Every commit can mount the node
+  useEffect(attempt);
+  return useCallback(
+    /** `from`: where focus was when the user asked, if that was earlier than now. */
+    (id: string, from: string | null = getActiveId()) => {
+      pending.current = { id, from };
+      attempt();
+    },
+    [attempt, getActiveId]
+  );
+}
+
+/**
+ * A title's details on the design system: the back rail; the logo, facts, overview, the rating
+ * actions and the main action over the backdrop; for shows the seasons and, beside them, the
+ * episodes. The screen is one navigation scope; Home keeps only Back.
+ */
+export function MediaDetails(props: MediaDetailsProps) {
+  return (
+    <NavigationProvider>
+      <DetailsScreen {...props} />
+    </NavigationProvider>
+  );
+}
+
+function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDetailsProps) {
   const dispatch = useDispatch();
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const watchlistType: 'movie' | 'tv' = media._type === 'movie' ? 'movie' : 'tv';
@@ -403,11 +182,10 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const inWatchlist = watchlist.data?.inWatchlist ?? false;
   const progress = useGetProgressQuery(undefined);
   const pageRef = useRef<HTMLElement>(null);
-  const backRef = useRef<HTMLButtonElement>(null);
-  const jumpToSeason = useRef<number | null>(null);
-  const seasonFocusOrigin = useRef<Element | null>(null);
   const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState(media.backdropFocus);
   const [backdropContext, setBackdropContext] = useState<BackdropPositionContext>();
+  const stacked = isSplitStacked(useWindowClass(), 'expanded');
+  const focusWhenReady = useFocusWhenReady();
   const selectCurrentDetailsNavigation = useMemo(
     () =>
       createSelector([(state: RootState) => state.detailsNavigation], detailsNavigation =>
@@ -415,9 +193,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       ),
     [media.mediaId, media._type]
   );
-  const { focusedArea, focusedSeasonIndex, activeSeasonNumber, selectedEpisode } = useSelector(
-    selectCurrentDetailsNavigation
-  );
+  const { activeSeasonNumber, selectedEpisode } = useSelector(selectCurrentDetailsNavigation);
   const userId = useSelector((state: RootState) => state.auth.currentUser?.id);
   const ratingItem = { mediaType: watchlistType, mediaId: media.mediaId, userId: userId ?? '' };
   const savedRating = useGetMediaRatingQuery(userId ? ratingItem : skipToken, {
@@ -428,7 +204,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const selectedRating = savedRating.currentData?.rating ?? null;
   const ratingPending =
     !savedRating.currentData || savedRating.isFetching || ratingUpdate.isLoading;
-  const changeRating = (rating: 'dislike' | 'like' | 'love') => {
+  const changeRating = (rating: Rating) => {
     if (!userId || ratingPending) return;
     void setMediaRating({ ...ratingItem, rating: selectedRating === rating ? null : rating });
   };
@@ -468,7 +244,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     seasonNumbers,
     openingSeason: initialSeason,
   });
-  const { loaded: loadedSeasons, request: requestSeason, retry: retrySeasonLoad } = showSeasons;
+  const {
+    loaded: loadedSeasons,
+    loadedSections,
+    request: requestSeason,
+    retry: retrySeasonLoad,
+  } = showSeasons;
 
   useEffect(() => {
     dispatch(
@@ -480,20 +261,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     resetRatingUpdate();
   }, [media._type, media.mediaId, userId, resetRatingUpdate]);
 
-  useEffect(() => {
-    pageRef.current?.focus({ preventScroll: true });
-  }, [media.mediaId, media._type]);
-
+  // The app logo moves aside on this screen
   useEffect(() => {
     document.body.dataset['miauflixDetails'] = 'true';
     return () => {
       delete document.body.dataset['miauflixDetails'];
     };
   }, []);
-
-  useEffect(() => {
-    jumpToSeason.current = null;
-  }, [media.mediaId, media._type]);
 
   useEffect(() => {
     let cancelled = false;
@@ -514,21 +288,6 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       cancelled = true;
     };
   }, [ensureBackdropFocus, media.backdrop, media.backdropFocus, media.mediaId, media._type]);
-
-  useEffect(() => {
-    if (media._type !== 'tvshow' || initialSeason === undefined) return;
-    if (activeSeasonNumber === null)
-      dispatch(detailsNavigationActions.setActiveSeasonNumber(initialSeason));
-    if (!selectedEpisode) jumpToSeason.current = initialSeason;
-  }, [activeSeasonNumber, dispatch, initialSeason, media._type, selectedEpisode]);
-
-  useEffect(() => {
-    const season = seasons[focusedSeasonIndex];
-    if (!season || focusedArea !== 'season') return;
-    document
-      .getElementById(`season-${media.mediaId}-${season.seasonNumber}`)
-      ?.scrollIntoView({ block: 'nearest' });
-  }, [focusedArea, focusedSeasonIndex, media.mediaId, seasons]);
 
   const current = media._type === 'movie' ? movie.data : showDetails;
   const artworkType = media._type === 'movie' ? 'movie' : 'tv';
@@ -594,7 +353,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     };
   }, [backdrop]);
 
-  const metadata = useMemo(() => {
+  const facts = useMemo(() => {
     if (!current) return [];
     if (current.type === 'movie') {
       return [
@@ -617,369 +376,396 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     [media.mediaId, progress.data?.progress]
   );
 
+  // Where focus starts: back on the episode left for the player, else the opening season (shows)
+  // or the main action (movies). Shows wait for their seasons and episodes to mount.
+  // Focus moved by the user while the show loads (to Back, say) is theirs to keep: where focus
+  // was on opening is the origin, recorded once the screen's scope has taken it.
+  const { getActiveId } = useNavigation();
+  const initialFocusFrom = useRef<string | null>(null);
   useEffect(() => {
-    const requested = jumpToSeason.current;
-    if (requested === null) return;
-    const section = loadedSeasons[requested];
+    initialFocusFrom.current = getActiveId();
+    // Once, on opening
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const initialFocusAsked = useRef(false);
+  useEffect(() => {
+    if (initialFocusAsked.current || media._type !== 'tvshow' || initialSeason === undefined)
+      return;
+    initialFocusAsked.current = true;
+    if (activeSeasonNumber === null)
+      dispatch(detailsNavigationActions.setActiveSeasonNumber(initialSeason));
+    // The remembered episode's season may not be the opening one: load it so its episode mounts
+    if (selectedEpisode) requestSeason(selectedEpisode.seasonNumber);
+    focusWhenReady(
+      selectedEpisode
+        ? episodeNavId(selectedEpisode.seasonNumber, selectedEpisode.episodeNumber)
+        : seasonNavId(activeSeasonNumber ?? initialSeason),
+      initialFocusFrom.current
+    );
+  }, [
+    activeSeasonNumber,
+    dispatch,
+    focusWhenReady,
+    initialSeason,
+    media._type,
+    requestSeason,
+    selectedEpisode,
+  ]);
+
+  // Choosing a season loads it, then focus goes to its episode to watch next
+  const [jumpToSeason, setJumpToSeason] = useState<{
+    seasonNumber: number;
+    from: string | null;
+  } | null>(null);
+  useEffect(() => {
+    if (jumpToSeason === null) return;
+    const section = loadedSeasons[jumpToSeason.seasonNumber];
     if (!section || progress.isLoading) return;
-    jumpToSeason.current = null;
+    setJumpToSeason(null);
     const target = targetEpisodeForSeason(section);
-    if (!target) return;
+    if (target)
+      focusWhenReady(
+        episodeNavId(jumpToSeason.seasonNumber, target.episodeNumber),
+        jumpToSeason.from
+      );
+  }, [focusWhenReady, jumpToSeason, loadedSeasons, progress.isLoading, targetEpisodeForSeason]);
+
+  const selectSeason = (seasonNumber: number) => {
+    dispatch(detailsNavigationActions.setActiveSeasonNumber(seasonNumber));
+    requestSeason(seasonNumber);
+    setJumpToSeason({ seasonNumber, from: getActiveId() });
+  };
+
+  const retrySeason = (seasonNumber: number) => {
+    selectSeason(seasonNumber);
+    retrySeasonLoad(seasonNumber);
+  };
+
+  // A focused season keeps its neighbours loading, so choosing one rarely waits
+  const focusedSeason = useActiveIdWithin(NAV.seasons);
+  useEffect(() => {
+    const index = seasons.findIndex(item => seasonNavId(item.seasonNumber) === focusedSeason);
+    if (index < 0) return;
+    for (const adjacent of seasons.slice(Math.max(0, index - 1), index + 2))
+      requestSeason(adjacent.seasonNumber);
+  }, [focusedSeason, requestSeason, seasons]);
+
+  const nextSeason = useMemo(() => {
+    const lastLoaded = loadedSections[loadedSections.length - 1]?.seasonNumber;
+    if (lastLoaded === undefined) return undefined;
+    return seasons[seasons.findIndex(item => item.seasonNumber === lastLoaded) + 1];
+  }, [loadedSections, seasons]);
+  const loadNextSeason = useCallback(() => {
+    if (nextSeason) requestSeason(nextSeason.seasonNumber);
+  }, [nextSeason, requestSeason]);
+
+  // The focused episode is remembered for coming back from the player, highlights its season,
+  // and near the end of the loaded ones loads the next season
+  const focusedEpisode = parseEpisodeNavId(useActiveIdWithin(EPISODES_GROUP));
+  const focusedSeasonNumber = focusedEpisode?.seasonNumber;
+  const focusedEpisodeNumber = focusedEpisode?.episodeNumber;
+  useEffect(() => {
+    if (focusedSeasonNumber === undefined || focusedEpisodeNumber === undefined) return;
     dispatch(
       detailsNavigationActions.selectEpisode({
-        seasonNumber: requested,
-        episodeNumber: target.episodeNumber,
+        seasonNumber: focusedSeasonNumber,
+        episodeNumber: focusedEpisodeNumber,
       })
     );
-    const origin = seasonFocusOrigin.current;
-    seasonFocusOrigin.current = null;
-    requestAnimationFrame(() => {
-      if (origin && document.activeElement === origin) {
-        document
-          .getElementById(episodeElementId(media.mediaId, requested, target.episodeNumber))
-          ?.focus();
-      }
-    });
-  }, [
-    focusedArea,
-    focusedSeasonIndex,
-    loadedSeasons,
-    dispatch,
-    media.mediaId,
-    progress.isLoading,
-    targetEpisodeForSeason,
-  ]);
+    const lastSection = loadedSections[loadedSections.length - 1];
+    if (lastSection?.seasonNumber !== focusedSeasonNumber) return;
+    const index = lastSection.episodes.findIndex(
+      episode => episode.episodeNumber === focusedEpisodeNumber
+    );
+    if (index >= lastSection.episodes.length - LOAD_NEXT_WITHIN_EPISODES) loadNextSeason();
+  }, [dispatch, focusedEpisodeNumber, focusedSeasonNumber, loadNextSeason, loadedSections]);
 
-  const selectSeason = useCallback(
-    (index: number) => {
-      const item = seasons[index];
-      if (!item) return;
-      dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
-      dispatch(detailsNavigationActions.setActiveSeasonNumber(item.seasonNumber));
-      dispatch(detailsNavigationActions.setFocusedArea('episodes'));
-      jumpToSeason.current = item.seasonNumber;
-      seasonFocusOrigin.current = document.activeElement;
-      requestSeason(item.seasonNumber);
+  const playEpisode = (seasonNumber: number, episodeNumber: number) => {
+    dispatch(detailsNavigationActions.selectEpisode({ seasonNumber, episodeNumber }));
+    onWatch({ kind: 'episode', showMediaId: media.mediaId, seasonNumber, episodeNumber });
+  };
+
+  const ratingItems: IconButtonGroupItem[] = [
+    {
+      id: 'watchlist',
+      label: inWatchlist ? 'Remove from watchlist' : 'Add to watchlist',
+      icon: inWatchlist ? <BookmarkIcon /> : <BookmarkOutlineIcon />,
+      pressed: inWatchlist,
+      // Busy, not disabled: disabling the focused button would drop focus
+      loading: watchlistPending,
+      onClick: () => {
+        const item = { mediaType: watchlistType, mediaId: media.mediaId } as const;
+        void (inWatchlist ? removeFromWatchlist(item) : addToWatchlist(item));
+      },
     },
-    [dispatch, requestSeason, seasons]
-  );
+    ...(
+      [
+        ['dislike', "Don't like it", ThumbDownIcon, ThumbDownOutlineIcon],
+        ['like', 'Like it', ThumbUpIcon, ThumbUpOutlineIcon],
+        ['love', 'Love it', HeartIcon, HeartOutlineIcon],
+      ] as const
+    ).map(([value, label, OnIcon, OffIcon]) => ({
+      id: value,
+      label,
+      icon: selectedRating === value ? <OnIcon /> : <OffIcon />,
+      pressed: selectedRating === value,
+      disabled: !savedRating.currentData,
+      'aria-disabled': ratingPending || undefined,
+      onClick: () => changeRating(value),
+    })),
+  ];
 
-  const retrySeason = useCallback(
-    (seasonNumber: number) => {
-      selectSeason(seasons.findIndex(item => item.seasonNumber === seasonNumber));
-      retrySeasonLoad(seasonNumber);
-    },
-    [retrySeasonLoad, seasons, selectSeason]
-  );
-
-  const selectEpisode = useCallback(
-    (seasonNumber: number, episodeNumber: number, play = false) => {
-      dispatch(detailsNavigationActions.selectEpisode({ seasonNumber, episodeNumber }));
-      requestAnimationFrame(() =>
-        document
-          .getElementById(episodeElementId(media.mediaId, seasonNumber, episodeNumber))
-          ?.scrollIntoView({ block: 'nearest' })
-      );
-      if (play)
-        onWatch({ kind: 'episode', showMediaId: media.mediaId, seasonNumber, episodeNumber });
-    },
-    [dispatch, media.mediaId, onWatch]
-  );
-
-  const showVisibleSeason = useCallback(
-    (seasonNumber: number) =>
-      dispatch(detailsNavigationActions.setActiveSeasonNumber(seasonNumber)),
-    [dispatch]
-  );
-
-  // Scrolling near the end of the loaded seasons loads the next one.
-  const { loadedSections } = showSeasons;
-  const loadNextSeason = useCallback(() => {
-    const lastLoaded = loadedSections[loadedSections.length - 1]?.seasonNumber;
-    const next = seasons[seasons.findIndex(item => item.seasonNumber === lastLoaded) + 1];
-    if (lastLoaded !== undefined && next) requestSeason(next.seasonNumber);
-  }, [loadedSections, requestSeason, seasons]);
-
-  const handleAction = useCallback((action: HomeAction): NavigationOutcome => {
-    if (action === 'back') return { type: 'escape', direction: 'left' };
-    const page = pageRef.current;
-    if (!page) return { type: 'ignored' };
-    const buttons = (selector: string) =>
-      Array.from(page.querySelectorAll<HTMLButtonElement>(selector)).filter(
-        button => !button.disabled
-      );
-    return navigateDetails(action, {
-      back: backRef.current,
-      ratings: buttons('[aria-label="Rate this title"] button'),
-      primary: buttons('[data-details-primary]'),
-      episodes: buttons('[aria-label="Episodes"] button'),
-    });
-  }, []);
-
-  useEffect(() => {
-    const page = pageRef.current;
-    if (document.activeElement === page) {
-      page?.querySelector<HTMLButtonElement>('[data-details-primary]')?.focus();
-    }
-  }, [current]);
-
-  const restoreFocus = useCallback(() => {
-    const page = pageRef.current;
-    const target = page?.querySelector<HTMLButtonElement>('[data-details-primary]') ?? page;
-    target?.focus({ preventScroll: true });
-    return !!target;
-  }, []);
-
-  useImperativeHandle(forwardedRef, () => ({ handleAction, restoreFocus }), [
-    handleAction,
-    restoreFocus,
-  ]);
-
-  return (
-    <>
-      <BackRail ref={backRef} label="Back to browse" onBack={onBack} />
-      <Page
-        ref={pageRef}
-        tabIndex={-1}
-        $backdrop={backdrop}
-        $position={backdropPlacement.position}
-        $size={backdropPlacement.size}
-        aria-label={`${title} details`}
+  const warmupId = `warmup-status-${media.mediaId}`;
+  const watchAction =
+    media._type !== 'movie' ? null : movieAvailability === 'unavailable' ? (
+      <Button
+        navId={NAV.watch}
+        size="lg"
+        icon={<BellIcon />}
+        loading={availabilityRequest.isLoading}
+        aria-describedby={warmupId}
+        // Stays focusable for remote navigation once the request is saved
+        aria-disabled={notifyRequested || undefined}
+        onClick={() => {
+          if (notifyRequested) return;
+          void requestAvailability({ kind: 'movie', mediaId: media.mediaId });
+        }}
       >
-        <Layout>
-          <Content>
-            {detailLogo ? (
-              <Logo decoding="async" src={artworkUrl(detailLogo, 'logo', 380)} alt={title} />
-            ) : (
-              <Title>{title}</Title>
-            )}
-            <MetadataRow>
-              <MetadataBlock>
-                <MetadataLine>
-                  <Metadata>
-                    {metadata.map((item, index) => (
-                      <Fragment key={item}>
-                        {index > 0 && <MetadataDot />}
-                        <span>{item}</span>
-                      </Fragment>
-                    ))}
-                    {rating && (
-                      <>
-                        {metadata.length > 0 && <MetadataDot />}
-                        <MetadataRating>
-                          <StarIcon aria-hidden="true" />
-                          {rating}
-                        </MetadataRating>
-                      </>
-                    )}
-                  </Metadata>
-                  {media._type === 'movie' && (
-                    <SourcePreparationStatus
-                      mediaKind={media._type}
-                      mode="details"
-                      preparation={preparation}
-                      availability={movieAvailability}
-                    />
-                  )}
-                </MetadataLine>
-                {current?.genres?.length ? <Metadata>{current.genres.join(' · ')}</Metadata> : null}
-              </MetadataBlock>
-            </MetadataRow>
-            {(media._type === 'movie' ? movie.isLoading : show.isLoading) && (
-              <Spinner text="Loading details..." />
-            )}
-            {(media._type === 'movie' ? movie.isError : show.isError) && (
-              <ErrorState role="alert">
-                <ErrorNotice
-                  error={media._type === 'movie' ? movie.error : show.error}
-                  fallback="Failed to load details."
-                />
-              </ErrorState>
-            )}
-            {current && <Overview>{current.overview || 'No overview available.'}</Overview>}
-            <RatingActions aria-label="Rate this title">
-              <RatingAction
-                type="button"
-                icon={<BookmarkIcon />}
-                $selected={inWatchlist}
-                aria-pressed={inWatchlist}
-                // Not `disabled`: disabling the focused button would drop focus to the page body.
-                aria-disabled={watchlistPending}
-                onClick={() => {
-                  if (watchlistPending) return;
-                  const item = { mediaType: watchlistType, mediaId: media.mediaId } as const;
-                  void (inWatchlist ? removeFromWatchlist(item) : addToWatchlist(item));
-                }}
-              >
-                {watchlistPending
-                  ? 'Updating…'
-                  : inWatchlist
-                    ? 'Remove from watchlist'
-                    : 'Add to watchlist'}
-              </RatingAction>
-              <RatingAction
-                type="button"
-                icon={<ThumbDownIcon />}
-                $selected={selectedRating === 'dislike'}
-                aria-pressed={selectedRating === 'dislike'}
-                aria-label="Don't like it"
-                disabled={!savedRating.currentData}
-                aria-disabled={ratingPending}
-                onClick={() => changeRating('dislike')}
-              >
-                Don&apos;t like it
-              </RatingAction>
-              <RatingAction
-                type="button"
-                icon={<ThumbUpIcon />}
-                $selected={selectedRating === 'like'}
-                aria-pressed={selectedRating === 'like'}
-                aria-label="Like it"
-                disabled={!savedRating.currentData}
-                aria-disabled={ratingPending}
-                onClick={() => changeRating('like')}
-              >
-                Like it
-              </RatingAction>
-              <RatingAction
-                type="button"
-                icon={<CardsHeartIcon />}
-                $selected={selectedRating === 'love'}
-                aria-pressed={selectedRating === 'love'}
-                aria-label="Love it"
-                disabled={!savedRating.currentData}
-                aria-disabled={ratingPending}
-                onClick={() => changeRating('love')}
-              >
-                Love it
-              </RatingAction>
-            </RatingActions>
-            {savedRating.isError && (
-              <ErrorState role="alert">
-                <ErrorNotice error={savedRating.error} fallback="Could not load your rating." />
-                <PrimaryAction
-                  data-details-primary
-                  type="button"
-                  $selected={false}
-                  onClick={() => void savedRating.refetch()}
-                >
-                  Retry
-                </PrimaryAction>
-              </ErrorState>
-            )}
-            {ratingUpdate.isError && (
-              <ErrorState role="alert">
-                <ErrorNotice
-                  error={ratingUpdate.error}
-                  fallback="Could not save your rating. Please try again."
-                />
-              </ErrorState>
+        {notifyRequested ? 'Notification Set' : 'Notify Me'}
+      </Button>
+    ) : (
+      <Button
+        navId={NAV.watch}
+        size="lg"
+        aria-describedby={warmupId}
+        onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
+      >
+        {movieProgress && movieProgress.state !== 'completed' ? 'Resume Watching' : 'Watch Now'}
+      </Button>
+    );
+  const warmupText =
+    movieAvailability === 'unavailable'
+      ? notifyRequested
+        ? `We'll notify you as soon as a source for this movie is out`
+        : 'No source available yet'
+      : warmupDescription(warmupState, warmupDisplayPercent);
+
+  const loading = media._type === 'movie' ? movie.isLoading : show.isLoading;
+  const loadError = media._type === 'movie' ? movie.error : show.error;
+  const hasEpisodes = media._type === 'tvshow' && !!showDetails;
+
+  const info = (
+    <ScrollArea>
+      <FocusGroup id={NAV.info} layout="vertical">
+        <div className={styles.info}>
+          {detailLogo ? (
+            <div className={styles.logoFrame}>
+              <img
+                className={styles.logo}
+                decoding="async"
+                src={artworkUrl(detailLogo, 'logo', 380)}
+                alt={title}
+              />
+            </div>
+          ) : (
+            <div className={styles.title}>
+              <Heading level={1} variant="display">
+                {title}
+              </Heading>
+            </div>
+          )}
+          <div className={styles.facts}>
+            {facts.map(fact => (
+              <Fragment key={fact}>
+                <span className={styles.fact}>{fact}</span>
+                <span className={styles.dot} aria-hidden="true" />
+              </Fragment>
+            ))}
+            {rating && (
+              <span className={styles.fact}>
+                <StarIcon className={styles.star} aria-hidden="true" />
+                <span className={visuallyHidden}>Rating </span>
+                {rating}
+              </span>
             )}
             {media._type === 'movie' && (
-              <WarmupBorder
-                $progress={warmupPercent}
-                $state={warmupState}
-                data-warmup-state={warmupState}
-                data-warmup-progress={warmupPercent}
-              >
-                {movieAvailability === 'unavailable' ? (
-                  <WatchAction
-                    data-details-primary
-                    type="button"
-                    $selected={focusedArea === 'action'}
-                    aria-describedby={`warmup-status-${media.mediaId}`}
-                    // Stays focusable for remote navigation once the request is saved.
-                    aria-disabled={notifyRequested || availabilityRequest.isLoading}
-                    onMouseEnter={() => dispatch(detailsNavigationActions.setFocusedArea('action'))}
-                    onClick={() => {
-                      if (notifyRequested || availabilityRequest.isLoading) return;
-                      void requestAvailability({ kind: 'movie', mediaId: media.mediaId });
-                    }}
-                  >
-                    <BellIcon aria-hidden="true" />
-                    {notifyRequested ? 'Notification Set' : 'Notify Me'}
-                  </WatchAction>
-                ) : (
-                  <WatchAction
-                    data-details-primary
-                    type="button"
-                    $selected={focusedArea === 'action'}
-                    aria-describedby={`warmup-status-${media.mediaId}`}
-                    onMouseEnter={() => dispatch(detailsNavigationActions.setFocusedArea('action'))}
-                    onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
-                  >
-                    {movieProgress && movieProgress.state !== 'completed'
-                      ? 'Resume Watching'
-                      : 'Watch Now'}
-                  </WatchAction>
-                )}
-                <WarmupDescription id={`warmup-status-${media.mediaId}`}>
-                  {movieAvailability === 'unavailable'
-                    ? notifyRequested
-                      ? `We'll notify you as soon as a source for this movie is out`
-                      : 'No source available yet'
-                    : warmupDescription(warmupState, warmupDisplayPercent)}
-                </WarmupDescription>
-              </WarmupBorder>
+              <SourcePreparationStatus
+                mediaKind={media._type}
+                mode="details"
+                preparation={preparation}
+                availability={movieAvailability}
+              />
             )}
-            {media._type === 'movie' &&
-              movieAvailability === 'unavailable' &&
-              notifyRequestedHere &&
-              availabilityRequest.isError && (
-                <ErrorState role="alert">
-                  The notification could not be saved. Try again.
-                </ErrorState>
-              )}
-            {media._type === 'tvshow' && showDetails && (
-              <>
-                <SectionLabel>Seasons</SectionLabel>
-                <SeasonMenu aria-label="Seasons">
-                  {seasons.map((item, index) => (
-                    <SeasonButton
-                      data-details-primary
-                      onFocus={() => {
-                        dispatch(detailsNavigationActions.setFocusedArea('season'));
-                        dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
-                        for (const adjacent of seasons.slice(Math.max(0, index - 1), index + 2))
-                          requestSeason(adjacent.seasonNumber);
-                      }}
-                      id={`season-${media.mediaId}-${item.seasonNumber}`}
-                      key={item.id}
-                      type="button"
-                      $selected={activeSeasonNumber === item.seasonNumber}
-                      $focused={focusedArea === 'season' && focusedSeasonIndex === index}
-                      onMouseEnter={() => {
-                        dispatch(detailsNavigationActions.setFocusedArea('season'));
-                        dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
-                      }}
-                      onClick={() => selectSeason(index)}
-                    >
-                      {item.name}
-                    </SeasonButton>
-                  ))}
-                </SeasonMenu>
-              </>
-            )}
-          </Content>
-          {media._type === 'tvshow' && showDetails && (
-            <EpisodesSection
-              showMediaId={media.mediaId}
-              seasons={seasons}
-              sections={loadedSections}
-              loading={showSeasons.loading}
-              failedSeasons={showSeasons.failedSeasons}
-              selectedEpisode={selectedEpisode}
-              progress={progress.data?.progress ?? []}
-              fallbackStill={current?.backdrop}
-              onSelectEpisode={selectEpisode}
-              onRetrySeason={retrySeason}
-              onVisibleSeasonChange={showVisibleSeason}
-              onNearEnd={loadNextSeason}
-              pushedAvailability={pushedEpisodeAvailability}
-            />
+          </div>
+          {current?.genres?.length ? (
+            <div className={styles.genres}>
+              <Text tone="secondary">{current.genres.join(' · ')}</Text>
+            </div>
+          ) : null}
+          {loading && (
+            <div className={styles.block}>
+              <ProgressSpinner label="Loading details..." showLabel />
+            </div>
           )}
-        </Layout>
-      </Page>
-    </>
+          {loadError && (
+            <div className={styles.block}>
+              <Message tone="danger" toneLabel="Error" live="assertive">
+                {errorText(loadError, 'Failed to load details.')}
+              </Message>
+            </div>
+          )}
+          {current && (
+            <div className={styles.overview}>
+              <Text maxLines={4}>{current.overview || 'No overview available.'}</Text>
+            </div>
+          )}
+          <div className={styles.block}>
+            <IconButtonGroup
+              label="Rate this title"
+              size="lg"
+              navId={NAV.actions}
+              items={ratingItems}
+            />
+          </div>
+          {savedRating.isError && (
+            <div className={styles.block}>
+              <Message
+                tone="danger"
+                toneLabel="Error"
+                live="assertive"
+                actions={
+                  <Button navId={NAV.ratingRetry} onClick={() => void savedRating.refetch()}>
+                    Retry
+                  </Button>
+                }
+              >
+                {errorText(savedRating.error, 'Could not load your rating.')}
+              </Message>
+            </div>
+          )}
+          {ratingUpdate.isError && (
+            <div className={styles.block}>
+              <Message tone="danger" toneLabel="Error" live="assertive">
+                {errorText(ratingUpdate.error, 'Could not save your rating. Please try again.')}
+              </Message>
+            </div>
+          )}
+          {watchAction && (
+            <div className={styles.watch}>
+              {watchAction}
+              {(warmupState === 'warming' || warmupState === 'paused') &&
+                movieAvailability !== 'unavailable' && (
+                  <div className={styles.warmup} data-warmup-state={warmupState}>
+                    <ProgressBar decorative size="sm" value={warmupPercent / 100} />
+                  </div>
+                )}
+              <span id={warmupId} className={visuallyHidden}>
+                {warmupText}
+              </span>
+            </div>
+          )}
+          {media._type === 'movie' &&
+            movieAvailability === 'unavailable' &&
+            notifyRequestedHere &&
+            availabilityRequest.isError && (
+              <div className={styles.block}>
+                <Message tone="danger" toneLabel="Error" live="assertive">
+                  The notification could not be saved. Try again.
+                </Message>
+              </div>
+            )}
+          {hasEpisodes && (
+            <nav className={styles.seasons} aria-labelledby={`${NAV.seasons}-heading`}>
+              <Heading level={2} id={`${NAV.seasons}-heading`}>
+                Seasons
+              </Heading>
+              <FocusGroup id={NAV.seasons} layout="vertical">
+                <div className={styles.seasonList}>
+                  {seasons.map(item => {
+                    const selected = activeSeasonNumber === item.seasonNumber;
+                    return (
+                      <div key={item.id} className={styles.seasonItem}>
+                        <Button
+                          navId={seasonNavId(item.seasonNumber)}
+                          // Over media a selection is carried by its icon
+                          icon={selected ? <CheckIcon /> : undefined}
+                          selected={selected}
+                          aria-current={selected || undefined}
+                          onClick={() => selectSeason(item.seasonNumber)}
+                        >
+                          {item.name}
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </FocusGroup>
+            </nav>
+          )}
+        </div>
+      </FocusGroup>
+    </ScrollArea>
   );
-});
+
+  return (
+    <main ref={pageRef} className={styles.page} aria-label={`${title} details`}>
+      <div
+        className={styles.backdrop}
+        style={{
+          backgroundImage: backdrop ? `url(${JSON.stringify(backdrop)})` : undefined,
+          backgroundPosition: backdropPlacement.position,
+          backgroundSize: backdropPlacement.size,
+        }}
+      />
+      <div className={styles.scrim} data-episodes={hasEpisodes || undefined} />
+      <FocusScope
+        id={NAV.scope}
+        layout="horizontal"
+        initialId={media._type === 'movie' ? NAV.watch : NAV.info}
+      >
+        <div className={styles.rail}>
+          <NavRail label="Details" navId={NAV.rail}>
+            <NavItem
+              navId={NAV.back}
+              icon={<ArrowLeftIcon />}
+              label="Back to browse"
+              onClick={onBack}
+            />
+          </NavRail>
+        </div>
+        <SurfaceContextProvider value="overMedia">
+          <div className={styles.body}>
+            <FocusGroup id={NAV.content} layout={stacked ? 'vertical' : 'horizontal'}>
+              <SplitLayout
+                fill
+                split="narrow"
+                stackBelow="expanded"
+                gap="2xl"
+                start={info}
+                end={
+                  hasEpisodes ? (
+                    <EpisodesSection
+                      showMediaId={media.mediaId}
+                      seasons={seasons}
+                      sections={loadedSections}
+                      loading={showSeasons.loading}
+                      failedSeasons={showSeasons.failedSeasons}
+                      progress={progress.data?.progress ?? []}
+                      fallbackStill={current?.backdrop}
+                      onPlay={playEpisode}
+                      onRetrySeason={retrySeason}
+                      hasMore={!!nextSeason}
+                      onMore={loadNextSeason}
+                      onNearEnd={loadNextSeason}
+                      pushedAvailability={pushedEpisodeAvailability}
+                    />
+                  ) : undefined
+                }
+              />
+            </FocusGroup>
+          </div>
+        </SurfaceContextProvider>
+      </FocusScope>
+    </main>
+  );
+}

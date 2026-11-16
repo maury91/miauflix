@@ -1,4 +1,5 @@
 import MemoryChunkStore from 'memory-chunk-store';
+import parseTorrent from 'parse-torrent';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
@@ -256,11 +257,12 @@ export class TorrentAttacher {
    */
   async addTorrent(
     { magnetLink, hash, file }: Pick<ContentSource, 'file' | 'hash' | 'magnetLink'>,
-    storage: Pick<Storage, 'downloadedPieces' | 'encryptedLayout' | 'location'>,
+    storage: AttachedStorage,
     priority = 1,
     timeout: number = 30000
   ): Promise<Torrent> {
-    const { location, downloadedPieces } = storage;
+    const { location } = storage;
+    const downloadedPieces = await startupBitfield(file, storage);
     return new Promise((resolve, reject) => {
       try {
         // Also covers a torrent already in the client: it is fenced, so it would never progress.
@@ -360,7 +362,7 @@ export class TorrentAttacher {
   /** Add a torrent, or join the add already in flight for its info hash. */
   async addTorrentWithLock(
     source: Pick<ContentSource, 'file' | 'hash' | 'magnetLink'>,
-    storage: Pick<Storage, 'downloadedPieces' | 'encryptedLayout' | 'location'>,
+    storage: AttachedStorage,
     priority = 1
   ): Promise<Torrent> {
     const key = source.hash.toLowerCase();
@@ -424,5 +426,30 @@ export class TorrentAttacher {
     return new Promise<void>((resolve, reject) => {
       this.client.destroy(error => (error ? reject(error) : resolve()));
     });
+  }
+}
+
+/** The storage a torrent is attached to; `verifiedBytes` unknown means data may be stored. */
+type AttachedStorage = Pick<Storage, 'downloadedPieces' | 'encryptedLayout' | 'location'> &
+  Partial<Pick<Storage, 'verifiedBytes'>>;
+
+/**
+ * The bitfield a torrent starts from: the recorded one, or, when nothing was ever recorded or
+ * verified, an all-zero one sized for the torrent. Without a bitfield of the right size,
+ * WebTorrent hashes every piece of the store before the torrent is ready, which for an empty
+ * 40 GB download is minutes of reading and decrypting nothing (the add times out, and the
+ * service stops answering meanwhile). Unknown piece count (no .torrent yet): WebTorrent decides.
+ */
+export async function startupBitfield(
+  file: ContentSource['file'],
+  storage: AttachedStorage
+): Promise<Uint8Array | undefined> {
+  if (storage.downloadedPieces?.length) return storage.downloadedPieces;
+  if (storage.verifiedBytes !== 0 || !file) return undefined;
+  try {
+    const pieces = (await parseTorrent(file)).pieces?.length ?? 0;
+    return pieces ? new Uint8Array(Math.ceil(pieces / 8)) : undefined;
+  } catch {
+    return undefined;
   }
 }

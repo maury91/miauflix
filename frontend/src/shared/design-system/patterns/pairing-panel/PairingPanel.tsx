@@ -35,6 +35,8 @@ export interface PairingPanelProps {
   actions?: ReactNode;
   /** The panel's navigation group (vertical); generated if absent. */
   navId?: string;
+  /** Fills its parent's height, to match a panel beside it (the login form). */
+  fill?: boolean;
 }
 
 /** Spells a code out for assistive technology, one character at a time. */
@@ -57,10 +59,11 @@ export function PairingPanel({
   message,
   actions,
   navId,
+  fill,
 }: PairingPanelProps) {
   return (
     <FocusGroup id={navId} layout="vertical">
-      <Surface padding="lg" radius="lg" as="section" aria-label={title}>
+      <Surface padding="lg" radius="lg" as="section" aria-label={title} fill={fill}>
         <div className={styles.panel}>
           <Stack gap="md" align="center">
             <Heading level={2} variant="heading" align="center">

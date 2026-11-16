@@ -33,9 +33,24 @@ export function getNoSourceMessage(title: string): string {
   return `There is no source for “${title}”. Press “Notify me” to receive a notification once it's out.`;
 }
 
-export function describePlaybackFailure(reason: unknown, title: string): string {
+/** Sources exist, but none fits in storage, even after freeing what can be freed. */
+export function isNoRoomPlaybackFailure(reason: unknown): boolean {
+  return getFailureDetails(reason).status === 507;
+}
+
+export function getNoRoomMessage(kind: 'episode' | 'movie'): string {
+  return `There isn't enough space to play this ${kind}. Free up space on the server, or raise its storage limit, then retry.`;
+}
+
+export function describePlaybackFailure(
+  reason: unknown,
+  title: string,
+  kind: 'episode' | 'movie' = 'movie'
+): string {
   const { status, data } = getFailureDetails(reason);
   const quotedTitle = `“${title}”`;
+
+  if (isNoRoomPlaybackFailure(reason)) return getNoRoomMessage(kind);
 
   if (isUnavailablePlaybackFailure(reason)) {
     return `No playable source is available for ${quotedTitle} yet. Try again later, or choose another title.`;

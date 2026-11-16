@@ -20,7 +20,7 @@ import {
 import type { SourceService } from '@services/source/source.service';
 import { isUsableSource } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
-import { isVideoFile } from '@services/source/video-files';
+import { isVideoFile, mainVideoPath } from '@services/source/video-files';
 import {
   madeForOtherLanguage,
   viewerLanguageFirst,
@@ -61,6 +61,8 @@ export interface PreparedPlayable {
   warmup: PreloadWarmupSnapshot;
   /** Sources were found, but every one is known to hold no playable video. */
   exhausted?: boolean;
+  /** Sources were found, but none fits in storage, even after freeing what can be freed. */
+  noRoom?: boolean;
 }
 
 /** Which candidate is being tried: `position` of `total` compatible sources. */
@@ -94,17 +96,21 @@ export interface PlayablePreparationServiceOptions {
   mediaService: MediaService;
   sourceService: SourceService;
   warmup?: SourceWarmupController;
-  storage?: Pick<MediaLoadClientService, 'getStorageStates'>;
+  storage?: PreparationStorage;
   targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
   sourceHealth?: Pick<SourceHealthService, 'hasFailed'>;
 }
+
+/** Stored copies, and whether a playback has room (an engine without the check skips it). */
+type PreparationStorage = Partial<Pick<MediaLoadClientService, 'playbackFits'>> &
+  Pick<MediaLoadClientService, 'getStorageStates'>;
 
 /** Shared inline preparation seam for focus, details, and Watch. */
 export class PlayablePreparationService {
   private readonly mediaService: MediaService;
   private readonly sourceService: SourceService;
   private readonly warmup?: SourceWarmupController;
-  private readonly storage?: Pick<MediaLoadClientService, 'getStorageStates'>;
+  private readonly storage?: PreparationStorage;
   private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
   private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>;
 
@@ -124,7 +130,7 @@ export class PlayablePreparationService {
     this.sourceHealth = sourceHealth;
   }
 
-  private readonly episodeFileSizeCache = new Map<string, number | null>();
+  private readonly episodeFileSizeCache = new Map<string, PlayedFile | null>();
 
   /**
    * Prepare a playable through catalog lookup, source discovery, metadata resolution, or payload warmup.
@@ -150,10 +156,10 @@ export class PlayablePreparationService {
       return { playable, source: null, target: null, state: 'metadata', warmup: emptyWarmup() };
     }
 
+    /** Sources that cannot fit in storage, found when playback is about to start. */
+    let noRoom = new Set<number>();
     const avoid = (list: ContentSource[]) =>
-      options.avoidSourceIds?.length
-        ? list.filter(source => !options.avoidSourceIds!.includes(source.id))
-        : list;
+      list.filter(source => !options.avoidSourceIds?.includes(source.id) && !noRoom.has(source.id));
     let sources = await this.sourceService
       .getSourcesForMovieWithOnDemandSearch(
         {
@@ -172,6 +178,20 @@ export class PlayablePreparationService {
       return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
     }
     if (!sources.some(isUsableSource)) return exhausted(playable);
+    if (options.through === 'warm') {
+      // Playback streams only the main video: size by it, once the torrent's files are known
+      const usable = sources.filter(isUsableSource);
+      const files = await Promise.all(usable.map(source => this.movieFile(source)));
+      noRoom = await this.withoutRoom(
+        usable.map((source, index) => ({
+          sourceId: source.id,
+          bytes: files[index]?.length ?? 0,
+          path: files[index]?.path,
+        }))
+      );
+      sources = avoid(sources);
+      if (!sources.some(isUsableSource)) return withoutRoomResult(playable);
+    }
     if (!sources.some(source => source.hasVideo === true)) {
       // Nothing verified yet: check the candidates in the background, well before Watch.
       this.sourceService.requestMovieVerification(media.local.id, 10);
@@ -315,6 +335,24 @@ export class PlayablePreparationService {
     );
     if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
       return exhausted(playable);
+    if (options.through === 'warm' && compatible.length) {
+      // A season pack streams only the episode's file: its own size, once the torrent is known
+      const fileOf = await this.episodeFiles(compatible);
+      const noRoom = await this.withoutRoom(
+        compatible
+          .filter(match => isUsableSource(match.source))
+          .map(match => {
+            const file = fileOf(match.source);
+            return { sourceId: match.source.id, bytes: file?.length ?? 0, path: file?.path };
+          })
+      );
+      if (noRoom.size) {
+        const fitting = compatible.filter(match => !noRoom.has(match.source.id));
+        if (!fitting.some(match => isUsableSource(match.source)))
+          return withoutRoomResult(playable);
+        compatible.splice(0, compatible.length, ...fitting);
+      }
+    }
     const runtimeMinutes = show.local.episodeRuntime;
     const bitrate: BitrateBudget | undefined =
       options.preferences.maxBitrateKbps && runtimeMinutes
@@ -375,6 +413,27 @@ export class PlayablePreparationService {
         return result;
       }
     }
+  }
+
+  /**
+   * The sources whose file cannot fit in storage even once everything evictable is freed. A size
+   * still unknown (0), or an engine that cannot tell, rules nothing out: admission still decides.
+   */
+  private async withoutRoom(
+    items: Array<{ sourceId: number; bytes: number; path?: string }>
+  ): Promise<Set<number>> {
+    const sized = items.filter(item => item.bytes > 0);
+    const fits = this.storage?.playbackFits ? await this.storage.playbackFits(sized) : null;
+    if (!fits) return new Set();
+    const tooLarge = new Set(
+      sized.filter((_, index) => fits[index] === false).map(i => i.sourceId)
+    );
+    if (tooLarge.size)
+      logger.info(
+        'PlayablePreparationService',
+        `Skipping ${tooLarge.size} of ${items.length} source(s): not enough storage to play them`
+      );
+    return tooLarge;
   }
 
   /** Tell the caller which candidate is tried, counting the ones already ruled out. */
@@ -581,12 +640,43 @@ export class PlayablePreparationService {
    * Each candidate's episode file size, from its torrent file; null while the torrent is unknown.
    * A season pack's size is the whole season, so it cannot stand for the episode.
    */
+  /**
+   * The length of the movie's main video (the largest video file, as playback picks it), or null
+   * while the torrent's files are unknown: fetching them is left to playback.
+   */
+  private async movieFile(source: ContentSource): Promise<PlayedFile | null> {
+    if (!source.file) return null;
+    const key = `${source.id}:movie`;
+    let played = this.episodeFileSizeCache.get(key);
+    if (played === undefined) {
+      try {
+        const files = (await parseTorrent(source.file)).files ?? [];
+        const path = mainVideoPath(files);
+        played = playedFile(files.find(file => file.path === path));
+      } catch {
+        played = null;
+      }
+      if (this.episodeFileSizeCache.size >= EPISODE_FILE_SIZES_LIMIT)
+        this.episodeFileSizeCache.clear();
+      this.episodeFileSizeCache.set(key, played);
+    }
+    return played;
+  }
+
   private async episodeFileSizes(matches: EpisodeSource[]): Promise<PlayedSize> {
-    const sizes = new Map<number, number | null>();
+    const fileOf = await this.episodeFiles(matches);
+    return source => fileOf(source)?.length ?? null;
+  }
+
+  /** Each candidate's episode file in its torrent; null while the torrent is unknown. */
+  private async episodeFiles(
+    matches: EpisodeSource[]
+  ): Promise<(source: ContentSource) => PlayedFile | null> {
+    const played = new Map<number, PlayedFile | null>();
     for (const match of matches) {
       const key = `${match.source.id}:${match.videoFilePath ?? ''}`;
-      let size = this.episodeFileSizeCache.get(key);
-      if (size === undefined && match.source.file) {
+      let entry = this.episodeFileSizeCache.get(key);
+      if (entry === undefined && match.source.file) {
         try {
           const files = (await parseTorrent(match.source.file)).files ?? [];
           const videos = files.filter(file => isVideoFile(file.path));
@@ -602,23 +692,32 @@ export class PlayablePreparationService {
             : videos.length === 1
               ? videos[0]
               : undefined;
-          size = file?.length ?? null;
+          entry = playedFile(file);
         } catch {
-          size = null;
+          entry = null;
         }
         if (this.episodeFileSizeCache.size >= EPISODE_FILE_SIZES_LIMIT)
           this.episodeFileSizeCache.clear();
-        this.episodeFileSizeCache.set(key, size);
+        this.episodeFileSizeCache.set(key, entry);
       }
-      sizes.set(match.source.id, size ?? null);
+      played.set(match.source.id, entry ?? null);
     }
-    return source => sizes.get(source.id) ?? null;
+    return source => played.get(source.id) ?? null;
   }
 
   private throwIfAborted(signal?: AbortSignal): void {
     if (signal?.aborted) throw new DOMException('Preparation cancelled', 'AbortError');
   }
 }
+
+/** The file playback streams from a torrent: its path there (as media-load records it) and length. */
+interface PlayedFile {
+  path: string;
+  length: number;
+}
+
+const playedFile = (file?: { path: string; length: number }): PlayedFile | null =>
+  file ? { path: file.path, length: file.length } : null;
 
 /** Every source found for the playable proved fake. */
 function exhausted(playable: PlayableRef): PreparedPlayable {
@@ -629,6 +728,18 @@ function exhausted(playable: PlayableRef): PreparedPlayable {
     state: 'cold',
     warmup: emptyWarmup(),
     exhausted: true,
+  };
+}
+
+/** Sources exist, but none fits in storage. */
+function withoutRoomResult(playable: PlayableRef): PreparedPlayable {
+  return {
+    playable,
+    source: null,
+    target: null,
+    state: 'cold',
+    warmup: emptyWarmup(),
+    noRoom: true,
   };
 }
 

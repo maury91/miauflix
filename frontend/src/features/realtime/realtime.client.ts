@@ -96,7 +96,9 @@ export interface RealtimePlaybackDelivery {
         delivery: NonNullable<CreatePlaybackSessionResponse['delivery']>;
         streamUrl: string;
       }
-    | { type: 'recreate'; reason: string };
+    | { type: 'recreate'; reason: string }
+    /** The probe gave up: the direct stream stands. */
+    | { type: 'unprobed' };
 }
 
 /** Downloaded stretches of a playback's file, `[start, end)` in thousandths of the file. */
@@ -454,7 +456,9 @@ function isPlaybackDelivery(value: unknown): value is RealtimePlaybackDelivery {
   return (
     candidate.type === 'playback-delivery' &&
     typeof candidate.playbackId === 'string' &&
-    (candidate.update?.type === 'delivery' || candidate.update?.type === 'recreate')
+    (candidate.update?.type === 'delivery' ||
+      candidate.update?.type === 'recreate' ||
+      candidate.update?.type === 'unprobed')
   );
 }
 

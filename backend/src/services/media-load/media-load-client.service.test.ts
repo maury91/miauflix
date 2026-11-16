@@ -99,6 +99,7 @@ const startMediaLoad = async () => {
         localOnly: false,
       })),
     storageInventory: unused,
+    playbackFits: unused,
     removeStorage: unused,
     storageBitfields: unused,
     piecesChanged: () => () => undefined,

@@ -17,7 +17,6 @@ const {
   rowHandles,
   rowProps,
   mediaIndexes,
-  detailsHandleAction,
   useUpdateIntentMutation,
   removeIntent,
   selectSession,
@@ -48,7 +47,6 @@ const {
   rowHandles: new Map<number, Record<string, unknown>>(),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
-  detailsHandleAction: vi.fn(),
   useUpdateIntentMutation: vi.fn(),
   removeIntent: vi.fn(),
   selectSession: vi.fn(),
@@ -301,28 +299,21 @@ vi.mock('./components/MediaHero', async () => {
 vi.mock('@features/details/ui/MediaDetails', async () => {
   const React = await import('react');
   return {
-    MediaDetails: React.forwardRef(
-      (
-        props: {
-          media: { mediaId: number };
-          preparation?: {
-            state: string;
-            source?: { quality: string };
-            warmup?: { state: string };
-          } | null;
-        },
-        ref
-      ) => {
-        React.useImperativeHandle(ref, () => ({ handleAction: detailsHandleAction }), []);
-        return React.createElement('div', {
-          'data-testid': 'details',
-          'data-media-id': props.media.mediaId,
-          'data-source-status': props.preparation?.state ?? 'checking',
-          'data-quality': props.preparation?.source?.quality,
-          'data-warmup': props.preparation?.warmup?.state,
-        });
-      }
-    ),
+    MediaDetails: (props: {
+      media: { mediaId: number };
+      preparation?: {
+        state: string;
+        source?: { quality: string };
+        warmup?: { state: string };
+      } | null;
+    }) =>
+      React.createElement('div', {
+        'data-testid': 'details',
+        'data-media-id': props.media.mediaId,
+        'data-source-status': props.preparation?.state ?? 'checking',
+        'data-quality': props.preparation?.source?.quality,
+        'data-warmup': props.preparation?.warmup?.state,
+      }),
   };
 });
 
@@ -428,7 +419,6 @@ describe('HomePage focus transitions', () => {
     useMarkNotificationReadMutation.mockReset().mockReturnValue([markNotificationRead]);
     useMarkAllNotificationsReadMutation.mockReset().mockReturnValue([vi.fn()]);
     markNotificationRead.mockReset();
-    detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
   });
 
   it('shows notifications while the bell is highlighted and keeps them open from the panel', () => {
@@ -1135,6 +1125,21 @@ describe('HomePage focus transitions', () => {
     expect(rowProps.get(5)).toEqual({ loadIntent: 'visible', visible: true });
     expect(rowProps.get(0)).toEqual({ loadIntent: 'dormant', visible: false });
     expect(rowProps.get(6)).toEqual({ loadIntent: 'prefetch', visible: false });
+  });
+
+  it('loads the rows a wheel scroll brings into view, with focus left where it was', () => {
+    render(<HomePage />);
+    const content = screen.getByTestId('card-0').parentElement!.parentElement!.parentElement!;
+    expect(rowProps.get(5)).toEqual({ loadIntent: 'prefetch', visible: false });
+
+    // Five rows down (rows are 300px), the pointer resting outside any card
+    content.scrollTop = 1500;
+    fireEvent.scroll(content);
+
+    expect(rowProps.get(5)).toEqual({ loadIntent: 'visible', visible: true });
+    expect(rowProps.get(6)).toEqual({ loadIntent: 'visible', visible: true });
+    // The focused row keeps loading too
+    expect(rowProps.get(0)).toEqual({ loadIntent: 'visible', visible: true });
   });
 
   it('renders every loaded page of lists as one ordered row collection', () => {

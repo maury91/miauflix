@@ -187,9 +187,10 @@ describe('Details saved ratings', () => {
     expect(watchlist.add).toHaveBeenCalledOnce();
     watchlist.isLoading = true;
     view.rerender();
-    const pending = screen.getByRole('button', { name: 'Updating…' });
+    // Busy, not disabled: the same button keeps focus and ignores presses
+    const pending = screen.getByRole('button', { name: 'Add to watchlist' });
     expect(pending).toHaveFocus();
-    expect(pending).toHaveAttribute('aria-disabled', 'true');
+    expect(pending).toHaveAttribute('aria-busy', 'true');
     fireEvent.click(pending);
     expect(watchlist.add).toHaveBeenCalledOnce();
   });

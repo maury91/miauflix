@@ -3,18 +3,19 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { clearAuth, setSession } from '@store/slices/auth';
 
 export type DetailsMediaType = 'movie' | 'tvshow';
-export type DetailsFocusedArea = 'action' | 'season' | 'episodes';
 
 export interface SelectedEpisode {
   seasonNumber: number;
   episodeNumber: number;
 }
 
+/**
+ * What the details screen remembers across the player: the season shown and the episode last
+ * focused, where focus goes back. Transient focus belongs to the navigation layer.
+ */
 export interface DetailsNavigationState {
   mediaId: number | null;
   mediaType: DetailsMediaType | null;
-  focusedArea: DetailsFocusedArea;
-  focusedSeasonIndex: number;
   activeSeasonNumber: number | null;
   selectedEpisode: SelectedEpisode | null;
 }
@@ -22,19 +23,12 @@ export interface DetailsNavigationState {
 const initialState: DetailsNavigationState = {
   mediaId: null,
   mediaType: null,
-  focusedArea: 'action',
-  focusedSeasonIndex: 0,
   activeSeasonNumber: null,
   selectedEpisode: null,
 };
 
 function initialStateFor(mediaId: number, mediaType: DetailsMediaType): DetailsNavigationState {
-  return {
-    ...initialState,
-    mediaId,
-    mediaType,
-    focusedArea: mediaType === 'movie' ? 'action' : 'season',
-  };
+  return { ...initialState, mediaId, mediaType };
 }
 
 export const detailsNavigationSlice = createSlice({
@@ -53,17 +47,10 @@ export const detailsNavigationSlice = createSlice({
       }
       return initialStateFor(action.payload.mediaId, action.payload.mediaType);
     },
-    setFocusedArea(state, action: PayloadAction<DetailsFocusedArea>) {
-      state.focusedArea = action.payload;
-    },
-    setFocusedSeasonIndex(state, action: PayloadAction<number>) {
-      state.focusedSeasonIndex = Math.max(0, action.payload);
-    },
     setActiveSeasonNumber(state, action: PayloadAction<number | null>) {
       state.activeSeasonNumber = action.payload;
     },
     selectEpisode(state, action: PayloadAction<SelectedEpisode>) {
-      state.focusedArea = 'episodes';
       state.activeSeasonNumber = action.payload.seasonNumber;
       state.selectedEpisode = action.payload;
     },
