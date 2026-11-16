@@ -193,27 +193,26 @@ test.describe('details page voting controls', () => {
     await expect(love).toHaveAttribute('aria-pressed', 'false');
     await expect(dislike).toHaveScreenshot('details-vote-dislike.png');
 
-    await expect(like).toHaveAttribute('aria-disabled', 'false');
+    await expect(like).toBeEnabled();
     await like.focus();
     await like.click();
     await expect(dislike).toHaveAttribute('aria-pressed', 'false');
     await expect(like).toHaveAttribute('aria-pressed', 'true');
     await expect(like).toHaveScreenshot('details-vote-like.png');
 
-    await expect(love).toHaveAttribute('aria-disabled', 'false');
+    await expect(love).toBeEnabled();
     await love.focus();
     await love.click();
     await expect(like).toHaveAttribute('aria-pressed', 'false');
     await expect(love).toHaveAttribute('aria-pressed', 'true');
     await expect(love).toHaveScreenshot('details-vote-love.png');
 
-    await expect(love).toHaveAttribute('aria-disabled', 'false');
+    await expect(love).toBeEnabled();
     await love.click();
     await expect(love).toHaveAttribute('aria-pressed', 'false');
     await expect(details).toHaveScreenshot('details-vote-cleared.png', {
       animations: 'disabled',
-      // Ubuntu runners and the Jammy image use different fallback fonts for ★,
-      // slightly shifting the adjacent rating and source-status text.
+      // Allow small font rendering differences between Linux environments.
       maxDiffPixels: 700,
     });
   });

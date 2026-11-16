@@ -77,11 +77,15 @@ export const info = style({
   paddingBottom: space.xl,
 });
 
+export const logoFrame = style({
+  maxWidth: '24rem',
+  marginBottom: space.md,
+});
+
 export const logo = style({
   display: 'block',
-  maxWidth: '24rem',
+  maxWidth: '100%',
   maxHeight: '8rem',
-  marginBottom: space.md,
   objectFit: 'contain',
   objectPosition: 'left bottom',
 });

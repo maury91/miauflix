@@ -559,12 +559,14 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
       <FocusGroup id={NAV.info} layout="vertical">
         <div className={styles.info}>
           {detailLogo ? (
-            <img
-              className={styles.logo}
-              decoding="async"
-              src={artworkUrl(detailLogo, 'logo', 380)}
-              alt={title}
-            />
+            <div className={styles.logoFrame}>
+              <img
+                className={styles.logo}
+                decoding="async"
+                src={artworkUrl(detailLogo, 'logo', 380)}
+                alt={title}
+              />
+            </div>
           ) : (
             <div className={styles.title}>
               <Heading level={1} variant="display">
