@@ -22,8 +22,8 @@ describe('TraktClient', () => {
 
     const request = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example/trakt/callback',
       5
     ).test();
@@ -44,8 +44,8 @@ describe('TraktClient', () => {
     try {
       await new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback'
       ).test();
       throw new Error('expected HTTP error');
@@ -71,18 +71,68 @@ describe('TraktClient', () => {
 
     await new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example/trakt/callback'
     ).refreshToken('refresh-1');
 
     expect(requestBody).toMatchObject({
       refresh_token: 'refresh-1',
       client_id: 'client',
-      client_secret: 'secret',
       redirect_uri: 'https://app.example/trakt/callback',
       grant_type: 'refresh_token',
     });
+    expect(requestBody).not.toHaveProperty('client_secret');
+  });
+
+  it('sends OAuth requests to the auth host and API requests to the API host', async () => {
+    const urls: string[] = [];
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
+      urls.push(String(input));
+      return String(input).endsWith('/oauth/device/code')
+        ? Response.json({
+            device_code: 'device',
+            user_code: 'USER',
+            verification_url: 'https://trakt.tv/activate',
+            expires_in: 600,
+            interval: 5,
+          })
+        : Response.json([]);
+    }) as unknown as typeof fetch;
+    const client = new TraktClient(
+      'client',
+      'https://trakt.example',
+      'https://auth.trakt.example',
+      'https://app.example/trakt/callback'
+    );
+
+    await client.deviceCode();
+    await client.test();
+
+    expect(urls).toEqual([
+      'https://auth.trakt.example/oauth/device/code',
+      'https://trakt.example/movies/popular?limit=1',
+    ]);
+  });
+
+  it('polls the device token with only the device code and client ID', async () => {
+    let requestBody: Record<string, string> | undefined;
+    globalThis.fetch = (async (
+      _input: Parameters<typeof fetch>[0],
+      init: Parameters<typeof fetch>[1]
+    ) => {
+      requestBody = JSON.parse(String(init?.body)) as Record<string, string>;
+      return Response.json({ access_token: 'access', refresh_token: 'refresh', expires_in: 3600 });
+    }) as unknown as typeof fetch;
+
+    await new TraktClient(
+      'client',
+      'https://trakt.example',
+      'https://auth.trakt.example',
+      'https://app.example/trakt/callback'
+    ).deviceToken('device-code');
+
+    expect(requestBody).toEqual({ code: 'device-code', client_id: 'client' });
   });
 
   it('bounds a stalled response body', async () => {
@@ -107,8 +157,8 @@ describe('TraktClient', () => {
     try {
       await new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback',
         5
       ).test();
@@ -125,8 +175,8 @@ describe('TraktClient', () => {
     await expect(
       new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback'
       ).deviceCode()
     ).rejects.toMatchObject({
@@ -139,8 +189,8 @@ describe('TraktClient', () => {
     await expect(
       new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback'
       ).deviceToken('device-code')
     ).rejects.toMatchObject({
@@ -154,8 +204,8 @@ describe('TraktClient', () => {
     await expect(
       new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback'
       ).profile('access-token')
     ).rejects.toMatchObject({
@@ -177,8 +227,8 @@ describe('TraktClient', () => {
     await expect(
       new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback'
       ).page('/movies/popular')
     ).rejects.toMatchObject({
@@ -192,8 +242,8 @@ describe('TraktClient', () => {
     await expect(
       new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback'
       ).page('/movies/popular')
     ).rejects.toMatchObject({
@@ -228,8 +278,8 @@ describe('TraktClient', () => {
     await expect(
       new TraktClient(
         'client',
-        'secret',
         'https://trakt.example',
+        'https://auth.trakt.example',
         'https://app.example/trakt/callback'
       ).popularLists(1, 20)
     ).resolves.toMatchObject({
@@ -249,8 +299,8 @@ describe('TraktClient', () => {
       })) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     expect(await client.page('/sync/watchlist/movies', 'token')).toEqual({
@@ -288,8 +338,8 @@ describe('TraktClient', () => {
     }) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     expect(await client.playback('token')).toEqual([
@@ -322,8 +372,8 @@ describe('TraktClient', () => {
       ])) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     await expect(client.playback('token')).rejects.toMatchObject({ status: 502 });
@@ -350,8 +400,8 @@ describe('TraktClient', () => {
     }) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     expect((await client.playback('token')).length).toBe(2);
@@ -368,8 +418,8 @@ describe('TraktClient', () => {
     }) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     const movie = {
@@ -427,8 +477,8 @@ describe('TraktClient', () => {
     }) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     const entries = await client.watchedHistory('token', '2026-10-03T10:00:00Z');
@@ -472,8 +522,8 @@ describe('TraktClient', () => {
     }) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     expect(await client.nextEpisodes('token')).toEqual([
@@ -499,8 +549,8 @@ describe('TraktClient', () => {
     }) as typeof fetch;
     const client = new TraktClient(
       'client',
-      'secret',
       'https://trakt.example',
+      'https://auth.trakt.example',
       'https://app.example'
     );
     await client.scrobble(

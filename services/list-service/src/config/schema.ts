@@ -16,22 +16,17 @@ export const createListConfigSchema = (): ServiceConfigSchema => ({
           testRelevant: true,
         },
         {
+          key: 'TRAKT_AUTH_URL',
+          description: 'Trakt OAuth URL, used for account authorization and token refresh',
+          required: false,
+          inputType: 'text',
+          defaultValue: 'https://auth.trakt.tv',
+        },
+        {
           key: 'TRAKT_CLIENT_ID',
           label: 'Trakt Client ID',
           description:
             'Create a Trakt API application, then copy its client ID from the application settings.',
-          required: true,
-          secret: true,
-          inputType: 'password',
-          link: 'https://trakt.tv/oauth/applications',
-          linkLabel: 'Open Trakt application settings',
-          testRelevant: true,
-        },
-        {
-          key: 'TRAKT_CLIENT_SECRET',
-          label: 'Trakt Client Secret',
-          description:
-            'Copy the client secret from the same Trakt API application settings page and keep it private.',
           required: true,
           secret: true,
           inputType: 'password',

@@ -61,6 +61,9 @@ function generateMockOAuthResponses(path: string, method: string, body?: any): a
   return null;
 }
 
+/** Trakt serves every OAuth endpoint on its auth host, not the API host. */
+const TRAKT_AUTH_URL = 'https://auth.trakt.tv';
+
 /**
  * Trakt-specific request handler for OAuth POST endpoints
  * Returns null if the request should be handled by the default logic
@@ -71,8 +74,6 @@ export const handleRequest = async ({
   path,
   method,
   API_KEY,
-  API_SECRET,
-  API_BASE_URL = 'https://api.trakt.tv',
   API_HEADERS,
   RECORD_PROVIDER_FIXTURES,
 }: HandleRequestParams): Promise<HandleRequestResponse | null> => {
@@ -85,11 +86,11 @@ export const handleRequest = async ({
 
   try {
     // Try to fetch from real API if credentials are available
-    if (RECORD_PROVIDER_FIXTURES && API_KEY && API_SECRET) {
+    if (RECORD_PROVIDER_FIXTURES && API_KEY) {
       console.log(`🌐 Calling real Trakt API for POST ${path}`);
 
       const requestBody = await req.json();
-      const apiUrl = new URL(path, API_BASE_URL);
+      const apiUrl = new URL(path, TRAKT_AUTH_URL);
 
       const apiResponse = await fetch(apiUrl.toString(), {
         method: 'POST',

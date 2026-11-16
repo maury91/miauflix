@@ -157,8 +157,8 @@ export const createListService = (
   const client = () =>
     new TraktClient(
       config.resolve('TRAKT_CLIENT_ID'),
-      config.resolve('TRAKT_CLIENT_SECRET'),
       config.resolve('TRAKT_API_URL'),
+      config.resolve('TRAKT_AUTH_URL'),
       config.resolve('TRAKT_REDIRECT_URI')
     );
 
@@ -169,12 +169,11 @@ export const createListService = (
       try {
         await new TraktClient(
           values.TRAKT_CLIENT_ID,
-          values.TRAKT_CLIENT_SECRET,
           values.TRAKT_API_URL,
+          values.TRAKT_AUTH_URL,
           values.TRAKT_REDIRECT_URI
         ).test();
-        lastProbeMessage =
-          'Trakt API is reachable and the client ID is accepted; the client secret is verified during account authorization';
+        lastProbeMessage = 'Trakt API is reachable and the client ID is accepted';
         return { success: true, message: lastProbeMessage };
       } catch (error) {
         lastProbeMessage =
