@@ -155,10 +155,10 @@ describe('StorageService.playbackFits', () => {
 
   it('does not count other files of the source as the requested one', async () => {
     const { storageService, stored } = await setup();
-    // The source's directory holds 6 MiB, but of the extra (and a remux), not of the movie
+    // The source's directory holds 3 MiB, but of the extra (and a remux), not of the movie
     await recordPack(storageService, stored);
     await storageService.markFilesComplete(stored, ['extra.mkv']);
-    await holdOnDisk(storageService, stored, 6 * MB);
+    await holdOnDisk(storageService, stored, 3 * MB);
     freeBytes = 128 * MB;
     expect(
       await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
@@ -172,5 +172,51 @@ describe('StorageService.playbackFits', () => {
     expect(
       await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
     ).toEqual([true]);
+  });
+
+  it('keeps the charge of what the source holds besides the file', async () => {
+    const { storageService, stored } = await setup();
+    await recordPack(storageService, stored);
+    await storageService.markFilesComplete(stored, ['extra.mkv']);
+    // 6 MiB of other data stays (admission never evicts the source it admits for): 6 + 6 > 10
+    await holdOnDisk(storageService, stored, 6 * MB);
+    expect(
+      await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
+    ).toEqual([false]);
+    // Its 6 MiB reservation is replaced, not added: 3 MiB of other data and the file fit
+    await holdOnDisk(storageService, stored, 3 * MB);
+    expect(
+      await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
+    ).toEqual([true]);
+  });
+
+  it('counts the file once when the source holds it', async () => {
+    const { storageService, stored } = await setup();
+    await recordPack(storageService, stored);
+    await storageService.markFilesComplete(stored, ['movie.mkv']);
+    // 9 MiB on disk: the 6 MiB movie and 3 MiB of other data, within the 10 MiB threshold
+    await holdOnDisk(storageService, stored, 9 * MB);
+    expect(
+      await storageService.playbackFits([{ sourceId: stored, bytes: 6 * MB, path: 'movie.mkv' }])
+    ).toEqual([true]);
+  });
+
+  it('sizes a version 1 store unpadded', async () => {
+    const { storageService, config, stored } = await setup();
+    const bytes = Math.floor(9.9 * MB);
+    // Just above the file: it fits as it is, but its padded size (10 MiB) does not
+    config.set('STORAGE_THRESHOLD', BigInt(Math.floor(9.95 * MB)));
+    config.set('STORAGE_PAD_FILE_SIZES', true);
+    await storageService.reload();
+    // No stored layout: padded, as the download would store it
+    expect(await storageService.playbackFits([{ sourceId: stored, bytes }])).toEqual([false]);
+    await storageService.updateEncryptedLayout(stored, {
+      storeName: 'stored',
+      filenameSalt: 'salt',
+      pieceLength: MB,
+      files: [{ path: 'movie.mkv', offset: 0, length: bytes }],
+      encryptionVersion: 1,
+    });
+    expect(await storageService.playbackFits([{ sourceId: stored, bytes }])).toEqual([true]);
   });
 });

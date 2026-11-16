@@ -1066,9 +1066,11 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * stays, so its charge and disk space are not available, except for the sources asked about:
    * they are one title's alternatives, so playing one replaces the others (a failing source and
    * its backup must not crowd out the rest). Admission still decides when a stream starts. The
-   * file is padded as its reservation would be. A source already stored counts what it holds
-   * against the threshold; on disk only what it holds of the item's own file (`path`) counts as
-   * already allocated, since its directory may hold other files (episodes, extras, remuxes).
+   * file is padded as its reservation would be, unless the source's stored layout is version 1
+   * (never padded). A source already stored keeps its charge (admission does not evict it) but
+   * for its reservation, which the request replaces; only what it holds of the item's own file
+   * (`path`) counts as already allocated, on disk and against the threshold, since its directory
+   * may hold other files (episodes, extras, remuxes).
    */
   async playbackFits(
     items: Array<{ sourceId: number; bytes: number; path?: string }>
@@ -1099,19 +1101,25 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     const bySource = new Map(storages.map(storage => [storage.sourceId, storage]));
     return Promise.all(
       items.map(async ({ sourceId, bytes, path }) => {
-        const needed = pad && bytes > 0 ? paddedLength(bytes) : bytes;
         const own = bySource.get(sourceId);
+        // Sized as the source stores it: version 1 stores never pad; without a stored layout
+        // version the store will be a padded one, as the download sizes it
+        const padded = pad && (own?.encryptedLayout?.encryptionVersion ?? 2) !== 1;
+        const needed = padded && bytes > 0 ? paddedLength(bytes) : bytes;
         const ownPinned = !!own && pinned.has(own.id);
         const ownAllocated = own?.allocatedBytes ?? 0;
-        // Its own reservation is replaced, not added to; its own data is kept, not evicted
+        // Admission never evicts the source it admits for: its charge stays, except for its
+        // reservation, which this request replaces (charged without one, it is what it holds)
         const budgetRoom = budget + (own && ownPinned ? chargeOf(own) : 0);
+        const retained = own ? chargeOf({ ...own, reservedBytes: 0 }) : 0;
         const diskRoom = disk - (own && !ownPinned ? ownAllocated : 0);
         // Only what the source holds of this very file is already allocated for it
         const held =
           own && path ? Math.min(needed, await this.fileHeldBytes(own, path, needed)) : 0;
         // Headroom guards new allocation only: a source that already holds its file needs no disk
         const additional = needed - held;
-        return needed <= budgetRoom && (additional <= 0 || additional <= diskRoom);
+        // What it holds of the file is in its retained charge already: only the rest is added
+        return retained + additional <= budgetRoom && (additional <= 0 || additional <= diskRoom);
       })
     );
   }
