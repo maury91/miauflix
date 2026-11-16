@@ -2,6 +2,8 @@ import { useListPage } from '@features/home-feed/listPages';
 import { usePromoteListMediaMutation } from '@features/media/api/lists.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { collectionGeometry } from '@shared/design-system';
+import { NavigationStage } from '@shared/design-system/storyHelpers';
 import { artworkSlice } from '@store/slices/artwork';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
@@ -24,17 +26,19 @@ const meta = {
       const store = configureStore({ reducer: { artwork: artworkSlice.reducer } });
       return (
         <Provider store={store}>
-          <div
-            style={{
-              width: '100%',
-              maxWidth: 1280,
-              margin: '0 auto',
-              padding: '32px 0',
-              boxSizing: 'border-box',
-            }}
-          >
-            <Story />
-          </div>
+          <NavigationStage>
+            <div
+              style={{
+                width: '100%',
+                maxWidth: 1280,
+                margin: '0 auto',
+                padding: '32px 0',
+                boxSizing: 'border-box',
+              }}
+            >
+              <Story />
+            </div>
+          </NavigationStage>
         </Provider>
       );
     },
@@ -98,12 +102,8 @@ const baseArgs = {
   category,
   categoryIndex: 0,
   initialIndex: 0,
-  mediaWidth: 250,
-  mediaPerPage: 3,
-  gap: 18,
-  peekWidth: 75,
+  geometry: collectionGeometry({ width: 1280, height: 720 }),
   isCurrentRow: true,
-  active: true,
   loadIntent: 'visible' as const,
   visible: true,
   onActive: fn(),
@@ -116,8 +116,9 @@ export const Loaded: Story = {
   play: async ({ args, canvas, userEvent }) => {
     const selectedMedia = mediaForCategory['popular-movies'][1];
     const secondCard = canvas.getByRole('button', { name: selectedMedia.title });
+    // The pointer focuses a card without scrolling the row
     await userEvent.hover(secondCard);
-    await expect(secondCard).toHaveAttribute('aria-current', 'true');
+    await expect(secondCard).toHaveAttribute('data-focused');
     await userEvent.click(secondCard);
     await expect(args.onSelect).toHaveBeenCalledWith(selectedMedia);
   },
@@ -129,13 +130,7 @@ export const LoadedVisual: Story = {
 };
 
 export const ArrowSequenceVisual: Story = {
-  args: {
-    ...baseArgs,
-    mediaWidth: 253.44,
-    mediaPerPage: 4,
-    gap: 14.4,
-    peekWidth: 111.52,
-  },
+  args: { ...baseArgs, geometry: collectionGeometry({ width: 1280, height: 720 }) },
   beforeEach: () => setupListMock('loaded'),
 };
 
@@ -143,7 +138,7 @@ export const LoadedHoverVisual: Story = {
   args: baseArgs,
   beforeEach: () => setupListMock('loaded'),
   play: async ({ canvas, userEvent }) => {
-    await userEvent.hover(canvas.getByRole('region'));
+    await userEvent.hover(canvas.getAllByRole('button')[0]!);
   },
 };
 
@@ -163,6 +158,6 @@ export const Empty: Story = {
 };
 
 export const Dormant: Story = {
-  args: { ...baseArgs, active: false, loadIntent: 'dormant', visible: false },
+  args: { ...baseArgs, loadIntent: 'dormant', visible: false },
   beforeEach: () => setupListMock('dormant'),
 };

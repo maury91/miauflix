@@ -15,7 +15,10 @@ const setupTest = () => {
     playableKey: 'm:123',
     expiresAt: new Date(Date.now() + 60_000),
   };
-  const playbackSessionService = { verify: jest.fn().mockResolvedValue(grant) };
+  const playbackSessionService = {
+    verify: jest.fn().mockResolvedValue(grant),
+    reportStreamStage: jest.fn(),
+  };
   const streamService = {
     getSourceById: jest.fn(),
     resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie: { id: 12 } }),
@@ -113,8 +116,17 @@ describe('audio streaming authorization', () => {
       expect.any(AbortSignal),
       1,
       false,
-      false
+      false,
+      expect.any(Function)
     );
+  });
+
+  it("reports the stream's stages to the playback it serves", async () => {
+    const { app, audioPlaybackService, playbackSessionService } = setupTest();
+    await app.request(`/${token}/audio?start=45`);
+    const onStage = audioPlaybackService.stream.mock.calls[0][8] as (stage: string) => void;
+    onStage('downloading');
+    expect(playbackSessionService.reportStreamStage).toHaveBeenCalledWith(token, 'downloading');
   });
 
   it('forwards explicit video conversion for the pinned source', async () => {
@@ -128,7 +140,8 @@ describe('audio streaming authorization', () => {
       expect.any(AbortSignal),
       undefined,
       false,
-      true
+      true,
+      expect.any(Function)
     );
   });
 

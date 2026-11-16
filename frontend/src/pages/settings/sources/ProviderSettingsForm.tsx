@@ -1,29 +1,53 @@
 import { useUpdateProviderMutation } from '@features/sources/api/sources.api';
 import type { ProviderView } from '@miauflix/backend';
-import { ActionRow, Button, FieldLabel, Input, Select, Switch } from '@shared/ui';
-import { type FormEvent, useState } from 'react';
-import styled from 'styled-components';
+import {
+  Button,
+  FormSection,
+  Message,
+  PasswordField,
+  Select,
+  Switch,
+  TextField,
+} from '@shared/design-system';
+import { type FocusEvent, useState } from 'react';
 
 import { errorMessage } from './errors';
-import { Message } from './styles';
+import * as styles from './providerSettingsForm.css';
 
-const Form = styled.form`
-  display: grid;
-  gap: 12px;
-  max-width: 560px;
-`;
+/** The submit button's key in the focus map: no setting can be named with a leading colon. */
+const SUBMIT = ':submit';
 
-const Field = styled.div`
-  display: grid;
-  gap: 6px;
-`;
+interface FocusedPart {
+  /** The setting's name, or SUBMIT. */
+  key: string;
+  /** For a password: the input or its reveal toggle. */
+  part: 'input' | 'reveal';
+}
 
-const Inline = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
+/**
+ * Which part of the form holds DOM focus. Sources still moves DOM focus itself (its own key
+ * handling, not the navigation layer), so this hands that focus to the design system's controls as
+ * their virtual focus; it goes once Sources moves to the navigation layer (phase 6).
+ */
+function useDomFocus() {
+  const [focused, setFocused] = useState<FocusedPart | null>(null);
+  const track = (event: FocusEvent<HTMLElement>) => {
+    const target = event.target;
+    const owner = target.closest<HTMLElement>('[data-provider-setting]');
+    const key = owner?.dataset['providerSetting'];
+    setFocused(key ? { key, part: target instanceof HTMLInputElement ? 'input' : 'reveal' } : null);
+  };
+  const clear = (event: FocusEvent<HTMLElement>) => {
+    if (!(event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)))
+      setFocused(null);
+  };
+  return { focused, containerProps: { onFocus: track, onBlur: clear } };
+}
 
+/**
+ * A provider's credentials and options: the same FormSection, fields and Message as sign-in and
+ * setup. Text settings are TextFields, secrets PasswordFields, choices a Select, flags a Switch.
+ */
 export function ProviderSettingsForm({
   provider,
   onSaved,
@@ -41,9 +65,16 @@ export function ProviderSettingsForm({
     )
   );
   const [error, setError] = useState('');
+  const { focused, containerProps } = useDomFocus();
+  const isFocused = (key: string) => focused?.key === key;
+  const setValue = (name: string, value: string | boolean) => {
+    setValues(current => ({ ...current, [name]: value }));
+    // The failed save was about the values before this edit
+    setError('');
+  };
 
-  const submit = async (event: FormEvent) => {
-    event.preventDefault();
+  const submit = async () => {
+    if (isLoading) return;
     setError('');
     try {
       await update({ id: provider.id, settings: values }).unwrap();
@@ -54,72 +85,101 @@ export function ProviderSettingsForm({
   };
 
   return (
-    <Form onSubmit={event => void submit(event)} aria-label={`${provider.name} settings`}>
-      {provider.settingsSchema.map(setting => {
-        const id = `${provider.id}-${setting.name}`;
-        return (
-          <Field key={setting.name}>
-            {setting.type === 'checkbox' ? (
-              <Inline>
-                <Switch
-                  id={id}
-                  aria-label={setting.label}
-                  checked={values[setting.name] === true}
-                  onCheckedChange={checked =>
-                    setValues(current => ({ ...current, [setting.name]: checked }))
-                  }
-                />
-                <span>{setting.label}</span>
-              </Inline>
-            ) : setting.type === 'select' && setting.options ? (
-              <>
-                <FieldLabel htmlFor={id}>{setting.label}</FieldLabel>
-                <Select
-                  id={id}
-                  value={String(values[setting.name] ?? '')}
-                  onChange={event =>
-                    setValues(current => ({ ...current, [setting.name]: event.target.value }))
-                  }
-                >
-                  <option value="">
-                    Default{setting.default === undefined ? '' : ` (${String(setting.default)})`}
-                  </option>
-                  {Object.entries(setting.options).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </Select>
-              </>
-            ) : (
-              <>
-                <FieldLabel htmlFor={id}>{setting.label}</FieldLabel>
-                <Input
-                  id={id}
-                  type={setting.type === 'password' ? 'password' : 'text'}
-                  value={String(values[setting.name] ?? '')}
-                  placeholder={setting.default === undefined ? undefined : String(setting.default)}
-                  onChange={event =>
-                    setValues(current => ({ ...current, [setting.name]: event.target.value }))
-                  }
-                />
-              </>
-            )}
-          </Field>
-        );
-      })}
-      {error && <Message role="alert">{error}</Message>}
-      <ActionRow>
-        <Button
-          type="submit"
-          size="small"
-          appearance="settings"
-          color="primary"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Saving…' : 'Save settings'}
-        </Button>
-      </ActionRow>
-    </Form>
+    <div className={styles.form} {...containerProps}>
+      <FormSection
+        title={`${provider.name} settings`}
+        titleHidden
+        headingLevel={3}
+        onSubmit={() => void submit()}
+        busy={isLoading}
+        message={
+          error ? (
+            <Message tone="danger" toneLabel="Error" live="assertive">
+              {error}
+            </Message>
+          ) : undefined
+        }
+        actions={
+          <Button
+            type="submit"
+            data-provider-setting={SUBMIT}
+            loading={isLoading}
+            focused={isFocused(SUBMIT)}
+          >
+            Save settings
+          </Button>
+        }
+      >
+        {provider.settingsSchema.map(setting => {
+          const id = `${provider.id}-${setting.name}`;
+          const value = values[setting.name];
+          const placeholder = setting.default === undefined ? undefined : String(setting.default);
+          let control;
+          if (setting.type === 'checkbox') {
+            control = (
+              <Switch
+                id={id}
+                label={setting.label}
+                checked={value === true}
+                onCheckedChange={checked => setValue(setting.name, checked)}
+                focused={isFocused(setting.name)}
+              />
+            );
+          } else if (setting.type === 'select' && setting.options) {
+            control = (
+              <Select
+                id={id}
+                label={setting.label}
+                fullWidth
+                items={[
+                  {
+                    value: '',
+                    label: `Default${placeholder === undefined ? '' : ` (${placeholder})`}`,
+                  },
+                  ...Object.entries(setting.options).map(([optionValue, label]) => ({
+                    value: optionValue,
+                    label,
+                  })),
+                ]}
+                value={String(value ?? '')}
+                onChange={next => setValue(setting.name, next)}
+                focused={isFocused(setting.name)}
+              />
+            );
+          } else if (setting.type === 'password') {
+            control = (
+              <PasswordField
+                id={id}
+                label={setting.label}
+                showLabel={`Show ${setting.label}`}
+                hideLabel={`Hide ${setting.label}`}
+                value={String(value ?? '')}
+                placeholder={placeholder}
+                autoComplete="off"
+                onChange={event => setValue(setting.name, event.target.value)}
+                focusedPart={isFocused(setting.name) ? focused?.part : undefined}
+              />
+            );
+          } else {
+            control = (
+              <TextField
+                id={id}
+                label={setting.label}
+                value={String(value ?? '')}
+                placeholder={placeholder}
+                autoComplete="off"
+                onChange={event => setValue(setting.name, event.target.value)}
+                focused={isFocused(setting.name)}
+              />
+            );
+          }
+          return (
+            <div key={setting.name} data-provider-setting={setting.name}>
+              {control}
+            </div>
+          );
+        })}
+      </FormSection>
+    </div>
   );
 }

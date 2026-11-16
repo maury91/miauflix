@@ -1,28 +1,20 @@
 import { type AppRoute, navigate, useRoute } from '@app/router';
-import { useLogoutMutation } from '@features/auth/api/auth.api';
-import { logOutSessions } from '@features/auth/logOutSessions';
 import { homeFeedActions, type RowIntent } from '@features/home-feed/homeFeed.slice';
 import { selectEmptyListSlugs } from '@features/home-feed/listPages';
 import { useTraktPrompt } from '@features/integrations/hooks/useTraktPrompt';
 import { TraktModal } from '@features/integrations/ui/TraktModal';
+import type { NotificationItem } from '@features/notifications/api/notifications.api';
 import { notificationPlayable } from '@features/notifications/lib/notification-copy';
-import { NotificationsMenu } from '@features/notifications/ui/NotificationsMenu';
 import { subtitleLanguageForMedia } from '@features/player/lib/subtitle-language';
 import { PlayerView } from '@features/player/ui/PlayerView';
-import { ProfileMenu } from '@features/profiles/ui/ProfileMenu';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
-import { builtForTizen, PALETTE } from '@shared/config/constants';
+import { builtForTizen } from '@shared/config/constants';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { getMediaTitle } from '@shared/lib/media.utils';
+import { FocusGroup, type InputKind, NavigationProvider } from '@shared/navigation';
 import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
-import { useAppSelector } from '@store/hooks';
-import {
-  selectAvailableSessions,
-  selectCurrentSessionId,
-  selectCurrentUser,
-  selectIsAdmin,
-} from '@store/slices/auth';
+import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
 import {
@@ -37,16 +29,14 @@ import {
   useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 
 import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
-import { HomeSidebar, type SidebarItem } from './components/HomeSidebar';
+import { HomeBrowse } from './components/HomeBrowse';
 import { PreparedMediaDetails, PreparedMediaHero } from './components/PreparedViews';
 import { useFocusPrefetch } from './hooks/useFocusPrefetch';
 import { useHomeArtwork } from './hooks/useHomeArtwork';
 import { useHomeFeed } from './hooks/useHomeFeed';
 import { useHomeNavigation } from './hooks/useHomeNavigation';
-import { useHomeNotifications } from './hooks/useHomeNotifications';
 import { useHomePreparation } from './hooks/useHomePreparation';
 import { useIdleRowWarmup } from './hooks/useIdleRowWarmup';
 import { useIntroReadiness } from './hooks/useIntroReadiness';
@@ -58,53 +48,12 @@ import { useSessionChange } from './hooks/useSessionChange';
 import { useSmoothScroller } from './hooks/useSmoothScroller';
 import { CONTINUE_CATEGORY } from './home-feed';
 import { homeMountedRows, homeRowLoadState, WARM_ROWS } from './home-layout';
-
-// Absolute, not fixed: a fixed element is its own stacking context, which would keep the rail
-// below the app logo. Nothing above Home scrolls, so both fill the viewport.
-const PageContainer = styled.main`
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  background: #000;
-  color: ${PALETTE.text.primary};
-  outline: none;
-`;
-
-const Content = styled.div<{ $margin: number }>`
-  position: absolute;
-  inset: 42vh 0 0;
-  z-index: 2;
-  /* On the TV the rows move on a transform transition inside it (see SmoothScrollerOptions):
-     scrolling lays out every mounted row on every frame. */
-  overflow: ${builtForTizen ? 'hidden' : 'hidden auto'};
-  ${builtForTizen ? 'will-change: transform;' : ''}
-  padding: 6vh ${({ $margin }) => $margin}px 8vh;
-  mask-image: linear-gradient(180deg, transparent 5vh, #000 8vh);
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
+import { HOME_NAV } from './homeNav';
+import * as styles from './homePage.css';
 
 /**
- * Full height of every row; only the mounted rows are rendered, each at its own offset (inline
- * styles: a styled-components prop would add a CSS class per distinct offset).
- */
-const Rows = styled.div`
-  position: relative;
-  ${builtForTizen ? 'will-change: transform;' : ''}
-`;
-
-const RowSlot = styled.div`
-  position: absolute;
-  inset-inline: 0;
-`;
-
-/**
- * A row in its slot. Memoized whole: a move re-renders Home, and every slot's wrapper re-renders
- * with it (a new `style` each time) even though only the moved row changed; on a TV each styled
- * wrapper costs about a millisecond.
+ * A row in its slot. Memoized whole: a row change re-renders Home, and every slot's wrapper would
+ * re-render with it (a new `style` each time) even though only one row changed.
  */
 const HomeRow = memo(function HomeRow({
   top,
@@ -115,20 +64,11 @@ const HomeRow = memo(function HomeRow({
   rowRef: Ref<CategoryRowHandle>;
 }) {
   return (
-    <RowSlot style={{ top }}>
+    <div className={styles.rowSlot} style={{ top }}>
       <CategoryRow ref={rowRef} {...row} />
-    </RowSlot>
+    </div>
   );
 });
-
-const FullPageState = styled.div`
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${PALETTE.text.muted};
-`;
 
 interface HomePageProps {
   route?: AppRoute;
@@ -140,7 +80,6 @@ interface HomePageProps {
 
 const FALLBACK_HOME_ROUTE: AppRoute = { type: 'home' };
 
-/** Browse, details and player screens; each concern lives in its own hook. */
 /** `rows` plus the focused row and its neighbours, ascending. */
 const withRowsAround = (rows: number[], activeCategory: number, categoryCount: number) => {
   const around = [activeCategory - 1, activeCategory, activeCategory + 1].filter(
@@ -155,8 +94,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
   const sessionId = useSelector(selectCurrentSessionId);
   const currentUser = useSelector(selectCurrentUser);
-  const availableSessions = useSelector(selectAvailableSessions);
-  const isAdmin = useAppSelector(selectIsAdmin);
   const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
 
   const { view, playable, routeQuery, routeMedia, nextEpisode } = useMediaRoute(activeRoute);
@@ -170,19 +107,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     sessionId,
     userId: currentUser?.id,
   });
-  // The notifications panel shows while the rail's bell is highlighted or the panel is in use.
-  const region = useSelector((state: RootState) => state.homeNavigation.activeRegion);
-  const [sidebarItem, setSidebarItem] = useState<SidebarItem>('search');
-  const sidebarActive = interactive && !trakt.open && region === 'sidebar';
-  const notificationsFocused = interactive && !trakt.open && region === 'notifications';
-  const notificationsVisible =
-    browsing && ((sidebarActive && sidebarItem === 'notifications') || notificationsFocused);
-  const notifications = useHomeNotifications(sessionId, notificationsVisible);
-  // Likewise the profile panel, beside the rail's avatar.
-  const profileMenuFocused = interactive && !trakt.open && region === 'profileMenu';
-  const profileMenuVisible =
-    browsing && ((sidebarActive && sidebarItem === 'profile') || profileMenuFocused);
-  const { mediaWidth, mediaPerPage, gap, margin, peekWidth, rowHeight } = useMediaBoxSizes();
+  const { geometry, margin, rowHeight } = useMediaBoxSizes();
   // The hero and the fixed app logo line up with the rows' left edge.
   useEffect(() => {
     document.body.style.setProperty('--home-content-left', `${margin}px`);
@@ -219,27 +144,18 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     transform: builtForTizen,
     onRest: builtForTizen ? () => contentRest.current() : undefined,
   });
-  const scrollToRow = useCallback(
-    (categoryIndex: number) => {
-      content.scrollTo(categoryIndex * rowHeight);
-      // On the web the focused row is the one coming into view; scroll events refine it. The TV
-      // waits for the content to rest (contentRest), so rows do not load mid-slide.
-      if (!builtForTizen) setFirstShownRow(categoryIndex);
-    },
-    [content, rowHeight]
-  );
   const navigation = useHomeNavigation({
     route: activeRoute,
     view,
     playable,
     enabled: interactive && !trakt.open,
     sessionId,
-    categories: displayCategories,
-    requestNextPage: feed.requestNextPage,
     onBrowseSelection: setBrowseSelection,
-    onRowFocus: scrollToRow,
   });
-  const { activeRegion, selectedByCategory, rowRefs } = navigation;
+  const selectedByCategory = useSelector(
+    (state: RootState) => state.homeNavigation.selectedByCategory
+  );
+  const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const publishInterestAfterScroll = useRealtimeInterest({
     sessionId,
     rowRefs,
@@ -320,15 +236,13 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         return;
       }
       if (index < 0 && displayCategories.length) {
-        // The focused row itself left: focus the row now in its place, or the last row.
+        // The focused row itself left: the row now in its place, or the last row.
         const next = Math.min(activeCategory, displayCategories.length - 1);
         const slug = displayCategories[next]!.slug;
         followedRow.current = { categories: displayCategories, slug };
         if (next !== activeCategory) dispatch(homeNavigationActions.setActiveCategory(next));
+        // The navigation layer moves focus to that row too
         content.scrollTo(next * rowHeight, { instant: true });
-        if (browsing && activeRegion === 'carousel') {
-          rowRefs.current.get(next)?.focusIndex(selectedByCategory[slug] ?? 0);
-        }
         return;
       }
     }
@@ -336,9 +250,21 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       categories: displayCategories,
       slug: displayCategories[activeCategory]?.slug,
     };
-    // Only a change of rows moves the focus; the region and selections are read as they are.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory, content, dispatch, displayCategories, rowHeight]);
+  /**
+   * Focus moved to another row: Home follows it (the hero, the rows that load). A key brings it
+   * into view with the slide between rows; the pointer focuses without scrolling; focus placed by
+   * the program (on arrival, or after a row left) jumps there.
+   */
+  const onRowFocus = useStableCallback((slug: string, input: InputKind) => {
+    const index = displayCategories.findIndex(category => category.slug === slug);
+    if (index < 0) return;
+    if (index !== activeCategory) dispatch(homeNavigationActions.setActiveCategory(index));
+    if (input === 'pointer') return;
+    content.scrollTo(index * rowHeight, input === 'key' ? undefined : { instant: true });
+    // Web scroll events refine the visible row. On TV, wait until the slide stops.
+    if (!builtForTizen) setFirstShownRow(index);
+  });
   // Which lists load is the store's (homeFeedMiddleware): Home says which rows it wants.
   useEffect(() => {
     const wanted: Record<string, RowIntent> = {};
@@ -364,29 +290,18 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const onRowSelect = useStableCallback(navigation.openDetails);
   const onRowMediaLoaded = useStableCallback(onMediaLoaded);
   const onRowReady = useStableCallback((slug: string) => onRowDataReady(slug));
-  // The sidebar is memoized: stable callbacks keep row moves from re-rendering it.
-  const onSidebarAction = useStableCallback(navigation.onSidebarAction);
+  // The rail is memoized: stable callbacks keep row moves from re-rendering it.
   const onSidebarSettings = useStableCallback(navigation.openSettings);
   const onSidebarSearch = useStableCallback(navigation.openSearch);
-  const [logout] = useLogoutMutation();
-  const onEnterProfile = useStableCallback(() =>
-    dispatch(homeNavigationActions.setActiveRegion('profileMenu'))
-  );
-  /** Leave Home for a profile screen; coming back, the rail (not the panel) has the keyboard. */
-  const openProfileScreen = (route: AppRoute) => {
-    dispatch(homeNavigationActions.setActiveRegion('sidebar'));
-    navigate(route, { parent: { type: 'home' } });
-  };
-  const sidebarProfile = useMemo(
-    () => (sessionId && currentUser ? { session: sessionId, user: currentUser } : null),
-    [currentUser, sessionId]
-  );
-  const onSidebarHover = useStableCallback(() =>
-    dispatch(homeNavigationActions.setActiveRegion('sidebar'))
-  );
-  const onEnterNotifications = useStableCallback(() =>
-    dispatch(homeNavigationActions.setActiveRegion('notifications'))
-  );
+  const onOpenNotification = useStableCallback((notification: NotificationItem) => {
+    const target = notificationPlayable(notification);
+    if (target) navigation.openPlayer(target, { type: 'home' });
+    else
+      navigate(
+        { type: 'showDetails', mediaId: notification.mediaId },
+        { parent: { type: 'home' } }
+      );
+  });
   const rowCallbacks = useRef(
     new Map<
       string,
@@ -415,106 +330,99 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
 
   if (view === 'browse' && isLoading) {
     return (
-      <PageContainer>
-        <FullPageState>
+      <main className={styles.page}>
+        <div className={styles.fullPageState}>
           <Spinner text="Loading categories..." size={32} />
-        </FullPageState>
-      </PageContainer>
+        </div>
+      </main>
     );
   }
   if (view === 'browse' && feed.failed) {
     return (
-      <PageContainer>
-        <FullPageState>Failed to load categories.</FullPageState>
-      </PageContainer>
+      <main className={styles.page}>
+        <div className={styles.fullPageState}>Failed to load categories.</div>
+      </main>
     );
   }
 
   return (
-    <PageContainer ref={navigation.attachPage} tabIndex={-1}>
-      <div inert={trakt.open} style={{ display: 'contents' }}>
+    <main ref={navigation.attachPage} className={styles.page} tabIndex={-1}>
+      <div inert={trakt.open} className={styles.contents}>
         {view === 'browse' ? (
-          <>
-            <PreparedMediaHero
-              media={selectedMedia}
-              preparationInputs={preparationInputs}
-              onReady={onHeroReady}
-            />
-            <Content
-              ref={builtForTizen ? undefined : content.ref}
-              $margin={margin}
-              onScroll={builtForTizen ? undefined : handleContentScroll}
-            >
-              <Rows
-                ref={builtForTizen ? content.ref : undefined}
-                style={{ height: displayCategories.length * rowHeight }}
-              >
-                {mountedRows.map(index => {
-                  const category = displayCategories[index];
-                  return (
-                    <HomeRow
-                      key={category.slug}
-                      top={index * rowHeight}
-                      rowRef={callbacksForRow(category.slug, index).ref}
-                      category={category}
-                      categoryIndex={index}
-                      initialIndex={selectedByCategory[category.slug] ?? 0}
-                      selectedIndex={selectedByCategory[category.slug] ?? 0}
-                      onSelectionChange={callbacksForRow(category.slug, index).onSelectionChange}
-                      loadIntent={
-                        rowLoadState.visible.has(index)
-                          ? 'visible'
-                          : rowLoadState.prefetch.has(index) || rowLoadState.warm.has(index)
-                            ? 'prefetch'
-                            : 'dormant'
-                      }
-                      visible={rowLoadState.visible.has(index)}
-                      warm={rowLoadState.warm.has(index)}
-                      mediaWidth={mediaWidth}
-                      mediaPerPage={mediaPerPage}
-                      gap={gap}
-                      peekWidth={peekWidth}
-                      isCurrentRow={activeCategory === index}
-                      onDataReady={onRowReady}
-                      active={
-                        interactive &&
-                        !trakt.open &&
-                        activeRegion === 'carousel' &&
-                        activeCategory === index
-                      }
-                      onActive={onRowActive}
-                      onInterest={publishInterestAfterScroll}
-                      onMediaLoaded={onRowMediaLoaded}
-                      progress={progressEntries}
-                      mediaOverride={
-                        category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
-                      }
-                      onSelect={onRowSelect}
-                    />
-                  );
-                })}
-              </Rows>
-            </Content>
-            <HomeSidebar
-              active={sidebarActive}
-              expanded={notificationsVisible || profileMenuVisible}
-              showSettings={isAdmin}
-              onAction={onSidebarAction}
-              onHover={onSidebarHover}
+          <NavigationProvider>
+            <HomeBrowse
+              interactive={interactive && !trakt.open}
+              initialRowSlug={displayCategories[activeCategory]?.slug}
+              onRowFocus={onRowFocus}
               onSettings={onSidebarSettings}
               onSearch={onSidebarSearch}
-              profile={sidebarProfile}
-              onEnterProfile={onEnterProfile}
-              onEnterNotifications={onEnterNotifications}
-              onSelectedChange={setSidebarItem}
-              unreadCount={notifications.unreadCount}
-              hasNotifications={
-                notifications.unreadCount > 0 ||
-                notifications.hasRead ||
-                notifications.unread.items.length > 0
-              }
-            />
-          </>
+              onOpenNotification={onOpenNotification}
+            >
+              <PreparedMediaHero
+                media={selectedMedia}
+                preparationInputs={preparationInputs}
+                onReady={onHeroReady}
+              />
+              <div
+                ref={builtForTizen ? undefined : content.ref}
+                className={builtForTizen ? styles.contentTv : styles.contentWeb}
+                onScroll={builtForTizen ? undefined : handleContentScroll}
+              >
+                <FocusGroup
+                  id={HOME_NAV.rows}
+                  layout="vertical"
+                  // Past the last row loaded, Down waits for the next page of lists
+                  more={{ end: feed.hasMoreRows }}
+                  onMore={() => {
+                    feed.requestNextPage();
+                  }}
+                >
+                  <div
+                    ref={builtForTizen ? content.ref : undefined}
+                    className={builtForTizen ? styles.rowsTv : styles.rows}
+                    style={{ height: displayCategories.length * rowHeight }}
+                  >
+                    {mountedRows.map(index => {
+                      const category = displayCategories[index];
+                      return (
+                        <HomeRow
+                          key={category.slug}
+                          top={index * rowHeight}
+                          rowRef={callbacksForRow(category.slug, index).ref}
+                          category={category}
+                          categoryIndex={index}
+                          initialIndex={selectedByCategory[category.slug] ?? 0}
+                          onSelectionChange={
+                            callbacksForRow(category.slug, index).onSelectionChange
+                          }
+                          loadIntent={
+                            rowLoadState.visible.has(index)
+                              ? 'visible'
+                              : rowLoadState.prefetch.has(index) || rowLoadState.warm.has(index)
+                                ? 'prefetch'
+                                : 'dormant'
+                          }
+                          visible={rowLoadState.visible.has(index)}
+                          warm={rowLoadState.warm.has(index)}
+                          geometry={geometry}
+                          isCurrentRow={activeCategory === index}
+                          onDataReady={onRowReady}
+                          onActive={onRowActive}
+                          onInterest={publishInterestAfterScroll}
+                          onMediaLoaded={onRowMediaLoaded}
+                          progress={progressEntries}
+                          mediaOverride={
+                            category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
+                          }
+                          onSelect={onRowSelect}
+                        />
+                      );
+                    })}
+                  </div>
+                </FocusGroup>
+              </div>
+            </HomeBrowse>
+          </NavigationProvider>
         ) : view === 'details' && selectedMedia ? (
           <PreparedMediaDetails
             media={selectedMedia}
@@ -523,7 +431,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             preparationInputs={preparationInputs}
           />
         ) : view === 'details' ? (
-          <FullPageState role="status">
+          <div className={styles.fullPageState} role="status">
             {routeQuery.isError ? (
               <div>
                 <p>
@@ -539,7 +447,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             ) : (
               <Spinner />
             )}
-          </FullPageState>
+          </div>
         ) : view === 'player' && playable ? (
           <PlayerView
             playable={playable}
@@ -552,59 +460,10 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
           />
         ) : null}
       </div>
-      {notificationsVisible && (
-        <NotificationsMenu
-          unread={notifications.unread}
-          read={notifications.read}
-          unreadCount={notifications.unreadCount}
-          hasRead={notifications.hasRead}
-          showRead={notifications.showRead}
-          focused={notificationsFocused}
-          railExpanded
-          onToggleShowRead={notifications.toggleShowRead}
-          onMarkAllRead={notifications.markAllRead}
-          onOpen={notification => {
-            if (!notification.readAt) notifications.markRead(notification.id);
-            const target = notificationPlayable(notification);
-            if (target) navigation.openPlayer(target, { type: 'home' });
-            else
-              navigate(
-                { type: 'showDetails', mediaId: notification.mediaId },
-                { parent: { type: 'home' } }
-              );
-          }}
-          onExit={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
-          onPointerEnter={() => dispatch(homeNavigationActions.setActiveRegion('notifications'))}
-          onPointerLeave={() => navigation.onSidebarAction('right')}
-        />
-      )}
-      {profileMenuVisible && sidebarProfile && (
-        <ProfileMenu
-          profile={sidebarProfile}
-          focused={profileMenuFocused}
-          railExpanded
-          onSwitch={() => openProfileScreen({ type: 'profiles' })}
-          onEdit={() => openProfileScreen({ type: 'editProfile', userId: sidebarProfile.user.id })}
-          onLogout={() => {
-            // Who's watching (or sign-in, with no other profile) takes over once it is gone:
-            // every session of this profile on the device ends, or it would still be listed.
-            dispatch(homeNavigationActions.setActiveRegion('sidebar'));
-            void logOutSessions(
-              availableSessions
-                .filter(({ user }) => user.id === sidebarProfile.user.id)
-                .map(({ session }) => session),
-              session => logout({ session })
-            );
-          }}
-          onExit={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
-          onPointerEnter={() => dispatch(homeNavigationActions.setActiveRegion('profileMenu'))}
-          onPointerLeave={() => navigation.onSidebarAction('right')}
-        />
-      )}
       {interactive && trakt.open && sessionId && (
         <TraktModal sessionId={sessionId} onConnected={trakt.connected} onDismiss={trakt.dismiss} />
       )}
-    </PageContainer>
+    </main>
   );
 };
 

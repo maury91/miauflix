@@ -155,6 +155,8 @@ export function useHomeFeed({
     failed: isError || !listPages,
     listsReady,
     progressReady,
+    /** More lists exist past the last page loaded. */
+    hasMoreRows: Boolean(hasNextPage),
     requestNextPage,
   };
 }

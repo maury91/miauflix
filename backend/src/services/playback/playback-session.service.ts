@@ -27,6 +27,7 @@ import {
   AudioPlaybackError,
   type AudioPlaybackPreferences,
   type AudioPlaybackService,
+  type AudioStreamStage,
   type PlaybackDelivery,
 } from './audio-playback.service';
 import { assessSwarm, type SwarmSample } from './swarm-health';
@@ -96,6 +97,14 @@ export interface LivePlayback {
   filePath?: string;
 }
 
+/** Where a playback's converted stream is while its player waits for it (after a seek, say). */
+export interface PlaybackStreamStage {
+  userId: string;
+  sessionId?: string;
+  playbackId: string;
+  stage: AudioStreamStage;
+}
+
 /** A candidate source being checked while a viewer waits for playback to start. */
 export interface PlaybackSourceAttempt {
   userId: string;
@@ -124,6 +133,8 @@ const INSPECTION_RETRY_DELAYS_MS = [5_000, 15_000];
 const MAX_CONVERSION_ALTERNATIVES = 3;
 
 interface LiveSession {
+  /** Hash of the session's streaming key, to tell which playback a stream request serves. */
+  keyHash: string;
   sourceId: number;
   userId: string;
   sessionId?: string;
@@ -197,6 +208,7 @@ export class PlaybackSessionService {
   private readonly grants: PlaybackGrantRepository;
   private readonly deliveryListeners = new Set<(event: PlaybackDeliveryUpdate) => void>();
   private readonly attemptListeners = new Set<(event: PlaybackSourceAttempt) => void>();
+  private readonly stageListeners = new Set<(event: PlaybackStreamStage) => void>();
   /** Sessions that may still be streaming, so a failed source can move them elsewhere. */
   private readonly liveSessions = new Map<string, LiveSession>();
   /** Sessions whose viewer position is being compared with their remux's progress. */
@@ -420,6 +432,7 @@ export class PlaybackSessionService {
 
     const playbackId = randomBytes(16).toString('hex');
     this.rememberSession(playbackId, {
+      keyHash: this.hash(streamingKey),
       sourceId: prepared.source.id,
       userId,
       sessionId: options.sessionId,
@@ -725,6 +738,29 @@ export class PlaybackSessionService {
   onSourceAttempt(listener: (event: PlaybackSourceAttempt) => void): () => void {
     this.attemptListeners.add(listener);
     return () => this.attemptListeners.delete(listener);
+  }
+
+  /** Subscribe to the stages of streams being started; returns the unsubscribe function. */
+  onStreamStage(listener: (event: PlaybackStreamStage) => void): () => void {
+    this.stageListeners.add(listener);
+    return () => this.stageListeners.delete(listener);
+  }
+
+  /** Tell the viewer of the playback a streaming key belongs to where its stream is. */
+  reportStreamStage(streamingKey: string, stage: AudioStreamStage): void {
+    const keyHash = this.hash(streamingKey);
+    for (const [playbackId, live] of this.liveSessions) {
+      if (live.keyHash !== keyHash) continue;
+      const event = { userId: live.userId, sessionId: live.sessionId, playbackId, stage };
+      for (const listener of this.stageListeners) {
+        try {
+          listener(event);
+        } catch (error) {
+          logger.warn('PlaybackSessionService', 'Stream stage listener failed', error);
+        }
+      }
+      return;
+    }
   }
 
   /** Subscribe to background probe results; returns the unsubscribe function. */

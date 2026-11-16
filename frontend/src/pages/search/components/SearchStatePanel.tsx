@@ -1,14 +1,19 @@
+import { Button, Disclosure, EmptyState, Message, Text } from '@shared/design-system';
 import { presentError } from '@shared/lib/api-error';
-import { StatePanel, type StatePanelDetail } from '@shared/ui/state-panel/StatePanel';
-import type { FC } from 'react';
-import styled from 'styled-components';
+import { FocusGroup } from '@shared/navigation';
+import type { ReactNode } from 'react';
 
+import { SEARCH_NAV } from '../searchNav';
 import { searchPanelKind, type SearchStatus } from './searchPanel';
+import * as styles from './searchStatePanel.css';
 
-function technicalDetails(error: unknown): StatePanelDetail[] {
+import WarningIcon from '~icons/mdi/alert-outline';
+import SearchIcon from '~icons/mdi/magnify';
+
+function technicalDetails(error: unknown): { label: string; value: ReactNode }[] {
   const presentation = presentError(error, '');
   if (presentation.code === undefined) return [];
-  const items: StatePanelDetail[] = [];
+  const items: { label: string; value: ReactNode }[] = [];
   if (presentation.message) items.push({ label: 'Error', value: presentation.message });
   if (presentation.detail)
     items.push({ label: 'Server error', value: <code>{presentation.detail}</code> });
@@ -18,59 +23,50 @@ function technicalDetails(error: unknown): StatePanelDetail[] {
   return items;
 }
 
-// The search page sizes text in vw; the panel scales with this.
-const Area = styled.div`
-  margin-top: 1vh;
-  font-size: 1.15vw;
-`;
-
 interface SearchStatePanelProps {
   status: SearchStatus;
   error: unknown;
   query: string;
   isGenre: boolean;
   resultCount: number;
-  /** Focused action (0: main action, 1: technical details), or null. */
-  focusedIndex: number | null;
-  onFocusAction: (index: number) => void;
-  registerAction: (index: number, element: HTMLButtonElement | null) => void;
   onRetry: () => void;
   onClear: () => void;
 }
 
-/** "No results" or "unavailable" in place of the results row, with what to do next. */
-export const SearchStatePanel: FC<SearchStatePanelProps> = ({
+/**
+ * "No results" or "unavailable" in place of the results row, with what to do next: an EmptyState
+ * whose action is the `search-panel` group's first item, then (for a failure the server explained)
+ * the technical details, collapsed.
+ */
+export function SearchStatePanel({
   status,
   error,
   query,
   isGenre,
   resultCount,
-  focusedIndex,
-  onFocusAction,
-  registerAction,
   onRetry,
   onClear,
-}) => {
+}: SearchStatePanelProps) {
   const kind = searchPanelKind(status, resultCount);
   if (!kind) return null;
-  const actionProps = (index: number) => ({
-    focused: focusedIndex === index,
-    onFocus: () => onFocusAction(index),
-    ref: (element: HTMLButtonElement | null) => registerAction(index, element),
-  });
 
   if (kind === 'empty') {
     return (
-      <Area>
-        <StatePanel
-          icon="search"
-          title={isGenre ? `Nothing popular in “${query}” yet` : `No results for ‘${query.trim()}’`}
-          description={
-            isGenre ? 'Try another genre.' : 'Try a shorter title or check the spelling.'
+      <FocusGroup id={SEARCH_NAV.panel} layout="vertical">
+        <EmptyState
+          visual={<SearchIcon />}
+          heading={
+            isGenre ? `Nothing popular in “${query}” yet` : `No results for ‘${query.trim()}’`
           }
-          action={{ label: 'Clear search', onClick: onClear, ...actionProps(0) }}
-        />
-      </Area>
+          actions={
+            <Button navId={SEARCH_NAV.panelAction} onClick={onClear}>
+              Clear search
+            </Button>
+          }
+        >
+          {isGenre ? 'Try another genre.' : 'Try a shorter title or check the spelling.'}
+        </EmptyState>
+      </FocusGroup>
     );
   }
 
@@ -81,30 +77,54 @@ export const SearchStatePanel: FC<SearchStatePanelProps> = ({
   const title = presentation.needsConfiguration
     ? 'Search needs to be set up'
     : 'Search is temporarily unavailable';
-  const description = presentation.needsConfiguration
-    ? presentation.message
-    : presentation.code === 'service_unavailable'
+  const description =
+    presentation.needsConfiguration || presentation.code === 'service_unavailable'
       ? presentation.message
       : 'Try again in a moment.';
   return (
-    <Area>
-      <StatePanel
-        role="alert"
-        icon="warning"
-        title={title}
-        description={description}
-        hint={presentation.needsConfiguration ? presentation.hint : undefined}
-        action={{ label: 'Try again', onClick: onRetry, ...actionProps(0) }}
-        details={
-          items.length
-            ? {
-                items,
-                note: 'Search the server logs (docker logs) for the error id; the browser console has the full response.',
-                toggle: actionProps(1),
-              }
-            : undefined
-        }
-      />
-    </Area>
+    <FocusGroup id={SEARCH_NAV.panel} layout="vertical">
+      <div role="alert">
+        <EmptyState
+          visual={<WarningIcon />}
+          heading={title}
+          message={
+            presentation.needsConfiguration && presentation.hint ? (
+              <Message tone="warning">{presentation.hint}</Message>
+            ) : undefined
+          }
+          actions={
+            <Button navId={SEARCH_NAV.panelAction} onClick={onRetry}>
+              Try again
+            </Button>
+          }
+        >
+          {description}
+        </EmptyState>
+      </div>
+      {items.length > 0 && (
+        <div className={styles.details}>
+          <Disclosure navId={SEARCH_NAV.panelDetails} title="Technical details" headingLevel={3}>
+            <dl className={styles.list}>
+              {items.map(item => (
+                <div key={item.label} className={styles.item}>
+                  <dt className={styles.term}>
+                    <Text as="span" tone="secondary">
+                      {item.label}
+                    </Text>
+                  </dt>
+                  <dd className={styles.value}>
+                    <Text as="span">{item.value}</Text>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <Text tone="secondary" variant="caption">
+              Search the server logs (docker logs) for the error id; the browser console has the
+              full response.
+            </Text>
+          </Disclosure>
+        </div>
+      )}
+    </FocusGroup>
   );
-};
+}

@@ -309,6 +309,50 @@ describe('PlayerView', () => {
     expect(await screen.findByText('Trying source 2 of 4 for “Clayface”…')).toBeInTheDocument();
   });
 
+  it("tells where a playing session's converted stream is, not which source is tried", async () => {
+    createSession.mockReturnValue({
+      unwrap: () =>
+        Promise.resolve({
+          ...session,
+          sourceAttempt: { position: 4, total: 9 },
+          streamUrl: '/api/stream/key/audio',
+          delivery: {
+            mode: 'audio-transcode',
+            audioCodec: 'ac3',
+            durationSeconds: 200,
+            mimeType: 'video/mp4',
+          },
+        }),
+    });
+    const { store } = render(
+      <PlayerView playable={playable} title="Seek fixture" onBack={vi.fn()} />
+    );
+    await waitFor(() => expect(startAudioPlayback).toHaveBeenCalled());
+
+    expect(screen.getByText('Preparing “Seek fixture” for playback…')).toBeInTheDocument();
+    expect(screen.queryByText(/Trying source/)).not.toBeInTheDocument();
+    act(() => {
+      store.dispatch(
+        realtimeActions.playbackStageReceived({
+          type: 'playback-stage',
+          playbackId: session.playbackId,
+          stage: 'downloading',
+        })
+      );
+    });
+    expect(screen.getByText('Downloading this part of “Seek fixture”…')).toBeInTheDocument();
+    act(() => {
+      store.dispatch(
+        realtimeActions.playbackStageReceived({
+          type: 'playback-stage',
+          playbackId: session.playbackId,
+          stage: 'converting',
+        })
+      );
+    });
+    expect(screen.getByText('Converting “Seek fixture” for playback…')).toBeInTheDocument();
+  });
+
   it('retries source preparation and reports when the selected source is ready', async () => {
     createSession
       .mockReturnValueOnce({

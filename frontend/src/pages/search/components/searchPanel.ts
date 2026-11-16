@@ -12,17 +12,6 @@ export function searchPanelKind(
   return status === 'ready' ? 'empty' : null;
 }
 
-/** Whether a failure carries details from the server worth a "Technical details" toggle. */
+/** Whether a failure carries details from the server worth a "Technical details" disclosure. */
 export const hasTechnicalDetails = (error: unknown): boolean =>
   presentError(error, '').code !== undefined;
-
-/** Focusable actions in the panel: the main action, then "Technical details" when there are any. */
-export function searchPanelActionCount(
-  status: SearchStatus,
-  resultCount: number,
-  error: unknown
-): number {
-  const kind = searchPanelKind(status, resultCount);
-  if (!kind) return 0;
-  return kind === 'error' && hasTechnicalDetails(error) ? 2 : 1;
-}

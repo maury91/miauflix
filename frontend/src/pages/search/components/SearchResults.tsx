@@ -1,83 +1,28 @@
 import type { SearchResultDetailDto, SearchResultDto } from '@miauflix/backend';
-import { PALETTE } from '@shared/config/constants';
-import { formatRuntime } from '@shared/lib/media.utils';
-import { artworkUrl } from '@shared/lib/media.utils';
-import { ErrorNotice, PosterCard } from '@shared/ui';
-import { MetadataDot, MetadataRating } from '@shared/ui/metadata/metadata.styles';
+import { Heading, MediaTile, Message, Text } from '@shared/design-system';
+import { artworkUrl, formatRuntime } from '@shared/lib/media.utils';
+import { FocusGroup, useActiveIdWithin } from '@shared/navigation';
+import { ErrorNotice } from '@shared/ui';
 import { searchResultKey } from '@store/slices/search';
-import { type FC, Fragment, type ReactNode } from 'react';
-import styled from 'styled-components';
+import { useEffect, useRef } from 'react';
 
-import { SectionTitle } from './search.styles';
+import { SEARCH_NAV } from '../searchNav';
 import { searchPanelKind } from './searchPanel';
+import * as styles from './searchResults.css';
 import { SearchStatePanel } from './SearchStatePanel';
 
-import StarIcon from '~icons/mdi/star';
-
-/** Poster width as a share of the viewport, matching five cards across the results column. */
-const CARD_WIDTH_VW = 10.9;
-
-const Header = styled.div`
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 2vw;
-`;
-
-const Count = styled.span`
-  color: rgba(255, 255, 255, 0.7);
-  font:
-    400 1.05vw 'Poppins',
-    sans-serif;
-  white-space: nowrap;
-`;
-
-const Row = styled.div`
-  display: flex;
-  gap: 1.1vw;
-  /* Room for the focus outline, which the scroll container would otherwise clip. */
-  margin: -0.4vw;
-  padding: 0.4vw;
-  overflow-x: auto;
-  overflow-y: hidden;
-  font-size: 0.95vw;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const Message = styled.p`
-  margin: 1vh 0 0;
-  color: ${PALETTE.text.secondary};
-  font:
-    400 1.1vw 'Poppins',
-    sans-serif;
-`;
-
-function resultMeta(result: SearchResultDto, detail: SearchResultDetailDto | undefined): ReactNode {
-  const parts: ReactNode[] = [];
+/** The tile's supporting line: seasons or runtime, year and rating ("2021 · 2h 35m · ★ 8.0"). */
+function resultMeta(
+  result: SearchResultDto,
+  detail: SearchResultDetailDto | undefined
+): string | undefined {
+  const parts: string[] = [];
   const year = result.releaseDate.slice(0, 4);
-  if (result._type === 'tvshow' && detail?.seasonCount)
-    parts.push(<span>S{detail.seasonCount}</span>);
-  if (year) parts.push(<span>{year}</span>);
-  if (result._type === 'movie' && detail?.runtime)
-    parts.push(<span>{formatRuntime(detail.runtime)}</span>);
-  if (result.rating > 0)
-    parts.push(
-      <MetadataRating>
-        <StarIcon aria-hidden="true" />
-        {result.rating.toFixed(1)}
-      </MetadataRating>
-    );
-  return parts.map((part, index) => (
-    <Fragment key={index}>
-      {index > 0 && <MetadataDot />}
-      {part}
-    </Fragment>
-  ));
+  if (result._type === 'tvshow' && detail?.seasonCount) parts.push(`S${detail.seasonCount}`);
+  if (year) parts.push(year);
+  if (result._type === 'movie' && detail?.runtime) parts.push(formatRuntime(detail.runtime));
+  if (result.rating > 0) parts.push(`★ ${result.rating.toFixed(1)}`);
+  return parts.length ? parts.join(' · ') : undefined;
 }
 
 interface SearchResultsProps {
@@ -88,56 +33,64 @@ interface SearchResultsProps {
   results: SearchResultDto[];
   details: Record<string, SearchResultDetailDto>;
   totalResults: number;
-  focusedIndex: number | null;
+  /** More pages to come: a move past the last tile waits on the next one. */
+  hasMore: boolean;
+  onLoadMore: () => void;
   onOpen: (index: number) => void;
-  onFocusResult: (index: number) => void;
-  registerResult: (index: number, element: HTMLButtonElement | null) => void;
   /** What was searched, for the no-results panel. */
   query: string;
   isGenre: boolean;
-  /** Focused action of the no-results / error panel, or null. */
-  panelFocusedIndex: number | null;
-  onFocusPanelAction: (index: number) => void;
-  registerPanelAction: (index: number, element: HTMLButtonElement | null) => void;
   onRetry: () => void;
   onClear: () => void;
 }
 
-/** Results row; keeps the previous results visible while a new search is loading. */
-export const SearchResults: FC<SearchResultsProps> = ({
+/**
+ * The results mosaic (the `search-results` grid group of Home's landscape MediaTiles, scrolled down
+ * to reveal the focused one); keeps the previous results visible while a new search is loading.
+ * Without results, the state panel takes its place.
+ */
+export function SearchResults({
   heading,
   status,
   error,
   results,
   details,
   totalResults,
-  focusedIndex,
+  hasMore,
+  onLoadMore,
   onOpen,
-  onFocusResult,
-  registerResult,
   query,
   isGenre,
-  panelFocusedIndex,
-  onFocusPanelAction,
-  registerPanelAction,
   onRetry,
   onClear,
-}) => {
+}: SearchResultsProps) {
   const panel = searchPanelKind(status, results.length);
-  const cardPixels =
-    typeof window === 'undefined' ? 200 : (window.innerWidth * CARD_WIDTH_VW) / 100;
+  const tilePixels =
+    typeof window === 'undefined' ? 200 : (window.innerWidth * styles.TILE_WIDTH_VW) / 100;
+  const tiles = useRef(new Map<string, HTMLElement>());
+  const activeId = useActiveIdWithin(SEARCH_NAV.results);
+
+  // The layer focuses without scrolling: bring the focused tile's row into view
+  useEffect(() => {
+    if (activeId) tiles.current.get(activeId)?.scrollIntoView?.({ block: 'nearest' });
+  }, [activeId]);
+
   return (
-    <section aria-label={heading} aria-busy={status === 'loading'}>
+    <section className={styles.section} aria-label={heading} aria-busy={status === 'loading'}>
       {/* The panel says what happened, so it replaces the heading. */}
       {!panel && (
-        <Header>
-          <SectionTitle>{heading}</SectionTitle>
+        <div className={styles.header}>
+          <Heading level={2} variant="heading">
+            {heading}
+          </Heading>
           {status === 'ready' && totalResults > 0 && (
-            <Count>
-              {totalResults} {totalResults === 1 ? 'result' : 'results'}
-            </Count>
+            <div className={styles.count}>
+              <Text as="span" tone="secondary">
+                {totalResults} {totalResults === 1 ? 'result' : 'results'}
+              </Text>
+            </div>
           )}
-        </Header>
+        </div>
       )}
       <SearchStatePanel
         status={status}
@@ -145,40 +98,61 @@ export const SearchResults: FC<SearchResultsProps> = ({
         query={query}
         isGenre={isGenre}
         resultCount={results.length}
-        focusedIndex={panelFocusedIndex}
-        onFocusAction={onFocusPanelAction}
-        registerAction={registerPanelAction}
         onRetry={onRetry}
         onClear={onClear}
       />
       {results.length > 0 && (status === 'error' || error != null) && (
-        <Message role="status">
-          <ErrorNotice
-            error={error}
-            fallback="Part of this search failed. Try again in a moment."
-          />
-        </Message>
-      )}
-      {status === 'loading' && !results.length && <Message role="status">Searching…</Message>}
-      {results.length > 0 && (
-        <Row>
-          {results.map((result, index) => (
-            <PosterCard
-              key={searchResultKey(result)}
-              ref={element => registerResult(index, element)}
-              poster={result.poster ? artworkUrl(result.poster, 'card', cardPixels) : ''}
-              title={result.title}
-              meta={resultMeta(result, details[searchResultKey(result)])}
-              width={`${CARD_WIDTH_VW}vw`}
-              focused={focusedIndex === index}
-              tabIndex={focusedIndex === index ? 0 : -1}
-              onFocus={() => onFocusResult(index)}
-              onMouseEnter={() => onFocusResult(index)}
-              onClick={() => onOpen(index)}
+        <div className={styles.notice}>
+          {/* Polite: a later page can fail while focus stays on a tile */}
+          <Message tone="warning" live="polite">
+            <ErrorNotice
+              error={error}
+              fallback="Part of this search failed. Try again in a moment."
             />
-          ))}
-        </Row>
+          </Message>
+        </div>
+      )}
+      {status === 'loading' && !results.length && (
+        <Text role="status" tone="secondary">
+          Searching…
+        </Text>
+      )}
+      {results.length > 0 && (
+        <FocusGroup
+          id={SEARCH_NAV.results}
+          layout="grid"
+          columns={styles.RESULT_COLUMNS}
+          more={{ end: hasMore }}
+          onMore={onLoadMore}
+        >
+          <div className={styles.mosaic}>
+            {results.map((result, index) => {
+              const key = searchResultKey(result);
+              const navId = SEARCH_NAV.result(key);
+              const logo = details[key]?.logo;
+              return (
+                <div key={key} className={styles.cell}>
+                  <MediaTile
+                    ref={element => {
+                      if (element) tiles.current.set(navId, element);
+                      else tiles.current.delete(navId);
+                    }}
+                    navId={navId}
+                    title={result.title}
+                    supportingText={resultMeta(result, details[key])}
+                    artwork={
+                      result.backdrop ? artworkUrl(result.backdrop, 'card', tilePixels) : null
+                    }
+                    logo={logo ? artworkUrl(logo, 'logo', tilePixels * 0.7) : null}
+                    labelPlacement="overlay"
+                    onClick={() => onOpen(index)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </FocusGroup>
       )}
     </section>
   );
-};
+}

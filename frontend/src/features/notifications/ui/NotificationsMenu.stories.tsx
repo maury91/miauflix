@@ -25,13 +25,11 @@ const baseArgs: NotificationsMenuProps = {
   hasRead: true,
   showRead: false,
   focused: true,
-  railExpanded: true,
   onToggleShowRead: fn(),
   onMarkAllRead: fn(),
   onOpen: fn(),
   onExit: fn(),
   onPointerEnter: fn(),
-  onPointerLeave: fn(),
 };
 
 const meta = {

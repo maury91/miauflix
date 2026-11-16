@@ -1,25 +1,16 @@
 import { type AppRoute, getRouteParent, navigate, navigateBack } from '@app/router';
 import type { MediaDto, PlayableRef } from '@miauflix/backend';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import type { HomeAction, NavigationOutcome } from '@shared/lib/homeNavigation';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
-import { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useStore } from 'react-redux';
 
-import type { CategoryRowHandle } from '../components/CategoryRow';
 import type { HomeView } from './useMediaRoute';
 
 /**
- * Holding a direction key scrolls at this pace (ms per card or row) instead of the key-repeat
- * rate, for a steady carousel that the smooth scrolling turns into one continuous motion.
- */
-const HELD_KEY_STEP_MS = 90;
-
-/**
- * Remote and keyboard navigation for Home's three screens, moving between them, and where
- * focus lands: rows and the sidebar while browsing, the details page, and Back from the player.
- * Returning to browse refocuses the card that was selected.
+ * Browse, details and the player own their navigation. Home handles Back out of details and
+ * the player.
  */
 export function useHomeNavigation({
   route,
@@ -27,10 +18,7 @@ export function useHomeNavigation({
   playable,
   enabled,
   sessionId,
-  categories,
-  requestNextPage,
   onBrowseSelection,
-  onRowFocus,
 }: {
   route: AppRoute;
   view: HomeView;
@@ -38,45 +26,21 @@ export function useHomeNavigation({
   /** Interactive and no overlay open. */
   enabled: boolean;
   sessionId: string | null;
-  categories: ReadonlyArray<{ slug: string }>;
-  /** Load more rows; false when there are none. */
-  requestNextPage: () => boolean;
   /** The card that becomes the browse selection (focused or opened). */
   onBrowseSelection: (media: MediaDto) => void;
-  /** Keyboard navigation moved to this row: bring it into view. */
-  onRowFocus: (categoryIndex: number) => void;
 }) {
   const dispatch = useDispatch<AppDispatch>();
-  const activeRegion = useSelector((state: RootState) => state.homeNavigation.activeRegion);
-  const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
-  const selectedByCategory = useSelector(
-    (state: RootState) => state.homeNavigation.selectedByCategory
-  );
-  const pendingCategoryAdvance = useSelector(
-    (state: RootState) => state.homeNavigation.pendingCategoryAdvance
-  );
-  const pageRef = useRef<HTMLElement | null>(null);
-  const rowRefs = useRef(new Map<number, CategoryRowHandle>());
-  const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
-  const browseFocusState = useRef({ activeCategory, categories, selectedByCategory, onRowFocus });
-  browseFocusState.current = { activeCategory, categories, selectedByCategory, onRowFocus };
-
-  const selectedIndexIn = useCallback(
-    (categoryIndex: number) => {
-      const category = categories[categoryIndex];
-      return category ? (selectedByCategory[category.slug] ?? 0) : 0;
-    },
-    [categories, selectedByCategory]
-  );
+  const store = useStore<RootState>();
 
   const onCardActive = useCallback(
     (categoryIndex: number, _mediaIndex: number, media: MediaDto) => {
       // Every move in a row reports it; an unchanged row would still notify every subscriber.
-      if (browseFocusState.current.activeCategory !== categoryIndex)
+      // Read at call time: a render-time copy can lag behind a dispatch made since
+      if (store.getState().homeNavigation.activeCategory !== categoryIndex)
         dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
       onBrowseSelection(media);
     },
-    [dispatch, onBrowseSelection]
+    [dispatch, onBrowseSelection, store]
   );
 
   const openDetails = useCallback(
@@ -93,56 +57,8 @@ export function useHomeNavigation({
     [dispatch, onBrowseSelection]
   );
 
-  const moveCategory = useCallback(
-    (delta: -1 | 1) => {
-      if (!categories.length) return;
-      let nextCategory = activeCategory + delta;
-      // Past the last loaded row: advance once the next page of rows arrives.
-      if (nextCategory >= categories.length && delta === 1 && requestNextPage()) {
-        dispatch(homeNavigationActions.setPendingCategoryAdvance(true));
-        return;
-      }
-      // Any other move cancels a pending advance, so it cannot undo this one once rows arrive.
-      if (pendingCategoryAdvance) dispatch(homeNavigationActions.setPendingCategoryAdvance(false));
-      // Skip rows that loaded empty; stop on a row that is still loading.
-      let destinationPending = false;
-      while (nextCategory >= 0 && nextCategory < categories.length) {
-        const row = rowRefs.current.get(nextCategory);
-        if (row?.focusIndex(selectedIndexIn(nextCategory))) break;
-        destinationPending = true;
-        if (!row || !row.isEmpty()) break;
-        nextCategory += delta;
-      }
-      if (nextCategory < 0 || nextCategory >= categories.length) return;
-      if (nextCategory === activeCategory) return;
-      dispatch(homeNavigationActions.setActiveCategory(nextCategory));
-      onRowFocus(nextCategory);
-      // Keep keys working while the destination row mounts its cards.
-      if (destinationPending) pageRef.current?.focus({ preventScroll: true });
-    },
-    [
-      activeCategory,
-      categories.length,
-      dispatch,
-      onRowFocus,
-      pendingCategoryAdvance,
-      requestNextPage,
-      selectedIndexIn,
-    ]
-  );
-
-  useEffect(() => {
-    if (!pendingCategoryAdvance || activeCategory + 1 >= categories.length) return;
-    dispatch(homeNavigationActions.setPendingCategoryAdvance(false));
-    dispatch(homeNavigationActions.setActiveCategory(activeCategory + 1));
-    onRowFocus(activeCategory + 1);
-  }, [activeCategory, categories.length, dispatch, onRowFocus, pendingCategoryAdvance]);
-
+  /** Back to the rows; browse starts on the row and card it remembers. */
   const returnToBrowse = useCallback(() => {
-    pendingBrowseFocus.current = {
-      categoryIndex: activeCategory,
-      mediaIndex: selectedIndexIn(activeCategory),
-    };
     // Details opened from search return there; everything else returns to Home.
     if (getRouteParent()?.type === 'search') {
       navigateBack({ type: 'search' });
@@ -150,7 +66,7 @@ export function useHomeNavigation({
     }
     navigateBack({ type: 'home' });
     dispatch(homeNavigationActions.setActiveRegion('carousel'));
-  }, [activeCategory, dispatch, selectedIndexIn]);
+  }, [dispatch]);
 
   const returnToDetails = useCallback(() => {
     // A player opened from a Home notification goes back to Home, not to details.
@@ -194,155 +110,24 @@ export function useHomeNavigation({
     navigate({ type: 'search' }, { parent: { type: 'home' } });
   }, []);
 
-  // Each screen owns its region; arriving back on browse refocuses the selected card.
+  // Each screen owns its region
   useEffect(() => {
-    if (view === 'details') {
-      dispatch(homeNavigationActions.setActiveRegion('details'));
-      return;
-    }
-    if (view === 'player') {
-      dispatch(homeNavigationActions.setActiveRegion('player'));
-      return;
-    }
-    dispatch(homeNavigationActions.setActiveRegion('carousel'));
-    const pending = pendingBrowseFocus.current;
-    const { activeCategory, categories, selectedByCategory, onRowFocus } = browseFocusState.current;
-    const categoryIndex = pending?.categoryIndex ?? activeCategory;
-    const category = categories[categoryIndex];
-    const mediaIndex =
-      pending?.mediaIndex ?? (category ? (selectedByCategory[category.slug] ?? 0) : 0);
-    onRowFocus(categoryIndex);
-    const row = rowRefs.current.get(categoryIndex);
-    if (!row) {
-      // The categories are still loading (e.g. their cache expired while another page was open),
-      // so Home shows its spinner. Focus the card once the rows arrive.
-      pageRef.current?.focus({ preventScroll: true });
-      pendingBrowseFocus.current = { categoryIndex, mediaIndex };
-      return;
-    }
-    row.focusIndex(mediaIndex);
-    pendingBrowseFocus.current = null;
-  }, [route, dispatch, view]);
-
-  useEffect(() => {
-    const pending = pendingBrowseFocus.current;
-    if (view !== 'browse' || !pending) return;
-    const row = rowRefs.current.get(pending.categoryIndex);
-    if (!row) return;
-    // Only take focus back if nothing else claimed it while the rows loaded.
-    const active = document.activeElement;
-    if (active && active !== document.body && active !== pageRef.current) {
-      pendingBrowseFocus.current = null;
-      return;
-    }
-    row.focusIndex(pending.mediaIndex);
-    pendingBrowseFocus.current = null;
-  }, [categories, view]);
-
-  const onSidebarAction = useCallback(
-    (action: HomeAction): NavigationOutcome => {
-      if (action === 'right' || action === 'confirm' || action === 'back') {
-        dispatch(homeNavigationActions.setActiveRegion('carousel'));
-        rowRefs.current.get(activeCategory)?.focusIndex(selectedIndexIn(activeCategory));
-      }
-      return { type: 'handled' };
-    },
-    [activeCategory, dispatch, selectedIndexIn]
-  );
-
-  const handleAction = useCallback(
-    (action: HomeAction): NavigationOutcome => {
-      if (view === 'player') {
-        return action === 'back' ? (returnToDetails(), { type: 'handled' }) : { type: 'ignored' };
-      }
-      // Details and the player are navigation scopes of their own; Home keeps only Back
-      if (view === 'details') {
-        return action === 'back' ? (returnToBrowse(), { type: 'handled' }) : { type: 'ignored' };
-      }
-      if (activeRegion === 'sidebar') return onSidebarAction(action);
-      // The panels beside the rail handle their own keys.
-      if (activeRegion === 'notifications' || activeRegion === 'profileMenu')
-        return { type: 'ignored' };
-      // Back (the remote's Return, or Esc) while browsing the rows opens the sidebar.
-      if (action === 'back') {
-        dispatch(homeNavigationActions.setActiveRegion('sidebar'));
-        return { type: 'handled' };
-      }
-      const outcome = rowRefs.current.get(activeCategory)?.handleAction(action) ?? {
-        type: 'ignored' as const,
-      };
-      if (outcome.type === 'escape') {
-        if (outcome.direction === 'left') {
-          dispatch(homeNavigationActions.setActiveRegion('sidebar'));
-        } else if (outcome.direction === 'up' || outcome.direction === 'down') {
-          moveCategory(outcome.direction === 'up' ? -1 : 1);
-        }
-      }
-      return outcome;
-    },
-    [
-      activeCategory,
-      activeRegion,
-      dispatch,
-      moveCategory,
-      onSidebarAction,
-      returnToBrowse,
-      returnToDetails,
-      view,
-    ]
-  );
-
-  // While browsing, a held key repeats far faster than anyone can follow; take one step per
-  // HELD_KEY_STEP_MS and swallow the repeats in between.
-  const lastStepAt = useRef(0);
-  const step = (action: HomeAction) => (event: KeyboardEvent) => {
-    const now = performance.now();
-    if (view === 'browse' && event.repeat && now - lastStepAt.current < HELD_KEY_STEP_MS)
-      return true;
-    lastStepAt.current = now;
-    return handleAction(action).type !== 'ignored';
-  };
+    if (view === 'details') dispatch(homeNavigationActions.setActiveRegion('details'));
+    else if (view === 'player') dispatch(homeNavigationActions.setActiveRegion('player'));
+  }, [dispatch, view]);
 
   const navigationRef = useKeyboardNavigation({
-    enabled,
-    // Focus lost: back to the selected card. Details, the player, the sidebar and the panels
-    // beside it restore their own.
-    onRestoreFocus: () => {
-      if (
-        view === 'details' ||
-        view === 'player' ||
-        activeRegion === 'sidebar' ||
-        activeRegion === 'notifications' ||
-        activeRegion === 'profileMenu'
-      )
-        return false;
-      if (rowRefs.current.get(activeCategory)?.focusIndex(selectedIndexIn(activeCategory)))
-        return true;
-      pageRef.current?.focus({ preventScroll: true });
-      return !!pageRef.current;
+    enabled: enabled && view !== 'browse',
+    onRestoreFocus: () => false,
+    onBack: () => {
+      if (view === 'player') returnToDetails();
+      else returnToBrowse();
+      return true;
     },
-    onLeft: step('left'),
-    onRight: step('right'),
-    onUp: step('up'),
-    onDown: step('down'),
-    onConfirm: () => handleAction('confirm').type !== 'ignored',
-    onBack: () => handleAction('back').type !== 'ignored',
   });
 
-  const attachPage = useCallback(
-    (node: HTMLElement | null) => {
-      pageRef.current = node;
-      navigationRef(node);
-    },
-    [navigationRef]
-  );
-
   return {
-    activeRegion,
-    activeCategory,
-    selectedByCategory,
-    rowRefs,
-    attachPage,
+    attachPage: navigationRef,
     onCardActive,
     openDetails,
     openPlayer,
@@ -350,6 +135,5 @@ export function useHomeNavigation({
     openSearch,
     returnToBrowse,
     returnToDetails,
-    onSidebarAction,
   };
 }

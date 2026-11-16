@@ -125,6 +125,19 @@ export function useNavigation() {
     focus: store.focus,
     lockPointer: store.lockPointer,
     getActiveId: store.getActiveId,
+    lastInput: store.lastInput,
+  };
+}
+
+/** Like useNavigation, or null without a NavigationProvider (a component also used outside one). */
+export function useOptionalNavigation() {
+  const store = useOptionalStore();
+  if (!store) return null;
+  return {
+    focus: store.focus,
+    lockPointer: store.lockPointer,
+    getActiveId: store.getActiveId,
+    lastInput: store.lastInput,
   };
 }
 

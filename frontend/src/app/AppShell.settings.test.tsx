@@ -24,24 +24,24 @@ vi.mock('framer-motion', () => ({
 const { homeRenders } = vi.hoisted(() => ({ homeRenders: { count: 0 } }));
 vi.mock('@pages/home/HomePage', async () => {
   const { HomeSidebar } = await import('@pages/home/components/HomeSidebar');
+  const { FocusScope, NavigationProvider } = await import('@shared/navigation');
   const { navigate } = await import('@app/router');
   return {
     default: function HomePageMock() {
       homeRenders.count += 1;
       return (
-        <HomeSidebar
-          active
-          onAction={() => ({ type: 'handled' })}
-          onHover={() => {}}
-          onSettings={() => navigate({ type: 'settings' }, { parent: { type: 'home' } })}
-          onSearch={() => {}}
-          onNotifications={() => {}}
-          onEnterNotifications={() => {}}
-          notificationsRef={null}
-          showSettings={state.admin}
-          unreadCount={0}
-          hasNotifications={false}
-        />
+        <NavigationProvider>
+          <FocusScope initialId="home-rail:search">
+            <HomeSidebar
+              onSettings={() => navigate({ type: 'settings' }, { parent: { type: 'home' } })}
+              onSearch={() => {}}
+              onEnterNotifications={() => {}}
+              onPointerLeave={() => {}}
+              showSettings={state.admin}
+              unreadCount={0}
+            />
+          </FocusScope>
+        </NavigationProvider>
       );
     },
   };
@@ -118,9 +118,14 @@ beforeEach(() => {
   state.page = 'home';
   store = createTestStore();
   navigate({ type: 'home' }, { replace: true });
+  // jsdom lays nothing out; the navigation layer only focuses elements on screen
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+    () => [{}] as unknown as DOMRectList
+  );
 });
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
   navigate({ type: 'home' }, { replace: true });
 });
 
@@ -135,7 +140,7 @@ describe('Settings navigation', () => {
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
     );
-    fireEvent.click(screen.getByRole('button', { name: 'Back to Home' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
 
@@ -162,8 +167,8 @@ describe('Settings navigation', () => {
     expect(screen.getByRole('button', { name: 'Storage' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
     expect(screen.getByRole('button', { name: 'Sources' })).toHaveFocus();
-    fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
-    expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
+    fireEvent.keyDown(document.activeElement!, { key: 'ArrowLeft' });
+    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
@@ -172,8 +177,9 @@ describe('Settings navigation', () => {
     state.admin = false;
     store = createTestStore();
     await renderApp();
+    // Nothing below Search: the rail doesn't wrap, focus stays
     fireEvent.keyDown(screen.getByRole('button', { name: 'Search' }), { key: 'ArrowDown' });
-    expect(screen.getByRole('button', { name: 'Notifications' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
     expect(screen.queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument();
   });
@@ -188,7 +194,7 @@ describe('Settings navigation', () => {
     expect(screen.getByRole('button', { name: 'Configuration' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Storage' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Sources' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
     fireEvent.click(screen.getByRole('button', { name: 'Configuration' }));
     expect(screen.queryByText('Close configuration editor')).not.toBeInTheDocument();
   });

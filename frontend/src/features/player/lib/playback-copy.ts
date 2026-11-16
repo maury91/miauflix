@@ -28,6 +28,13 @@ export function getSourceAttemptMessage(
   return `Trying source ${attempt.position} of ${attempt.total} for “${title}”…`;
 }
 
+/** Shown while a playing session's converted stream restarts, after a seek or a track switch. */
+export function getStreamStageMessage(stage: 'downloading' | 'converting', title: string): string {
+  return stage === 'downloading'
+    ? `Downloading this part of “${title}”…`
+    : `Converting “${title}” for playback…`;
+}
+
 /** Every source was tried (or none exists): offer to notify once one is out. */
 export function getNoSourceMessage(title: string): string {
   return `There is no source for “${title}”. Press “Notify me” to receive a notification once it's out.`;
