@@ -140,7 +140,7 @@ describe('Settings navigation', () => {
     await waitFor(() =>
       expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
     );
-    fireEvent.click(screen.getByRole('button', { name: 'Back to Home' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
 
@@ -168,7 +168,7 @@ describe('Settings navigation', () => {
     fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
     expect(screen.getByRole('button', { name: 'Sources' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'ArrowLeft' });
-    expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
@@ -194,7 +194,7 @@ describe('Settings navigation', () => {
     expect(screen.getByRole('button', { name: 'Configuration' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Storage' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Sources' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
     fireEvent.click(screen.getByRole('button', { name: 'Configuration' }));
     expect(screen.queryByText('Close configuration editor')).not.toBeInTheDocument();
   });

@@ -18,7 +18,7 @@ import {
 } from '@shared/navigation';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { searchActions, searchResultKey } from '@store/slices/search';
-import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { type KeyboardEvent, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { PopularSearches, RecentSearches } from './components/SearchChips';
 import { searchPanelKind } from './components/searchPanel';
@@ -28,7 +28,6 @@ import * as styles from './searchPage.css';
 
 import ArrowLeftIcon from '~icons/mdi/arrow-left';
 import DeleteIcon from '~icons/mdi/backspace-outline';
-import ClearIcon from '~icons/mdi/close';
 import SpaceIcon from '~icons/mdi/keyboard-space';
 
 /** Load the next page once focus is this close to the end of the results. */
@@ -38,18 +37,24 @@ export const MAX_RECENT_CHIPS = 5;
 const KEYS = alphanumericKeys({
   space: { label: 'Space', icon: <SpaceIcon /> },
   delete: { label: 'Delete', icon: <DeleteIcon /> },
-  clear: { label: 'Clear', icon: <ClearIcon /> },
+  // Spelled out: a bare cross reads as "close"
+  clear: { label: 'Clear' },
 });
 
 interface SearchPageProps {
   onDismiss: () => void;
+  /**
+   * TV: the on-screen keyboard types and the field only shows the text. Elsewhere there is no
+   * keyboard and the field is focused and typed into. Defaults to the platform.
+   */
+  tv?: boolean;
 }
 
 /**
- * TV search on the design system (docs/plans/style-guide.md, sections 9 and 10): the back rail,
- * then the search field above the on-screen keyboard and, beside it, popular and recent searches
- * and the results row. One navigation scope; it starts where it was left (a result opened from
- * here), else on the keyboard.
+ * Search on the design system (docs/plans/style-guide.md, sections 9 and 10): the back rail, then
+ * a column with the on-screen keyboard (TV only) over popular and recent searches and, beside it,
+ * the search field over the results mosaic. One navigation scope; it starts where it was left (a
+ * result opened from here), else on the keyboard (TV) or the field.
  */
 export default function SearchPage(props: SearchPageProps) {
   return (
@@ -59,12 +64,28 @@ export default function SearchPage(props: SearchPageProps) {
   );
 }
 
-function SearchScreen({ onDismiss }: SearchPageProps) {
+function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
   const dispatch = useAppDispatch();
   const search = useAppSelector(state => state.search);
   const { focus } = useNavigation();
+  const start = tv ? SEARCH_START : SEARCH_NAV.field;
+  const fieldRef = useRef<HTMLInputElement>(null);
   // Read once: where focus starts
-  const [initialId] = useState(() => search.focus ?? SEARCH_START);
+  const [initialId] = useState(() => search.focus ?? start);
+  // The app logo lines up with the left column, as it does with Home's rows
+  const sideRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const align = () => {
+      const left = sideRef.current?.getBoundingClientRect().left;
+      if (left) document.body.style.setProperty('--home-content-left', `${left}px`);
+    };
+    align();
+    window.addEventListener('resize', align);
+    return () => {
+      window.removeEventListener('resize', align);
+      document.body.style.removeProperty('--home-content-left');
+    };
+  }, []);
 
   const genres = search.genres;
   const genreChips = useMemo(
@@ -109,6 +130,11 @@ function SearchScreen({ onDismiss }: SearchPageProps) {
     focusResultsWhenReady.current = true;
     dispatch(searchActions.submitted());
   };
+  const submitAction:
+    | { onSearch: () => void; submitLabel: string }
+    | { onSearch?: undefined; submitLabel?: undefined } = tv
+    ? {}
+    : { onSearch: submit, submitLabel: 'Search' };
   const panel = searchPanelKind(search.status, search.results.length);
   useEffect(() => {
     if (!focusResultsWhenReady.current || search.status === 'loading') return;
@@ -126,7 +152,8 @@ function SearchScreen({ onDismiss }: SearchPageProps) {
   };
   const clearSearch = () => {
     setQuery('');
-    focus(SEARCH_START);
+    focus(start);
+    if (!tv) fieldRef.current?.focus();
   };
   const leave = () => {
     dispatch(searchActions.focusChanged(null));
@@ -172,13 +199,36 @@ function SearchScreen({ onDismiss }: SearchPageProps) {
     },
   });
 
-  // On desktop, typing anywhere on the page goes to the search field.
+  // On desktop, typing anywhere on the page goes on in the search field.
   const typeIntoField = (event: KeyboardEvent<HTMLElement>) => {
-    if (IS_TV || event.defaultPrevented || event.target instanceof HTMLInputElement) return;
+    if (tv || event.defaultPrevented || event.target instanceof HTMLInputElement) return;
     if (event.key.length !== 1 || event.altKey || event.ctrlKey || event.metaKey) return;
     event.preventDefault();
     typeText(event.key);
-    focus(SEARCH_NAV.field, { part: 'input' });
+    fieldRef.current?.focus();
+  };
+  // Off TV the field starts ready to type, unless focus comes back to a result
+  const mainRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!tv && initialId === SEARCH_NAV.field) fieldRef.current?.focus();
+  }, [initialId, tv]);
+  // A text field holds no DOM focus outside edit mode: keep it on the page so its keys (typing,
+  // Back) still reach it after editing ends
+  const keepFocusInPage = () => {
+    queueMicrotask(() => {
+      const active = document.activeElement;
+      if (!active || active === document.body) mainRef.current?.focus({ preventScroll: true });
+    });
+  };
+  const pageRef = (element: HTMLElement | null) => {
+    mainRef.current = element;
+    keysRef(element);
+  };
+
+  // Down from the field being typed in goes on to the results, as a desktop search box does
+  const leaveFieldDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'ArrowDown' || event.nativeEvent.isComposing) return;
+    if (focus(SEARCH_NAV.results) || focus(SEARCH_NAV.panel)) event.preventDefault();
   };
 
   const heading = search.genre
@@ -187,7 +237,15 @@ function SearchScreen({ onDismiss }: SearchPageProps) {
   const showResults = search.status !== 'idle' || search.results.length > 0;
 
   return (
-    <main ref={keysRef} className={styles.page} aria-label="Search" onKeyDown={typeIntoField}>
+    <main
+      ref={pageRef}
+      className={styles.page}
+      aria-label="Search"
+      // Programmatic focus only (see keepFocusInPage), never a Tab stop
+      tabIndex={-1}
+      onKeyDown={typeIntoField}
+      onBlur={keepFocusInPage}
+    >
       <FocusScope id={SEARCH_NAV.scope} layout="horizontal" initialId={initialId}>
         <div className={styles.rail}>
           <NavRail label="Search" navId={SEARCH_NAV.rail}>
@@ -200,71 +258,85 @@ function SearchScreen({ onDismiss }: SearchPageProps) {
           </NavRail>
         </div>
         <SurfaceContextProvider value="solid">
-          <FocusGroup id={SEARCH_NAV.content} layout="vertical">
+          <FocusGroup id={SEARCH_NAV.content} layout="horizontal">
             <div className={styles.body}>
-              <div className={styles.field}>
-                <SearchField
-                  navId={SEARCH_NAV.field}
-                  size="lg"
-                  label="Search"
-                  value={search.query}
-                  // The remote types with the on-screen keyboard, not the system IME
-                  readOnly={IS_TV}
-                  maxLength={100}
-                  placeholder="Search for movies, TV shows, anime..."
-                  autoComplete="off"
-                  spellCheck={false}
-                  onChange={event => setQuery(event.target.value)}
-                  onSearch={submit}
-                  submitLabel="Search"
-                />
-              </div>
-              <FocusGroup id={SEARCH_NAV.columns} layout="horizontal">
-                <div className={styles.columns}>
-                  <div className={styles.keyboard}>
-                    <SearchKeyboard
-                      label="On-screen keyboard"
-                      keys={KEYS}
-                      value={text}
-                      onChange={setQuery}
-                      navId={SEARCH_NAV.keyboard}
+              <FocusGroup id={SEARCH_NAV.side} layout="vertical">
+                <div ref={sideRef} className={styles.side}>
+                  {tv && (
+                    <div className={styles.keyboard}>
+                      <SearchKeyboard
+                        label="On-screen keyboard"
+                        keys={KEYS}
+                        value={text}
+                        onChange={setQuery}
+                        // The browsed genre shows no text, so Clear has nothing to change: it
+                        // still ends the genre. Typing replaces it through onChange.
+                        onPress={key => {
+                          if (key.kind === 'clear' && search.genre) setQuery('');
+                        }}
+                        navId={SEARCH_NAV.keyboard}
+                      />
+                    </div>
+                  )}
+                  {genreChips.length > 0 && (
+                    <PopularSearches
+                      genres={genreChips}
+                      selected={search.genre}
+                      onSelect={selectGenre}
+                    />
+                  )}
+                  {recents.length > 0 && (
+                    <RecentSearches
+                      recents={recents}
+                      onSelect={selectRecent}
+                      onRemove={removeRecent}
+                    />
+                  )}
+                </div>
+              </FocusGroup>
+              <FocusGroup id={SEARCH_NAV.main} layout="vertical">
+                <div className={styles.main}>
+                  <div className={styles.field}>
+                    <SearchField
+                      ref={fieldRef}
+                      // On TV the keyboard types and the search runs as it does: the field only
+                      // shows the text, so it is not a focus stop and has no submit arrow
+                      navId={tv ? undefined : SEARCH_NAV.field}
+                      size="lg"
+                      label="Search"
+                      labelHidden
+                      value={search.query}
+                      // The remote types with the on-screen keyboard, not the system IME
+                      readOnly={tv}
+                      tabIndex={tv ? -1 : undefined}
+                      maxLength={100}
+                      placeholder="Search for movies, TV shows, anime..."
+                      autoComplete="off"
+                      spellCheck={false}
+                      onChange={event => setQuery(event.target.value)}
+                      onKeyDown={leaveFieldDown}
+                      {...submitAction}
                     />
                   </div>
-                  <FocusGroup id={SEARCH_NAV.side} layout="vertical">
-                    <div className={styles.side}>
-                      {genreChips.length > 0 && (
-                        <PopularSearches
-                          genres={genreChips}
-                          selected={search.genre}
-                          onSelect={selectGenre}
-                        />
-                      )}
-                      {recents.length > 0 && (
-                        <RecentSearches
-                          recents={recents}
-                          onSelect={selectRecent}
-                          onRemove={removeRecent}
-                        />
-                      )}
-                      {showResults && (
-                        <SearchResults
-                          heading={heading}
-                          status={search.status}
-                          error={search.error}
-                          results={search.results}
-                          details={search.details}
-                          totalResults={search.totalResults}
-                          hasMore={search.page < search.totalPages}
-                          onLoadMore={() => dispatch(searchActions.nextPageRequested())}
-                          onOpen={openResult}
-                          query={search.query}
-                          isGenre={search.genre !== null}
-                          onRetry={retrySearch}
-                          onClear={clearSearch}
-                        />
-                      )}
-                    </div>
-                  </FocusGroup>
+                  {showResults && (
+                    <SearchResults
+                      heading={heading}
+                      status={search.status}
+                      error={search.error}
+                      results={search.results}
+                      details={search.details}
+                      totalResults={search.totalResults}
+                      hasMore={search.page < search.totalPages}
+                      onLoadMore={() => {
+                        dispatch(searchActions.nextPageRequested());
+                      }}
+                      onOpen={openResult}
+                      query={search.query}
+                      isGenre={search.genre !== null}
+                      onRetry={retrySearch}
+                      onClear={clearSearch}
+                    />
+                  )}
                 </div>
               </FocusGroup>
             </div>

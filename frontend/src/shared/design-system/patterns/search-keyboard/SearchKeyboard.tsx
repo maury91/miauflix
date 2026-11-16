@@ -16,8 +16,13 @@ export interface SearchKeyboardProps {
   columns?: number;
   /** The text being entered, owned by the feature (usually shown in a SearchField). */
   value: string;
-  /** Called with the new text after each key. */
+  /** Called with the new text after each key that changes it. */
   onChange: (value: string) => void;
+  /**
+   * Called on every press, before `onChange`, even when the text stays the same (Clear on empty
+   * text): for state the feature keeps beside the text, such as a browsed genre.
+   */
+  onPress?: (key: KeyboardKey) => void;
   /**
    * Registers the keys as a grid group with the navigation layer (each `<navId>:<key id>`): Up/Down
    * keep the column across spanning keys, the edges exit to the neighbouring regions.
@@ -40,16 +45,18 @@ export function SearchKeyboard({
   columns = 6,
   value,
   onChange,
+  onPress,
   navId,
   focusedId,
   onPointerFocus,
 }: SearchKeyboardProps) {
   // A press reads the text at the time of the press, not of the render that drew the key
-  const latest = useRef({ value, onChange });
+  const latest = useRef({ value, onChange, onPress });
   useLayoutEffect(() => {
-    latest.current = { value, onChange };
+    latest.current = { value, onChange, onPress };
   });
   const press = (key: KeyboardKey) => {
+    latest.current.onPress?.(key);
     const next = applyKey(latest.current.value, key);
     if (next !== latest.current.value) latest.current.onChange(next);
   };

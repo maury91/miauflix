@@ -7,8 +7,8 @@ export const SEARCH_NAV = {
   rail: 'search-rail',
   back: 'search-back',
   content: 'search-content',
+  main: 'search-main',
   field: 'search-field',
-  columns: 'search-columns',
   keyboard: 'search-keyboard',
   key: (id: string) => `search-keyboard:${id}`,
   side: 'search-side',
@@ -23,5 +23,5 @@ export const SEARCH_NAV = {
   panelDetails: 'search-panel:details',
 } as const;
 
-/** Where Search starts without a remembered focus: the keyboard's first key. */
+/** Where Search starts on TV without a remembered focus: the keyboard's first key. */
 export const SEARCH_START = SEARCH_NAV.key('a');

@@ -3,8 +3,8 @@ import type { MediaDto, PlayableRef } from '@miauflix/backend';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
-import { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useStore } from 'react-redux';
 
 import type { HomeView } from './useMediaRoute';
 
@@ -30,18 +30,17 @@ export function useHomeNavigation({
   onBrowseSelection: (media: MediaDto) => void;
 }) {
   const dispatch = useDispatch<AppDispatch>();
-  const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
-  const browseState = useRef({ activeCategory });
-  browseState.current = { activeCategory };
+  const store = useStore<RootState>();
 
   const onCardActive = useCallback(
     (categoryIndex: number, _mediaIndex: number, media: MediaDto) => {
       // Every move in a row reports it; an unchanged row would still notify every subscriber.
-      if (browseState.current.activeCategory !== categoryIndex)
+      // Read at call time: a render-time copy can lag behind a dispatch made since
+      if (store.getState().homeNavigation.activeCategory !== categoryIndex)
         dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
       onBrowseSelection(media);
     },
-    [dispatch, onBrowseSelection]
+    [dispatch, onBrowseSelection, store]
   );
 
   const openDetails = useCallback(

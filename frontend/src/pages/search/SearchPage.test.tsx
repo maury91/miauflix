@@ -12,7 +12,7 @@ import SearchPage from './SearchPage';
 
 vi.mock('@app/router', () => ({ navigate: vi.fn() }));
 
-const setupTest = (search?: SearchState) => {
+const setupTest = (search?: SearchState, { tv = false }: { tv?: boolean } = {}) => {
   const store = configureStore({
     reducer: { auth: authSlice.reducer, search: searchSlice.reducer },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(searchMiddleware),
@@ -21,7 +21,7 @@ const setupTest = (search?: SearchState) => {
   const onDismiss = vi.fn();
   render(
     <Provider store={store}>
-      <SearchPage onDismiss={onDismiss} />
+      <SearchPage onDismiss={onDismiss} tv={tv} />
     </Provider>
   );
   return { store, onDismiss };
@@ -48,31 +48,32 @@ const press = (key: string, init: Partial<KeyboardEventInit> = {}) =>
   });
 
 describe('SearchPage', () => {
-  it('types with the on-screen keyboard and moves up to the search box', () => {
-    const { store } = setupTest();
+  it('types with the on-screen keyboard on TV, where the field only shows the text', () => {
+    const { store } = setupTest(undefined, { tv: true });
     expect(screen.getByRole('button', { name: 'a' })).toHaveFocus();
 
     press('Enter');
     press('ArrowRight');
     press('Enter');
-    expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveValue('ab');
+    const field = screen.getByRole('searchbox', { name: 'Search' });
+    expect(field).toHaveValue('ab');
+    expect(field).toHaveAttribute('readonly');
+    // No submit arrow: the search runs as the keyboard types
+    expect(screen.queryByRole('button', { name: 'Search' })).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
     expect(store.getState().search.query).toBe('a');
+    fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
+    expect(store.getState().search.query).toBe('');
 
-    // Down to the action row, then back up past the six rows of characters
-    for (let step = 0; step < 6; step++) press('ArrowDown');
-    expect(screen.getByRole('button', { name: 'Space' })).toHaveFocus();
-    for (let step = 0; step < 7; step++) press('ArrowUp');
-    // Focused, not yet editing: Confirm enters the field
-    const field = screen.getByRole('searchbox', { name: 'Search' });
-    expect(field.closest('[data-focused]')).not.toBeNull();
-    press('Enter');
-    expect(field).toHaveFocus();
+    // The field is not a focus stop: Up from the top row stays on the keyboard
+    press('ArrowLeft');
+    press('ArrowUp');
+    expect(screen.getByRole('button', { name: 'a' })).toHaveFocus();
   });
 
   it('moves left from the keyboard to the rail back button, which leaves the page', () => {
-    const { onDismiss } = setupTest();
+    const { onDismiss } = setupTest(undefined, { tv: true });
     press('ArrowLeft');
     expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
     expect(screen.queryByRole('button', { name: 'Home' })).not.toBeInTheDocument();
@@ -81,10 +82,21 @@ describe('SearchPage', () => {
     expect(onDismiss).toHaveBeenCalledOnce();
   });
 
+  it('starts on the search field without a keyboard off TV, and Down goes to the results', () => {
+    setupTest(searchStateFixture);
+    expect(screen.queryByRole('group', { name: 'On-screen keyboard' })).not.toBeInTheDocument();
+    // Ready to type
+    const field = screen.getByRole('searchbox', { name: 'Search' });
+    expect(field).toHaveFocus();
+    act(() => {
+      fireEvent.keyDown(field, { key: 'ArrowDown' });
+    });
+    expect(document.activeElement).toHaveAccessibleName(searchStateFixture.results[0]!.title);
+  });
+
   it('moves focus to the results when Enter submits the search box', async () => {
     const { store } = setupTest(searchStateFixture);
-    press('ArrowUp');
-    press('Enter');
+    // The field starts in edit mode off TV
     expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveFocus();
     press('Enter');
     expect(store.getState().search.status).toBe('loading');
@@ -108,9 +120,7 @@ describe('SearchPage', () => {
   });
 
   const submit = (store: ReturnType<typeof setupTest>['store']) => {
-    press('ArrowUp');
-    // Confirm enters the field, Enter there submits
-    press('Enter');
+    // The field starts in edit mode: Enter submits
     press('Enter');
     return store.getState().search.requestId;
   };
@@ -196,13 +206,12 @@ describe('SearchPage', () => {
     expect(screen.getByRole('button', { name: 'Clear search' })).toHaveFocus();
     press('Enter');
     expect(store.getState().search.query).toBe('');
-    expect(screen.getByRole('button', { name: 'a' })).toHaveFocus();
+    // Back in the field, ready to type again
+    expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveFocus();
   });
 
   it('ignores the Enter that confirms an IME composition', () => {
     const { store } = setupTest(searchStateFixture);
-    press('ArrowUp');
-    press('Enter');
     const box = screen.getByRole('searchbox', { name: 'Search' });
     press('Enter', { isComposing: true });
     expect(store.getState().search.status).toBe('ready');
@@ -259,12 +268,39 @@ describe('SearchPage', () => {
   });
 
   it('runs a recent search and leaves on Back', () => {
-    const { store, onDismiss } = setupTest(searchStateFixture);
+    const { store, onDismiss } = setupTest(searchStateFixture, { tv: true });
     fireEvent.click(screen.getByRole('button', { name: 'Silo' }));
     expect(store.getState().search.query).toBe('Silo');
+    press('Escape');
+    expect(onDismiss).toHaveBeenCalled();
+    expect(store.getState().search.focus).toBeNull();
+  });
+
+  it('forgets the result it would start on when Back leaves', () => {
+    const { store, onDismiss } = setupTest(
+      { ...searchStateFixture, focus: 'search-result:tvshow:1368166' },
+      { tv: true }
+    );
+    expect(screen.getByRole('button', { name: 'Dune: Prophecy' })).toHaveFocus();
 
     press('Escape');
     expect(onDismiss).toHaveBeenCalled();
     expect(store.getState().search.focus).toBeNull();
+  });
+
+  it('ends a browsed genre with Clear, though it shows no text to clear', () => {
+    const { store } = setupTest(searchStateFixture, { tv: true });
+    fireEvent.click(screen.getByRole('button', { name: 'Horror' }));
+    expect(store.getState().search.genre).toBe('27');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
+    expect(store.getState().search).toMatchObject({ genre: null, query: '' });
+  });
+
+  it('replaces a browsed genre with what the keyboard types', () => {
+    const { store } = setupTest(searchStateFixture, { tv: true });
+    fireEvent.click(screen.getByRole('button', { name: 'Horror' }));
+    fireEvent.click(screen.getByRole('button', { name: 'd' }));
+    expect(store.getState().search).toMatchObject({ genre: null, query: 'd' });
   });
 });

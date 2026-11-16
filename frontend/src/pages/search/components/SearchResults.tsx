@@ -45,9 +45,9 @@ interface SearchResultsProps {
 }
 
 /**
- * The results row (the `search-results` group of portrait MediaTiles, scrolled to reveal the
- * focused one); keeps the previous results visible while a new search is loading. Without results,
- * the state panel takes its place.
+ * The results mosaic (the `search-results` grid group of Home's landscape MediaTiles, scrolled down
+ * to reveal the focused one); keeps the previous results visible while a new search is loading.
+ * Without results, the state panel takes its place.
  */
 export function SearchResults({
   heading,
@@ -70,14 +70,13 @@ export function SearchResults({
   const tiles = useRef(new Map<string, HTMLElement>());
   const activeId = useActiveIdWithin(SEARCH_NAV.results);
 
-  // The layer focuses without scrolling: bring the focused tile into the row's view
+  // The layer focuses without scrolling: bring the focused tile's row into view
   useEffect(() => {
-    if (activeId)
-      tiles.current.get(activeId)?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+    if (activeId) tiles.current.get(activeId)?.scrollIntoView?.({ block: 'nearest' });
   }, [activeId]);
 
   return (
-    <section aria-label={heading} aria-busy={status === 'loading'}>
+    <section className={styles.section} aria-label={heading} aria-busy={status === 'loading'}>
       {/* The panel says what happened, so it replaces the heading. */}
       {!panel && (
         <div className={styles.header}>
@@ -104,7 +103,8 @@ export function SearchResults({
       />
       {results.length > 0 && (status === 'error' || error != null) && (
         <div className={styles.notice}>
-          <Message tone="warning">
+          {/* Polite: a later page can fail while focus stays on a tile */}
+          <Message tone="warning" live="polite">
             <ErrorNotice
               error={error}
               fallback="Part of this search failed. Try again in a moment."
@@ -120,14 +120,16 @@ export function SearchResults({
       {results.length > 0 && (
         <FocusGroup
           id={SEARCH_NAV.results}
-          layout="horizontal"
+          layout="grid"
+          columns={styles.RESULT_COLUMNS}
           more={{ end: hasMore }}
           onMore={onLoadMore}
         >
-          <div className={styles.row}>
+          <div className={styles.mosaic}>
             {results.map((result, index) => {
               const key = searchResultKey(result);
               const navId = SEARCH_NAV.result(key);
+              const logo = details[key]?.logo;
               return (
                 <div key={key} className={styles.cell}>
                   <MediaTile
@@ -136,10 +138,13 @@ export function SearchResults({
                       else tiles.current.delete(navId);
                     }}
                     navId={navId}
-                    ratio="portrait"
                     title={result.title}
                     supportingText={resultMeta(result, details[key])}
-                    artwork={result.poster ? artworkUrl(result.poster, 'card', tilePixels) : null}
+                    artwork={
+                      result.backdrop ? artworkUrl(result.backdrop, 'card', tilePixels) : null
+                    }
+                    logo={logo ? artworkUrl(logo, 'logo', tilePixels * 0.7) : null}
+                    labelPlacement="overlay"
                     onClick={() => onOpen(index)}
                   />
                 </div>

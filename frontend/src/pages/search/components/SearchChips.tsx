@@ -6,16 +6,13 @@ import * as styles from './searchChips.css';
 
 import SearchIcon from '~icons/mdi/magnify';
 
-/** Popular genres per row: the `search-popular` grid group's columns. */
-export const POPULAR_COLUMNS = 5;
-
 export interface SearchShortcut {
   key: string;
   label: string;
 }
 
 /**
- * The catalog's genres as filter chips on a grid; the browsed genre is the selected one (and where
+ * The catalog's genres as full-width filter chips, one per line; the browsed genre is the selected one (and where
  * the group is entered).
  */
 export function PopularSearches({
@@ -34,13 +31,15 @@ export function PopularSearches({
           Popular searches
         </Heading>
       </div>
-      <FocusGroup id={SEARCH_NAV.popular} layout="grid" columns={POPULAR_COLUMNS}>
-        <div className={styles.chips}>
+      {/* One genre per line, as wide as the column */}
+      <FocusGroup id={SEARCH_NAV.popular} layout="vertical">
+        <div className={styles.list}>
           {genres.map((genre, index) => (
             <div key={genre.key} className={styles.cell}>
               <FilterChip
                 navId={SEARCH_NAV.genre(genre.key)}
                 icon={<SearchIcon />}
+                fullWidth
                 selected={genre.key === selected}
                 // Choosing the browsed genre again browses it again; it never clears
                 onSelectedChange={() => onSelect(index)}
@@ -55,7 +54,7 @@ export function PopularSearches({
   );
 }
 
-/** Recent searches in a row: the body runs one again, the circle forgets it. */
+/** Recent searches, wrapping: the body runs one again, the circle forgets it. */
 export function RecentSearches({
   recents,
   onSelect,
@@ -72,7 +71,7 @@ export function RecentSearches({
           Recent searches
         </Heading>
       </div>
-      <FocusGroup id={SEARCH_NAV.recents} layout="horizontal">
+      <FocusGroup id={SEARCH_NAV.recents} layout="spatial">
         <div className={styles.row}>
           {recents.map((recent, index) => (
             <div key={recent.key} className={styles.rowItem}>

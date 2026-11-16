@@ -1,21 +1,27 @@
 import { space } from '@shared/design-system/tokens';
 import { style } from '@vanilla-extract/css';
 
-/** Poster width as a share of the viewport, matching five tiles across the results column. */
-export const TILE_WIDTH_VW = 10.9;
+/** Tiles per mosaic row: the `search-results` grid group's columns. */
+export const RESULT_COLUMNS = 4;
 
 /**
- * The results row: MediaTiles side by side, scrolled to reveal the focused one. Its padding is room
- * for the tile's focus scale and outline, which the scroll container would otherwise clip; the
- * negative margin keeps the tiles aligned with the heading.
+ * Share of the viewport one tile takes, for the artwork size requested: the results column is
+ * about three quarters of the screen beside the keyboard column.
  */
-export const row = style({
-  display: 'flex',
-  gap: '1.1vw',
-  margin: `-${space.xs}`,
-  padding: space.xs,
-  overflowX: 'auto',
-  overflowY: 'hidden',
+export const TILE_WIDTH_VW = 75 / RESULT_COLUMNS;
+
+/**
+ * The scrolling part of the results column, under the field: the heading, then the mosaic. Its
+ * padding is room for the tile's focus scale and outline, which the scroll container would
+ * otherwise clip; the negative margin keeps everything aligned with the field.
+ */
+export const section = style({
+  flex: '1 1 0%',
+  minHeight: 0,
+  margin: `0 -${space.xs}`,
+  padding: `0 ${space.xs} ${space.xl}`,
+  overflowX: 'hidden',
+  overflowY: 'auto',
   scrollBehavior: 'smooth',
   scrollbarWidth: 'none',
   selectors: {
@@ -23,10 +29,20 @@ export const row = style({
   },
 });
 
+/** The mosaic: Home's landscape tiles, wrapping into rows; margins rather than `gap` (Chromium 69). */
+export const mosaic = style({
+  display: 'flex',
+  flexWrap: 'wrap',
+  margin: `-${space.xs}`,
+  padding: `${space.xs} 0`,
+});
+
 /** One tile's slot: the tile fills the width the row gives it. */
 export const cell = style({
-  flex: `0 0 ${TILE_WIDTH_VW}vw`,
-  width: `${TILE_WIDTH_VW}vw`,
+  boxSizing: 'border-box',
+  flex: `0 0 ${100 / RESULT_COLUMNS}%`,
+  width: `${100 / RESULT_COLUMNS}%`,
+  padding: space.xs,
 });
 
 /** The heading with the result count at its end; margins rather than flex `gap` (Chromium 69). */

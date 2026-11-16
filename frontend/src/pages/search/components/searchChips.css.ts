@@ -5,19 +5,10 @@ export const section = style({ marginBottom: space.lg });
 
 export const title = style({ marginBottom: space.sm });
 
-/** Five chips a row; margins rather than flex `gap` (Chromium 69). */
-export const chips = style({
-  display: 'flex',
-  flexWrap: 'wrap',
-  margin: `-${space['2xs']}`,
-});
+/** One chip per line; padding rather than flex `gap` (Chromium 69). */
+export const list = style({ margin: `-${space['2xs']} 0` });
 
-export const cell = style({
-  boxSizing: 'border-box',
-  width: '20%',
-  padding: space['2xs'],
-  display: 'flex',
-});
+export const cell = style({ padding: `${space['2xs']} 0` });
 
 export const row = style({
   display: 'flex',

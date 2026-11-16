@@ -50,7 +50,7 @@ describe('settings keyboard navigation', () => {
     expect(storage).toHaveFocus();
 
     press('ArrowLeft');
-    expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
     press('ArrowRight');
     expect(storage).toHaveFocus();
   });
@@ -67,7 +67,7 @@ describe('settings keyboard navigation', () => {
   it('starts on Back when no area can be opened', () => {
     renderSettings({ canConfigure: false, canManageStorage: false, canManageSources: false });
     expect(screen.getByRole('button', { name: 'Configuration' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
     expect(screen.getByText(/available to administrators/)).toBeInTheDocument();
   });
 });

@@ -291,8 +291,9 @@ export const CategoryRow = memo(
     useEffect(() => {
       if (mediaOverride || !visible || !current.currentData?.results.length) return;
       const timeout = window.setTimeout(() => {
+        // The visible window starts at the leading card, not at the focused one
         const items = Array.from({ length: perPage }, (_, offset) =>
-          mediaByIndex.get(selectedIndex + offset)
+          mediaByIndex.get(navigation.leadingIndex + offset)
         )
           .filter((media): media is MediaDto => Boolean(media))
           .map(media => ({ ...mediaRef(media), tier: 'viewport' as const }));
@@ -314,9 +315,9 @@ export const CategoryRow = memo(
       current.currentData,
       mediaByIndex,
       mediaOverride,
+      navigation.leadingIndex,
       perPage,
       promoteListMedia,
-      selectedIndex,
       visible,
     ]);
 

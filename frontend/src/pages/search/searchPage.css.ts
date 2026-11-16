@@ -2,9 +2,8 @@ import { color, fontFamily, space } from '@shared/design-system/tokens';
 import { style } from '@vanilla-extract/css';
 
 /**
- * The search screen (docs/plans/style-guide.md, section 8): the back rail, then the field over the
- * keyboard and the column of shortcuts and results beside it. Margins instead of flex `gap`
- * (Chromium 69).
+ * The search screen (docs/plans/style-guide.md, section 8): the back rail, then the keyboard and
+ * shortcuts column beside the field and results one. Margins instead of flex `gap` (Chromium 69).
  */
 export const page = style({
   position: 'fixed',
@@ -18,6 +17,8 @@ export const page = style({
   backgroundColor: color.canvas,
   color: color.text,
   fontFamily,
+  // Focused only to keep keys on the page (see SearchPage): never drawn as focused
+  outline: 'none',
 });
 
 export const rail = style({
@@ -31,18 +32,36 @@ export const body = style({
   flex: '1 1 0%',
   minWidth: 0,
   height: '100%',
+  display: 'flex',
   padding: `6rem ${space.xl} 0`,
 });
 
-export const field = style({ maxWidth: '40rem', marginBottom: space.xl });
+const hiddenScrollbar = {
+  scrollbarWidth: 'none',
+  selectors: { '&::-webkit-scrollbar': { display: 'none' } },
+} as const;
 
-export const columns = style({
-  display: 'flex',
-  // The keyboard keeps its rows while the results make the column beside it taller
-  alignItems: 'flex-start',
+/** The keyboard (TV) over popular and recent searches: SplitLayout's `rail` share. */
+export const side = style({
+  boxSizing: 'border-box',
+  flex: '0 0 20rem',
+  width: '20rem',
+  height: '100%',
+  marginRight: space['2xl'],
+  paddingBottom: space.xl,
+  overflowY: 'auto',
+  ...hiddenScrollbar,
 });
 
-/** The keyboard pane: SplitLayout's `rail` share. */
-export const keyboard = style({ flex: '0 0 20rem', width: '20rem', marginRight: space['2xl'] });
+export const keyboard = style({ marginBottom: space.xl });
 
-export const side = style({ flex: '1 1 0%', minWidth: 0 });
+/** The field over the results, which scroll under it. */
+export const main = style({
+  flex: '1 1 0%',
+  minWidth: 0,
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+export const field = style({ flex: 'none', marginBottom: space.xl });

@@ -57,42 +57,34 @@ test.describe('Home stories - visual regression', () => {
     await waitForHomeArtwork(page);
 
     const row = page.getByRole('region', { name: 'Popular Movies' });
-    // The carousel moves its track with a transform; read where it rests
     const track = row.locator('ul').first();
     const offset = () =>
       track.evaluate(element => new DOMMatrixReadOnly(getComputedStyle(element).transform).m41);
-    const next = page.getByRole('button', { name: 'Next Popular Movies items' });
-    const previous = page.getByRole('button', { name: 'Previous Popular Movies items' });
-    const offsets: number[] = [];
-    const screenshot = async (position: number, name: string) => {
-      let last = Number.NaN;
-      await expect
-        .poll(async () => {
-          const now = await offset();
-          const settled = now === last;
-          last = now;
-          return settled;
-        })
-        .toBe(true);
-      // Each page moves the track one step further; going back returns to the same place
-      offsets[position] ??= last;
-      expect(last).toBe(offsets[position]);
-      if (position > 0) expect(last).toBeLessThan(offsets[position - 1]!);
-      await expect(page.locator('[aria-current="true"]')).toHaveCount(1);
+    const next = row.getByRole('button', { name: 'Next Popular Movies items' });
+    const previous = row.getByRole('button', { name: 'Previous Popular Movies items' });
+    const stride = 253.44 + 14.4;
+    const screenshot = async (leadingIndex: number, name: string) => {
+      await expect.poll(offset).toBeCloseTo(-leadingIndex * stride, 1);
+      await expect(row.locator('[aria-current="true"]')).toHaveCount(1);
       await expect(row).toHaveScreenshot(`category-row-arrow-${name}.png`, {
         animations: 'disabled',
       });
     };
 
+    await expect(previous).toBeHidden();
     await screenshot(0, 'initial');
-    for (const position of [1, 2, 3]) {
-      await next.click();
-      await screenshot(position, `right-${position}`);
-    }
-    for (const [movement, position] of [2, 1, 0].entries()) {
-      await previous.click();
-      await screenshot(position, `left-${movement + 1}`);
-    }
+    // Ten cards and four slots per page put the last full page at index 6.
+    await next.click();
+    await screenshot(4, 'right-1');
+    await next.click();
+    await screenshot(6, 'right-2');
+    await expect(next).toBeHidden();
+
+    await previous.click();
+    await screenshot(2, 'left-1');
+    await previous.click();
+    await screenshot(0, 'left-2');
+    await expect(previous).toBeHidden();
   });
 
   for (const viewport of HOME_VIEWPORTS) {

@@ -95,12 +95,7 @@ function SettingsScreen({
     <FocusScope id={NAV.scope} layout="horizontal" initialId={initialId}>
       <div className={styles.rail}>
         <NavRail label="Settings" navId={NAV.rail}>
-          <NavItem
-            navId={NAV.back}
-            icon={<ArrowLeftIcon />}
-            label="Back to Home"
-            onClick={onDismiss}
-          />
+          <NavItem navId={NAV.back} icon={<ArrowLeftIcon />} label="Back" onClick={onDismiss} />
         </NavRail>
       </div>
       <SurfaceContextProvider value="solid">

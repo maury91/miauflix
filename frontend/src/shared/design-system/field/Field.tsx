@@ -1,5 +1,6 @@
 import { type ReactNode, useId } from 'react';
 
+import { visuallyHidden } from '../a11y.css';
 import { joinIds } from '../ids';
 import { ErrorMessage } from './ErrorMessage';
 import * as styles from './field.css';
@@ -15,6 +16,11 @@ export interface FieldControlProps {
 export interface FieldAnatomyProps {
   /** Always visible, and the control's accessible name. A placeholder never replaces it. */
   label: string;
+  /**
+   * Keeps the label for assistive technology only, for a field whose purpose the screen already
+   * shows (the search page's field, under its placeholder and icon). Use sparingly.
+   */
+  labelHidden?: boolean;
   /** Short text next to the label, such as a translated "Optional". */
   indicator?: string;
   /** Help below the control. Not a focus target. */
@@ -43,6 +49,7 @@ export interface FieldProps extends FieldAnatomyProps {
  */
 export function Field({
   label,
+  labelHidden = false,
   indicator,
   description,
   error,
@@ -58,7 +65,7 @@ export function Field({
 
   return (
     <div className={styles.field}>
-      <div className={styles.labelRow}>
+      <div className={labelHidden ? visuallyHidden : styles.labelRow}>
         <label id={`${controlId}-label`} className={styles.label} htmlFor={controlId}>
           {label}
         </label>

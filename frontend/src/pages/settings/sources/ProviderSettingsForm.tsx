@@ -67,8 +67,11 @@ export function ProviderSettingsForm({
   const [error, setError] = useState('');
   const { focused, containerProps } = useDomFocus();
   const isFocused = (key: string) => focused?.key === key;
-  const setValue = (name: string, value: string | boolean) =>
+  const setValue = (name: string, value: string | boolean) => {
     setValues(current => ({ ...current, [name]: value }));
+    // The failed save was about the values before this edit
+    setError('');
+  };
 
   const submit = async () => {
     if (isLoading) return;

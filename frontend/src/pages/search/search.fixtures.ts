@@ -3,7 +3,7 @@ import { initialSearchState, type SearchState } from '@store/slices/search';
 
 import { homeFixtureAssets } from '@/__test-utils__/fixtures/home.assets';
 
-const poster = (mediaId: keyof typeof homeFixtureAssets) => homeFixtureAssets[mediaId].poster;
+const asset = (mediaId: number) => homeFixtureAssets[mediaId as keyof typeof homeFixtureAssets];
 
 export const searchResultsFixture: SearchResultDto[] = [
   { mediaId: 687163, title: 'Dune', releaseDate: '2021-09-15', rating: 8 },
@@ -17,8 +17,9 @@ export const searchResultsFixture: SearchResultDto[] = [
   _type: tv ? ('tvshow' as const) : ('movie' as const),
   mediaId,
   overview: '',
-  poster: poster(mediaId as keyof typeof homeFixtureAssets),
-  backdrop: '',
+  poster: asset(mediaId).poster,
+  // The mosaic shows Home's landscape tiles: the backdrop is the artwork
+  backdrop: asset(mediaId).backdrop,
 }));
 
 /** Catalog genres as the backend sends them: most titles first, then the Anime shortcut. */

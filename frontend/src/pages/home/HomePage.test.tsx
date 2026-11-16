@@ -137,6 +137,15 @@ vi.mock('react-redux', async importOriginal => {
   return {
     shallowEqual,
     useDispatch: () => dispatch,
+    // Read at call time by useHomeNavigation: the same state useSelector sees
+    useStore: () => ({
+      getState: () =>
+        selectSession((state: unknown) => ({
+          ...(state && typeof state === 'object' ? state : {}),
+          homeNavigation: homeNavigationState.value,
+          realtime: realtimeState,
+        })),
+    }),
     useSelector: (
       selector: (state: unknown) => unknown,
       equalityFn: (left: unknown, right: unknown) => boolean = Object.is
