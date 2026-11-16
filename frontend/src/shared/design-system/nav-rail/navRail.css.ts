@@ -139,3 +139,20 @@ export const badge = style({
 
 /** Expanded, the panel overlays the page; labels never wrap, so it grows to the longest. */
 globalStyle(`${rail}[data-expanded] ${panel}`, { boxShadow: shadowOverlay });
+
+/**
+ * A panel beside the rail: spans the rail's height from its end edge, so a panel inside can line
+ * up with any item. Only its content takes the pointer.
+ */
+export const flyout = style({
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  left: '100%',
+  pointerEvents: 'none',
+  selectors: {
+    '[dir="rtl"] &': { left: 'auto', right: '100%' },
+  },
+});
+
+globalStyle(`${flyout} > *`, { pointerEvents: 'auto' });

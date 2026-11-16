@@ -836,6 +836,21 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     }
     // The pending group re-rendered: new parts, or `more` turned off
     if (pending?.groupId === node.id) queueRetry();
+    // A composite focused while it had no parts (a row still loading) gained them: its entry part
+    if (
+      activeId === node.id &&
+      activePart === undefined &&
+      !previousParts?.length &&
+      node.parts?.length
+    ) {
+      const entry = node.entryPart?.();
+      setActive(
+        node.id,
+        entry !== undefined && node.parts.includes(entry) ? entry : node.parts[0],
+        'program'
+      );
+      return;
+    }
     // The focused part went away (a search's clear action once the field is empty): the part
     // before it, else the first
     if (
@@ -937,6 +952,8 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     },
     activePartOf: (id: string) => (activeId === id ? activePart : undefined),
     getActiveId: () => activeId,
+    /** What set the current focus: a key, the pointer, or the program. */
+    lastInput: () => lastInput,
     subscribe(id: string, listener: () => void) {
       if (!listeners.has(id)) listeners.set(id, new Set());
       listeners.get(id)!.add(listener);

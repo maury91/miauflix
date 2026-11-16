@@ -2,6 +2,7 @@ import type {
   RealtimeMediaRef,
   RealtimePlaybackDelivery,
   RealtimePlaybackPieces,
+  RealtimePlaybackStage,
   RealtimeSourceAvailability,
   RealtimeSourceMessage,
   RealtimeStatusMessage,
@@ -24,6 +25,8 @@ interface RealtimeState {
   playbackDelivered: Record<string, PlaybackDeliveredUpdate>;
   /** Downloaded stretches of each playback's file (thousandths), for the seek bar. */
   playbackPieces: Record<string, RealtimePlaybackPieces['ranges']>;
+  /** Where each playback's converted stream is while its player waits for it. */
+  playbackStages: Record<string, RealtimePlaybackStage['stage']>;
   /** Pushed source availability per playable key, newer than any details response. */
   availabilityByPlayable: Record<string, RealtimeSourceAvailability>;
   /** The candidate a starting playback is trying, per playable key. */
@@ -36,6 +39,7 @@ const initialState: RealtimeState = {
   playbackDeliveries: {},
   playbackDelivered: {},
   playbackPieces: {},
+  playbackStages: {},
   availabilityByPlayable: {},
   sourceAttempts: {},
 };
@@ -140,6 +144,9 @@ export const realtimeSlice = createSlice({
     playbackPiecesReceived(state, action: PayloadAction<RealtimePlaybackPieces>) {
       state.playbackPieces[action.payload.playbackId] = action.payload.ranges;
     },
+    playbackStageReceived(state, action: PayloadAction<RealtimePlaybackStage>) {
+      state.playbackStages[action.payload.playbackId] = action.payload.stage;
+    },
     resetRealtimeState() {
       return initialState;
     },
@@ -165,6 +172,10 @@ export const selectPlaybackDelivered =
 export const selectPlaybackPieces =
   (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
     playbackId === undefined ? null : (state.realtime.playbackPieces[playbackId] ?? null);
+
+export const selectPlaybackStage =
+  (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
+    playbackId === undefined ? null : (state.realtime.playbackStages?.[playbackId] ?? null);
 
 export const selectSourceAvailability =
   (playable: RealtimeMediaRef | PlayableRef | null | undefined) =>

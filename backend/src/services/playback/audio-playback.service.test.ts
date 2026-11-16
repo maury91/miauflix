@@ -5,6 +5,7 @@ import {
   deliveryFromProbe,
   explicitCredits,
   explicitIntro,
+  stageReporter,
 } from './audio-playback.service';
 
 describe('audio playback delivery', () => {
@@ -471,5 +472,46 @@ describe('credits chapters', () => {
       introStartSeconds: 114,
       introEndSeconds: 204,
     });
+  });
+});
+
+describe('stream stages', () => {
+  beforeEach(() => jest.useFakeTimers());
+  afterEach(() => jest.useRealTimers());
+
+  it('tells only the stages that last, then ready, then nothing more', () => {
+    const told = jest.fn();
+    const stages = stageReporter(told, 400);
+
+    // FFmpeg's quick reads before the position: nothing worth telling
+    stages.tell('downloading');
+    jest.advanceTimersByTime(100);
+    stages.tell('converting');
+    jest.advanceTimersByTime(100);
+    stages.tell('downloading');
+    jest.advanceTimersByTime(400);
+    expect(told.mock.calls).toEqual([['downloading']]);
+
+    stages.tell('converting');
+    jest.advanceTimersByTime(400);
+    stages.tell('ready');
+    stages.tell('downloading');
+    jest.advanceTimersByTime(1000);
+    expect(told.mock.calls).toEqual([['downloading'], ['converting'], ['ready']]);
+  });
+
+  it('tells ready even when no stage lasted, and nothing once stopped', () => {
+    const told = jest.fn();
+    const quick = stageReporter(told, 400);
+    quick.tell('downloading');
+    quick.tell('ready');
+    jest.advanceTimersByTime(1000);
+    expect(told.mock.calls).toEqual([['ready']]);
+
+    const cancelled = stageReporter(told, 400);
+    cancelled.tell('downloading');
+    cancelled.stop();
+    jest.advanceTimersByTime(1000);
+    expect(told).toHaveBeenCalledTimes(1);
   });
 });

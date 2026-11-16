@@ -12,14 +12,23 @@ import type { PlaybackTarget } from './playback-target';
 /** ffprobe read budget: container headers fit in it, so a probe waits on few torrent pieces. */
 export const PROBE_SIZE_BYTES = 2 * 1024 * 1024;
 
+/**
+ * Whether the reader's latest request waits for the file's bytes (`waiting`: they are still being
+ * downloaded) or receives them (`flowing`).
+ */
+export type SourceReadState = 'flowing' | 'waiting';
+
 /** A private loopback capability exposes only this file; no arbitrary URLs or plaintext files. */
 export async function openSourceInput(
   mediaLoad: MediaLoadClientService,
   target: PlaybackTarget,
-  speculative = false
+  speculative = false,
+  onRead?: (state: SourceReadState) => void
 ) {
   const path = `/${randomBytes(24).toString('hex')}`;
   const sockets = new Set<Socket>();
+  /** Only the latest request speaks for the reader: an earlier one may still be draining. */
+  let latestRequest = 0;
   const server = createServer(async (request, response) => {
     if (request.url !== path || !['GET', 'HEAD'].includes(request.method ?? '')) {
       response.writeHead(404).end();
@@ -30,6 +39,8 @@ export async function openSourceInput(
       response.writeHead(416).end();
       return;
     }
+    const requestNumber = ++latestRequest;
+    onRead?.('waiting');
     try {
       const result = await mediaLoad.streamFile(target, range, speculative);
       if (response.destroyed || request.method === 'HEAD') {
@@ -47,6 +58,10 @@ export async function openSourceInput(
         return;
       }
       const readable = Readable.fromWeb(result.body as NodeReadableStream<Uint8Array>);
+      if (onRead)
+        readable.once('data', () => {
+          if (requestNumber === latestRequest) onRead('flowing');
+        });
       response.once('close', () => readable.destroy());
       await pipeline(readable, response);
     } catch {

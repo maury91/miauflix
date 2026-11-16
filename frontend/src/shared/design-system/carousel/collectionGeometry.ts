@@ -1,8 +1,7 @@
 /**
  * The collection geometry contract (docs/plans/style-guide.md, "Collection geometry and tile
- * focus"): the tuned Home row sizes from `pages/home/home-layout.ts` (`mediaBoxSizes`), in pixels
- * from the window size. It is the documented exception to the rem rule. The values match
- * home-layout.ts; when Home migrates to Carousel it imports them from here instead.
+ * focus"): the tuned Home row sizes, in pixels from the window size. It is the documented exception
+ * to the rem rule. Home's rows (`pages/home/home-layout.ts`, `mediaBoxSizes`) are built on it.
  */
 
 /** Card width as a share of the window height (16:9 cards, 35.2vh wide). */

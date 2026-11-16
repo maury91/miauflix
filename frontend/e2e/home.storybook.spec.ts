@@ -56,21 +56,32 @@ test.describe('Home stories - visual regression', () => {
     );
     await waitForHomeArtwork(page);
 
-    const scrollContainer = page.getByTestId('category-row-scroll-container');
+    const row = page.getByRole('region', { name: 'Popular Movies' });
+    // The carousel moves its track with a transform; read where it rests
+    const track = row.locator('ul').first();
+    const offset = () =>
+      track.evaluate(element => new DOMMatrixReadOnly(getComputedStyle(element).transform).m41);
     const next = page.getByRole('button', { name: 'Next Popular Movies items' });
     const previous = page.getByRole('button', { name: 'Previous Popular Movies items' });
-    const stride = 253.44 + 14.4;
+    const offsets: number[] = [];
     const screenshot = async (position: number, name: string) => {
+      let last = Number.NaN;
       await expect
-        .poll(() => scrollContainer.evaluate(element => element.scrollLeft))
-        .toBe(Math.round(position * stride));
+        .poll(async () => {
+          const now = await offset();
+          const settled = now === last;
+          last = now;
+          return settled;
+        })
+        .toBe(true);
+      // Each page moves the track one step further; going back returns to the same place
+      offsets[position] ??= last;
+      expect(last).toBe(offsets[position]);
+      if (position > 0) expect(last).toBeLessThan(offsets[position - 1]!);
       await expect(page.locator('[aria-current="true"]')).toHaveCount(1);
-      await expect(page.getByRole('region', { name: 'Popular Movies' })).toHaveScreenshot(
-        `category-row-arrow-${name}.png`,
-        {
-          animations: 'disabled',
-        }
-      );
+      await expect(row).toHaveScreenshot(`category-row-arrow-${name}.png`, {
+        animations: 'disabled',
+      });
     };
 
     await screenshot(0, 'initial');

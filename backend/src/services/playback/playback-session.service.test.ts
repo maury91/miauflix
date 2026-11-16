@@ -115,6 +115,41 @@ describe('PlaybackSessionService', () => {
     expect(session?.sourceAttempt).toEqual({ position: 2, total: 3 });
   });
 
+  it("tells only the streaming key's own playback where its stream is", async () => {
+    const service = new PlaybackSessionService({
+      db: { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      preparation: {
+        prepare: jest.fn().mockResolvedValue({
+          source: { id: 2 },
+          target: movie({ id: 2 }),
+          state: 'cold',
+        }),
+      } as never,
+      config: { getOrThrow: () => 60000 } as never,
+      audioPlaybackService: {
+        knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }),
+      } as never,
+    });
+    const stages = jest.fn();
+    service.onStreamStage(stages);
+    const create = () =>
+      service.create(
+        'user',
+        { kind: 'movie', mediaId: 1 },
+        { quality: 'auto', allowHevc: false },
+        { sessionId: 'tab' }
+      );
+    await create();
+    const session = await create();
+
+    service.reportStreamStage(session!.streamingKey, 'downloading');
+    service.reportStreamStage('unknown-key', 'converting');
+
+    expect(stages.mock.calls).toEqual([
+      [{ userId: 'user', sessionId: 'tab', playbackId: session!.playbackId, stage: 'downloading' }],
+    ]);
+  });
+
   it.each([
     ['every source proved fake', { exhausted: true }, 'exhausted'],
     ['no source fits in storage', { noRoom: true }, 'insufficient_storage'],

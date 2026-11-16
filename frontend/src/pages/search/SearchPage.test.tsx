@@ -3,9 +3,9 @@ import { searchMiddleware } from '@features/search/search.middleware';
 import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from '@store/slices/auth';
 import { searchActions, searchSlice, type SearchState } from '@store/slices/search';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { searchStateFixture } from './search.fixtures';
 import SearchPage from './SearchPage';
@@ -27,48 +27,67 @@ const setupTest = (search?: SearchState) => {
   return { store, onDismiss };
 };
 
+beforeEach(() => {
+  // jsdom lays nothing out; the navigation layer only focuses elements on screen
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+    () => [{}] as unknown as DOMRectList
+  );
+  // jsdom has no scrolling
+  Element.prototype.scrollIntoView = vi.fn();
+});
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
   vi.clearAllMocks();
 });
+
+/** A key on whatever holds focus, as the remote sends it. */
+const press = (key: string, init: Partial<KeyboardEventInit> = {}) =>
+  act(() => {
+    fireEvent.keyDown(document.activeElement ?? document.body, { key, ...init });
+  });
 
 describe('SearchPage', () => {
   it('types with the on-screen keyboard and moves up to the search box', () => {
     const { store } = setupTest();
-    const keyA = screen.getByRole('button', { name: 'A' });
-    expect(document.activeElement).toBe(keyA);
+    expect(screen.getByRole('button', { name: 'a' })).toHaveFocus();
 
-    fireEvent.keyDown(keyA, { key: 'Enter' });
-    fireEvent.keyDown(document.activeElement!, { key: 'ArrowRight' });
-    fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
+    press('Enter');
+    press('ArrowRight');
+    press('Enter');
     expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveValue('ab');
 
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
     expect(store.getState().search.query).toBe('a');
 
-    // Delete sits on the action row, six rows below the top of the grid.
-    for (let step = 0; step < 7; step++)
-      fireEvent.keyDown(document.activeElement!, { key: 'ArrowUp' });
-    expect(document.activeElement).toBe(screen.getByRole('searchbox', { name: 'Search' }));
+    // Down to the action row, then back up past the six rows of characters
+    for (let step = 0; step < 6; step++) press('ArrowDown');
+    expect(screen.getByRole('button', { name: 'Space' })).toHaveFocus();
+    for (let step = 0; step < 7; step++) press('ArrowUp');
+    // Focused, not yet editing: Confirm enters the field
+    const field = screen.getByRole('searchbox', { name: 'Search' });
+    expect(field.closest('[data-focused]')).not.toBeNull();
+    press('Enter');
+    expect(field).toHaveFocus();
   });
 
   it('moves left from the keyboard to the rail back button, which leaves the page', () => {
     const { onDismiss } = setupTest();
-    fireEvent.keyDown(screen.getByRole('button', { name: 'A' }), { key: 'ArrowLeft' });
-    const back = screen.getByRole('button', { name: 'Back to Home' });
-    expect(document.activeElement).toBe(back);
+    press('ArrowLeft');
+    expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
     expect(screen.queryByRole('button', { name: 'Home' })).not.toBeInTheDocument();
 
-    fireEvent.keyDown(back, { key: 'Enter' });
+    press('Enter');
     expect(onDismiss).toHaveBeenCalledOnce();
   });
 
   it('moves focus to the results when Enter submits the search box', async () => {
     const { store } = setupTest(searchStateFixture);
-    const box = screen.getByRole('searchbox', { name: 'Search' });
-    box.focus();
-    fireEvent.keyDown(box, { key: 'Enter' });
-    expect(store.getState().search.focus.zone).toBe('input');
+    press('ArrowUp');
+    press('Enter');
+    expect(screen.getByRole('searchbox', { name: 'Search' })).toHaveFocus();
+    press('Enter');
+    expect(store.getState().search.status).toBe('loading');
 
     const { requestId } = store.getState().search;
     act(() => {
@@ -83,15 +102,16 @@ describe('SearchPage', () => {
         })
       );
     });
-    expect(store.getState().search.focus).toEqual({ zone: 'results', index: 0 });
     const results = screen.getByRole('region', { name: 'Results for “Dune”' });
     expect(results).toContainElement(document.activeElement as HTMLElement);
+    expect(document.activeElement).toHaveAccessibleName(searchStateFixture.results[0]!.title);
   });
 
   const submit = (store: ReturnType<typeof setupTest>['store']) => {
-    const box = screen.getByRole('searchbox', { name: 'Search' });
-    box.focus();
-    fireEvent.keyDown(box, { key: 'Enter' });
+    press('ArrowUp');
+    // Confirm enters the field, Enter there submits
+    press('Enter');
+    press('Enter');
     return store.getState().search.requestId;
   };
 
@@ -122,19 +142,19 @@ describe('SearchPage', () => {
     expect(screen.getByText('Media Catalog is not configured.')).toBeInTheDocument();
     expect(screen.getByText('An admin needs to configure TMDB.')).toBeInTheDocument();
     const retry = screen.getByRole('button', { name: 'Try again' });
-    expect(document.activeElement).toBe(retry);
+    expect(retry).toHaveFocus();
 
-    fireEvent.keyDown(retry, { key: 'ArrowDown' });
+    press('ArrowDown');
     const toggle = screen.getByRole('button', { name: 'Technical details' });
-    expect(document.activeElement).toBe(toggle);
+    expect(toggle).toHaveFocus();
     expect(screen.queryByText('abcd1234')).not.toBeInTheDocument();
-    fireEvent.keyDown(toggle, { key: 'Enter' });
+    press('Enter');
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
     expect(screen.getByText('abcd1234')).toBeInTheDocument();
 
-    fireEvent.keyDown(toggle, { key: 'ArrowUp' });
-    expect(document.activeElement).toBe(retry);
-    fireEvent.keyDown(retry, { key: 'Enter' });
+    press('ArrowUp');
+    expect(retry).toHaveFocus();
+    press('Enter');
     expect(store.getState().search.status).toBe('loading');
     const retryId = store.getState().search.requestId;
     expect(retryId).toBeGreaterThan(requestId);
@@ -152,7 +172,7 @@ describe('SearchPage', () => {
         })
       );
     });
-    expect(store.getState().search.focus).toEqual({ zone: 'results', index: 0 });
+    expect(document.activeElement).toHaveAccessibleName(searchStateFixture.results[0]!.title);
   });
 
   it('offers to clear a search without results', () => {
@@ -173,31 +193,29 @@ describe('SearchPage', () => {
     });
 
     expect(screen.getByRole('heading', { name: 'No results for ‘zzzz’' })).toBeInTheDocument();
-    const clear = screen.getByRole('button', { name: 'Clear search' });
-    expect(document.activeElement).toBe(clear);
-    fireEvent.keyDown(clear, { key: 'Enter' });
+    expect(screen.getByRole('button', { name: 'Clear search' })).toHaveFocus();
+    press('Enter');
     expect(store.getState().search.query).toBe('');
-    expect(store.getState().search.focus).toEqual({ zone: 'keyboard', index: 0 });
+    expect(screen.getByRole('button', { name: 'a' })).toHaveFocus();
   });
 
   it('ignores the Enter that confirms an IME composition', () => {
     const { store } = setupTest(searchStateFixture);
+    press('ArrowUp');
+    press('Enter');
     const box = screen.getByRole('searchbox', { name: 'Search' });
-    box.focus();
-    fireEvent.keyDown(box, { key: 'Enter', isComposing: true });
+    press('Enter', { isComposing: true });
     expect(store.getState().search.status).toBe('ready');
     expect(box).toHaveFocus();
 
-    fireEvent.keyDown(box, { key: 'Enter' });
+    press('Enter');
     expect(store.getState().search.status).toBe('loading');
   });
 
   it('shows the catalog genres as chips and browses one', () => {
     const { store } = setupTest(searchStateFixture);
     expect(
-      screen
-        .getAllByRole('button')
-        .filter(button => button.closest('[aria-label="Popular searches"]'))
+      within(screen.getByRole('region', { name: 'Popular searches' })).getAllByRole('button')
     ).toHaveLength(searchStateFixture.genres.length);
 
     fireEvent.click(screen.getByRole('button', { name: 'Horror' }));
@@ -217,8 +235,8 @@ describe('SearchPage', () => {
     const { store } = setupTest(searchStateFixture);
     expect(screen.getByRole('heading', { name: 'Results for “Dune”' })).toBeInTheDocument();
     expect(screen.getByText('24 results')).toBeInTheDocument();
-    expect(screen.getByText('2h 35m')).toBeInTheDocument();
-    expect(screen.getAllByText('S1')).toHaveLength(2);
+    expect(screen.getByText(/· 2h 35m ·/)).toBeInTheDocument();
+    expect(screen.getAllByText(/^S1 · /)).toHaveLength(2);
 
     fireEvent.click(screen.getByRole('button', { name: 'Dune: Prophecy' }));
 
@@ -226,7 +244,18 @@ describe('SearchPage', () => {
       { type: 'showDetails', mediaId: 1368166 },
       { parent: { type: 'search' } }
     );
-    expect(store.getState().search.focus).toEqual({ zone: 'results', index: 2 });
+    expect(store.getState().search.focus).toBe('search-result:tvshow:1368166');
+  });
+
+  it('starts on the result it opened when it comes back from details', () => {
+    setupTest({ ...searchStateFixture, focus: 'search-result:tvshow:1368166' });
+    expect(screen.getByRole('button', { name: 'Dune: Prophecy' })).toHaveFocus();
+  });
+
+  it('forgets a recent search from its remove action', () => {
+    const { store } = setupTest(searchStateFixture);
+    fireEvent.click(screen.getByRole('button', { name: 'Remove “Silo”' }));
+    expect(store.getState().search.recents.map(recent => recent.label)).not.toContain('Silo');
   });
 
   it('runs a recent search and leaves on Back', () => {
@@ -234,7 +263,8 @@ describe('SearchPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Silo' }));
     expect(store.getState().search.query).toBe('Silo');
 
-    fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
+    press('Escape');
     expect(onDismiss).toHaveBeenCalled();
+    expect(store.getState().search.focus).toBeNull();
   });
 });

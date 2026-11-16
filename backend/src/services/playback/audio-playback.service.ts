@@ -61,6 +61,49 @@ export interface AudioPlaybackPreferences {
   playsRemux?: boolean;
 }
 
+/**
+ * Where a converted stream is before its first media reaches the player: `downloading` while
+ * FFmpeg waits for the file's bytes at the requested position, `converting` while they flow in
+ * and are turned into the stream, `ready` once its first media is sent.
+ */
+export type AudioStreamStage = 'converting' | 'downloading' | 'ready';
+
+/** How long a stream stays in a stage before the viewer is told about it. */
+const STAGE_HOLD_MS = 400;
+
+/**
+ * Tells a starting stream's stages. FFmpeg makes a few quick reads (header, index, then the
+ * position): a stage is told once it lasts, so a quick start does not flicker between them.
+ * `ready` is told at once, and always, so the player drops a stage left by a cancelled start;
+ * nothing is told after it, as later reads are ordinary playback.
+ */
+export function stageReporter(onStage: (stage: AudioStreamStage) => void, holdMs = STAGE_HOLD_MS) {
+  let stopped = false;
+  let told: AudioStreamStage | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const stop = () => {
+    stopped = true;
+    clearTimeout(timer);
+  };
+  return {
+    tell(stage: AudioStreamStage) {
+      if (stopped) return;
+      clearTimeout(timer);
+      if (stage === 'ready') {
+        stop();
+        onStage(stage);
+      } else if (stage !== told) {
+        timer = setTimeout(() => {
+          told = stage;
+          onStage(stage);
+        }, holdMs);
+        timer.unref?.();
+      }
+    },
+    stop,
+  };
+}
+
 export class AudioPlaybackError extends Error {
   constructor(
     message: string,
@@ -667,8 +710,10 @@ export class AudioPlaybackService {
     signal: AbortSignal,
     audioTrackIndex?: number,
     copyAudio = false,
-    transcodeVideo = false
+    transcodeVideo = false,
+    onStage?: (stage: AudioStreamStage) => void
   ): Promise<Response> {
+    const stages = onStage ? stageReporter(onStage) : undefined;
     if (transcodeVideo && !this.canConvertHevc())
       throw new AudioPlaybackError('Video conversion is disabled.', 422);
     // Reinspect the source; query parameters cannot enable conversion against server policy.
@@ -719,6 +764,7 @@ export class AudioPlaybackService {
     const cleanup = (): Promise<void> =>
       (cleaning ??= (async () => {
         signal.removeEventListener('abort', abort);
+        stages?.stop();
         if (expiry) clearTimeout(expiry);
         if (preparationTimeout) clearTimeout(preparationTimeout);
         timeline?.destroy();
@@ -745,10 +791,12 @@ export class AudioPlaybackService {
       if (this.closed || this.jobs.size > 2 || this.processes.size >= 4) {
         throw new AudioPlaybackError('Audio conversion is busy. Retry shortly.');
       }
-      input = await openSourceInput(this.mediaLoad, {
-        ...target,
-        durationSeconds: delivery.durationSeconds,
-      });
+      input = await openSourceInput(
+        this.mediaLoad,
+        { ...target, durationSeconds: delivery.durationSeconds },
+        false,
+        stages && (state => stages.tell(state === 'waiting' ? 'downloading' : 'converting'))
+      );
       if (controller.signal.aborted)
         throw new AudioPlaybackError('Audio preparation was cancelled.');
       const spawnStartedAt = performance.now();
@@ -854,6 +902,7 @@ export class AudioPlaybackService {
           await iterator.return?.().catch(() => undefined);
         },
       });
+      stages?.tell('ready');
       return new Response(body, {
         headers: {
           'Content-Type': 'video/mp4',

@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { HomeSidebar } from './HomeSidebar';
 
@@ -15,178 +16,139 @@ const profile = {
   },
 };
 
-const sidebar = (overrides: Partial<Parameters<typeof HomeSidebar>[0]> = {}) => (
-  <HomeSidebar
-    active={false}
-    showSettings={false}
-    onAction={() => ({ type: 'handled' })}
-    onHover={vi.fn()}
-    onSettings={vi.fn()}
-    onSearch={vi.fn()}
-    onEnterNotifications={vi.fn()}
-    unreadCount={0}
-    hasNotifications={false}
-    {...overrides}
-  />
-);
+beforeEach(() => {
+  // jsdom lays nothing out; the navigation layer only focuses elements on screen
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+    () => [{}] as unknown as DOMRectList
+  );
+});
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
-describe('HomeSidebar', () => {
-  it('keeps Search and Settings accessible, without a Home item, when the rail is collapsed', () => {
-    const onSettings = vi.fn();
-    render(
+const sidebar = (overrides: Partial<Parameters<typeof HomeSidebar>[0]> = {}) => (
+  <NavigationProvider>
+    <FocusScope initialId="home-rail:search">
       <HomeSidebar
-        active={false}
-        showSettings={true}
-        onAction={() => ({ type: 'handled' })}
-        onHover={vi.fn()}
-        onSettings={onSettings}
+        showSettings={false}
+        onSettings={vi.fn()}
         onSearch={vi.fn()}
         onEnterNotifications={vi.fn()}
+        onPointerLeave={vi.fn()}
         unreadCount={0}
-        hasNotifications={false}
+        {...overrides}
       />
-    );
+    </FocusScope>
+  </NavigationProvider>
+);
 
-    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
-    const settings = screen.getByRole('button', { name: 'Settings' });
-    expect(settings).toBeInTheDocument();
+const press = (key: string) =>
+  act(() => {
+    fireEvent.keyDown(document.activeElement ?? document.body, { key });
+  });
 
-    fireEvent.click(settings);
+const rail = () => screen.getByRole('navigation', { name: 'Home navigation' });
+
+describe('HomeSidebar', () => {
+  it('keeps Search and Settings reachable, without a Home item, when the rail is compact', () => {
+    const onSettings = vi.fn();
+    const onSearch = vi.fn();
+    render(sidebar({ showSettings: true, onSettings, onSearch }));
+
+    expect(screen.queryByRole('button', { name: 'Home' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Search' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    expect(onSearch).toHaveBeenCalledTimes(1);
     expect(onSettings).toHaveBeenCalledTimes(1);
   });
 
-  it('should hide Settings, when showSettings is false', () => {
-    render(
-      <HomeSidebar
-        active={false}
-        showSettings={false}
-        onAction={() => ({ type: 'handled' })}
-        onHover={vi.fn()}
-        onSettings={vi.fn()}
-        onSearch={vi.fn()}
-        onEnterNotifications={vi.fn()}
-        unreadCount={0}
-        hasNotifications={false}
-      />
-    );
-
+  it('hides Settings when showSettings is false', () => {
+    render(sidebar());
     expect(screen.queryByRole('button', { name: 'Settings' })).not.toBeInTheDocument();
   });
 
-  it('stays open when the pointer moves onto the notifications panel', () => {
-    const onAction = vi.fn(() => ({ type: 'handled' as const }));
+  it('starts on Search, moves with Up and Down without wrapping, and expands while it holds focus', () => {
+    render(sidebar({ showSettings: true }));
+    const search = screen.getByRole('button', { name: 'Search' });
+    expect(search).toHaveFocus();
+    expect(search).toHaveAttribute('data-focused');
+
+    press('ArrowUp');
+    expect(screen.getByRole('button', { name: 'Notifications' })).toHaveFocus();
+    press('ArrowUp');
+    expect(screen.getByRole('button', { name: 'Notifications' })).toHaveFocus();
+    press('ArrowDown');
+    press('ArrowDown');
+    expect(screen.getByRole('button', { name: 'Settings' })).toHaveFocus();
+    press('ArrowDown');
+    expect(screen.getByRole('button', { name: 'Settings' })).toHaveFocus();
+  });
+
+  it('expands while the pointer is over it and reports when the pointer leaves', () => {
+    const onPointerLeave = vi.fn();
     render(
-      <>
+      <NavigationProvider>
         <HomeSidebar
-          active
           showSettings={false}
-          onAction={onAction}
-          onHover={vi.fn()}
           onSettings={vi.fn()}
           onSearch={vi.fn()}
           onEnterNotifications={vi.fn()}
-          unreadCount={3}
-          hasNotifications
+          onPointerLeave={onPointerLeave}
+          unreadCount={0}
         />
-        <div data-notifications-panel="" data-testid="panel" />
-      </>
+      </NavigationProvider>
     );
-    const rail = screen.getByRole('complementary', { name: 'Home navigation' });
 
-    fireEvent.mouseLeave(rail, { relatedTarget: screen.getByTestId('panel') });
-    expect(onAction).not.toHaveBeenCalled();
-
-    fireEvent.mouseLeave(rail, { relatedTarget: document.body });
-    expect(onAction).toHaveBeenCalledWith('right');
+    const nav = rail();
+    expect(nav).not.toHaveAttribute('data-expanded');
+    fireEvent.mouseEnter(nav);
+    expect(nav).toHaveAttribute('data-expanded');
+    fireEvent.mouseLeave(nav);
+    expect(nav).not.toHaveAttribute('data-expanded');
+    expect(onPointerLeave).toHaveBeenCalledTimes(1);
   });
 
-  it('enters the notifications panel from the bell and shows the unread count', () => {
-    const onEnterNotifications = vi.fn();
-    render(
-      <HomeSidebar
-        active={false}
-        showSettings={false}
-        onAction={() => ({ type: 'handled' })}
-        onHover={vi.fn()}
-        onSettings={vi.fn()}
-        onSearch={vi.fn()}
-        onEnterNotifications={onEnterNotifications}
-        unreadCount={120}
-        hasNotifications
-      />
+  it('stays expanded with an open panel, drawn beside it in the flyout', () => {
+    render(sidebar({ openPanel: 'notifications', flyout: <section aria-label="Panel" /> }));
+
+    expect(rail()).toHaveAttribute('data-expanded');
+    expect(rail()).toContainElement(screen.getByRole('region', { name: 'Panel' }));
+    expect(screen.getByRole('button', { name: 'Notifications' })).toHaveAttribute(
+      'aria-expanded',
+      'true'
     );
+  });
+
+  it('opens the notifications panel from the bell and shows the unread count', () => {
+    const onEnterNotifications = vi.fn();
+    render(sidebar({ onEnterNotifications, unreadCount: 120 }));
 
     expect(screen.getByText('99+')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Notifications, 120 unread' }));
+    const bell = screen.getByRole('button', { name: 'Notifications' });
+    expect(bell).toHaveAccessibleDescription('120 unread');
+    fireEvent.click(bell);
     expect(onEnterNotifications).toHaveBeenCalledTimes(1);
   });
 
-  it.each([
-    { hasNotifications: false, entered: 0 },
-    { hasNotifications: true, entered: 1 },
-  ])(
-    'moves Right from the bell into the panel only when there are notifications ($hasNotifications)',
-    ({ hasNotifications, entered }) => {
-      const onEnterNotifications = vi.fn();
-      const onAction = vi.fn(() => ({ type: 'handled' as const }));
-      render(
-        <HomeSidebar
-          active
-          showSettings={false}
-          onAction={onAction}
-          onHover={vi.fn()}
-          onSettings={vi.fn()}
-          onSearch={vi.fn()}
-          onEnterNotifications={onEnterNotifications}
-          unreadCount={0}
-          hasNotifications={hasNotifications}
-        />
-      );
-
-      const search = screen.getByRole('button', { name: 'Search' });
-      fireEvent.keyDown(search, { key: 'ArrowUp' });
-      const bell = screen.getByRole('button', { name: 'Notifications' });
-      expect(bell).toHaveFocus();
-      fireEvent.keyDown(bell, { key: 'ArrowRight' });
-
-      expect(onEnterNotifications).toHaveBeenCalledTimes(entered);
-      expect(onAction).not.toHaveBeenCalled();
-      expect(bell).toHaveFocus();
-    }
-  );
-
   it('puts the watching profile at the bottom, above Settings, and opens its panel', () => {
     const onEnterProfile = vi.fn();
-    const { rerender } = render(sidebar({ profile, onEnterProfile, showSettings: true }));
+    render(sidebar({ profile, onEnterProfile, showSettings: true }));
 
-    const buttons = screen.getAllByRole('button').map(button => button.getAttribute('aria-label'));
-    expect(buttons).toEqual([
-      'Notifications',
-      'Search',
-      'Profile, Maurizio is watching',
-      'Settings',
-    ]);
+    const names = screen
+      .getAllByRole('button')
+      .map(button => button.getAttribute('aria-label') ?? button.textContent);
+    expect(names).toEqual(['Notifications', 'Search', 'Profile, Maurizio is watching', 'Settings']);
     fireEvent.click(screen.getByRole('button', { name: /^Profile/ }));
     expect(onEnterProfile).toHaveBeenCalledTimes(1);
-
-    rerender(sidebar({ profile, onEnterProfile }));
-    const last = screen.getAllByRole('button').at(-1);
-    expect(last).toHaveAccessibleName('Profile, Maurizio is watching');
   });
 
-  it.each(['Enter', 'ArrowRight'])(
-    'moves into the profile panel with %s, like the bell into notifications',
-    key => {
-      const onEnterProfile = vi.fn();
-      const onAction = vi.fn(() => ({ type: 'handled' as const }));
-      render(sidebar({ active: true, profile, onEnterProfile, onAction }));
-      expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
-      fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
-      const item = screen.getByRole('button', { name: /^Profile/ });
-      expect(item).toHaveFocus();
-      fireEvent.keyDown(item, { key });
-      expect(onEnterProfile).toHaveBeenCalledTimes(1);
-      expect(onAction).not.toHaveBeenCalled();
-    }
-  );
+  it('opens the profile panel with Enter', () => {
+    const onEnterProfile = vi.fn();
+    render(sidebar({ profile, onEnterProfile }));
+    press('ArrowDown');
+    expect(screen.getByRole('button', { name: /^Profile/ })).toHaveFocus();
+    press('Enter');
+    expect(onEnterProfile).toHaveBeenCalledTimes(1);
+  });
 });

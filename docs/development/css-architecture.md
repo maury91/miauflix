@@ -192,7 +192,7 @@ is classified:
 | File                                              | Lines                                              | Props                                                                                              | V      | C      | G      | Target                                                                                                                                |
 | ------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ------ | ------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `shared/ui/media-card/MediaCard.tsx`              | 25, 53, 65, 116, 117, 132, 140                     | `$width`, `$hovered`, `$focused`, `$percent`                                                       | 2      | 1      | 4      | **Done (pilot)**                                                                                                                      |
-| `shared/ui/poster-card/PosterCard.tsx`            | 24, 45, 54                                         | `$width`, `$focused`                                                                               | 2      |        | 1      | MediaCard's pattern: `em` width, `data-focused`                                                                                       |
+| `shared/ui/poster-card/PosterCard.tsx`            | 24, 45, 54                                         | `$width`, `$focused`                                                                               | 2      |        | 1      | **Removed**: Search results use the design system's `MediaTile`                                                                       |
 | `shared/ui/quality-badge/QualityBadge.tsx`        | 28, 35, 41                                         | `$state`                                                                                           | 3      |        |        | `data-state`                                                                                                                          |
 | `shared/ui/rail/rail.styles.ts`                   | 44, 76                                             | `$active`, `$selected`                                                                             | 2      |        |        | `data-active`, `aria-current`; fixed gradient                                                                                         |
 | `shared/ui/button/Button.tsx`                     | 85, 87, 99, 127, 145, 151, 190                     | `$color`, `$size`, `$appearance`, `$variant`, `$fullWidth`, `$iconOnly`, `$collapseWhenNotFocused` | 7      |        |        | `data-color`, `data-size`, `data-appearance`, `data-variant`, boolean `data-*`                                                        |
@@ -235,7 +235,7 @@ the stories, unit tests and visual snapshots passing, and add a CHANGELOG line.
 
 0. ~~`shared/ui/media-card/MediaCard`~~ (pilot, done)
 1. **Base components on the TV path** (`shared/ui`)
-   1. `poster-card/PosterCard.tsx`: MediaCard's pattern exactly
+   1. ~~`poster-card/PosterCard.tsx`~~ (removed: Search results use `MediaTile`)
    2. `quality-badge/QualityBadge.tsx`
    3. `rail/rail.styles.ts`: always on screen, and expanding it inserts a rule today
    4. `button/Button.tsx`: the base for most controls

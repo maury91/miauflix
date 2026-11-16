@@ -35,6 +35,13 @@ export interface NavRailProps {
    * `navId`); on TV it then expands while it holds focus. See NavigableProps.
    */
   navId?: string;
+  /** With `navId`: the item entered first while the rail remembers none (Search on Home). */
+  defaultNavId?: string;
+  /**
+   * A panel beside the rail (notifications, the profile), placed at the rail's end edge and moving
+   * with it as it expands. The pointer travelling into it never leaves the rail.
+   */
+  flyout?: ReactNode;
 }
 
 /**
@@ -50,10 +57,17 @@ export function NavRail({
   onMouseEnter,
   onMouseLeave,
   navId,
+  defaultNavId,
+  flyout,
 }: NavRailProps) {
   const holdsFocus = useActiveIdWithin(navId) !== null;
   return (
-    <FocusGroup id={navId} layout="vertical" disabled={navId === undefined}>
+    <FocusGroup
+      id={navId}
+      layout="vertical"
+      defaultId={defaultNavId}
+      disabled={navId === undefined}
+    >
       <SurfaceContextProvider value="solid">
         <nav
           aria-label={label}
@@ -65,6 +79,7 @@ export function NavRail({
           <div className={styles.panel}>
             <div className={styles.items}>{children}</div>
             {end && <div className={`${styles.items} ${styles.end}`}>{end}</div>}
+            {flyout && <div className={styles.flyout}>{flyout}</div>}
           </div>
         </nav>
       </SurfaceContextProvider>

@@ -11,24 +11,6 @@ import type {
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { clearAuth, setSession } from '@store/slices/auth';
 
-/**
- * `back` is the back button on the page's rail; `state` holds the actions of the no-results or
- * error panel shown instead of results (the main action, then "Technical details").
- */
-export type SearchZone =
-  | 'back'
-  | 'input'
-  | 'keyboard'
-  | 'popular'
-  | 'recents'
-  | 'results'
-  | 'state';
-
-export interface SearchFocus {
-  zone: SearchZone;
-  index: number;
-}
-
 export interface SearchState {
   /** Text shown in the search box; a selected genre shows its name. */
   query: string;
@@ -49,9 +31,11 @@ export interface SearchState {
   recents: SearchRecentDto[];
   /** Genre chips from the catalog, most titles first, then shortcuts such as Anime. */
   genres: SearchGenreDto[];
-  focus: SearchFocus;
-  /** Last character key on the on-screen keyboard that had focus, to return to it. */
-  lastKey: number;
+  /**
+   * The navigation id focused when Search was left (opening a result), where it starts again on
+   * return; null starts on the keyboard.
+   */
+  focus: string | null;
 }
 
 export const initialSearchState: SearchState = {
@@ -68,8 +52,7 @@ export const initialSearchState: SearchState = {
   details: {},
   recents: [],
   genres: [],
-  focus: { zone: 'keyboard', index: 0 },
-  lastKey: 0,
+  focus: null,
 };
 
 export const searchResultKey = (item: { _type: string; mediaId: number }) =>
@@ -176,11 +159,8 @@ export const searchSlice = createSlice({
         state.error = message.error ?? null;
       }
     },
-    focusChanged(state, action: PayloadAction<SearchFocus>) {
+    focusChanged(state, action: PayloadAction<string | null>) {
       state.focus = action.payload;
-    },
-    keyRemembered(state, action: PayloadAction<number>) {
-      state.lastKey = action.payload;
     },
   },
   extraReducers: builder => {

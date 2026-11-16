@@ -31,7 +31,7 @@ test.describe('Search stories - visual regression', () => {
     await expect(page.getByRole('heading', { name: 'Results for “Dune”' })).toBeVisible({
       timeout: 30_000,
     });
-    await expect(page.getByRole('button', { name: 'A', exact: true })).toBeFocused();
+    await expect(page.getByRole('button', { name: 'a', exact: true })).toBeFocused();
     await page.waitForLoadState('networkidle');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => {

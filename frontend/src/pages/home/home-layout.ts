@@ -1,14 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit';
+import {
+  type CollectionGeometry,
+  collectionGeometry,
+} from '@shared/design-system/carousel/collectionGeometry';
 import { selectWindowSize, type WindowSize } from '@store/slices/measurements';
 
-/** Card width as a share of the window height (16:9 cards, 35.2vh wide). */
-export const CARD_WIDTH_OF_HEIGHT = 0.352;
-/** Gap between cards as a share of the window height (2vh). */
-export const CARD_GAP_OF_HEIGHT = 0.02;
-/** Minimum space kept on each side of a row as a share of the window width (5vw). */
-export const ROW_SIDE_MARGIN_OF_WIDTH = 0.05;
-/** At most half a card peeks in from either side of a row. */
-export const MAX_PEEK_OF_CARD = 0.5;
 /**
  * Every row is exactly this tall (vh), space below included: title 6vh, cards 22vh, gap 5vh.
  * A fixed height lets Home place and scroll to any row without measuring it.
@@ -17,6 +13,8 @@ export const ROW_HEIGHT_VH = 33;
 export const ROW_GAP_VH = 5;
 
 export interface MediaBoxSizes {
+  /** The same sizes for a Carousel. */
+  geometry: CollectionGeometry;
   mediaWidth: number;
   /** Whole cards that fit in a row between the side margins. */
   mediaPerPage: number;
@@ -33,24 +31,17 @@ export interface MediaBoxSizes {
   windowHeight: number;
 }
 
-/** Card sizes for Home rows, in pixels, for a window size. */
+/** Card sizes for Home rows, in pixels, for a window size: the design system's collection geometry. */
 export function mediaBoxSizes({ width, height }: WindowSize): MediaBoxSizes {
-  const mediaWidth = CARD_WIDTH_OF_HEIGHT * height;
-  const gap = CARD_GAP_OF_HEIGHT * height;
-  const sideMargin = ROW_SIDE_MARGIN_OF_WIDTH * width;
-  const fitting = Math.floor((width - gap - sideMargin * 2) / (mediaWidth + gap));
-  // At least one card, also before the window is measured (a zero height divides by zero).
-  const mediaPerPage = Number.isFinite(fitting) ? Math.max(1, fitting) : 1;
-  const totalMediaWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1);
-  const margin = (width - totalMediaWidth) / 2;
-  const peekWidth = Math.min(mediaWidth * MAX_PEEK_OF_CARD, Math.max(0, margin));
+  const geometry = collectionGeometry({ width, height });
   return {
-    mediaWidth,
-    mediaPerPage,
-    gap,
-    margin,
-    peekWidth,
-    width: totalMediaWidth,
+    geometry,
+    mediaWidth: geometry.itemWidth,
+    mediaPerPage: geometry.perPage,
+    gap: geometry.gap,
+    margin: (width - geometry.contentWidth) / 2,
+    peekWidth: geometry.peek,
+    width: geometry.contentWidth,
     rowHeight: (ROW_HEIGHT_VH / 100) * height,
     windowWidth: width,
     windowHeight: height,

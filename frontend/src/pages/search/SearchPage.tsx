@@ -1,74 +1,70 @@
 import { navigate } from '@app/router';
-import { IS_TV, PALETTE } from '@shared/config/constants';
-import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { BackRail } from '@shared/ui/rail/BackRail';
-import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
-import { useAppDispatch, useAppSelector } from '@store/hooks';
-import { searchActions, type SearchFocus } from '@store/slices/search';
-import { type FC, type KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
-import styled from 'styled-components';
-
-import { OnScreenKeyboard } from './components/OnScreenKeyboard';
-import { SearchBox } from './components/SearchBox';
-import { SearchChips } from './components/SearchChips';
-import { searchPanelActionCount } from './components/searchPanel';
-import { SearchResults } from './components/SearchResults';
+import { IS_TV } from '@shared/config/constants';
 import {
-  clampSearchFocus,
-  isCharacterKey,
-  KEYBOARD_BACKSPACE,
-  KEYBOARD_CHARACTERS,
-  KEYBOARD_SPACE,
-  MAX_RECENT_CHIPS,
-  moveSearchFocus,
-  POPULAR_COLUMNS,
-  type SearchDirection,
-} from './searchNavigation';
+  alphanumericKeys,
+  NavItem,
+  NavRail,
+  SearchField,
+  SearchKeyboard,
+  SurfaceContextProvider,
+} from '@shared/design-system';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import {
+  FocusGroup,
+  FocusScope,
+  NavigationProvider,
+  useActiveIdWithin,
+  useNavigation,
+} from '@shared/navigation';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
+import { searchActions, searchResultKey } from '@store/slices/search';
+import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
-import ClockIcon from '~icons/mdi/clock-outline';
-import SearchIcon from '~icons/mdi/magnify';
+import { PopularSearches, RecentSearches } from './components/SearchChips';
+import { searchPanelKind } from './components/searchPanel';
+import { SearchResults } from './components/SearchResults';
+import { SEARCH_NAV, SEARCH_START } from './searchNav';
+import * as styles from './searchPage.css';
+
+import ArrowLeftIcon from '~icons/mdi/arrow-left';
+import DeleteIcon from '~icons/mdi/backspace-outline';
+import ClearIcon from '~icons/mdi/close';
+import SpaceIcon from '~icons/mdi/keyboard-space';
 
 /** Load the next page once focus is this close to the end of the results. */
 const NEXT_PAGE_THRESHOLD = 3;
+export const MAX_RECENT_CHIPS = 5;
 
-const Page = styled.main`
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  overflow: hidden;
-  padding: 10.5vh 3.2vw 0 calc(max(5vw, 56px) + 2.4vw);
-  background:
-    radial-gradient(ellipse at 85% 0%, rgba(80, 90, 110, 0.18), transparent 55%),
-    linear-gradient(180deg, #121419 0%, #08090c 100%);
-  color: ${PALETTE.text.primary};
-  font-family: 'Poppins', sans-serif;
-`;
-
-const Columns = styled.div`
-  display: grid;
-  grid-template-columns: 24vw minmax(0, 1fr);
-  gap: 3.2vw;
-  /* Keep the keyboard's rows fixed when results make the right column taller. */
-  align-items: start;
-  margin-top: 6vh;
-`;
-
-const RightColumn = styled.div`
-  min-width: 0;
-  margin-top: -1.6vh;
-`;
+const KEYS = alphanumericKeys({
+  space: { label: 'Space', icon: <SpaceIcon /> },
+  delete: { label: 'Delete', icon: <DeleteIcon /> },
+  clear: { label: 'Clear', icon: <ClearIcon /> },
+});
 
 interface SearchPageProps {
   onDismiss: () => void;
 }
 
-/** TV search: query box, on-screen keyboard, genre and recent shortcuts, and the results row. */
-const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
+/**
+ * TV search on the design system (docs/plans/style-guide.md, sections 9 and 10): the back rail,
+ * then the search field above the on-screen keyboard and, beside it, popular and recent searches
+ * and the results row. One navigation scope; it starts where it was left (a result opened from
+ * here), else on the keyboard.
+ */
+export default function SearchPage(props: SearchPageProps) {
+  return (
+    <NavigationProvider>
+      <SearchScreen {...props} />
+    </NavigationProvider>
+  );
+}
+
+function SearchScreen({ onDismiss }: SearchPageProps) {
   const dispatch = useAppDispatch();
   const search = useAppSelector(state => state.search);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const backRef = useRef<HTMLButtonElement>(null);
-  const elements = useRef(new Map<string, HTMLElement>());
+  const { focus } = useNavigation();
+  // Read once: where focus starts
+  const [initialId] = useState(() => search.focus ?? SEARCH_START);
 
   const genres = search.genres;
   const genreChips = useMemo(
@@ -84,120 +80,64 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
       })),
     [search.recents]
   );
-  const panelActions = searchPanelActionCount(search.status, search.results.length, search.error);
-  const counts = useMemo(
-    () => ({
-      popular: genres.length,
-      recents: recents.length,
-      results: search.results.length,
-      state: panelActions,
-    }),
-    [genres.length, recents.length, search.results.length, panelActions]
-  );
-  const focus = search.focus;
-
-  const setFocus = useCallback(
-    (next: SearchFocus) => {
-      dispatch(searchActions.focusChanged(next));
-      if (next.zone === 'keyboard' && isCharacterKey(next.index))
-        dispatch(searchActions.keyRemembered(next.index));
-    },
-    [dispatch]
-  );
-  // Enter in the search box moves to the results once the submitted search answers.
-  const focusResultsWhenReady = useRef(false);
-  const register = useCallback(
-    (zone: string) => (index: number, element: HTMLElement | null) => {
-      if (element) elements.current.set(`${zone}:${index}`, element);
-      else elements.current.delete(`${zone}:${index}`);
-    },
-    []
-  );
 
   useEffect(() => {
     dispatch(searchActions.recentsRequested());
     dispatch(searchActions.genresRequested());
   }, [dispatch]);
 
-  useRailContentLeft();
-
-  // Results and recents change under the remembered focus; keep it on something that exists.
-  useEffect(() => {
-    const clamped = clampSearchFocus(focus, counts);
-    if (clamped.zone !== focus.zone || clamped.index !== focus.index) setFocus(clamped);
-  }, [counts, focus, setFocus]);
-
-  const elementFor = useCallback(
-    (target: SearchFocus) =>
-      target.zone === 'input'
-        ? inputRef.current
-        : target.zone === 'back'
-          ? backRef.current
-          : elements.current.get(`${target.zone}:${target.index}`),
-    []
-  );
-
-  // Move DOM focus to the focused control.
-  useEffect(() => {
-    const element = elementFor(focus);
-    if (element && document.activeElement !== element) {
-      element.focus({ preventScroll: true });
-    }
-    if (focus.zone === 'results' || focus.zone === 'state')
-      element?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
-  }, [elementFor, focus, search.results.length]);
-
   // Ask for more results as focus nears the end of the row.
+  const activeResult = useActiveIdWithin(SEARCH_NAV.results);
   useEffect(() => {
-    if (focus.zone === 'results' && focus.index >= search.results.length - NEXT_PAGE_THRESHOLD)
+    if (activeResult === null) return;
+    const index = search.results.findIndex(
+      result => SEARCH_NAV.result(searchResultKey(result)) === activeResult
+    );
+    if (index >= search.results.length - NEXT_PAGE_THRESHOLD)
       dispatch(searchActions.nextPageRequested());
-  }, [dispatch, focus, search.results.length]);
+  }, [activeResult, dispatch, search.results]);
 
-  const typeText = useCallback(
-    (text: string) =>
-      dispatch(searchActions.queryChanged((search.genre ? '' : search.query) + text)),
-    [dispatch, search.genre, search.query]
-  );
-  const deleteCharacter = useCallback(
-    () => dispatch(searchActions.queryChanged(search.genre ? '' : search.query.slice(0, -1))),
-    [dispatch, search.genre, search.query]
-  );
+  const text = search.genre ? '' : search.query;
+  const setQuery = (value: string) => dispatch(searchActions.queryChanged(value));
+  const typeText = (typed: string) => setQuery(text + typed);
+  const deleteCharacter = () => setQuery(Array.from(text).slice(0, -1).join(''));
 
-  const pressKey = (index: number) => {
-    setFocus({ zone: 'keyboard', index });
-    if (index < KEYBOARD_BACKSPACE) typeText(KEYBOARD_CHARACTERS[index]!.toLowerCase());
-    else if (index === KEYBOARD_BACKSPACE) deleteCharacter();
-    else if (index === KEYBOARD_SPACE) typeText(' ');
-  };
-  const submitFromBox = () => {
+  // Enter in the search field moves to the results once the submitted search answers.
+  const focusResultsWhenReady = useRef(false);
+  const submit = () => {
     if (!search.genre && !search.query.trim()) return;
     focusResultsWhenReady.current = true;
     dispatch(searchActions.submitted());
   };
-
+  const panel = searchPanelKind(search.status, search.results.length);
   useEffect(() => {
     if (!focusResultsWhenReady.current || search.status === 'loading') return;
     focusResultsWhenReady.current = false;
-    if (search.status === 'ready' && search.results.length) setFocus({ zone: 'results', index: 0 });
+    const first = search.results[0];
+    if (search.status === 'ready' && first) focus(SEARCH_NAV.result(searchResultKey(first)));
     // No results or a failure: focus what to do next (clear, or try again).
-    else if (panelActions) setFocus({ zone: 'state', index: 0 });
-  }, [panelActions, search.results.length, search.status, setFocus]);
+    else if (panel) focus(SEARCH_NAV.panelAction);
+  }, [focus, panel, search.results, search.status]);
 
   const retrySearch = () => {
     // The panel goes away while it runs; focus the results, or Try again, once it is done.
     focusResultsWhenReady.current = true;
-    setFocus({ zone: 'state', index: 0 });
     dispatch(searchActions.retryRequested());
   };
   const clearSearch = () => {
-    dispatch(searchActions.queryChanged(''));
-    setFocus({ zone: 'keyboard', index: 0 });
+    setQuery('');
+    focus(SEARCH_START);
+  };
+  const leave = () => {
+    dispatch(searchActions.focusChanged(null));
+    onDismiss();
   };
 
   const openResult = (index: number) => {
     const result = search.results[index];
     if (!result) return;
-    setFocus({ zone: 'results', index });
+    // Back from details starts on this result
+    dispatch(searchActions.focusChanged(SEARCH_NAV.result(searchResultKey(result))));
     dispatch(searchActions.resultOpened(result));
     navigate(
       result._type === 'movie'
@@ -208,65 +148,37 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
   };
   const selectGenre = (index: number) => {
     const genre = genres[index];
-    if (!genre) return;
-    setFocus({ zone: 'popular', index });
-    dispatch(searchActions.genreSelected(genre));
+    if (genre) dispatch(searchActions.genreSelected(genre));
   };
   const selectRecent = (index: number) => {
     const entry = recents[index];
-    if (!entry) return;
-    setFocus({ zone: 'recents', index });
-    dispatch(searchActions.recentSelected(entry.recent));
+    if (entry) dispatch(searchActions.recentSelected(entry.recent));
+  };
+  const removeRecent = (index: number) => {
+    const entry = recents[index];
+    if (entry) dispatch(searchActions.recentRemoved(entry.recent));
   };
 
-  const move = (direction: SearchDirection) => {
-    const next = moveSearchFocus(focus, direction, counts, search.lastKey);
-    if (next) setFocus(next);
-    return true;
-  };
-
-  const navigationRef = useKeyboardNavigation({
-    // Focus lost: back to the selected control, else the keyboard's first key.
-    onRestoreFocus: () => {
-      const element = elementFor(focus) ?? elementFor({ zone: 'keyboard', index: 0 });
-      if (!element) return false;
-      if (element !== elementFor(focus)) setFocus({ zone: 'keyboard', index: 0 });
-      element.focus({ preventScroll: true });
-      return true;
-    },
-    onUp: () => move('up'),
-    onDown: () => move('down'),
-    onLeft: () => move('left'),
-    onRight: () => move('right'),
-    onConfirm: () => {
-      if (focus.zone === 'keyboard') pressKey(focus.index);
-      else if (focus.zone === 'popular') selectGenre(focus.index);
-      else if (focus.zone === 'recents') selectRecent(focus.index);
-      else if (focus.zone === 'results') openResult(focus.index);
-      // The panel's buttons own their behaviour (the details toggle keeps its open state).
-      else if (focus.zone === 'state') elementFor(focus)?.click();
-      else if (focus.zone === 'back') onDismiss();
-      else return false;
-      return true;
-    },
+  // Keys the layer doesn't own: Back edits the query or leaves
+  const keysRef = useKeyboardNavigation({
     onBack: event => {
       // A physical Backspace edits the query; remote Back leaves the page.
       if (event.key === 'Backspace' && (search.query || search.genre)) {
         deleteCharacter();
         return true;
       }
-      onDismiss();
+      leave();
       return true;
     },
   });
 
-  // On desktop, typing anywhere on the page goes to the search box.
-  const typeIntoBox = (event: KeyboardEvent<HTMLElement>) => {
-    if (IS_TV || event.defaultPrevented || event.target === inputRef.current) return;
+  // On desktop, typing anywhere on the page goes to the search field.
+  const typeIntoField = (event: KeyboardEvent<HTMLElement>) => {
+    if (IS_TV || event.defaultPrevented || event.target instanceof HTMLInputElement) return;
     if (event.key.length !== 1 || event.altKey || event.ctrlKey || event.metaKey) return;
     event.preventDefault();
     typeText(event.key);
-    setFocus({ zone: 'input', index: 0 });
+    focus(SEARCH_NAV.field, { part: 'input' });
   };
 
   const heading = search.genre
@@ -275,79 +187,90 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
   const showResults = search.status !== 'idle' || search.results.length > 0;
 
   return (
-    <Page ref={navigationRef} aria-label="Search" onKeyDown={typeIntoBox}>
-      <SearchBox
-        ref={inputRef}
-        value={search.query}
-        focused={focus.zone === 'input'}
-        onChange={value => dispatch(searchActions.queryChanged(value))}
-        onSubmit={submitFromBox}
-        onFocus={() => setFocus({ zone: 'input', index: 0 })}
-        onLeave={() => setFocus({ zone: 'keyboard', index: 0 })}
-      />
-      <Columns>
-        <OnScreenKeyboard
-          focusedIndex={focus.zone === 'keyboard' ? focus.index : null}
-          onPress={pressKey}
-          onFocusKey={index => setFocus({ zone: 'keyboard', index })}
-          registerKey={register('keyboard')}
-        />
-        <RightColumn>
-          {genreChips.length > 0 && (
-            <SearchChips
-              title="Popular searches"
-              items={genreChips}
-              icon={<SearchIcon aria-hidden="true" />}
-              columns={POPULAR_COLUMNS}
-              focusedIndex={focus.zone === 'popular' ? focus.index : null}
-              onSelect={selectGenre}
-              onFocusChip={index => setFocus({ zone: 'popular', index })}
-              registerChip={register('popular')}
+    <main ref={keysRef} className={styles.page} aria-label="Search" onKeyDown={typeIntoField}>
+      <FocusScope id={SEARCH_NAV.scope} layout="horizontal" initialId={initialId}>
+        <div className={styles.rail}>
+          <NavRail label="Search" navId={SEARCH_NAV.rail}>
+            <NavItem
+              navId={SEARCH_NAV.back}
+              icon={<ArrowLeftIcon />}
+              label="Back to Home"
+              onClick={leave}
             />
-          )}
-          {recents.length > 0 && (
-            <SearchChips
-              title="Recent searches"
-              items={recents}
-              icon={<ClockIcon aria-hidden="true" />}
-              columns={MAX_RECENT_CHIPS}
-              focusedIndex={focus.zone === 'recents' ? focus.index : null}
-              onSelect={selectRecent}
-              onFocusChip={index => setFocus({ zone: 'recents', index })}
-              registerChip={register('recents')}
-            />
-          )}
-          {showResults && (
-            <SearchResults
-              heading={heading}
-              status={search.status}
-              error={search.error}
-              results={search.results}
-              details={search.details}
-              totalResults={search.totalResults}
-              focusedIndex={focus.zone === 'results' ? focus.index : null}
-              onOpen={openResult}
-              onFocusResult={index => setFocus({ zone: 'results', index })}
-              registerResult={register('results')}
-              query={search.query}
-              isGenre={search.genre !== null}
-              panelFocusedIndex={focus.zone === 'state' ? focus.index : null}
-              onFocusPanelAction={index => setFocus({ zone: 'state', index })}
-              registerPanelAction={register('state')}
-              onRetry={retrySearch}
-              onClear={clearSearch}
-            />
-          )}
-        </RightColumn>
-      </Columns>
-      <BackRail
-        ref={backRef}
-        label="Back to Home"
-        onBack={onDismiss}
-        onFocus={() => setFocus({ zone: 'back', index: 0 })}
-      />
-    </Page>
+          </NavRail>
+        </div>
+        <SurfaceContextProvider value="solid">
+          <FocusGroup id={SEARCH_NAV.content} layout="vertical">
+            <div className={styles.body}>
+              <div className={styles.field}>
+                <SearchField
+                  navId={SEARCH_NAV.field}
+                  size="lg"
+                  label="Search"
+                  value={search.query}
+                  // The remote types with the on-screen keyboard, not the system IME
+                  readOnly={IS_TV}
+                  maxLength={100}
+                  placeholder="Search for movies, TV shows, anime..."
+                  autoComplete="off"
+                  spellCheck={false}
+                  onChange={event => setQuery(event.target.value)}
+                  onSearch={submit}
+                  submitLabel="Search"
+                />
+              </div>
+              <FocusGroup id={SEARCH_NAV.columns} layout="horizontal">
+                <div className={styles.columns}>
+                  <div className={styles.keyboard}>
+                    <SearchKeyboard
+                      label="On-screen keyboard"
+                      keys={KEYS}
+                      value={text}
+                      onChange={setQuery}
+                      navId={SEARCH_NAV.keyboard}
+                    />
+                  </div>
+                  <FocusGroup id={SEARCH_NAV.side} layout="vertical">
+                    <div className={styles.side}>
+                      {genreChips.length > 0 && (
+                        <PopularSearches
+                          genres={genreChips}
+                          selected={search.genre}
+                          onSelect={selectGenre}
+                        />
+                      )}
+                      {recents.length > 0 && (
+                        <RecentSearches
+                          recents={recents}
+                          onSelect={selectRecent}
+                          onRemove={removeRecent}
+                        />
+                      )}
+                      {showResults && (
+                        <SearchResults
+                          heading={heading}
+                          status={search.status}
+                          error={search.error}
+                          results={search.results}
+                          details={search.details}
+                          totalResults={search.totalResults}
+                          hasMore={search.page < search.totalPages}
+                          onLoadMore={() => dispatch(searchActions.nextPageRequested())}
+                          onOpen={openResult}
+                          query={search.query}
+                          isGenre={search.genre !== null}
+                          onRetry={retrySearch}
+                          onClear={clearSearch}
+                        />
+                      )}
+                    </div>
+                  </FocusGroup>
+                </div>
+              </FocusGroup>
+            </div>
+          </FocusGroup>
+        </SurfaceContextProvider>
+      </FocusScope>
+    </main>
   );
-};
-
-export default SearchPage;
+}

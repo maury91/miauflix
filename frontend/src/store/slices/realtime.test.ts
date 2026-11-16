@@ -56,6 +56,7 @@ describe('realtime state', () => {
       playbackDeliveries: {},
       playbackDelivered: {},
       playbackPieces: {},
+      playbackStages: {},
       availabilityByPlayable: {},
       sourceAttempts: {},
     });

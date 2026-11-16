@@ -143,7 +143,8 @@ export const createStreamRoutes = ({
             c.req.raw.signal,
             c.req.valid('query').audioTrack,
             c.req.valid('query').audioCopy === 'true',
-            c.req.valid('query').transcodeVideo === 'true'
+            c.req.valid('query').transcodeVideo === 'true',
+            stage => playbackSessionService.reportStreamStage(token, stage)
           );
         } catch (error) {
           if (error instanceof AudioPlaybackError) throw new HttpError(error.status, error.message);

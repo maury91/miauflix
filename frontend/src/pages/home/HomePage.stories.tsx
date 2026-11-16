@@ -26,7 +26,7 @@ import { measurementActions, measurementsSlice } from '@store/slices/measurement
 import { realtimeSlice } from '@store/slices/realtime';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
-import { expect, fn, mocked } from 'storybook/test';
+import { expect, fn, mocked, waitFor } from 'storybook/test';
 
 import HomePage from './HomePage';
 
@@ -168,14 +168,16 @@ export const Browse: Story = {
     const nextRowCard = canvas.getByRole('button', {
       name: mediaForCategory['trending-movies'][0].title,
     });
-    await expect(first).toHaveAttribute('aria-current', 'true');
-    await first.focus();
+    // The navigation layer focuses the remembered row's card
+    await waitFor(() => expect(first).toHaveFocus());
     await userEvent.keyboard('{ArrowDown}');
-    await expect(nextRowCard).toHaveAttribute('aria-current', 'true');
+    await waitFor(() => expect(nextRowCard).toHaveFocus());
     await userEvent.keyboard('{ArrowRight}');
-    await expect(
-      canvas.getByRole('button', { name: mediaForCategory['trending-movies'][1].title })
-    ).toHaveAttribute('aria-current', 'true');
+    await waitFor(() =>
+      expect(
+        canvas.getByRole('button', { name: mediaForCategory['trending-movies'][1].title })
+      ).toHaveFocus()
+    );
   },
 };
 

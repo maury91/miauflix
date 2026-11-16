@@ -35,7 +35,7 @@ export const Results: Story = {
   decorators: [withSearchState(searchStateFixture)],
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('heading', { name: 'Results for “Dune”' })).toBeVisible();
-    await expect(canvas.getByRole('button', { name: 'A' })).toHaveFocus();
+    await expect(canvas.getByRole('button', { name: 'a' })).toHaveFocus();
   },
 };
 

@@ -1,6 +1,9 @@
 import type { ListResponse } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { act, render, screen } from '@testing-library/react';
+import { Button } from '@shared/design-system';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { useGetListQuery, usePromoteListMediaMutation, useQueueBackdropFocusMutation } = vi.hoisted(
@@ -28,53 +31,20 @@ vi.mock('@features/home-feed/listPages', () => ({
   }),
 }));
 vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
-// jsdom has no layout to animate; land every scroll immediately (the spring has its own tests).
-vi.mock('@shared/lib/smooth-scroll', () => ({
-  createSmoothScroller: (element: HTMLElement) => ({
-    scrollTo: (target: number) => {
-      element.scrollLeft = target;
-    },
-    stop: () => {},
-    dispose: () => {},
-    position: () => element.scrollLeft,
-  }),
+vi.mock('./MediaCard', () => ({
+  MediaCard: (props: { media: { id: number }; focused: boolean; onSelect: () => void }) => (
+    <button
+      data-focused={props.focused || undefined}
+      data-testid={`media-${props.media.id}`}
+      type="button"
+      onClick={props.onSelect}
+    >
+      {props.media.id}
+    </button>
+  ),
 }));
-vi.mock('./MediaCard', async () => {
-  const React = await import('react');
-  return {
-    MediaCard: React.forwardRef(
-      (
-        props: {
-          media: { id: number };
-          selected: boolean;
-          tabIndex: number;
-          onFocus: () => void;
-          onHover: () => void;
-          onSelect: () => void;
-        },
-        ref
-      ) => (
-        <button
-          ref={ref}
-          aria-current={props.selected ? 'true' : undefined}
-          data-focused={props.selected || undefined}
-          data-testid={`media-${props.media.id}`}
-          tabIndex={props.tabIndex}
-          type="button"
-          onFocus={props.onFocus}
-          onMouseEnter={props.onHover}
-          onClick={props.onSelect}
-        >
-          {props.media.id}
-        </button>
-      )
-    ),
-  };
-});
 
-import { createRef } from 'react';
-
-import { CategoryRow, type CategoryRowHandle } from './CategoryRow';
+import { CategoryRow } from './CategoryRow';
 
 const responses = new Map<number, ListResponse>();
 /** One response object per page, as the query cache returns. */
@@ -99,22 +69,38 @@ const props = (visible: boolean) => ({
   category: { id: 1, name: 'Popular', slug: 'popular' } as never,
   categoryIndex: 0,
   initialIndex: 10,
-  nearby: true,
-  mediaWidth: 180,
-  mediaPerPage: 4,
-  gap: 12,
-  peekWidth: 54,
-  active: false,
+  loadIntent: 'visible' as const,
+  geometry: { itemWidth: 180, gap: 12, perPage: 4, peek: 54, contentWidth: 756 },
+  isCurrentRow: false,
   visible,
   onActive: vi.fn(),
   onSelect: vi.fn(),
 });
+
+/** The row under the navigation layer, below a button focus starts on (or on the row). */
+const layer = (row: ReactNode, startOnRow = false) => (
+  <NavigationProvider>
+    <FocusScope initialId={startOnRow ? 'home-row:popular' : 'outside'}>
+      <Button navId="outside">Outside</Button>
+      {row}
+    </FocusScope>
+  </NavigationProvider>
+);
+
+const press = (key: string) =>
+  act(() => {
+    fireEvent.keyDown(document.activeElement ?? document.body, { key });
+  });
 
 const renderedCards = () => screen.getAllByTestId(/^media-/).map(card => Number(card.textContent));
 
 describe('CategoryRow on the Samsung TV', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    // jsdom lays nothing out; the navigation layer only focuses elements on screen
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
     useGetListQuery.mockImplementation((query: unknown) =>
       query === skipToken
         ? { data: undefined, isLoading: false, isError: false }
@@ -127,21 +113,23 @@ describe('CategoryRow on the Samsung TV', () => {
     );
   });
   afterEach(() => {
+    cleanup();
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('renders only the cards in view while off screen', () => {
-    render(<CategoryRow {...props(false)} />);
+    render(layer(<CategoryRow {...props(false)} />));
     expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
   });
 
   it('renders two cards of margin past a page once it has been in view a moment', () => {
-    const view = render(<CategoryRow {...props(false)} />);
-    view.rerender(<CategoryRow {...props(true)} />);
+    const view = render(layer(<CategoryRow {...props(false)} />));
+    view.rerender(layer(<CategoryRow {...props(true)} />));
     expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
 
     act(() => vi.advanceTimersByTime(400));
-    expect(renderedCards()).toEqual([4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+    expect(renderedCards()).toEqual([8, 9, 10, 11, 12, 13, 14, 15]);
   });
 
   it('shows no spinner while loading off screen', () => {
@@ -152,51 +140,49 @@ describe('CategoryRow on the Samsung TV', () => {
       isFetching: true,
       isError: false,
     }));
-    const view = render(<CategoryRow {...props(false)} />);
+    const view = render(layer(<CategoryRow {...props(false)} />));
     expect(screen.queryByText('Loading...')).toBeNull();
 
-    view.rerender(<CategoryRow {...props(true)} />);
+    view.rerender(layer(<CategoryRow {...props(true)} />));
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('marks the selection on the card only while the row is active', () => {
-    const view = render(<CategoryRow {...props(true)} />);
-    expect(screen.getByTestId('media-10').hasAttribute('data-focused')).toBe(false);
+  it('marks the selection on the card only while the row holds focus', () => {
+    render(layer(<CategoryRow {...props(true)} />));
+    expect(screen.getByTestId('media-10')).not.toHaveAttribute('data-focused');
 
-    view.rerender(<CategoryRow {...props(true)} active />);
-    expect(screen.getByTestId('media-10').getAttribute('aria-current')).toBe('true');
-    expect(screen.getByTestId('media-10').hasAttribute('data-focused')).toBe(true);
+    press('ArrowDown');
+    expect(screen.getByTestId('media-10')).toHaveAttribute('data-focused');
+    press('ArrowUp');
+    expect(screen.getByTestId('media-10')).not.toHaveAttribute('data-focused');
   });
 
   it('moves at once but reports a held run of moves once it pauses', () => {
-    const ref = createRef<CategoryRowHandle>();
     const onSelectionChange = vi.fn();
     const onActive = vi.fn();
-    const row = (selectedIndex: number, active = true) => (
-      <CategoryRow
-        {...props(true)}
-        ref={ref}
-        active={active}
-        isCurrentRow
-        selectedIndex={selectedIndex}
-        onSelectionChange={onSelectionChange}
-        onActive={onActive}
-      />
+    render(
+      layer(
+        <CategoryRow
+          {...props(true)}
+          isCurrentRow
+          onSelectionChange={onSelectionChange}
+          onActive={onActive}
+        />,
+        true
+      )
     );
-    const view = render(row(10));
     act(() => vi.advanceTimersByTime(400));
     onActive.mockClear();
 
-    act(() => void ref.current?.handleAction('right'));
+    press('ArrowRight');
     expect(onSelectionChange.mock.calls).toEqual([[11]]);
     expect(onActive).toHaveBeenLastCalledWith(0, 11, expect.objectContaining({ id: 11 }));
-    view.rerender(row(11));
 
     for (let move = 0; move < 3; move += 1) {
       act(() => vi.advanceTimersByTime(50));
-      act(() => void ref.current?.handleAction('right'));
+      press('ArrowRight');
     }
-    expect(screen.getByTestId('media-14').getAttribute('aria-current')).toBe('true');
+    expect(screen.getByTestId('media-14')).toHaveAttribute('data-focused');
     expect(onSelectionChange).toHaveBeenCalledTimes(1);
     expect(onActive).toHaveBeenCalledTimes(1);
 
@@ -206,23 +192,23 @@ describe('CategoryRow on the Samsung TV', () => {
   });
 
   it('reports the selection at once when a card opens right after a move', () => {
-    const ref = createRef<CategoryRowHandle>();
     const onSelectionChange = vi.fn();
     const onSelect = vi.fn();
     render(
-      <CategoryRow
-        {...props(true)}
-        ref={ref}
-        active
-        isCurrentRow
-        selectedIndex={10}
-        onSelectionChange={onSelectionChange}
-        onSelect={onSelect}
-      />
+      layer(
+        <CategoryRow
+          {...props(true)}
+          isCurrentRow
+          onSelectionChange={onSelectionChange}
+          onSelect={onSelect}
+        />,
+        true
+      )
     );
-    act(() => void ref.current?.handleAction('right'));
-    act(() => void ref.current?.handleAction('right'));
-    act(() => void ref.current?.handleAction('confirm'));
+    press('ArrowRight');
+    act(() => vi.advanceTimersByTime(50));
+    press('ArrowRight');
+    press('Enter');
 
     expect(onSelectionChange).toHaveBeenLastCalledWith(12);
     expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 12 }));
@@ -232,35 +218,26 @@ describe('CategoryRow on the Samsung TV', () => {
   });
 
   it('reports a pending selection at once when the row is left', () => {
-    const ref = createRef<CategoryRowHandle>();
     const onSelectionChange = vi.fn();
-    const row = (active: boolean) => (
-      <CategoryRow
-        {...props(true)}
-        ref={ref}
-        active={active}
-        selectedIndex={10}
-        onSelectionChange={onSelectionChange}
-      />
-    );
-    const view = render(row(true));
-    act(() => void ref.current?.handleAction('right'));
-    act(() => void ref.current?.handleAction('right'));
+    render(layer(<CategoryRow {...props(true)} onSelectionChange={onSelectionChange} />, true));
+    press('ArrowRight');
+    act(() => vi.advanceTimersByTime(50));
+    press('ArrowRight');
     expect(onSelectionChange.mock.calls).toEqual([[11]]);
 
-    view.rerender(row(false));
+    press('ArrowUp');
     expect(onSelectionChange).toHaveBeenLastCalledWith(12);
   });
 
   it('goes back to the cards in view when it leaves view, unless kept warm', () => {
-    const view = render(<CategoryRow {...props(true)} />);
+    const view = render(layer(<CategoryRow {...props(true)} />));
     act(() => vi.advanceTimersByTime(400));
-    expect(renderedCards()).toHaveLength(13);
+    expect(renderedCards()).toHaveLength(8);
 
-    view.rerender(<CategoryRow {...props(false)} warm />);
-    expect(renderedCards()).toHaveLength(13);
+    view.rerender(layer(<CategoryRow {...props(false)} warm />));
+    expect(renderedCards()).toHaveLength(8);
 
-    view.rerender(<CategoryRow {...props(false)} />);
+    view.rerender(layer(<CategoryRow {...props(false)} />));
     expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
   });
 });

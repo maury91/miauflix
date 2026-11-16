@@ -1,7 +1,7 @@
 import { navigate } from '@app/router';
 import type { RootState } from '@store/store';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
   useGetListsInfiniteQuery,
@@ -14,7 +14,6 @@ const {
   useMarkAllNotificationsReadMutation,
   markNotificationRead,
   resetNotificationsApi,
-  rowHandles,
   rowProps,
   mediaIndexes,
   useUpdateIntentMutation,
@@ -44,7 +43,6 @@ const {
   useMarkAllNotificationsReadMutation: vi.fn(),
   markNotificationRead: vi.fn(),
   resetNotificationsApi: vi.fn(() => ({ type: 'notificationsApi/resetApiState' })),
-  rowHandles: new Map<number, Record<string, unknown>>(),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
   useUpdateIntentMutation: vi.fn(),
@@ -72,7 +70,6 @@ const {
       activeRegion: 'carousel',
       activeCategory: 0,
       selectedByCategory: {} as Record<string, number>,
-      pendingCategoryAdvance: false,
     } as RootState['homeNavigation'],
     revision: 0,
     listeners: new Set<() => void>(),
@@ -172,6 +169,7 @@ vi.mock('react-redux', async importOriginal => {
 });
 vi.mock('./hooks/useMediaBoxSizes', () => ({
   useMediaBoxSizes: () => ({
+    geometry: { itemWidth: 180, gap: 12, perPage: 1, peek: 54, contentWidth: 400 },
     mediaWidth: 180,
     mediaPerPage: 1,
     gap: 12,
@@ -182,83 +180,65 @@ vi.mock('./hooks/useMediaBoxSizes', () => ({
 const emptyRows = vi.hoisted(() => ({ value: new Set<string>() as ReadonlySet<string> }));
 vi.mock('./components/CategoryRow', async () => {
   const React = await import('react');
+  const { useFocusable } = await import('@shared/navigation');
   return {
-    CategoryRow: React.forwardRef(
-      (
-        props: {
-          category: { slug: string };
-          categoryIndex: number;
-          isCurrentRow: boolean;
-          active: boolean;
-          mediaOverride?: unknown[];
-          loadIntent?: string;
-          visible?: boolean;
-          onActive: (categoryIndex: number, mediaIndex: number, media: unknown) => void;
-          onDataReady: (slug: string) => void;
-          onSelectionChange: (mediaIndex: number) => void;
-          onSelect: (media: unknown) => void;
-        },
-        ref
-      ) => {
-        rowProps.set(props.categoryIndex, {
-          loadIntent: props.loadIntent,
-          visible: props.visible,
-        });
-        const {
-          mediaOverride,
-          onActive,
-          categoryIndex,
-          isCurrentRow,
-          loadIntent,
-          onDataReady,
-          category,
-        } = props;
-        const mediaIndex = mediaIndexes.get(categoryIndex) ?? 0;
-        const media = React.useMemo(
-          () =>
-            mediaOverride?.[mediaIndex] ?? {
-              _type: 'movie',
-              id: categoryIndex + 1,
-              mediaId: 100 + categoryIndex,
-            },
-          [categoryIndex, mediaIndex, mediaOverride]
-        );
-        React.useEffect(() => {
-          if (loadIntent !== 'dormant') onDataReady(category.slug);
-          if (isCurrentRow) onActive(categoryIndex, mediaIndex, media);
-        }, [
-          categoryIndex,
-          isCurrentRow,
-          media,
-          mediaIndex,
-          onActive,
-          category.slug,
-          loadIntent,
-          onDataReady,
-        ]);
-        const handle = rowHandles.get(props.categoryIndex);
-        React.useImperativeHandle(ref, () => handle, [handle]);
-        return React.createElement(
-          'button',
-          {
-            type: 'button',
-            'data-testid': `card-${props.categoryIndex}`,
-            'data-slug': props.category.slug,
-            'data-active': props.active,
-            onMouseEnter: () => {
-              props.onSelectionChange(mediaIndex);
-              props.onActive(props.categoryIndex, mediaIndex, media);
-            },
-            onClick: () => {
-              props.onSelectionChange(mediaIndex);
-              props.onActive(props.categoryIndex, mediaIndex, media);
-              props.onSelect(media);
-            },
+    CategoryRow: (props: {
+      category: { slug: string };
+      categoryIndex: number;
+      isCurrentRow: boolean;
+      mediaOverride?: unknown[];
+      loadIntent?: string;
+      visible?: boolean;
+      onActive: (categoryIndex: number, mediaIndex: number, media: unknown) => void;
+      onDataReady: (slug: string) => void;
+      onSelectionChange?: (mediaIndex: number) => void;
+      onSelect: (media: unknown) => void;
+    }) => {
+      rowProps.set(props.categoryIndex, {
+        loadIntent: props.loadIntent,
+        visible: props.visible,
+      });
+      const { mediaOverride, onActive, categoryIndex, isCurrentRow, loadIntent, onDataReady } =
+        props;
+      const slug = props.category.slug;
+      const focusable = useFocusable<HTMLButtonElement>(`home-row:${slug}`);
+      const mediaIndex = mediaIndexes.get(categoryIndex) ?? 0;
+      const media = React.useMemo(
+        () =>
+          mediaOverride?.[mediaIndex] ?? {
+            _type: 'movie',
+            id: categoryIndex + 1,
+            mediaId: 100 + categoryIndex,
           },
-          `Category ${props.categoryIndex}`
-        );
-      }
-    ),
+        [categoryIndex, mediaIndex, mediaOverride]
+      );
+      React.useEffect(() => {
+        if (loadIntent !== 'dormant') onDataReady(slug);
+        if (isCurrentRow) onActive(categoryIndex, mediaIndex, media);
+      }, [categoryIndex, isCurrentRow, media, mediaIndex, onActive, slug, loadIntent, onDataReady]);
+      return React.createElement(
+        'button',
+        {
+          ref: focusable.ref,
+          type: 'button',
+          tabIndex: focusable.focused ? 0 : -1,
+          'data-testid': `card-${categoryIndex}`,
+          'data-slug': slug,
+          'data-active': focusable.focused,
+          onMouseMove: focusable.onMouseMove,
+          onMouseEnter: () => {
+            props.onSelectionChange?.(mediaIndex);
+            props.onActive(categoryIndex, mediaIndex, media);
+          },
+          onClick: () => {
+            props.onSelectionChange?.(mediaIndex);
+            props.onActive(categoryIndex, mediaIndex, media);
+            props.onSelect(media);
+          },
+        },
+        `Category ${categoryIndex}`
+      );
+    },
   };
 });
 vi.mock('@features/player/ui/PlayerView', () => ({
@@ -333,12 +313,14 @@ const categories = [
   { id: 7, name: 'Seventh', slug: 'seventh' },
 ];
 
-const makeHandle = (focusResult: boolean, empty: boolean) => ({
-  focusIndex: vi.fn(() => focusResult),
-  isEmpty: vi.fn(() => empty),
-  handleAction: vi.fn(() => ({ type: 'ignored' as const })),
-  getNavigationContext: vi.fn(() => ({ selected: null, left: null, right: null })),
-});
+/** A key on whatever holds focus, as the remote sends it. */
+const press = (key: string) =>
+  act(() => {
+    fireEvent.keyDown(document.activeElement ?? document.body, { key });
+  });
+
+const card = (slug: string) =>
+  screen.getAllByTestId(/^card-/).find(button => button.dataset.slug === slug)!;
 
 function notificationPages(notifications: unknown[]) {
   return {
@@ -353,7 +335,14 @@ function notificationPages(notifications: unknown[]) {
 }
 
 describe('HomePage focus transitions', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
+    // jsdom lays nothing out; the navigation layer only focuses elements on screen
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
     navigate({ type: 'home' }, { replace: true });
     dispatch.mockReset();
     dispatch.mockImplementation(action => {
@@ -383,7 +372,6 @@ describe('HomePage focus transitions', () => {
     window.sessionStorage.clear();
     removeIntent.mockReset();
     useUpdateIntentMutation.mockReturnValue([vi.fn(), {}]);
-    rowHandles.clear();
     rowProps.clear();
     mediaIndexes.clear();
     useGetListsInfiniteQuery.mockReset().mockReturnValue({
@@ -422,9 +410,6 @@ describe('HomePage focus transitions', () => {
   });
 
   it('shows notifications while the bell is highlighted and keeps them open from the panel', () => {
-    const row = makeHandle(true, false);
-    row.handleAction.mockReturnValue({ type: 'escape', direction: 'left' });
-    rowHandles.set(0, row);
     useGetNotificationCountsQuery.mockReturnValue({ data: { unreadCount: 1, hasRead: false } });
     useGetNotificationsInfiniteQuery.mockReturnValue(
       notificationPages([
@@ -447,25 +432,27 @@ describe('HomePage focus transitions', () => {
       ])
     );
     render(<HomePage />);
+    expect(screen.getByTestId('card-0')).toHaveFocus();
 
-    fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowLeft' });
+    press('ArrowLeft');
+    expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
     expect(screen.queryByRole('region', { name: 'Notifications' })).not.toBeInTheDocument();
-    fireEvent.keyDown(screen.getByRole('button', { name: 'Search' }), { key: 'ArrowUp' });
-    const bell = screen.getByRole('button', { name: 'Notifications, 1 unread' });
+    press('ArrowUp');
+    const bell = screen.getByRole('button', { name: 'Notifications' });
+    expect(bell).toHaveFocus();
+    expect(bell).toHaveAccessibleDescription('1 unread');
+    expect(screen.getByRole('region', { name: 'Notifications' })).toBeInTheDocument();
+
+    press('ArrowRight');
+    expect(
+      screen.getByRole('button', { name: /Just added\. Movie\..*1080p.*unread/ })
+    ).toHaveFocus();
+
+    press('ArrowLeft');
     expect(bell).toHaveFocus();
     expect(screen.getByRole('region', { name: 'Notifications' })).toBeInTheDocument();
 
-    fireEvent.keyDown(bell, { key: 'ArrowRight' });
-    const notification = screen.getByRole('button', {
-      name: /Just added\. Movie\..*1080p.*unread/,
-    });
-    expect(notification).toHaveFocus();
-
-    fireEvent.keyDown(notification, { key: 'ArrowLeft' });
-    expect(bell).toHaveFocus();
-    expect(screen.getByRole('region', { name: 'Notifications' })).toBeInTheDocument();
-
-    fireEvent.keyDown(bell, { key: 'ArrowDown' });
+    press('ArrowDown');
     expect(screen.queryByRole('region', { name: 'Notifications' })).not.toBeInTheDocument();
   });
 
@@ -493,7 +480,7 @@ describe('HomePage focus transitions', () => {
     );
     render(<HomePage />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Notifications, 1 unread' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Notifications' }));
     fireEvent.click(screen.getByRole('button', { name: /Just added\. Movie/ }));
 
     expect(markNotificationRead).toHaveBeenCalledWith(7);
@@ -641,9 +628,6 @@ describe('HomePage focus transitions', () => {
     currentUserIsAdmin.mockReturnValue(true);
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     getAssociation.mockResolvedValue({ data: { connected: false } });
-    const row = makeHandle(true, false);
-    row.handleAction.mockReturnValue({ type: 'handled' } as never);
-    rowHandles.set(0, row);
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
@@ -651,12 +635,12 @@ describe('HomePage focus transitions', () => {
     try {
       await act(async () => {});
       expect(getAssociation).toHaveBeenCalledWith('test-session');
-      for (let press = 0; press < 3; press++) {
+      for (const key of ['ArrowDown', 'ArrowUp', 'ArrowDown']) {
         act(() => vi.advanceTimersByTime(4000));
-        fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
+        press(key);
       }
-      // Each handled key stops propagation at the document; it must still reset the idle timer.
-      expect(row.handleAction).toHaveBeenCalledTimes(3);
+      // Each key the layer handles stops there; it must still reset the idle timer.
+      expect(screen.getByTestId('card-1')).toHaveFocus();
       act(() => vi.advanceTimersByTime(4000));
       expect(screen.queryByRole('dialog', { name: 'Connect Trakt' })).not.toBeInTheDocument();
       act(() => vi.advanceTimersByTime(1000));
@@ -679,8 +663,6 @@ describe('HomePage focus transitions', () => {
       currentUserIsAdmin.mockReturnValue(true);
       selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
       getAssociation.mockResolvedValue({ data: { connected: false } });
-      const row = makeHandle(true, false);
-      rowHandles.set(0, row);
       const progressSelector = vi
         .spyOn(progressApi.endpoints.getProgress, 'select')
         .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
@@ -696,8 +678,8 @@ describe('HomePage focus transitions', () => {
         // A late-loading carousel must not be able to reclaim keyboard focus.
         background.focus();
         expect(first).toHaveFocus();
-        fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
-        expect(row.handleAction).not.toHaveBeenCalled();
+        fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowDown' });
+        expect(screen.getByTestId('card-1')).toHaveAttribute('data-active', 'false');
         fireEvent.keyDown(first, { key: 'ArrowRight' });
         expect(never).toHaveFocus();
         fireEvent.keyDown(never, { key: 'Tab' });
@@ -709,8 +691,8 @@ describe('HomePage focus transitions', () => {
         fireEvent.keyDown(close, { key: 'Escape' });
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         await waitFor(() => expect(background).toHaveFocus());
-        fireEvent.keyDown(background, { key: 'ArrowRight' });
-        expect(row.handleAction).toHaveBeenCalledTimes(1);
+        press('ArrowDown');
+        expect(screen.getByTestId('card-1')).toHaveFocus();
       } finally {
         progressSelector.mockRestore();
       }
@@ -816,51 +798,43 @@ describe('HomePage focus transitions', () => {
     }
   });
 
-  it('collapses the sidebar on mouse leave and restores the selected carousel item', () => {
-    const row = makeHandle(true, false);
-    rowHandles.set(0, row);
-    mediaIndexes.set(0, 4);
+  it('collapses the rail when the pointer leaves it and gives the rows their focus back', () => {
     render(<HomePage />);
-    fireEvent.mouseEnter(screen.getByTestId('card-0'));
+    const rail = screen.getByRole('navigation', { name: 'Home navigation' });
 
-    const sidebar = screen.getByRole('complementary', { name: 'Home navigation' });
     for (let visit = 0; visit < 2; visit += 1) {
-      fireEvent.mouseEnter(sidebar);
-      expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
+      fireEvent.mouseEnter(rail);
+      expect(rail).toHaveAttribute('data-expanded');
+      fireEvent.mouseMove(screen.getByRole('button', { name: 'Search' }));
       expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
       expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
 
-      fireEvent.mouseLeave(sidebar);
-      expect(screen.queryByText('Search', { selector: 'span' })).not.toBeInTheDocument();
-      expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'true');
-      expect(row.focusIndex).toHaveBeenLastCalledWith(4);
+      fireEvent.mouseLeave(rail);
+      expect(rail).not.toHaveAttribute('data-expanded');
+      expect(screen.getByTestId('card-0')).toHaveFocus();
     }
   });
 
-  it('keeps keyboard entry and return from the sidebar working', () => {
-    const row = makeHandle(true, false);
-    row.handleAction.mockReturnValue({ type: 'escape', direction: 'left' });
-    rowHandles.set(0, row);
+  it('enters the rail with Left and returns to the row with Back', () => {
     render(<HomePage />);
+    const rail = screen.getByRole('navigation', { name: 'Home navigation' });
 
-    fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowLeft' });
-    const search = screen.getByRole('button', { name: 'Search' });
-    expect(search).toHaveFocus();
-    expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
-    fireEvent.keyDown(search, { key: 'Escape' });
-    expect(screen.queryByText('Search', { selector: 'span' })).not.toBeInTheDocument();
-    expect(row.focusIndex).toHaveBeenCalledWith(0);
+    press('ArrowLeft');
+    expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
+    expect(rail).toHaveAttribute('data-expanded');
+    press('Escape');
+    expect(rail).not.toHaveAttribute('data-expanded');
+    expect(screen.getByTestId('card-0')).toHaveFocus();
   });
 
-  it.each(['Escape', 'GoBack'])('opens the sidebar on %s while browsing the rows', key => {
-    const row = makeHandle(true, false);
-    rowHandles.set(0, row);
+  it.each(['Escape', 'GoBack'])('opens the rail on %s while browsing the rows', key => {
     render(<HomePage />);
 
-    fireEvent.keyDown(screen.getByRole('main'), { key });
+    press(key);
     expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
-    expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
-    expect(row.handleAction).not.toHaveBeenCalledWith('back');
+    expect(screen.getByRole('navigation', { name: 'Home navigation' })).toHaveAttribute(
+      'data-expanded'
+    );
   });
 
   it('shows the preparation result for the selected movie', () => {
@@ -1030,52 +1004,32 @@ describe('HomePage focus transitions', () => {
     expect(removeIntent).toHaveBeenCalledTimes(1);
   });
 
-  it('activates a pending adjacent row instead of skipping it', () => {
-    const first = makeHandle(true, false);
-    const pending = makeHandle(false, false);
-    rowHandles.set(0, first);
-    rowHandles.set(1, pending);
-    rowHandles.set(2, makeHandle(true, false));
-    first.handleAction.mockReturnValue({ type: 'escape', direction: 'down' });
-
+  it('moves to the next row with Down, even while that row is still loading', () => {
     render(<HomePage />);
-    fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowDown' });
+    press('ArrowDown');
 
-    expect(pending.focusIndex).toHaveBeenCalledWith(0);
-    expect(screen.getByTestId('card-1')).toHaveAttribute('data-active', 'true');
-    expect(document.activeElement).toBe(screen.getByRole('main'));
+    expect(screen.getByTestId('card-1')).toHaveFocus();
+    expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
+    expect(homeNavigationState.value.activeCategory).toBe(1);
   });
 
-  it('skips a confirmed empty row in favor of the next destination', () => {
-    const first = makeHandle(true, false);
-    const empty = makeHandle(false, true);
-    const next = makeHandle(true, false);
-    rowHandles.set(0, first);
-    rowHandles.set(1, empty);
-    rowHandles.set(2, next);
-    first.handleAction.mockReturnValue({ type: 'escape', direction: 'down' });
-
+  it('moves past a row whose list loaded empty', () => {
+    emptyRows.value = new Set(['second']);
     render(<HomePage />);
-    fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowDown' });
+    press('ArrowDown');
 
-    expect(empty.focusIndex).toHaveBeenCalledWith(0);
-    expect(next.focusIndex).toHaveBeenCalledWith(0);
-    expect(screen.getByTestId('card-2')).toHaveAttribute('data-active', 'true');
+    expect(card('third')).toHaveFocus();
   });
 
-  it('restores the saved media index after details remounts browse content', async () => {
-    const first = makeHandle(true, false);
-    rowHandles.set(0, first);
-    rowHandles.set(1, makeHandle(true, false));
-    mediaIndexes.set(0, 4);
-
+  it('restores focus to the originating row on Back from details', async () => {
+    mediaIndexes.set(1, 4);
     render(<HomePage />);
-    fireEvent.click(screen.getByTestId('card-0'));
-    expect(screen.getByTestId('details')).toBeInTheDocument();
+    press('ArrowDown');
+    fireEvent.click(screen.getByTestId('card-1'));
+    const details = screen.getByTestId('details');
+    fireEvent.keyDown(details, { key: 'Backspace' });
 
-    fireEvent.keyDown(screen.getByRole('main'), { key: 'Backspace' });
-
-    await waitFor(() => expect(first.focusIndex).toHaveBeenCalledWith(4));
+    await waitFor(() => expect(screen.getByTestId('card-1')).toHaveFocus());
     expect(screen.queryByTestId('details')).not.toBeInTheDocument();
   });
 
@@ -1089,11 +1043,8 @@ describe('HomePage focus transitions', () => {
       isLoading: true,
       isError: false,
     });
-    const first = makeHandle(true, false);
-    rowHandles.set(0, first);
     const { rerender } = render(<HomePage />);
     expect(screen.queryByTestId('card-0')).not.toBeInTheDocument();
-    expect(first.focusIndex).not.toHaveBeenCalled();
 
     useGetListsInfiniteQuery.mockReturnValue({
       data: { pages: [{ results: categories, totalPages: 1 }] },
@@ -1105,21 +1056,13 @@ describe('HomePage focus transitions', () => {
     });
     rerender(<HomePage />);
 
-    expect(first.focusIndex).toHaveBeenCalledWith(0);
+    expect(screen.getByTestId('card-0')).toHaveFocus();
   });
 
   it('makes the newly reached rows visible after four ArrowDown transitions', () => {
-    for (let index = 0; index < categories.length; index += 1) {
-      const handle = makeHandle(true, false);
-      handle.handleAction.mockReturnValue({ type: 'escape', direction: 'down' });
-      rowHandles.set(index, handle);
-    }
-
     render(<HomePage />);
-    const main = screen.getByRole('main');
-    for (let count = 0; count < 4; count += 1) {
-      fireEvent.keyDown(main, { key: 'ArrowDown' });
-    }
+    for (let count = 0; count < 4; count += 1) press('ArrowDown');
+    expect(screen.getByTestId('card-4')).toHaveFocus();
 
     expect(rowProps.get(4)).toEqual({ loadIntent: 'visible', visible: true });
     expect(rowProps.get(5)).toEqual({ loadIntent: 'visible', visible: true });
@@ -1138,6 +1081,7 @@ describe('HomePage focus transitions', () => {
 
     expect(rowProps.get(5)).toEqual({ loadIntent: 'visible', visible: true });
     expect(rowProps.get(6)).toEqual({ loadIntent: 'visible', visible: true });
+    expect(screen.getByTestId('card-0')).toHaveFocus();
     // The focused row keeps loading too
     expect(rowProps.get(0)).toEqual({ loadIntent: 'visible', visible: true });
   });
@@ -1251,23 +1195,22 @@ describe('HomePage focus transitions', () => {
       homeNavigationState.listeners.forEach(listener => listener());
     });
     expect(homeNavigationState.value.activeCategory).toBe(1);
-    const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
-    expect(active?.dataset.slug).toBe('third');
+    expect(card('third')).toHaveFocus();
   });
 
-  it('moves to the row above when the focused last row drops out', () => {
+  it('moves to the row above when the focused last row drops out', async () => {
     homeNavigationState.value = homeNavigationSlice.reducer(
       homeNavigationState.value,
       homeNavigationSlice.actions.setActiveCategory(6)
     );
     render(<HomePage />);
     // The focused list, the last one, turns out empty.
-    act(() => {
+    // The layer moves focus off a removed row once the commit settles
+    await act(async () => {
       emptyRows.value = new Set(['seventh']);
       homeNavigationState.listeners.forEach(listener => listener());
     });
     expect(homeNavigationState.value.activeCategory).toBe(5);
-    const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
-    expect(active?.dataset.slug).toBe('sixth');
+    expect(card('sixth')).toHaveFocus();
   });
 });
