@@ -1,4 +1,5 @@
 import { getTraktAssociation } from '@features/integrations/api/trakt.api';
+import { listsApi } from '@features/media/api/lists.api';
 import { progressApi } from '@features/progress/api/progress.api';
 import type { AppDispatch } from '@store/store';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -84,6 +85,9 @@ export function useTraktPrompt({
   const connected = useCallback(() => {
     // Trakt history becomes this account's progress.
     dispatch(progressApi.util.invalidateTags(['Progress']));
+    // Home's lists are per account: connecting adds the Trakt lists and merges the Trakt
+    // watchlist into My watchlist. The lists query and that row are both tagged 'Watchlist'.
+    dispatch(listsApi.util.invalidateTags(['Watchlist']));
     setOpen(false);
     restoreFocus();
   }, [dispatch]);

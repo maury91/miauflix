@@ -185,7 +185,6 @@ else
     echo "⚠️  No .env file found, using default environment variables"
     export TMDB_API_ACCESS_TOKEN="mock-tmdb-token-for-testing"
     export TRAKT_CLIENT_ID="mock-trakt-client-id"
-    export TRAKT_CLIENT_SECRET="mock-trakt-client-secret"
 fi
 
 if [[ "$record_provider_fixtures_was_set" == "true" ]]; then
@@ -213,7 +212,6 @@ if [[ "$INITIAL_SETUP" == "true" ]]; then
     export E2E_CATALOG_TMDB_TOKEN=''
     export TMDB_API_ACCESS_TOKEN='e2e-dummy-token'
     export E2E_TRAKT_CLIENT_ID=''
-    export E2E_TRAKT_CLIENT_SECRET=''
     export E2E_TRAKT_REDIRECT_URI=''
 fi
 

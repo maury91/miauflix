@@ -4,8 +4,8 @@ import { ListConfigService } from '../src/config/config.service';
 
 const snapshot = (clientId = 'client-id') => ({
   TRAKT_API_URL: 'https://api.trakt.tv',
+  TRAKT_AUTH_URL: 'https://auth.trakt.tv',
   TRAKT_CLIENT_ID: clientId,
-  TRAKT_CLIENT_SECRET: 'client-secret',
   TRAKT_REDIRECT_URI: 'https://miauflix.example/callback',
 });
 

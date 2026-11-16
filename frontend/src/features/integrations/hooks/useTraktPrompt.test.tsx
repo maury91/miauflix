@@ -4,16 +4,32 @@ import type { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { getTraktAssociation } = vi.hoisted(() => ({ getTraktAssociation: vi.fn() }));
+const { getTraktAssociation, dispatched } = vi.hoisted(() => ({
+  getTraktAssociation: vi.fn(),
+  dispatched: [] as unknown[],
+}));
 vi.mock('@features/integrations/api/trakt.api', () => ({ getTraktAssociation }));
 vi.mock('@features/progress/api/progress.api', () => ({
-  progressApi: { util: { invalidateTags: () => ({ type: 'progress/invalidate' }) } },
+  progressApi: {
+    util: { invalidateTags: (tags: string[]) => ({ type: 'progress/invalidate', tags }) },
+  },
+}));
+vi.mock('@features/media/api/lists.api', () => ({
+  listsApi: {
+    util: { invalidateTags: (tags: string[]) => ({ type: 'lists/invalidate', tags }) },
+  },
 }));
 
 import { TRAKT_PROMPT_IDLE_MS, useTraktPrompt } from './useTraktPrompt';
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <Provider store={configureStore({ reducer: { noop: (state = null) => state } })}>
+  <Provider
+    store={configureStore({
+      reducer: {
+        actions: (state = null, action: unknown) => (dispatched.push(action), state),
+      },
+    })}
+  >
     {children}
   </Provider>
 );
@@ -28,6 +44,7 @@ describe('useTraktPrompt', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     window.localStorage.clear();
+    dispatched.length = 0;
     getTraktAssociation.mockResolvedValue({ data: { connected: false } });
   });
   afterEach(() => vi.useRealTimers());
@@ -87,6 +104,20 @@ describe('useTraktPrompt', () => {
     await settle();
     act(() => vi.advanceTimersByTime(TRAKT_PROMPT_IDLE_MS));
     expect(result.current.open).toBe(true);
+  });
+
+  it("refreshes progress and Home's lists once connected, then closes", async () => {
+    const { result } = render({ enabled: true, sessionId: 's1' });
+    await settle();
+    act(() => vi.advanceTimersByTime(TRAKT_PROMPT_IDLE_MS));
+    act(() => result.current.connected());
+    expect(result.current.open).toBe(false);
+    expect(dispatched).toEqual(
+      expect.arrayContaining([
+        { type: 'progress/invalidate', tags: ['Progress'] },
+        { type: 'lists/invalidate', tags: ['Watchlist'] },
+      ])
+    );
   });
 
   it('remembers "don\'t ask again" for the user across sessions', async () => {

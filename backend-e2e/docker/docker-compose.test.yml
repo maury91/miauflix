@@ -54,8 +54,8 @@ services:
       # value so the browser must complete Catalog configuration through the UI.
       - TMDB_API_ACCESS_TOKEN=${E2E_CATALOG_TMDB_TOKEN-e2e-dummy-token}
       - TRAKT_API_URL=http://trakt-mock
+      - TRAKT_AUTH_URL=http://trakt-mock
       - TRAKT_CLIENT_ID=${E2E_TRAKT_CLIENT_ID-${TRAKT_CLIENT_ID:-mock-trakt-client-id}}
-      - TRAKT_CLIENT_SECRET=${E2E_TRAKT_CLIENT_SECRET-${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}}
       - TRAKT_REDIRECT_URI=${E2E_TRAKT_REDIRECT_URI-${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}}
       - CARDIGANN_DEFINITION_SOURCES=http://indexer-mock/definitions
       - DISABLE_VPN_CHECK=true
@@ -226,7 +226,6 @@ services:
       - API_AUTH_HEADER=trakt-api-key
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=$TRAKT_CLIENT_ID
-      - API_SECRET=$TRAKT_CLIENT_SECRET
       - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
       - |
         API_HEADERS={"trakt-api-version": "2"}

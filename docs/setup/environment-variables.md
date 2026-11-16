@@ -86,12 +86,11 @@ TMDB_API_ACCESS_TOKEN=your-tmdb-token
 ```bash
 # Optional backend bootstrap values; normally configure these once in the `TRAKT` group
 TRAKT_CLIENT_ID=your-client-id
-TRAKT_CLIENT_SECRET=your-client-secret
 TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
 LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 ```
 
-- **Description**: OAuth application credentials and the exact redirect URI configured for the Trakt.tv integration
+- **Description**: OAuth application client ID and the exact redirect URI configured for the Trakt.tv integration. Trakt no longer issues client secrets to new apps, and Miauflix does not need one
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
 - **Required for**: Trakt features that consume the shared Trakt application credentials
 - **Configuration**: Use the `TRAKT` group in Miauflix's configuration UI. Retain the List Service data directory and active key across restarts.
@@ -232,6 +231,7 @@ STREAM_TOKEN_EXPIRATION=6h
 # API endpoints (use defaults unless customizing)
 TMDB_API_URL=https://api.themoviedb.org/3
 TRAKT_API_URL=https://api.trakt.tv
+TRAKT_AUTH_URL=https://auth.trakt.tv # Trakt sign-in and token refresh
 
 # Anime (list service): AniList's rankings and the AniList → TMDB id list
 ANILIST_API_URL=https://graphql.anilist.co
@@ -292,7 +292,7 @@ With the VPN overlay, include `docker-compose.vpn.yml` too; the backend stays ou
 
 ### Enhanced Features (Optional)
 
-1. **Trakt client ID + client secret + redirect URI** - Configure once in `TRAKT` for all consumers
+1. **Trakt client ID + redirect URI** - Configure once in `TRAKT` for all consumers
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
 3. **FLARESOLVERR_URL** - Optional challenge handling for supported source providers
 
@@ -319,7 +319,7 @@ With the VPN overlay, include `docker-compose.vpn.yml` too; the backend stays ou
 **Trakt.tv connection fails**
 
 - Double-check client ID and secret from your [Trakt.tv application](https://trakt.tv/oauth/applications)
-- Configure a valid Trakt client ID, client secret, and redirect URI in `TRAKT`
+- Configure a valid Trakt client ID and redirect URI in `TRAKT`
 
 **VPN docker container not starting**
 
