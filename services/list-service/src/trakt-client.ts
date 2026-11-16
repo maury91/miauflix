@@ -54,8 +54,8 @@ export class TraktProviderError extends Error {
 export class TraktClient {
   constructor(
     private readonly clientId: string,
-    private readonly clientSecret: string,
     private readonly apiUrl: string,
+    private readonly authUrl: string,
     private readonly redirectUri: string,
     private readonly requestTimeoutMs = DEFAULT_REQUEST_TIMEOUT_MS
   ) {}
@@ -84,7 +84,9 @@ export class TraktClient {
   ): Promise<{ data: unknown; headers: Headers }> {
     try {
       await waitForCooldown();
-      const response = await fetch(`${this.apiUrl}${path}`, {
+      // Trakt serves OAuth (device codes, token exchange and refresh, revocation) on its own host.
+      const baseUrl = path.startsWith('/oauth/') ? this.authUrl : this.apiUrl;
+      const response = await fetch(`${baseUrl}${path}`, {
         ...init,
         signal: init.signal ?? AbortSignal.timeout(this.requestTimeoutMs),
         headers: {
@@ -153,7 +155,7 @@ export class TraktClient {
   deviceToken(code: string): Promise<z.infer<typeof tokenSchema>> {
     return this.request('/oauth/device/token', tokenSchema, {
       method: 'POST',
-      body: JSON.stringify({ code, client_id: this.clientId, client_secret: this.clientSecret }),
+      body: JSON.stringify({ code, client_id: this.clientId }),
     });
   }
 
@@ -163,7 +165,6 @@ export class TraktClient {
       body: JSON.stringify({
         refresh_token: refreshToken,
         client_id: this.clientId,
-        client_secret: this.clientSecret,
         redirect_uri: this.redirectUri,
         grant_type: 'refresh_token',
       }),
@@ -222,7 +223,6 @@ export class TraktClient {
       body: JSON.stringify({
         token: accessToken,
         client_id: this.clientId,
-        client_secret: this.clientSecret,
       }),
     });
   }

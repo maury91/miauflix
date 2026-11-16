@@ -110,7 +110,7 @@ test('completes first-run admin and required configuration through the UI', asyn
         required: true,
         hasValue: false,
       }),
-      ...['TRAKT_CLIENT_ID', 'TRAKT_CLIENT_SECRET', 'TRAKT_REDIRECT_URI'].map(key =>
+      ...['TRAKT_CLIENT_ID', 'TRAKT_REDIRECT_URI'].map(key =>
         expect.objectContaining({
           key,
           required: true,
@@ -207,9 +207,8 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(page.getByRole('heading', { name: 'Trakt' })).toBeVisible({
     timeout: 5_000,
   });
-  await expect(page.getByText('2 missing')).toBeVisible();
+  await expect(page.getByText('1 missing')).toBeVisible();
   await page.getByRole('textbox', { name: 'Trakt Client ID' }).fill('mock-trakt-client-id');
-  await page.getByRole('textbox', { name: 'Trakt Client Secret' }).fill('mock-trakt-client-secret');
   const redirectUriInput = page.getByRole('textbox', { name: 'Trakt Redirect URI' });
   await expect(redirectUriInput).toHaveValue(new URL(page.url()).origin);
   await redirectUriInput.fill('https://app.example/trakt/callback');

@@ -30,8 +30,8 @@ const setup = () => {
 
 const values = {
   TRAKT_API_URL: 'https://trakt.invalid',
+  TRAKT_AUTH_URL: 'https://auth.trakt.invalid',
   TRAKT_CLIENT_ID: 'client-id',
-  TRAKT_CLIENT_SECRET: 'client-secret',
   TRAKT_REDIRECT_URI: 'https://miauflix.example/callback',
 };
 
