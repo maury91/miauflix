@@ -131,7 +131,7 @@ async function focusHeroCase(
   for (let index = currentIndex; index !== targetIndex; ) {
     await page.keyboard.press(direction > 0 ? 'ArrowRight' : 'ArrowLeft');
     index += direction;
-    await expect(focusedSlot).toHaveAttribute('aria-posinset', String(index));
+    await expect(focusedSlot).toHaveAttribute('aria-posinset', String(index + 1));
   }
   const card = row.getByRole('button', { name: mediaTitle(media!), exact: true });
   await expect(card).toHaveAttribute('aria-current', 'true');

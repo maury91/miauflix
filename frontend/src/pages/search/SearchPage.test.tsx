@@ -297,6 +297,27 @@ describe('SearchPage', () => {
     expect(store.getState().search).toMatchObject({ genre: null, query: '' });
   });
 
+  it('keeps the focused side-column item in view by the least scroll', () => {
+    setupTest(searchStateFixture, { tv: true });
+    const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
+    const keyboard = screen.getByRole('group', { name: 'On-screen keyboard' });
+    const popular = screen.getByRole('region', { name: 'Popular searches' });
+    const inside = (container: HTMLElement) => container.contains(document.activeElement);
+
+    // Down through the keyboard to the popular searches below it
+    for (let step = 0; step < 10 && !inside(popular); step++) press('ArrowDown');
+    expect(inside(popular)).toBe(true);
+    const chip = document.activeElement;
+    expect(scrollIntoView.mock.contexts.at(-1)).toBe(chip);
+    expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
+
+    // And back up to the keyboard, which scrolls back into view
+    press('ArrowUp');
+    expect(inside(keyboard)).toBe(true);
+    expect(scrollIntoView.mock.contexts.at(-1)).toBe(document.activeElement);
+    expect(scrollIntoView).toHaveBeenLastCalledWith({ block: 'nearest' });
+  });
+
   it('replaces a browsed genre with what the keyboard types', () => {
     const { store } = setupTest(searchStateFixture, { tv: true });
     fireEvent.click(screen.getByRole('button', { name: 'Horror' }));

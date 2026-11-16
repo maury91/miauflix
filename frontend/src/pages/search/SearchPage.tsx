@@ -67,7 +67,7 @@ export default function SearchPage(props: SearchPageProps) {
 function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
   const dispatch = useAppDispatch();
   const search = useAppSelector(state => state.search);
-  const { focus } = useNavigation();
+  const { focus, lastInput } = useNavigation();
   const start = tv ? SEARCH_START : SEARCH_NAV.field;
   const fieldRef = useRef<HTMLInputElement>(null);
   // Read once: where focus starts
@@ -86,6 +86,16 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
       document.body.style.removeProperty('--home-content-left');
     };
   }, []);
+
+  // The layer focuses without scrolling: keep the focused key or chip in view in the side column,
+  // by the least scroll. Pointer focus never scrolls: the pointer is already on it
+  const activeSide = useActiveIdWithin(SEARCH_NAV.side);
+  useEffect(() => {
+    if (activeSide === null || lastInput() === 'pointer') return;
+    sideRef.current
+      ?.querySelector<HTMLElement>('[data-focused]')
+      ?.scrollIntoView?.({ block: 'nearest' });
+  }, [activeSide, lastInput]);
 
   const genres = search.genres;
   const genreChips = useMemo(
