@@ -6,13 +6,14 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { useGetListQuery, usePromoteListMediaMutation, useQueueBackdropFocusMutation } = vi.hoisted(
-  () => ({
+const { useGetListQuery, usePromoteListMediaMutation, useQueueBackdropFocusMutation, cardRenders } =
+  vi.hoisted(() => ({
     useGetListQuery: vi.fn(),
     usePromoteListMediaMutation: vi.fn(() => [vi.fn()]),
     useQueueBackdropFocusMutation: vi.fn(() => [vi.fn()]),
-  })
-);
+    /** The cards rendered, in order. */
+    cardRenders: [] as number[],
+  }));
 
 vi.mock('@shared/config/constants', async importOriginal => ({
   ...(await importOriginal<typeof import('@shared/config/constants')>()),
@@ -32,16 +33,19 @@ vi.mock('@features/home-feed/listPages', () => ({
 }));
 vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
 vi.mock('./MediaCard', () => ({
-  MediaCard: (props: { media: { id: number }; focused: boolean; onSelect: () => void }) => (
-    <button
-      data-focused={props.focused || undefined}
-      data-testid={`media-${props.media.id}`}
-      type="button"
-      onClick={props.onSelect}
-    >
-      {props.media.id}
-    </button>
-  ),
+  MediaCard: (props: { media: { id: number }; focused: boolean; onSelect: () => void }) => {
+    cardRenders.push(props.media.id);
+    return (
+      <button
+        data-focused={props.focused || undefined}
+        data-testid={`media-${props.media.id}`}
+        type="button"
+        onClick={props.onSelect}
+      >
+        {props.media.id}
+      </button>
+    );
+  },
 }));
 
 import { CategoryRow } from './CategoryRow';
@@ -157,7 +161,7 @@ describe('CategoryRow on the Samsung TV', () => {
     expect(screen.getByTestId('media-10')).not.toHaveAttribute('data-focused');
   });
 
-  it('moves at once but reports a held run of moves once it pauses', () => {
+  it('moves at once, reports the move after it painted, and a held run once it pauses', () => {
     const onSelectionChange = vi.fn();
     const onActive = vi.fn();
     render(
@@ -175,6 +179,10 @@ describe('CategoryRow on the Samsung TV', () => {
     onActive.mockClear();
 
     press('ArrowRight');
+    expect(screen.getByTestId('media-11')).toHaveAttribute('data-focused');
+    expect(onSelectionChange).not.toHaveBeenCalled();
+    // On the next task: the move paints before Home and the hero render
+    act(() => vi.advanceTimersByTime(0));
     expect(onSelectionChange.mock.calls).toEqual([[11]]);
     expect(onActive).toHaveBeenLastCalledWith(0, 11, expect.objectContaining({ id: 11 }));
 
@@ -227,6 +235,28 @@ describe('CategoryRow on the Samsung TV', () => {
 
     press('ArrowUp');
     expect(onSelectionChange).toHaveBeenLastCalledWith(12);
+  });
+
+  it('renders neither the row nor its other cards on a move', () => {
+    const onSelectionChange = vi.fn();
+    render(
+      layer(
+        <CategoryRow {...props(true)} isCurrentRow onSelectionChange={onSelectionChange} />,
+        true
+      )
+    );
+    act(() => vi.advanceTimersByTime(400));
+    // The row reads its pages on every render of its own
+    const rowRenders = useGetListQuery.mock.calls.length;
+    cardRenders.length = 0;
+
+    press('ArrowRight');
+    act(() => vi.advanceTimersByTime(500));
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith(11);
+    expect(useGetListQuery.mock.calls.length).toBe(rowRenders);
+    // The two cards whose focus changed, and the one the kept window gained
+    expect(cardRenders.sort((left, right) => left - right)).toEqual([10, 11, 16]);
   });
 
   it('goes back to the cards in view when it leaves view, unless kept warm', () => {

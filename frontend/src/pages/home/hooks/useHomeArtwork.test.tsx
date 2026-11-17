@@ -3,7 +3,11 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { dispatch } = vi.hoisted(() => ({ dispatch: vi.fn() }));
-vi.mock('react-redux', () => ({ useDispatch: () => dispatch }));
+const artworkState = { artwork: { byMedia: {} } };
+vi.mock('react-redux', () => ({
+  useDispatch: () => dispatch,
+  useStore: () => ({ getState: () => artworkState }),
+}));
 vi.mock('@features/realtime/realtime.middleware', () => ({
   realtimeRuntimeActions: {
     artworkSubscriptionsChanged: (refs: unknown) => ({ type: 'subscriptions', payload: refs }),

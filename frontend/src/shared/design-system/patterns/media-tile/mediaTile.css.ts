@@ -4,20 +4,26 @@ import { color, space, typeScale } from '../../tokens';
 
 /**
  * MediaTile (docs/plans/style-guide.md, section 8.6): the artwork layers inside a CollectionTile's
- * frame. The title logo sits over a landscape backdrop at the bottom start; the fallback title
+ * frame. The title logo sits over a landscape backdrop at the start, above the overlay text (or a
+ * card image has it drawn in already); the fallback title
  * replaces missing artwork in the same box.
  */
 
-/** The logo's box; the image keeps its own ratio inside it, anchored at the bottom start. */
+/**
+ * The logo's box; the image keeps its own ratio inside it, anchored at the bottom start. It ends
+ * above the overlay line (an episode such as `S1 E1`, from about 70% of the height), so the two
+ * never overlap. Card images draw their logo in the same box (CARD_IMAGE_LOGO_BOX in
+ * @miauflix/service-contracts): keep them in step.
+ */
 export const logo = style({
   position: 'absolute',
-  left: '8%',
-  bottom: '10%',
-  width: '60%',
-  height: '35%',
+  left: '5%',
+  top: '18%',
+  width: '64%',
+  height: '48%',
   pointerEvents: 'none',
   selectors: {
-    '[dir="rtl"] &': { left: 'auto', right: '8%' },
+    '[dir="rtl"] &': { left: 'auto', right: '5%' },
   },
 });
 

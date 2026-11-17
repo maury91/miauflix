@@ -13,183 +13,35 @@ import {
   FineTuneControls,
   ShapePicker,
 } from '@features/profiles/ui/LookControls';
+import * as lookStyles from '@features/profiles/ui/lookControls.css';
 import {
-  type Direction,
-  focusFirst,
-  moveFocus,
-  NAV_ATTRIBUTE,
-  NAV_REGION_ATTRIBUTE,
-} from '@features/profiles/ui/spatialFocus';
+  Button,
+  Disclosure,
+  FormSection,
+  Heading,
+  Message,
+  NavItem,
+  NavRail,
+  PasswordField,
+  ScrollArea,
+  SurfaceContextProvider,
+  TabPanel,
+  Tabs,
+  TextField,
+} from '@shared/design-system';
+import { TIZEN_IME_DONE } from '@shared/hooks/useKeyboard';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { Alert, Button, FieldLabel, Input } from '@shared/ui';
-import { BackRail } from '@shared/ui/rail/BackRail';
-import { RAIL_COLLAPSED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
+import { FocusGroup, FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
 import { useAppSelector } from '@store/hooks';
 import { selectAdminSession, type SessionInfo } from '@store/slices/auth';
 import { motion } from 'framer-motion';
-import {
-  type FC,
-  type FormEvent,
-  type KeyboardEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import styled from 'styled-components';
+import { type FC, type KeyboardEvent, useCallback, useRef, useState } from 'react';
 
-import ChevronIcon from '~icons/mdi/chevron-down';
+import { EDITOR_NAV as NAV } from './profileEditorNav';
+import * as styles from './profileEditorPage.css';
 
-const Page = styled(motion.main)`
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  grid-template-columns: minmax(256px, 0.75fr) minmax(0, 1.25fr);
-  gap: 4vw;
-  /* Clear of the back rail, as the other inner pages are. */
-  padding: 11vh 6vw 4vh calc(${RAIL_COLLAPSED_WIDTH_CSS} + 2.4vw);
-  background: #0a0d0f;
-  color: #f5f5f5;
-  font-family: 'Poppins', sans-serif;
-  overflow: hidden;
-
-  @media (max-width: 760px) {
-    grid-template-columns: 1fr;
-    overflow: auto;
-    padding: 90px 20px 32px calc(${RAIL_COLLAPSED_WIDTH_CSS} + 20px);
-  }
-`;
-
-const Preview = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  min-height: 0;
-`;
-
-const Heading = styled.h1`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  align-self: flex-start;
-  margin: 0;
-  font-size: clamp(28.8px, 3.2vw, 64px);
-  font-weight: 600;
-  text-transform: none;
-`;
-
-/* As wide as 52vh or the column, whichever is less; square without aspect-ratio or min()
-   (neither exists on the 2020 TVs): the inner padding is a share of this width. */
-const Stage = styled.div`
-  flex-shrink: 0;
-  width: 52vh;
-  max-width: 100%;
-`;
-
-const StageSquare = styled.div`
-  position: relative;
-  padding-bottom: 100%;
-`;
-
-const StageFill = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 22.4px;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 8px 12px 16px 4px;
-`;
-
-const Fields = styled.div`
-  display: grid;
-  gap: 16px;
-
-  label {
-    font-size: clamp(15.2px, 1.2vw, 23.2px);
-    font-weight: 600;
-  }
-
-  input {
-    font-size: clamp(16px, 1.5vw, 28.8px);
-  }
-`;
-
-const Tabs = styled.div`
-  display: flex;
-  gap: clamp(8px, 2vw, 40px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-`;
-
-const Tab = styled.button<{ $selected: boolean }>`
-  padding: 9.6px 6.4px 12.8px;
-  border: 0;
-  border-bottom: 4px solid ${({ $selected }) => ($selected ? '#e50914' : 'transparent')};
-  background: none;
-  color: ${({ $selected }) => ($selected ? '#ffffff' : 'rgba(255, 255, 255, 0.65)')};
-  font:
-    500 clamp(16px, 1.3vw, 25.6px) 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 8px 8px 0 0;
-    /* A ring like the other controls': the tint alone hardly shows on the dark page. */
-    box-shadow: inset 0 0 0 3px #ffffff;
-  }
-`;
-
-const Panel = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`;
-
-const Disclosure = styled.button<{ $open: boolean }>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-  background: none;
-  color: inherit;
-  font:
-    500 clamp(16px, 1.25vw, 24px) 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  svg {
-    transform: rotate(${({ $open }) => ($open ? 180 : 0)}deg);
-    transition: transform 0.2s ease;
-  }
-
-  &:focus {
-    outline: 3px solid #ffffff;
-    border-radius: 6px;
-  }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  padding-top: 8px;
-`;
+import ArrowLeftIcon from '~icons/mdi/arrow-left';
 
 type TabId = 'shape' | 'color' | 'face' | 'accessories';
 const TABS: { id: TabId; label: string }[] = [
@@ -198,6 +50,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'face', label: 'Face' },
   { id: 'accessories', label: 'Accessories' },
 ];
+const TABS_ID = 'profile-look';
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -209,41 +62,74 @@ export interface ProfileEditorPageProps {
   onCancel: () => void;
 }
 
-const isTextField = (element: Element | null) =>
+const isEditing = (element: Element | null) =>
   element instanceof HTMLInputElement && element.type !== 'range';
 
-/** The Samsung on-screen keyboard's Done key. */
-const TIZEN_IME_DONE = 65376;
+/** Create or edit a profile: its name and Plushie. */
+const ProfileEditorPage: FC<ProfileEditorPageProps> = props => {
+  const { onCancel } = props;
+  // The logo lines up with the content beside the back rail, as on the other inner pages.
+  useRailContentLeft();
+  // Back ends editing a field first (closing a TV's keyboard), then leaves the page. An element
+  // scope, so it wins over the page-wide navigation keys.
+  const keysRef = useKeyboardNavigation({
+    onBack: event => {
+      const active = document.activeElement;
+      if (isEditing(active)) {
+        if (event.key === 'Backspace') return false;
+        (active as HTMLElement).blur();
+        return true;
+      }
+      onCancel();
+      return true;
+    },
+  });
+  // A text field holds no DOM focus outside edit mode (the editor opens on the name): keep DOM
+  // focus on the page then, so its keys (Back) still reach it rather than the document body
+  const mainRef = useRef<HTMLElement | null>(null);
+  const keepFocusInPage = useCallback(() => {
+    queueMicrotask(() => {
+      const active = document.activeElement;
+      if (!active || active === document.body) mainRef.current?.focus({ preventScroll: true });
+    });
+  }, []);
+  const pageRef = useCallback(
+    (element: HTMLElement | null) => {
+      mainRef.current = element;
+      keysRef(element);
+      if (element) keepFocusInPage();
+    },
+    [keysRef, keepFocusInPage]
+  );
+  return (
+    <motion.main
+      ref={pageRef}
+      className={styles.page}
+      aria-labelledby="profile-editor-title"
+      // Programmatic focus only (see keepFocusInPage), never a Tab stop
+      tabIndex={-1}
+      onBlur={keepFocusInPage}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.35 }}
+    >
+      <NavigationProvider>
+        <ProfileEditor {...props} />
+      </NavigationProvider>
+    </motion.main>
+  );
+};
 
 /**
- * Where a key pressed in a field leads, or null to leave it to the field. The app's key routing
- * skips fields, so they move the focus themselves: Up and Down (and Done on the TV keyboard)
- * always leave; Left and Right leave a text field from either end of its text, and move a
- * slider's value.
+ * One navigation scope: the back rail, the preview (Surprise me) and the form (name, then email
+ * and password when creating, the look's tabs and their pictures, Fine-tune, then Save and
+ * Cancel). The form column scrolls to keep the focused control in view.
  */
-function fieldExit(event: KeyboardEvent<HTMLElement>): Direction | null {
-  const field = event.target;
-  if (!(field instanceof HTMLInputElement)) return null;
-  if (event.key === 'ArrowUp') return 'up';
-  if (event.key === 'ArrowDown' || event.keyCode === TIZEN_IME_DONE) return 'down';
-  if (field.type === 'range') return null;
-  // Email fields do not expose their caret; treat them as at both ends.
-  const start = field.selectionStart ?? 0;
-  const end = field.selectionEnd ?? field.value.length;
-  const caretKnown = field.selectionStart !== null;
-  if (event.key === 'ArrowLeft' && (!caretKnown || (start === 0 && end === 0))) return 'left';
-  if (
-    event.key === 'ArrowRight' &&
-    (!caretKnown || (start === field.value.length && end === field.value.length))
-  )
-    return 'right';
-  return null;
-}
-
-/** Create or edit a profile: its name and Plushie. */
-const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCancel }) => {
+function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
   const creating = !profile;
   const adminSession = useAppSelector(selectAdminSession);
+  const navigation = useNavigation();
   const [name, setName] = useState(profile?.user.displayName ?? '');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -261,9 +147,6 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
   const [rendering, setRendering] = useState(false);
   const submitting = useRef(false);
   const busy = rendering || createState.isLoading || updateState.isLoading;
-  const pageRef = useRef<HTMLElement | null>(null);
-  // The logo lines up with the content beside the back rail, as on the other inner pages.
-  useRailContentLeft();
 
   const change = useCallback((changes: Partial<PlushieLook>) => {
     setLook(current => ({ ...current, ...changes }));
@@ -274,53 +157,12 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
     setHops(count => count + 1);
   };
 
-  useEffect(() => {
-    focusFirst(pageRef.current, '#profile-name');
-  }, []);
+  /** The TV keyboard's Done moves on to the next field. */
+  const nextOnDone = (next: string) => (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === TIZEN_IME_DONE) navigation.focus(next);
+  };
 
-  const keyboardRef = useKeyboardNavigation({
-    exclusive: true,
-    onRestoreFocus: () => focusFirst(pageRef.current, '#profile-name'),
-    // Fields never reach these handlers: the Page's onKeyDown moves out of them (fieldExit).
-    onLeft: () => {
-      moveFocus(pageRef.current, 'left');
-      return true;
-    },
-    onRight: () => {
-      moveFocus(pageRef.current, 'right');
-      return true;
-    },
-    onUp: () => {
-      moveFocus(pageRef.current, 'up');
-      return true;
-    },
-    onDown: () => {
-      moveFocus(pageRef.current, 'down');
-      return true;
-    },
-    onConfirm: () => {
-      const active = document.activeElement;
-      // Enter in a field opens the TV keyboard (or submits on a computer).
-      if (isTextField(active)) return false;
-      if (active instanceof HTMLElement && pageRef.current?.contains(active)) active.click();
-      return true;
-    },
-    onBack: () => {
-      onCancel();
-      return true;
-    },
-  });
-
-  const setPageRef = useCallback(
-    (element: HTMLElement | null) => {
-      pageRef.current = element;
-      keyboardRef(element);
-    },
-    [keyboardRef]
-  );
-
-  const submit = async (event?: FormEvent) => {
-    event?.preventDefault();
+  const submit = async () => {
     if (busy || submitting.current) return;
     const displayName = name.trim();
     if (!displayName) return setError('Give the profile a name.');
@@ -365,154 +207,153 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
   };
 
   return (
-    <Page
-      ref={setPageRef}
-      aria-labelledby="profile-editor-title"
-      onKeyDown={event => {
-        const direction = fieldExit(event);
-        if (direction && moveFocus(pageRef.current, direction)) event.preventDefault();
-      }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.35 }}
-    >
-      <Preview {...{ [NAV_REGION_ATTRIBUTE]: '' }}>
-        <Heading id="profile-editor-title">{creating ? 'Add profile' : 'Edit profile'}</Heading>
-        <Stage>
-          <StageSquare>
-            <StageFill>
-              <PlushieLive look={look} animated hopSignal={hops} />
-            </StageFill>
-          </StageSquare>
-        </Stage>
-        <Button
-          data-profile-nav=""
-          appearance="settings"
-          color="secondary"
-          size="large"
-          onClick={surprise}
-        >
-          Surprise me
-        </Button>
-      </Preview>
-
-      <Form {...{ [NAV_REGION_ATTRIBUTE]: '' }} onSubmit={event => void submit(event)} noValidate>
-        <Fields>
-          <div>
-            <FieldLabel htmlFor="profile-name">Profile name</FieldLabel>
-            <Input
-              id="profile-name"
-              data-profile-nav=""
-              value={name}
-              maxLength={40}
-              autoComplete="off"
-              onChange={event => setName(event.target.value)}
-            />
+    <FocusScope id={NAV.scope} layout="horizontal" initialId={NAV.name}>
+      <div className={styles.rail}>
+        <NavRail label="Profile" navId={NAV.rail}>
+          <NavItem navId={NAV.back} icon={<ArrowLeftIcon />} label="Back" onClick={onCancel} />
+        </NavRail>
+      </div>
+      <SurfaceContextProvider value="solid">
+        <div className={styles.body}>
+          <FocusGroup id={NAV.preview} layout="vertical">
+            <div className={styles.preview}>
+              <div className={styles.title}>
+                <Heading level={1} id="profile-editor-title">
+                  {creating ? 'Add profile' : 'Edit profile'}
+                </Heading>
+              </div>
+              <div className={styles.stage}>
+                <div className={styles.stageSquare}>
+                  <div className={styles.stageFill}>
+                    <PlushieLive look={look} animated hopSignal={hops} />
+                  </div>
+                </div>
+              </div>
+              <Button navId={NAV.surprise} size="lg" onClick={surprise}>
+                Surprise me
+              </Button>
+            </div>
+          </FocusGroup>
+          <div className={styles.form}>
+            <ScrollArea>
+              <div className={styles.formContent}>
+                <FormSection
+                  navId={NAV.form}
+                  title="Name and Plushie"
+                  titleHidden
+                  onSubmit={() => void submit()}
+                  busy={busy}
+                  message={
+                    error ? (
+                      <Message tone="danger" toneLabel="Error" live="assertive">
+                        {error}
+                      </Message>
+                    ) : undefined
+                  }
+                  actions={
+                    <>
+                      <Button navId={NAV.save} type="submit" loading={busy} disabled={busy}>
+                        {creating ? 'Create profile' : 'Save changes'}
+                      </Button>
+                      <Button navId={NAV.cancel} onClick={onCancel}>
+                        Cancel
+                      </Button>
+                    </>
+                  }
+                >
+                  <TextField
+                    navId={NAV.name}
+                    id="profile-name"
+                    label="Profile name"
+                    value={name}
+                    maxLength={40}
+                    autoComplete="off"
+                    onChange={event => setName(event.target.value)}
+                    onKeyDown={creating ? nextOnDone(NAV.email) : undefined}
+                  />
+                  {creating && (
+                    <>
+                      <TextField
+                        navId={NAV.email}
+                        id="profile-email"
+                        label="Email"
+                        type="email"
+                        value={email}
+                        autoComplete="off"
+                        onChange={event => setEmail(event.target.value)}
+                        onKeyDown={nextOnDone(NAV.password)}
+                      />
+                      <PasswordField
+                        navId={NAV.password}
+                        id="profile-password"
+                        label="Password"
+                        showLabel="Show password"
+                        hideLabel="Hide password"
+                        value={password}
+                        autoComplete="new-password"
+                        onChange={event => setPassword(event.target.value)}
+                      />
+                    </>
+                  )}
+                  <Tabs
+                    id={TABS_ID}
+                    navId={NAV.tabs}
+                    label="Plushie"
+                    items={TABS}
+                    selectedId={tab}
+                    onSelect={setTab}
+                  />
+                  {TABS.map(({ id }) => (
+                    <TabPanel key={id} tabsId={TABS_ID} tab={id} selected={tab === id}>
+                      {/* Only the shown panel registers its controls */}
+                      {tab === id && id === 'shape' && (
+                        <ShapePicker
+                          navId={NAV.look}
+                          value={look.kind}
+                          color={look.color}
+                          fabric={look.fabric}
+                          onChange={kind => change({ kind })}
+                        />
+                      )}
+                      {tab === id && id === 'color' && (
+                        <div className={lookStyles.controls}>
+                          <ColorPicker
+                            navId={NAV.look}
+                            value={look.color}
+                            onChange={color => change({ color })}
+                          />
+                          <FabricPicker
+                            navId={NAV.look}
+                            value={look.fabric}
+                            color={look.color}
+                            onChange={fabric => change({ fabric })}
+                          />
+                        </div>
+                      )}
+                      {tab === id && id === 'face' && (
+                        <FaceControls navId={NAV.look} look={look} onChange={change} />
+                      )}
+                      {tab === id && id === 'accessories' && (
+                        <AccessoryControls navId={NAV.look} look={look} onChange={change} />
+                      )}
+                    </TabPanel>
+                  ))}
+                  <Disclosure
+                    navId={NAV.fineTune}
+                    title="Fine-tune"
+                    expanded={fineTuneOpen}
+                    onExpandedChange={setFineTuneOpen}
+                  >
+                    <FineTuneControls navId={NAV.look} look={look} onChange={change} />
+                  </Disclosure>
+                </FormSection>
+              </div>
+            </ScrollArea>
           </div>
-          {creating && (
-            <>
-              <div>
-                <FieldLabel htmlFor="profile-email">Email</FieldLabel>
-                <Input
-                  id="profile-email"
-                  data-profile-nav=""
-                  type="email"
-                  value={email}
-                  autoComplete="off"
-                  onChange={event => setEmail(event.target.value)}
-                />
-              </div>
-              <div>
-                <FieldLabel htmlFor="profile-password">Password</FieldLabel>
-                <Input
-                  id="profile-password"
-                  data-profile-nav=""
-                  type="password"
-                  value={password}
-                  autoComplete="new-password"
-                  onChange={event => setPassword(event.target.value)}
-                />
-              </div>
-            </>
-          )}
-        </Fields>
-
-        <Tabs role="tablist" aria-label="Plushie">
-          {TABS.map(({ id, label }) => (
-            <Tab
-              key={id}
-              type="button"
-              role="tab"
-              id={`profile-tab-${id}`}
-              aria-selected={tab === id}
-              aria-controls="profile-tab-panel"
-              data-profile-nav=""
-              $selected={tab === id}
-              onClick={() => setTab(id)}
-            >
-              {label}
-            </Tab>
-          ))}
-        </Tabs>
-
-        <Panel id="profile-tab-panel" role="tabpanel" aria-labelledby={`profile-tab-${tab}`}>
-          {tab === 'shape' && (
-            <ShapePicker
-              value={look.kind}
-              color={look.color}
-              fabric={look.fabric}
-              onChange={kind => change({ kind })}
-            />
-          )}
-          {tab === 'color' && (
-            <>
-              <ColorPicker value={look.color} onChange={color => change({ color })} />
-              <FabricPicker
-                value={look.fabric}
-                color={look.color}
-                onChange={fabric => change({ fabric })}
-              />
-            </>
-          )}
-          {tab === 'face' && <FaceControls look={look} onChange={change} />}
-          {tab === 'accessories' && <AccessoryControls look={look} onChange={change} />}
-        </Panel>
-
-        <Disclosure
-          type="button"
-          data-profile-nav=""
-          aria-expanded={fineTuneOpen}
-          $open={fineTuneOpen}
-          onClick={() => setFineTuneOpen(open => !open)}
-        >
-          Fine-tune
-          <ChevronIcon aria-hidden="true" />
-        </Disclosure>
-        {fineTuneOpen && <FineTuneControls look={look} onChange={change} />}
-
-        {error && <Alert severity="error">{error}</Alert>}
-
-        <Buttons>
-          <Button data-profile-nav="" type="submit" color="primary" size="medium" disabled={busy}>
-            {creating ? 'Create profile' : busy ? 'Saving…' : 'Save changes'}
-          </Button>
-          <Button
-            data-profile-nav=""
-            type="button"
-            appearance="settings"
-            color="secondary"
-            size="medium"
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
-        </Buttons>
-      </Form>
-
-      <BackRail label="Back" onBack={onCancel} buttonAttributes={{ [NAV_ATTRIBUTE]: '' }} />
-    </Page>
+        </div>
+      </SurfaceContextProvider>
+    </FocusScope>
   );
-};
+}
 
 export default ProfileEditorPage;

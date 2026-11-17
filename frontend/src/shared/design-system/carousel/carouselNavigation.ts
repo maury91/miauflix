@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useLayoutEffect, useState, useSyncExternalStore } from 'react';
 
 /** Where a carousel is: the focused item and the item in its left-most (leading) visible slot. */
 export interface CarouselPosition {
@@ -60,84 +60,147 @@ export function revealItem(
   return { focused, leading: clamp(focused, 0, maxLeading(layout)) };
 }
 
-/**
- * Carousel state for one row: the focused item and the track's position. Keys move both; the
- * pointer moves focus only (never scrolls); `reveal` restores a remembered item.
- */
-export function useCarouselNavigation(layout: CarouselLayout, initialIndex = 0) {
-  // A row whose size isn't known yet (its first page is loading) keeps the item it starts on, at
-  // the leading slot; the bounds below apply once the count arrives
-  const [position, setPosition] = useState<CarouselPosition>(() =>
-    layout.count > 0
-      ? revealItem({ focused: 0, leading: 0 }, initialIndex, layout)
-      : { focused: Math.max(0, initialIndex), leading: Math.max(0, initialIndex) }
-  );
+/** A position outside the layout (a reload shrank the row, a resize changed the page) brought back. */
+function boundPosition(
+  position: CarouselPosition,
+  layout: CarouselLayout,
+  resized: boolean
+): CarouselPosition {
   // The item count can shrink under the focus (a reload): keep both inside it. A smaller page (a
   // resize) also brings the focused item back into view; otherwise an item outside the page stays
-  // where it is, since the pointer focuses peeking items without scrolling. revealItem's result
-  // satisfies every condition, so this settles after one update.
-  const [pagedBy, setPagedBy] = useState(layout.perPage);
-  const resized = pagedBy !== layout.perPage;
-  if (resized) setPagedBy(layout.perPage);
+  // where it is, since the pointer focuses peeking items without scrolling.
   const outOfView =
     position.focused < position.leading || position.focused >= position.leading + layout.perPage;
-  const bounded =
-    layout.count > 0 &&
+  return layout.count > 0 &&
     (position.focused >= layout.count ||
       position.leading > maxLeading(layout) ||
       (resized && outOfView))
-      ? revealItem(position, position.focused, layout)
-      : position;
-  if (bounded !== position) setPosition(bounded);
+    ? revealItem(position, position.focused, layout)
+    : position;
+}
 
-  const { count, perPage, paging } = layout;
+/**
+ * One row's position, outside React: a key moves it without re-rendering the row's owner. Only
+ * the components that read it (`useCarouselPosition`) render again, and only when what they read
+ * changed.
+ */
+export interface CarouselNavigation {
+  /** The focused item and the leading slot now. The same object until either changes. */
+  position: () => CarouselPosition;
+  /** Called after every change of `position()`. Returns the unsubscribe. */
+  subscribe: (listener: () => void) => () => void;
   /** A Left/Right press; `false` when it exits the carousel. */
-  const move = useCallback(
-    (direction: -1 | 1) => {
-      const next = stepCarousel(bounded, direction, { count, perPage, paging });
-      if (next) setPosition(next);
-      return next !== null;
-    },
-    [bounded, count, perPage, paging]
-  );
-  /** A page of the pointer's previous/next buttons: scroll and focus the new leading item. */
-  const page = useCallback(
-    (direction: -1 | 1) => {
-      const leading = clamp(
-        bounded.leading + direction * perPage,
-        0,
-        maxLeading({ count, perPage })
-      );
-      setPosition({ focused: leading, leading });
-    },
-    [bounded.leading, count, perPage]
-  );
+  move: (direction: -1 | 1) => boolean;
   /** Where a Left/Right press would focus, without moving (null when it exits). */
-  const peek = useCallback(
-    (direction: -1 | 1) =>
-      stepCarousel(bounded, direction, { count, perPage, paging })?.focused ?? null,
-    [bounded, count, perPage, paging]
-  );
-  const pointerFocus = useCallback(
-    (index: number) => setPosition(current => ({ ...current, focused: index })),
-    []
-  );
-  const reveal = useCallback(
-    (index: number) =>
-      setPosition(current => revealItem(current, index, { count, perPage, paging })),
-    [count, perPage, paging]
-  );
+  peek: (direction: -1 | 1) => number | null;
+  /** A page of the pointer's previous/next buttons: scroll and focus the new leading item. */
+  page: (direction: -1 | 1) => void;
+  /** The pointer focused an item: focus moves, the track doesn't. */
+  pointerFocus: (index: number) => void;
+  /** Make an item focused and visible (a remembered item). */
+  reveal: (index: number) => void;
+}
+
+interface CarouselStore extends CarouselNavigation {
+  /** The layout of this render: bounds the position, without notifying (see useCarouselNavigation). */
+  setLayout: (layout: CarouselLayout) => void;
+  /** Tells subscribers of a position a layout bounded since the last call, if any. */
+  flushLayoutChange: () => void;
+}
+
+function createCarouselStore(initialLayout: CarouselLayout, initialIndex: number): CarouselStore {
+  let layout = initialLayout;
+  // A row whose size isn't known yet (its first page is loading) keeps the item it starts on, at
+  // the leading slot; the bounds apply once the count arrives
+  let position: CarouselPosition =
+    layout.count > 0
+      ? revealItem({ focused: 0, leading: 0 }, initialIndex, layout)
+      : { focused: Math.max(0, initialIndex), leading: Math.max(0, initialIndex) };
+  let boundedByLayout = false;
+  const listeners = new Set<() => void>();
+  const notify = () => listeners.forEach(listener => listener());
+  const set = (next: CarouselPosition) => {
+    if (next.focused === position.focused && next.leading === position.leading) return;
+    position = next;
+    notify();
+  };
 
   return {
-    focusedIndex: bounded.focused,
-    leadingIndex: bounded.leading,
-    move,
-    peek,
-    page,
-    pointerFocus,
-    reveal,
+    position: () => position,
+    subscribe: listener => {
+      listeners.add(listener);
+      return () => {
+        listeners.delete(listener);
+      };
+    },
+    setLayout: next => {
+      if (
+        next.count === layout.count &&
+        next.perPage === layout.perPage &&
+        next.paging === layout.paging
+      )
+        return;
+      const resized = next.perPage !== layout.perPage;
+      layout = next;
+      const bounded = boundPosition(position, layout, resized);
+      if (bounded === position) return;
+      position = bounded;
+      boundedByLayout = true;
+    },
+    flushLayoutChange: () => {
+      if (!boundedByLayout) return;
+      boundedByLayout = false;
+      notify();
+    },
+    move: direction => {
+      const next = stepCarousel(position, direction, layout);
+      if (next) set(next);
+      return next !== null;
+    },
+    peek: direction => stepCarousel(position, direction, layout)?.focused ?? null,
+    page: direction => {
+      const leading = clamp(position.leading + direction * layout.perPage, 0, maxLeading(layout));
+      set({ focused: leading, leading });
+    },
+    pointerFocus: index => set({ ...position, focused: index }),
+    reveal: index => set(revealItem(position, index, layout)),
   };
 }
 
-/** What `useCarouselNavigation` returns; give it to a Carousel with a `navId`. */
-export type CarouselNavigation = ReturnType<typeof useCarouselNavigation>;
+/**
+ * Carousel state for one row: the focused item and the track's position. Keys move both; the
+ * pointer moves focus only (never scrolls); `reveal` restores a remembered item. The returned
+ * object is stable and holds the position outside React state, so moving re-renders only the
+ * components that read the position with `useCarouselPosition` (the Carousel itself), never the
+ * component that owns the row.
+ */
+export function useCarouselNavigation(
+  layout: CarouselLayout,
+  initialIndex = 0
+): CarouselNavigation {
+  const [store] = useState(() => createCarouselStore(layout, initialIndex));
+  // Applied during render, so this render and its children already read the bounded position;
+  // the same layout again changes nothing, so a repeated or discarded render is harmless
+  store.setLayout(layout);
+  // Readers that didn't render with the new layout hear of the bounded position before paint
+  useLayoutEffect(() => store.flushLayoutChange());
+  return store;
+}
+
+/**
+ * Reads a carousel's position and re-renders when what `select` returns changes: return a
+ * primitive (an index, a page number), not a new object. Without `navigation` it reads nothing and
+ * returns undefined.
+ */
+export function useCarouselPosition<T>(
+  navigation: CarouselNavigation | undefined,
+  select: (position: CarouselPosition) => T
+): T | undefined {
+  return useSyncExternalStore(
+    navigation?.subscribe ?? noSubscription,
+    () => (navigation ? select(navigation.position()) : undefined),
+    () => (navigation ? select(navigation.position()) : undefined)
+  );
+}
+
+const noSubscription = () => () => undefined;

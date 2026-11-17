@@ -1,6 +1,6 @@
+import { ChoiceTileGroup, Slider } from '@shared/design-system';
 import type { PlushieKind } from 'plushies';
 import { useEffect, useMemo, useState } from 'react';
-import styled, { css } from 'styled-components';
 
 import {
   COLORS,
@@ -26,128 +26,17 @@ import {
   spriteLayout,
   spriteUrl,
 } from '../avatar/sprites';
+import * as styles from './lookControls.css';
 import { outlinePath } from './outline';
-import { NAV_ATTRIBUTE } from './spatialFocus';
 
 import NoneIcon from '~icons/mdi/cancel';
 
-const nav = { [NAV_ATTRIBUTE]: '' };
-
-const focusRing = css`
-  outline: none;
-
-  &:focus-visible,
-  &:focus {
-    box-shadow:
-      0 0 0 3px #0a0d0f,
-      0 0 0 6px #ffffff;
-  }
-`;
-
-export const Section = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 14.4px;
-`;
-
-export const SectionTitle = styled.h3`
-  margin: 0;
-  font-size: clamp(16px, 1.25vw, 24px);
-  font-weight: 600;
-  text-transform: none;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-`;
-
-const Chip = styled.button<{ $selected: boolean }>`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 7.2px 16px;
-  border: 2px solid ${({ $selected }) => ($selected ? '#ffffff' : 'rgba(255, 255, 255, 0.16)')};
-  border-radius: 999px;
-  background: ${({ $selected }) =>
-    $selected ? 'rgba(255, 255, 255, 0.14)' : 'rgba(255, 255, 255, 0.04)'};
-  color: #f5f5f5;
-  font:
-    500 clamp(13.6px, 1vw, 18.4px) 'Poppins',
-    sans-serif;
-  cursor: pointer;
-  ${focusRing}
-`;
-
-const ShapeChip = styled(Chip)`
-  flex-direction: column;
-  /* Stretch, not center: on the 2020 TVs (Chromium 69) a button lays its children out in an inner
-     box that takes this alignment, so centring would shrink the picture to the label's width. */
-  align-items: stretch;
-  text-align: center;
-  width: clamp(72px, 6.2vw, 120px);
-  padding: 9.6px 6.4px;
-  border-radius: 16px;
-  font-size: clamp(12px, 0.85vw, 16px);
-`;
-
-/** A square (padding keeps the ratio on TVs without `aspect-ratio`). */
-const ShapeArea = styled.span`
-  position: relative;
-  display: block;
-  width: 70%;
-  margin: 0 auto;
-  padding-bottom: 70%;
-`;
-
-/**
- * The shape filled with the chosen fabric: an SVG of the outline masks the fabric's picture, so
- * each tile is one masked layer rather than a live drawing.
- */
-const ShapeFill = styled.span`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  /* The tint below blends with the fabric only. */
-  isolation: isolate;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-`;
-
-/** Recolours the fabric to the fur colour, keeping its light and shade. */
-const FabricTint = styled.span<{ $color: string }>`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: ${({ $color }) => $color};
-  mix-blend-mode: color;
-`;
-
-/** A soft light from the top left and shade below, so the flat fabric reads as stuffed. */
-const Volume = styled.span`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background:
-    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.28), transparent 55%),
-    radial-gradient(circle at 60% 100%, rgba(0, 0, 0, 0.3), transparent 60%);
-`;
-
 /** The inside of a fabric swatch: a square share of its cell, away from the shaded edges. */
 const FABRIC_CROP = { width: 0.45, height: 0.6 } as const;
+
+/** The navigation id of one part control: `<prefix>:<part>`. */
+const partNavId = (prefix: string | undefined, part: string) =>
+  prefix === undefined ? undefined : `${prefix}:${part}`;
 
 /** The outline as a CSS mask image. */
 const outlineMask = (points: [number, number][]) =>
@@ -174,12 +63,18 @@ function useOutline(): Outline | null {
   return outline;
 }
 
+interface PartProps {
+  /** Prefix for the controls' navigation ids. See NavigableProps. */
+  navId?: string;
+}
+
 export function ShapePicker({
   value,
   color,
   fabric,
   onChange,
-}: {
+  navId,
+}: PartProps & {
   value: PlushieKind;
   color: string;
   fabric: PlushieLook['fabric'];
@@ -194,160 +89,76 @@ export function ShapePicker({
   const fabricCell = spriteCell('fabric', fabric);
   const fabricLayout = fabricCell && spriteCrop(fabricCell, FABRIC_CROP.width, FABRIC_CROP.height);
   return (
-    <Section aria-label="Shape">
-      <SectionTitle>Shape</SectionTitle>
-      <Row role="radiogroup" aria-label="Shape">
-        {KINDS.map(kind => (
-          <ShapeChip
-            key={kind}
-            type="button"
-            role="radio"
-            aria-checked={kind === value}
-            $selected={kind === value}
-            {...nav}
-            onClick={() => onChange(kind)}
-          >
+    <ChoiceTileGroup
+      label="Shape"
+      labelHidden
+      navId={partNavId(navId, 'shape')}
+      value={value}
+      onChange={onChange}
+      options={KINDS.map(kind => ({
+        value: kind,
+        label: optionLabel(kind),
+        visual: (
+          <span className={styles.shapeArea}>
             {masks && (
-              <ShapeArea aria-hidden="true">
-                <ShapeFill style={{ WebkitMaskImage: masks.get(kind), maskImage: masks.get(kind) }}>
-                  {fabricCell && fabricLayout && (
-                    <SheetImage
-                      src={fabricCell.sheet.url}
-                      srcSet={fabricCell.sheet.srcSet}
-                      alt=""
-                      draggable={false}
-                      decoding="async"
-                      style={fabricLayout}
-                    />
-                  )}
-                  <FabricTint $color={color} />
-                  <Volume />
-                </ShapeFill>
-              </ShapeArea>
+              <span
+                className={styles.shapeFill}
+                style={{ WebkitMaskImage: masks.get(kind), maskImage: masks.get(kind) }}
+              >
+                {fabricCell && fabricLayout && (
+                  <img
+                    className={styles.sheetImage}
+                    src={fabricCell.sheet.url}
+                    srcSet={fabricCell.sheet.srcSet}
+                    alt=""
+                    draggable={false}
+                    decoding="async"
+                    style={fabricLayout}
+                  />
+                )}
+                <span className={styles.fabricTint} style={{ backgroundColor: color }} />
+                <span className={styles.volume} />
+              </span>
             )}
-            {optionLabel(kind)}
-          </ShapeChip>
-        ))}
-      </Row>
-    </Section>
+          </span>
+        ),
+      }))}
+    />
   );
 }
-
-const Swatch = styled.button<{ $color: string; $selected: boolean }>`
-  width: clamp(41.6px, 3.3vw, 64px);
-  height: clamp(41.6px, 3.3vw, 64px);
-  padding: 0;
-  border: 3px solid ${({ $selected }) => ($selected ? '#ffffff' : 'transparent')};
-  border-radius: 50%;
-  background: ${({ $color }) => $color};
-  box-shadow: inset 0 0 0 3px #0a0d0f;
-  cursor: pointer;
-  ${focusRing}
-`;
 
 export function ColorPicker({
   value,
   onChange,
-}: {
-  value: string;
-  onChange: (color: string) => void;
-}) {
+  navId,
+}: PartProps & { value: string; onChange: (color: string) => void }) {
   return (
-    <Section aria-label="Color">
-      <SectionTitle>Color</SectionTitle>
-      <Row role="radiogroup" aria-label="Color">
-        {COLORS.map(color => (
-          <Swatch
-            key={color.value}
-            type="button"
-            role="radio"
-            aria-checked={color.value === value}
-            aria-label={color.name}
-            $color={color.value}
-            $selected={color.value === value}
-            {...nav}
-            onClick={() => onChange(color.value)}
-          />
-        ))}
-      </Row>
-    </Section>
+    <ChoiceTileGroup
+      label="Color"
+      shape="swatch"
+      navId={partNavId(navId, 'color')}
+      value={value}
+      onChange={onChange}
+      options={COLORS.map(color => ({ value: color.value, label: color.name, color: color.value }))}
+    />
   );
 }
-
-const PictureTile = styled.button<{ $selected: boolean }>`
-  display: flex;
-  flex-direction: column;
-  /* Stretch, not center: on the 2020 TVs (Chromium 69) a button lays its children out in an inner
-     box that takes this alignment, so centring would shrink the picture to the label's width. */
-  align-items: stretch;
-  text-align: center;
-  gap: 5.6px;
-  width: clamp(88px, 7.2vw, 140px);
-  padding: 7.2px 7.2px 8.8px;
-  border: 2px solid ${({ $selected }) => ($selected ? '#ffffff' : 'rgba(255, 255, 255, 0.12)')};
-  border-radius: 16px;
-  background: ${({ $selected }) =>
-    $selected ? 'rgba(255, 255, 255, 0.14)' : 'rgba(255, 255, 255, 0.04)'};
-  color: #f5f5f5;
-  font:
-    500 clamp(12px, 0.85vw, 16px) 'Poppins',
-    sans-serif;
-  cursor: pointer;
-  ${focusRing}
-`;
-
-/** A 4:3 area (padding keeps the ratio on TVs without `aspect-ratio`). */
-const PictureArea = styled.span`
-  position: relative;
-  display: block;
-  width: 100%;
-  padding-bottom: 75%;
-  overflow: hidden;
-  border-radius: 10px;
-  /* The tint below blends with the picture only. */
-  isolation: isolate;
-
-  > svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 42%;
-    height: 42%;
-    transform: translate(-50%, -50%);
-    opacity: 0.45;
-  }
-`;
-
-const SheetImage = styled.img`
-  position: absolute;
-  max-width: none;
-  pointer-events: none;
-  user-select: none;
-`;
-
-/** Recolours a picture to the fur colour, keeping its light and shade; masked to its shape. */
-const Tint = styled.span<{ $color: string; $url: string }>`
-  position: absolute;
-  background: ${({ $color }) => $color};
-  mix-blend-mode: color;
-  -webkit-mask: url(${({ $url }) => $url}) 0 0 / 100% 100% no-repeat;
-  mask: url(${({ $url }) => $url}) 0 0 / 100% 100% no-repeat;
-  pointer-events: none;
-`;
 
 /** One option's picture from its sheet, or a "none" sign. */
 function OptionPicture({ cell, tint }: { cell: SpriteCell | null; tint?: string }) {
   if (!cell) {
     return (
-      <PictureArea aria-hidden="true">
+      <span className={styles.pictureArea}>
         <NoneIcon />
-      </PictureArea>
+      </span>
     );
   }
   const image = spriteLayout(cell);
+  const mask = `url(${spriteUrl(cell.sheet, spriteDensity())}) 0 0 / 100% 100% no-repeat`;
   return (
-    <PictureArea aria-hidden="true">
-      <SheetImage
+    <span className={styles.pictureArea}>
+      <img
+        className={styles.sheetImage}
         src={cell.sheet.url}
         srcSet={cell.sheet.srcSet}
         alt=""
@@ -355,8 +166,13 @@ function OptionPicture({ cell, tint }: { cell: SpriteCell | null; tint?: string 
         decoding="async"
         style={image}
       />
-      {tint && <Tint $color={tint} $url={spriteUrl(cell.sheet, spriteDensity())} style={image} />}
-    </PictureArea>
+      {tint && (
+        <span
+          className={styles.tint}
+          style={{ ...image, backgroundColor: tint, WebkitMask: mask, mask }}
+        />
+      )}
+    </span>
   );
 }
 
@@ -370,7 +186,8 @@ export function PicturePicker<T extends string>({
   value,
   tint,
   onChange,
-}: {
+  navId,
+}: PartProps & {
   label: string;
   category: PictureCategory;
   values: readonly T[];
@@ -380,25 +197,17 @@ export function PicturePicker<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <Section aria-label={label}>
-      <SectionTitle>{label}</SectionTitle>
-      <Row role="radiogroup" aria-label={label}>
-        {values.map(option => (
-          <PictureTile
-            key={option}
-            type="button"
-            role="radio"
-            aria-checked={option === value}
-            $selected={option === value}
-            {...nav}
-            onClick={() => onChange(option)}
-          >
-            <OptionPicture cell={spriteCell(category, option)} tint={tint} />
-            {optionLabel(option)}
-          </PictureTile>
-        ))}
-      </Row>
-    </Section>
+    <ChoiceTileGroup
+      label={label}
+      navId={partNavId(navId, category)}
+      value={value}
+      onChange={onChange}
+      options={values.map(option => ({
+        value: option,
+        label: optionLabel(option),
+        visual: <OptionPicture cell={spriteCell(category, option)} tint={tint} />,
+      }))}
+    />
   );
 }
 
@@ -406,7 +215,8 @@ export function FabricPicker({
   value,
   color,
   onChange,
-}: {
+  navId,
+}: PartProps & {
   value: PlushieLook['fabric'];
   color: string;
   onChange: (fabric: PlushieLook['fabric']) => void;
@@ -419,67 +229,49 @@ export function FabricPicker({
       value={value}
       tint={color}
       onChange={onChange}
+      navId={navId}
     />
   );
 }
 
-const Slider = styled.label`
-  display: grid;
-  grid-template-columns: minmax(112px, 176px) 1fr;
-  align-items: center;
-  gap: 16px;
-  font-size: clamp(13.6px, 1vw, 18.4px);
-
-  input {
-    width: 100%;
-    accent-color: #e50914;
-    ${focusRing}
-    border-radius: 6px;
-  }
-`;
-
 export function FineTuneControls({
   look,
   onChange,
-}: {
-  look: PlushieLook;
-  onChange: (changes: Partial<PlushieLook>) => void;
-}) {
+  navId,
+}: PartProps & { look: PlushieLook; onChange: (changes: Partial<PlushieLook>) => void }) {
   return (
-    <Section aria-label="Fine-tune">
+    <div className={styles.controls}>
       {FINE_TUNES.map(tune => (
-        <Slider key={tune.key}>
-          {tune.label}
-          <input
-            type="range"
-            {...nav}
-            min={tune.min}
-            max={tune.max}
-            step={tune.step}
-            value={look[tune.key] ?? tune.defaultValue}
-            onChange={event => onChange({ [tune.key]: Number(event.target.value) })}
-          />
-        </Slider>
+        <Slider
+          key={tune.key}
+          navId={partNavId(navId, tune.key)}
+          label={tune.label}
+          min={tune.min}
+          max={tune.max}
+          step={tune.step}
+          value={look[tune.key] ?? tune.defaultValue}
+          onChange={value => onChange({ [tune.key]: value })}
+        />
       ))}
-    </Section>
+    </div>
   );
 }
 
-export function FaceControls({
-  look,
-  onChange,
-}: {
+type LookProps = PartProps & {
   look: PlushieLook;
   onChange: (changes: Partial<PlushieLook>) => void;
-}) {
+};
+
+export function FaceControls({ look, onChange, navId }: LookProps) {
   return (
-    <>
+    <div className={styles.controls}>
       <PicturePicker
         label="Eyes"
         category="eyes"
         values={EYES}
         value={look.eyes}
         onChange={eyes => onChange({ eyes })}
+        navId={navId}
       />
       <PicturePicker
         label="Mouth"
@@ -487,6 +279,7 @@ export function FaceControls({
         values={MOUTHS}
         value={look.mouth}
         onChange={mouth => onChange({ mouth })}
+        navId={navId}
       />
       <PicturePicker
         label="Cheeks"
@@ -494,6 +287,7 @@ export function FaceControls({
         values={['none', 'blush'] as const}
         value={look.cheeks ? 'blush' : 'none'}
         onChange={cheeks => onChange({ cheeks: cheeks === 'blush' })}
+        navId={navId}
       />
       <PicturePicker
         label="Moustache"
@@ -501,26 +295,22 @@ export function FaceControls({
         values={MOUSTACHES}
         value={look.moustache}
         onChange={moustache => onChange({ moustache })}
+        navId={navId}
       />
-    </>
+    </div>
   );
 }
 
-export function AccessoryControls({
-  look,
-  onChange,
-}: {
-  look: PlushieLook;
-  onChange: (changes: Partial<PlushieLook>) => void;
-}) {
+export function AccessoryControls({ look, onChange, navId }: LookProps) {
   return (
-    <>
+    <div className={styles.controls}>
       <PicturePicker
         label="Hat"
         category="hat"
         values={HATS}
         value={look.hat}
         onChange={hat => onChange({ hat })}
+        navId={navId}
       />
       <PicturePicker
         label="Glasses"
@@ -528,6 +318,7 @@ export function AccessoryControls({
         values={GLASSES}
         value={look.glasses}
         onChange={glasses => onChange({ glasses })}
+        navId={navId}
       />
       <PicturePicker
         label="Pin"
@@ -535,6 +326,7 @@ export function AccessoryControls({
         values={PINS}
         value={look.pin}
         onChange={pin => onChange({ pin })}
+        navId={navId}
       />
       <PicturePicker
         label="Neckwear"
@@ -542,7 +334,8 @@ export function AccessoryControls({
         values={NECKS}
         value={look.neck}
         onChange={neck => onChange({ neck })}
+        navId={navId}
       />
-    </>
+    </div>
   );
 }

@@ -6,8 +6,16 @@ import * as styles from './avatar.css';
 export interface AvatarProps {
   /** Whose avatar: its accessible name. */
   name: string;
-  /** The picture. An avatar is always a picture, never initials. */
-  src: string;
+  /**
+   * The picture. An avatar is always a picture, never initials. Absent (still being fetched), the
+   * colour and placeholder show.
+   */
+  src?: string | null;
+  /**
+   * A picture the feature draws itself (a profile's live, animated Plushie), filling the circle in
+   * place of `src`. Decorative: the avatar's name and semantics stay the same.
+   */
+  picture?: ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'fill';
   /** `contain` for pictures with their own shape (a profile's Plushie). */
   fit?: 'cover' | 'contain';
@@ -27,13 +35,15 @@ export interface AvatarProps {
 export function Avatar({
   name,
   src,
+  picture,
   size = 'md',
   fit = 'cover',
   color,
   placeholder,
   decorative = false,
 }: AvatarProps) {
-  const { status, imageProps } = useImageStatus(src);
+  const image = useImageStatus(src);
+  const status = picture ? 'loaded' : image.status;
   const semantics = decorative
     ? ({ 'aria-hidden': true } as const)
     : ({ role: 'img', 'aria-label': name } as const);
@@ -44,23 +54,30 @@ export function Avatar({
       data-size={size}
       data-fit={fit}
       data-status={status}
-      style={color ? { backgroundColor: color } : undefined}
+      style={color && status !== 'loaded' ? { backgroundColor: color } : undefined}
     >
       {placeholder && status !== 'loaded' && (
         <span className={styles.placeholder} aria-hidden="true">
           {placeholder}
         </span>
       )}
-      {status !== 'failed' && (
-        <img
-          {...imageProps}
-          key={src}
-          className={styles.image}
-          src={src}
-          alt=""
-          decoding="async"
-          draggable={false}
-        />
+      {picture ? (
+        <span className={styles.picture} aria-hidden="true">
+          {picture}
+        </span>
+      ) : (
+        src &&
+        status !== 'failed' && (
+          <img
+            {...image.imageProps}
+            key={src}
+            className={styles.image}
+            src={src}
+            alt=""
+            decoding="async"
+            draggable={false}
+          />
+        )
       )}
     </span>
   );

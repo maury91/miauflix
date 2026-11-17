@@ -45,6 +45,9 @@ export const tile = style({
   selectors: {
     '&[data-focused]:not(:disabled)': { zIndex: 1, transform: 'scale(1.03)' },
     '&:disabled': { cursor: 'default' },
+    // On the TV the scale applies at once: an animated scale lifts the old and new tiles onto
+    // layers of their own and makes the compositor assume they overlap everything after them.
+    'html[data-density="tv"] &': { transition: 'none' },
   },
   '@media': {
     '(prefers-reduced-motion: reduce)': { transition: 'none' },

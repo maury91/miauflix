@@ -102,19 +102,22 @@ describe('live media artwork', () => {
         <MediaCard {...props} />
       </Provider>
     );
-    expect([...view.container.querySelectorAll('img')].map(image => image.src)).toEqual([
-      update.backdrop,
-      update.logo,
+    const sources = () => [...view.container.querySelectorAll('img')].map(image => image.src);
+    // One card image, versioned by the newer artwork's revision
+    expect(sources()).toEqual([
+      expect.stringMatching(/\/api\/artwork\/card\/movie\/1\/sm\.webp\?rev=2$/u),
     ]);
     view.rerender(
       <Provider store={store}>
         <MediaCard {...props} media={{ ...props.media, artworkRevision: 3 }} />
       </Provider>
     );
-    expect([...view.container.querySelectorAll('img')].map(image => image.src)).toEqual([
-      props.media.backdrop,
-      props.media.logo,
-    ]);
+    expect(sources()).toEqual([expect.stringMatching(/\?rev=3$/u)]);
+    // A card image that fails falls back to the backdrop and logo layers of the same revision
+    act(() => {
+      view.container.querySelector('img')!.dispatchEvent(new Event('error'));
+    });
+    expect(sources()).toEqual([props.media.backdrop, props.media.logo]);
   });
 
   it('loads the hero backdrop from the same revision as its logo', () => {

@@ -52,7 +52,6 @@ function Redirect({ to }: { to: AppRoute }) {
 
 const HOME: AppRoute = { type: 'home' };
 const PROFILES: AppRoute = { type: 'profiles' };
-const MANAGE_PROFILES: AppRoute = { type: 'manageProfiles' };
 
 const LoadingContainer = styled.div`
   position: fixed;
@@ -123,10 +122,7 @@ export function AppShell() {
     isAdmin,
   });
   const profileScreen =
-    screen.kind === 'whosWatching' ||
-    screen.kind === 'manageProfiles' ||
-    screen.kind === 'newProfile' ||
-    screen.kind === 'editProfile';
+    screen.kind === 'whosWatching' || screen.kind === 'newProfile' || screen.kind === 'editProfile';
 
   const logoPage =
     homeEligible && introPhase !== 'complete'
@@ -175,27 +171,12 @@ export function AppShell() {
               if (!screen.startup) navigateBack(HOME);
               else if (route.type === 'profiles') navigate(HOME, { replace: true });
             }}
-            onEdit={() => undefined}
-            onAdd={() => navigate({ type: 'newProfile' })}
-            onManage={() => navigate({ type: 'manageProfiles' })}
-            onDone={() => undefined}
-            onBack={screen.startup ? undefined : () => navigateBack(HOME)}
-          />
-        );
-      case 'manageProfiles':
-        return (
-          <WhosWatchingPage
-            key="manage-profiles"
-            mode="manage"
-            focusUserId={profileFocus}
-            onSelect={() => undefined}
             onEdit={profile => {
               setProfileFocus(profile.user.id);
               navigate({ type: 'editProfile', userId: profile.user.id });
             }}
-            onAdd={() => undefined}
-            onManage={() => undefined}
-            onDone={() => navigateBack(PROFILES)}
+            onAdd={() => navigate({ type: 'newProfile' })}
+            onBack={screen.startup ? undefined : () => navigateBack(HOME)}
           />
         );
       case 'newProfile':
@@ -211,9 +192,9 @@ export function AppShell() {
         );
       case 'editProfile': {
         const profile = profiles.find(({ user }) => user.id === screen.userId);
-        if (!profile) return <Redirect key="redirect" to={{ type: 'manageProfiles' }} />;
-        // Opened from Home's profile panel it returns there; from Manage profiles, to that list.
-        const editParent = getRouteParent()?.type === 'home' ? HOME : MANAGE_PROFILES;
+        if (!profile) return <Redirect key="redirect" to={PROFILES} />;
+        // Opened from Home's profile panel it returns there; from Who's watching, to that list.
+        const editParent = getRouteParent()?.type === 'home' ? HOME : PROFILES;
         return (
           <ProfileEditorPage
             key={`edit-profile-${profile.user.id}`}

@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 import { color, radius } from '../tokens';
 
@@ -11,6 +11,8 @@ import { color, radius } from '../tokens';
  *   tile frame)
  * - `data-fit="cover" | "contain"`
  * - `data-status="loading" | "loaded" | "failed"`
+ *
+ * A placeholder icon scales with the circle; a feature-drawn `picture` (a live Plushie) fills it.
  */
 
 const sizes = { sm: '2rem', md: '2.5rem', lg: '4rem', xl: '8rem' } as const;
@@ -64,4 +66,16 @@ export const image = style({
     // Until decoded the colour and placeholder show through
     [`${avatar}:not([data-status="loaded"]) &`]: { opacity: 0 },
   },
+});
+
+globalStyle(`${placeholder} > svg`, { width: '50%', height: '50%' });
+
+/** A picture the feature draws (a canvas), filling the circle. */
+export const picture = style({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  display: 'block',
+  width: '100%',
+  height: '100%',
 });

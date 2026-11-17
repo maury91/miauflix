@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useEffect } from 'react';
 
 import * as styles from './artwork.css';
 import { useImageStatus } from './useImageStatus';
@@ -17,6 +17,8 @@ export interface ArtworkProps {
   fit?: 'cover' | 'contain';
   /** Shown when there is no image or it fails: a title, an icon. Decorative. */
   fallback?: ReactNode;
+  /** Called once `src` fails to load (not when it is absent). */
+  onError?: () => void;
 }
 
 /**
@@ -29,8 +31,15 @@ export function Artwork({
   ratio = 'landscape',
   fit = 'cover',
   fallback,
+  onError,
 }: ArtworkProps) {
   const { status, imageProps } = useImageStatus(src);
+  const failed = Boolean(src) && status === 'failed';
+  useEffect(() => {
+    if (failed) onError?.();
+    // Once per failing source; a new callback for the same failure is not a new failure
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [failed, src]);
   // A described image keeps its description when the picture is missing or fails
   const describedFallback = status === 'failed' && alt !== '';
   return (

@@ -89,7 +89,7 @@ test.describe('Profiles stories - visual regression', () => {
     await expect(page.getByRole('heading', { name: 'Who’s watching?' })).toBeVisible({
       timeout: 30_000,
     });
-    await expect(page.getByRole('button', { name: 'Maurizio' })).toBeFocused();
+    await expect(page.getByRole('button', { name: 'Maurizio', exact: true })).toBeFocused();
     await waitForPictures(page);
     await screenshot(page, 'whos-watching.png');
 
@@ -98,14 +98,16 @@ test.describe('Profiles stories - visual regression', () => {
     await expect(page.getByRole('button', { name: 'Back', exact: true })).toBeFocused();
   });
 
-  test('captures Manage profiles with the back rail and no Done button', async ({ page }) => {
-    await page.goto(storyUrl('profiles-who-s-watching--manage'));
-    await expect(page.getByRole('heading', { name: 'Manage profiles' })).toBeVisible({
+  test('captures the edit button under the focused profile', async ({ page }) => {
+    await page.goto(storyUrl('profiles-who-s-watching--with-admin'));
+    await expect(page.getByRole('heading', { name: 'Who’s watching?' })).toBeVisible({
       timeout: 30_000,
     });
-    await expect(page.getByRole('button', { name: 'Done' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Maurizio', exact: true })).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('button', { name: 'Edit Maurizio' })).toBeFocused();
     await waitForPictures(page);
-    await screenshot(page, 'manage-profiles.png');
+    await screenshot(page, 'whos-watching-edit.png');
   });
 
   for (const [tab, name] of [

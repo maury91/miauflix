@@ -15,7 +15,6 @@ const routes: Record<string, AppRoute> = {
   qr: { type: 'qrApproval', approvalToken: 'abc' },
   missing: { type: 'notFound', pathname: '/nope' },
   profiles: { type: 'profiles' },
-  manageProfiles: { type: 'manageProfiles' },
   newProfile: { type: 'newProfile' },
   editProfile: { type: 'editProfile', userId: 'user-1' },
 };
@@ -43,10 +42,9 @@ describe('resolveScreen', () => {
   });
 
   it('opens profile management before and after a profile is chosen, but not before sign-in', () => {
-    expect(resolve('manageProfiles', 'profiles')).toEqual({ kind: 'manageProfiles' });
     expect(resolve('newProfile', 'home')).toEqual({ kind: 'newProfile' });
     expect(resolve('editProfile', 'profiles')).toEqual({ kind: 'editProfile', userId: 'user-1' });
-    expect(resolve('manageProfiles', 'login')).toEqual({ kind: 'login' });
+    expect(resolve('editProfile', 'login')).toEqual({ kind: 'login' });
   });
 
   it.each<[string, AppState, string]>([

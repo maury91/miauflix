@@ -1,4 +1,11 @@
-import { type RefCallback, useCallback, useRef, useSyncExternalStore } from 'react';
+import {
+  type RefCallback,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
 
 import { type ChildOptions, useNode, useOptionalStore, useStore } from './context';
 import type { NavigationStore } from './store';
@@ -111,6 +118,32 @@ export function useActiveIdWithin(groupId: string | undefined): string | null {
     // Server render: nothing is focused before hydration
     () => null
   );
+}
+
+/**
+ * Calls `onChange` when focus enters (true) or leaves (false) a group or scope, from the key or
+ * pointer event that moved it, without re-rendering the caller (unlike useActiveIdWithin). Inert
+ * without a provider or an ID.
+ */
+export function useFocusWithinChange(
+  groupId: string | undefined,
+  onChange: (within: boolean) => void
+): void {
+  const store = useOptionalStore();
+  const latest = useRef(onChange);
+  useLayoutEffect(() => {
+    latest.current = onChange;
+  });
+  useEffect(() => {
+    if (!store || groupId === undefined) return;
+    let within = store.activeWithin(groupId);
+    return store.subscribeAll(() => {
+      const next = store.activeWithin(groupId);
+      if (next === within) return;
+      within = next;
+      latest.current(next);
+    });
+  }, [store, groupId]);
 }
 
 /** Whether a NavigationProvider is above: components then take focus from the layer. */

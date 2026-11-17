@@ -19,6 +19,7 @@ import {
   BackdropFocusService,
   DEFAULT_BACKDROP_FOCUS_CONCURRENCY,
 } from '../services/backdrop-focus.service';
+import type { CardImageSource } from '../services/card-image.service';
 import type {
   BatchResponse,
   EpisodeDetail,
@@ -82,7 +83,7 @@ export class CatalogService {
     private readonly provider: CatalogProvider,
     private readonly values: CatalogValues,
     backdropFocusRepository: BackdropFocusRepository,
-    artworkRepository?: ArtworkRepository,
+    private readonly artworkRepository?: ArtworkRepository,
     anime?: { index: AnimeIndex; layouts: AnimeLayoutRepository },
     artworkListeners?: ArtworkListeners
   ) {
@@ -330,6 +331,32 @@ export class CatalogService {
 
   artworkSnapshot(items: MediaRef[]): ArtworkUpdate[] {
     return this.artworkService?.snapshot(items) ?? [];
+  }
+
+  /**
+   * What a title's card image draws, from stored data only (never a provider call): the backdrop
+   * and card logo the artwork selection chose, and the localized name. Null when the title or its
+   * backdrop is unknown.
+   */
+  cardImageSource(
+    ref: MediaRef,
+    language: string
+  ): (CardImageSource & { revision: number }) | null {
+    const row =
+      ref.mediaType === 'movie'
+        ? this.movies.getMovie(ref.mediaId)
+        : this.tvShows.getTVShow(ref.mediaId);
+    if (!row) return null;
+    const artwork = this.artworkRepository?.get(ref.mediaType, ref.mediaId);
+    const backdrop = artwork?.displayBackdrop || row.backdrop;
+    if (!backdrop) return null;
+    const name = 'title' in row ? row.title : row.name;
+    return {
+      backdrop,
+      logo: (artwork ? artwork.cardLogo : row.logo) ?? '',
+      title: this.localizer.localizedTitle(ref.mediaType, ref.mediaId, language, name),
+      revision: artwork?.revision ?? 0,
+    };
   }
 
   onArtworkUpdate(listener: (update: ArtworkUpdate) => void): () => void {

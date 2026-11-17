@@ -20,6 +20,12 @@ export type MediaTileProps = Omit<
    * over the artwork (`labelPlacement="overlay"`) the logo stands in for the visible title.
    */
   logo?: string | null;
+  /**
+   * A landscape backdrop with the title already drawn in (the logo, or the name): preferred over
+   * `artwork` and `logo`, since one image paints faster than two layers. Over the artwork it stands
+   * in for the visible title. If it fails to load, the tile shows `artwork` and `logo` instead.
+   */
+  titledArtwork?: string | null;
   /** A short quality or availability label ("4K", "New"), top start corner. */
   badge?: { label: string; accessibleLabel?: string };
 };
@@ -30,18 +36,21 @@ export type MediaTileProps = Omit<
  * the collection around it owns movement. Supporting text, progress and the badge describe it.
  */
 export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function MediaTile(
-  { title, artwork, ratio = 'landscape', logo, badge, labelPlacement, ...props },
+  { title, artwork, ratio = 'landscape', logo, titledArtwork, badge, labelPlacement, ...props },
   forwardedRef
 ) {
   const [logoFailed, setLogoFailed] = useState<string | null>(null);
-  const showLogo = ratio === 'landscape' && logo && logoFailed !== logo;
+  const [titledFailed, setTitledFailed] = useState<string | null>(null);
+  const titled =
+    ratio === 'landscape' && titledArtwork && titledFailed !== titledArtwork ? titledArtwork : null;
+  const showLogo = !titled && ratio === 'landscape' && logo && logoFailed !== logo;
   return (
     <CollectionTile
       {...props}
       ref={forwardedRef}
       label={title}
       labelPlacement={labelPlacement}
-      labelHidden={Boolean(showLogo) && labelPlacement === 'overlay'}
+      labelHidden={Boolean(titled || showLogo) && labelPlacement === 'overlay'}
       ratio={ratio}
       badge={
         badge ? <Badge accessibleLabel={badge.accessibleLabel}>{badge.label}</Badge> : undefined
@@ -49,9 +58,10 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
       visual={
         <>
           <Artwork
-            src={artwork}
+            src={titled ?? artwork}
             ratio="fill"
             fallback={<span className={styles.fallbackTitle}>{title}</span>}
+            onError={titled ? () => setTitledFailed(titled) : undefined}
           />
           {showLogo && (
             <span className={styles.logo}>

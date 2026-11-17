@@ -51,12 +51,15 @@ WORKDIR /workspace/services/media-catalog
 CMD ["bun", "--watch", "src/index.ts"]
 
 FROM bun-runtime AS production
-RUN apt-get update && apt-get install -y --no-install-recommends wget && \
+# DejaVu: card images draw Greek and Cyrillic names, which the bundled Poppins lacks
+RUN apt-get update && apt-get install -y --no-install-recommends wget fonts-dejavu-core && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=builder /tmp/media-catalog.js ./index.js
 # CatalogDatabase resolves Drizzle migrations relative to the bundled entrypoint.
 COPY --from=builder /workspace/services/media-catalog/src/db/migrations ./migrations
+# The font card images draw a title's name in when it has no logo
+COPY --from=builder /workspace/services/media-catalog/assets/fonts ./fonts
 # Keep the face detector self-contained in the runtime image. Only the model
 # used by backdrop focus and the WASM binaries are needed.
 COPY --from=builder /workspace/node_modules/@vladmandic/human/models/blazeface.json ./models/blazeface.json
@@ -75,6 +78,7 @@ ENV MALLOC_ARENA_MAX=2
 ENV DATA_DIR=/app/data
 ENV BACKDROP_FOCUS_MODEL_DIR=/app/models
 ENV BACKDROP_FOCUS_WASM_DIR=/app/wasm
+ENV CARD_IMAGE_FONT_FILE=/app/fonts/Poppins-SemiBold.ttf
 RUN groupadd --gid 911 linuxserver && \
     useradd --uid 911 --gid 911 --create-home --shell /usr/sbin/nologin linuxserver && \
     mkdir -p /app/data && \

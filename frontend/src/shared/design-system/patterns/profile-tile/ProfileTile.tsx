@@ -14,8 +14,15 @@ export type ProfileTileProps = Omit<
 > & {
   /** The profile's name, which names the tile. */
   name: string;
-  /** The profile picture. */
-  avatar: string;
+  /** The profile picture; absent while it is fetched (the colour and placeholder show). */
+  avatar?: string | null;
+  /**
+   * A picture the feature draws itself in place of `avatar`: the live, animated Plushie. The
+   * profiles feature decides when to animate it (a hop as focus arrives).
+   */
+  picture?: ReactNode;
+  /** `contain` for pictures with their own shape (a Plushie); `cover` by default. */
+  fit?: 'cover' | 'contain';
   /** The profile's colour, shown while the picture loads and if it fails. */
   color?: string;
   /** Shown while the picture loads and if it fails (a decorative icon). */
@@ -37,6 +44,8 @@ export const ProfileTile = forwardRef<HTMLButtonElement, ProfileTileProps>(funct
   {
     name,
     avatar,
+    picture,
+    fit,
     color,
     placeholder,
     editing = false,
@@ -61,6 +70,8 @@ export const ProfileTile = forwardRef<HTMLButtonElement, ProfileTileProps>(funct
           <Avatar
             name={name}
             src={avatar}
+            picture={picture}
+            fit={fit}
             color={color}
             placeholder={placeholder}
             size="fill"

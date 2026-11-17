@@ -42,6 +42,10 @@ const setupReady = () => {
       return { mediaType: 'movie', mediaId, title: 'Movie' };
     },
     getTVShow: async () => null,
+    cardImageSource: (ref: { mediaId: number }) =>
+      ref.mediaId === 404
+        ? null
+        : { backdrop: 'backdrop.jpg', logo: 'logo.png', title: 'Movie', revision: 3 },
     search: async (query: string, page: number) => ({
       page,
       totalPages: 1,
@@ -62,11 +66,19 @@ const setupReady = () => {
       return () => artworkListeners.delete(listener);
     },
   };
-  const context = { config, db, catalog, env: {} } as unknown as ServiceContext;
+  const rendered: unknown[][] = [];
+  const cardImages = {
+    render: async (...args: unknown[]) => {
+      rendered.push(args);
+      return { bytes: new Uint8Array([1, 2, 3]), contentType: 'image/webp', etag: '"tag"' };
+    },
+  };
+  const context = { config, db, catalog, cardImages, env: {} } as unknown as ServiceContext;
   const service = createCatalogService(context);
   return {
     service,
     artworkListeners,
+    rendered,
     client: createClient(catalogContract, localTransport(service)),
   };
 };
@@ -171,6 +183,39 @@ describe('media-catalog service contract', () => {
     for (const listener of artworkListeners) listener(update);
     expect(await received).toEqual(update);
     expect(artworkListeners.size).toBe(0);
+    await service.stop();
+  });
+
+  it('serves card images with their revision, and not_found for unknown titles', async () => {
+    const { client, rendered, service } = setupReady();
+    const response = await client.cardImage.open({
+      mediaType: 'movie',
+      mediaId: 5,
+      size: 'sm',
+      format: 'webp',
+    });
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toBe('image/webp');
+    expect(response.headers.get('x-artwork-revision')).toBe('3');
+    expect(response.headers.get('etag')).toBe('"tag"');
+    expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([1, 2, 3]);
+    expect(rendered).toEqual([
+      [{ backdrop: 'backdrop.jpg', logo: 'logo.png', title: 'Movie', revision: 3 }, 'sm', 'webp'],
+    ]);
+    const missing = client.cardImage.open({
+      mediaType: 'movie',
+      mediaId: 404,
+      size: 'sm',
+      format: 'webp',
+    });
+    expect(isContractError(await failure(missing), 'not_found')).toBe(true);
+    const unknownSize = client.cardImage.open({
+      mediaType: 'movie',
+      mediaId: 5,
+      size: 'xl' as 'sm',
+      format: 'webp',
+    });
+    expect(isContractError(await failure(unknownSize), 'bad_request')).toBe(true);
     await service.stop();
   });
 });

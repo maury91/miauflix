@@ -15,7 +15,7 @@ import { IconButton } from '../icon-button/IconButton';
 import { SurfaceContextProvider } from '../surface';
 import { duration } from '../tokens';
 import * as styles from './carousel.css';
-import { type CarouselNavigation, maxLeading } from './carouselNavigation';
+import { type CarouselNavigation, maxLeading, useCarouselPosition } from './carouselNavigation';
 import type { CollectionGeometry } from './collectionGeometry';
 
 import ChevronLeftIcon from '~icons/mdi/chevron-left';
@@ -87,9 +87,10 @@ export interface CarouselProps {
  * A horizontal, focus-aware row on the collection geometry: whole items centred with a peek on
  * each side, moved by translating a track. The row owns no keys: the navigation layer calls
  * `useCarouselNavigation`'s `move` and feeds the result back, so Left/Right, item memory and exits
- * live in one place.
+ * live in one place. Memoized: with a stable `renderItem`, `navigation` and `pageButtons`, the
+ * owner re-rendering (a row whose data or load state changed) leaves the carousel alone.
  */
-export function Carousel({
+export const Carousel = memo(function Carousel({
   labelledBy,
   label,
   count,
@@ -119,7 +120,7 @@ export function Carousel({
       return String(next);
     },
     entryPart: () =>
-      latestNavigation.current ? String(latestNavigation.current.focusedIndex) : undefined,
+      latestNavigation.current ? String(latestNavigation.current.position().focused) : undefined,
     more: { end: hasMore },
     onMore: onLoadMore,
   });
@@ -128,7 +129,9 @@ export function Carousel({
       ? null
       : Number(composite.focusedPart)
     : focusedIndexProp;
-  const leadingIndex = leadingIndexProp ?? navigation?.leadingIndex ?? 0;
+  // The row's owner doesn't re-render on a move: the carousel reads the track's position itself
+  const navigationLeading = useCarouselPosition(navigation, position => position.leading);
+  const leadingIndex = leadingIndexProp ?? navigationLeading ?? 0;
   const onPointerFocus = (index: number) => {
     if (layered) {
       navigation?.pointerFocus(index);
@@ -235,7 +238,7 @@ export function Carousel({
       </div>
     </section>
   );
-}
+});
 
 interface CarouselSlotProps {
   index: number;

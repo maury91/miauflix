@@ -1,6 +1,7 @@
 import type { MediaDto, ProgressEntry } from '@miauflix/backend';
+import { cardTitleRenderable } from '@miauflix/service-contracts/card-image/v1';
 import { MediaTile } from '@shared/design-system';
-import { artworkUrl, getMediaTitle } from '@shared/lib/media.utils';
+import { artworkUrl, cardImageUrl, getMediaTitle } from '@shared/lib/media.utils';
 import type { RootState } from '@store/store';
 import { useSelector } from 'react-redux';
 
@@ -49,6 +50,13 @@ export function MediaCard({ media, onSelect, progress: playback, focused, width 
         selectedArtwork.backdrop ? artworkUrl(selectedArtwork.backdrop, 'card', width) : null
       }
       logo={selectedArtwork.logo ? artworkUrl(selectedArtwork.logo, 'logo', width * 0.7) : null}
+      // One image with the logo (or the name) drawn in; the two layers above if it fails. Without
+      // a logo or a name the catalog can draw, it would only be the backdrop again.
+      titledArtwork={
+        selectedArtwork.backdrop && (selectedArtwork.logo || cardTitleRenderable(title))
+          ? cardImageUrl(mediaType, media.mediaId, selectedArtwork.artworkRevision ?? 0, width)
+          : null
+      }
       labelPlacement="overlay"
       progress={share}
       progressText={share === undefined ? undefined : `${Math.round(share * 100)}% watched`}

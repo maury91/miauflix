@@ -11,10 +11,12 @@ export { Button, type ButtonProps } from './button/Button';
 export { Carousel, type CarouselItemState, type CarouselProps } from './carousel/Carousel';
 export {
   type CarouselLayout,
+  type CarouselNavigation,
   type CarouselPosition,
   revealItem,
   stepCarousel,
   useCarouselNavigation,
+  useCarouselPosition,
 } from './carousel/carouselNavigation';
 export { type CollectionGeometry, collectionGeometry } from './carousel/collectionGeometry';
 export {
@@ -28,6 +30,11 @@ export {
 } from './chip/Chip';
 export { Checkbox, type CheckboxProps } from './choice/Checkbox';
 export type { ChoiceProps } from './choice/ChoiceFrame';
+export {
+  ChoiceTileGroup,
+  type ChoiceTileGroupProps,
+  type ChoiceTileOption,
+} from './choice/ChoiceTileGroup';
 export { RadioGroup, type RadioGroupProps, type RadioOption } from './choice/RadioGroup';
 export { Switch, type SwitchProps } from './choice/Switch';
 export { CollectionTile, type CollectionTileProps } from './collection-tile/CollectionTile';

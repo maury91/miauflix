@@ -3,6 +3,8 @@ import {
   type ArtworkPriority,
   type ArtworkUpdate,
   type BatchResponse,
+  type CardImageFormat,
+  type CardImageSize,
   catalog,
   type EpisodeLayout,
   type ExternalMediaLookup,
@@ -85,6 +87,24 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
 
   artworkSnapshot(items: MediaRef[]): Promise<ArtworkUpdate[]> {
     return this.client.artworkSnapshot({ items });
+  }
+
+  /**
+   * A title's card image: its backdrop with the card logo (or its name) drawn in, as the catalog
+   * answered (an error status included). `x-artwork-revision` names the artwork revision drawn.
+   */
+  async cardImage(
+    mediaType: MediaRef['mediaType'],
+    mediaId: number,
+    size: CardImageSize,
+    format: CardImageFormat
+  ): Promise<Response> {
+    const response = await this.client.cardImage.open({ mediaType, mediaId, size, format });
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: new Headers(response.headers),
+    });
   }
 
   /** Live artwork updates. Updates missed during a disconnect are announced via onArtworkStreamReady. */

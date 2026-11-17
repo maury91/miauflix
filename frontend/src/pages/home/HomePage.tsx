@@ -28,7 +28,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
 import { HomeBrowse } from './components/HomeBrowse';
@@ -53,19 +53,24 @@ import * as styles from './homePage.css';
 
 /**
  * A row in its slot. Memoized whole: a row change re-renders Home, and every slot's wrapper would
- * re-render with it (a new `style` each time) even though only one row changed.
+ * re-render with it (a new `style` each time) even though only one row changed. The remembered card
+ * is read once, as the row mounts: the row reports every later selection, and passing the
+ * remembered one down again would re-render it on each report.
  */
 const HomeRow = memo(function HomeRow({
   top,
   rowRef,
+  initialIndexOf,
   ...row
-}: Omit<ComponentProps<typeof CategoryRow>, 'ref'> & {
+}: Omit<ComponentProps<typeof CategoryRow>, 'ref' | 'initialIndex'> & {
   top: number;
   rowRef: Ref<CategoryRowHandle>;
+  initialIndexOf: (slug: string) => number;
 }) {
+  const [initialIndex] = useState(() => initialIndexOf(row.category.slug));
   return (
     <div className={styles.rowSlot} style={{ top }}>
-      <CategoryRow ref={rowRef} {...row} />
+      <CategoryRow ref={rowRef} initialIndex={initialIndex} {...row} />
     </div>
   );
 });
@@ -152,8 +157,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     sessionId,
     onBrowseSelection: setBrowseSelection,
   });
-  const selectedByCategory = useSelector(
-    (state: RootState) => state.homeNavigation.selectedByCategory
+  // Read when a row mounts, not subscribed: each row's report would re-render Home
+  const store = useStore<RootState>();
+  const initialIndexOf = useCallback(
+    (slug: string) => store.getState().homeNavigation.selectedByCategory[slug] ?? 0,
+    [store]
   );
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const publishInterestAfterScroll = useRealtimeInterest({
@@ -391,7 +399,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                           rowRef={callbacksForRow(category.slug, index).ref}
                           category={category}
                           categoryIndex={index}
-                          initialIndex={selectedByCategory[category.slug] ?? 0}
+                          initialIndexOf={initialIndexOf}
                           onSelectionChange={
                             callbacksForRow(category.slug, index).onSelectionChange
                           }
