@@ -66,12 +66,16 @@ export const createArtworkRoutes = ({
           isContractError(error, 'unavailable')
         )
           throw new HttpError(503, 'Card images are not available');
+        if (error instanceof DOMException && error.name === 'TimeoutError')
+          throw new HttpError(504, 'The card image took too long');
         throw error;
       }
       if (response.status === 404) throw new HttpError(404, 'Title not found');
       if (!response.ok) throw new HttpError(502, 'The card image could not be drawn');
       const { rev } = c.req.valid('query');
       const headers = new Headers(response.headers);
+      // The catalog names a revision only for images that revision fully determines: a card drawing
+      // its name (no logo) can change without one, so it is never kept forever
       headers.set(
         'Cache-Control',
         rev !== undefined && rev === headers.get('x-artwork-revision') ? IMMUTABLE : REVALIDATE

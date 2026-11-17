@@ -237,12 +237,17 @@ export const CategoryRow = memo(
     useFocusWithinChange(navId, within => {
       if (!within && total) reportSelection(navigation.position().focused);
     });
+    // A row mounting (or loading its first page) on a card other than the remembered one (fewer
+    // cards now) reports it, and the hero shows the bounded card
+    const hasCards = total > 0;
     useEffect(() => {
-      // A row mounting on a card other than the remembered one (fewer cards now) reports it
-      if (total) reportSelection(navigation.position().focused);
-      // Mounting only; later moves report through the coalescer
+      if (!hasCards) return;
+      const { focused } = navigation.position();
+      reportedIndex.current = focused;
+      reportSelection(focused);
+      // When the row gains its cards only; later moves report through the coalescer
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [hasCards]);
     useEffect(() => {
       showInHero();
     }, [categoryIndex, isCurrentRow, mediaByIndex, onActive, showInHero]);

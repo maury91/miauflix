@@ -44,15 +44,17 @@ const steps = JSON.parse(stepsArg);
 // Runs in the TV's Chromium 69: ES2018 at most.
 const PROBE = `(function () {
   window.__bench = {
-    frames: [], recording: false, startedAt: 0,
+    frames: [], recording: 0, startedAt: 0,
     start: function () {
-      var b = this; b.frames = []; b.recording = true; b.startedAt = performance.now();
+      // Each recording has its own number: a frame chain left over from an earlier start stops itself
+      var b = this; var run = b.recording = (b.lastRun = (b.lastRun || 0) + 1);
+      b.frames = []; b.startedAt = performance.now();
       var last = b.startedAt;
-      function tick(t) { if (!b.recording) return; b.frames.push(t - last); last = t; requestAnimationFrame(tick); }
+      function tick(t) { if (b.recording !== run) return; b.frames.push(t - last); last = t; requestAnimationFrame(tick); }
       requestAnimationFrame(tick);
     },
     stop: function () {
-      this.recording = false;
+      this.recording = 0;
       var elapsed = performance.now() - this.startedAt;
       var f = this.frames.slice(1);
       if (!f.length) return 'no frames';
@@ -97,20 +99,32 @@ const send = (method, params = {}) =>
     ws.send(JSON.stringify({ id, method, params }));
   });
 const eventWaiters = new Map();
-const eventListeners = new Map();
-const nextEvent = method => new Promise(resolve => eventWaiters.set(method, resolve));
+const nextEvent = method =>
+  new Promise((resolve, reject) => eventWaiters.set(method, { resolve, reject }));
+/** Set by the "serve" step: answers intercepted requests. */
+let onRequestIntercepted;
 ws.onmessage = event => {
   const message = JSON.parse(event.data);
-  if (message.method) eventListeners.get(message.method)?.(message.params);
-  if (message.method && eventWaiters.has(message.method)) {
-    eventWaiters.get(message.method)(message.params);
+  if (message.method === 'Network.requestIntercepted' && onRequestIntercepted)
+    onRequestIntercepted(message.params);
+  const waiter = message.method && eventWaiters.get(message.method);
+  if (waiter) {
     eventWaiters.delete(message.method);
+    waiter.resolve(message.params);
   }
   const waiting = message.id && pending.get(message.id);
   if (!waiting) return;
   pending.delete(message.id);
   if (message.error) waiting.reject(new Error(JSON.stringify(message.error)));
   else waiting.resolve(message.result);
+};
+// A closed connection never answers: fail whatever is still waiting so the steps stop and clean up
+ws.onclose = () => {
+  const closed = new Error('DevTools connection closed');
+  for (const waiting of pending.values()) waiting.reject(closed);
+  pending.clear();
+  for (const waiter of eventWaiters.values()) waiter.reject(closed);
+  eventWaiters.clear();
 };
 const CONTENT_TYPES = { jpeg: 'image/jpeg', webp: 'image/webp', png: 'image/png' };
 /** Answers intercepted requests from `dir` (see the "serve" step). Chromium 69 has no Fetch domain. */
@@ -147,7 +161,11 @@ const evaluate = async expression => {
     returnByValue: true,
     awaitPromise: true,
   });
-  return exceptionDetails ? `error: ${exceptionDetails.text}` : result.value;
+  if (exceptionDetails)
+    throw new Error(
+      `${expression.slice(0, 80)} threw: ${exceptionDetails.exception?.description ?? exceptionDetails.text}`
+    );
+  return result.value;
 };
 // The TV reports its remote keys as Unidentified with a key code; arrows and Enter by name
 const keyEvent = (name, type, autoRepeat = false) => {
@@ -216,7 +234,7 @@ ws.onopen = async () => {
         console.log(`injected ${step.inject} for the next loads`);
       } else if (step.serve) {
         await send('Network.enable');
-        eventListeners.set('Network.requestIntercepted', serveFrom(step.serve, step.ext ?? 'jpeg'));
+        onRequestIntercepted = serveFrom(step.serve, step.ext ?? 'jpeg');
         await send('Network.setRequestInterception', {
           patterns: [{ urlPattern: `*${step.match ?? '/api/artwork/card/'}*` }],
         });

@@ -61,7 +61,8 @@ export function providerImageUrl(url: string, size: string): string {
   return url.startsWith('/') ? `https://image.tmdb.org/t/p/${size}${url}` : url;
 }
 
-const fetchImage: ImageFetcher = async url => {
+/** Downloads a provider image, refusing (and no longer reading) one over MAX_SOURCE_BYTES. */
+export const fetchImage: ImageFetcher = async url => {
   const response = await fetch(url, {
     redirect: 'error',
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
@@ -69,9 +70,22 @@ const fetchImage: ImageFetcher = async url => {
   if (!response.ok) throw new Error(`Image request failed (${response.status}): ${url}`);
   const length = Number(response.headers.get('content-length'));
   if (length > MAX_SOURCE_BYTES) throw new Error(`Image too large (${length} bytes): ${url}`);
-  const bytes = Buffer.from(await response.arrayBuffer());
-  if (bytes.byteLength > MAX_SOURCE_BYTES) throw new Error(`Image too large: ${url}`);
-  return bytes;
+  // Read in chunks: a body without a length must not be buffered whole before the check
+  const chunks: Uint8Array[] = [];
+  let received = 0;
+  const reader = response.body?.getReader();
+  if (!reader) throw new Error(`Image request had no body: ${url}`);
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    received += value.byteLength;
+    if (received > MAX_SOURCE_BYTES) {
+      await reader.cancel().catch(() => undefined);
+      throw new Error(`Image too large: ${url}`);
+    }
+    chunks.push(value);
+  }
+  return Buffer.concat(chunks, received);
 };
 
 const escapeMarkup = (text: string): string =>

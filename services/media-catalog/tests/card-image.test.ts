@@ -5,6 +5,7 @@ import sharp from 'sharp';
 import {
   cardImageCacheBytes,
   CardImageService,
+  fetchImage,
   providerImageUrl,
 } from '../src/services/card-image.service';
 import { ByteLru } from '../src/utils/byte-lru';
@@ -182,5 +183,34 @@ describe('CardImageService', () => {
     await Bun.sleep(0);
     provider.failLogos(false);
     expect((await service.render(source, 'sm', 'jpeg')).bytes.byteLength).toBeGreaterThan(0);
+  });
+
+  it('stops reading a download without a length once it passes the size limit', async () => {
+    const originalFetch = globalThis.fetch;
+    let pulled = 0;
+    let cancelled = false;
+    const chunk = new Uint8Array(1024 * 1024);
+    globalThis.fetch = (async () =>
+      new Response(
+        new ReadableStream<Uint8Array>({
+          pull(controller) {
+            pulled += 1;
+            controller.enqueue(chunk);
+          },
+          cancel() {
+            cancelled = true;
+          },
+        })
+      )) as unknown as typeof fetch;
+    try {
+      await expect(fetchImage('https://img/huge.jpg')).rejects.toThrow('Image too large');
+      expect(cancelled).toBe(true);
+      expect(pulled).toBeLessThan(12);
+      globalThis.fetch = (async () =>
+        new Response(Uint8Array.from([1, 2, 3]))) as unknown as typeof fetch;
+      expect([...(await fetchImage('https://img/small.jpg'))]).toEqual([1, 2, 3]);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 });

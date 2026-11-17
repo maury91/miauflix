@@ -336,12 +336,14 @@ export class CatalogService {
   /**
    * What a title's card image draws, from stored data only (never a provider call): the backdrop
    * and card logo the artwork selection chose, and the localized name. Null when the title or its
-   * backdrop is unknown.
+   * backdrop is unknown. `revision` is the artwork revision the drawing is fully determined by, or
+   * null when it also depends on data the revision does not track (the drawn name of a card
+   * without a logo, or the title's own backdrop before any artwork was selected).
    */
   cardImageSource(
     ref: MediaRef,
     language: string
-  ): (CardImageSource & { revision: number }) | null {
+  ): (CardImageSource & { revision: number | null }) | null {
     const row =
       ref.mediaType === 'movie'
         ? this.movies.getMovie(ref.mediaId)
@@ -351,11 +353,12 @@ export class CatalogService {
     const backdrop = artwork?.displayBackdrop || row.backdrop;
     if (!backdrop) return null;
     const name = 'title' in row ? row.title : row.name;
+    const logo = (artwork ? artwork.cardLogo : row.logo) ?? '';
     return {
       backdrop,
-      logo: (artwork ? artwork.cardLogo : row.logo) ?? '',
+      logo,
       title: this.localizer.localizedTitle(ref.mediaType, ref.mediaId, language, name),
-      revision: artwork?.revision ?? 0,
+      revision: artwork?.displayBackdrop && logo ? artwork.revision : null,
     };
   }
 

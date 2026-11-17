@@ -72,5 +72,21 @@ describe('artwork routes', () => {
     expect((await older.app.request('/artwork/card/movie/7/sm.jpg')).status).toBe(503);
     const failed = setupTest(jest.fn().mockResolvedValue(image(500)));
     expect((await failed.app.request('/artwork/card/movie/7/sm.jpg')).status).toBe(502);
+    const slow = setupTest(
+      jest.fn().mockRejectedValue(new DOMException('The operation timed out', 'TimeoutError'))
+    );
+    expect((await slow.app.request('/artwork/card/movie/7/sm.jpg')).status).toBe(504);
+  });
+
+  it('keeps a card image without a revision (one drawing its name) only briefly', async () => {
+    const { app } = setupTest(
+      jest
+        .fn()
+        .mockResolvedValue(
+          new Response(Uint8Array.from([1]), { headers: { 'content-type': 'image/jpeg' } })
+        )
+    );
+    const response = await app.request('/artwork/card/movie/7/sm.jpg?rev=4');
+    expect(response.headers.get('cache-control')).toBe('public, max-age=300');
   });
 });

@@ -259,6 +259,36 @@ describe('CategoryRow on the Samsung TV', () => {
     expect(cardRenders.sort((left, right) => left - right)).toEqual([10, 11, 16]);
   });
 
+  it('shows the bounded card in the hero when the first page brings fewer cards than remembered', () => {
+    const loaded = useGetListQuery.getMockImplementation()!;
+    useGetListQuery.mockImplementation(() => ({
+      data: undefined,
+      currentData: undefined,
+      isLoading: true,
+      isFetching: true,
+      isError: false,
+    }));
+    const onActive = vi.fn();
+    const onSelectionChange = vi.fn();
+    const row = () => (
+      <CategoryRow
+        {...props(true)}
+        initialIndex={50}
+        isCurrentRow
+        onActive={onActive}
+        onSelectionChange={onSelectionChange}
+      />
+    );
+    const view = render(layer(row(), true));
+    expect(onActive).not.toHaveBeenCalled();
+
+    useGetListQuery.mockImplementation(loaded);
+    view.rerender(layer(row(), true));
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith(39);
+    expect(onActive).toHaveBeenLastCalledWith(0, 39, expect.objectContaining({ id: 39 }));
+  });
+
   it('goes back to the cards in view when it leaves view, unless kept warm', () => {
     const view = render(layer(<CategoryRow {...props(true)} />));
     act(() => vi.advanceTimersByTime(400));

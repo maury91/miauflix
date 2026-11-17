@@ -93,6 +93,8 @@ export const option = style({
     },
     '&[data-shape="swatch"]::after': { borderRadius: radius.full },
     '&[data-focused]:not(:disabled)::after': { opacity: 1 },
+    // Native keyboard focus too (a group without navId has no virtual focus)
+    '&:focus-visible:not(:disabled)::after': { opacity: 1 },
   },
 });
 

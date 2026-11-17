@@ -16,6 +16,11 @@ export interface AvatarProps {
    * place of `src`. Decorative: the avatar's name and semantics stay the same.
    */
   picture?: ReactNode;
+  /**
+   * Whether `picture` has drawn itself (default true). Until it has, the colour and placeholder
+   * (and `src`, once loaded) show under it.
+   */
+  pictureLoaded?: boolean;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'fill';
   /** `contain` for pictures with their own shape (a profile's Plushie). */
   fit?: 'cover' | 'contain';
@@ -36,6 +41,7 @@ export function Avatar({
   name,
   src,
   picture,
+  pictureLoaded = true,
   size = 'md',
   fit = 'cover',
   color,
@@ -43,7 +49,9 @@ export function Avatar({
   decorative = false,
 }: AvatarProps) {
   const image = useImageStatus(src);
-  const status = picture ? 'loaded' : image.status;
+  const pictureShown = Boolean(picture) && pictureLoaded;
+  // A drawn picture still on its way is loading, with or without a `src` standing in
+  const status = pictureShown ? 'loaded' : picture && !src ? 'loading' : image.status;
   const semantics = decorative
     ? ({ 'aria-hidden': true } as const)
     : ({ role: 'img', 'aria-label': name } as const);
@@ -61,23 +69,21 @@ export function Avatar({
           {placeholder}
         </span>
       )}
-      {picture ? (
+      {!pictureShown && src && status !== 'failed' && (
+        <img
+          {...image.imageProps}
+          key={src}
+          className={styles.image}
+          src={src}
+          alt=""
+          decoding="async"
+          draggable={false}
+        />
+      )}
+      {picture && (
         <span className={styles.picture} aria-hidden="true">
           {picture}
         </span>
-      ) : (
-        src &&
-        status !== 'failed' && (
-          <img
-            {...image.imageProps}
-            key={src}
-            className={styles.image}
-            src={src}
-            alt=""
-            decoding="async"
-            draggable={false}
-          />
-        )
       )}
     </span>
   );

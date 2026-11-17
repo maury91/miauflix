@@ -34,9 +34,14 @@ export const body = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
+  // Centred by growing spacers rather than justify-content: a list taller than the screen then
+  // starts at the top, where scrolling can reach it (centred overflow is cut off above)
+  justifyContent: 'flex-start',
   padding: `${space['2xl']} ${space.xl}`,
   overflowY: 'auto',
+  selectors: {
+    '&::before, &::after': { content: '""', flex: '1 0 0px' },
+  },
 });
 
 export const title = style({

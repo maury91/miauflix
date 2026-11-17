@@ -1,6 +1,6 @@
 import type { UserDto } from '@miauflix/backend';
 import { ProfileTile } from '@shared/design-system';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { PlushieLive } from '../avatar/PlushieLive';
 import { useProfilePicture } from '../avatar/useProfilePicture';
@@ -24,6 +24,12 @@ export interface ProfileCardProps {
 export function ProfileCard({ navId, user, session, live, focused, onActivate }: ProfileCardProps) {
   const { look, showLive, picture, onLiveError } = useProfilePicture(user, session, live);
   const [hops, setHops] = useState(0);
+  // The colour and placeholder (or the picture) show until the live Plushie has drawn itself
+  const [liveReady, setLiveReady] = useState(false);
+  const onLiveReady = useCallback(() => setLiveReady(true), []);
+  useEffect(() => {
+    if (!showLive) setLiveReady(false);
+  }, [showLive]);
   useEffect(() => {
     if (focused) setHops(count => count + 1);
   }, [focused]);
@@ -35,9 +41,16 @@ export function ProfileCard({ navId, user, session, live, focused, onActivate }:
       avatar={picture}
       picture={
         showLive ? (
-          <PlushieLive look={look} animated hopSignal={hops} onError={onLiveError} />
+          <PlushieLive
+            look={look}
+            animated
+            hopSignal={hops}
+            onReady={onLiveReady}
+            onError={onLiveError}
+          />
         ) : undefined
       }
+      pictureLoaded={liveReady}
       fit="contain"
       color={look.color}
       onClick={onActivate}

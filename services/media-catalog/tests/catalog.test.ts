@@ -292,7 +292,8 @@ describe('CatalogService', () => {
         backdrop: 'https://img/backdrop.jpg',
         logo: 'https://img/stored-logo.png',
         title: 'Titolo 605',
-        revision: 0,
+        // No artwork selected yet: nothing versions the stored backdrop
+        revision: null,
       });
       const row = repo.artwork.enqueue({
         mediaType: 'movie',

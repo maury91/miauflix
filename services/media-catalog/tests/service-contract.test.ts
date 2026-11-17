@@ -45,7 +45,9 @@ const setupReady = () => {
     cardImageSource: (ref: { mediaId: number }) =>
       ref.mediaId === 404
         ? null
-        : { backdrop: 'backdrop.jpg', logo: 'logo.png', title: 'Movie', revision: 3 },
+        : ref.mediaId === 6
+          ? { backdrop: 'backdrop.jpg', logo: '', title: 'Movie', revision: null }
+          : { backdrop: 'backdrop.jpg', logo: 'logo.png', title: 'Movie', revision: 3 },
     search: async (query: string, page: number) => ({
       page,
       totalPages: 1,
@@ -216,6 +218,19 @@ describe('media-catalog service contract', () => {
       format: 'webp',
     });
     expect(isContractError(await failure(unknownSize), 'bad_request')).toBe(true);
+    await service.stop();
+  });
+
+  it('names no revision for a card image the revision does not determine', async () => {
+    const { client, service } = setupReady();
+    const response = await client.cardImage.open({
+      mediaType: 'movie',
+      mediaId: 6,
+      size: 'sm',
+      format: 'jpeg',
+    });
+    expect(response.status).toBe(200);
+    expect(response.headers.has('x-artwork-revision')).toBe(false);
     await service.stop();
   });
 });

@@ -51,8 +51,10 @@ export function useHomeArtwork({
   const receive = useCallback(
     (media: readonly MediaDto[]) => {
       const { artwork } = store.getState();
-      const updates = media.map(artworkFromMedia).filter(update => artworkChanges(artwork, update));
-      if (updates.length) dispatch(artworkActions.receivedMany(updates));
+      const updates = media.map(artworkFromMedia);
+      // The whole batch, in order, when any of it changes the store: the reducer applies it in turn
+      if (updates.some(update => artworkChanges(artwork, update)))
+        dispatch(artworkActions.receivedMany(updates));
     },
     [dispatch, store]
   );
@@ -112,6 +114,8 @@ export function useHomeArtwork({
     () => () => {
       dispatch(realtimeRuntimeActions.artworkSubscriptionsChanged([]));
       if (subscribed.current.length) dispatch(artworkActions.removed(subscribed.current));
+      // A remount (Strict Mode replays every effect) must subscribe again
+      subscribed.current = [];
     },
     [dispatch]
   );

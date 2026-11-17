@@ -99,7 +99,11 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
     size: CardImageSize,
     format: CardImageFormat
   ): Promise<Response> {
-    const response = await this.client.cardImage.open({ mediaType, mediaId, size, format });
+    // The bytes transport sets no deadline of its own: the catalog timeout covers the whole image
+    const response = await this.client.cardImage.open(
+      { mediaType, mediaId, size, format },
+      { signal: AbortSignal.timeout(this.timeoutMs()) }
+    );
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,

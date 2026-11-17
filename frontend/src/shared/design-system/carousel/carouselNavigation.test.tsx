@@ -1,4 +1,5 @@
 import { act, render, renderHook } from '@testing-library/react';
+import { memo } from 'react';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -58,16 +59,16 @@ describe('useCarouselNavigation', () => {
 
   it('tells readers that did not render when a new layout bounds the position', () => {
     let navigation: CarouselNavigation | undefined;
-    const Owner = ({ count }: { count: number }) => {
-      navigation = useCarouselNavigation({ ...layout, count }, 8);
-      return <Reader navigation={navigation} />;
-    };
     let readerRenders = 0;
-    // Memoized and given only `navigation`: it renders again only through its subscription
-    const Reader = ({ navigation: nav }: { navigation: CarouselNavigation }) => {
+    // Memoized and given only `navigation` (stable): it renders again only through its subscription
+    const Reader = memo(({ navigation: nav }: { navigation: CarouselNavigation }) => {
       readerRenders += 1;
       const focused = useCarouselPosition(nav, position => position.focused);
       return <output>{focused}</output>;
+    });
+    const Owner = ({ count }: { count: number }) => {
+      navigation = useCarouselNavigation({ ...layout, count }, 8);
+      return <Reader navigation={navigation} />;
     };
     const view = render(<Owner count={10} />);
     expect(view.container.textContent).toBe('8');
@@ -75,7 +76,7 @@ describe('useCarouselNavigation', () => {
     view.rerender(<Owner count={6} />);
     expect(navigation?.position()).toEqual({ focused: 5, leading: 2 });
     expect(view.container.textContent).toBe('5');
-    expect(readerRenders).toBeGreaterThan(1);
+    expect(readerRenders).toBe(2);
   });
 });
 

@@ -21,6 +21,8 @@ export type ProfileTileProps = Omit<
    * profiles feature decides when to animate it (a hop as focus arrives).
    */
   picture?: ReactNode;
+  /** Whether `picture` has drawn itself (default true); until then the avatar's loading look shows. */
+  pictureLoaded?: boolean;
   /** `contain` for pictures with their own shape (a Plushie); `cover` by default. */
   fit?: 'cover' | 'contain';
   /** The profile's colour, shown while the picture loads and if it fails. */
@@ -45,6 +47,7 @@ export const ProfileTile = forwardRef<HTMLButtonElement, ProfileTileProps>(funct
     name,
     avatar,
     picture,
+    pictureLoaded,
     fit,
     color,
     placeholder,
@@ -71,6 +74,7 @@ export const ProfileTile = forwardRef<HTMLButtonElement, ProfileTileProps>(funct
             name={name}
             src={avatar}
             picture={picture}
+            pictureLoaded={pictureLoaded}
             fit={fit}
             color={color}
             placeholder={placeholder}
