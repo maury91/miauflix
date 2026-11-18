@@ -46,6 +46,16 @@ type Harness = {
   torrentEvents: string[];
 };
 
+/** Card images (`/api/artwork/card/...`): the backend draws them; any fixture image will do. */
+export const isCardArtworkRequest = (path: string, method: string): boolean =>
+  method === 'GET' && path.startsWith('/api/artwork/card/');
+
+export function fulfillCardArtwork(route: Route): Promise<void> {
+  return route.fulfill({
+    path: resolve(process.cwd(), '../test-fixtures/providers/tmdb/images/tmdb-83533-backdrop.jpg'),
+  });
+}
+
 function json(route: Route, body: unknown, status = 200): Promise<void> {
   return route.fulfill({
     status,
@@ -97,6 +107,8 @@ export async function installOfflineHarness(page: Page): Promise<Harness> {
     const url = new URL(request.url());
     const path = url.pathname;
     if (!path.startsWith('/api/')) return route.continue();
+
+    if (isCardArtworkRequest(path, request.method())) return fulfillCardArtwork(route);
 
     if (path === '/api/ratings' && request.method() === 'GET') {
       if (

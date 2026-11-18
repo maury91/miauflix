@@ -78,6 +78,40 @@ describe('artwork routes', () => {
     expect((await slow.app.request('/artwork/card/movie/7/sm.jpg')).status).toBe(504);
   });
 
+  it('keeps a card image forever when the URL names its revision and layout', async () => {
+    const { app } = setupTest(
+      jest.fn().mockImplementation(
+        async () =>
+          new Response(Uint8Array.from([1]), {
+            headers: { 'content-type': 'image/jpeg', 'x-artwork-revision': '4.1' },
+          })
+      )
+    );
+    const current = await app.request('/artwork/card/movie/7/sm.jpg?rev=4.1');
+    expect(current.headers.get('cache-control')).toBe('public, max-age=31536000, immutable');
+    // An older layout's URL for the same revision is not kept forever
+    const outdated = await app.request('/artwork/card/movie/7/sm.jpg?rev=4.0');
+    expect(outdated.headers.get('cache-control')).toBe('public, max-age=300');
+  });
+
+  it('answers 504, not a truncated image, when the body times out', async () => {
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(Uint8Array.from([1, 2]));
+        controller.error(new DOMException('The operation timed out.', 'TimeoutError'));
+      },
+    });
+    const { app } = setupTest(
+      jest
+        .fn()
+        .mockResolvedValue(
+          new Response(body, { headers: { 'content-type': 'image/jpeg', 'content-length': '3' } })
+        )
+    );
+    const response = await app.request('/artwork/card/movie/7/sm.jpg?rev=4');
+    expect(response.status).toBe(504);
+  });
+
   it('keeps a card image without a revision (one drawing its name) only briefly', async () => {
     const { app } = setupTest(
       jest

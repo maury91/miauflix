@@ -263,7 +263,8 @@ export const CategoryRow = memo(
       [categoryIndex, onActive, onSelect, reportSelection, reports]
     );
 
-    // The track settles: the cards in view changed (realtime interest).
+    // The track settles: the cards in view changed (realtime interest). So do they when a page of
+    // cards arrives under a track that has already settled (a viewport only partly loaded).
     const interestTimer = useRef<number | undefined>(undefined);
     const scheduleInterest = useStableCallback(() => {
       window.clearTimeout(interestTimer.current);
@@ -272,7 +273,7 @@ export const CategoryRow = memo(
     useEffect(() => {
       scheduleInterest();
       return () => window.clearTimeout(interestTimer.current);
-    }, [onInterest, scheduleInterest]);
+    }, [onInterest, scheduleInterest, mediaByIndex]);
 
     useImperativeHandle(
       forwardedRef,

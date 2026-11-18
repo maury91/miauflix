@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import {
+  CARD_IMAGE_LAYOUT_VERSION,
   CARD_IMAGE_LOGO_BOX,
   CARD_IMAGE_SIZES,
   type CardImageFormat,
@@ -18,8 +19,6 @@ import { SharedJobs } from '../utils/single-flight';
 const SCOPE = 'CardImages';
 
 export const DEFAULT_CARD_IMAGE_CACHE_MB = 100;
-/** Bump when the drawing changes, so cached images are not served for the new layout. */
-const LAYOUT_VERSION = 1;
 const MASTER = CARD_IMAGE_SIZES.lg;
 const FETCH_TIMEOUT_MS = 15_000;
 const MAX_SOURCE_BYTES = 8 * 1024 * 1024;
@@ -68,7 +67,9 @@ export function approvedImageUrl(url: string): string {
   } catch {
     throw new Error(`Not an image URL: ${url}`);
   }
-  if (parsed.origin !== IMAGE_ORIGIN) throw new Error(`Image origin not allowed: ${url}`);
+  // The protocol too: a blob: URL reports the origin of the URL it wraps
+  if (parsed.protocol !== 'https:' || parsed.origin !== IMAGE_ORIGIN)
+    throw new Error(`Image origin not allowed: ${url}`);
   return parsed.href;
 }
 
@@ -85,9 +86,14 @@ export const fetchImage: ImageFetcher = async url => {
     redirect: 'error',
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
-  if (!response.ok) throw new Error(`Image request failed (${response.status}): ${url}`);
+  // Rejected before reading: cancel the body, so the download stops once the slot is given back
+  const refuse = async (message: string): Promise<never> => {
+    await response.body?.cancel().catch(() => undefined);
+    throw new Error(message);
+  };
+  if (!response.ok) return refuse(`Image request failed (${response.status}): ${url}`);
   const length = Number(response.headers.get('content-length'));
-  if (length > MAX_SOURCE_BYTES) throw new Error(`Image too large (${length} bytes): ${url}`);
+  if (length > MAX_SOURCE_BYTES) return refuse(`Image too large (${length} bytes): ${url}`);
   // Read in chunks: a body without a length must not be buffered whole before the check
   const chunks: Uint8Array[] = [];
   let received = 0;
@@ -195,7 +201,7 @@ export class CardImageService {
   private masterKey(source: CardImageSource): string {
     const name = source.logo || !cardTitleRenderable(source.title) ? '' : source.title;
     return createHash('sha1')
-      .update(JSON.stringify([LAYOUT_VERSION, source.backdrop, source.logo, name]))
+      .update(JSON.stringify([CARD_IMAGE_LAYOUT_VERSION, source.backdrop, source.logo, name]))
       .digest('base64url')
       .slice(0, 22);
   }
@@ -207,8 +213,10 @@ export class CardImageService {
     if (cached) return Promise.resolve(cached);
     return this.jobs.run(
       cacheKey,
-      jobSignal =>
+      (jobSignal, commit) =>
         this.limited(jobSignal, async () => {
+          // Drawing ignores the signal: keep it joinable until it is cached
+          commit();
           const started = performance.now();
           const master = await this.draw(source);
           this.cache.set(cacheKey, master);
@@ -314,6 +322,8 @@ export class CardImageService {
   private async limited<T>(signal: AbortSignal, operation: () => Promise<T>): Promise<T> {
     await this.acquire(signal);
     try {
+      // The caller may have left between the slot being granted and this resuming
+      signal.throwIfAborted();
       return await operation();
     } finally {
       // The slot passes straight to the next waiter, so no newcomer can take it in between

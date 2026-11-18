@@ -204,7 +204,7 @@ describe('ListService refresh safety', () => {
     });
   });
 
-  it('answers a cold page past a shrunken list with its total, and still fails on real errors', async () => {
+  it('answers a cold page past a shrunken list with its total, and fails on provider errors', async () => {
     const { database, listClient, catalogClient, mediaListRepository } = setupTest();
     mediaListRepository.findBySlug = jest
       .fn()
@@ -218,20 +218,31 @@ describe('ListService refresh safety', () => {
         media: { mediaType: 'movie', ids: { tmdb: 1000 + index } },
       })),
     };
-    listClient.getPage.mockImplementation(async (_subject, _slug, page) => {
-      if (page === 1) return firstPage as never;
-      throw new Error('page out of range');
-    });
+    // Past the end, the provider answers with no items and the list's totals
+    listClient.getPage.mockImplementation(async (_subject, _slug, page) =>
+      page === 1 ? (firstPage as never) : ({ ...firstPage, page, items: [] } as never)
+    );
     const service = new ListService(database, catalogClient, listClient);
 
     // Zero-based page 2 of 20 (cards 40-59) spans provider pages 1 and 2; page 2 is past the end
     const past = await service.getListPage('trakt-movies-popular', 'en', 2, 20);
     expect(past.total).toBe(40);
     expect(past.medias).toEqual([]);
-    // Zero-based page 3 (cards 60-79) is all on provider page 2: page 1 gives the total
+    // Zero-based page 3 (cards 60-79) is all on provider page 2; no catalog work for no cards
+    catalogClient.batch.mockClear();
+    catalogClient.batch.mockRejectedValue(new Error('catalog not ready'));
     const further = await service.getListPage('trakt-movies-popular', 'en', 3, 20);
-    expect(further.total).toBe(40);
+    expect(further).toEqual({ medias: [], total: 40 });
+    expect(catalogClient.batch).not.toHaveBeenCalled();
 
+    // A failing page is an error even when a cached page's count says it is past the end
+    listClient.getPage.mockImplementation(async (_subject, _slug, page) => {
+      if (page === 1) return firstPage as never;
+      throw new Error('provider timed out');
+    });
+    await expect(service.getListPage('trakt-movies-popular', 'en', 2, 20)).rejects.toThrow(
+      'provider timed out'
+    );
     listClient.getPage.mockRejectedValue(new Error('provider down'));
     await expect(service.getListPage('trakt-movies-popular', 'en', 0, 20)).rejects.toThrow(
       'provider down'

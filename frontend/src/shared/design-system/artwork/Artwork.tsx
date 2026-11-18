@@ -23,7 +23,7 @@ export interface ArtworkProps {
   onLoad?: () => void;
   /**
    * While a new `src` loads, keep showing the last one that loaded instead of the placeholder (a
-   * newer version of the same picture). Off by default.
+   * newer version of the same picture), then show the new one without fading in. Off by default.
    */
   holdPrevious?: boolean;
 }
@@ -58,8 +58,10 @@ export function Artwork({
     // Once per loaded source
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, src]);
-  const held =
-    holdPrevious && status === 'loading' && lastLoaded && lastLoaded !== src ? lastLoaded : null;
+  // A newer picture replacing one that loaded before: the old one stays in view until the new one
+  // has loaded, which then shows at once (fading in would uncover the box under both)
+  const replacing = holdPrevious && lastLoaded !== null && lastLoaded !== src;
+  const held = replacing && status === 'loading' ? lastLoaded : null;
   // A described image keeps its description when the picture is missing or fails
   const describedFallback = status === 'failed' && alt !== '';
   return (
@@ -86,6 +88,7 @@ export function Artwork({
           {...imageProps}
           key={src}
           className={styles.image}
+          data-instant={replacing ? '' : undefined}
           src={src}
           alt={alt}
           decoding="async"

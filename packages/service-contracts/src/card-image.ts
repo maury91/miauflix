@@ -24,6 +24,18 @@ export const CARD_IMAGE_SIZE_NAMES = Object.keys(CARD_IMAGE_SIZES) as CardImageS
  */
 export const CARD_IMAGE_LOGO_BOX = { left: 0.05, top: 0.18, width: 0.64, bottom: 0.66 } as const;
 
+/** Bump when the drawing changes, so images cached for the old layout are not kept. */
+export const CARD_IMAGE_LAYOUT_VERSION = 1;
+
+/**
+ * What versions a card image URL (`?rev=`) and the catalog's `x-artwork-revision` header: the
+ * artwork revision drawn and the layout that drew it, so a new layout never matches a URL cached
+ * forever for the old one.
+ */
+export function cardImageVersion(artworkRevision: number): string {
+  return `${artworkRevision}.${CARD_IMAGE_LAYOUT_VERSION}`;
+}
+
 /** The smallest size at least `pixels` wide, else the largest. */
 export function cardImageSizeFor(pixels: number): CardImageSize {
   return CARD_IMAGE_SIZE_NAMES.find(name => CARD_IMAGE_SIZES[name].width >= pixels) ?? 'lg';

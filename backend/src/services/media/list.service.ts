@@ -504,23 +504,17 @@ export class ListService {
       { length: lastProviderPage - firstProviderPage + 1 },
       (_, index) => firstProviderPage + index
     );
-    const settled = await Promise.allSettled(
+    // A page past the list's end is not an error: the providers answer it with no items and the
+    // list's totals, so a client asking beyond a list that has since shrunk can step back into
+    // range. Any failure is a real one (a cached page's count cannot prove a page out of range).
+    const pages = await Promise.all(
       pageNumbers.map(number => this.listClient.getPage(subjectId, slug, number))
     );
-    // A page past the list's end may fail at the provider: a client asking for a remembered card
-    // beyond a list that has since shrunk still gets the total, so it can step back into range
-    let size = settled.find(result => result.status === 'fulfilled')?.value;
-    if (!size) {
-      if (firstProviderPage === 1) throw (settled[0] as PromiseRejectedResult).reason;
-      size = await this.listClient.getPage(subjectId, slug, 1);
-    }
-    const providerItems = settled.flatMap((result, index) => {
-      if (result.status === 'fulfilled') return result.value.items;
-      if (pageNumbers[index]! <= size.totalPages) throw result.reason;
-      return [];
-    });
+    const size = pages[pages.length - 1]!;
+    const providerItems = pages.flatMap(result => result.items);
     const firstItemOffset = start - (firstProviderPage - 1) * providerPageSize;
     const requestedItems = providerItems.slice(firstItemOffset, firstItemOffset + limit);
+    if (requestedItems.length === 0) return { medias: [], total: size.totalItems };
     const refs = await this.resolveExternalRefs(requestedItems.map(item => item.media));
     const batch = await this.catalogClient.batch(
       refs.map(({ ref }) => ref),

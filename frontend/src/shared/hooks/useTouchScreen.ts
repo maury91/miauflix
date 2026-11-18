@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 
-/** A touch screen without hover: nothing on it can be revealed by pointing or by a remote. */
-const TOUCH_QUERY = '(hover: none) and (pointer: coarse)';
+/**
+ * Any touch screen, even beside a mouse (a touchscreen laptop reports the mouse as its primary
+ * pointer): what only pointing or a remote reveals must also be reachable by a tap.
+ */
+const TOUCH_QUERY = '(any-pointer: coarse)';
 
 const query = (): MediaQueryList | null =>
   typeof window !== 'undefined' && typeof window.matchMedia === 'function'
     ? window.matchMedia(TOUCH_QUERY)
     : null;
 
-/** Whether the primary input is a touch screen, following changes (a tablet's keyboard docked). */
+/** Whether the device has a touch screen, following changes (a tablet's keyboard docked). */
 export function useTouchScreen(): boolean {
   const [touch, setTouch] = useState(() => query()?.matches ?? false);
   useEffect(() => {

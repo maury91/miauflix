@@ -239,9 +239,15 @@ ws.onopen = async () => {
       } else if (step.wait) await sleep(step.wait);
       else if (step.reload) {
         await send('Page.enable');
-        const loaded = nextEvent('Page.loadEventFired', step.ms ?? 60000);
-        await send('Page.reload', { ignoreCache: true });
-        await loaded.catch(error => {
+        const end = Date.now() + (step.ms ?? 60000);
+        const loaded = nextEvent('Page.loadEventFired', end - Date.now());
+        // Awaited together: the load deadline can pass before the reload answers, and neither
+        // may reject unhandled. A failed reload stops waiting for its load.
+        await Promise.all([
+          send('Page.reload', { ignoreCache: true }, end - Date.now()),
+          loaded,
+        ]).catch(error => {
+          eventWaiters.delete('Page.loadEventFired');
           throw new Error(`reload: ${error.message}`);
         });
         await evaluate(PROBE);
@@ -251,13 +257,18 @@ ws.onopen = async () => {
         const startedAt = Date.now();
         // Each evaluation gets only the step's remaining time: one that never settles (a pending
         // promise) still ends the step at its deadline
+        // Awaited before `!!`: a promise is truthy, its value may not be
         const check = () =>
-          evaluate(`!!(${step.until})`, end - Date.now()).catch(error => {
+          evaluate(`(async () => !!(await (${step.until})))()`, end - Date.now()).catch(error => {
             throw new Error(`until ${step.until}: ${error.message}`);
           });
-        while (!(await check())) {
+        for (;;) {
+          if (Date.now() >= end) throw new Error(`Timed out waiting for ${step.until}`);
+          const met = await check();
+          // A result answered after the deadline does not count
           if (Date.now() > end) throw new Error(`Timed out waiting for ${step.until}`);
-          await sleep(250);
+          if (met) break;
+          await sleep(Math.min(250, end - Date.now()));
         }
         console.log(`until: true after ${((Date.now() - startedAt) / 1000).toFixed(1)} s`);
       } else if (step.start) await evaluate('__bench.start()');

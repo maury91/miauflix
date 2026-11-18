@@ -1,5 +1,9 @@
 import { createClient, isContractError, localTransport } from '@miauflix/contract';
-import { catalog as catalogContract, MAX_BATCH_ITEMS } from '@miauflix/service-contracts';
+import {
+  cardImageVersion,
+  catalog as catalogContract,
+  MAX_BATCH_ITEMS,
+} from '@miauflix/service-contracts';
 import { describe, expect, it } from 'bun:test';
 
 import { CatalogConfigService } from '../src/config/config.service';
@@ -47,7 +51,9 @@ const setupReady = () => {
         ? null
         : ref.mediaId === 6
           ? { backdrop: 'backdrop.jpg', logo: '', title: 'Movie', revision: null }
-          : { backdrop: 'backdrop.jpg', logo: 'logo.png', title: 'Movie', revision: 3 },
+          : ref.mediaId === 8
+            ? { backdrop: 'backdrop.jpg', logo: '', title: '千と千尋', revision: 2 }
+            : { backdrop: 'backdrop.jpg', logo: 'logo.png', title: 'Movie', revision: 3 },
     search: async (query: string, page: number) => ({
       page,
       totalPages: 1,
@@ -199,7 +205,7 @@ describe('media-catalog service contract', () => {
     });
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toBe('image/webp');
-    expect(response.headers.get('x-artwork-revision')).toBe('3');
+    expect(response.headers.get('x-artwork-revision')).toBe(cardImageVersion(3));
     expect(response.headers.get('etag')).toBe('"tag"');
     expect([...new Uint8Array(await response.arrayBuffer())]).toEqual([1, 2, 3]);
     expect(rendered).toEqual([
@@ -212,6 +218,14 @@ describe('media-catalog service contract', () => {
       format: 'webp',
     });
     expect(isContractError(await failure(missing), 'not_found')).toBe(true);
+    // No logo, and a name the catalog's fonts cannot draw: nothing to draw on the card
+    const nothingToDraw = client.cardImage.open({
+      mediaType: 'movie',
+      mediaId: 8,
+      size: 'sm',
+      format: 'webp',
+    });
+    expect(isContractError(await failure(nothingToDraw), 'not_found')).toBe(true);
     const unknownSize = client.cardImage.open({
       mediaType: 'movie',
       mediaId: 5,

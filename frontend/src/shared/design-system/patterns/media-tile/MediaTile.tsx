@@ -43,8 +43,12 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
 ) {
   const [logoFailed, setLogoFailed] = useState<string | null>(null);
   const [titledFailed, setTitledFailed] = useState<string | null>(null);
-  // A titled image has shown in this tile: one stays in view from then on (see holdPrevious)
-  const [titledShown, setTitledShown] = useState(false);
+  // The title drawn in the last image to load in this tile, if it had one. A newer version of it
+  // keeps it in view while loading (see holdPrevious), so the label stays hidden; over a plain
+  // backdrop, or once the tile shows another title (a carousel slot reused), the label shows and
+  // nothing is held.
+  const [titledShownFor, setTitledShownFor] = useState<string | null>(null);
+  const titledShown = titledShownFor === title;
   const titled =
     ratio === 'landscape' && titledArtwork && titledFailed !== titledArtwork ? titledArtwork : null;
   const showLogo = !titled && ratio === 'landscape' && logo && logoFailed !== logo;
@@ -66,8 +70,8 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
             ratio="fill"
             fallback={<span className={styles.fallbackTitle}>{title}</span>}
             onError={titled ? () => setTitledFailed(titled) : undefined}
-            onLoad={titled ? () => setTitledShown(true) : undefined}
-            holdPrevious={Boolean(titled)}
+            onLoad={() => setTitledShownFor(titled ? title : null)}
+            holdPrevious={Boolean(titled) && titledShown}
           />
           {showLogo && (
             <span className={styles.logo}>

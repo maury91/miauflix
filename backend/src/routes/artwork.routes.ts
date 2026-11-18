@@ -25,8 +25,8 @@ const paramsSchema = z.object({
  * loads them as plain `<img>` sources, which cannot carry its bearer token. The catalog only draws
  * titles it already stores, never asking the provider for new ones.
  *
- * `GET /card/:mediaType/:mediaId/:size.:ext?rev=N`: `rev` (the media's `artworkRevision`) versions
- * the URL, so an image matching it is kept forever.
+ * `GET /card/:mediaType/:mediaId/:size.:ext?rev=N.L`: `rev` (the media's `artworkRevision` and the
+ * card layout version, `cardImageVersion`) versions the URL, so an image matching it is kept forever.
  */
 export const createArtworkRoutes = ({
   rateLimitGuard,
@@ -42,7 +42,7 @@ export const createArtworkRoutes = ({
       z.object({
         rev: z
           .string()
-          .regex(/^\d{1,9}$/u)
+          .regex(/^\d{1,9}(?:\.\d{1,4})?$/u)
           .optional(),
       })
     ),
@@ -50,6 +50,7 @@ export const createArtworkRoutes = ({
       const { mediaType, mediaId, file } = c.req.valid('param');
       const [size, extension] = file.split('.') as [CardImageSize, string];
       let response: Response;
+      let body: ArrayBuffer | null = null;
       try {
         response = await catalogClient.cardImage(
           mediaType,
@@ -57,6 +58,9 @@ export const createArtworkRoutes = ({
           size,
           FORMATS[extension]
         );
+        // Read here, not streamed: the timeout can also stop the body, and once a 200 is sent a
+        // stalled body could only end as a truncated image. Card images are tens of kilobytes.
+        if (response.ok) body = await response.arrayBuffer();
       } catch (error) {
         if (isContractError(error, 'not_found')) throw new HttpError(404, 'Title not found');
         // A catalog without card images yet (older, or not configured): the card shows its layers
@@ -80,6 +84,6 @@ export const createArtworkRoutes = ({
         'Cache-Control',
         rev !== undefined && rev === headers.get('x-artwork-revision') ? IMMUTABLE : REVALIDATE
       );
-      return new Response(response.body, { status: 200, headers });
+      return new Response(body, { status: 200, headers });
     }
   );

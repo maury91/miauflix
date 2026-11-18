@@ -1,5 +1,9 @@
 import type { MediaDto } from '@miauflix/backend';
-import { type CardImageFormat, cardImageSizeFor } from '@miauflix/service-contracts/card-image/v1';
+import {
+  type CardImageFormat,
+  cardImageSizeFor,
+  cardImageVersion,
+} from '@miauflix/service-contracts/card-image/v1';
 import { API_URL, builtForTizen } from '@shared/config/constants';
 import { getTvHeroBackdropSizes } from '@shared/config/tv-profile';
 
@@ -81,7 +85,7 @@ const CARD_IMAGE_EXTENSION: Record<CardImageFormat, string> = { jpeg: 'jpg', web
 
 /**
  * A title's card image from the backend: its backdrop with the logo (or the name) drawn in, at the
- * smallest size covering `cssWidth`. `revision` (the media's `artworkRevision`) versions the URL.
+ * smallest size covering `cssWidth`. `revision` (the media's `artworkRevision`) and the drawing's layout version the URL.
  */
 export function cardImageUrl(
   mediaType: 'movie' | 'tv',
@@ -92,5 +96,5 @@ export function cardImageUrl(
   const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
   const size = cardImageSizeFor(Math.max(1, cssWidth) * dpr);
   const base = API_URL.replace(/\/+$/u, '');
-  return `${base}/api/artwork/card/${mediaType}/${mediaId}/${size}.${CARD_IMAGE_EXTENSION[CARD_IMAGE_FORMAT]}?rev=${revision}`;
+  return `${base}/api/artwork/card/${mediaType}/${mediaId}/${size}.${CARD_IMAGE_EXTENSION[CARD_IMAGE_FORMAT]}?rev=${cardImageVersion(revision)}`;
 }

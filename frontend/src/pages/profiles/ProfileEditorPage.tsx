@@ -158,13 +158,14 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
   };
 
   /**
-   * The TV keyboard's Done moves on to the next field, and only that: never a native submit of the
-   * form (Save is pressed on purpose). The shared key handling sees Done first (capture phase).
+   * The TV keyboard's Done moves on to the next field (if there is one), and only that: never a
+   * native submit of the form (Save is pressed on purpose). The shared key handling sees Done
+   * first (capture phase).
    */
-  const nextOnDone = (next: string) => (event: KeyboardEvent<HTMLInputElement>) => {
+  const nextOnDone = (next?: string) => (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode !== TIZEN_IME_DONE) return;
     event.preventDefault();
-    navigation.focus(next);
+    if (next) navigation.focus(next);
   };
 
   const submit = async () => {
@@ -274,7 +275,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                     maxLength={40}
                     autoComplete="off"
                     onChange={event => setName(event.target.value)}
-                    onKeyDown={creating ? nextOnDone(NAV.email) : undefined}
+                    onKeyDown={nextOnDone(creating ? NAV.email : undefined)}
                   />
                   {creating && (
                     <>
@@ -297,6 +298,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                         value={password}
                         autoComplete="new-password"
                         onChange={event => setPassword(event.target.value)}
+                        onKeyDown={nextOnDone()}
                       />
                     </>
                   )}

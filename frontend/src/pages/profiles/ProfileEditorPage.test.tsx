@@ -218,7 +218,22 @@ describe('ProfileEditorPage', () => {
     const done = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 65376 });
     screen.getByLabelText('Email').dispatchEvent(done);
     expect(done.defaultPrevented).toBe(true);
+    // The last field before Save: Done still never submits
+    const lastDone = new KeyboardEvent('keydown', {
+      bubbles: true,
+      cancelable: true,
+      keyCode: 65376,
+    });
+    screen.getByLabelText('Password').dispatchEvent(lastDone);
+    expect(lastDone.defaultPrevented).toBe(true);
     expect(mocks.createProfile).not.toHaveBeenCalled();
+  });
+
+  it('never submits with the TV keyboard’s Done on the name when editing', () => {
+    setupTest(admin);
+    const done = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 65376 });
+    screen.getByLabelText('Profile name').dispatchEvent(done);
+    expect(done.defaultPrevented).toBe(true);
   });
 
   it('shows the server’s reason when saving fails', async () => {

@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 
 import type { Page, Route } from '@playwright/test';
 
+import { fulfillCardArtwork, isCardArtworkRequest } from './utils/details-harness';
 import { waitForHomeReady } from './utils/login';
 import { expect, test } from './fixtures';
 
@@ -154,6 +155,7 @@ async function installVotingHarness(page: Page): Promise<void> {
       });
     if (path.startsWith('/api/preload/intents/') && request.method() === 'DELETE')
       return route.fulfill({ status: 204, body: '' });
+    if (isCardArtworkRequest(path, request.method())) return fulfillCardArtwork(route);
     throw new Error(`Unexpected voting E2E request: ${request.method()} ${path}`);
   });
 }

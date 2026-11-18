@@ -68,6 +68,8 @@ describe('approvedImageUrl', () => {
       'https://image.tmdb.org:8443/t/p/w780/a.jpg',
       'https://evil.example/t/p/w780/a.jpg',
       'http://169.254.169.254/latest/meta-data',
+      // Reports https://image.tmdb.org as its origin, but is not an HTTPS URL
+      'blob:https://image.tmdb.org/0c1f8f3e-6a4b-4e2f-9d1a-1f2e3d4c5b6a',
       'not a url',
     ])
       expect(() => approvedImageUrl(url)).toThrow();
@@ -210,9 +212,11 @@ describe('CardImageService', () => {
     globalThis.fetch = (async () =>
       new Response(
         new ReadableStream<Uint8Array>({
+          // Finite (16 MiB, twice the limit) so a regression fails instead of hanging
           pull(controller) {
             pulled += 1;
-            controller.enqueue(chunk);
+            if (pulled > 16) controller.close();
+            else controller.enqueue(chunk);
           },
           cancel() {
             cancelled = true;
@@ -304,5 +308,27 @@ describe('CardImageService', () => {
     await Promise.all(busy);
     await Bun.sleep(10);
     expect(started.some(url => url.includes('queued'))).toBe(false);
+  });
+
+  it('keeps a drawing that already started joinable after its callers leave', async () => {
+    const waits: Array<() => void> = [];
+    const backdrop = await solid(780, 439, '#204060');
+    const started: string[] = [];
+    const fetcher = (url: string) => {
+      started.push(url);
+      return new Promise<Buffer>(resolve => waits.push(() => resolve(backdrop)));
+    };
+    const service = new CardImageService(10 * 1024 * 1024, fetcher);
+    const titled = { backdrop: 'https://image.tmdb.org/t/p/w300/a.jpg', logo: '', title: 'Name' };
+    const caller = new AbortController();
+    const first = service.render(titled, 'sm', 'jpeg', caller.signal);
+    await Bun.sleep(0);
+    caller.abort(new Error('gone'));
+    await expect(first).rejects.toThrow('gone');
+    // The retry joins the running drawing instead of downloading the backdrop again
+    const retry = service.render(titled, 'sm', 'jpeg');
+    for (const release of waits.splice(0)) release();
+    expect((await retry).bytes.byteLength).toBeGreaterThan(0);
+    expect(started.length).toBe(1);
   });
 });
