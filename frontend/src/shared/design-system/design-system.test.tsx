@@ -959,6 +959,22 @@ describe('Avatar', () => {
     expect(avatar).toHaveAttribute('data-status', 'failed');
     expect(avatar.querySelector('img')).toBeNull();
   });
+
+  it('keeps its colour and placeholder until a drawn picture is ready', () => {
+    const picture = <canvas data-testid="drawn" />;
+    const { rerender } = render(
+      <Avatar name="Mia" picture={picture} pictureLoaded={false} color="#6d4aa8" placeholder="•" />
+    );
+    const avatar = screen.getByRole('img', { name: 'Mia' });
+    expect(avatar).toHaveAttribute('data-status', 'loading');
+    expect(avatar).toHaveStyle({ backgroundColor: '#6d4aa8' });
+    expect(avatar).toHaveTextContent('•');
+    expect(screen.getByTestId('drawn')).toBeInTheDocument();
+    rerender(<Avatar name="Mia" picture={picture} pictureLoaded color="#6d4aa8" placeholder="•" />);
+    expect(avatar).toHaveAttribute('data-status', 'loaded');
+    expect(avatar).not.toHaveTextContent('•');
+    expect(screen.getByTestId('drawn')).toBeInTheDocument();
+  });
 });
 
 describe('Review fixes', () => {

@@ -15,6 +15,7 @@ export {
   useActiveIdWithin,
   useComposite,
   useFocusable,
+  useFocusWithinChange,
   useHasNavigation,
   useNavigation,
   useNavigationStore,

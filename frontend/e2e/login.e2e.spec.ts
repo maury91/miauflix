@@ -170,7 +170,7 @@ test.describe('Login flow', () => {
     // Signing in adds the profile to the device; Who's watching then picks who is watching.
     const selector = page.getByRole('main', { name: 'Who’s watching?' });
     await expect(selector).toBeVisible({ timeout: 30000 });
-    await expect(selector.getByRole('listitem').first().getByRole('button')).toBeFocused();
+    await expect(selector.locator('[data-profile-id]').first()).toBeFocused();
   });
 
   test('should display proper visual feedback during form interaction', async ({ page }) => {

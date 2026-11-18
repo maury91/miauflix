@@ -83,6 +83,15 @@ export const CATALOG_CONFIG_SCHEMA: CatalogConfigSchema = {
           description:
             'Delay between low-priority backdrop calculations for uncached catalog images',
         },
+        {
+          key: 'CARD_IMAGE_CACHE_MB',
+          inputType: 'number',
+          required: false,
+          defaultValue: '100',
+          numberOptions: { min: 0, max: 4096, integer: true },
+          description:
+            'Memory (in megabytes) kept for drawn card images (backdrop with logo); the least recently used are dropped first',
+        },
       ],
     },
   ],

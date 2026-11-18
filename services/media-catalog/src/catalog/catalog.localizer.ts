@@ -131,6 +131,11 @@ export class CatalogLocalizer {
     }
   }
 
+  /** The title's name in `language`, falling back to the stored one. */
+  localizedTitle(entityType: 'movie' | 'tv', entityId: number, language: string, fallback: string) {
+    return this.translationFor(entityType, entityId, language).title || fallback;
+  }
+
   private translationFor(
     entityType: 'movie' | 'tv',
     entityId: number,

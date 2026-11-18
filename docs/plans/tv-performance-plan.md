@@ -8,6 +8,9 @@ This plan covers the JavaScript side: store traffic, re-renders and per-move eff
 [css-architecture.md](../development/css-architecture.md) and its migration order. Each phase below says where
 the two meet.
 
+Later measurements, and the script that takes them, are in
+[tv-benchmarks.md](../development/tv-benchmarks.md).
+
 ## Where Home stands
 
 Four `ArrowRight` presses along an ordinary row, 600 ms apart:
@@ -303,6 +306,24 @@ Next:
 
 Once Phase 1 has removed the needless renders, what's left is the cost of the renders that are
 needed: the cards whose selection changes, the hero, and the rows mounted as you move down.
+
+**React work per move (2026-11-17, after the design-system rows).** A move now renders only what
+it changes: the row's `Carousel`, the two tiles whose focus changed and the card it mounts, then
+Home and the hero once, on the next task. Before, the row rendered three times per press and Home
+twice. The carousel's position lives outside React state (`useCarouselNavigation` returns a stable
+object, `useCarouselPosition` reads it), and the row acts on a move imperatively. Keydown handling
+during a held Right went from 34 to 17 ms (median, max 124 to 46 ms), but the frame rate didn't
+move: first pass 39–46 fps (before 44–47), back 46–53 (45–51), held Right 11–15 (11–19), 3 × Down
+25–38 (28–32). What limits Home now is `UpdateLayerTree`, about 30 ms per frame of a slide over
+roughly 1,000 paint layers (15 rows and 75 cards mounted); hiding the rows off screen doubled held
+Right to 23–27 fps. Still well short of the WebGL spike (about 60, 53 and 59 fps). Details in
+[tv-benchmarks.md](../development/tv-benchmarks.md#2026-11-17-home-react-work-per-move).
+
+Card images (2026-11-17, docs/development/tv-benchmarks.md): each Home card is now one picture
+from the backend, the backdrop with the logo (or the name) drawn in, instead of the backdrop and a
+logo layer. On a first pass along row 3 it measured 41.5 (JPEG) and 46.5 (WebP) fps against 35
+for the two layers; held Right went from about 12 to 14 fps, and moving between rows is unchanged.
+The TV asks for JPEG, which it decodes in about 6 ms per card against 10 for WebP.
 
 ### 2.1 `CategoryRow`
 

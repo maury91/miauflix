@@ -29,8 +29,6 @@ const meta = {
     onSelect: fn(),
     onEdit: fn(),
     onAdd: fn(),
-    onManage: fn(),
-    onDone: fn(),
     onBack: fn(),
   },
   parameters: { layout: 'fullscreen' },
@@ -60,7 +58,20 @@ export const WithoutAdmin: Story = {
   },
 };
 
-export const Manage: Story = {
-  args: { mode: 'manage' },
+/** Down from the focused profile reaches its edit button, which opens the profile editor. */
+export const EditProfile: Story = {
   decorators: [withProfiles(profilesFixture)],
+  play: async ({ canvas, args, userEvent }) => {
+    await expect(canvas.getByRole('button', { name: 'Maurizio' })).toHaveFocus();
+    // Only the focused profile shows its edit button
+    await expect(canvas.getAllByRole('button', { name: /^Edit / })).toHaveLength(1);
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(canvas.getByRole('button', { name: 'Edit Alex' })).toBeInTheDocument();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('button', { name: 'Edit Alex' })).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onEdit).toHaveBeenCalledWith(
+      expect.objectContaining({ user: expect.objectContaining({ displayName: 'Alex' }) })
+    );
+  },
 };

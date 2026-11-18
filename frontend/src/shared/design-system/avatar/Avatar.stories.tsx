@@ -16,7 +16,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A passive circle with a person\'s or profile\'s picture; an avatar is always a picture, never initials. Until the picture has loaded (and if it fails) the circle keeps its size and shows its colour (a profile colour, set inline) and an optional decorative placeholder. Sizes are 2, 2.5, 4 and 8rem, or `fill` to cover a square tile frame. Named by `name` (`role="img"`), or `decorative` when the name is shown next to it.',
+          'A passive circle with a person\'s or profile\'s picture; an avatar is always a picture, never initials. Until the picture has loaded (and if it fails) the circle keeps its size and shows its colour (a profile colour, set inline) and an optional decorative placeholder. Sizes are 2, 2.5, 4 and 8rem, or `fill` to cover a square tile frame. A feature that draws its own picture (the live Plushie) passes it as `picture` instead of `src`. Named by `name` (`role="img"`), or `decorative` when the name is shown next to it.',
       },
     },
   },

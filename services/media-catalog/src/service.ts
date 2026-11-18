@@ -1,5 +1,8 @@
 import { ContractError, defineService, type Service, type ServiceStatus } from '@miauflix/contract';
 import {
+  CARD_IMAGE_SIZES,
+  cardImageVersion,
+  cardTitleRenderable,
   catalog as catalogContract,
   type CatalogStatusDetails,
   MAX_BATCH_ITEMS,
@@ -19,6 +22,8 @@ const SYNC_SCOPES: Record<string, string> = { movies: 'lastMovieSync', tv_shows:
 const STATUS_NOTIFY_INTERVAL_MS = 5_000;
 const MAX_QUERY_LENGTH = 100;
 const MAX_SEARCH_PAGE = 500;
+/** Lists reach the catalog in English (see the backend's list service), so card names do too. */
+const CARD_IMAGE_LANGUAGE = 'en';
 
 const count = (
   db: CatalogDatabase,
@@ -186,6 +191,25 @@ export const createCatalogService = (context: ServiceContext): Service => {
     queueArtwork: ({ items, priority }) => catalog().queueArtwork(items, priority),
     artworkSnapshot: ({ items }) => catalog().artworkSnapshot(items),
     artwork: emit => catalog().onArtworkUpdate(emit),
+    cardImage: async ({ mediaType, mediaId, size, format }, ctx) => {
+      if (!(size in CARD_IMAGE_SIZES)) ctx.fail('bad_request', 'Unknown card image size');
+      if (format !== 'jpeg' && format !== 'webp') ctx.fail('bad_request', 'Unknown image format');
+      const source = catalog().cardImageSource({ mediaType, mediaId }, CARD_IMAGE_LANGUAGE);
+      if (!source) return ctx.fail('not_found', 'Unknown title, or one without a backdrop');
+      // Neither a logo nor a name to draw: the card shows its own backdrop and label instead
+      if (!source.logo && !cardTitleRenderable(source.title))
+        return ctx.fail('not_found', 'The title has nothing to draw on its card');
+      const image = await context.cardImages.render(source, size, format, ctx.signal);
+      const headers: Record<string, string> = {
+        'content-type': image.contentType,
+        'content-length': String(image.bytes.byteLength),
+        etag: image.etag,
+      };
+      // Only a drawing the artwork revision fully determines may be cached for that revision
+      if (source.revision !== null)
+        headers['x-artwork-revision'] = cardImageVersion(source.revision);
+      return new Response(image.bytes, { headers });
+    },
     ensureBackdropFocus: async ({ mediaType, mediaId }, ctx) => {
       try {
         return await catalog().ensureBackdropFocus(mediaType, mediaId);

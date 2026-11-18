@@ -1,6 +1,7 @@
 import type { CatalogService } from './catalog/catalog.service.ts';
 import type { CatalogConfigService } from './config/config.service';
 import type { CatalogDatabase } from './db/database';
+import type { CardImageService } from './services/card-image.service';
 import type { ServiceEnv } from './env';
 
 /**
@@ -13,4 +14,6 @@ export interface ServiceContext {
   config: CatalogConfigService;
   db: CatalogDatabase;
   catalog: CatalogService | null;
+  /** Draws and caches card images; outlives catalog replacements so its cache does too. */
+  cardImages: CardImageService;
 }

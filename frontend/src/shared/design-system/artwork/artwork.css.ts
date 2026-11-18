@@ -12,6 +12,7 @@ import { color, duration, easing, radius } from '../tokens';
  *   positioned container (a tile's frame, a hero)
  * - `data-status="loading" | "loaded" | "failed"`
  * - `data-fit="cover" | "contain"`
+ * - `data-instant` on the image: it replaces a held picture, so it shows without fading in
  */
 
 export const artwork = style({
@@ -48,11 +49,16 @@ export const image = style({
   selectors: {
     [`${artwork}[data-fit="contain"] &`]: { objectFit: 'contain' },
     [`${artwork}[data-status="loaded"] &`]: { opacity: 1 },
+    // Replacing a held picture: shown at once, or the box would show through the fade
+    '&[data-instant]': { transition: 'none' },
   },
   '@media': {
     '(prefers-reduced-motion: reduce)': { transition: 'none' },
   },
 });
+
+/** The previous picture, kept in view under a new one still loading (`holdPrevious`). */
+export const heldImage = style([image, { opacity: 1, transition: 'none' }]);
 
 /** The fallback fills the same box, centred: a title, an icon, a logo. */
 export const fallback = style({

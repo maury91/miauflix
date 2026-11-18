@@ -109,7 +109,9 @@ ENTRYPOINT ["/bin/bash", "/app/miauflix-services-entrypoint.sh"]
 
 # --- Service code, one layer each, so every image copies only what it runs ---
 FROM runtime-base AS catalog-code
-RUN mkdir -p /app/models /app/wasm && chown bunqueue:bunqueue /app/models /app/wasm
+# DejaVu: card images draw Greek and Cyrillic names, which the bundled Poppins lacks
+RUN apk add --no-cache font-dejavu && \
+    mkdir -p /app/models /app/wasm && chown bunqueue:bunqueue /app/models /app/wasm
 COPY --from=builder --chown=1001:1001 /workspace/services/media-catalog ./services/media-catalog
 COPY --from=builder --chown=1001:1001 /workspace/services/list-service ./services/list-service
 COPY --from=builder --chown=1001:1001 /workspace/node_modules/@vladmandic/human/models/blazeface.json /app/models/blazeface.json

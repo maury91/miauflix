@@ -1,3 +1,4 @@
+export * from './card-image.js';
 export * from './catalog.js';
 export * from './lists.js';
 export * from './media-load.js';

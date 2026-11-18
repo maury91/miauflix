@@ -282,6 +282,51 @@ describe('CatalogService', () => {
     }
   });
 
+  it('describes card images from stored data, preferring the selected artwork', () => {
+    const { repo, service, cleanup } = setup();
+    try {
+      expect(service.cardImageSource({ mediaType: 'movie', mediaId: 605 }, 'en')).toBeNull();
+      const movie = { ...makeMovie(605), logo: 'https://img/stored-logo.png' };
+      repo.movies.upsertMovie(movie);
+      expect(service.cardImageSource({ mediaType: 'movie', mediaId: 605 }, 'it')).toEqual({
+        backdrop: 'https://img/backdrop.jpg',
+        logo: 'https://img/stored-logo.png',
+        title: 'Titolo 605',
+        // No artwork selected yet: nothing versions the stored backdrop
+        revision: null,
+      });
+      const row = repo.artwork.enqueue({
+        mediaType: 'movie',
+        mediaId: 605,
+        signature: 'signature',
+        imageKey: 'fake:backdrop',
+        backdropUrl: 'https://image.tmdb.org/t/p/w300/selected.jpg',
+        displayBackdrop: 'https://image.tmdb.org/t/p/w780/selected.jpg',
+        fallbackLogo: 'https://image.tmdb.org/t/p/original/card-logo.png',
+        candidates: [
+          {
+            url: 'https://image.tmdb.org/t/p/w300/card-logo.png',
+            language: null,
+            width: 0,
+            height: 0,
+            voteAverage: 0,
+            voteCount: 0,
+          },
+        ],
+        popularity: movie.popularity,
+        priority: 0,
+      });
+      expect(service.cardImageSource({ mediaType: 'movie', mediaId: 605 }, 'en')).toEqual({
+        backdrop: 'https://image.tmdb.org/t/p/w780/selected.jpg',
+        logo: 'https://image.tmdb.org/t/p/original/card-logo.png',
+        title: 'Movie 605',
+        revision: row.revision,
+      });
+    } finally {
+      cleanup();
+    }
+  });
+
   it('invalidates stale artwork before projecting a detail response', async () => {
     const { repo, provider, service, cleanup } = setup();
     try {

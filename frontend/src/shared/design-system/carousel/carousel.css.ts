@@ -13,9 +13,18 @@ export const root = style({
   position: 'relative',
 });
 
-/** Clips the track to the whole items plus the peek on each side; centred in the row. */
+/**
+ * Clips the track to the whole items plus the peek on each side; centred in the row.
+ *
+ * A stacking context (`z-index: 0`): while the track slides, Chromium can't tell where it will be
+ * and assumes it overlaps everything painted after it in its stacking context. Without one here,
+ * every later row's items, edges and clips took a compositing layer of their own for the length of
+ * each move (23 layers at rest, ~112 during a move on the TV), each rasterized afresh. Contained,
+ * the assumption stops at this row.
+ */
 export const viewport = style({
   position: 'relative',
+  zIndex: 0,
   boxSizing: 'content-box',
   margin: '0 auto',
   // Room for the focus scale and outline above and below the items
@@ -31,6 +40,11 @@ export const track = style({
   padding: 0,
   listStyle: 'none',
   transition: `transform ${duration.fast} ${easing.standard}`,
+  selectors: {
+    // On the TV (software raster) the track keeps its own layer: a move only slides it, instead
+    // of lifting it onto a layer, rasterizing it and painting it back into the page each time.
+    'html[data-density="tv"] &': { willChange: 'transform' },
+  },
   '@media': {
     '(prefers-reduced-motion: reduce)': { transition: 'none' },
   },

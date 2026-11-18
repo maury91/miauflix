@@ -41,7 +41,7 @@ RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/service-contracts && \
     npm run build --workspace @miauflix/anime-mapping && \
     npm run build --workspace @miauflix/service-configuration && \
-    bun build services/media-catalog/src/index.ts --target=bun --outfile=/tmp/media-catalog.js
+    bun build services/media-catalog/src/index.ts --target=bun --external sharp --outfile=/tmp/media-catalog.js
 
 FROM builder AS development
 # glibc gives every thread its own malloc arena and rarely returns freed memory; with
@@ -51,12 +51,22 @@ WORKDIR /workspace/services/media-catalog
 CMD ["bun", "--watch", "src/index.ts"]
 
 FROM bun-runtime AS production
-RUN apt-get update && apt-get install -y --no-install-recommends wget && \
+# DejaVu: card images draw Greek and Cyrillic names, which the bundled Poppins lacks
+RUN apt-get update && apt-get install -y --no-install-recommends wget fonts-dejavu-core && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=builder /tmp/media-catalog.js ./index.js
+# sharp loads its native addon and libvips from the @img package for this platform, which a bundle
+# cannot hold: it stays external and ships with its dependencies (without them Bun would try to
+# install it from the registry at startup, and fail offline)
+COPY --from=builder /workspace/node_modules/sharp ./node_modules/sharp
+COPY --from=builder /workspace/node_modules/@img ./node_modules/@img
+COPY --from=builder /workspace/node_modules/detect-libc ./node_modules/detect-libc
+COPY --from=builder /workspace/node_modules/semver ./node_modules/semver
 # CatalogDatabase resolves Drizzle migrations relative to the bundled entrypoint.
 COPY --from=builder /workspace/services/media-catalog/src/db/migrations ./migrations
+# The font card images draw a title's name in when it has no logo
+COPY --from=builder /workspace/services/media-catalog/assets/fonts ./fonts
 # Keep the face detector self-contained in the runtime image. Only the model
 # used by backdrop focus and the WASM binaries are needed.
 COPY --from=builder /workspace/node_modules/@vladmandic/human/models/blazeface.json ./models/blazeface.json
@@ -75,6 +85,7 @@ ENV MALLOC_ARENA_MAX=2
 ENV DATA_DIR=/app/data
 ENV BACKDROP_FOCUS_MODEL_DIR=/app/models
 ENV BACKDROP_FOCUS_WASM_DIR=/app/wasm
+ENV CARD_IMAGE_FONT_FILE=/app/fonts/Poppins-SemiBold.ttf
 RUN groupadd --gid 911 linuxserver && \
     useradd --uid 911 --gid 911 --create-home --shell /usr/sbin/nologin linuxserver && \
     mkdir -p /app/data && \

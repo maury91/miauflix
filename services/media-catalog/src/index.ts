@@ -3,6 +3,7 @@ import { serve } from '@miauflix/contract';
 import { CatalogRuntime } from './catalog/bootstrap';
 import { CatalogConfigService } from './config/config.service';
 import { CatalogDatabase } from './db/database';
+import { CardImageService } from './services/card-image.service';
 import { loadEnv } from './env';
 import { logger } from './logger';
 import { createCatalogService } from './service';
@@ -28,6 +29,7 @@ const context: ServiceContext = {
   config,
   db,
   catalog: null,
+  cardImages: new CardImageService(),
 };
 
 const runtime = new CatalogRuntime(context, config);

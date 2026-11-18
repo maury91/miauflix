@@ -144,6 +144,7 @@ vi.mock('react-redux', async importOriginal => {
           ...(state && typeof state === 'object' ? state : {}),
           homeNavigation: homeNavigationState.value,
           realtime: realtimeState,
+          artwork: { byMedia: {} },
         })),
     }),
     useSelector: (
