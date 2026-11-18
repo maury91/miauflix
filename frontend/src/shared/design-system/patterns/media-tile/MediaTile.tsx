@@ -1,9 +1,11 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useLayoutEffect, useState } from 'react';
 
 import { Artwork } from '../../artwork/Artwork';
 import { Badge } from '../../badge/Badge';
 import { CollectionTile, type CollectionTileProps } from '../../collection-tile/CollectionTile';
+import { useGlImageStatus, useGlNode, useGlPaint, useGlParent } from '../../gl';
 import * as styles from './mediaTile.css';
+import { LOGO_BOX, mediaTileVisual } from './MediaTile.gl';
 
 export type MediaTileProps = Omit<
   CollectionTileProps,
@@ -52,13 +54,21 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
   const titled =
     ratio === 'landscape' && titledArtwork && titledFailed !== titledArtwork ? titledArtwork : null;
   const showLogo = !titled && ratio === 'landscape' && logo && logoFailed !== logo;
+  // Inside a GlSurface the whole tile is one baked picture (MediaTile.gl.ts)
+  const glVisual = useGlParent()
+    ? mediaTileVisual({ title, artwork, ratio, logo, titledArtwork })
+    : undefined;
   return (
     <CollectionTile
       {...props}
       ref={forwardedRef}
+      glVisual={glVisual}
       label={title}
       labelPlacement={labelPlacement}
-      labelHidden={Boolean((titled && titledShown) || showLogo) && labelPlacement === 'overlay'}
+      // In GL the visual says whether it names the tile (it knows what failed or is still loading)
+      labelHidden={
+        !glVisual && Boolean((titled && titledShown) || showLogo) && labelPlacement === 'overlay'
+      }
       ratio={ratio}
       badge={
         badge ? <Badge accessibleLabel={badge.accessibleLabel}>{badge.label}</Badge> : undefined
@@ -69,17 +79,50 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
             src={titled ?? artwork}
             ratio="fill"
             fallback={<span className={styles.fallbackTitle}>{title}</span>}
+            fallbackText={title}
             onError={titled ? () => setTitledFailed(titled) : undefined}
             onLoad={() => setTitledShownFor(titled ? title : null)}
             holdPrevious={Boolean(titled) && titledShown}
           />
-          {showLogo && (
-            <span className={styles.logo}>
-              <img src={logo} alt="" decoding="async" onError={() => setLogoFailed(logo)} />
-            </span>
-          )}
+          {showLogo && <TileLogo src={logo} onError={() => setLogoFailed(logo)} />}
         </>
       }
     />
   );
 });
+
+/** The title logo over the backdrop: an <img>, or a GL image inside a GlSurface. */
+function TileLogo({ src, onError }: { src: string; onError: () => void }) {
+  const glParent = useGlParent();
+  const node = useGlNode();
+  const status = useGlImageStatus(src);
+  useEffect(() => {
+    if (status === 'failed') onError();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+  const width = glParent?.width ?? 0;
+  const height = glParent?.height ?? 0;
+  useLayoutEffect(() => {
+    node?.set({ z: 1 });
+  });
+  useGlPaint(
+    node,
+    painter => {
+      painter.image(
+        src,
+        width * LOGO_BOX.left,
+        height * LOGO_BOX.top,
+        width * LOGO_BOX.width,
+        height * LOGO_BOX.height,
+        { fit: 'contain', alignX: 0, alignY: 1 }
+      );
+    },
+    [src, width, height]
+  );
+  if (glParent) return null;
+  return (
+    <span className={styles.logo}>
+      <img src={src} alt="" decoding="async" onError={onError} />
+    </span>
+  );
+}

@@ -1,6 +1,9 @@
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useLayoutEffect, useState } from 'react';
 
+import { remPx, useGlImageStatus, useGlNode, useGlPaint, useGlParent } from '../gl';
+import { radius } from '../tokens';
 import * as styles from './artwork.css';
+import { drawArtwork } from './Artwork.gl';
 import { useImageStatus } from './useImageStatus';
 
 export interface ArtworkProps {
@@ -26,7 +29,11 @@ export interface ArtworkProps {
    * newer version of the same picture), then show the new one without fading in. Off by default.
    */
   holdPrevious?: boolean;
+  /** Inside a GlSurface (spike), the fallback drawn as text: GL can't draw `fallback`. */
+  fallbackText?: string;
 }
+
+const RATIO = { landscape: 9 / 16, portrait: 3 / 2, square: 1 } as const;
 
 /**
  * An image whose geometry never depends on it: the box keeps its ratio while loading (placeholder
@@ -41,11 +48,44 @@ export function Artwork({
   onError,
   onLoad,
   holdPrevious = false,
+  fallbackText,
 }: ArtworkProps) {
-  const { status, imageProps } = useImageStatus(src);
+  const { status: domStatus, imageProps } = useImageStatus(src);
+  // GL form: the renderer loads and draws the image; its status drives the fallback
+  const glParent = useGlParent();
+  const node = useGlNode();
+  const glStatus = useGlImageStatus(src);
+  const status = glParent ? (!src || glStatus === 'failed' ? 'failed' : 'loading') : domStatus;
   const failed = Boolean(src) && status === 'failed';
-  const loaded = Boolean(src) && status === 'loaded';
+  // In the GL form the renderer knows when the image is in
+  const loaded = Boolean(src) && (glParent ? glStatus === 'ready' : status === 'loaded');
   const [lastLoaded, setLastLoaded] = useState<string | null>(null);
+  const loading = Boolean(src) && !loaded && status !== 'failed';
+  // A newer picture replacing one that loaded before: the old one stays in view until the new one
+  // has loaded, which then shows at once (fading in would uncover the box under both)
+  const replacing = holdPrevious && lastLoaded !== null && lastLoaded !== src;
+  const held = replacing && loading ? lastLoaded : null;
+  const width = glParent?.width ?? 0;
+  const height = ratio === 'fill' ? (glParent?.height ?? 0) : width * RATIO[ratio];
+  const corner = ratio === 'fill' ? (glParent?.radius ?? 0) : glParent ? remPx(radius.md) : 0;
+  useLayoutEffect(() => {
+    node?.set({ width, height });
+  });
+  useGlPaint(
+    node,
+    painter => {
+      drawArtwork(painter, {
+        src,
+        previous: held,
+        width,
+        height,
+        fit,
+        radius: corner,
+        fallbackText,
+      });
+    },
+    [src, held, status, width, height, corner, fit, fallbackText]
+  );
   useEffect(() => {
     if (failed) onError?.();
     // Once per failing source; a new callback for the same failure is not a new failure
@@ -58,12 +98,11 @@ export function Artwork({
     // Once per loaded source
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaded, src]);
-  // A newer picture replacing one that loaded before: the old one stays in view until the new one
-  // has loaded, which then shows at once (fading in would uncover the box under both)
-  const replacing = holdPrevious && lastLoaded !== null && lastLoaded !== src;
-  const held = replacing && status === 'loading' ? lastLoaded : null;
   // A described image keeps its description when the picture is missing or fails
   const describedFallback = status === 'failed' && alt !== '';
+  if (glParent) {
+    return describedFallback ? <span role="img" aria-label={alt} /> : null;
+  }
   return (
     <span
       className={styles.artwork}

@@ -172,3 +172,19 @@ export const supporting = style({
     [`${tile}:disabled &`]: { color: color.textDisabled },
   },
 });
+
+/**
+ * GL form (inside a GlSurface, spike): the renderer draws the tile; the button keeps focus,
+ * `data-focused` and its text for assistive technology, unpositioned (no paint layers).
+ */
+export const glTile = style({
+  display: 'block',
+  margin: 0,
+  border: 0,
+  padding: 0,
+  background: 'none',
+  color: 'inherit',
+  font: 'inherit',
+  textAlign: 'inherit',
+  outline: 'none',
+});

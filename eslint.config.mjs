@@ -244,6 +244,26 @@ export default [
     },
   },
   {
+    // The GL engine's parts that describe what is drawn stay free of Pixi and React, so they run in
+    // unit tests and the backend can be loaded on its own (docs/plans/tv-gl-production-plan.md)
+    files: ['frontend/src/shared/design-system/gl/{core,paint,resources,bake}/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            { name: 'styled-components', message: 'The GL engine has no DOM styles.' },
+            { name: 'pixi.js', message: 'Only gl/pixi imports Pixi.' },
+            { name: 'react', message: 'Only gl/react imports React.' },
+          ],
+          patterns: [
+            { group: ['**/pixi/**', '**/react/**'], message: 'Only gl/pixi imports Pixi.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.ts', '**/*.spec.{ts,tsx}'],
     languageOptions: {
       globals: {

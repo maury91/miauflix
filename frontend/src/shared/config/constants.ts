@@ -2,6 +2,13 @@ import { computedEnv, env } from './env';
 import { readTvServer } from './tv-server';
 
 export const builtForTizen = env.TIZEN;
+/** Spike (VITE_TV_GL_ROWS): Home's rows drawn in one WebGL canvas on the TV build. */
+export const glRowsEnabled =
+  (builtForTizen && env.TV_GL_ROWS) ||
+  // Development: localStorage['miauflix:gl-rows'] = '1' tries it in a browser
+  (import.meta.env.DEV &&
+    typeof localStorage !== 'undefined' &&
+    localStorage.getItem('miauflix:gl-rows') === '1');
 /**
  * The backend. The TV app uses the server picked on the TV (see features/server-discovery), or
  * the one it was packaged with; '' until one is picked.

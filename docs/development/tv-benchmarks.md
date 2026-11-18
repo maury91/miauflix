@@ -358,3 +358,176 @@ pass is smaller than either's spread). Decoding alone decides it: drawing 80 car
 canvas right after they load took 6.3, 6.2 and 5.9 ms per image in JPEG (p90 about 8 ms) against
 9.6, 9.7 and 10.4 ms in WebP (p90 13 to 18 ms), three runs each. The TV asks for baseline JPEG;
 browsers, which decode either quickly, ask for the quarter-smaller WebP.
+
+## 2026-11-17: Home rows drawn with WebGL (spike)
+
+- **Device:** Samsung TV, Tizen 5.5, Chromium 69.0.3497, 1920×1080, device pixel ratio 1.
+- **Builds:** the same code twice, `3367216a` plus the uncommitted work of the sections above (per
+  move React work, card images, row layers) plus the GL rows spike. **DOM** has the flag off
+  (`index-COZ0CHR2.js`); **GL** is packaged with `MIAUFLIX_TV_GL_ROWS=true` (`index-CuzzYiVn.js`):
+  Home's rows (titles, carousels, tiles, artwork, logos, progress, focus outline and scale, edge
+  fades, the slides along and between rows) are drawn by the design-system components into one
+  WebGL canvas, with React and the navigation layer driving them as before. The hero, rail and
+  panels stay DOM. See [the GL rows plan](../plans/tv-gl-rows-plan.md).
+- **Serving:** card images live from the server. GL measured first, then DOM, both cold.
+
+### Home, the standard scenario (cold)
+
+| Build | Run | Row 3 first pass, 4 × Right              | Row 3, 4 × Left back                    |
+| ----- | --: | ---------------------------------------- | --------------------------------------- |
+| DOM   |   1 | 59 fps, p90 35.2, max 120, 11 over 50 ms | 51 fps, p90 28.9, max 99, 4 over 50 ms  |
+| DOM   |   2 | 51 fps, p90 44.9, max 95, 14 over 50 ms  | 54 fps, p90 28.5, max 76, 5 over 50 ms  |
+| DOM   |   3 | 50 fps, p90 50.2, max 102, 15 over 50 ms | 53 fps, p90 29.2, max 106, 9 over 50 ms |
+| GL    |   1 | 54 fps, p90 26.5, max 58, 3 over 50 ms   | 55 fps, p90 23.5, max 46, 0 over 50 ms  |
+| GL    |   2 | 55 fps, p90 26.7, max 75, 2 over 50 ms   | 55 fps, p90 22.5, max 58, 2 over 50 ms  |
+| GL    |   3 | 55 fps, p90 26.6, max 52, 2 over 50 ms   | 56 fps, p90 22.2, max 52, 1 over 50 ms  |
+
+### Home, held Right and Down (cold, from row 3)
+
+| Scenario               | DOM, fps   | GL, fps    |
+| ---------------------- | ---------- | ---------- |
+| Hold Right 2.5 s       | 14, 17, 15 | 36, 33, 40 |
+| 3 × Down, 800 ms apart | 27, 32, 35 | 51, 49, 47 |
+
+The renderer drew about 40 quads in 2 draw calls per frame, in 1–2 ms of JavaScript (7 ms at
+most); about 33 images were uploaded per run at about 1.3 ms each, none failed, and textures held
+about 11 MB.
+
+### What it means
+
+- **A first pass along a row** is about the same frame rate (DOM 50–59, GL 54–55), but GL has far
+  fewer long frames: p90 26.5 ms against 35–50 ms, at most 3 frames over 50 ms against 11–15, and
+  no frame over 75 ms against 95–120. Going back is a little smoother too.
+- **Holding Right** goes from 14–17 to 33–40 fps, and **moving between rows** from 27–35 to
+  47–51: the moves that paid for re-layering the whole page now cost a few quads.
+- The throwaway spike, which ran no React and no DOM, reached 53–54 holding Right and 59 moving
+  down. A CPU profile of 2.5 s of held Right on the GL build (3.4 s window) shows where the rest
+  goes: the renderer 290 ms, keydown handling and React about 600 ms, and 1,560 ms of native work
+  outside JavaScript (style, layout and paint of what is still DOM: the invisible rows' buttons and
+  the hero). Making the hidden DOM lighter and the hero cheaper per move are the next levers.
+- `requestAnimationFrame` intervals measure the main thread. In the DOM build the slides are CSS
+  transitions the compositor could run between main-thread frames, but on this TV (software
+  raster) each frame of a move needs the main thread's layer update anyway, so the two builds are
+  compared on the same footing.
+
+## 2026-11-17: Home rows and hero drawn with PixiJS (spike)
+
+- **Device:** Samsung TV, Tizen 5.5, Chromium 69.0.3497, Mali-TDVX (WebGL 2), 1920×1080, device
+  pixel ratio 1.
+- **Builds:** the GL spike above, extended to draw Home's hero (backdrops, shade, details) in the
+  same canvas, packaged with `MIAUFLIX_TV_GL_ROWS=true`. **Quad renderer + hero**
+  (`index-n1esONSB.js`): the spike's own renderer, everything redrawn every frame through its
+  rounded-rectangle shader. **PixiJS + hero** (`index-CjNK5qvI.js`): the renderer rebuilt on
+  PixiJS 8: a retained display tree (a node paints only when what it draws changes), Pixi's batched
+  sprite shader, rounded corners as geometry with MSAA, clips as stencil rectangles, the hero's shade
+  drawn once into a texture between the live backdrops (under) and details (over), and the fade
+  into the rows copied from a 1920×32 px texture of the hero. Also in both: Home's page is black
+  again (it was `#0A0D0F` since the design system) and the last rows scroll to the top.
+- **Serving:** card images live from the server, cold (each run reloads).
+
+### Home, the standard scenario (cold)
+
+| Build                | Run | Row 3 first pass, 4 × Right              | Row 3, 4 × Left back                     |
+| -------------------- | --: | ---------------------------------------- | ---------------------------------------- |
+| Quad renderer + hero |   1 | 21 fps, p90 81.3, max 125, 29 over 50 ms | 32 fps, p90 78.9, max 136, 21 over 50 ms |
+| Quad renderer + hero |   2 | 20 fps, p90 79.3, max 111, 35 over 50 ms | 23 fps, p90 90.7, max 134, 30 over 50 ms |
+| Quad renderer + hero |   3 | 23 fps, p90 84.6, max 142, 28 over 50 ms | 23 fps, p90 98.7, max 134, 27 over 50 ms |
+| PixiJS + hero        |   1 | 45 fps, p90 33.8, max 72, 3 over 50 ms   | 55 fps, p90 23.3, max 43, 0 over 50 ms   |
+| PixiJS + hero        |   2 | 45 fps, p90 37.4, max 64, 5 over 50 ms   | 55 fps, p90 21.2, max 40, 0 over 50 ms   |
+| PixiJS + hero        |   3 | 46 fps, p90 37.5, max 66, 4 over 50 ms   | 55 fps, p90 22.4, max 41, 0 over 50 ms   |
+
+For comparison, from the section above: DOM 50–59 first pass and 51–54 back; GL rows with the DOM
+hero 54–55 and 55–56.
+
+### Home, held Right and Down (cold, from row 3)
+
+| Scenario               |   DOM | GL rows, DOM hero | Quad renderer + hero | PixiJS + hero |
+| ---------------------- | ----: | ----------------: | -------------------: | ------------: |
+| Hold Right 2.5 s       | 14–17 |             33–40 |                   22 |            30 |
+| 3 × Down, 800 ms apart | 27–35 |             47–51 |                   27 |            39 |
+
+PixiJS + hero per run: JavaScript per frame about 3 ms, about 54 image uploads at about 4 ms each,
+about 44 MB of textures, the shade drawn twice, the fade band about 310 times (once per frame of a
+backdrop crossfade).
+
+### Tiles baked from their `.gl.ts` form
+
+Build `index-BIomsNXX.js`, same session-free conditions. Each tile is one picture: its `.gl.ts`
+form (`MediaTile.gl.ts` over `CollectionTile.gl.ts` and `Artwork.gl.ts`) is drawn once its images
+and texts are ready, baked into a texture with antialiased corners cut afterwards, and shown as
+one sprite; only the focus outline and scale stay live. The row slides a group of those sprites.
+
+| Run | Row 3 first pass, 4 × Right            | Row 3, 4 × Left back                   |
+| --: | -------------------------------------- | -------------------------------------- |
+|   1 | 48 fps, p90 34.0, max 68, 4 over 50 ms | 58 fps, p90 19.5, max 35, 0 over 50 ms |
+|   2 | 53 fps, p90 32.3, max 68, 1 over 50 ms | 59 fps, p90 19.8, max 33, 0 over 50 ms |
+|   3 | 52 fps, p90 34.6, max 53, 1 over 50 ms | 59 fps, p90 20.3, max 39, 0 over 50 ms |
+
+Held Right: 29 fps (PixiJS + hero 30). 3 × Down: 43 fps (39). Per run: 31 tiles baked in about
+65 draw attempts (a tile waits for its images and texts), about 7 ms a bake, about 54 MB of
+textures (the image textures stay until the 64 MB budget needs them).
+
+### A static focus outline and a hero that waits (Prime Video's pattern)
+
+Build `index-C4krXcU7.js`: the baked tiles above, plus three things Prime Video does. The focused
+card always rests in the same place (rows already did vertically; now the row keeps the focused
+card in the leading slot to its end, `paging: 'anchor'`), so the outline is drawn once there and
+never moves (`GlFocusAnchor`). During a burst of moves the hero shows no details and keeps its
+image; after 400 ms of rest the details show, after 800 ms the image changes (it was 250 ms).
+
+| Run | Row 3 first pass, 4 × Right             | Row 3, 4 × Left back                    |
+| --: | --------------------------------------- | --------------------------------------- |
+|   1 | 55 fps, p90 21.4, max 136, 1 over 50 ms | 59 fps, p90 17.2, max 90, 1 over 50 ms  |
+|   2 | 60 fps, p90 21.8, max 35, 0 over 50 ms  | 58 fps, p90 18.6, max 102, 2 over 50 ms |
+|   3 | 51 fps, p90 33.8, max 102, 3 over 50 ms | 60 fps, p90 18.1, max 39, 0 over 50 ms  |
+
+Held Right: **48 fps** (baked tiles 29, DOM 14–17). 3 × Down: 44 (43). The fade band redrew
+170–240 times a run instead of about 310: the hero crossfades once per rest, not per move.
+
+### Details fading out and in, logos waited for, cached rows above
+
+Build `index-bRE5flWC.js`, on top of the one above. A move fades the hero's details out over
+200 ms; once the selection has rested 200 ms the new details fade in over 200 ms, only when all
+their texts and the logo are ready (a logo still being made waited for up to 600 ms). The next
+title's texts and logo start loading once the selection pauses 100 ms. The shade is opaque up to
+the backdrop's left edge. Rows mounted above the loaded ones show their cached cards.
+
+| Run | Row 3 first pass, 4 × Right            | Row 3, 4 × Left back                   |
+| --: | -------------------------------------- | -------------------------------------- |
+|   1 | 53 fps, p90 30.6, max 48, 0 over 50 ms | 56 fps, p90 24.1, max 99, 2 over 50 ms |
+|   2 | 54 fps, p90 26.9, max 39, 0 over 50 ms | 55 fps, p90 22.0, max 43, 0 over 50 ms |
+|   3 | 55 fps, p90 24.9, max 60, 1 over 50 ms | 55 fps, p90 24.0, max 30, 0 over 50 ms |
+
+Held Right: 44 fps (48 before). 3 × Down: 40 (44). Loading the next title from the first move
+instead (build `index-9e42V0Zy.js`) dropped held Right to 29: every title passed rendered its
+texts and fetched its logo.
+
+### What it means
+
+- **The hero in the quad renderer halved the frame rate** (54–55 → 20–23 on a first pass): every
+  frame redrew about four full-screen layers through the rounded-rectangle shader. Hiding the GL
+  hero in the same session brought it back to 46–54 fps; JavaScript was about 2 ms a frame, so the
+  cost was the GPU's fill.
+- **PixiJS brings the hero to 45–46 / 55 fps.** On the way there, on the TV: with the whole hero
+  baked into one texture, re-baking it on every crossfade frame and every text that landed cost
+  about 10 fps (57–58 fps with bakes switched off in the same session, 46 with them on); drawing
+  the backdrops and details live around a shade drawn once removed that.
+- **Still behind GL rows with the DOM hero** on a first pass (45 vs 54–55), held Right (30 vs
+  33–40) and moving down (39 vs 47–51): the hero's backdrops are now a full-screen sprite drawn
+  every frame (two during a crossfade), on top of the shade's. Ahead of the DOM build everywhere
+  except the first pass (DOM 50–59), with far fewer long frames.
+- **Baked tiles bring the first pass to 48–53 and going back to 58–59 fps**, the best Home
+  numbers so far with the hero drawn, and 3 × Down from 39 to 43. Held Right didn't move (29–30):
+  there the cost isn't drawing tiles (a focus move now repaints only two outlines); what's left is
+  the hero changing title on every step (backdrop crossfade, the fade band redrawn every frame of
+  it) and React's work per move. A bake costs about 7 ms on the TV (a render-target switch on a
+  tiled GPU), so more than about one per frame would show; packing tiles in an atlas page would
+  batch them.
+- **The hero waiting for a rest is what held Right needed: 29 → 48 fps**, and the first pass is
+  51–60 (DOM 50–59), going back 58–60. Each move used to start a backdrop crossfade and new
+  details (texts to render, the fade band redrawn every frame of it); now a burst changes only
+  the row's position. The static outline removes the last per-move repaint of the tiles.
+- Two Chromium 69 traps found on the way: Pixi needs `String.prototype.matchAll` (73) and
+  `replaceAll` (85) (`gl/legacy.ts`), and Pixi's GPU garbage collector re-uploads textures unused
+  for a minute from their source, which the renderer had already closed: cards went blank after a
+  minute (the collector is off; the renderer has its own 64 MB budget).

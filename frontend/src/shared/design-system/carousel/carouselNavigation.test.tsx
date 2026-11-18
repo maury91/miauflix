@@ -12,6 +12,21 @@ import {
 const layout: CarouselLayout = { count: 10, perPage: 4, paging: 'item' };
 
 describe('useCarouselNavigation', () => {
+  it('keeps the focused item in the leading slot to the row end with anchor paging', () => {
+    const { result } = renderHook(() =>
+      useCarouselNavigation({ count: 5, perPage: 4, paging: 'anchor' }, 3)
+    );
+    const navigation = result.current;
+    expect(navigation.position()).toEqual({ focused: 3, leading: 3 });
+    act(() => {
+      expect(navigation.move(1)).toBe(true);
+    });
+    expect(navigation.position()).toEqual({ focused: 4, leading: 4 });
+    expect(navigation.move(1)).toBe(false);
+    act(() => navigation.reveal(1));
+    expect(navigation.position()).toEqual({ focused: 1, leading: 1 });
+  });
+
   it('moves without re-rendering its owner, and keeps one object', () => {
     let renders = 0;
     const { result } = renderHook(() => {

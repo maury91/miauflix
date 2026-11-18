@@ -16,6 +16,9 @@ import {
   useCarouselNavigation,
   useCarouselPosition,
 } from '@shared/design-system';
+import { ITEM_WIDTH_OF_HEIGHT } from '@shared/design-system/carousel/collectionGeometry';
+import { GlGroup, remPx, useGlNode, useGlPaint, useGlParent } from '@shared/design-system/gl';
+import { color, typeScale } from '@shared/design-system/tokens';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { presentError } from '@shared/lib/api-error';
 import { IDLE, imagePreloader, NEARBY } from '@shared/lib/image-preloader';
@@ -150,8 +153,10 @@ export const CategoryRow = memo(
     // homeFeedMiddleware fills for the rows Home wants. Until the first page arrives the row's
     // size is unknown, and the carousel keeps the remembered card.
     const [total, setTotal] = useState(mediaOverride?.length ?? 0);
+    // In GL the focused card always rests in the same place, under one static outline
+    const glRows = useGlParent() !== null;
     const navigation = useCarouselNavigation(
-      { count: total, perPage, paging: 'item' },
+      { count: total, perPage, paging: glRows ? 'anchor' : 'item' },
       initialIndex
     );
     // The pages the row needs change only every few cards: the row renders then, not per move
@@ -495,6 +500,42 @@ export const CategoryRow = memo(
       [category.name, onPage]
     );
 
+    // GL form (VITE_TV_GL_ROWS): the title and states are drawn; the carousel draws itself below
+    const glParent = useGlParent();
+    const titleNode = useGlNode();
+    // From the geometry, not the store: the row's sizes all come from collectionGeometry
+    const windowHeight = geometry.itemWidth / ITEM_WIDTH_OF_HEIGHT;
+    const margin = ((glParent?.width ?? 0) - geometry.contentWidth) / 2;
+    const glState = useRef<string | null>(null);
+    useGlPaint(titleNode, painter => {
+      painter.text(
+        {
+          text: category.name,
+          size: remPx(typeScale.heading.fontSize),
+          weight: typeScale.heading.fontWeight,
+          lineHeight: parseFloat(typeScale.heading.lineHeight),
+          color: color.text,
+          maxWidth: (glParent?.width ?? 0) - margin * 2,
+        },
+        margin,
+        0
+      );
+      if (glState.current)
+        painter.text(
+          {
+            text: glState.current,
+            size: remPx(typeScale.body.fontSize),
+            weight: 400,
+            lineHeight: parseFloat(typeScale.body.lineHeight),
+            color: color.textSecondary,
+            maxWidth: (glParent?.width ?? 0) - margin * 2,
+          },
+          margin,
+          windowHeight * 0.06 + windowHeight * 0.1,
+          { anchorY: 0.5 }
+        );
+    });
+
     const titleId = `category-${category.slug}`;
     const title = (
       <div className={styles.title}>
@@ -505,7 +546,9 @@ export const CategoryRow = memo(
     );
     // Loading until the row's size is known; a later page loading shows its cards as they come
     const loading = !mediaOverride && !total && (loadIntent === 'dormant' || !current.currentData);
+    glState.current = null;
     if (!mediaOverride && current.isError && !current.currentData) {
+      glState.current = errorText(current.error, 'Failed to load content.');
       return (
         <div className={styles.row}>
           {title}
@@ -519,6 +562,7 @@ export const CategoryRow = memo(
       );
     }
     if (!loading && !total) {
+      glState.current = 'Nothing here yet.';
       return (
         <div className={styles.row}>
           {title}
@@ -531,17 +575,20 @@ export const CategoryRow = memo(
       <div className={styles.row}>
         {title}
         <div className={styles.carousel}>
-          <Carousel
-            labelledBy={titleId}
-            count={loading ? 0 : total}
-            renderItem={renderItem}
-            geometry={geometry}
-            navId={navId}
-            navigation={navigation}
-            overscan={expanded ? EXPANDED_OVERSCAN : 1}
-            pageButtons={pageButtons}
-            surface="black"
-          />
+          {/* Title 5vh + its 1vh margin (categoryRow.css.ts) */}
+          <GlGroup y={windowHeight * 0.06}>
+            <Carousel
+              labelledBy={titleId}
+              count={loading ? 0 : total}
+              renderItem={renderItem}
+              geometry={geometry}
+              navId={navId}
+              navigation={navigation}
+              overscan={expanded ? EXPANDED_OVERSCAN : 1}
+              pageButtons={pageButtons}
+              surface="black"
+            />
+          </GlGroup>
           {/* A row still loading holds its place, and focus can rest on it meanwhile. Off screen
               on the TV, no spinner: Chromium 69 keeps animating it out of view. */}
           {loading && loadIntent !== 'dormant' && !(builtForTizen && !visible) && (

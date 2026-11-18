@@ -1,10 +1,28 @@
-import { type ButtonHTMLAttributes, forwardRef, type ReactNode, useId } from 'react';
+import {
+  type ButtonHTMLAttributes,
+  forwardRef,
+  type ReactNode,
+  useId,
+  useLayoutEffect,
+  useMemo,
+} from 'react';
 
 import { visuallyHidden } from '../a11y.css';
+import { GlParentProvider, remPx, useGlNode, useGlPaint, useGlParent } from '../gl';
 import { joinIds } from '../ids';
 import { type NavigableProps, useNavFocus } from '../navFocus';
 import { ProgressBar } from '../progress/Progress';
+import { radius } from '../tokens';
 import * as styles from './collectionTile.css';
+import {
+  collectionTileArt,
+  paintFocusRing,
+  paintTileFrame,
+  paintTileOverlay,
+  TILE_RATIO,
+  type TileVisualGl,
+} from './CollectionTile.gl';
+import { useFocusAnchor } from './focusAnchor';
 
 export type CollectionTileProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -38,6 +56,11 @@ export type CollectionTileProps = Omit<
   focused?: boolean;
   /** Called when the pointer moves onto the tile. */
   onPointerFocus?: () => void;
+  /**
+   * Inside a GlSurface: the visual's GL form (from the caller's `.gl.ts`). The whole tile is then
+   * one baked picture (CollectionTile.gl.ts) and `visual` isn't rendered.
+   */
+  glVisual?: TileVisualGl;
 } & NavigableProps;
 
 /**
@@ -58,6 +81,7 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
       progressText,
       focused = false,
       onPointerFocus,
+      glVisual,
       type = 'button',
       onMouseMove,
       navId,
@@ -76,6 +100,123 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
       progressText && `${id}-progress`
     );
     const hasProgress = progress !== undefined;
+
+    // GL form (inside a GlSurface): the frame, scrim, progress, text and focus outline are drawn
+    // by the renderer; the button stays for focus. With `glVisual` the tile is one baked picture
+    // and only the outline is live; otherwise the visual registers its own nodes in the frame.
+    const glParent = useGlParent();
+    const tileNode = useGlNode();
+    const visualNode = useGlNode(tileNode);
+    const overlayNode = useGlNode(tileNode);
+    const tileWidth = glParent?.width ?? 0;
+    const frameHeight = tileWidth * TILE_RATIO[ratio];
+    const active = nav.focused && !props.disabled;
+    // Under a GlFocusAnchor the outline is drawn once, where the focused tile rests
+    const focusAnchor = useFocusAnchor();
+    const anchor = glParent ? focusAnchor : null;
+    useLayoutEffect(() => {
+      if (!anchor) return;
+      anchor.set(id, active);
+      return () => anchor.set(id, false);
+    }, [anchor, active, id]);
+    useLayoutEffect(() => {
+      if (!tileNode || !overlayNode) return;
+      tileNode.set({
+        width: tileWidth,
+        height: frameHeight,
+        // On the TV the focus scale applies at once (collectionTile.css.ts)
+        scale: active ? 1.03 : 1,
+        opacity: props.disabled ? 0.4 : 1,
+      });
+      overlayNode.set({ z: 1 });
+    });
+    const art =
+      glParent && glVisual
+        ? collectionTileArt(
+            {
+              label,
+              supportingText,
+              ratio,
+              labelPlacement,
+              labelHidden,
+              progress,
+              width: tileWidth,
+            },
+            glVisual
+          )
+        : null;
+    useGlPaint(
+      tileNode,
+      painter => {
+        if (art) painter.art(art);
+        else paintTileFrame(painter, tileWidth, frameHeight);
+      },
+      [art?.key, tileWidth, frameHeight]
+    );
+    useGlPaint(
+      overlayNode,
+      painter => {
+        if (!art)
+          paintTileOverlay(painter, {
+            width: tileWidth,
+            height: frameHeight,
+            label: labelHidden ? undefined : label,
+            supportingText,
+            labelPlacement,
+            progress,
+          });
+        if (active && !anchor) paintFocusRing(painter, tileWidth, frameHeight);
+      },
+      [
+        anchor,
+        art?.key,
+        tileWidth,
+        frameHeight,
+        labelHidden,
+        label,
+        supportingText,
+        labelPlacement,
+        progress,
+        active,
+      ]
+    );
+    const visualValue = useMemo(
+      () =>
+        glParent && visualNode
+          ? {
+              renderer: glParent.renderer,
+              node: visualNode,
+              width: tileWidth,
+              height: frameHeight,
+              radius: remPx(radius.md),
+            }
+          : null,
+      [frameHeight, glParent, tileWidth, visualNode]
+    );
+    if (visualValue) {
+      return (
+        <button
+          {...props}
+          ref={nav.ref}
+          type={type}
+          className={styles.glTile}
+          data-focused={nav.focused || undefined}
+          aria-labelledby={labelId}
+          aria-describedby={describedBy}
+          onMouseMove={event => {
+            nav.onPointerFocus();
+            onPointerFocus?.();
+            onMouseMove?.(event);
+          }}
+        >
+          <span id={labelId}>{label}</span>
+          {supportingText && <span id={`${id}-supporting`}>{supportingText}</span>}
+          {badge && <span id={`${id}-badge`}>{badge}</span>}
+          {progressText && <span id={`${id}-progress`}>{progressText}</span>}
+          {!art && <GlParentProvider value={visualValue}>{visual}</GlParentProvider>}
+        </button>
+      );
+    }
 
     return (
       <button

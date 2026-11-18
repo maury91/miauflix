@@ -38,6 +38,7 @@ export {
 export { RadioGroup, type RadioGroupProps, type RadioOption } from './choice/RadioGroup';
 export { Switch, type SwitchProps } from './choice/Switch';
 export { CollectionTile, type CollectionTileProps } from './collection-tile/CollectionTile';
+export { GlFocusAnchor, type GlFocusAnchorProps } from './collection-tile/GlFocusAnchor';
 export { Dialog, type DialogProps } from './dialog/Dialog';
 export { Disclosure, type DisclosureProps } from './disclosure/Disclosure';
 export { Divider, type DividerProps } from './divider/Divider';

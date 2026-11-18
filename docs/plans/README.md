@@ -7,6 +7,8 @@ For how Miauflix works today, use the [architecture references](../architecture/
 | Document                                                    | Kind                 | Status                                          |
 | ----------------------------------------------------------- | -------------------- | ----------------------------------------------- |
 | [TV performance plan](tv-performance-plan.md)               | Plan                 | In progress; each phase records what has landed |
+| [TV GL rows plan](tv-gl-rows-plan.md)                       | Spike and plan       | Spike behind a flag; not decided                |
+| [TV GL production plan](tv-gl-production-plan.md)           | Plan                 | Phases 0–1 landed; TV numbers to re-measure     |
 | [TV remux plan](tv-remux-plan.md)                           | Plan                 | Phase 1 mostly landed; Phase 2 deferred         |
 | [Legacy UI deferred roadmap](legacy-ui-deferred-roadmap.md) | Deferred roadmap     | Deferred                                        |
 | [PR #48 CI review](pr48-ci-review-plan.md)                  | Record of a past fix | Applied; kept for the diagnosis and evidence    |

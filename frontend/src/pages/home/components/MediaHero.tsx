@@ -2,6 +2,7 @@ import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
 import { SourcePreparationStatus } from '@features/preload/ui/SourcePreparationStatus';
 import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
+import { useGlParent } from '@shared/design-system/gl';
 import {
   type BackdropFocus,
   type BackdropPositionContext,
@@ -42,6 +43,7 @@ import {
 } from '../hero-backdrop-layout';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { useRestingValue } from '../hooks/useRestingValue';
+import { GlHero, GlHeroText } from './GlHero';
 
 import StarIcon from '~icons/mdi/star';
 
@@ -140,9 +142,9 @@ const Hero = styled.header<{ $shade: HeroShade | null }>`
 `;
 
 /** How long the details fade out, and in (see BACKDROP_REST_MS). */
-const DETAILS_FADE_MS = 200;
+export const DETAILS_FADE_MS = 200;
 /** The backdrop crossfade. */
-const BACKDROP_FADE_MS = 400;
+export const BACKDROP_FADE_MS = 400;
 
 /**
  * Stacked in DOM order: a later layer fades in over the earlier ones. The image and opacity are
@@ -262,7 +264,8 @@ const BACKDROP_REST_MS = DETAILS_FADE_MS;
 const HERO_RESTING_OWNER = 'hero-resting';
 
 /**
- * The hero logo for the displayed title, preferring current artwork from the store.
+ * The hero logo for a title (the artwork store's, once current), and whether it is still being
+ * made: a logo arriving after the details would replace the title text (a flash).
  */
 function useHeroLogo(media: MediaDto | null) {
   const artwork = useSelector((state: RootState) =>
@@ -270,9 +273,11 @@ function useHeroLogo(media: MediaDto | null) {
       ? state.artwork.byMedia[`${media._type === 'movie' ? 'movie' : 'tv'}:${media.mediaId}`]
       : undefined
   );
-  if (!media) return null;
+  if (!media) return { heroLogo: null, pending: false };
   const current = artwork && artwork.artworkRevision >= (media.artworkRevision ?? 0);
-  return current ? artwork.heroLogo : (media.heroLogo ?? media.logo);
+  return current
+    ? { heroLogo: artwork.heroLogo, pending: artwork.heroLogoStatus === 'pending' }
+    : { heroLogo: media.heroLogo ?? media.logo, pending: media.heroLogoStatus === 'pending' };
 }
 
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
@@ -293,9 +298,10 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   const selectionKey = media ? `${media._type}:${media.mediaId}` : '';
   const detailsMedia = useRestingValue(media, selectionKey, builtForTizen ? DETAILS_FADE_MS : 0);
   const moving = detailsMedia !== media;
-  // The next backdrop starts loading once the selection pauses half the fade-out:
+  // The next title's texts and logo start loading once the selection pauses half the fade-out:
   // a held burst loads none of the titles it passes, a single move still gets a head start
   const pausedMedia = useRestingValue(media, selectionKey, builtForTizen ? DETAILS_FADE_MS / 2 : 0);
+  const selectedLogo = useHeroLogo(media);
   const detailsLogo = useHeroLogo(detailsMedia);
   const { media: backdropMedia, backdrop: selectedBackdrop } = useRestingValue(
     { media, backdrop: selectedArtwork?.backdrop },
@@ -306,7 +312,11 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   const backdropMediaRef = useRef(backdropMedia);
   backdropMediaRef.current = backdropMedia;
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation(IGNORE_RESULT);
-  const { margin } = useMediaBoxSizes();
+  const { margin, windowHeight } = useMediaBoxSizes();
+  // GL form (VITE_TV_GL_ROWS): inside the rows' surface the hero is drawn, sized from the window
+  const glParent = useGlParent();
+  const glRef = useRef(glParent);
+  glRef.current = glParent;
   const heroRef = useRef<HTMLElement>(null);
   const [heroSize, setHeroSize] = useState({ width: 0, height: 0 });
   const [layers, setLayersState] = useState<StackedBackdrop<BackdropLayerState>[]>([]);
@@ -382,6 +392,8 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       // fade never runs (reduced motion, a hidden page).
       requestAnimationFrame(() => {
         setLayers(stack => revealBackdrop(stack, id));
+        // GL settles the layer when its fade lands, after its texture is up (can be >400 ms)
+        if (glRef.current) return;
         const timer = window.setTimeout(() => {
           settleTimers.current.delete(timer);
           settle(id);
@@ -465,6 +477,8 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     const url = imagePreloader.isLoaded(restingUrl)
       ? restingUrl
       : artworkUrl(pausedBackdrop, 'backdrop');
+    const gl = glRef.current;
+    if (gl) gl.renderer.preload(url, gl.width);
     imagePreloader.load(url, URGENT).catch(() => undefined);
     const key = `${media._type}:${media.mediaId}:${url}`;
     if (media.backdropFocus || focusCacheRef.current.has(key)) return;
@@ -479,7 +493,8 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pausedBackdrop, media?.mediaId, media?._type]);
 
-  const layout = getHeroBackdropLayout(heroSize.width, margin);
+  const size = glParent ? { width: glParent.width, height: windowHeight * 0.55 } : heroSize;
+  const layout = getHeroBackdropLayout(size.width, margin);
   // The hero spans the viewport (`100vw` in the CSS version)
   const shade = useMemo(
     () => (builtForTizen ? getHeroTextGeometry(window.innerWidth, margin) : null),
@@ -490,7 +505,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       imageWidth: layer.imageWidth,
       imageHeight: layer.imageHeight,
       containerWidth: layout?.width ?? 0,
-      containerHeight: heroSize.height,
+      containerHeight: size.height,
       targetX: layout?.targetX,
       targetY: layout?.targetY,
       maxZoom: 1.5,
@@ -498,6 +513,30 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     const placement = getBackdropPlacement(layer.focus, context);
     return { backgroundPosition: placement.position, backgroundSize: placement.size };
   };
+  if (glParent) {
+    return (
+      <>
+        <GlHero
+          media={detailsMedia}
+          heroLogo={detailsLogo.heroLogo}
+          logoPending={detailsLogo.pending}
+          moving={moving}
+          upcoming={
+            moving && media && pausedMedia === media
+              ? { media, heroLogo: selectedLogo.heroLogo }
+              : null
+          }
+          layers={layers}
+          onSettle={settle}
+          detailsLeft={margin}
+          windowHeight={windowHeight}
+          preparation={preparation}
+          availability={availability}
+        />
+        <GlHeroText media={media} />
+      </>
+    );
+  }
 
   if (!media) return <Hero ref={heroRef} $shade={shade} aria-hidden="true" />;
   return (
@@ -519,7 +558,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       {detailsMedia && (
         <HeroDetails
           media={detailsMedia}
-          heroLogo={detailsLogo}
+          heroLogo={detailsLogo.heroLogo}
           preparation={preparation}
           availability={availability}
           hidden={moving}
