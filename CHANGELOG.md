@@ -14,6 +14,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- The catalog service's Docker image starts without internet access: it used to download its image library from the package registry on every start, and stopped with an error when it could not
 - The player no longer says "Trying source N of M" after a seek or audio track switch with converted audio. It says what the server is doing instead: downloading that part of the file, or converting it
 - Home: rows you scroll to with the mouse wheel or touch, without pointing at a title, now load instead of staying empty
 - The player no longer stays on "Trying source…" forever when a source fails before its file can be checked: it moves on to the next source

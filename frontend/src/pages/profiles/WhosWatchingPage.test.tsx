@@ -146,6 +146,33 @@ describe('WhosWatchingPage', () => {
     expect(screen.queryAllByRole('button', { name: /^Edit / })).toHaveLength(0);
   });
 
+  it('shows every profile’s edit button on a touch screen, editing without switching', () => {
+    const matchMedia = vi.mocked(window.matchMedia);
+    const original = matchMedia.getMockImplementation();
+    matchMedia.mockImplementation(
+      query =>
+        ({
+          matches: query.includes('pointer: coarse'),
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        }) as unknown as MediaQueryList
+    );
+    try {
+      const { onEdit, onSelect } = setupTest();
+      expect(screen.getByRole('button', { name: 'Edit Maurizio' })).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'Edit Alex' }));
+      expect(onEdit).toHaveBeenCalledWith(expect.objectContaining({ session: 's2' }));
+      expect(onSelect).not.toHaveBeenCalled();
+    } finally {
+      matchMedia.mockImplementation(original!);
+    }
+  });
+
   it('reaches Back on the rail with Left from the first profile', () => {
     const { onBack } = setupTest();
     place();

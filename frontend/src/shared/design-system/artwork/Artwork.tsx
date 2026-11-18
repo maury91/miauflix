@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 import * as styles from './artwork.css';
 import { useImageStatus } from './useImageStatus';
@@ -19,6 +19,13 @@ export interface ArtworkProps {
   fallback?: ReactNode;
   /** Called once `src` fails to load (not when it is absent). */
   onError?: () => void;
+  /** Called once `src` has loaded. */
+  onLoad?: () => void;
+  /**
+   * While a new `src` loads, keep showing the last one that loaded instead of the placeholder (a
+   * newer version of the same picture). Off by default.
+   */
+  holdPrevious?: boolean;
 }
 
 /**
@@ -32,14 +39,27 @@ export function Artwork({
   fit = 'cover',
   fallback,
   onError,
+  onLoad,
+  holdPrevious = false,
 }: ArtworkProps) {
   const { status, imageProps } = useImageStatus(src);
   const failed = Boolean(src) && status === 'failed';
+  const loaded = Boolean(src) && status === 'loaded';
+  const [lastLoaded, setLastLoaded] = useState<string | null>(null);
   useEffect(() => {
     if (failed) onError?.();
     // Once per failing source; a new callback for the same failure is not a new failure
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [failed, src]);
+  useEffect(() => {
+    if (!loaded || !src) return;
+    setLastLoaded(src);
+    onLoad?.();
+    // Once per loaded source
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded, src]);
+  const held =
+    holdPrevious && status === 'loading' && lastLoaded && lastLoaded !== src ? lastLoaded : null;
   // A described image keeps its description when the picture is missing or fails
   const describedFallback = status === 'failed' && alt !== '';
   return (
@@ -51,6 +71,16 @@ export function Artwork({
       role={describedFallback ? 'img' : undefined}
       aria-label={describedFallback ? alt : undefined}
     >
+      {held && (
+        <img
+          key={held}
+          className={styles.heldImage}
+          src={held}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+        />
+      )}
       {src && status !== 'failed' && (
         <img
           {...imageProps}

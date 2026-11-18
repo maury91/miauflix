@@ -157,9 +157,14 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
     setHops(count => count + 1);
   };
 
-  /** The TV keyboard's Done moves on to the next field. */
+  /**
+   * The TV keyboard's Done moves on to the next field, and only that: never a native submit of the
+   * form (Save is pressed on purpose). The shared key handling sees Done first (capture phase).
+   */
   const nextOnDone = (next: string) => (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === TIZEN_IME_DONE) navigation.focus(next);
+    if (event.keyCode !== TIZEN_IME_DONE) return;
+    event.preventDefault();
+    navigation.focus(next);
   };
 
   const submit = async () => {

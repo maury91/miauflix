@@ -3,6 +3,7 @@ import { describe, expect, it } from 'bun:test';
 import sharp from 'sharp';
 
 import {
+  approvedImageUrl,
   cardImageCacheBytes,
   CardImageService,
   fetchImage,
@@ -54,6 +55,22 @@ describe('cardImageCacheBytes', () => {
     expect(cardImageCacheBytes('8')).toBe(8 * 1024 * 1024);
     expect(cardImageCacheBytes('0')).toBe(0);
     expect(cardImageCacheBytes('nope')).toBe(100 * 1024 * 1024);
+  });
+});
+
+describe('approvedImageUrl', () => {
+  it('allows TMDB image URLs only', () => {
+    expect(approvedImageUrl('https://image.tmdb.org/t/p/w780/a.jpg')).toBe(
+      'https://image.tmdb.org/t/p/w780/a.jpg'
+    );
+    for (const url of [
+      'http://image.tmdb.org/t/p/w780/a.jpg',
+      'https://image.tmdb.org:8443/t/p/w780/a.jpg',
+      'https://evil.example/t/p/w780/a.jpg',
+      'http://169.254.169.254/latest/meta-data',
+      'not a url',
+    ])
+      expect(() => approvedImageUrl(url)).toThrow();
   });
 });
 
@@ -212,5 +229,80 @@ describe('CardImageService', () => {
     } finally {
       globalThis.fetch = originalFetch;
     }
+  });
+
+  it('refuses to download images from other origins', async () => {
+    const provider = fakeProvider();
+    const service = new CardImageService(10 * 1024 * 1024, provider.fetcher);
+    await expect(
+      service.render({ ...source, backdrop: 'https://evil.example/t/p/w300/b.jpg' }, 'sm', 'jpeg')
+    ).rejects.toThrow('origin not allowed');
+    expect(provider.requests.some(url => url.includes('evil'))).toBe(false);
+  });
+
+  it('keeps the slot until both downloads settle when the logo fails', async () => {
+    const pending: Array<() => void> = [];
+    const started: string[] = [];
+    const backdrop = await solid(780, 439, '#204060');
+    const fetcher = (url: string) => {
+      started.push(url);
+      if (url.includes('logo')) return Promise.reject(new Error('logo unavailable'));
+      if (url.includes('slow'))
+        return new Promise<Buffer>(resolve => pending.push(() => resolve(backdrop)));
+      return Promise.resolve(backdrop);
+    };
+    const service = new CardImageService(10 * 1024 * 1024, fetcher);
+    const slow = (n: number) => ({
+      backdrop: `https://image.tmdb.org/t/p/w300/slow-${n}.jpg`,
+      logo: `https://image.tmdb.org/t/p/w300/logo-${n}.png`,
+      title: 'Slow',
+    });
+    // Four masters fill the slots; each one's logo fails while its backdrop is still downloading
+    const failing = [1, 2, 3, 4].map(n =>
+      service.render(slow(n), 'sm', 'jpeg').then(
+        () => 'drawn',
+        (error: Error) => error.message
+      )
+    );
+    const fifth = service.render(
+      { backdrop: 'https://image.tmdb.org/t/p/w300/fifth.jpg', logo: '', title: 'Fifth' },
+      'sm',
+      'jpeg'
+    );
+    await Bun.sleep(20);
+    expect(started.some(url => url.includes('fifth'))).toBe(false);
+    for (const release of pending.splice(0)) release();
+    expect(await Promise.all(failing)).toEqual(Array(4).fill('logo unavailable'));
+    expect((await fifth).bytes.byteLength).toBeGreaterThan(0);
+  });
+
+  it('drops a queued drawing once no caller needs it, and shares one until the last leaves', async () => {
+    const waits: Array<() => void> = [];
+    const backdrop = await solid(780, 439, '#204060');
+    const started: string[] = [];
+    const fetcher = (url: string) => {
+      started.push(url);
+      return new Promise<Buffer>(resolve => waits.push(() => resolve(backdrop)));
+    };
+    const service = new CardImageService(10 * 1024 * 1024, fetcher);
+    const titled = (name: string) => ({
+      backdrop: `https://image.tmdb.org/t/p/w300/${name}.jpg`,
+      logo: '',
+      title: 'Name',
+    });
+    const busy = ['a', 'b', 'c', 'd'].map(name => service.render(titled(name), 'sm', 'jpeg'));
+    const first = new AbortController();
+    const second = new AbortController();
+    const one = service.render(titled('queued'), 'sm', 'jpeg', first.signal);
+    const two = service.render(titled('queued'), 'md', 'jpeg', second.signal);
+    first.abort(new Error('gone'));
+    await expect(one).rejects.toThrow('gone');
+    second.abort(new Error('gone too'));
+    await expect(two).rejects.toThrow('gone too');
+    // The slots free up: the cancelled drawing never starts its download
+    for (const release of waits.splice(0)) release();
+    await Promise.all(busy);
+    await Bun.sleep(10);
+    expect(started.some(url => url.includes('queued'))).toBe(false);
   });
 });

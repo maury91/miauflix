@@ -71,7 +71,8 @@ const setupReady = () => {
   const rendered: unknown[][] = [];
   const cardImages = {
     render: async (...args: unknown[]) => {
-      rendered.push(args);
+      rendered.push(args.slice(0, 3));
+      expect(args[3]).toBeInstanceOf(AbortSignal);
       return { bytes: new Uint8Array([1, 2, 3]), contentType: 'image/webp', etag: '"tag"' };
     },
   };

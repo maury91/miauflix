@@ -204,6 +204,40 @@ describe('ListService refresh safety', () => {
     });
   });
 
+  it('answers a cold page past a shrunken list with its total, and still fails on real errors', async () => {
+    const { database, listClient, catalogClient, mediaListRepository } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    const firstPage = {
+      listId: publicDefinition.id,
+      page: 1,
+      totalPages: 1,
+      totalItems: 40,
+      items: Array.from({ length: 40 }, (_, index) => ({
+        media: { mediaType: 'movie', ids: { tmdb: 1000 + index } },
+      })),
+    };
+    listClient.getPage.mockImplementation(async (_subject, _slug, page) => {
+      if (page === 1) return firstPage as never;
+      throw new Error('page out of range');
+    });
+    const service = new ListService(database, catalogClient, listClient);
+
+    // Zero-based page 2 of 20 (cards 40-59) spans provider pages 1 and 2; page 2 is past the end
+    const past = await service.getListPage('trakt-movies-popular', 'en', 2, 20);
+    expect(past.total).toBe(40);
+    expect(past.medias).toEqual([]);
+    // Zero-based page 3 (cards 60-79) is all on provider page 2: page 1 gives the total
+    const further = await service.getListPage('trakt-movies-popular', 'en', 3, 20);
+    expect(further.total).toBe(40);
+
+    listClient.getPage.mockRejectedValue(new Error('provider down'));
+    await expect(service.getListPage('trakt-movies-popular', 'en', 0, 20)).rejects.toThrow(
+      'provider down'
+    );
+  });
+
   it('retries individual entries when a bulk projection fails', async () => {
     const { database, listClient, catalogClient, mediaListRepository } = setupTest();
     mediaListRepository.findBySlug = jest

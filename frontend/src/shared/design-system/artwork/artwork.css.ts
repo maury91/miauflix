@@ -54,6 +54,9 @@ export const image = style({
   },
 });
 
+/** The previous picture, kept in view under a new one still loading (`holdPrevious`). */
+export const heldImage = style([image, { opacity: 1, transition: 'none' }]);
+
 /** The fallback fills the same box, centred: a title, an icon, a logo. */
 export const fallback = style({
   position: 'absolute',

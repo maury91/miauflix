@@ -13,7 +13,7 @@ import sharp, { type OverlayOptions } from 'sharp';
 
 import { logger } from '../logger';
 import { ByteLru } from '../utils/byte-lru';
-import { SingleFlight } from '../utils/single-flight';
+import { SharedJobs } from '../utils/single-flight';
 
 const SCOPE = 'CardImages';
 
@@ -53,6 +53,24 @@ const CONTENT_TYPES: Record<CardImageFormat, string> = {
   jpeg: 'image/jpeg',
   webp: 'image/webp',
 };
+
+/** The only place card images download from: TMDB's image server, over HTTPS. */
+const IMAGE_ORIGIN = 'https://image.tmdb.org';
+
+/**
+ * The URL to download a provider image from, refusing any other origin: stored artwork URLs are
+ * built from the provider's configuration, so a card image must not fetch wherever they point.
+ */
+export function approvedImageUrl(url: string): string {
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    throw new Error(`Not an image URL: ${url}`);
+  }
+  if (parsed.origin !== IMAGE_ORIGIN) throw new Error(`Image origin not allowed: ${url}`);
+  return parsed.href;
+}
 
 /** A provider image URL (or bare path) at the given rendition. */
 export function providerImageUrl(url: string, size: string): string {
@@ -116,7 +134,7 @@ export function defaultFontFile(): string | undefined {
  */
 export class CardImageService {
   private readonly cache: ByteLru<Bytes>;
-  private readonly flights = new SingleFlight();
+  private readonly jobs = new SharedJobs();
   private running = 0;
   private readonly waiting: Array<() => void> = [];
 
@@ -136,10 +154,15 @@ export class CardImageService {
     this.cache.resize(bytes);
   }
 
+  /**
+   * `signal`: the caller no longer needs the image. A drawing still waiting for a slot is dropped
+   * once no caller needs it; one already drawing finishes (and is cached).
+   */
   async render(
     source: CardImageSource,
     size: CardImageSize,
-    format: CardImageFormat
+    format: CardImageFormat,
+    signal?: AbortSignal
   ): Promise<CardImage> {
     const masterKey = this.masterKey(source);
     const key = `${masterKey}:${size}:${format}`;
@@ -147,21 +170,25 @@ export class CardImageService {
     const etag = `"${key}"`;
     const cached = this.cache.get(key);
     if (cached) return { bytes: cached, contentType, etag };
-    const bytes = await this.flights.run(key, async () => {
-      const master = await this.master(masterKey, source);
-      const { width, height } = CARD_IMAGE_SIZES[size];
-      let image = sharp(master);
-      if (width !== MASTER.width) image = image.resize(width, height);
-      const encoded = new Uint8Array(
-        await (
-          format === 'webp'
-            ? image.webp({ quality: 80, effort: 4 })
-            : image.jpeg({ quality: 82, progressive: false, mozjpeg: false })
-        ).toBuffer()
-      );
-      this.cache.set(key, encoded);
-      return encoded;
-    });
+    const bytes = await this.jobs.run(
+      key,
+      async jobSignal => {
+        const master = await this.master(masterKey, source, jobSignal);
+        const { width, height } = CARD_IMAGE_SIZES[size];
+        let image = sharp(master);
+        if (width !== MASTER.width) image = image.resize(width, height);
+        const encoded = new Uint8Array(
+          await (
+            format === 'webp'
+              ? image.webp({ quality: 80, effort: 4 })
+              : image.jpeg({ quality: 82, progressive: false, mozjpeg: false })
+          ).toBuffer()
+        );
+        this.cache.set(key, encoded);
+        return encoded;
+      },
+      signal
+    );
     return { bytes, contentType, etag };
   }
 
@@ -174,22 +201,25 @@ export class CardImageService {
   }
 
   /** The drawn image at the largest size, losslessly enough to scale from (JPEG at 95). */
-  private master(key: string, source: CardImageSource): Promise<Bytes> {
+  private master(key: string, source: CardImageSource, signal: AbortSignal): Promise<Bytes> {
     const cacheKey = `${key}:master`;
     const cached = this.cache.get(cacheKey);
     if (cached) return Promise.resolve(cached);
-    return this.flights.run(cacheKey, () =>
-      this.limited(async () => {
-        const started = performance.now();
-        const master = await this.draw(source);
-        this.cache.set(cacheKey, master);
-        logger.debug(SCOPE, 'Card image drawn', {
-          ms: Math.round(performance.now() - started),
-          bytes: master.byteLength,
-          cachedBytes: this.cache.bytes,
-        });
-        return master;
-      })
+    return this.jobs.run(
+      cacheKey,
+      jobSignal =>
+        this.limited(jobSignal, async () => {
+          const started = performance.now();
+          const master = await this.draw(source);
+          this.cache.set(cacheKey, master);
+          logger.debug(SCOPE, 'Card image drawn', {
+            ms: Math.round(performance.now() - started),
+            bytes: master.byteLength,
+            cachedBytes: this.cache.bytes,
+          });
+          return master;
+        }),
+      signal
     );
   }
 
@@ -201,8 +231,10 @@ export class CardImageService {
       bottom: Math.round(MASTER.height * CARD_IMAGE_LOGO_BOX.bottom),
     };
     const boxHeight = box.bottom - box.top;
-    const [backdrop, overlays] = await Promise.all([
-      this.fetcher(providerImageUrl(source.backdrop, 'w780')),
+    // Both settle before the slot is given back, so a failed logo never leaves the backdrop's
+    // download running beside the next master's
+    const [backdropResult, overlaysResult] = await Promise.allSettled([
+      this.fetcher(approvedImageUrl(providerImageUrl(source.backdrop, 'w780'))),
       source.logo
         ? this.logoLayer(source.logo, box.width, boxHeight).then(logo => [
             { input: logo.data, left: box.left, top: box.bottom - logo.info.height },
@@ -211,6 +243,10 @@ export class CardImageService {
           ? this.titleLayers(source.title, box, boxHeight)
           : Promise.resolve([]),
     ]);
+    if (backdropResult.status === 'rejected') throw backdropResult.reason;
+    if (overlaysResult.status === 'rejected') throw overlaysResult.reason;
+    const backdrop = backdropResult.value;
+    const overlays = overlaysResult.value;
     const image = await sharp(backdrop)
       .resize(MASTER.width, MASTER.height, { fit: 'cover', position: 'centre' })
       .composite(overlays)
@@ -220,7 +256,7 @@ export class CardImageService {
   }
 
   private async logoLayer(url: string, width: number, height: number) {
-    const bytes = await this.fetcher(providerImageUrl(url, 'w500'));
+    const bytes = await this.fetcher(approvedImageUrl(providerImageUrl(url, 'w500')));
     // An SVG logo rasterizes at its own size: a higher density keeps it sharp when scaled up
     const vector = /\.svg$/iu.test(url);
     return sharp(bytes, vector ? { density: 288 } : {})
@@ -274,15 +310,37 @@ export class CardImageService {
     ];
   }
 
-  private async limited<T>(operation: () => Promise<T>): Promise<T> {
-    if (this.running >= MAX_CONCURRENT_MASTERS)
-      await new Promise<void>(resolve => this.waiting.push(resolve));
-    this.running += 1;
+  /** Runs `operation` in one of the master slots; while waiting, an aborted `signal` leaves the queue. */
+  private async limited<T>(signal: AbortSignal, operation: () => Promise<T>): Promise<T> {
+    await this.acquire(signal);
     try {
       return await operation();
     } finally {
-      this.running -= 1;
-      this.waiting.shift()?.();
+      // The slot passes straight to the next waiter, so no newcomer can take it in between
+      const next = this.waiting.shift();
+      if (next) next();
+      else this.running -= 1;
     }
+  }
+
+  private acquire(signal: AbortSignal): Promise<void> {
+    signal.throwIfAborted();
+    if (this.running < MAX_CONCURRENT_MASTERS) {
+      this.running += 1;
+      return Promise.resolve();
+    }
+    return new Promise<void>((resolve, reject) => {
+      const granted = () => {
+        signal.removeEventListener('abort', cancel);
+        resolve();
+      };
+      const cancel = () => {
+        const index = this.waiting.indexOf(granted);
+        if (index >= 0) this.waiting.splice(index, 1);
+        reject(signal.reason);
+      };
+      this.waiting.push(granted);
+      signal.addEventListener('abort', cancel, { once: true });
+    });
   }
 }

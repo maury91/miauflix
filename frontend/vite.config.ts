@@ -292,6 +292,16 @@ export default defineConfig({
       '@types': path.resolve(__dirname, './src/types'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@/__test-utils__': path.resolve(__dirname, './src/__test-utils__'),
+      // The runtime-free contract modules the app imports, from source: tests and dev servers then
+      // work without building the package first (a clean checkout running `vitest` directly)
+      '@miauflix/service-contracts/card-image/v1': path.resolve(
+        __dirname,
+        '../packages/service-contracts/src/card-image.ts'
+      ),
+      '@miauflix/service-contracts/profiles/v1': path.resolve(
+        __dirname,
+        '../packages/service-contracts/src/profiles.ts'
+      ),
     },
   },
 });

@@ -5,15 +5,28 @@ import { space } from '../tokens';
 /**
  * Tabs (docs/plans/style-guide.md, sections 4 and 8.2): tabs are Buttons (pills, inverted fill):
  * the selected tab has the translucent fill, the focused one is white. The tablist lays them out;
- * labels never wrap.
+ * labels never wrap: a horizontal list too narrow for its tabs wraps onto another row instead of
+ * squeezing them (a phone's profile editor).
  */
 
 export const tablist = style({
   display: 'flex',
   alignItems: 'center',
   selectors: {
+    // Rows of wrapped tabs keep a gap without flex `gap` (Chromium 69): margins, cancelled here
+    '&[data-orientation="horizontal"]': {
+      flexWrap: 'wrap',
+      marginTop: `-${space['2xs']}`,
+      marginBottom: `-${space['2xs']}`,
+    },
     '&[data-orientation="vertical"]': { flexDirection: 'column', alignItems: 'stretch' },
   },
+});
+
+globalStyle(`${tablist}[data-orientation="horizontal"] > *`, {
+  flexShrink: 0,
+  marginTop: space['2xs'],
+  marginBottom: space['2xs'],
 });
 
 globalStyle(`${tablist}[data-orientation="horizontal"] > * + *`, { marginLeft: space.xs });

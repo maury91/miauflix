@@ -28,11 +28,17 @@ export const rail = style({
   height: '100%',
 });
 
+/** Below this width the preview sits above the form, so the form keeps room for every tab. */
+const NARROW = '(max-width: 560px)';
+
 export const body = style({
   display: 'flex',
   flex: '1 1 0%',
   minWidth: 0,
   height: '100%',
+  '@media': {
+    [NARROW]: { flexDirection: 'column' },
+  },
 });
 
 export const preview = style({
@@ -45,6 +51,7 @@ export const preview = style({
   padding: `6rem ${space.xl} ${space.xl}`,
   '@media': {
     '(max-width: 760px)': { flexBasis: '40%', padding: `5rem ${space.md} ${space.md}` },
+    [NARROW]: { flex: 'none', padding: `${space.lg} ${space.md} 0` },
   },
 });
 
@@ -58,6 +65,9 @@ export const stage = style({
   width: '100%',
   maxWidth: '52vh',
   margin: `${space.lg} 0`,
+  '@media': {
+    [NARROW]: { maxWidth: '28vh', margin: `${space.sm} 0` },
+  },
 });
 
 export const stageSquare = style({
@@ -79,6 +89,9 @@ export const form = style({
   flex: '1 1 0%',
   minWidth: 0,
   height: '100%',
+  '@media': {
+    [NARROW]: { height: 'auto', minHeight: 0 },
+  },
 });
 
 export const formContent = style({
@@ -87,5 +100,6 @@ export const formContent = style({
   padding: `6rem ${space.xl} ${space.xl}`,
   '@media': {
     '(max-width: 760px)': { padding: `5rem ${space.md} ${space.md}` },
+    [NARROW]: { padding: `${space.md} ${space.md} ${space.xl}` },
   },
 });

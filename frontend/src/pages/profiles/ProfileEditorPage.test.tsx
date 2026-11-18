@@ -210,6 +210,17 @@ describe('ProfileEditorPage', () => {
     );
   });
 
+  it('moves on with the TV keyboard’s Done without submitting the form', () => {
+    setupTest(null);
+    fireEvent.change(screen.getByLabelText('Profile name'), { target: { value: 'Sam' } });
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough' } });
+    const done = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 65376 });
+    screen.getByLabelText('Email').dispatchEvent(done);
+    expect(done.defaultPrevented).toBe(true);
+    expect(mocks.createProfile).not.toHaveBeenCalled();
+  });
+
   it('shows the server’s reason when saving fails', async () => {
     mocks.createProfile.mockResolvedValue({
       error: { status: 409, data: 'An account with this email already exists' },

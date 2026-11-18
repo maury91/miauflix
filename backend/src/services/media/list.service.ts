@@ -500,12 +500,25 @@ export class ListService {
     const start = page * limit;
     const firstProviderPage = Math.floor(start / providerPageSize) + 1;
     const lastProviderPage = Math.floor((start + limit - 1) / providerPageSize) + 1;
-    const providerPages = await Promise.all(
-      Array.from({ length: lastProviderPage - firstProviderPage + 1 }, (_, index) =>
-        this.listClient.getPage(subjectId, slug, firstProviderPage + index)
-      )
+    const pageNumbers = Array.from(
+      { length: lastProviderPage - firstProviderPage + 1 },
+      (_, index) => firstProviderPage + index
     );
-    const providerItems = providerPages.flatMap(result => result.items);
+    const settled = await Promise.allSettled(
+      pageNumbers.map(number => this.listClient.getPage(subjectId, slug, number))
+    );
+    // A page past the list's end may fail at the provider: a client asking for a remembered card
+    // beyond a list that has since shrunk still gets the total, so it can step back into range
+    let size = settled.find(result => result.status === 'fulfilled')?.value;
+    if (!size) {
+      if (firstProviderPage === 1) throw (settled[0] as PromiseRejectedResult).reason;
+      size = await this.listClient.getPage(subjectId, slug, 1);
+    }
+    const providerItems = settled.flatMap((result, index) => {
+      if (result.status === 'fulfilled') return result.value.items;
+      if (pageNumbers[index]! <= size.totalPages) throw result.reason;
+      return [];
+    });
     const firstItemOffset = start - (firstProviderPage - 1) * providerPageSize;
     const requestedItems = providerItems.slice(firstItemOffset, firstItemOffset + limit);
     const refs = await this.resolveExternalRefs(requestedItems.map(item => item.media));
@@ -520,7 +533,7 @@ export class ListService {
       start,
       loadPriority
     );
-    return { medias, total: providerPages[0]?.totalItems ?? 0 };
+    return { medias, total: size.totalItems };
   }
 
   getListContent(slug: string, language = 'en', subjectId = 'public') {

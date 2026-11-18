@@ -120,6 +120,49 @@ describe('live media artwork', () => {
     expect(sources()).toEqual([props.media.backdrop, props.media.logo]);
   });
 
+  it('keeps the title visible until the card image shows, and the old image while a newer loads', () => {
+    const store = configureStore({ reducer: { artwork: artworkSlice.reducer } });
+    const props = {
+      media: {
+        ...media,
+        backdrop: 'https://image.test/b.jpg',
+        logo: 'https://image.test/l.png',
+        artworkRevision: 1,
+      },
+      width: 320,
+      onSelect: vi.fn(),
+    };
+    const view = render(
+      <Provider store={store}>
+        <MediaCard {...props} />
+      </Provider>
+    );
+    const card = screen.getByRole('button');
+    const label = () => document.getElementById(card.getAttribute('aria-labelledby')!)!;
+    const sources = () => [...view.container.querySelectorAll('img')].map(image => image.src);
+    const visibleClass = label().className;
+    act(() => {
+      view.container.querySelector('img')!.dispatchEvent(new Event('load'));
+    });
+    // The card image has the title drawn in: the overlay title steps aside only now
+    expect(label().className).not.toBe(visibleClass);
+    view.rerender(
+      <Provider store={store}>
+        <MediaCard {...props} media={{ ...props.media, artworkRevision: 2 }} />
+      </Provider>
+    );
+    // The revision-1 image stays in view under the revision-2 one until it loads
+    expect(sources()).toEqual([
+      expect.stringMatching(/\?rev=1$/u),
+      expect.stringMatching(/\?rev=2$/u),
+    ]);
+    expect(label().className).not.toBe(visibleClass);
+    act(() => {
+      view.container.querySelectorAll('img')[1]!.dispatchEvent(new Event('load'));
+    });
+    expect(sources()).toEqual([expect.stringMatching(/\?rev=2$/u)]);
+  });
+
   it('loads the hero backdrop from the same revision as its logo', () => {
     const requested: string[] = [];
     class PendingImage {

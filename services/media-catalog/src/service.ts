@@ -194,7 +194,7 @@ export const createCatalogService = (context: ServiceContext): Service => {
       if (format !== 'jpeg' && format !== 'webp') ctx.fail('bad_request', 'Unknown image format');
       const source = catalog().cardImageSource({ mediaType, mediaId }, CARD_IMAGE_LANGUAGE);
       if (!source) return ctx.fail('not_found', 'Unknown title, or one without a backdrop');
-      const image = await context.cardImages.render(source, size, format);
+      const image = await context.cardImages.render(source, size, format, ctx.signal);
       const headers: Record<string, string> = {
         'content-type': image.contentType,
         'content-length': String(image.bytes.byteLength),

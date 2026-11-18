@@ -23,7 +23,9 @@ export type MediaTileProps = Omit<
   /**
    * A landscape backdrop with the title already drawn in (the logo, or the name): preferred over
    * `artwork` and `logo`, since one image paints faster than two layers. Over the artwork it stands
-   * in for the visible title. If it fails to load, the tile shows `artwork` and `logo` instead.
+   * in for the visible title, once it has shown: until then the title stays visible, and a newer
+   * version keeps the previous one in view while it loads. If it fails to load, the tile shows
+   * `artwork` and `logo` instead.
    */
   titledArtwork?: string | null;
   /** A short quality or availability label ("4K", "New"), top start corner. */
@@ -41,6 +43,8 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
 ) {
   const [logoFailed, setLogoFailed] = useState<string | null>(null);
   const [titledFailed, setTitledFailed] = useState<string | null>(null);
+  // A titled image has shown in this tile: one stays in view from then on (see holdPrevious)
+  const [titledShown, setTitledShown] = useState(false);
   const titled =
     ratio === 'landscape' && titledArtwork && titledFailed !== titledArtwork ? titledArtwork : null;
   const showLogo = !titled && ratio === 'landscape' && logo && logoFailed !== logo;
@@ -50,7 +54,7 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
       ref={forwardedRef}
       label={title}
       labelPlacement={labelPlacement}
-      labelHidden={Boolean(titled || showLogo) && labelPlacement === 'overlay'}
+      labelHidden={Boolean((titled && titledShown) || showLogo) && labelPlacement === 'overlay'}
       ratio={ratio}
       badge={
         badge ? <Badge accessibleLabel={badge.accessibleLabel}>{badge.label}</Badge> : undefined
@@ -62,6 +66,8 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
             ratio="fill"
             fallback={<span className={styles.fallbackTitle}>{title}</span>}
             onError={titled ? () => setTitledFailed(titled) : undefined}
+            onLoad={titled ? () => setTitledShown(true) : undefined}
+            holdPrevious={Boolean(titled)}
           />
           {showLogo && (
             <span className={styles.logo}>

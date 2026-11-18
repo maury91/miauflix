@@ -8,6 +8,7 @@ import {
   SurfaceContextProvider,
 } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { useTouchScreen } from '@shared/hooks/useTouchScreen';
 import { FocusGroup, FocusScope, NavigationProvider, useActiveIdWithin } from '@shared/navigation';
 import { useAppSelector } from '@store/hooks';
 import {
@@ -104,7 +105,8 @@ function WhosWatchingScreen({
   const initialId = initialUserId ? profileNavId(initialUserId) : adminSession ? NAV.add : NAV.back;
 
   // The profile whose edit button shows: the one holding focus, kept while focus is on the rail,
-  // none on Add profile
+  // none on Add profile. On a touch screen nothing holds focus, so every profile shows its own
+  const touch = useTouchScreen();
   const [editUserId, setEditUserId] = useState<string | null>(initialUserId ?? null);
   useEffect(() => {
     if (active === null) return;
@@ -146,7 +148,7 @@ function WhosWatchingScreen({
                       />
                       {/* Room kept under every profile, so the button never moves the row */}
                       <div className={styles.editSlot}>
-                        {editUserId === userId && (
+                        {(touch || editUserId === userId) && (
                           <IconButton
                             navId={editNavId(userId)}
                             label={`Edit ${name}`}

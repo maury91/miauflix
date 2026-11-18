@@ -7,7 +7,7 @@
 //   {"key": "ArrowRight", "repeat": 4, "delay": 600}  press a key (delay: ms after each press, default 250)
 //   {"hold": "ArrowDown", "ms": 2500}                hold a key (auto-repeat every 50 ms), then release
 //   {"wait": 1000}                                   wait
-//   {"reload": true}                                 reload the page and wait for it to load, so what
+//   {"reload": true, "ms": 60000}                    reload the page and wait for it to load, so what
 //                                                    follows starts cold (a remembered profile opens on
 //                                                    Home, after the intro: wait for a focused card)
 //   {"until": "<expression>", "ms": 30000}           wait until an expression is truthy (polled every 250 ms)
@@ -92,15 +92,45 @@ if (!page) throw new Error(`No page to debug at ${host}`);
 const ws = new WebSocket(page.webSocketDebuggerUrl);
 let nextId = 0;
 const pending = new Map();
-const send = (method, params = {}) =>
+/** A DevTools command; with `timeoutMs` it fails (and stops waiting for its answer) past it. */
+const send = (method, params = {}, timeoutMs) =>
   new Promise((resolve, reject) => {
     const id = ++nextId;
-    pending.set(id, { resolve, reject });
+    let timer;
+    const settle = callback => value => {
+      clearTimeout(timer);
+      callback(value);
+    };
+    pending.set(id, { resolve: settle(resolve), reject: settle(reject) });
+    if (timeoutMs !== undefined)
+      timer = setTimeout(
+        () => {
+          pending.delete(id);
+          reject(new Error(`${method} did not answer within ${Math.round(timeoutMs)} ms`));
+        },
+        Math.max(0, timeoutMs)
+      );
     ws.send(JSON.stringify({ id, method, params }));
   });
 const eventWaiters = new Map();
-const nextEvent = method =>
-  new Promise((resolve, reject) => eventWaiters.set(method, { resolve, reject }));
+/** The next `method` event, failing past `timeoutMs`. */
+const nextEvent = (method, timeoutMs) =>
+  new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      eventWaiters.delete(method);
+      reject(new Error(`No ${method} within ${timeoutMs} ms`));
+    }, timeoutMs);
+    eventWaiters.set(method, {
+      resolve: value => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      reject: error => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    });
+  });
 /** Set by the "serve" step: answers intercepted requests. */
 let onRequestIntercepted;
 ws.onmessage = event => {
@@ -143,8 +173,10 @@ const serveFrom =
     } catch {
       body = undefined;
     }
+    // no-store: the browser must ask again on every run, so a run serving none (ext "none") never
+    // reuses an image an earlier run served (alternating runs compare the two conditions)
     const head = body
-      ? `HTTP/1.1 200 OK\r\nContent-Type: ${CONTENT_TYPES[format] ?? 'application/octet-stream'}\r\nContent-Length: ${body.length}\r\nCache-Control: public, max-age=31536000, immutable\r\nAccess-Control-Allow-Origin: *\r\n\r\n`
+      ? `HTTP/1.1 200 OK\r\nContent-Type: ${CONTENT_TYPES[format] ?? 'application/octet-stream'}\r\nContent-Length: ${body.length}\r\nCache-Control: no-store\r\nAccess-Control-Allow-Origin: *\r\n\r\n`
       : 'HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nAccess-Control-Allow-Origin: *\r\n\r\n';
     const raw = body ? Buffer.concat([Buffer.from(head), body]) : Buffer.from(head);
     served[body ? 'hits' : 'misses'] += 1;
@@ -155,12 +187,12 @@ const serveFrom =
   };
 const served = { hits: 0, misses: 0 };
 
-const evaluate = async expression => {
-  const { result, exceptionDetails } = await send('Runtime.evaluate', {
-    expression,
-    returnByValue: true,
-    awaitPromise: true,
-  });
+const evaluate = async (expression, timeoutMs) => {
+  const { result, exceptionDetails } = await send(
+    'Runtime.evaluate',
+    { expression, returnByValue: true, awaitPromise: true },
+    timeoutMs
+  );
   if (exceptionDetails)
     throw new Error(
       `${expression.slice(0, 80)} threw: ${exceptionDetails.exception?.description ?? exceptionDetails.text}`
@@ -207,15 +239,23 @@ ws.onopen = async () => {
       } else if (step.wait) await sleep(step.wait);
       else if (step.reload) {
         await send('Page.enable');
-        const loaded = nextEvent('Page.loadEventFired');
+        const loaded = nextEvent('Page.loadEventFired', step.ms ?? 60000);
         await send('Page.reload', { ignoreCache: true });
-        await loaded;
+        await loaded.catch(error => {
+          throw new Error(`reload: ${error.message}`);
+        });
         await evaluate(PROBE);
         console.log('reloaded');
       } else if (step.until) {
         const end = Date.now() + (step.ms ?? 30000);
         const startedAt = Date.now();
-        while (!(await evaluate(`!!(${step.until})`))) {
+        // Each evaluation gets only the step's remaining time: one that never settles (a pending
+        // promise) still ends the step at its deadline
+        const check = () =>
+          evaluate(`!!(${step.until})`, end - Date.now()).catch(error => {
+            throw new Error(`until ${step.until}: ${error.message}`);
+          });
+        while (!(await check())) {
           if (Date.now() > end) throw new Error(`Timed out waiting for ${step.until}`);
           await sleep(250);
         }
