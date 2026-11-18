@@ -14,6 +14,10 @@
       "types": "./dist/catalog.d.ts",
       "default": "./dist/catalog.js"
     },
+    "./card-image/v1": {
+      "types": "./dist/card-image.d.ts",
+      "default": "./dist/card-image.js"
+    },
     "./profiles/v1": {
       "types": "./dist/profiles.d.ts",
       "default": "./dist/profiles.js"

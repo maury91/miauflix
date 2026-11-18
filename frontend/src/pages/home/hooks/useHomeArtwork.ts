@@ -1,10 +1,10 @@
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type { MediaDto } from '@miauflix/backend';
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
-import { artworkActions } from '@store/slices/artwork';
-import type { AppDispatch } from '@store/store';
+import { artworkActions, artworkChanges } from '@store/slices/artwork';
+import type { AppDispatch, RootState } from '@store/store';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 
 import { useSessionChange } from './useSessionChange';
 
@@ -46,6 +46,18 @@ export function useHomeArtwork({
   sessionId: string | null;
 }) {
   const dispatch = useDispatch<AppDispatch>();
+  const store = useStore<RootState>();
+  /** Records artwork that changes the store: the hero's title, re-reported on every move, rarely does. */
+  const receive = useCallback(
+    (media: readonly MediaDto[]) => {
+      const { artwork } = store.getState();
+      const updates = media.map(artworkFromMedia);
+      // The whole batch, in order, when any of it changes the store: the reducer applies it in turn
+      if (updates.some(update => artworkChanges(artwork, update)))
+        dispatch(artworkActions.receivedMany(updates));
+    },
+    [dispatch, store]
+  );
   const [loadedRefsByRow, setLoadedRefsByRow] = useState<Record<string, MediaRef[]>>({});
   const subscribed = useRef<MediaRef[]>([]);
 
@@ -54,7 +66,7 @@ export function useHomeArtwork({
   const onMediaLoaded = useCallback(
     (slug: string, media: MediaDto[]) => {
       const refs = media.map(mediaRef);
-      if (media.length) dispatch(artworkActions.receivedMany(media.map(artworkFromMedia)));
+      receive(media);
       setLoadedRefsByRow(previous => {
         const current = previous[slug];
         const unchanged =
@@ -63,7 +75,7 @@ export function useHomeArtwork({
         return unchanged ? previous : { ...previous, [slug]: refs };
       });
     },
-    [dispatch]
+    [receive]
   );
 
   // Rows that left the feed no longer hold artwork.
@@ -90,6 +102,9 @@ export function useHomeArtwork({
   useEffect(() => {
     const next = new Set(artworkRefs.map(refKey));
     const removed = subscribed.current.filter(ref => !next.has(refKey(ref)));
+    // The hero's title is usually a row's card already: the same titles need no new message
+    const unchanged = subscribed.current.length === artworkRefs.length && removed.length === 0;
+    if (unchanged && subscribed.current.length) return;
     dispatch(realtimeRuntimeActions.artworkSubscriptionsChanged(artworkRefs));
     if (removed.length) dispatch(artworkActions.removed(removed));
     subscribed.current = artworkRefs;
@@ -99,15 +114,16 @@ export function useHomeArtwork({
     () => () => {
       dispatch(realtimeRuntimeActions.artworkSubscriptionsChanged([]));
       if (subscribed.current.length) dispatch(artworkActions.removed(subscribed.current));
+      // A remount (Strict Mode replays every effect) must subscribe again
+      subscribed.current = [];
     },
     [dispatch]
   );
 
   // Continue watching and the hero do not come from a row, so record their artwork here.
   useEffect(() => {
-    const media = [...continueMedia, ...(selectedMedia ? [selectedMedia] : [])];
-    if (media.length) dispatch(artworkActions.receivedMany(media.map(artworkFromMedia)));
-  }, [continueMedia, dispatch, selectedMedia]);
+    receive([...continueMedia, ...(selectedMedia ? [selectedMedia] : [])]);
+  }, [continueMedia, receive, selectedMedia]);
 
   return { onMediaLoaded };
 }

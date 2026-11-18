@@ -18,7 +18,8 @@ export async function chooseProfile(page: Page, name?: string): Promise<void> {
   if (!(await selector.isVisible())) return;
   const profile = name
     ? selector.getByRole('button', { name, exact: true })
-    : selector.getByRole('listitem').first().getByRole('button');
+    : // The first profile's tile (its list item also holds the focused profile's Edit button)
+      selector.locator('[data-profile-id]').first();
   await profile.click();
   await expect(selector).toBeHidden({ timeout: 30000 });
 }

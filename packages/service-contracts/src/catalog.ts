@@ -1,4 +1,6 @@
-import { call, contract, event } from '@miauflix/contract';
+import { bytes, call, contract, event } from '@miauflix/contract';
+
+import type { CardImageFormat, CardImageSize } from './card-image.js';
 
 export type MediaType = 'movie' | 'tv';
 
@@ -207,7 +209,7 @@ export interface CatalogStatusDetails {
 /** Most media refs a batch method accepts. */
 export const MAX_BATCH_ITEMS = 50;
 
-export const catalog = contract('catalog', '2.1', {
+export const catalog = contract('catalog', '2.2', {
   getMovie: call<{ mediaId: number; language: string }, MovieDetail, 'not_found'>({ dedupe: true }),
   getShow: call<{ mediaId: number; language: string }, TVShowDetail, 'not_found'>({ dedupe: true }),
   getSeason: call<
@@ -240,6 +242,14 @@ export const catalog = contract('catalog', '2.1', {
   queueArtwork: call<{ items: MediaRef[]; priority: ArtworkPriority }, number>(),
   artworkSnapshot: call<{ items: MediaRef[] }, ArtworkUpdate[]>(),
   artwork: event<ArtworkUpdate>(),
+  /**
+   * The title's card image: its backdrop with the card logo drawn in, or its name without one.
+   * Answers with the artwork revision drawn in the `x-artwork-revision` header.
+   */
+  cardImage: bytes<
+    { mediaType: MediaType; mediaId: number; size: CardImageSize; format: CardImageFormat },
+    'not_found'
+  >({ since: 2, status: { not_found: 404 } }),
 
   /** Cached or newly computed focus of the title's backdrop. */
   ensureBackdropFocus: call<MediaRef, BackdropFocus, 'not_found' | 'no_backdrop'>(),

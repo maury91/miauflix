@@ -15,6 +15,7 @@ import { TmdbProvider } from '../provider/tmdb/tmdb.provider';
 import type { ServiceContext } from '../service-context';
 import type { ArtworkListeners } from '../services/artwork-selection.service';
 import { DEFAULT_BACKDROP_FOCUS_CONCURRENCY } from '../services/backdrop-focus.service';
+import { cardImageCacheBytes } from '../services/card-image.service';
 import { ApiCache } from '../utils/api-cache';
 import { CatalogWorkerManager } from '../workers/worker';
 import type { CatalogValues } from './catalog.service';
@@ -187,6 +188,7 @@ export class CatalogRuntime {
     const retiring = previous?.stopArtworkBackground();
     this.active = catalog;
     this.ctx.catalog = catalog;
+    this.ctx.cardImages.setCacheBytes(cardImageCacheBytes(values.CARD_IMAGE_CACHE_MB));
     if (!this.ctx.env.disableBackgroundTasks) catalog.startBackdropFocusBackground();
     void catalog
       .getGenres('en')

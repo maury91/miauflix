@@ -500,14 +500,21 @@ export class ListService {
     const start = page * limit;
     const firstProviderPage = Math.floor(start / providerPageSize) + 1;
     const lastProviderPage = Math.floor((start + limit - 1) / providerPageSize) + 1;
-    const providerPages = await Promise.all(
-      Array.from({ length: lastProviderPage - firstProviderPage + 1 }, (_, index) =>
-        this.listClient.getPage(subjectId, slug, firstProviderPage + index)
-      )
+    const pageNumbers = Array.from(
+      { length: lastProviderPage - firstProviderPage + 1 },
+      (_, index) => firstProviderPage + index
     );
-    const providerItems = providerPages.flatMap(result => result.items);
+    // A page past the list's end is not an error: the providers answer it with no items and the
+    // list's totals, so a client asking beyond a list that has since shrunk can step back into
+    // range. Any failure is a real one (a cached page's count cannot prove a page out of range).
+    const pages = await Promise.all(
+      pageNumbers.map(number => this.listClient.getPage(subjectId, slug, number))
+    );
+    const size = pages[pages.length - 1]!;
+    const providerItems = pages.flatMap(result => result.items);
     const firstItemOffset = start - (firstProviderPage - 1) * providerPageSize;
     const requestedItems = providerItems.slice(firstItemOffset, firstItemOffset + limit);
+    if (requestedItems.length === 0) return { medias: [], total: size.totalItems };
     const refs = await this.resolveExternalRefs(requestedItems.map(item => item.media));
     const batch = await this.catalogClient.batch(
       refs.map(({ ref }) => ref),
@@ -520,7 +527,7 @@ export class ListService {
       start,
       loadPriority
     );
-    return { medias, total: providerPages[0]?.totalItems ?? 0 };
+    return { medias, total: size.totalItems };
   }
 
   getListContent(slug: string, language = 'en', subjectId = 'public') {

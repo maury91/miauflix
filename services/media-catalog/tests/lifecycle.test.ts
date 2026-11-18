@@ -10,6 +10,7 @@ import { CatalogConfigService } from '../src/config/config.service';
 import { CatalogDatabase } from '../src/db/database';
 import { MovieRepository } from '../src/db/movie.repo';
 import type { ServiceContext } from '../src/service-context';
+import { CardImageService } from '../src/services/card-image.service';
 import { CatalogWorkerManager } from '../src/workers/worker';
 
 const setup = () => {
@@ -28,6 +29,7 @@ const setup = () => {
     config,
     db,
     catalog: null,
+    cardImages: new CardImageService(),
   };
   return {
     db,

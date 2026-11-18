@@ -20,6 +20,14 @@ export type MediaTileProps = Omit<
    * over the artwork (`labelPlacement="overlay"`) the logo stands in for the visible title.
    */
   logo?: string | null;
+  /**
+   * A landscape backdrop with the title already drawn in (the logo, or the name): preferred over
+   * `artwork` and `logo`, since one image paints faster than two layers. Over the artwork it stands
+   * in for the visible title, once it has shown: until then the title stays visible, and a newer
+   * version keeps the previous one in view while it loads. If it fails to load, the tile shows
+   * `artwork` and `logo` instead.
+   */
+  titledArtwork?: string | null;
   /** A short quality or availability label ("4K", "New"), top start corner. */
   badge?: { label: string; accessibleLabel?: string };
 };
@@ -30,18 +38,27 @@ export type MediaTileProps = Omit<
  * the collection around it owns movement. Supporting text, progress and the badge describe it.
  */
 export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function MediaTile(
-  { title, artwork, ratio = 'landscape', logo, badge, labelPlacement, ...props },
+  { title, artwork, ratio = 'landscape', logo, titledArtwork, badge, labelPlacement, ...props },
   forwardedRef
 ) {
   const [logoFailed, setLogoFailed] = useState<string | null>(null);
-  const showLogo = ratio === 'landscape' && logo && logoFailed !== logo;
+  const [titledFailed, setTitledFailed] = useState<string | null>(null);
+  // The title drawn in the last image to load in this tile, if it had one. A newer version of it
+  // keeps it in view while loading (see holdPrevious), so the label stays hidden; over a plain
+  // backdrop, or once the tile shows another title (a carousel slot reused), the label shows and
+  // nothing is held.
+  const [titledShownFor, setTitledShownFor] = useState<string | null>(null);
+  const titledShown = titledShownFor === title;
+  const titled =
+    ratio === 'landscape' && titledArtwork && titledFailed !== titledArtwork ? titledArtwork : null;
+  const showLogo = !titled && ratio === 'landscape' && logo && logoFailed !== logo;
   return (
     <CollectionTile
       {...props}
       ref={forwardedRef}
       label={title}
       labelPlacement={labelPlacement}
-      labelHidden={Boolean(showLogo) && labelPlacement === 'overlay'}
+      labelHidden={Boolean((titled && titledShown) || showLogo) && labelPlacement === 'overlay'}
       ratio={ratio}
       badge={
         badge ? <Badge accessibleLabel={badge.accessibleLabel}>{badge.label}</Badge> : undefined
@@ -49,9 +66,12 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
       visual={
         <>
           <Artwork
-            src={artwork}
+            src={titled ?? artwork}
             ratio="fill"
             fallback={<span className={styles.fallbackTitle}>{title}</span>}
+            onError={titled ? () => setTitledFailed(titled) : undefined}
+            onLoad={() => setTitledShownFor(titled ? title : null)}
+            holdPrevious={Boolean(titled) && titledShown}
           />
           {showLogo && (
             <span className={styles.logo}>

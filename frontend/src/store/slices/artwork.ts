@@ -13,19 +13,24 @@ const sameArtwork = (current: ArtworkUpdate, update: ArtworkUpdate) =>
   (Object.keys(update) as (keyof ArtworkUpdate)[]).every(key => current[key] === update[key]);
 
 /**
- * Store `update` unless an entry is newer or identical: Home re-reports the artwork of every
- * title it shows, and replacing an equal entry would re-render every card showing it.
+ * Whether storing `update` changes anything: not when an entry is newer or identical. Home
+ * re-reports the artwork of every title it shows; checking first spares every subscriber a
+ * notification for an update that changes nothing.
+ */
+export const artworkChanges = (state: ArtworkState, update: ArtworkUpdate) => {
+  const current = state.byMedia[mediaKey(update.mediaType, update.mediaId)];
+  if (!current) return true;
+  if (current.artworkRevision > update.artworkRevision) return false;
+  return current.artworkRevision !== update.artworkRevision || !sameArtwork(current, update);
+};
+
+/**
+ * Store `update` unless an entry is newer or identical: replacing an equal entry would re-render
+ * every card showing it.
  */
 const apply = (state: ArtworkState, update: ArtworkUpdate) => {
-  const key = mediaKey(update.mediaType, update.mediaId);
-  const current = state.byMedia[key];
-  if (!current) {
-    state.byMedia[key] = update;
-    return;
-  }
-  if (current.artworkRevision > update.artworkRevision) return;
-  if (current.artworkRevision === update.artworkRevision && sameArtwork(current, update)) return;
-  state.byMedia[key] = update;
+  if (artworkChanges(state, update))
+    state.byMedia[mediaKey(update.mediaType, update.mediaId)] = update;
 };
 
 export const artworkSlice = createSlice({

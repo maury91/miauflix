@@ -13,6 +13,7 @@ import { createSecurityHeadersMiddleware } from '@middleware/security-headers.mi
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 import { expandEquivalentOrigins, isTvAppOrigin } from '@utils/origin.util';
 
+import { createArtworkRoutes } from './artwork.routes';
 import { createAuthRoutes } from './auth.routes';
 import type { Deps, RouteDeps } from './common.types';
 import { createConfigRoutes } from './config.routes';
@@ -81,6 +82,7 @@ function createApiRoutes(services: Deps) {
       .route('/movies', createMovieRoutes(deps))
       .route('/shows', createShowRoutes(deps))
       .route('/media', createMediaRoutes(deps))
+      .route('/artwork', createArtworkRoutes(deps))
       .route('/stream', createStreamRoutes(deps))
       .route('/ratings', createRatingRoutes(deps))
       .route('/progress', createProgressRoutes(deps))

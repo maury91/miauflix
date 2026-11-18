@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from '@store/slices/auth';
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -63,30 +63,75 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-/** jsdom has no layout: stack the remote's stops in one column, in document order. */
-const stackNavStops = () => {
-  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
-    const stops = [...document.querySelectorAll('[data-profile-nav]')];
-    const index = stops.indexOf(this);
-    const top = index < 0 ? 0 : index * 60;
-    const height = index < 0 ? 0 : 50;
-    return { left: 0, top, width: 200, height, right: 200, bottom: top + height } as DOMRect;
+beforeEach(() => {
+  // jsdom lays nothing out; the navigation layer only focuses elements on screen
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+    () => [{}] as unknown as DOMRectList
+  );
+});
+
+const press = (key: string) =>
+  act(() => {
+    fireEvent.keyDown(document.activeElement ?? document.body, { key });
   });
-};
+
+const focused = () => document.querySelector('[data-focused]');
 
 describe('ProfileEditorPage', () => {
-  it('lets the remote move out of the name field', () => {
-    stackNavStops();
-    setupTest(admin);
+  it('starts on the name and moves through the form with the remote', () => {
+    const { onCancel } = setupTest(admin);
+    expect(screen.getByLabelText('Profile name').closest('[data-focused]')).not.toBeNull();
+    press('ArrowDown');
+    expect(focused()).toHaveAttribute('role', 'tab');
+    expect(focused()).toHaveAccessibleName('Color & fabric');
+    // Down enters the shown panel at the chosen colour
+    press('ArrowDown');
+    expect(focused()).toHaveAttribute('role', 'radio');
+    expect(focused()).toHaveAttribute('aria-checked', 'true');
+    // Back leaves the page
+    press('Escape');
+    expect(onCancel).toHaveBeenCalled();
+  });
+
+  it('leaves with the remote’s Back from the name it opens on, and after editing it', async () => {
+    const { onCancel } = setupTest(admin);
+    // The name holds no DOM focus outside edit mode: the page keeps it, so its keys arrive
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(document.activeElement).toBe(screen.getByRole('main'));
+    const remoteBack = () =>
+      act(() => {
+        fireEvent.keyDown(document.activeElement ?? document.body, {
+          key: 'Unidentified',
+          keyCode: 10009,
+        });
+      });
+    // Editing the name, Back ends editing first
     const name = screen.getByLabelText('Profile name');
-    name.focus();
-    // A caret in the middle keeps Left for the field; Down always leaves
-    (name as HTMLInputElement).setSelectionRange(2, 2);
-    fireEvent.keyDown(name, { key: 'ArrowLeft' });
-    expect(name).toHaveFocus();
-    fireEvent.keyDown(name, { key: 'ArrowDown' });
-    expect(name).not.toHaveFocus();
-    expect(document.activeElement).toHaveAttribute('role', 'tab');
+    act(() => name.focus());
+    remoteBack();
+    expect(onCancel).not.toHaveBeenCalled();
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(document.activeElement).toBe(screen.getByRole('main'));
+    remoteBack();
+    expect(onCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('chooses a part with Confirm, never by moving onto it', () => {
+    setupTest(admin);
+    press('ArrowDown');
+    press('ArrowDown');
+    const chosen = focused()!;
+    press('ArrowRight');
+    expect(chosen).toHaveAttribute('aria-checked', 'true');
+    const next = focused()!;
+    expect(next).not.toBe(chosen);
+    press('Enter');
+    expect(next).toHaveAttribute('aria-checked', 'true');
+    expect(chosen).toHaveAttribute('aria-checked', 'false');
   });
 
   it('edits the name and look, then saves them with a fresh picture', async () => {
@@ -165,6 +210,32 @@ describe('ProfileEditorPage', () => {
     );
   });
 
+  it('moves on with the TV keyboard’s Done without submitting the form', () => {
+    setupTest(null);
+    fireEvent.change(screen.getByLabelText('Profile name'), { target: { value: 'Sam' } });
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough' } });
+    const done = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 65376 });
+    screen.getByLabelText('Email').dispatchEvent(done);
+    expect(done.defaultPrevented).toBe(true);
+    // The last field before Save: Done still never submits
+    const lastDone = new KeyboardEvent('keydown', {
+      bubbles: true,
+      cancelable: true,
+      keyCode: 65376,
+    });
+    screen.getByLabelText('Password').dispatchEvent(lastDone);
+    expect(lastDone.defaultPrevented).toBe(true);
+    expect(mocks.createProfile).not.toHaveBeenCalled();
+  });
+
+  it('never submits with the TV keyboard’s Done on the name when editing', () => {
+    setupTest(admin);
+    const done = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 65376 });
+    screen.getByLabelText('Profile name').dispatchEvent(done);
+    expect(done.defaultPrevented).toBe(true);
+  });
+
   it('shows the server’s reason when saving fails', async () => {
     mocks.createProfile.mockResolvedValue({
       error: { status: 409, data: 'An account with this email already exists' },
@@ -182,7 +253,7 @@ describe('ProfileEditorPage', () => {
   it('leaves with the rail’s Back button and offers no way to delete the profile', () => {
     const { onCancel } = setupTest(admin);
     expect(screen.queryByRole('button', { name: /Delete/ })).not.toBeInTheDocument();
-    const rail = screen.getByRole('complementary', { name: 'Page navigation' });
+    const rail = screen.getByRole('navigation', { name: 'Profile' });
     fireEvent.click(within(rail).getByRole('button', { name: 'Back' }));
     expect(onCancel).toHaveBeenCalledTimes(1);
   });

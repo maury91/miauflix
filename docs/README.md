@@ -51,6 +51,7 @@ docs/
 │   ├── ci-cd-guide.md        # GitHub Actions/CI
 │   ├── coding-conventions.md # Code standards
 │   ├── css-architecture.md   # Build-time styles (proposal, partly applied)
+│   ├── tv-benchmarks.md      # Frame timing on the TV, per build, and how to measure it
 │   └── bun-compatibility.md  # Bun specifics and the remaining uTP gap
 ├── architecture/       # Current architecture references (see its README)
 └── plans/              # Plans and records: not a description of the current system

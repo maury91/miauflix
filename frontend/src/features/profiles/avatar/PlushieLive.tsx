@@ -29,6 +29,8 @@ export interface PlushieLiveProps {
   /** Each change makes the Plushie hop (e.g. when its card is focused). */
   hopSignal?: number;
   className?: string;
+  /** The Plushie has drawn its first frame. */
+  onReady?: () => void;
   onError?: () => void;
 }
 
@@ -38,23 +40,27 @@ export const PlushieLive = memo(function PlushieLive({
   animated = false,
   hopSignal = 0,
   className,
+  onReady,
   onError,
 }: PlushieLiveProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<PlushieViewer | null>(null);
   const lookRef = useRef(look);
   const animatedRef = useRef(animated);
+  const onReadyRef = useRef(onReady);
   const onErrorRef = useRef(onError);
 
   // The latest committed props, for the viewer mounted once the runtime loads.
   useEffect(() => {
     lookRef.current = look;
     animatedRef.current = animated;
+    onReadyRef.current = onReady;
     onErrorRef.current = onError;
   });
 
   useEffect(() => {
     let disposed = false;
+    let readyFrame = 0;
     loadPlushies()
       .then(({ THREE, viewer }) => {
         const stage = stageRef.current;
@@ -64,6 +70,10 @@ export const PlushieLive = memo(function PlushieLive({
           idle: animatedRef.current && !prefersReducedMotion(),
           maxPixelRatio: 1.5,
         });
+        // The viewer draws on the next frame; this callback, requested after it, runs once it has
+        readyFrame = requestAnimationFrame(() => {
+          if (!disposed) onReadyRef.current?.();
+        });
       })
       .catch((error: unknown) => {
         console.warn('The Plushie could not be drawn', error);
@@ -71,6 +81,7 @@ export const PlushieLive = memo(function PlushieLive({
       });
     return () => {
       disposed = true;
+      cancelAnimationFrame(readyFrame);
       viewRef.current?.dispose();
       viewRef.current = null;
     };

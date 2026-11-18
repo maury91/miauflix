@@ -213,7 +213,7 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     return typeof token === 'string' && token ? token : undefined;
   }
 
-  private timeoutMs(): number {
+  protected timeoutMs(): number {
     return Number(this.configuration.getDynamic(this.descriptor.timeoutKey) ?? DEFAULT_TIMEOUT_MS);
   }
 

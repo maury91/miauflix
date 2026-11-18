@@ -28,6 +28,8 @@ Miauflix starts loading useful details while you move around the catalog. For sh
 
 Miauflix requests artwork sizes suited to cards, episode pictures, logos, and large backgrounds. The Samsung TV build also adjusts background image sizes to the TV's generation to balance sharpness and responsiveness.
 
+Home cards are one picture each: your server draws the title's logo onto its backdrop (or the title's name, for titles without a logo) above the episode line, in the size the card needs, and keeps the most recently used pictures in memory (100 MB by default; `CARD_IMAGE_CACHE_MB` in the Media Catalog settings). One picture per card is quicker for the TV to draw than a backdrop and a logo on top of it.
+
 ## Planned improvements
 
 [ToDo.md](../../ToDo.md) includes making input fields consistent throughout the app. Translated menus and an interface-language selector are also planned; see the language features in the [feature overview](../features.md).

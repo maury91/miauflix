@@ -32,7 +32,6 @@ describe('application routes', () => {
     [{ type: 'sources' }, '/settings/sources'],
     [{ type: 'qrApproval', approvalToken: 'approval token' }, '/auth/qr/approval%20token'],
     [{ type: 'profiles' }, '/profiles'],
-    [{ type: 'manageProfiles' }, '/profiles/manage'],
     [{ type: 'newProfile' }, '/profiles/new'],
     [
       { type: 'editProfile', userId: '7f1c1a8e-6f3b-4c55-9a41-2b7c6c3f9d10' },

@@ -9,7 +9,6 @@ export type AppScreen =
   | { kind: 'login' }
   /** Who's watching: at startup (`startup`, nothing to go back to) or opened from Home. */
   | { kind: 'whosWatching'; startup: boolean }
-  | { kind: 'manageProfiles' }
   | { kind: 'newProfile' }
   | { kind: 'editProfile'; userId: string }
   /** Something is not configured, but the app can be used: the admin may skip it. */
@@ -59,7 +58,6 @@ export function resolveScreen({
   if (appState === 'login') return { kind: 'login' };
   // Profiles are managed before anyone is watching too, so they come before the other gates.
   if (route.type === 'profiles') return { kind: 'whosWatching', startup: appState === 'profiles' };
-  if (route.type === 'manageProfiles') return { kind: 'manageProfiles' };
   if (route.type === 'newProfile') return { kind: 'newProfile' };
   if (route.type === 'editProfile') return { kind: 'editProfile', userId: route.userId };
   if (appState === 'profiles') return { kind: 'whosWatching', startup: true };

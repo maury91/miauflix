@@ -11,6 +11,7 @@ import { storyImage } from '../../storyImage';
 import { ProfileTile } from './ProfileTile';
 
 import FaceIcon from '~icons/mdi/emoticon-outline';
+import AddIcon from '~icons/mdi/plus';
 
 const meta = {
   title: 'Design System/Product Patterns/ProfileTile',
@@ -98,5 +99,45 @@ export const ChooseAndEdit: Story = {
     );
     await userEvent.keyboard('{ArrowUp}{Enter}');
     await expect(canvas.getByTestId('chosen')).toHaveTextContent('Editing');
+  },
+};
+
+/** A shape standing in for the live Plushie the profiles feature draws (a canvas). */
+function StoryPlushie() {
+  return (
+    <svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+      <ellipse cx="50" cy="58" rx="30" ry="32" fill="#e07a5f" />
+      <circle cx="40" cy="50" r="4" fill="#1b1b1b" />
+      <circle cx="60" cy="50" r="4" fill="#1b1b1b" />
+    </svg>
+  );
+}
+
+/**
+ * `picture` takes a picture the feature draws itself (the live Plushie) in place of `avatar`, with
+ * `fit="contain"` for its own shape. Without a picture yet the colour shows; Add profile is a tile
+ * with only a placeholder.
+ */
+export const PictureAndAdd: Story = {
+  render: () => (
+    <div style={{ display: 'flex' }}>
+      {[
+        <ProfileTile key="live" name="Live" picture={<StoryPlushie />} fit="contain" />,
+        <ProfileTile key="loading" name="Loading" avatar={null} color="#1e6091" />,
+        <ProfileTile key="add" name="Add profile" placeholder={<AddIcon />} />,
+      ].map(tile => (
+        <div key={tile.key} style={{ width: '10rem', marginRight: '2rem' }}>
+          {tile}
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // The drawn picture replaces the image, and the colour yields to it
+    const live = canvas.getByRole('button', { name: 'Live' });
+    await expect(live.querySelector('img')).toBeNull();
+    await expect(live.querySelector('svg')).not.toBeNull();
+    await expect(canvas.getByRole('button', { name: 'Add profile' })).toBeInTheDocument();
   },
 };

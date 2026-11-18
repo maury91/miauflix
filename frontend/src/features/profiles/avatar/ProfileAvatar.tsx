@@ -1,11 +1,9 @@
 import type { UserDto } from '@miauflix/backend';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo } from 'react';
 import styled from 'styled-components';
 
-import { loadAvatarImage } from '../api/profiles.api';
-import { lookFor } from './look';
 import { PlushieLive } from './PlushieLive';
-import { liveAvatarsSupported } from './runtime';
+import { useProfilePicture } from './useProfilePicture';
 
 const Frame = styled.div`
   position: relative;
@@ -51,35 +49,12 @@ export const ProfileAvatar = memo(function ProfileAvatar({
   hopSignal,
   className,
 }: ProfileAvatarProps) {
-  const look = useMemo(() => lookFor(user.avatar, user.id), [user.avatar, user.id]);
-  const [liveFailed, setLiveFailed] = useState(false);
-  // Whoever asks for live has already decided about TVs; this only checks the device can draw.
-  const showLive = live && !liveFailed && liveAvatarsSupported({ onTv: true });
-  const [picture, setPicture] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (showLive || user.avatarVersion == null) {
-      setPicture(null);
-      return undefined;
-    }
-    let current = true;
-    void loadAvatarImage(session, user.id, user.avatarVersion).then(url => {
-      if (current) setPicture(url);
-    });
-    return () => {
-      current = false;
-    };
-  }, [session, showLive, user.avatarVersion, user.id]);
+  const { look, showLive, picture, onLiveError } = useProfilePicture(user, session, live);
 
   return (
     <Frame className={className} data-avatar={showLive ? 'live' : picture ? 'picture' : 'color'}>
       {showLive ? (
-        <PlushieLive
-          look={look}
-          animated={animated}
-          hopSignal={hopSignal}
-          onError={() => setLiveFailed(true)}
-        />
+        <PlushieLive look={look} animated={animated} hopSignal={hopSignal} onError={onLiveError} />
       ) : picture ? (
         <Picture src={picture} alt="" draggable={false} />
       ) : (
