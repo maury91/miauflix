@@ -68,12 +68,17 @@ export const Unread: Story = {
   },
 };
 
+/** Delivers the first page to the mounted ArrivingLater, when the story's play says so. */
+const firstPage: { deliver?: () => void } = {};
+
 /** Entered while the first page loads; the unread count is known, so Mark all as read shows. */
 function ArrivingLater(args: NotificationsMenuProps) {
   const [items, setItems] = useState<NotificationItem[]>([]);
   useEffect(() => {
-    const timer = setTimeout(() => setItems(unreadItems), 100);
-    return () => clearTimeout(timer);
+    firstPage.deliver = () => setItems(unreadItems);
+    return () => {
+      firstPage.deliver = undefined;
+    };
   }, []);
   return <NotificationsMenu {...args} unread={{ ...stream(items), loading: items.length === 0 }} />;
 }
@@ -83,6 +88,9 @@ export const EnteredWhileLoading: Story = {
   render: args => <ArrivingLater {...args} />,
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('button', { name: 'Mark all as read' })).toHaveFocus();
+    // The page arrives only now, after the loading state was checked
+    if (!firstPage.deliver) throw new Error('The story did not mount');
+    firstPage.deliver();
     await waitFor(() =>
       expect(
         within(canvas.getByRole('list', { name: 'Unread notifications' })).getAllByRole('button')[0]

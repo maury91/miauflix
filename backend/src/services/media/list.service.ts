@@ -25,6 +25,8 @@ export const DEFAULT_LIST_REFRESH_PAGES = 6;
 const ON_DEMAND_COUNT_PAGES = 10;
 /** How long an unstored list's order of resolved entries is reused (its provider pages are cached 2 to 15 min). */
 const ON_DEMAND_ORDER_TTL_MS = 5 * 60 * 1000;
+/** The most titles one catalog batch request resolves. */
+const CATALOG_BATCH_LIMIT = 50;
 export const LOCAL_WATCHLIST_SLUG = 'my-watchlist';
 const LIST_BASE_PRIORITY = 90;
 const LIST_MIN_PRIORITY = 20;
@@ -305,12 +307,9 @@ export class ListService {
     if (refs.length === 0) return [];
     const batch = await this.catalogClient.batch(refs, language, 'returned');
     const medias = await this.hydrateMediaDetails(batch.items);
-    const rank = new Map(refs.map((ref, index) => [`${ref.mediaType}:${ref.mediaId}`, index]));
-    return medias.sort(
-      (left, right) =>
-        (rank.get(`${left.mediaType}:${left.mediaId}`) ?? 0) -
-        (rank.get(`${right.mediaType}:${right.mediaId}`) ?? 0)
-    );
+    // Rebuilt from the refs asked for: a title asked twice comes back twice, in each position
+    const byKey = new Map(medias.map(media => [`${media.mediaType}:${media.mediaId}`, media]));
+    return refs.flatMap(ref => byKey.get(`${ref.mediaType}:${ref.mediaId}`) ?? []);
   }
 
   async getWatchlistMembership(
@@ -585,6 +584,17 @@ export class ListService {
     const priority = loadPriority === 'prefetch' ? 'prefetch' : 'returned';
     const details = new Map<string, MovieDetail | TVShowDetail>();
     const refKey = (ref: MediaRef) => `${ref.mediaType}:${ref.mediaId}`;
+    /** Card details for any number of titles, one catalog batch per CATALOG_BATCH_LIMIT. */
+    const loadDetails = async (refs: MediaRef[]) => {
+      for (let index = 0; index < refs.length; index += CATALOG_BATCH_LIMIT) {
+        const batch = await this.catalogClient.batch(
+          refs.slice(index, index + CATALOG_BATCH_LIMIT),
+          language,
+          priority
+        );
+        for (const item of batch.items) details.set(refKey(item), item);
+      }
+    };
     const extend = async () => {
       while (order.refs.length < start + limit) {
         if (order.consumed >= providerItems.length) {
@@ -594,15 +604,10 @@ export class ListService {
         }
         const chunk = providerItems.slice(
           order.consumed,
-          order.consumed + start + limit - order.refs.length
+          order.consumed + Math.min(CATALOG_BATCH_LIMIT, start + limit - order.refs.length)
         );
         const refs = await this.resolveExternalRefs(chunk.map(item => item.media));
-        const batch = await this.catalogClient.batch(
-          refs.map(({ ref }) => ref),
-          language,
-          priority
-        );
-        for (const item of batch.items) details.set(refKey(item), item);
+        await loadDetails(refs.map(({ ref }) => ref));
         const seen = new Set(order.refs.map(refKey));
         for (const { ref } of refs) {
           if (!details.has(refKey(ref)) || seen.has(refKey(ref))) continue;
@@ -612,17 +617,33 @@ export class ListService {
         order.consumed += chunk.length;
       }
     };
-    const extended = order.ready.then(extend, extend);
-    order.ready = extended.catch(() => undefined);
-    await extended;
+    /** Extend the order after the list's earlier requests, optionally changing it first. */
+    const extendOrder = async (change?: () => void) => {
+      const run = async () => {
+        change?.();
+        await extend();
+      };
+      const extended = order.ready.then(run, run);
+      order.ready = extended.catch(() => undefined);
+      await extended;
+    };
+    await extendOrder();
+    // A remembered order holds titles this request has no details for yet. One the catalog no
+    // longer returns leaves the order, and the page refills from the entries after it
+    let pageRefs = order.refs.slice(start, start + limit);
+    for (;;) {
+      const missing = pageRefs.filter(ref => !details.has(refKey(ref)));
+      if (!missing.length) break;
+      await loadDetails(missing);
+      const omitted = new Set(missing.filter(ref => !details.has(refKey(ref))).map(refKey));
+      if (!omitted.size) break;
+      await extendOrder(() => {
+        order.refs = order.refs.filter(ref => !omitted.has(refKey(ref)));
+      });
+      pageRefs = order.refs.slice(start, start + limit);
+    }
     // Raw entries in hand may still all drop: a failure is never answered with an empty page
     if (providerFailed && order.refs.length <= start) throw providerError;
-    const pageRefs = order.refs.slice(start, start + limit);
-    const missing = pageRefs.filter(ref => !details.has(refKey(ref)));
-    if (missing.length) {
-      const batch = await this.catalogClient.batch(missing, language, priority);
-      for (const item of batch.items) details.set(refKey(item), item);
-    }
     const medias = await this.hydrateMediaDetails(
       pageRefs.flatMap(ref => details.get(refKey(ref)) ?? []),
       this.listRank(slug),

@@ -53,8 +53,16 @@ export interface NotificationsMenuProps {
   onPointerEnter: () => void;
 }
 
-/** Calls `onVisible` whenever the sentinel scrolls into the list's view. */
-function useSentinel(root: RefObject<HTMLElement | null>, enabled: boolean, onVisible: () => void) {
+/**
+ * Calls `onVisible` whenever the sentinel scrolls into the list's view. `mount` changes when the
+ * list and sentinel elements are replaced, so the observer follows the new ones.
+ */
+function useSentinel(
+  root: RefObject<HTMLElement | null>,
+  enabled: boolean,
+  onVisible: () => void,
+  mount: unknown
+) {
   const sentinel = useRef<HTMLDivElement>(null);
   const callback = useRef(onVisible);
   callback.current = onVisible;
@@ -69,7 +77,7 @@ function useSentinel(root: RefObject<HTMLElement | null>, enabled: boolean, onVi
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, [enabled, root]);
+  }, [enabled, root, mount]);
   return sentinel;
 }
 
@@ -136,15 +144,19 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
   const { focus, lastInput } = useNavigation();
+  // Taking or giving back the keys moves the content in or out of its FocusScope, which replaces
+  // the list and its sentinels
   const unreadSentinel = useSentinel(
     listRef,
     unread.hasMore && !unread.loadingMore,
-    unread.loadMore
+    unread.loadMore,
+    focused
   );
   const readSentinel = useSentinel(
     listRef,
     showRead && read.hasMore && !read.loadingMore,
-    read.loadMore
+    read.loadMore,
+    focused
   );
   const keysRef = useKeyboardNavigation({
     enabled: focused,

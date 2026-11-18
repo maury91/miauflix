@@ -18,23 +18,18 @@ import type { RootState } from '@store/store';
 // The backend protects each media-detail route at five requests per second. Focus prefetch and
 // details pages can ask for several titles at once, so keep requests for the same route below
 // that ceiling while still allowing RTK Query to deduplicate identical media IDs. Rows that need
-// many titles at once use getMediaCard, which batches them instead.
+// many titles at once use getMediaCard, which batches them instead (the batch route has the same
+// limit, so its requests are spaced the same way).
 const MEDIA_DETAIL_INTERVAL_MS = 225;
-let nextMovieRequestAt = 0;
-let nextShowRequestAt = 0;
+const nextRequestAt: Record<'movie' | 'show' | 'batch', number> = { movie: 0, show: 0, batch: 0 };
 
 async function scheduleMediaDetailRequest<T>(
-  kind: 'movie' | 'show',
+  kind: 'movie' | 'show' | 'batch',
   request: () => Promise<T>
 ): Promise<T> {
   const now = Date.now();
-  const nextRequestAt = kind === 'movie' ? nextMovieRequestAt : nextShowRequestAt;
-  const startAt = Math.max(now, nextRequestAt);
-  if (kind === 'movie') {
-    nextMovieRequestAt = startAt + MEDIA_DETAIL_INTERVAL_MS;
-  } else {
-    nextShowRequestAt = startAt + MEDIA_DETAIL_INTERVAL_MS;
-  }
+  const startAt = Math.max(now, nextRequestAt[kind]);
+  nextRequestAt[kind] = startAt + MEDIA_DETAIL_INTERVAL_MS;
   if (startAt > now) {
     await new Promise<void>(resolve => setTimeout(resolve, startAt - now));
   }
@@ -93,7 +88,8 @@ function flushMediaCards() {
       for (const { fallback, resolve } of chunk) void fallback().then(resolve);
       continue;
     }
-    void chunk[0].request(chunk.map(({ ref }) => ref)).then(result => {
+    const refs = chunk.map(({ ref }) => ref);
+    void scheduleMediaDetailRequest('batch', () => chunk[0].request(refs)).then(result => {
       if ('error' in result && result.error.status === 404) {
         batchRouteMissing = true;
         for (const { fallback, resolve } of chunk) void fallback().then(resolve);

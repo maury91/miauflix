@@ -102,7 +102,8 @@ export function HomeBrowse({
   latestInitialRow.current = initialRowSlug;
 
   const railItem = railItemOf(useActiveIdWithin(HOME_NAV.rail));
-  const activeRow = rowSlugOf(useActiveIdWithin(HOME_NAV.rows));
+  const activeInRows = useActiveIdWithin(HOME_NAV.rows);
+  const activeRow = rowSlugOf(activeInRows);
   const [panelInUse, setPanelInUse] = useState<Panel | null>(null);
   const open = (panel: Panel) =>
     interactive && (panelInUse === panel || (panelInUse === null && railItem === panel));
@@ -145,20 +146,30 @@ export function HomeBrowse({
 
   // Continue watching appears once its cards load, after the lists: focus already rests on the
   // first list. Until a key or the pointer moves anything, focus belongs on the first row, so it
-  // goes to the row that took that place instead of following its list down.
+  // goes to the row that took that place instead of following its list down. A card the pointer
+  // focused (hovering it is enough) is the user's choice, as is any real pointer movement.
   const moved = useRef(false);
   useEffect(() => {
     if (!interactive) return;
     const onInput = () => {
       moved.current = true;
     };
+    // Content sliding under a resting pointer fires moves without any movement
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.movementX || event.movementY) moved.current = true;
+    };
     window.addEventListener('keydown', onInput, true);
     window.addEventListener('pointerdown', onInput, true);
+    window.addEventListener('pointermove', onPointerMove, true);
     return () => {
       window.removeEventListener('keydown', onInput, true);
       window.removeEventListener('pointerdown', onInput, true);
+      window.removeEventListener('pointermove', onPointerMove, true);
     };
   }, [interactive]);
+  useEffect(() => {
+    if (interactive && activeInRows !== null && lastInput() === 'pointer') moved.current = true;
+  }, [activeInRows, interactive, lastInput]);
   const firstRow = useRef(firstRowSlug);
   useEffect(() => {
     const previous = firstRow.current;

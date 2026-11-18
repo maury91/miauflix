@@ -74,8 +74,14 @@ describe('getMediaCard', () => {
       expect(mediaApi.endpoints.getMediaCard.select(ref)(store.getState()).data).toEqual(card(ref));
   });
 
-  it('splits more titles than one batch carries into batch-sized requests', async () => {
+  it('splits more titles than one batch carries into batch-sized requests, spaced under the rate limit', async () => {
     answerBatches();
+    const sentAt: number[] = [];
+    const answer = batchPost.getMockImplementation()!;
+    batchPost.mockImplementation(request => {
+      sentAt.push(Date.now());
+      return answer(request);
+    });
     const store = setupStore();
 
     const results = await load(store, refs(120));
@@ -84,6 +90,9 @@ describe('getMediaCard', () => {
       50, 50, 20,
     ]);
     expect(results.every(result => result.data)).toBe(true);
+    // The batch route allows five requests a second: successive chunks wait their turn
+    for (let index = 1; index < sentAt.length; index++)
+      expect(sentAt[index] - sentAt[index - 1]).toBeGreaterThanOrEqual(200);
   });
 
   it('asks only for titles not cached yet when the row gains one', async () => {

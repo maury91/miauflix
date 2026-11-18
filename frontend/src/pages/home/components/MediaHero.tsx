@@ -172,6 +172,10 @@ const Details = styled.div`
   position: relative;
   z-index: 4;
   transition: opacity ${DETAILS_FADE_MS}ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;
 
 const Logo = styled.img`

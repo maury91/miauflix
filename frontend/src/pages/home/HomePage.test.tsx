@@ -803,9 +803,12 @@ describe('HomePage focus transitions', () => {
   });
 
   it.each([
-    ['moves focus to Continue Watching when it arrives above the first list', false],
-    ['leaves focus where a key put it when Continue Watching arrives', true],
-  ])('%s', async (_name, pressFirst) => {
+    ['moves focus to Continue Watching when it arrives above the first list', 'none'],
+    ['leaves focus where a key put it when Continue Watching arrives', 'key'],
+    ['leaves focus on a card the pointer chose when Continue Watching arrives', 'pointer-focus'],
+    ['leaves focus where it is after a real pointer movement', 'pointer-move'],
+    ['still moves focus after content slid under a resting pointer', 'pointer-rest'],
+  ] as const)('%s', async (_name, input) => {
     const state = { mediaApi: {}, progressApi: {} };
     currentSession.mockReturnValue('test-session');
     const progress = [
@@ -829,14 +832,27 @@ describe('HomePage focus transitions', () => {
       const firstList = screen.getByTestId('card-0');
       expect(firstList).toHaveAttribute('data-slug', categories[0].slug);
       await waitFor(() => expect(firstList).toHaveFocus());
-      if (pressFirst) fireEvent.keyDown(firstList, { key: 'ArrowRight' });
+      if (input === 'key') fireEvent.keyDown(firstList, { key: 'ArrowRight' });
+      if (input === 'pointer-focus') {
+        // Away and back: the first list holds focus again, now by the pointer's choice
+        fireEvent.mouseMove(screen.getByTestId('card-1'));
+        fireEvent.mouseMove(firstList);
+        await waitFor(() => expect(firstList).toHaveFocus());
+      }
+      if (input === 'pointer-move' || input === 'pointer-rest') {
+        const move = new MouseEvent('pointermove', { bubbles: true });
+        Object.defineProperty(move, 'movementX', { value: input === 'pointer-move' ? 4 : 0 });
+        Object.defineProperty(move, 'movementY', { value: 0 });
+        fireEvent(window, move);
+      }
 
       savedMovie = { _type: 'movie', id: 1, mediaId: 100, title: 'Saved movie' };
       state.mediaApi = {};
       view.rerender(<HomePage />);
 
       expect(screen.getByTestId('card-0')).toHaveAttribute('data-slug', 'continue-watching');
-      const focusedSlug = pressFirst ? categories[0].slug : 'continue-watching';
+      const focusedSlug =
+        input === 'none' || input === 'pointer-rest' ? 'continue-watching' : categories[0].slug;
       await waitFor(() => expect(document.activeElement).toHaveAttribute('data-slug', focusedSlug));
     } finally {
       progressSelector.mockRestore();
