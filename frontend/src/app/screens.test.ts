@@ -8,7 +8,7 @@ const routes: Record<string, AppRoute> = {
   home: { type: 'home' },
   movie: { type: 'movieDetails', mediaId: 7 },
   player: { type: 'moviePlayer', mediaId: 7 },
-  settings: { type: 'settings' },
+  search: { type: 'search' },
   configuration: { type: 'configuration' },
   storage: { type: 'storage' },
   sources: { type: 'sources' },
@@ -52,14 +52,13 @@ describe('resolveScreen', () => {
     ['movie', 'loading', 'loading'],
     ['movie', 'initial_setup', 'setup'],
     ['movie', 'login', 'login'],
-    ['settings', 'login', 'login'],
+    ['search', 'login', 'login'],
     ['movie', 'config', 'optionalConfig'],
     ['player', 'config_wizard', 'requiredConfig'],
     // Signed in and configured: the route decides.
     ['home', 'home', 'media'],
     ['movie', 'home', 'media'],
     ['player', 'home', 'media'],
-    ['settings', 'home', 'settings'],
     ['configuration', 'home', 'configuration'],
     ['storage', 'home', 'storage'],
     ['sources', 'home', 'sources'],
@@ -73,22 +72,19 @@ describe('resolveScreen', () => {
       expect(resolve('qr', appState)).toEqual({ kind: 'qrApproval', approvalToken: 'abc' });
   });
 
-  it.each(['configuration', 'storage', 'sources'])(
-    'sends non-admins from %s to Settings',
-    route => {
-      expect(resolve(route, 'home', { isAdmin: false })).toEqual({
-        kind: 'redirect',
-        to: { type: 'settings' },
-      });
-    }
-  );
+  it.each(['configuration', 'storage', 'sources'])('sends non-admins from %s to Home', route => {
+    expect(resolve(route, 'home', { isAdmin: false })).toEqual({
+      kind: 'redirect',
+      to: { type: 'home' },
+    });
+  });
 
   it('keeps the required wizard open until it is dismissed, even once configured', () => {
     expect(resolve('home', 'home', { requiredConfigActive: true }).kind).toBe('requiredConfig');
   });
 
   it('holds other pages for the opening logo, but mounts Home at once behind the intro', () => {
-    expect(resolve('settings', 'home', { booted: false }).kind).toBe('loading');
+    expect(resolve('search', 'home', { booted: false }).kind).toBe('loading');
     expect(resolve('home', 'home', { booted: false, homeEligible: true }).kind).toBe('media');
   });
 });

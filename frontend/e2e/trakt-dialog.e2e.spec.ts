@@ -65,7 +65,7 @@ test('contains keyboard navigation and returns control to Home after closing', a
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
 
-  const selected = page.locator('main section button[aria-current="true"]');
+  const selected = page.locator('main section button[data-focused]');
   await expect(selected).toBeFocused();
   await expect(selected).toHaveAttribute('aria-labelledby', /\S/);
   const labelId = await selected.getAttribute('aria-labelledby');

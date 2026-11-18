@@ -112,7 +112,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     sessionId,
     userId: currentUser?.id,
   });
-  const { geometry, margin, rowHeight } = useMediaBoxSizes();
+  const { geometry, margin, rowHeight, windowHeight } = useMediaBoxSizes();
   // The hero and the fixed app logo line up with the rows' left edge.
   useEffect(() => {
     document.body.style.setProperty('--home-content-left', `${margin}px`);
@@ -154,7 +154,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     view,
     playable,
     enabled: interactive && !trakt.open,
-    sessionId,
     onBrowseSelection: setBrowseSelection,
   });
   // Read when a row mounts, not subscribed: each row's report would re-render Home
@@ -299,7 +298,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const onRowMediaLoaded = useStableCallback(onMediaLoaded);
   const onRowReady = useStableCallback((slug: string) => onRowDataReady(slug));
   // The rail is memoized: stable callbacks keep row moves from re-rendering it.
-  const onSidebarSettings = useStableCallback(navigation.openSettings);
   const onSidebarSearch = useStableCallback(navigation.openSearch);
   const onOpenNotification = useStableCallback((notification: NotificationItem) => {
     const target = notificationPlayable(notification);
@@ -361,8 +359,8 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             <HomeBrowse
               interactive={interactive && !trakt.open}
               initialRowSlug={displayCategories[activeCategory]?.slug}
+              firstRowSlug={displayCategories[0]?.slug}
               onRowFocus={onRowFocus}
-              onSettings={onSidebarSettings}
               onSearch={onSidebarSearch}
               onOpenNotification={onOpenNotification}
             >
@@ -388,7 +386,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                   <div
                     ref={builtForTizen ? content.ref : undefined}
                     className={builtForTizen ? styles.rowsTv : styles.rows}
-                    style={{ height: displayCategories.length * rowHeight }}
+                    style={{
+                      height: Math.max(
+                        displayCategories.length * rowHeight,
+                        (displayCategories.length - 1) * rowHeight + windowHeight * 0.44
+                      ),
+                    }}
                   >
                     {mountedRows.map(index => {
                       const category = displayCategories[index];

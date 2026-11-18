@@ -17,7 +17,6 @@ export function useHomeNavigation({
   view,
   playable,
   enabled,
-  sessionId,
   onBrowseSelection,
 }: {
   route: AppRoute;
@@ -25,7 +24,6 @@ export function useHomeNavigation({
   playable: PlayableRef | null;
   /** Interactive and no overlay open. */
   enabled: boolean;
-  sessionId: string | null;
   /** The card that becomes the browse selection (focused or opened). */
   onBrowseSelection: (media: MediaDto) => void;
 }) {
@@ -102,10 +100,6 @@ export function useHomeNavigation({
     [dispatch, route]
   );
 
-  const openSettings = useCallback(() => {
-    if (sessionId) navigate({ type: 'settings' }, { parent: { type: 'home' } });
-  }, [sessionId]);
-
   const openSearch = useCallback(() => {
     navigate({ type: 'search' }, { parent: { type: 'home' } });
   }, []);
@@ -131,7 +125,6 @@ export function useHomeNavigation({
     onCardActive,
     openDetails,
     openPlayer,
-    openSettings,
     openSearch,
     returnToBrowse,
     returnToDetails,

@@ -107,6 +107,7 @@ export { Menu, type MenuProps, type MenuTriggerProps } from './menu/Menu';
 export type { MenuAction, MenuEntry, MenuSeparator } from './menu/menuItems';
 export { Message, type MessageProps, type MessageTone } from './message/Message';
 export { NavItem, type NavItemProps, NavRail, type NavRailProps } from './nav-rail/NavRail';
+export { useFlyoutBottom } from './nav-rail/useFlyoutBottom';
 export {
   type Notification,
   NotificationRegion,

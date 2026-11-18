@@ -122,7 +122,7 @@ async function focusHeroCase(
 
   const row = page.getByRole('region', { name: heroCase.rowName, exact: true });
   const focusedSlot = row.getByRole('listitem').filter({
-    has: page.locator('[aria-current="true"]'),
+    has: page.locator('button[data-focused]'),
   });
   await expect(focusedSlot).toBeVisible();
   // Move the carousel one slot at a time so it mounts and reveals offscreen cards.
@@ -134,7 +134,7 @@ async function focusHeroCase(
     await expect(focusedSlot).toHaveAttribute('aria-posinset', String(index + 1));
   }
   const card = row.getByRole('button', { name: mediaTitle(media!), exact: true });
-  await expect(card).toHaveAttribute('aria-current', 'true');
+  await expect(card).toHaveAttribute('data-focused', 'true');
 
   const hero = page.locator('header[aria-live="polite"]');
   const expectedImagePath = imagePath(media!.backdrop!);

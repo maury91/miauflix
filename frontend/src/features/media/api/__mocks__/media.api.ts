@@ -10,6 +10,7 @@ export const mediaApi = {
   endpoints: {
     getMovie: { select: emptySelector, initiate: fn() },
     getShow: { select: emptySelector, initiate: fn() },
+    getMediaCard: { select: emptySelector, initiate: fn() },
   },
 };
 

@@ -132,7 +132,7 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
   }> = [];
   for (const kind of ['movie', 'show']) {
     if (kind === 'show') await page.keyboard.press('ArrowRight');
-    const card = page.locator('button[aria-current="true"]');
+    const card = page.locator('button[data-focused]');
     await expect(card).toHaveAccessibleName(kind === 'movie' ? fixtureMovie.title : 'Fixture Show');
     await expect(card).toBeFocused();
     await expect
@@ -204,7 +204,7 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
       ).length,
     });
     await page.keyboard.press('Escape');
-    await expect(page.locator('button[aria-current="true"]')).toBeFocused();
+    await expect(page.locator('button[data-focused]')).toBeFocused();
     await page.waitForTimeout(200);
   }
   const metrics = await page.evaluate(

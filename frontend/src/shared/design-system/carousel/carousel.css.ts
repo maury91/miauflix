@@ -76,6 +76,13 @@ export const edge = style({
       right: 0,
       background: `linear-gradient(to left, ${color.canvas} 0%, rgba(10, 13, 15, 0) 100%)`,
     },
+    // On a black page (Home)
+    '&[data-side="start"][data-surface="black"]': {
+      background: 'linear-gradient(to right, #000 0%, rgba(0, 0, 0, 0) 100%)',
+    },
+    '&[data-side="end"][data-surface="black"]': {
+      background: 'linear-gradient(to left, #000 0%, rgba(0, 0, 0, 0) 100%)',
+    },
   },
 });
 

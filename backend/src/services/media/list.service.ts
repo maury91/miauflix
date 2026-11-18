@@ -21,6 +21,10 @@ import type { ListClientService } from '@services/list/list-client.service';
 import { traced } from '@utils/tracing.util';
 
 export const DEFAULT_LIST_REFRESH_PAGES = 6;
+/** Provider pages an unstored list with dropped items reads to count what it keeps. */
+const ON_DEMAND_COUNT_PAGES = 10;
+/** How long an unstored list's order of resolved entries is reused (its provider pages are cached 2 to 15 min). */
+const ON_DEMAND_ORDER_TTL_MS = 5 * 60 * 1000;
 export const LOCAL_WATCHLIST_SLUG = 'my-watchlist';
 const LIST_BASE_PRIORITY = 90;
 const LIST_MIN_PRIORITY = 20;
@@ -58,6 +62,15 @@ export class ListService {
   private readonly tvShowRepository;
   private readonly listRanks = new Map<string, number>();
   private readonly listDefinitions = new Map<string, ListServiceDefinition>();
+  /**
+   * Unstored lists: the entries that resolved to a catalog item, in list order, and how many
+   * provider entries that took. Item N of the list is `refs[N]`, whatever was dropped before it.
+   * `ready` chains the requests of one list, which extend the same order.
+   */
+  private readonly onDemandOrders = new Map<
+    string,
+    { at: number; refs: MediaRef[]; consumed: number; ready: Promise<unknown> }
+  >();
 
   constructor(
     private readonly db: Database,
@@ -282,6 +295,24 @@ export class ListService {
     return { medias, total };
   }
 
+  /**
+   * Card data for any titles, in one catalog batch: what a row built outside the lists (Continue
+   * watching) shows, without a details request per title. Titles the catalog does not know are
+   * left out; the rest keep the order asked for.
+   */
+  @traced('ListService')
+  async getMediaByRefs(refs: MediaRef[], language = 'en') {
+    if (refs.length === 0) return [];
+    const batch = await this.catalogClient.batch(refs, language, 'returned');
+    const medias = await this.hydrateMediaDetails(batch.items);
+    const rank = new Map(refs.map((ref, index) => [`${ref.mediaType}:${ref.mediaId}`, index]));
+    return medias.sort(
+      (left, right) =>
+        (rank.get(`${left.mediaType}:${left.mediaId}`) ?? 0) -
+        (rank.get(`${right.mediaType}:${right.mediaId}`) ?? 0)
+    );
+  }
+
   async getWatchlistMembership(
     subjectId: string,
     mediaType: MediaListItemType,
@@ -498,36 +529,91 @@ export class ListService {
   ) {
     const providerPageSize = 50;
     const start = page * limit;
-    const firstProviderPage = Math.floor(start / providerPageSize) + 1;
-    const lastProviderPage = Math.floor((start + limit - 1) / providerPageSize) + 1;
-    const pageNumbers = Array.from(
-      { length: lastProviderPage - firstProviderPage + 1 },
-      (_, index) => firstProviderPage + index
-    );
-    // A page past the list's end is not an error: the providers answer it with no items and the
-    // list's totals, so a client asking beyond a list that has since shrunk can step back into
-    // range. Any failure is a real one (a cached page's count cannot prove a page out of range).
-    const pages = await Promise.all(
-      pageNumbers.map(number => this.listClient.getPage(subjectId, slug, number))
-    );
-    const size = pages[pages.length - 1]!;
-    const providerItems = pages.flatMap(result => result.items);
-    const firstItemOffset = start - (firstProviderPage - 1) * providerPageSize;
-    const requestedItems = providerItems.slice(firstItemOffset, firstItemOffset + limit);
-    if (requestedItems.length === 0) return { medias: [], total: size.totalItems };
-    const refs = await this.resolveExternalRefs(requestedItems.map(item => item.media));
-    const batch = await this.catalogClient.batch(
-      refs.map(({ ref }) => ref),
-      language,
-      loadPriority === 'prefetch' ? 'prefetch' : 'returned'
-    );
+    // Provider pages drop what isn't a movie or show (a list's episodes, seasons, people), so
+    // item N isn't at provider position N: walk the pages in order until this page is filled
+    const providerItems: Awaited<ReturnType<typeof this.listClient.getPage>>['items'] = [];
+    let providerTotal = 0;
+    let totalPages = 1;
+    let rawSeen = 0;
+    let providerPage = 1;
+    const fetchProviderPage = async () => {
+      const result = await this.listClient.getPage(subjectId, slug, providerPage);
+      providerTotal = result.totalItems;
+      totalPages = result.totalPages;
+      rawSeen += Math.min(providerPageSize, Math.max(0, providerTotal - rawSeen));
+      providerItems.push(...result.items);
+      providerPage += 1;
+    };
+    do await fetchProviderPage();
+    while (providerItems.length < start + limit && providerPage <= totalPages);
+    // The provider's count includes what was dropped: once some was, count the kept ones to the
+    // end (pages are cached), or a row would offer cards past the list's end
+    const filtered = providerItems.length < rawSeen;
+    while (filtered && providerPage <= Math.min(totalPages, ON_DEMAND_COUNT_PAGES)) {
+      await fetchProviderPage();
+    }
+    // Entries can still drop after that: an IMDb id that doesn't resolve, an item the catalog
+    // doesn't return. Fill the page from the next entries, remembering the order that resolved so
+    // the following pages start where this one ended (no gap, no repeat)
+    const key = `${subjectId}:${slug}`;
+    const remembered = this.onDemandOrders.get(key);
+    const order =
+      remembered && remembered.at + ON_DEMAND_ORDER_TTL_MS > Date.now()
+        ? remembered
+        : { at: Date.now(), refs: [] as MediaRef[], consumed: 0, ready: Promise.resolve() };
+    this.onDemandOrders.set(key, order);
+    const priority = loadPriority === 'prefetch' ? 'prefetch' : 'returned';
+    const details = new Map<string, MovieDetail | TVShowDetail>();
+    const refKey = (ref: MediaRef) => `${ref.mediaType}:${ref.mediaId}`;
+    const extend = async () => {
+      while (order.refs.length < start + limit) {
+        if (order.consumed >= providerItems.length) {
+          if (providerPage > totalPages) break;
+          await fetchProviderPage();
+          continue;
+        }
+        const chunk = providerItems.slice(
+          order.consumed,
+          order.consumed + start + limit - order.refs.length
+        );
+        const refs = await this.resolveExternalRefs(chunk.map(item => item.media));
+        const batch = await this.catalogClient.batch(
+          refs.map(({ ref }) => ref),
+          language,
+          priority
+        );
+        for (const item of batch.items) details.set(refKey(item), item);
+        const seen = new Set(order.refs.map(refKey));
+        for (const { ref } of refs) {
+          if (!details.has(refKey(ref)) || seen.has(refKey(ref))) continue;
+          seen.add(refKey(ref));
+          order.refs.push(ref);
+        }
+        order.consumed += chunk.length;
+      }
+    };
+    const extended = order.ready.then(extend, extend);
+    order.ready = extended.catch(() => undefined);
+    await extended;
+    const pageRefs = order.refs.slice(start, start + limit);
+    const missing = pageRefs.filter(ref => !details.has(refKey(ref)));
+    if (missing.length) {
+      const batch = await this.catalogClient.batch(missing, language, priority);
+      for (const item of batch.items) details.set(refKey(item), item);
+    }
     const medias = await this.hydrateMediaDetails(
-      batch.items,
+      pageRefs.flatMap(ref => details.get(refKey(ref)) ?? []),
       this.listRank(slug),
       start,
       loadPriority
     );
-    return { medias, total: size.totalItems };
+    // Read to the end: exact. Otherwise the provider's count less what was dropped so far
+    const dropped = rawSeen - providerItems.length + (order.consumed - order.refs.length);
+    const total =
+      providerPage > totalPages && order.consumed >= providerItems.length
+        ? order.refs.length
+        : providerTotal - dropped;
+    return { medias, total };
   }
 
   getListContent(slug: string, language = 'en', subjectId = 'public') {

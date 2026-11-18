@@ -1,12 +1,13 @@
 import { ProfileAvatar } from '@features/profiles/avatar/ProfileAvatar';
-import { PALETTE } from '@shared/config/constants';
+import { Divider, Heading, List, ListItem, Text, useFlyoutBottom } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { FocusScope } from '@shared/navigation';
 import type { SessionInfo } from '@store/slices/auth';
-import { type FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import type { FC, ReactNode } from 'react';
+
+import * as styles from './profileMenu.css';
 
 import SwitchIcon from '~icons/mdi/account-switch-outline';
-import ChevronIcon from '~icons/mdi/chevron-right';
 import LogoutIcon from '~icons/mdi/logout';
 import EditIcon from '~icons/mdi/pencil-outline';
 
@@ -16,118 +17,20 @@ export const PROFILE_PANEL_ATTRIBUTE = 'data-profile-panel';
 /** The rail item the panel lines up with. */
 export const PROFILE_RAIL_ITEM_ATTRIBUTE = 'data-rail-profile';
 
-/**
- * In the rail's flyout (NavRail): it starts right at the rail's edge, so the pointer travels from
- * the avatar into the panel without leaving the rail.
- */
-const HoverZone = styled.div`
-  position: absolute;
-  left: 0;
-  outline: none;
-`;
-
-const Panel = styled.section`
-  /* Not min(): the 2020 TVs do not have it. */
-  width: 340px;
-  max-width: calc(100vw - 160px);
-  padding: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  background: #151515;
-  color: ${PALETTE.text.primary};
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
-`;
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 10px 12px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 6px;
-
-  h2 {
-    margin: 0;
-    overflow: hidden;
-    font-family: inherit;
-    font-size: 18.4px;
-    font-weight: 600;
-    text-overflow: ellipsis;
-    text-transform: none;
-    white-space: nowrap;
-  }
-
-  p {
-    margin: 2px 0 0;
-    color: ${PALETTE.text.muted};
-    font-size: 12.8px;
-  }
-`;
-
-const HeaderText = styled.div`
-  min-width: 0;
-`;
-
-const Avatar = styled.div`
-  flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
-`;
-
-/* Flex, not grid: the 2020 TVs (Chromium 69) cannot lay out a button as a grid. */
-const Row = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  padding: 12px 12px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 16px;
-  text-align: left;
-  cursor: pointer;
-
-  > svg {
-    flex: 0 0 auto;
-    width: 24px;
-    height: 24px;
-  }
-
-  > svg:last-child {
-    width: 18px;
-    height: 18px;
-    color: ${PALETTE.text.muted};
-  }
-
-  > span {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  > span:last-child {
-    flex: 0 0 18px;
-  }
-
-  &:hover,
-  &:focus,
-  &:focus-visible {
-    outline: none;
-    background: rgba(255, 255, 255, 0.09);
-  }
-`;
-
-const Separator = styled.hr`
-  margin: 6px 12px;
-  border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-`;
+/** Navigation ids of the panel's scope and options. */
+const PROFILE_MENU_NAV = {
+  scope: 'profile-menu',
+  switch: 'profile-menu:switch',
+  edit: 'profile-menu:edit',
+  logout: 'profile-menu:logout',
+} as const;
 
 export interface ProfileMenuProps {
   profile: SessionInfo;
-  /** The keyboard is in the panel (rather than on the rail). */
+  /**
+   * The keyboard is in the panel (rather than on the rail): its options become a contained
+   * navigation scope, entered at Switch profile.
+   */
   focused: boolean;
   onSwitch: () => void;
   onEdit: () => void;
@@ -139,36 +42,11 @@ export interface ProfileMenuProps {
   onPointerEnter: () => void;
 }
 
-const ROW = '[data-profile-menu-row]';
-
-const rowsIn = (zone: HTMLElement | null) => [...(zone?.querySelectorAll<HTMLElement>(ROW) ?? [])];
-
-/** Focus the panel's first option. */
-function focusFirstIn(zone: HTMLElement | null): boolean {
-  const [first] = rowsIn(zone);
-  first?.focus({ preventScroll: true });
-  return Boolean(first);
-}
-
 /**
- * How far the rail's profile item sits from the bottom of the window: null until measured, the
- * rail's bottom inset when there is no item to line up with.
+ * The profile panel beside the rail: who is watching, then Switch profile, Edit profile and
+ * Logout as ListItems. While it has the keyboard it is a contained scope of the navigation layer
+ * (Up/Down move, OK runs, the ends stay put); Left or Back hand the keyboard back to the rail.
  */
-function useRailItemBottom(): number | string | null {
-  const [bottom, setBottom] = useState<number | string | null>(null);
-  useLayoutEffect(() => {
-    const measure = () => {
-      const item = document.querySelector(`[${PROFILE_RAIL_ITEM_ATTRIBUTE}]`);
-      setBottom(item ? window.innerHeight - item.getBoundingClientRect().bottom : '3vh');
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, []);
-  return bottom;
-}
-
-/** The profile panel beside the rail: who is watching, and switching or editing the profile. */
 export const ProfileMenu: FC<ProfileMenuProps> = ({
   profile,
   focused,
@@ -178,29 +56,12 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
   onExit,
   onPointerEnter,
 }) => {
-  const zoneRef = useRef<HTMLDivElement | null>(null);
-  const bottom = useRailItemBottom();
-
-  // Entering the panel lands on its first option, like the rail lands on its item. Hidden until
-  // measured, the panel can only take focus once it is placed.
+  const bottom = useFlyoutBottom(`[${PROFILE_RAIL_ITEM_ATTRIBUTE}]`);
+  // Hidden until measured, the panel can only take the keyboard once it is placed
   const placed = bottom !== null;
-  useEffect(() => {
-    if (focused && placed && !zoneRef.current?.contains(document.activeElement))
-      focusFirstIn(zoneRef.current);
-  }, [focused, placed]);
-
-  const move = (direction: -1 | 1) => {
-    const items = rowsIn(zoneRef.current);
-    const index = items.indexOf(document.activeElement as HTMLElement);
-    items[index === -1 ? 0 : index + direction]?.focus({ preventScroll: true });
-    return true;
-  };
-
-  const navigationRef = useKeyboardNavigation({
-    enabled: focused,
-    onRestoreFocus: () => focusFirstIn(zoneRef.current),
-    onUp: () => move(-1),
-    onDown: () => move(1),
+  const inUse = focused && placed;
+  const keysRef = useKeyboardNavigation({
+    enabled: inUse,
     onLeft: () => {
       onExit();
       return true;
@@ -210,70 +71,69 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
       return true;
     },
     onRight: () => true,
-    onConfirm: () => {
-      const active = document.activeElement;
-      if (active instanceof HTMLElement && zoneRef.current?.contains(active)) active.click();
-      return true;
-    },
   });
+  // Only an open panel registers its options, so the rail never moves into it
+  const nav = (id: string) => (inUse ? id : undefined);
+  const options: ReactNode = (
+    <>
+      <List label="Profile">
+        <ListItem
+          navId={nav(PROFILE_MENU_NAV.switch)}
+          leading={<SwitchIcon />}
+          title="Switch profile"
+          onClick={onSwitch}
+        />
+        <ListItem
+          navId={nav(PROFILE_MENU_NAV.edit)}
+          leading={<EditIcon />}
+          title="Edit profile"
+          onClick={onEdit}
+        />
+      </List>
+      <Divider />
+      <List label="Session">
+        <ListItem
+          navId={nav(PROFILE_MENU_NAV.logout)}
+          leading={<LogoutIcon />}
+          title="Logout"
+          onClick={onLogout}
+        />
+      </List>
+    </>
+  );
 
   const name = profile.user.displayName || profile.user.email;
   return (
-    <>
-      <HoverZone
-        ref={node => {
-          zoneRef.current = node;
-          navigationRef(node);
-        }}
-        {...{ [PROFILE_PANEL_ATTRIBUTE]: '' }}
-        tabIndex={-1}
-        // Bottom-aligned with the avatar on the rail; hidden for the moment before it is measured
-        style={{ bottom: bottom ?? undefined, visibility: bottom === null ? 'hidden' : undefined }}
-        onMouseEnter={onPointerEnter}
-      >
-        <Panel aria-label="Profile">
-          <Header>
-            <Avatar aria-hidden="true">
-              <ProfileAvatar user={profile.user} session={profile.session} />
-            </Avatar>
-            <HeaderText>
-              <h2>{name}</h2>
-              <p>Watching now</p>
-            </HeaderText>
-          </Header>
-          <Row
-            type="button"
-            data-profile-menu-row=""
-            onMouseEnter={event => event.currentTarget.focus({ preventScroll: true })}
-            onClick={onSwitch}
-          >
-            <SwitchIcon aria-hidden="true" />
-            <span>Switch profile</span>
-            <ChevronIcon aria-hidden="true" />
-          </Row>
-          <Row
-            type="button"
-            data-profile-menu-row=""
-            onMouseEnter={event => event.currentTarget.focus({ preventScroll: true })}
-            onClick={onEdit}
-          >
-            <EditIcon aria-hidden="true" />
-            <span>Edit profile</span>
-            <ChevronIcon aria-hidden="true" />
-          </Row>
-          <Separator />
-          <Row
-            type="button"
-            data-profile-menu-row=""
-            onMouseEnter={event => event.currentTarget.focus({ preventScroll: true })}
-            onClick={onLogout}
-          >
-            <LogoutIcon aria-hidden="true" />
-            <span>Logout</span>
-            <span />
-          </Row>
-        </Panel>
-      </HoverZone>
-    </>
+    <div
+      ref={keysRef}
+      className={styles.zone}
+      {...{ [PROFILE_PANEL_ATTRIBUTE]: '' }}
+      // Bottom-aligned with the avatar on the rail; hidden for the moment before it is measured
+      style={{ bottom: bottom ?? undefined, visibility: placed ? undefined : 'hidden' }}
+      onMouseEnter={onPointerEnter}
+    >
+      <section className={styles.panel} aria-label="Profile">
+        <header className={styles.header}>
+          <span className={styles.avatar} aria-hidden="true">
+            <ProfileAvatar user={profile.user} session={profile.session} />
+          </span>
+          <div className={styles.headerText}>
+            <Heading level={2} variant="heading" maxLines={1}>
+              {name}
+            </Heading>
+            <Text variant="caption" tone="secondary">
+              Watching now
+            </Text>
+          </div>
+        </header>
+        {inUse ? (
+          <FocusScope id={PROFILE_MENU_NAV.scope} contain initialId={PROFILE_MENU_NAV.switch}>
+            {options}
+          </FocusScope>
+        ) : (
+          options
+        )}
+      </section>
+    </div>
   );
 };

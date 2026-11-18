@@ -12,7 +12,8 @@ export const page = style({
   bottom: 0,
   left: 0,
   overflow: 'hidden',
-  backgroundColor: color.canvas,
+  // Black, like the hero's shade it continues (the canvas colour showed as a step under it)
+  backgroundColor: '#000',
   color: color.text,
   outline: 'none',
 });

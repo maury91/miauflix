@@ -26,7 +26,6 @@ describe('application routes', () => {
       { type: 'episodePlayer', showMediaId: 456, seasonNumber: 0, episodeNumber: 2 },
       '/shows/456/seasons/0/episodes/2/watch',
     ],
-    [{ type: 'settings' }, '/settings'],
     [{ type: 'configuration' }, '/settings/configuration'],
     [{ type: 'storage' }, '/settings/storage'],
     [{ type: 'sources' }, '/settings/sources'],
@@ -50,6 +49,10 @@ describe('application routes', () => {
     '/profiles/not-a-user/edit',
   ])('rejects malformed or unknown path %s', path => {
     expect(parseRoute(path).type).toBe('notFound');
+  });
+
+  it('sends the old settings page to Home, where Settings is a panel on the rail', () => {
+    expect(parseRoute('/settings')).toEqual({ type: 'home' });
   });
 
   it('remembers that details were opened from search', () => {

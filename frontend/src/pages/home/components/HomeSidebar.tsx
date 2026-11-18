@@ -7,6 +7,7 @@ import { memo, type ReactNode, useState } from 'react';
 
 import { HOME_NAV } from '../homeNav';
 import * as styles from './homeSidebar.css';
+import { SETTINGS_RAIL_ITEM_ATTRIBUTE } from './SettingsMenu';
 
 import NotificationsIcon from '~icons/mdi/bell-outline';
 import SettingsIcon from '~icons/mdi/cog-outline';
@@ -14,7 +15,8 @@ import SearchIcon from '~icons/mdi/magnify';
 
 interface HomeSidebarProps {
   showSettings: boolean;
-  onSettings: () => void;
+  /** Move the keyboard into the settings panel (the settings areas). */
+  onEnterSettings: () => void;
   onSearch: () => void;
   /** The profile watching; its Plushie opens the profile panel. */
   profile?: SessionInfo | null;
@@ -23,7 +25,7 @@ interface HomeSidebarProps {
   /** Move the keyboard into the notifications panel. */
   onEnterNotifications: () => void;
   /** The panel open beside the rail, drawn as `flyout`; the rail stays expanded meanwhile. */
-  openPanel?: 'notifications' | 'profile' | null;
+  openPanel?: 'notifications' | 'profile' | 'settings' | null;
   /** The pointer left the rail and the panel beside it: focus goes back to the rows. */
   onPointerLeave: () => void;
   unreadCount: number;
@@ -39,7 +41,7 @@ interface HomeSidebarProps {
  */
 export const HomeSidebar = memo(function HomeSidebar({
   showSettings,
-  onSettings,
+  onEnterSettings,
   onSearch,
   profile = null,
   onEnterProfile,
@@ -91,7 +93,9 @@ export const HomeSidebar = memo(function HomeSidebar({
                 navId={HOME_NAV.railItem('settings')}
                 icon={<SettingsIcon />}
                 label="Settings"
-                onClick={onSettings}
+                aria-expanded={openPanel === 'settings'}
+                {...{ [SETTINGS_RAIL_ITEM_ATTRIBUTE]: '' }}
+                onClick={onEnterSettings}
               />
             )}
           </>

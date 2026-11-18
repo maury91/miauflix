@@ -33,6 +33,7 @@ import {
   type StackedBackdrop,
 } from '../backdrop-stack';
 import {
+  BACKDROP_OVERLAP_RATIO,
   getHeroBackdropLayout,
   getHeroTextGeometry,
   HERO_BACKDROP_LEFT_CSS,
@@ -102,11 +103,17 @@ const Hero = styled.header<{ $shade: HeroShade | null }>`
       linear-gradient(
         90deg,
         #03050d 0%,
+        /* Opaque up to the backdrop's left edge, so its edge never shows */
+        #03050d
+          ${({ $shade }) =>
+      $shade
+        ? px($shade.detailsLeft + $shade.detailsWidth * BACKDROP_OVERLAP_RATIO)
+        : HERO_BACKDROP_LEFT_CSS},
         rgba(3, 5, 13, 0.96)
           ${({ $shade }) =>
       $shade
-        ? px($shade.detailsLeft + $shade.detailsWidth * 0.48)
-        : `calc(${HERO_DETAILS_LEFT_CSS} + var(--hero-details-width) * 0.48)`},
+        ? px($shade.detailsLeft + $shade.detailsWidth * (BACKDROP_OVERLAP_RATIO + 0.08))
+        : `calc(${HERO_BACKDROP_LEFT_CSS} + var(--hero-details-width) * 0.08)`},
         rgba(3, 5, 13, 0.35)
           ${({ $shade }) =>
       shadeAt($shade, 'calc(var(--hero-text-right) + var(--hero-free-width) * 0.14)', 1, 0.14)},
@@ -132,6 +139,11 @@ const Hero = styled.header<{ $shade: HeroShade | null }>`
   }
 `;
 
+/** How long the details fade out, and in (see BACKDROP_REST_MS). */
+const DETAILS_FADE_MS = 200;
+/** The backdrop crossfade. */
+const BACKDROP_FADE_MS = 400;
+
 /**
  * Stacked in DOM order: a later layer fades in over the earlier ones. The image and opacity are
  * inline: as styled-components props every backdrop added a CSS class, and each inserted rule
@@ -147,7 +159,7 @@ const BackdropLayer = styled.div`
   pointer-events: none;
   background-color: #000;
   background-repeat: no-repeat;
-  transition: opacity 350ms ease;
+  transition: opacity ${BACKDROP_FADE_MS}ms ease;
   ${tvLayer('opacity')}
 
   @media (prefers-reduced-motion: reduce) {
@@ -159,6 +171,7 @@ const Details = styled.div`
   width: var(--hero-details-width);
   position: relative;
   z-index: 4;
+  transition: opacity ${DETAILS_FADE_MS}ms ease;
 `;
 
 const Logo = styled.img`
@@ -232,10 +245,31 @@ interface MediaHeroProps {
 const NO_RESULT = {};
 const IGNORE_RESULT = { selectFromResult: () => NO_RESULT };
 
-/** How long the selection rests before the TV swaps the hero backdrop. */
-const BACKDROP_REST_MS = 250;
+/**
+ * On the TV, as on Prime Video: a move fades the details out (DETAILS_FADE_MS); once the
+ * selection has rested as long, the new title's details fade in and its image crossfades in
+ * (BACKDROP_FADE_MS). Moves before that keep the hero as it is, details dark (a move during the
+ * fade-in fades out again from where it is; one during the crossfade ends it on the new image).
+ * Each new backdrop is a full-width layer to rasterize and upload, and each new set of details a
+ * layout (or text textures), which cost frames during a move.
+ */
+const BACKDROP_REST_MS = DETAILS_FADE_MS;
 /** The image queue's owner of the resting backdrop the hero waits for. */
 const HERO_RESTING_OWNER = 'hero-resting';
+
+/**
+ * The hero logo for the displayed title, preferring current artwork from the store.
+ */
+function useHeroLogo(media: MediaDto | null) {
+  const artwork = useSelector((state: RootState) =>
+    media
+      ? state.artwork.byMedia[`${media._type === 'movie' ? 'movie' : 'tv'}:${media.mediaId}`]
+      : undefined
+  );
+  if (!media) return null;
+  const current = artwork && artwork.artworkRevision >= (media.artworkRevision ?? 0);
+  return current ? artwork.heroLogo : (media.heroLogo ?? media.logo);
+}
 
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
 export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onReady }) => {
@@ -250,9 +284,15 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   );
   const selectedArtwork =
     artwork && artwork.artworkRevision >= (media?.artworkRevision ?? 0) ? artwork : media;
-  // On the TV each new backdrop is a full-width layer to rasterize and upload, which costs frames
-  // during a move: change it only once the selection rests, so a run of moves loads one backdrop.
-  // The title and details still change at once.
+  // The details shown: the selection once it rested DETAILS_FADE_MS (the fade-out's length);
+  // until then the previous ones, fading out (`moving`)
+  const selectionKey = media ? `${media._type}:${media.mediaId}` : '';
+  const detailsMedia = useRestingValue(media, selectionKey, builtForTizen ? DETAILS_FADE_MS : 0);
+  const moving = detailsMedia !== media;
+  // The next backdrop starts loading once the selection pauses half the fade-out:
+  // a held burst loads none of the titles it passes, a single move still gets a head start
+  const pausedMedia = useRestingValue(media, selectionKey, builtForTizen ? DETAILS_FADE_MS / 2 : 0);
+  const detailsLogo = useHeroLogo(detailsMedia);
   const { media: backdropMedia, backdrop: selectedBackdrop } = useRestingValue(
     { media, backdrop: selectedArtwork?.backdrop },
     media ? `${media._type}:${media.mediaId}:${selectedArtwork?.backdrop ?? ''}` : '',
@@ -341,7 +381,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
         const timer = window.setTimeout(() => {
           settleTimers.current.delete(timer);
           settle(id);
-        }, 400);
+        }, BACKDROP_FADE_MS + 50);
         settleTimers.current.add(timer);
       });
     };
@@ -411,6 +451,30 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     backdropMedia?.mediaId,
   ]);
 
+  // The next backdrop (its image and focus) loads once the selection pauses, like its details,
+  // so its crossfade starts as the details finish fading out instead of after the download
+  const pausedBackdrop =
+    moving && media && pausedMedia === media ? selectedArtwork?.backdrop : null;
+  useEffect(() => {
+    if (!pausedBackdrop || !media) return;
+    const restingUrl = artworkUrl(pausedBackdrop, 'backdrop-resting');
+    const url = imagePreloader.isLoaded(restingUrl)
+      ? restingUrl
+      : artworkUrl(pausedBackdrop, 'backdrop');
+    imagePreloader.load(url, URGENT).catch(() => undefined);
+    const key = `${media._type}:${media.mediaId}:${url}`;
+    if (media.backdropFocus || focusCacheRef.current.has(key)) return;
+    ensureBackdropFocus({
+      mediaType: media._type === 'movie' ? 'movie' : 'tv',
+      mediaId: media.mediaId,
+    })
+      .unwrap()
+      .then(result => focusCacheRef.current.set(key, result.backdropFocus))
+      .catch(() => undefined);
+    // Once per paused title
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pausedBackdrop, media?.mediaId, media?._type]);
+
   const layout = getHeroBackdropLayout(heroSize.width, margin);
   // The hero spans the viewport (`100vw` in the CSS version)
   const shade = useMemo(
@@ -432,11 +496,6 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   };
 
   if (!media) return <Hero ref={heroRef} $shade={shade} aria-hidden="true" />;
-  const currentRevision = media.artworkRevision ?? 0;
-  const heroLogo =
-    artwork && artwork.artworkRevision >= currentRevision
-      ? artwork.heroLogo
-      : (media.heroLogo ?? media.logo);
   return (
     <Hero ref={heroRef} $shade={shade} aria-live="polite">
       {layers.map(layer => (
@@ -453,12 +512,15 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
           aria-hidden="true"
         />
       ))}
-      <HeroDetails
-        media={media}
-        heroLogo={heroLogo}
-        preparation={preparation}
-        availability={availability}
-      />
+      {detailsMedia && (
+        <HeroDetails
+          media={detailsMedia}
+          heroLogo={detailsLogo}
+          preparation={preparation}
+          availability={availability}
+          hidden={moving}
+        />
+      )}
     </Hero>
   );
 };
@@ -472,7 +534,9 @@ const HeroDetails = memo(function HeroDetails({
   heroLogo,
   preparation,
   availability,
+  hidden,
 }: {
+  hidden: boolean;
   media: MediaDto;
   heroLogo: string | null | undefined;
   preparation: ComponentProps<typeof SourcePreparationStatus>['preparation'];
@@ -485,7 +549,7 @@ const HeroDetails = memo(function HeroDetails({
   ].filter(Boolean);
   const rating = media.rating ? media.rating.toFixed(1) : null;
   return (
-    <Details>
+    <Details style={{ opacity: hidden ? 0 : 1 }}>
       {heroLogo ? (
         <Logo decoding="async" src={artworkUrl(heroLogo, 'logo', 500)} alt={getMediaTitle(media)} />
       ) : (

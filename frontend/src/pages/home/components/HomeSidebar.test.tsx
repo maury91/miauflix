@@ -32,7 +32,7 @@ const sidebar = (overrides: Partial<Parameters<typeof HomeSidebar>[0]> = {}) => 
     <FocusScope initialId="home-rail:search">
       <HomeSidebar
         showSettings={false}
-        onSettings={vi.fn()}
+        onEnterSettings={vi.fn()}
         onSearch={vi.fn()}
         onEnterNotifications={vi.fn()}
         onPointerLeave={vi.fn()}
@@ -51,16 +51,16 @@ const press = (key: string) =>
 const rail = () => screen.getByRole('navigation', { name: 'Home navigation' });
 
 describe('HomeSidebar', () => {
-  it('keeps Search and Settings reachable, without a Home item, when the rail is compact', () => {
-    const onSettings = vi.fn();
+  it('keeps Search and the Settings panel reachable, without a Home item, when the rail is compact', () => {
+    const onEnterSettings = vi.fn();
     const onSearch = vi.fn();
-    render(sidebar({ showSettings: true, onSettings, onSearch }));
+    render(sidebar({ showSettings: true, onEnterSettings, onSearch }));
 
     expect(screen.queryByRole('button', { name: 'Home' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Search' }));
     fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
     expect(onSearch).toHaveBeenCalledTimes(1);
-    expect(onSettings).toHaveBeenCalledTimes(1);
+    expect(onEnterSettings).toHaveBeenCalledTimes(1);
   });
 
   it('hides Settings when showSettings is false', () => {
@@ -91,7 +91,7 @@ describe('HomeSidebar', () => {
       <NavigationProvider>
         <HomeSidebar
           showSettings={false}
-          onSettings={vi.fn()}
+          onEnterSettings={vi.fn()}
           onSearch={vi.fn()}
           onEnterNotifications={vi.fn()}
           onPointerLeave={onPointerLeave}

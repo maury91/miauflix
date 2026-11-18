@@ -23,25 +23,21 @@ vi.mock('framer-motion', () => ({
 }));
 const { homeRenders } = vi.hoisted(() => ({ homeRenders: { count: 0 } }));
 vi.mock('@pages/home/HomePage', async () => {
-  const { HomeSidebar } = await import('@pages/home/components/HomeSidebar');
-  const { FocusScope, NavigationProvider } = await import('@shared/navigation');
   const { navigate } = await import('@app/router');
   return {
     default: function HomePageMock() {
       homeRenders.count += 1;
+      // Home's settings panel opens each area as a page of its own
       return (
-        <NavigationProvider>
-          <FocusScope initialId="home-rail:search">
-            <HomeSidebar
-              onSettings={() => navigate({ type: 'settings' }, { parent: { type: 'home' } })}
-              onSearch={() => {}}
-              onEnterNotifications={() => {}}
-              onPointerLeave={() => {}}
-              showSettings={state.admin}
-              unreadCount={0}
-            />
-          </FocusScope>
-        </NavigationProvider>
+        <main>
+          <h1>Home</h1>
+          <button onClick={() => navigate({ type: 'configuration' }, { parent: { type: 'home' } })}>
+            Configuration
+          </button>
+          <button onClick={() => navigate({ type: 'storage' }, { parent: { type: 'home' } })}>
+            Storage
+          </button>
+        </main>
       );
     },
   };
@@ -58,7 +54,7 @@ vi.mock('@pages/settings/StoragePage', () => ({
   default: ({ onDismiss }: { onDismiss: () => void }) => (
     <main>
       <h1>Storage</h1>
-      <button onClick={onDismiss}>Back to Settings</button>
+      <button onClick={onDismiss}>Back</button>
     </main>
   ),
 }));
@@ -129,105 +125,53 @@ afterEach(() => {
   navigate({ type: 'home' }, { replace: true });
 });
 
-describe('Settings navigation', () => {
-  it('opens settings from the sidebar, edits configuration, and returns home', async () => {
+describe('Settings areas', () => {
+  it('opens configuration from Home and returns there', async () => {
     await renderApp();
-    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
-    expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Configuration' })).toHaveFocus();
     fireEvent.click(screen.getByRole('button', { name: 'Configuration' }));
     fireEvent.click(screen.getByRole('button', { name: 'Close configuration editor' }));
-    await waitFor(() =>
-      expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
-    );
-    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument());
+    expect(window.location.pathname).toBe('/');
   });
 
-  it('opens Storage from settings and restores focus when returning', async () => {
+  it('opens Storage from Home and returns there', async () => {
     await renderApp();
-    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
     fireEvent.click(screen.getByRole('button', { name: 'Storage' }));
     expect(screen.getByRole('heading', { name: 'Storage' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Back to Settings' }));
-    await waitFor(() =>
-      expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
-    );
-    expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Storage' })).toHaveFocus();
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument());
   });
 
-  it('opens the selected Settings action with a remote and supports back navigation', async () => {
+  it('sends the old settings page to Home', async () => {
+    navigate({ type: 'storage' }, { replace: true });
+    window.history.replaceState(null, '', '/settings');
     await renderApp();
-    fireEvent.keyDown(screen.getByRole('button', { name: 'Search' }), { key: 'ArrowDown' });
-    expect(screen.getByRole('button', { name: 'Settings' })).toHaveFocus();
-    fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
-    expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
-    fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
-    expect(screen.getByRole('button', { name: 'Storage' })).toHaveFocus();
-    fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
-    expect(screen.getByRole('button', { name: 'Sources' })).toHaveFocus();
-    fireEvent.keyDown(document.activeElement!, { key: 'ArrowLeft' });
-    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
-    fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
-  });
-
-  it('skips the hidden Settings action when navigating the sidebar as a non-admin', async () => {
-    state.admin = false;
-    store = createTestStore();
-    await renderApp();
-    // Nothing below Search: the rail doesn't wrap, focus stays
-    fireEvent.keyDown(screen.getByRole('button', { name: 'Search' }), { key: 'ArrowDown' });
-    expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
-    fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
-    expect(screen.queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument();
-  });
-
-  it('allows non-admins to open settings while keeping configuration restricted', async () => {
-    state.admin = false;
-    store = createTestStore();
-    await renderApp();
-    // The sidebar hides Settings from non-admins, so open the route directly.
-    expect(screen.queryByRole('button', { name: 'Settings' })).not.toBeInTheDocument();
-    act(() => navigate({ type: 'settings' }, { parent: { type: 'home' } }));
-    expect(screen.getByRole('button', { name: 'Configuration' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Storage' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Sources' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Back' })).toHaveFocus();
-    fireEvent.click(screen.getByRole('button', { name: 'Configuration' }));
-    expect(screen.queryByText('Close configuration editor')).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument());
   });
 
   it.each([
     ['configuration', '/settings/configuration'],
     ['storage', '/settings/storage'],
     ['sources', '/settings/sources'],
-  ] as const)(
-    'sends a non-admin opening %s directly to Settings without mounting Home',
-    async (type, path) => {
-      state.admin = false;
-      store = createTestStore();
-      navigate({ type }, { replace: true });
-      expect(window.location.pathname).toBe(path);
-      homeRenders.count = 0;
-      await renderApp();
-      await waitFor(() =>
-        expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
-      );
-      expect(window.location.pathname).toBe('/settings');
-      expect(homeRenders.count).toBe(0);
-    }
-  );
+  ] as const)('sends a non-admin opening %s directly to Home', async (type, path) => {
+    state.admin = false;
+    store = createTestStore();
+    navigate({ type }, { replace: true });
+    expect(window.location.pathname).toBe(path);
+    await renderApp();
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'Home' })).toBeInTheDocument());
+    expect(window.location.pathname).toBe('/');
+    expect(screen.queryByText('Close configuration editor')).not.toBeInTheDocument();
+  });
 
-  it('does not open settings when signed out', async () => {
+  it('does not open a settings area when signed out', async () => {
     state.authenticated = false;
     state.page = 'login';
     store = createTestStore();
     await renderApp();
-    act(() => navigate({ type: 'settings' }));
+    act(() => navigate({ type: 'storage' }));
     expect(screen.getByText('Login')).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Storage' })).not.toBeInTheDocument();
   });
 
   it('preserves automatic configuration setup', async () => {

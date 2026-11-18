@@ -8,6 +8,8 @@ import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
 
 import type { RouteDeps } from './common.types';
+import { serializeMedia } from './list.serializers';
+import type { MediaBatchResponse } from './media.types';
 
 const mediaTypeSchema = z.enum(['movie', 'tv']);
 const backdropFocusBackgroundRequestSchema = z.object({
@@ -16,21 +18,43 @@ const backdropFocusBackgroundRequestSchema = z.object({
     .max(MAX_BATCH_ITEMS),
 });
 
+const mediaBatchRequestSchema = z.object({
+  items: z
+    .array(z.object({ mediaType: mediaTypeSchema, mediaId: z.number().int().positive() }))
+    .min(1)
+    .max(MAX_BATCH_ITEMS),
+  lang: z.string().min(2).max(5).optional().default('en'),
+});
+
 const paramsSchema = z.object({
   mediaType: mediaTypeSchema,
   mediaId: z.string().regex(/^\d+$/u),
 });
 
 /**
- * Creates authenticated, rate-limited immediate and background backdrop-focus routes.
- * The handlers reject invalid payloads and forward catalog and response validation errors
- * to Hono's error handling.
+ * Creates authenticated, rate-limited media routes: card data for many titles at once, and
+ * immediate and background backdrop focus. The handlers reject invalid payloads and forward
+ * catalog and response validation errors to Hono's error handling.
  */
 export const createMediaRoutes = ({
   rateLimitGuard,
   catalogClient,
-}: Pick<RouteDeps, 'catalogClient' | 'rateLimitGuard'>) => {
+  listService,
+}: Pick<RouteDeps, 'catalogClient' | 'listService' | 'rateLimitGuard'>) => {
   return new Hono()
+    .post(
+      '/batch',
+      // One request covers a whole row (Continue watching), where the details routes would
+      // need one per title and run into their per-address limit.
+      rateLimitGuard(5),
+      authGuard(),
+      zValidator('json', mediaBatchRequestSchema),
+      async c => {
+        const { items, lang } = c.req.valid('json');
+        const medias = await listService.getMediaByRefs(items, lang);
+        return c.json({ results: medias.map(serializeMedia) } satisfies MediaBatchResponse);
+      }
+    )
     .post(
       '/backdrop-focus/background',
       rateLimitGuard(30),
