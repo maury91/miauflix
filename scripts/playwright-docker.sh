@@ -46,5 +46,12 @@ exec docker run --rm --ipc=host --network=host \
   ${docker_options[@]+"${docker_options[@]}"} \
   "$image" \
   bash -lc "npm install -g bun@1.4.0 >/dev/null \
-    && flock /root/.bun/install/cache/.miauflix-install.lock bun install --frozen-lockfile \
+    && flock /root/.bun/install/cache/.miauflix-install.lock bash -euo pipefail -c '
+      current_lock_hash=\$(sha1sum < bun.lock | cut -c1-12)
+      if [[ \"\$current_lock_hash\" != \"\$1\" ]]; then
+        echo \"bun.lock changed before dependency installation. Rerun the command.\" >&2
+        exit 1
+      fi
+      bun install --frozen-lockfile
+    ' bash '$lock_hash' \
     && $command" bash "$@"

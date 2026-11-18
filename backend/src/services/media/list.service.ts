@@ -646,14 +646,14 @@ export class ListService {
       });
       pageRefs = order.refs.slice(start, start + limit);
     }
-    // Raw entries in hand may still all drop: a failure is never answered with an empty page
-    if (providerFailed && order.refs.length <= start) throw providerError;
     const medias = await this.hydrateMediaDetails(
       pageRefs.flatMap(ref => details.get(refKey(ref)) ?? []),
       this.listRank(slug),
       start,
       loadPriority
     );
+    // References can be kept for retry even when none produce a card for this response.
+    if (providerFailed && medias.length === 0) throw providerError;
     // Read to the end: exact. Otherwise the provider's count less what was dropped so far.
     // A page cut short by a provider failure ends the list for now: rows page by index, so a
     // next page would start past the entries this one could not reach

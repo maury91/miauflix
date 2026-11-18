@@ -476,8 +476,9 @@ describe('ListService refresh safety', () => {
       .fn()
       .mockResolvedValue({ id: 1, activeGeneration: null } as never);
     // Only 12 of the first page's 50 entries are kept: filling 20 cards needs page 2, which fails
+    const providerError = new Error('provider page unavailable');
     listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => {
-      if (page !== 1) throw new Error('provider page unavailable');
+      if (page !== 1) throw providerError;
       return {
         listId: 'trakt-community-1',
         page,
@@ -490,8 +491,15 @@ describe('ListService refresh safety', () => {
         })),
       };
     });
-    echoCatalog(catalogClient, database);
+    catalogClient.batch.mockImplementation(async refs => ({
+      items: [],
+      missing: [],
+      errors: refs.map(ref => ({ ref, error: 'catalog_batch_item_failed' })),
+    }));
+    await expect(service.getListPage('trakt-community-1', 'en', 0, 20)).rejects.toBe(providerError);
 
+    // The catalog can recover the remembered references even while the provider is still failing.
+    echoCatalog(catalogClient, database);
     const result = await service.getListPage('trakt-community-1', 'en', 0, 20);
     expect(result.medias.map(media => media.mediaId)).toEqual(
       Array.from({ length: 12 }, (_, index) => index + 1)
