@@ -21,6 +21,9 @@ vi.mock('@features/auth/api/auth.api', () => ({
   authApi: { endpoints: { listSessions: { initiate: vi.fn() } } },
 }));
 
+import type { ProgressEntry } from '@miauflix/backend';
+import { mediaFromProgress, progressTitle } from '@pages/home/media-mappers';
+
 import { mediaApi, type MediaBatchRef, resetMediaBatchSupport } from './media.api';
 
 const card = ({ mediaType, mediaId }: MediaBatchRef) =>
@@ -127,6 +130,44 @@ describe('getMediaCard', () => {
       expect.objectContaining({ status: 429 }),
       expect.objectContaining({ status: 429 }),
     ]);
+  });
+
+  it('settles every card with an error when the batch answer cannot be read', async () => {
+    batchPost.mockResolvedValue(json(200, { unexpected: true }));
+    const store = setupStore();
+
+    const results = await load(store, refs(2));
+
+    expect(results.map(result => result.error)).toEqual([
+      expect.objectContaining({ status: 500 }),
+      expect.objectContaining({ status: 500 }),
+    ]);
+  });
+
+  it("feeds Continue watching's selectors for a movie and an episode's show", async () => {
+    answerBatches();
+    const store = setupStore();
+    const movie = { playable: { kind: 'movie', mediaId: 101 } } as ProgressEntry;
+    const episode = {
+      playable: { kind: 'episode', showMediaId: 202, seasonNumber: 1, episodeNumber: 2 },
+    } as ProgressEntry;
+    // useHomeFeed asks for each progress title as its progressTitle
+    await load(
+      store,
+      [movie, episode].map(entry => {
+        const { kind, mediaId } = progressTitle(entry);
+        return { mediaType: kind === 'movie' ? 'movie' : 'tv', mediaId } as MediaBatchRef;
+      })
+    );
+
+    expect(mediaFromProgress(store.getState(), movie)).toMatchObject({
+      _type: 'movie',
+      mediaId: 101,
+    });
+    expect(mediaFromProgress(store.getState(), episode)).toMatchObject({
+      _type: 'tvshow',
+      mediaId: 202,
+    });
   });
 
   it("falls back to each title's details on a server without the batch route", async () => {

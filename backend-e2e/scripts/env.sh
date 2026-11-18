@@ -424,17 +424,11 @@ else
             if [[ "$FRONTEND_ONLY" == "true" ]]; then
                 frontend_test_args=("$@")
             fi
-            # Install inside the container so host-built native packages never reach Linux; the named
-            # volumes keep that install between runs (see scripts/update-ui-snapshots.sh).
-            docker run --rm --ipc=host --network=host \
-                -v "$root_dir:/workspace" \
-                -v miauflix-playwright-node-modules:/workspace/node_modules \
-                -v miauflix-playwright-frontend-node-modules:/workspace/frontend/node_modules \
-                -v miauflix-playwright-bun-cache:/root/.bun/install/cache \
-                -w /workspace \
-                -e BACKEND_URL="http://127.0.0.1:$PORT" \
-                "$E2E_PLAYWRIGHT_IMAGE" \
-                bash -lc 'npm install -g bun@1.4.0 && bun install --frozen-lockfile && cd frontend && npx playwright test --config=playwright.config.e2e.ts --update-snapshots=changed "$@"' bash "${frontend_test_args[@]}" \
+            # Dependencies install inside the container (see scripts/playwright-docker.sh)
+            PLAYWRIGHT_IMAGE="$E2E_PLAYWRIGHT_IMAGE" "$root_dir/scripts/playwright-docker.sh" \
+                -e BACKEND_URL="http://127.0.0.1:$PORT" -- \
+                'cd frontend && npx playwright test --config=playwright.config.e2e.ts --update-snapshots=changed "$@"' \
+                ${frontend_test_args[@]+"${frontend_test_args[@]}"} \
                 || FRONTEND_TEST_PASSED=false
         elif [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
             echo "🧪 Running frontend integration tests with snapshot updates..."

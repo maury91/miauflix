@@ -1,5 +1,5 @@
 import { NavigationProvider } from '@shared/navigation';
-import { render } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { notificationUnreadItems as unreadItems } from '../notifications.fixtures';
@@ -36,7 +36,10 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const props = (focused: boolean): NotificationsMenuProps => ({
+const props = (
+  focused: boolean,
+  overrides: Partial<NotificationsMenuProps> = {}
+): NotificationsMenuProps => ({
   unread: {
     items: unreadItems,
     loading: false,
@@ -56,26 +59,71 @@ const props = (focused: boolean): NotificationsMenuProps => ({
   onOpen: vi.fn(),
   onExit: vi.fn(),
   onPointerEnter: vi.fn(),
+  ...overrides,
 });
+
+const renderMenu = (menuProps: NotificationsMenuProps) => {
+  const view = render(
+    <NavigationProvider>
+      <NotificationsMenu {...menuProps} />
+    </NavigationProvider>
+  );
+  return (next: NotificationsMenuProps) =>
+    view.rerender(
+      <NavigationProvider>
+        <NotificationsMenu {...next} />
+      </NavigationProvider>
+    );
+};
+const watching = () => observers.filter(observer => observer.connected && observer.target);
 
 describe('NotificationsMenu', () => {
   it('keeps watching the page sentinel when the panel takes and gives back the keys', () => {
-    const view = render(
-      <NavigationProvider>
-        <NotificationsMenu {...props(false)} />
-      </NavigationProvider>
-    );
-    const watching = () => observers.filter(observer => observer.connected);
+    const rerender = renderMenu(props(false));
 
     for (const focused of [true, false]) {
-      view.rerender(
-        <NavigationProvider>
-          <NotificationsMenu {...props(focused)} />
-        </NavigationProvider>
-      );
+      rerender(props(focused));
       // Moving in or out of the focus scope replaces the sentinel: the live observer follows it
       expect(watching()).toHaveLength(1);
       expect(watching()[0]!.target?.isConnected).toBe(true);
     }
+  });
+
+  it('watches the read sentinel once it appears after the unread notifications run out', () => {
+    const read = {
+      items: unreadItems.map(item => ({ ...item, id: item.id + 1000, readAt: item.createdAt })),
+      loading: false,
+      hasMore: true,
+      loadingMore: false,
+      loadMore: vi.fn(),
+    };
+    const withUnread = (hasMore: boolean) =>
+      props(false, {
+        showRead: true,
+        hasRead: true,
+        read,
+        unread: { ...props(false).unread, hasMore },
+      });
+    const rerender = renderMenu(withUnread(true));
+    // Only the unread sentinel exists while unread pages remain
+    expect(watching()).toHaveLength(1);
+    const unreadSentinel = watching()[0]!.target;
+
+    rerender(withUnread(false));
+
+    expect(watching()).toHaveLength(1);
+    expect(watching()[0]!.target).not.toBe(unreadSentinel);
+    expect(watching()[0]!.target?.isConnected).toBe(true);
+  });
+
+  it('enters on Retry when notifications failed to load and none are unread', async () => {
+    renderMenu(
+      props(true, {
+        unread: { ...props(true).unread, items: [], failed: true, hasMore: false },
+        unreadCount: 0,
+      })
+    );
+
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Retry' })).toHaveFocus());
   });
 });

@@ -16,8 +16,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
-- A list row no longer fails to open when a later page of the list cannot be loaded from its provider (Trakt, AniList): it shows the titles already loaded and continues from there on the next page
-- Home: Continue watching shows every title you are watching, even with many in progress. On a TV with about 17 titles, several cards used to stay missing because the app asked for each title separately and the server turned the extra requests away
+- A list row no longer fails to open when a later page of the list cannot be loaded from its provider (Trakt, AniList): it shows the titles already loaded, and the rest once the provider answers again. A title the catalog fails to load for a moment keeps its place in the row instead of disappearing from it
+- Home: Continue watching shows every title you are watching, even with many in progress. On a TV with about 17 titles, several cards used to stay missing because the app asked for each title separately and the server turned the extra requests away. Its cards never stay loading when the server answers with something unexpected
 - The catalog service's Docker image starts without internet access: it used to download its image library from the package registry on every start, and stopped with an error when it could not
 - Rows from Trakt lists that also hold episodes (like the Marvel Cinematic Universe list) no longer turn into empty cards after the first twenty: they show every film and show in the list, with no empty cards in between, and end where the list does
 - Home's hero no longer shows the left edge of its picture: the shade is fully dark up to where the picture starts

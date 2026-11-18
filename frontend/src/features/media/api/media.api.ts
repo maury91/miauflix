@@ -78,6 +78,17 @@ let batchRouteMissing = false;
 
 const cardKey = (mediaType: 'movie' | 'tv', mediaId: number) => `${mediaType}:${mediaId}`;
 
+/** A card that could not be loaded at all: its query settles with an error instead of waiting. */
+const failedCard = (error: unknown): CardResult => ({
+  error: { status: 500, data: error instanceof Error ? error.message : 'Failed to fetch titles' },
+});
+
+/** Resolve each card from its own details route; one that throws settles with an error. */
+const loadFallbacks = (chunk: PendingCard[]) => {
+  for (const { fallback, resolve } of chunk)
+    void fallback().then(resolve, error => resolve(failedCard(error)));
+};
+
 /** Send the cards asked for since the last flush, at most MEDIA_BATCH_LIMIT per request. */
 function flushMediaCards() {
   const pending = pendingCards;
@@ -85,31 +96,38 @@ function flushMediaCards() {
   for (let start = 0; start < pending.length; start += MEDIA_BATCH_LIMIT) {
     const chunk = pending.slice(start, start + MEDIA_BATCH_LIMIT);
     if (batchRouteMissing) {
-      for (const { fallback, resolve } of chunk) void fallback().then(resolve);
+      loadFallbacks(chunk);
       continue;
     }
     const refs = chunk.map(({ ref }) => ref);
-    void scheduleMediaDetailRequest('batch', () => chunk[0].request(refs)).then(result => {
-      if ('error' in result && result.error.status === 404) {
-        batchRouteMissing = true;
-        for (const { fallback, resolve } of chunk) void fallback().then(resolve);
-        return;
-      }
-      const cards = new Map(
-        'data' in result
-          ? result.data.results.map(card => [
-              cardKey(card._type === 'movie' ? 'movie' : 'tv', card.mediaId),
-              card,
-            ])
-          : []
-      );
-      for (const { ref, resolve } of chunk) {
-        const card = cards.get(cardKey(ref.mediaType, ref.mediaId));
-        if (card) resolve({ data: card });
-        else if ('error' in result) resolve(result);
-        else resolve({ error: { status: 404, data: 'Title not found' } });
-      }
-    });
+    // A rejected request or an unexpected body settles every card with an error: a card left
+    // pending would keep its query loading forever
+    void scheduleMediaDetailRequest('batch', () => chunk[0].request(refs))
+      .then(result => {
+        if ('error' in result && result.error.status === 404) {
+          batchRouteMissing = true;
+          loadFallbacks(chunk);
+          return;
+        }
+        const cards = new Map(
+          'data' in result
+            ? result.data.results.map(card => [
+                cardKey(card._type === 'movie' ? 'movie' : 'tv', card.mediaId),
+                card,
+              ])
+            : []
+        );
+        for (const { ref, resolve } of chunk) {
+          const card = cards.get(cardKey(ref.mediaType, ref.mediaId));
+          if (card) resolve({ data: card });
+          else if ('error' in result) resolve(result);
+          else resolve({ error: { status: 404, data: 'Title not found' } });
+        }
+      })
+      .catch(error => {
+        // A card resolved already keeps its result: a promise settles once
+        for (const { resolve } of chunk) resolve(failedCard(error));
+      });
   }
 }
 

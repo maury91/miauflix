@@ -14,13 +14,6 @@ set -euo pipefail
 
 root_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 playwright_image="mcr.microsoft.com/playwright:v1.56.1-jammy"
-# Linux node_modules and bun's package cache persist in named volumes (shared with the E2E lane in
-# env.sh), so after the first run `bun install --frozen-lockfile` only checks the lockfile.
-playwright_cache_volumes=(
-  -v miauflix-playwright-node-modules:/workspace/node_modules
-  -v miauflix-playwright-frontend-node-modules:/workspace/frontend/node_modules
-  -v miauflix-playwright-bun-cache:/root/.bun/install/cache
-)
 
 lanes=("$@")
 if [[ ${#lanes[@]} -eq 0 ]]; then
@@ -48,7 +41,8 @@ has_lane() {
 cd "$root_dir"
 
 # Storybook and the details lanes need Linux builds of native packages (esbuild, rollup), so they
-# share one container with its own node_modules, as `npm run test:frontend:visual` does.
+# share one container with its own node_modules (scripts/playwright-docker.sh), as
+# `npm run test:frontend:visual` does.
 container_steps=()
 if has_lane storybook; then
   # Match CI's single worker so concurrent software-rendered stories don't stall captures.
@@ -62,12 +56,8 @@ fi
 if [[ ${#container_steps[@]} -gt 0 ]]; then
   steps=$(printf ' && %s' "${container_steps[@]}")
   echo "📸 Updating ${lanes[*]} baselines in $playwright_image..."
-  docker run --rm --ipc=host --network=host \
-    -v "$root_dir:/workspace" \
-    "${playwright_cache_volumes[@]}" \
-    -w /workspace \
-    "$playwright_image" \
-    bash -lc "npm install -g bun@1.4.0 && bun install --frozen-lockfile && npm run build:backend && cd frontend${steps}"
+  PLAYWRIGHT_IMAGE="$playwright_image" scripts/playwright-docker.sh -- \
+    "npm run build:backend && cd frontend${steps}"
 fi
 
 if has_lane e2e; then

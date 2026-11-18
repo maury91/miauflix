@@ -395,6 +395,81 @@ describe('ListService refresh safety', () => {
     expect(next.medias.map(media => media.mediaId)).toEqual([4, 5]);
   });
 
+  it('keeps the place of a title the catalog failed to load for now', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockResolvedValue({
+      listId: 'trakt-community-1',
+      page: 1,
+      totalPages: 1,
+      totalItems: 5,
+      items: Array.from({ length: 5 }, (_, index) => ({
+        key: `movie:${index + 1}`,
+        rank: index + 1,
+        media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+      })),
+    });
+    echoCatalog(catalogClient, database);
+    // Title 2 fails (a timeout), it is not unknown
+    catalogClient.batch.mockImplementation(
+      async refs =>
+        ({
+          items: refs.filter(ref => ref.mediaId !== 2),
+          missing: [],
+          errors: refs
+            .filter(ref => ref.mediaId === 2)
+            .map(ref => ({ ref, error: 'catalog_batch_item_failed' })),
+        }) as never
+    );
+
+    const first = await service.getListPage('trakt-community-1', 'en', 0, 3);
+    expect(first.medias.map(media => media.mediaId)).toEqual([1, 3]);
+
+    // Once the catalog recovers, title 2 is back in its place and nothing moved past it
+    echoCatalog(catalogClient, database);
+    const again = await service.getListPage('trakt-community-1', 'en', 0, 3);
+    expect(again.medias.map(media => media.mediaId)).toEqual([1, 2, 3]);
+    const next = await service.getListPage('trakt-community-1', 'en', 1, 3);
+    expect(next.medias.map(media => media.mediaId)).toEqual([4, 5]);
+  });
+
+  it('forgets expired list orders and keeps at most 200', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockImplementation(async (_subjectId, slug) => ({
+      listId: slug,
+      page: 1,
+      totalPages: 1,
+      totalItems: 1,
+      items: [
+        { key: 'movie:1', rank: 1, media: { mediaType: 'movie' as const, ids: { tmdb: 1 } } },
+      ],
+    }));
+    echoCatalog(catalogClient, database);
+    const orders = (service as unknown as { onDemandOrders: Map<string, unknown> }).onDemandOrders;
+    const start = new Date('2026-01-01T00:00:00.000Z').getTime();
+    jest.setSystemTime(new Date(start));
+    try {
+      for (let list = 0; list < 205; list++) {
+        await service.getListPage(`trakt-community-${list}`, 'en', 0, 1);
+      }
+      expect(orders.size).toBe(200);
+      // The oldest went first
+      expect(orders.has('public:trakt-community-0')).toBe(false);
+      expect(orders.has('public:trakt-community-204')).toBe(true);
+
+      jest.setSystemTime(new Date(start + 5 * 60 * 1000));
+      await service.getListPage('trakt-community-1000', 'en', 0, 1);
+      expect([...orders.keys()]).toEqual(['public:trakt-community-1000']);
+    } finally {
+      jest.setSystemTime();
+    }
+  });
+
   it('serves a short page when a provider page needed to fill it fails', async () => {
     const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
     mediaListRepository.findBySlug = jest
@@ -421,7 +496,9 @@ describe('ListService refresh safety', () => {
     expect(result.medias.map(media => media.mediaId)).toEqual(
       Array.from({ length: 12 }, (_, index) => index + 1)
     );
-    expect(result.total).toBe(112);
+    // Rows page by index: the short page ends the list for now, or the next page (cards 20-39)
+    // would skip the entries 13-20 that page 2 holds
+    expect(result.total).toBe(12);
 
     // The next page has nothing in hand, so the same failure is an error, not an empty page
     await expect(service.getListPage('trakt-community-1', 'en', 1, 20)).rejects.toThrow(

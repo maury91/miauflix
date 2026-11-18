@@ -4,7 +4,7 @@ import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { artworkUrl } from '@shared/lib/media.utils';
 import { formatRelativeTime } from '@shared/lib/relative-time';
 import { FocusScope, useActiveIdWithin, useNavigation } from '@shared/navigation';
-import { type FC, type ReactNode, type RefObject, useEffect, useRef } from 'react';
+import { type FC, type ReactNode, type RefObject, useEffect, useRef, useState } from 'react';
 
 import { notificationCopy } from '../lib/notification-copy';
 import * as styles from './notificationsMenu.css';
@@ -54,31 +54,27 @@ export interface NotificationsMenuProps {
 }
 
 /**
- * Calls `onVisible` whenever the sentinel scrolls into the list's view. `mount` changes when the
- * list and sentinel elements are replaced, so the observer follows the new ones.
+ * Calls `onVisible` whenever the sentinel scrolls into the list's view. Returns a callback ref:
+ * the observer follows the sentinel element itself, so one that appears later (a stream's sentinel
+ * renders only while it has more) or is replaced (moving in or out of the FocusScope) is watched.
  */
-function useSentinel(
-  root: RefObject<HTMLElement | null>,
-  enabled: boolean,
-  onVisible: () => void,
-  mount: unknown
-) {
-  const sentinel = useRef<HTMLDivElement>(null);
+function useSentinel(root: RefObject<HTMLElement | null>, enabled: boolean, onVisible: () => void) {
+  const [sentinel, setSentinel] = useState<HTMLDivElement | null>(null);
   const callback = useRef(onVisible);
   callback.current = onVisible;
   useEffect(() => {
-    const target = sentinel.current;
-    if (!enabled || !target || typeof IntersectionObserver === 'undefined') return;
+    if (!enabled || !sentinel || typeof IntersectionObserver === 'undefined') return;
     const observer = new IntersectionObserver(
       entries => {
         if (entries.some(entry => entry.isIntersecting)) callback.current();
       },
+      // The list is replaced with the sentinel, so it is read when the sentinel changes
       { root: root.current, rootMargin: '0px 0px 200px 0px' }
     );
-    observer.observe(target);
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [enabled, root, mount]);
-  return sentinel;
+  }, [enabled, root, sentinel]);
+  return setSentinel;
 }
 
 const NotificationRow: FC<{
@@ -144,19 +140,15 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
 }) => {
   const listRef = useRef<HTMLDivElement>(null);
   const { focus, lastInput } = useNavigation();
-  // Taking or giving back the keys moves the content in or out of its FocusScope, which replaces
-  // the list and its sentinels
   const unreadSentinel = useSentinel(
     listRef,
     unread.hasMore && !unread.loadingMore,
-    unread.loadMore,
-    focused
+    unread.loadMore
   );
   const readSentinel = useSentinel(
     listRef,
     showRead && read.hasMore && !read.loadingMore,
-    read.loadMore,
-    focused
+    read.loadMore
   );
   const keysRef = useKeyboardNavigation({
     enabled: focused,
@@ -176,11 +168,14 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
   const lastRead = read.items[read.items.length - 1];
   // Only an open panel registers its controls, so the rail never moves into it
   const nav = (id: string) => (focused ? id : undefined);
-  const firstId = unread.items[0]
-    ? NOTIFICATIONS_NAV.row(unread.items[0].id)
-    : unreadCount > 0
-      ? NOTIFICATIONS_NAV.markAll
-      : NOTIFICATIONS_NAV.showRead;
+  // The first control actually shown: Retry replaces the list when loading failed
+  const firstId = unread.failed
+    ? NOTIFICATIONS_NAV.retry
+    : unread.items[0]
+      ? NOTIFICATIONS_NAV.row(unread.items[0].id)
+      : unreadCount > 0
+        ? NOTIFICATIONS_NAV.markAll
+        : NOTIFICATIONS_NAV.showRead;
 
   // The panel scrolls natively: keep a row reached by key in view, and load the next page when the
   // last loaded row of a stream is reached

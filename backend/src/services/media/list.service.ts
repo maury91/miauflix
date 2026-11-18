@@ -25,6 +25,8 @@ export const DEFAULT_LIST_REFRESH_PAGES = 6;
 const ON_DEMAND_COUNT_PAGES = 10;
 /** How long an unstored list's order of resolved entries is reused (its provider pages are cached 2 to 15 min). */
 const ON_DEMAND_ORDER_TTL_MS = 5 * 60 * 1000;
+/** Unstored lists whose order is remembered at once; the least recently used one goes first. */
+const ON_DEMAND_ORDER_LIMIT = 200;
 /** The most titles one catalog batch request resolves. */
 const CATALOG_BATCH_LIMIT = 50;
 export const LOCAL_WATCHLIST_SLUG = 'my-watchlist';
@@ -574,16 +576,14 @@ export class ListService {
     // Entries can still drop after that: an IMDb id that doesn't resolve, an item the catalog
     // doesn't return. Fill the page from the next entries, remembering the order that resolved so
     // the following pages start where this one ended (no gap, no repeat)
-    const key = `${subjectId}:${slug}`;
-    const remembered = this.onDemandOrders.get(key);
-    const order =
-      remembered && remembered.at + ON_DEMAND_ORDER_TTL_MS > Date.now()
-        ? remembered
-        : { at: Date.now(), refs: [] as MediaRef[], consumed: 0, ready: Promise.resolve() };
-    this.onDemandOrders.set(key, order);
+    const order = this.rememberedOrder(`${subjectId}:${slug}`);
     const priority = loadPriority === 'prefetch' ? 'prefetch' : 'returned';
     const details = new Map<string, MovieDetail | TVShowDetail>();
+    // Titles the catalog failed to load this time (not ones it does not know): they keep their
+    // place in the order, missing from this answer only, and are asked for again next time
+    const failed = new Set<string>();
     const refKey = (ref: MediaRef) => `${ref.mediaType}:${ref.mediaId}`;
+    const kept = (ref: MediaRef) => details.has(refKey(ref)) || failed.has(refKey(ref));
     /** Card details for any number of titles, one catalog batch per CATALOG_BATCH_LIMIT. */
     const loadDetails = async (refs: MediaRef[]) => {
       for (let index = 0; index < refs.length; index += CATALOG_BATCH_LIMIT) {
@@ -592,7 +592,11 @@ export class ListService {
           language,
           priority
         );
-        for (const item of batch.items) details.set(refKey(item), item);
+        for (const item of batch.items) {
+          details.set(refKey(item), item);
+          failed.delete(refKey(item));
+        }
+        for (const { ref } of batch.errors ?? []) failed.add(refKey(ref));
       }
     };
     const extend = async () => {
@@ -610,7 +614,7 @@ export class ListService {
         await loadDetails(refs.map(({ ref }) => ref));
         const seen = new Set(order.refs.map(refKey));
         for (const { ref } of refs) {
-          if (!details.has(refKey(ref)) || seen.has(refKey(ref))) continue;
+          if (!kept(ref) || seen.has(refKey(ref))) continue;
           seen.add(refKey(ref));
           order.refs.push(ref);
         }
@@ -629,13 +633,13 @@ export class ListService {
     };
     await extendOrder();
     // A remembered order holds titles this request has no details for yet. One the catalog no
-    // longer returns leaves the order, and the page refills from the entries after it
+    // longer knows leaves the order, and the page refills from the entries after it
     let pageRefs = order.refs.slice(start, start + limit);
     for (;;) {
-      const missing = pageRefs.filter(ref => !details.has(refKey(ref)));
+      const missing = pageRefs.filter(ref => !details.has(refKey(ref)) && !failed.has(refKey(ref)));
       if (!missing.length) break;
       await loadDetails(missing);
-      const omitted = new Set(missing.filter(ref => !details.has(refKey(ref))).map(refKey));
+      const omitted = new Set(missing.filter(ref => !kept(ref)).map(refKey));
       if (!omitted.size) break;
       await extendOrder(() => {
         order.refs = order.refs.filter(ref => !omitted.has(refKey(ref)));
@@ -650,13 +654,42 @@ export class ListService {
       start,
       loadPriority
     );
-    // Read to the end: exact. Otherwise the provider's count less what was dropped so far
+    // Read to the end: exact. Otherwise the provider's count less what was dropped so far.
+    // A page cut short by a provider failure ends the list for now: rows page by index, so a
+    // next page would start past the entries this one could not reach
     const dropped = rawSeen - providerItems.length + (order.consumed - order.refs.length);
     const total =
-      providerPage > totalPages && order.consumed >= providerItems.length
-        ? order.refs.length
-        : providerTotal - dropped;
+      providerFailed && pageRefs.length < limit
+        ? start + pageRefs.length
+        : providerPage > totalPages && order.consumed >= providerItems.length
+          ? order.refs.length
+          : providerTotal - dropped;
     return { medias, total };
+  }
+
+  /**
+   * The remembered order of an unstored list, or a new one. Expired orders are dropped on every
+   * call, and past ON_DEMAND_ORDER_LIMIT lists the least recently used one is forgotten.
+   */
+  private rememberedOrder(key: string) {
+    const now = Date.now();
+    for (const [rememberedKey, remembered] of this.onDemandOrders) {
+      if (remembered.at + ON_DEMAND_ORDER_TTL_MS <= now) this.onDemandOrders.delete(rememberedKey);
+    }
+    const order = this.onDemandOrders.get(key) ?? {
+      at: now,
+      refs: [] as MediaRef[],
+      consumed: 0,
+      ready: Promise.resolve() as Promise<unknown>,
+    };
+    // Re-inserted: the map's order is the use order
+    this.onDemandOrders.delete(key);
+    this.onDemandOrders.set(key, order);
+    for (const oldest of this.onDemandOrders.keys()) {
+      if (this.onDemandOrders.size <= ON_DEMAND_ORDER_LIMIT) break;
+      this.onDemandOrders.delete(oldest);
+    }
+    return order;
   }
 
   getListContent(slug: string, language = 'en', subjectId = 'public') {
