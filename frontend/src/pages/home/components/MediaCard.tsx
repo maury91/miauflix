@@ -61,9 +61,6 @@ export function MediaCard({ media, onSelect, progress: playback, focused, width 
       progress={share}
       progressText={share === undefined ? undefined : `${Math.round(share * 100)}% watched`}
       focused={focused}
-      // The selected card of the focused row, as Home has always marked it (end-to-end tests
-      // find it by this)
-      aria-current={focused || undefined}
       // Roving: the carousel's focused card is the row's one Tab stop
       tabIndex={focused ? 0 : -1}
       onClick={onSelect}

@@ -370,7 +370,7 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
 
         <ActionRow>
           <Button ref={backRef} appearance="settings" color="secondary" onClick={onDismiss}>
-            Back to Settings
+            Back to Home
           </Button>
         </ActionRow>
       </Content>

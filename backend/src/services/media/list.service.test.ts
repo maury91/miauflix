@@ -69,6 +69,25 @@ const setupTest = () => {
   };
 };
 
+/** The catalog returns every requested movie except `missing`, and the projection stores them all. */
+const echoCatalog = (
+  catalogClient: jest.Mocked<CatalogClientService>,
+  database: jest.Mocked<Database>,
+  missing: number[] = []
+) => {
+  catalogClient.batch.mockImplementation(
+    async refs =>
+      ({
+        items: refs.filter(ref => !missing.includes(ref.mediaId)),
+      }) as never
+  );
+  database.getMovieRepository().upsertMovieDetails = jest
+    .fn()
+    .mockImplementation(async (details: Array<{ mediaId: number }>) =>
+      details.map(detail => ({ id: detail.mediaId, mediaId: detail.mediaId }))
+    );
+};
+
 describe('ListService refresh safety', () => {
   beforeAll(() => {
     configureFakerSeed();
@@ -218,26 +237,29 @@ describe('ListService refresh safety', () => {
         media: { mediaType: 'movie', ids: { tmdb: 1000 + index } },
       })),
     };
-    // Past the end, the provider answers with no items and the list's totals
-    listClient.getPage.mockImplementation(async (_subject, _slug, page) =>
-      page === 1 ? (firstPage as never) : ({ ...firstPage, page, items: [] } as never)
-    );
+    listClient.getPage.mockImplementation(async (_subject, _slug, page) => {
+      if (page === 1) return firstPage as never;
+      throw new Error('page out of range');
+    });
+    echoCatalog(catalogClient, database);
     const service = new ListService(database, catalogClient, listClient);
 
-    // Zero-based page 2 of 20 (cards 40-59) spans provider pages 1 and 2; page 2 is past the end
+    // Zero-based page 2 of 20 (cards 40-59) is past the 40 cards: the total, and no items
     const past = await service.getListPage('trakt-movies-popular', 'en', 2, 20);
     expect(past.total).toBe(40);
     expect(past.medias).toEqual([]);
-    // Zero-based page 3 (cards 60-79) is all on provider page 2; no catalog work for no cards
+    // Zero-based page 3 (cards 60-79): no catalog work for no cards
     catalogClient.batch.mockClear();
     catalogClient.batch.mockRejectedValue(new Error('catalog not ready'));
     const further = await service.getListPage('trakt-movies-popular', 'en', 3, 20);
     expect(further).toEqual({ medias: [], total: 40 });
     expect(catalogClient.batch).not.toHaveBeenCalled();
+    // The provider is never asked for a page past its last
+    expect(listClient.getPage.mock.calls.every(([, , page]) => page === 1)).toBe(true);
 
-    // A failing page is an error even when a cached page's count says it is past the end
+    // A page within the list that fails is an error, never an empty page
     listClient.getPage.mockImplementation(async (_subject, _slug, page) => {
-      if (page === 1) return firstPage as never;
+      if (page === 1) return { ...firstPage, totalPages: 2, totalItems: 60 } as never;
       throw new Error('provider timed out');
     });
     await expect(service.getListPage('trakt-movies-popular', 'en', 2, 20)).rejects.toThrow(
@@ -247,6 +269,282 @@ describe('ListService refresh safety', () => {
     await expect(service.getListPage('trakt-movies-popular', 'en', 0, 20)).rejects.toThrow(
       'provider down'
     );
+  });
+
+  it('fills unstored list pages past the items a provider page dropped', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    // 120 provider entries over 3 pages; only 21, 30 and 10 of them are movies (a list of episodes)
+    const kept = [21, 30, 10];
+    let next = 1;
+    const pages = kept.map(count =>
+      Array.from({ length: count }, () => {
+        const tmdb = next++;
+        return {
+          key: `movie:${tmdb}`,
+          rank: tmdb,
+          media: { mediaType: 'movie' as const, ids: { tmdb } },
+        };
+      })
+    );
+    listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => ({
+      listId: 'trakt-community-1',
+      page,
+      totalPages: 3,
+      totalItems: 120,
+      items: pages[page - 1],
+    }));
+
+    echoCatalog(catalogClient, database);
+
+    const result = await service.getListPage('trakt-community-1', 'en', 1, 20);
+
+    expect(result.medias.map(media => media.mediaId)).toEqual(
+      Array.from({ length: 20 }, (_, index) => 21 + index)
+    );
+    expect(result.total).toBe(61);
+  });
+
+  it('keeps the provider estimate when a page read only to count the total fails', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    // The first page drops 10 of its 50 entries but still fills the requested 20 cards
+    listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => {
+      if (page !== 1) throw new Error('provider page unavailable');
+      return {
+        listId: 'trakt-community-1',
+        page,
+        totalPages: 3,
+        totalItems: 150,
+        items: Array.from({ length: 40 }, (_, index) => ({
+          key: `movie:${index + 1}`,
+          rank: index + 1,
+          media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+        })),
+      };
+    });
+    echoCatalog(catalogClient, database);
+
+    const result = await service.getListPage('trakt-community-1', 'en', 0, 20);
+
+    expect(result.medias.map(media => media.mediaId)).toEqual(
+      Array.from({ length: 20 }, (_, index) => index + 1)
+    );
+    expect(result.total).toBe(140);
+  });
+
+  it('resolves an unstored list in catalog batches of at most 50 titles', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => ({
+      listId: 'trakt-community-1',
+      page,
+      totalPages: 3,
+      totalItems: 150,
+      items: Array.from({ length: 50 }, (_, index) => {
+        const tmdb = (page - 1) * 50 + index + 1;
+        return {
+          key: `movie:${tmdb}`,
+          rank: tmdb,
+          media: { mediaType: 'movie' as const, ids: { tmdb } },
+        };
+      }),
+    }));
+    echoCatalog(catalogClient, database);
+
+    const result = await service.getListPage('trakt-community-1', 'en', 0, 120);
+
+    expect(result.medias.map(media => media.mediaId)).toEqual(
+      Array.from({ length: 120 }, (_, index) => index + 1)
+    );
+    expect(catalogClient.batch.mock.calls.every(([refs]) => refs.length <= 50)).toBe(true);
+  });
+
+  it('refills a remembered page when the catalog stops returning one of its titles', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockResolvedValue({
+      listId: 'trakt-community-1',
+      page: 1,
+      totalPages: 1,
+      totalItems: 5,
+      items: Array.from({ length: 5 }, (_, index) => ({
+        key: `movie:${index + 1}`,
+        rank: index + 1,
+        media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+      })),
+    });
+    echoCatalog(catalogClient, database);
+    const first = await service.getListPage('trakt-community-1', 'en', 0, 2);
+    expect(first.medias.map(media => media.mediaId)).toEqual([1, 2]);
+
+    // The remembered order still holds title 2, which the catalog no longer returns
+    echoCatalog(catalogClient, database, [2]);
+    const again = await service.getListPage('trakt-community-1', 'en', 0, 2);
+
+    expect(again.medias.map(media => media.mediaId)).toEqual([1, 3]);
+    const next = await service.getListPage('trakt-community-1', 'en', 1, 2);
+    expect(next.medias.map(media => media.mediaId)).toEqual([4, 5]);
+  });
+
+  it('keeps the place of a title the catalog failed to load for now', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockResolvedValue({
+      listId: 'trakt-community-1',
+      page: 1,
+      totalPages: 1,
+      totalItems: 5,
+      items: Array.from({ length: 5 }, (_, index) => ({
+        key: `movie:${index + 1}`,
+        rank: index + 1,
+        media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+      })),
+    });
+    echoCatalog(catalogClient, database);
+    // Title 2 fails (a timeout), it is not unknown
+    catalogClient.batch.mockImplementation(
+      async refs =>
+        ({
+          items: refs.filter(ref => ref.mediaId !== 2),
+          missing: [],
+          errors: refs
+            .filter(ref => ref.mediaId === 2)
+            .map(ref => ({ ref, error: 'catalog_batch_item_failed' })),
+        }) as never
+    );
+
+    const first = await service.getListPage('trakt-community-1', 'en', 0, 3);
+    expect(first.medias.map(media => media.mediaId)).toEqual([1, 3]);
+
+    // Once the catalog recovers, title 2 is back in its place and nothing moved past it
+    echoCatalog(catalogClient, database);
+    const again = await service.getListPage('trakt-community-1', 'en', 0, 3);
+    expect(again.medias.map(media => media.mediaId)).toEqual([1, 2, 3]);
+    const next = await service.getListPage('trakt-community-1', 'en', 1, 3);
+    expect(next.medias.map(media => media.mediaId)).toEqual([4, 5]);
+  });
+
+  it('forgets expired list orders and keeps at most 200', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockImplementation(async (_subjectId, slug) => ({
+      listId: slug,
+      page: 1,
+      totalPages: 1,
+      totalItems: 1,
+      items: [
+        { key: 'movie:1', rank: 1, media: { mediaType: 'movie' as const, ids: { tmdb: 1 } } },
+      ],
+    }));
+    echoCatalog(catalogClient, database);
+    const orders = (service as unknown as { onDemandOrders: Map<string, unknown> }).onDemandOrders;
+    const start = new Date('2026-01-01T00:00:00.000Z').getTime();
+    jest.setSystemTime(new Date(start));
+    try {
+      for (let list = 0; list < 205; list++) {
+        await service.getListPage(`trakt-community-${list}`, 'en', 0, 1);
+      }
+      expect(orders.size).toBe(200);
+      // The oldest went first
+      expect(orders.has('public:trakt-community-0')).toBe(false);
+      expect(orders.has('public:trakt-community-204')).toBe(true);
+
+      jest.setSystemTime(new Date(start + 5 * 60 * 1000));
+      await service.getListPage('trakt-community-1000', 'en', 0, 1);
+      expect([...orders.keys()]).toEqual(['public:trakt-community-1000']);
+    } finally {
+      jest.setSystemTime();
+    }
+  });
+
+  it('serves a short page when a provider page needed to fill it fails', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    // Only 12 of the first page's 50 entries are kept: filling 20 cards needs page 2, which fails
+    const providerError = new Error('provider page unavailable');
+    listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => {
+      if (page !== 1) throw providerError;
+      return {
+        listId: 'trakt-community-1',
+        page,
+        totalPages: 3,
+        totalItems: 150,
+        items: Array.from({ length: 12 }, (_, index) => ({
+          key: `movie:${index + 1}`,
+          rank: index + 1,
+          media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+        })),
+      };
+    });
+    catalogClient.batch.mockImplementation(async refs => ({
+      items: [],
+      missing: [],
+      errors: refs.map(ref => ({ ref, error: 'catalog_batch_item_failed' })),
+    }));
+    await expect(service.getListPage('trakt-community-1', 'en', 0, 20)).rejects.toBe(providerError);
+
+    // The catalog can recover the remembered references even while the provider is still failing.
+    echoCatalog(catalogClient, database);
+    const result = await service.getListPage('trakt-community-1', 'en', 0, 20);
+    expect(result.medias.map(media => media.mediaId)).toEqual(
+      Array.from({ length: 12 }, (_, index) => index + 1)
+    );
+    // Rows page by index: the short page ends the list for now, or the next page (cards 20-39)
+    // would skip the entries 13-20 that page 2 holds
+    expect(result.total).toBe(12);
+
+    // The next page has nothing in hand, so the same failure is an error, not an empty page
+    await expect(service.getListPage('trakt-community-1', 'en', 1, 20)).rejects.toThrow(
+      'provider page unavailable'
+    );
+  });
+
+  it('fills unstored list pages past the items the catalog did not return', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    const items = Array.from({ length: 50 }, (_, index) => ({
+      key: `movie:${index + 1}`,
+      rank: index,
+      media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+    }));
+    listClient.getPage.mockResolvedValue({
+      listId: 'trakt-community-2',
+      page: 1,
+      totalPages: 1,
+      totalItems: 50,
+      items,
+    });
+    // The catalog can't find item 7
+    echoCatalog(catalogClient, database, [7]);
+
+    const first = await service.getListPage('trakt-community-2', 'en', 0, 20);
+    const second = await service.getListPage('trakt-community-2', 'en', 1, 20);
+
+    expect(first.medias.map(media => media.mediaId)).toEqual([
+      ...Array.from({ length: 6 }, (_, index) => index + 1),
+      ...Array.from({ length: 14 }, (_, index) => index + 8),
+    ]);
+    expect(second.medias.map(media => media.mediaId)).toEqual(
+      Array.from({ length: 20 }, (_, index) => index + 22)
+    );
+    expect(second.total).toBe(49);
   });
 
   it('retries individual entries when a bulk projection fails', async () => {
@@ -317,6 +615,67 @@ describe('ListService refresh safety', () => {
       { tvMediaId: 202, priority: 90 },
       { priority: 90 }
     );
+  });
+});
+
+describe('ListService.getMediaByRefs', () => {
+  it('loads every title in one catalog batch and keeps the order asked for', async () => {
+    const { database, listClient, catalogClient } = setupTest();
+    const backgroundJobs = {
+      enqueueBestEffort: jest.fn(),
+    } as unknown as jest.Mocked<BackgroundJobService>;
+    // The catalog answers in its own order and without titles it does not know.
+    catalogClient.batch.mockResolvedValue({
+      items: [
+        { mediaType: 'movie', mediaId: 101 },
+        { mediaType: 'tv', mediaId: 202 },
+      ],
+      missing: [{ mediaType: 'movie', mediaId: 303 }],
+      errors: [],
+    } as never);
+    database.getMovieRepository().upsertMovieDetails = jest
+      .fn()
+      .mockResolvedValue([{ id: 11, mediaId: 101 }]);
+    database.getTVShowRepository().upsertTVShowDetails = jest
+      .fn()
+      .mockResolvedValue([{ id: 22, mediaId: 202 }]);
+    const service = new ListService(database, catalogClient, listClient, backgroundJobs);
+    const refs = [
+      { mediaType: 'tv' as const, mediaId: 202 },
+      { mediaType: 'movie' as const, mediaId: 303 },
+      { mediaType: 'movie' as const, mediaId: 101 },
+    ];
+
+    const medias = await service.getMediaByRefs(refs, 'it');
+
+    expect(catalogClient.batch).toHaveBeenCalledTimes(1);
+    expect(catalogClient.batch).toHaveBeenCalledWith(refs, 'it', 'returned');
+    expect(medias.map(media => [media.mediaType, media.mediaId, media.localId])).toEqual([
+      ['tv', 202, 22],
+      ['movie', 101, 11],
+    ]);
+    expect(backgroundJobs.enqueueBestEffort).toHaveBeenCalledTimes(2);
+  });
+
+  it('returns a title asked for twice in both positions', async () => {
+    const { database, listClient, catalogClient } = setupTest();
+    echoCatalog(catalogClient, database);
+    const service = new ListService(database, catalogClient, listClient);
+    const refs = [
+      { mediaType: 'movie' as const, mediaId: 101 },
+      { mediaType: 'movie' as const, mediaId: 202 },
+      { mediaType: 'movie' as const, mediaId: 101 },
+    ];
+
+    const medias = await service.getMediaByRefs(refs);
+
+    expect(medias.map(media => media.mediaId)).toEqual([101, 202, 101]);
+  });
+
+  it('does not call the catalog for no titles', async () => {
+    const { catalogClient, service } = setupTest();
+    expect(await service.getMediaByRefs([])).toEqual([]);
+    expect(catalogClient.batch).not.toHaveBeenCalled();
   });
 });
 

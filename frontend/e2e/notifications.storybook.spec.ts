@@ -72,7 +72,7 @@ test.describe('Notifications stories - visual regression', () => {
       // may still be settling focus after the artwork loads, so retry until Left lands.
       const search = page.getByRole('button', { name: 'Search' });
       await expect(async () => {
-        await page.locator('[aria-current="true"]').first().focus();
+        await page.locator('button[data-focused]').first().focus();
         await page.keyboard.press('ArrowLeft');
         await expect(search).toBeFocused({ timeout: 1_000 });
       }).toPass({ timeout: 15_000 });

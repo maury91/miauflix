@@ -1,3 +1,4 @@
+import { NavigationProvider } from '@shared/navigation';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn } from 'storybook/test';
 
@@ -18,6 +19,13 @@ const meta = {
     onPointerEnter: fn(),
   },
   parameters: { layout: 'fullscreen', backgrounds: { default: 'dark' } },
+  decorators: [
+    Story => (
+      <NavigationProvider>
+        <Story />
+      </NavigationProvider>
+    ),
+  ],
 } satisfies Meta<typeof ProfileMenu>;
 
 export default meta;

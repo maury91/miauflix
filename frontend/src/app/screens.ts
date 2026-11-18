@@ -18,20 +18,19 @@ export type AppScreen =
   | { kind: 'configuration' }
   | { kind: 'storage' }
   | { kind: 'sources' }
-  | { kind: 'settings' }
   | { kind: 'search' }
   | { kind: 'notFound' }
   | { kind: 'media' }
   /** The route is not allowed; replace it without showing the page. */
   | { kind: 'redirect'; to: AppRoute };
 
-const SETTINGS: AppRoute = { type: 'settings' };
+const HOME: AppRoute = { type: 'home' };
 
 /**
  * Decide the screen from the route and the app's startup state, top to bottom. Startup gates
  * (setup, login, configuration) show over the route without changing it, so a deep link opens
  * once they are cleared. QR approval works before signing in. Admin pages redirect others to
- * Settings without mounting.
+ * Home without mounting.
  */
 export function resolveScreen({
   route,
@@ -65,8 +64,7 @@ export function resolveScreen({
   if (requiredConfigActive || appState === 'config_wizard') return { kind: 'requiredConfig' };
   // Past the gates the user is signed in.
   if (route.type === 'configuration' || route.type === 'storage' || route.type === 'sources')
-    return isAdmin ? { kind: route.type } : { kind: 'redirect', to: SETTINGS };
-  if (route.type === 'settings') return { kind: 'settings' };
+    return isAdmin ? { kind: route.type } : { kind: 'redirect', to: HOME };
   if (route.type === 'search') return { kind: 'search' };
   if (route.type === 'notFound') return { kind: 'notFound' };
   return { kind: 'media' };

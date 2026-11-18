@@ -86,12 +86,18 @@ export function useHomeFeed({
     [continueHydrationSignature]
   );
   useEffect(() => {
-    // These queries supply rendered cards, so retain their data while the row needs it.
+    // These queries supply rendered cards, so retain their data while the row needs it. Each
+    // title has its own cache entry (a new title fetches only itself), but the subscriptions
+    // made here together go out as one batch request: a details request per title would run
+    // into the backend's per-address limit with a long Continue watching row.
     const subscriptions = continueHydrationKeys.map(key => {
       const [kind, mediaId] = key.split(':');
-      return kind === 'movie'
-        ? dispatch(mediaApi.endpoints.getMovie.initiate(Number(mediaId)))
-        : dispatch(mediaApi.endpoints.getShow.initiate(Number(mediaId)));
+      return dispatch(
+        mediaApi.endpoints.getMediaCard.initiate({
+          mediaType: kind === 'movie' ? 'movie' : 'tv',
+          mediaId: Number(mediaId),
+        })
+      );
     });
     return () => subscriptions.forEach(subscription => subscription?.unsubscribe?.());
   }, [continueHydrationKeys, dispatch]);

@@ -8,7 +8,6 @@ export type AppRoute =
   | { type: 'showDetails'; mediaId: number }
   | { type: 'moviePlayer'; mediaId: number }
   | { type: 'episodePlayer'; showMediaId: number; seasonNumber: number; episodeNumber: number }
-  | { type: 'settings' }
   | { type: 'configuration' }
   | { type: 'storage' }
   | { type: 'sources' }
@@ -31,7 +30,8 @@ export function parseRoute(pathname: string): AppRoute {
   const path = pathname.split('?')[0]?.replace(/\/+$/, '') || '/';
   if (path === '/') return HOME;
   if (path === '/search') return { type: 'search' };
-  if (path === '/settings') return { type: 'settings' };
+  // The settings page became a panel on Home's rail
+  if (path === '/settings') return HOME;
   if (path === '/settings/configuration') return { type: 'configuration' };
   if (path === '/settings/storage') return { type: 'storage' };
   if (path === '/settings/sources') return { type: 'sources' };
@@ -88,8 +88,6 @@ export function routePath(route: AppRoute): string {
       return `/movies/${route.mediaId}/watch`;
     case 'episodePlayer':
       return `/shows/${route.showMediaId}/seasons/${route.seasonNumber}/episodes/${route.episodeNumber}/watch`;
-    case 'settings':
-      return '/settings';
     case 'configuration':
       return '/settings/configuration';
     case 'storage':
@@ -167,17 +165,6 @@ export function navigate(
   const path = routePath(route);
   const previous = snapshot;
   const url = builtForTizen ? `#${path}` : path;
-  const previousState = window.history.state?.[HISTORY_KEY] ?? {};
-  if (
-    previous.type === 'settings' &&
-    (route.type === 'storage' || route.type === 'sources' || route.type === 'configuration')
-  ) {
-    window.history.replaceState(
-      { ...window.history.state, [HISTORY_KEY]: { ...previousState, focus: route.type } },
-      '',
-      window.location.href
-    );
-  }
   const state = {
     [HISTORY_KEY]: { parent: options.parent ? routeKey(options.parent) : routeKey(previous) },
   };
@@ -189,18 +176,6 @@ export function navigate(
     snapshot = route;
     subscribers.forEach(listener => listener());
   }
-}
-
-export type SettingsFocus = 'configuration' | 'storage' | 'sources';
-
-export function getRouteFocusSnapshot(): SettingsFocus {
-  const focus =
-    typeof window === 'undefined' ? undefined : window.history.state?.[HISTORY_KEY]?.focus;
-  return focus === 'storage' || focus === 'sources' ? focus : 'configuration';
-}
-
-export function useRouteFocus(): SettingsFocus {
-  return useSyncExternalStore(subscribeRoute, getRouteFocusSnapshot, () => 'configuration');
 }
 
 /** The route this history entry was opened from, when the app recorded one. */

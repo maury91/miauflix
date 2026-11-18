@@ -1,4 +1,5 @@
 import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
+import { createIsolatedUser } from '../utils/user-pool';
 
 describe('Authentication Endpoints', () => {
   let client: TestClient;
@@ -10,8 +11,9 @@ describe('Authentication Endpoints', () => {
     try {
       await waitForService(client);
 
-      // Try to extract user credentials from Docker logs
-      userCredentials = await extractUserCredentialsFromLogs();
+      // A user of its own: this suite logs in often enough to evict the shared admin's sessions
+      const adminCredentials = await extractUserCredentialsFromLogs();
+      userCredentials = adminCredentials && (await createIsolatedUser(adminCredentials));
     } catch (error) {
       console.log('❌ Backend service is not available. Ensure the Docker environment is running.');
       throw error;

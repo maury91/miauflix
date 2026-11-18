@@ -65,7 +65,7 @@ test.describe('Home stories - visual regression', () => {
     const stride = 253.44 + 14.4;
     const screenshot = async (leadingIndex: number, name: string) => {
       await expect.poll(offset).toBeCloseTo(-leadingIndex * stride, 1);
-      await expect(row.locator('[aria-current="true"]')).toHaveCount(1);
+      await expect(row.locator('button[data-focused]')).toHaveCount(1);
       await expect(row).toHaveScreenshot(`category-row-arrow-${name}.png`, {
         animations: 'disabled',
       });

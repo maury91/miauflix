@@ -55,10 +55,23 @@ const storeWith = async (seed: { movie?: MovieResponse; show?: ShowResponse }) =
     reducer: { [mediaApi.reducerPath]: mediaApi.reducer },
     middleware: getDefault => getDefault().concat(mediaApi.middleware),
   });
+  // Continue watching cards come from the batch card cache, not the details responses.
   if (seed.movie)
-    await store.dispatch(mediaApi.util.upsertQueryData('getMovie', seed.movie.mediaId, seed.movie));
+    await store.dispatch(
+      mediaApi.util.upsertQueryData(
+        'getMediaCard',
+        { mediaType: 'movie', mediaId: seed.movie.mediaId },
+        mediaFromMovie(seed.movie)
+      )
+    );
   if (seed.show)
-    await store.dispatch(mediaApi.util.upsertQueryData('getShow', seed.show.mediaId, seed.show));
+    await store.dispatch(
+      mediaApi.util.upsertQueryData(
+        'getMediaCard',
+        { mediaType: 'tv', mediaId: seed.show.mediaId },
+        mediaFromShow(seed.show)
+      )
+    );
   return store;
 };
 

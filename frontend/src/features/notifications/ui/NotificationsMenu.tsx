@@ -1,13 +1,13 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
-import { PALETTE } from '@shared/config/constants';
+import { Badge, Button, Heading, List, ListItem, Text } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { artworkUrl } from '@shared/lib/media.utils';
 import { formatRelativeTime } from '@shared/lib/relative-time';
-import { QualityBadge } from '@shared/ui/quality-badge/QualityBadge';
-import { type FC, type RefObject, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import { FocusScope, useActiveIdWithin, useNavigation } from '@shared/navigation';
+import { type FC, type ReactNode, type RefObject, useEffect, useRef, useState } from 'react';
 
 import { notificationCopy } from '../lib/notification-copy';
+import * as styles from './notificationsMenu.css';
 
 import BellIcon from '~icons/mdi/bell-outline';
 
@@ -16,204 +16,14 @@ export const NOTIFICATIONS_PANEL_ATTRIBUTE = 'data-notifications-panel';
 
 const POSTER_SIZE = 84;
 
-/**
- * In the rail's flyout (NavRail), at the top of the screen: it starts right at the rail's edge, so
- * the pointer travels from the bell into the panel without leaving the rail.
- */
-const HoverZone = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 3vh 0 0 0;
-  outline: none;
-`;
-
-const Panel = styled.section`
-  display: flex;
-  flex-direction: column;
-  width: 440px;
-  max-width: calc(100vw - 160px);
-  max-height: 88vh;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  background: #151515;
-  color: ${PALETTE.text.primary};
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
-`;
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 18px 18px 10px;
-
-  h2 {
-    margin: 0;
-    font-family: inherit;
-    font-size: 19.2px;
-    font-weight: 600;
-    text-transform: none;
-  }
-`;
-
-const PillButton = styled.button`
-  flex: 0 0 auto;
-  padding: 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  color: ${PALETTE.text.secondary};
-  font: inherit;
-  font-size: 12.8px;
-  cursor: pointer;
-
-  &:hover,
-  &:focus-visible,
-  &:focus {
-    outline: none;
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.12);
-    color: ${PALETTE.text.primary};
-  }
-`;
-
-const List = styled.div`
-  overflow: auto;
-  padding: 0 10px 12px;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-/* Flex, not grid: the 2020 TVs (Chromium 69) cannot lay out a button as a grid. */
-const Row = styled.button`
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  padding: 8px 14px 8px 8px;
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-
-  & + &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 10px;
-    left: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  &:hover,
-  &:focus,
-  &:focus-visible {
-    outline: none;
-    background: rgba(255, 255, 255, 0.09);
-  }
-
-  &:hover::before,
-  &:focus::before,
-  &:hover + &::before,
-  &:focus + &::before {
-    border-color: transparent;
-  }
-`;
-
-const Poster = styled.div`
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: ${POSTER_SIZE}px;
-  height: ${POSTER_SIZE}px;
-  overflow: hidden;
-  border-radius: 6px;
-  background: #262626;
-  color: ${PALETTE.text.muted};
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  svg {
-    width: 28px;
-    height: 28px;
-  }
-`;
-
-const Text = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  gap: 4px;
-  min-width: 0;
-
-  strong {
-    font-size: 15.2px;
-    font-weight: 600;
-  }
-
-  p {
-    margin: 0;
-    color: ${PALETTE.text.secondary};
-    font-size: 13.12px;
-    line-height: 1.45;
-  }
-
-  time {
-    color: ${PALETTE.text.muted};
-    font-size: 11.52px;
-  }
-`;
-
-const InlineBadge = styled(QualityBadge)`
-  margin: 0 0.3em;
-  font-size: 11.52px;
-  gap: 5.6px;
-`;
-
-/** Holds the unread dot's column on read rows, so their text lines up. */
-const DotSlot = styled.span`
-  flex: 0 0 10px;
-`;
-
-const UnreadDot = styled.span`
-  flex: 0 0 9px;
-  width: 9px;
-  margin-right: 1px;
-  height: 9px;
-  border-radius: 50%;
-  background: #e60019;
-`;
-
-const Message = styled.p`
-  margin: 0;
-  padding: 14px 12px;
-  color: ${PALETTE.text.muted};
-  font-size: 13.6px;
-  text-align: center;
-`;
-
-const ShowReadButton = styled(PillButton)`
-  display: block;
-  margin: 10px auto 4px;
-`;
-
-const Sentinel = styled.div`
-  height: 1px;
-`;
+/** Navigation ids of the panel's scope and controls. */
+const NOTIFICATIONS_NAV = {
+  scope: 'notifications',
+  markAll: 'notifications:mark-all',
+  retry: 'notifications:retry',
+  showRead: 'notifications:show-read',
+  row: (id: number | string) => `notifications:row:${id}`,
+} as const;
 
 interface NotificationStream {
   items: NotificationItem[];
@@ -229,7 +39,10 @@ export interface NotificationsMenuProps {
   /** Whether read notifications exist, so the "show read" button is worth offering. */
   hasRead: boolean;
   showRead: boolean;
-  /** The keyboard is in the panel (rather than on the rail). */
+  /**
+   * The keyboard is in the panel (rather than on the rail): its controls become a contained
+   * navigation scope, entered at the newest notification.
+   */
   focused: boolean;
   onToggleShowRead: () => void;
   onMarkAllRead: () => void;
@@ -240,79 +53,78 @@ export interface NotificationsMenuProps {
   onPointerEnter: () => void;
 }
 
-const FOCUSABLE = '[data-notification-focusable]:not([disabled])';
-
-/** Calls `onVisible` whenever the sentinel scrolls into the list's view. */
-/** Focus the panel's newest notification, else its first control, else the panel itself. */
-function focusFirstIn(zone: HTMLElement | null): boolean {
-  if (!zone) return false;
-  const target =
-    zone.querySelector<HTMLElement>('[data-notification-row]') ??
-    zone.querySelector<HTMLElement>(FOCUSABLE) ??
-    zone;
-  target.focus({ preventScroll: true });
-  return true;
-}
-
+/**
+ * Calls `onVisible` whenever the sentinel scrolls into the list's view. Returns a callback ref:
+ * the observer follows the sentinel element itself, so one that appears later (a stream's sentinel
+ * renders only while it has more) or is replaced (moving in or out of the FocusScope) is watched.
+ */
 function useSentinel(root: RefObject<HTMLElement | null>, enabled: boolean, onVisible: () => void) {
-  const sentinel = useRef<HTMLDivElement>(null);
+  const [sentinel, setSentinel] = useState<HTMLDivElement | null>(null);
   const callback = useRef(onVisible);
   callback.current = onVisible;
   useEffect(() => {
-    const target = sentinel.current;
-    if (!enabled || !target || typeof IntersectionObserver === 'undefined') return;
+    if (!enabled || !sentinel || typeof IntersectionObserver === 'undefined') return;
     const observer = new IntersectionObserver(
       entries => {
         if (entries.some(entry => entry.isIntersecting)) callback.current();
       },
+      // The list is replaced with the sentinel, so it is read when the sentinel changes
       { root: root.current, rootMargin: '0px 0px 200px 0px' }
     );
-    observer.observe(target);
+    observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [enabled, root]);
-  return sentinel;
+  }, [enabled, root, sentinel]);
+  return setSentinel;
 }
 
 const NotificationRow: FC<{
   notification: NotificationItem;
-  last?: 'read' | 'unread';
+  navId?: string;
   onOpen: (notification: NotificationItem) => void;
-}> = ({ notification, last, onOpen }) => {
+}> = ({ notification, navId, onOpen }) => {
   const copy = notificationCopy(notification);
   const unread = !notification.readAt;
   const poster = notification.poster ? artworkUrl(notification.poster, 'card', POSTER_SIZE) : null;
-  const sentence = [copy.text, copy.qualityLabel, copy.release].filter(Boolean).join(' ');
   return (
-    <Row
-      type="button"
-      data-notification-focusable=""
-      data-notification-row=""
-      data-last-of={last}
-      aria-label={`${copy.heading}. ${notification.title}. ${sentence}${unread ? ', unread' : ''}`}
-      onMouseEnter={event => event.currentTarget.focus({ preventScroll: true })}
-      onClick={() => onOpen(notification)}
-    >
-      <Poster>
-        {poster ? <img src={poster} alt="" loading="lazy" /> : <BellIcon aria-hidden="true" />}
-      </Poster>
-      <Text>
-        <strong>{copy.heading}</strong>
-        <p>
-          {copy.text}
+    <ListItem
+      navId={navId}
+      leading={
+        <span className={styles.poster}>
+          {poster ? (
+            <img className={styles.posterImage} src={poster} alt="" loading="lazy" />
+          ) : (
+            <BellIcon />
+          )}
+        </span>
+      }
+      title={copy.heading}
+      description={
+        <>
+          {notification.title}. {copy.text}
           {copy.qualityLabel && (
-            <InlineBadge label={copy.qualityLabel} sourceType={notification.sourceType} />
+            <span className={styles.inlineBadge}>
+              <Badge>{copy.qualityLabel}</Badge>
+            </span>
           )}
           {copy.release && ` ${copy.release}`}
           {copy.qualityLabel && !copy.release && '.'}
-        </p>
-        <time dateTime={notification.createdAt}>{formatRelativeTime(notification.createdAt)}</time>
-      </Text>
-      {unread ? <UnreadDot aria-hidden="true" /> : <DotSlot />}
-    </Row>
+          <time className={styles.time} dateTime={notification.createdAt}>
+            {formatRelativeTime(notification.createdAt)}
+          </time>
+        </>
+      }
+      metadata={unread ? <Badge accessibleLabel="Unread">New</Badge> : undefined}
+      onClick={() => onOpen(notification)}
+    />
   );
 };
 
-/** The notifications panel beside the rail: unread first, read on request, paged as it scrolls. */
+/**
+ * The notifications panel beside the rail: unread first, read on request, paged as it scrolls.
+ * Rows are ListItems; while the panel has the keyboard it is a contained scope of the navigation
+ * layer (Up/Down move, OK opens, reaching the last row loads the next page); Left or Back hand the
+ * keyboard back to the rail.
+ */
 export const NotificationsMenu: FC<NotificationsMenuProps> = ({
   unread,
   read,
@@ -326,8 +138,8 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
   onExit,
   onPointerEnter,
 }) => {
-  const zoneRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const { focus, lastInput } = useNavigation();
   const unreadSentinel = useSentinel(
     listRef,
     unread.hasMore && !unread.loadingMore,
@@ -338,41 +150,8 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
     showRead && read.hasMore && !read.loadingMore,
     read.loadMore
   );
-
-  const focusables = () => [...(zoneRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [])];
-
-  const focusItem = (element: HTMLElement | undefined) => {
-    if (!element) return;
-    element.focus({ preventScroll: true });
-    element.scrollIntoView?.({ block: 'nearest' });
-    const last = element.dataset['lastOf'];
-    if (last === 'unread') unread.loadMore();
-    if (last === 'read') read.loadMore();
-  };
-
-  const focusFirst = () => focusFirstIn(zoneRef.current);
-
-  // Entering the panel lands on the newest notification, like the rail lands on its item.
-  useEffect(() => {
-    if (!focused) return;
-    if (zoneRef.current?.contains(document.activeElement)) return;
-    focusFirstIn(zoneRef.current);
-    // Runs when the keyboard arrives, and once the first page loads.
-  }, [focused, unread.items.length]);
-
-  const move = (direction: -1 | 1) => {
-    const items = focusables();
-    const index = items.indexOf(document.activeElement as HTMLElement);
-    const next = index === -1 ? items[0] : items[index + direction];
-    focusItem(next);
-    return true;
-  };
-
-  const navigationRef = useKeyboardNavigation({
+  const keysRef = useKeyboardNavigation({
     enabled: focused,
-    onRestoreFocus: focusFirst,
-    onUp: () => move(-1),
-    onDown: () => move(1),
     onLeft: () => {
       onExit();
       return true;
@@ -382,95 +161,162 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
       return true;
     },
     onRight: () => true,
-    onConfirm: () => {
-      const active = document.activeElement;
-      if (active instanceof HTMLElement && zoneRef.current?.contains(active)) active.click();
-      return true;
-    },
   });
 
+  const unreadExhausted = !unread.hasMore;
   const lastUnread = unread.items[unread.items.length - 1];
   const lastRead = read.items[read.items.length - 1];
-  const unreadExhausted = !unread.hasMore;
+  // Only an open panel registers its controls, so the rail never moves into it
+  const nav = (id: string) => (focused ? id : undefined);
+  // The first control actually shown: Retry replaces the list when loading failed
+  const firstId = unread.failed
+    ? NOTIFICATIONS_NAV.retry
+    : unread.items[0]
+      ? NOTIFICATIONS_NAV.row(unread.items[0].id)
+      : unreadCount > 0
+        ? NOTIFICATIONS_NAV.markAll
+        : NOTIFICATIONS_NAV.showRead;
 
-  return (
+  // The panel scrolls natively: keep a row reached by key in view, and load the next page when the
+  // last loaded row of a stream is reached
+  const active = useActiveIdWithin(focused ? NOTIFICATIONS_NAV.scope : undefined);
+  useEffect(() => {
+    if (active === null) return;
+    if (lastInput() === 'key')
+      listRef.current
+        ?.querySelector<HTMLElement>('[data-focused]')
+        ?.scrollIntoView?.({ block: 'nearest' });
+    if (lastUnread && unread.hasMore && active === NOTIFICATIONS_NAV.row(lastUnread.id))
+      unread.loadMore();
+    if (lastRead && read.hasMore && active === NOTIFICATIONS_NAV.row(lastRead.id)) read.loadMore();
+    // Only a focus move scrolls or pages
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
+
+  // Entered before the first page arrived (on Mark all as read, or nothing): take the newest
+  // notification once it does, unless focus already moved on
+  const enteredEmpty = useRef(false);
+  useEffect(() => {
+    if (!focused) {
+      enteredEmpty.current = false;
+      return;
+    }
+    const first = unread.items[0];
+    if (!first) {
+      enteredEmpty.current = true;
+      if (active === null) focus(NOTIFICATIONS_NAV.scope);
+      return;
+    }
+    if (!enteredEmpty.current) return;
+    enteredEmpty.current = false;
+    if (active === null || active === NOTIFICATIONS_NAV.markAll)
+      focus(NOTIFICATIONS_NAV.row(first.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focused, unread.items.length]);
+
+  const content: ReactNode = (
     <>
-      <HoverZone
-        ref={node => {
-          zoneRef.current = node;
-          navigationRef(node);
-        }}
-        {...{ [NOTIFICATIONS_PANEL_ATTRIBUTE]: '' }}
-        tabIndex={-1}
-        onMouseEnter={onPointerEnter}
-      >
-        <Panel aria-label="Notifications">
-          <Header>
-            <h2>Notifications</h2>
-            {unreadCount > 0 && (
-              <PillButton
-                type="button"
-                data-notification-focusable=""
-                onMouseEnter={event => event.currentTarget.focus({ preventScroll: true })}
-                onClick={onMarkAllRead}
-              >
-                Mark all as read
-              </PillButton>
-            )}
-          </Header>
-          <List ref={listRef} aria-live="polite">
-            {unread.failed ? (
-              <Message>
-                Notifications could not be loaded.{' '}
-                <PillButton type="button" data-notification-focusable="" onClick={unread.retry}>
-                  Retry
-                </PillButton>
-              </Message>
-            ) : unread.loading && !unread.items.length ? (
-              <Message>Loading notifications…</Message>
-            ) : (
-              <>
+      <header className={styles.header}>
+        <Heading level={2} variant="heading">
+          Notifications
+        </Heading>
+        {unreadCount > 0 && (
+          <Button navId={nav(NOTIFICATIONS_NAV.markAll)} size="sm" onClick={onMarkAllRead}>
+            Mark all as read
+          </Button>
+        )}
+      </header>
+      <div ref={listRef} className={styles.list} aria-live="polite">
+        {unread.failed ? (
+          <div className={styles.message}>
+            <Text tone="secondary">Notifications could not be loaded.</Text>{' '}
+            <Button navId={nav(NOTIFICATIONS_NAV.retry)} size="sm" onClick={unread.retry}>
+              Retry
+            </Button>
+          </div>
+        ) : unread.loading && !unread.items.length ? (
+          <p className={styles.message}>
+            <Text tone="secondary">Loading notifications…</Text>
+          </p>
+        ) : (
+          <>
+            {unread.items.length > 0 && (
+              <List label="Unread notifications" divided>
                 {unread.items.map(notification => (
                   <NotificationRow
                     key={notification.id}
+                    navId={nav(NOTIFICATIONS_NAV.row(notification.id))}
                     notification={notification}
-                    last={notification === lastUnread && unread.hasMore ? 'unread' : undefined}
                     onOpen={onOpen}
                   />
                 ))}
-                {unread.hasMore && <Sentinel ref={unreadSentinel} />}
-                {unread.loadingMore && <Message>Loading more…</Message>}
-                {!unread.items.length && <Message>You’re all caught up.</Message>}
-                {unreadExhausted && hasRead && (
-                  <ShowReadButton
-                    type="button"
-                    data-notification-focusable=""
-                    aria-expanded={showRead}
-                    onMouseEnter={event => event.currentTarget.focus({ preventScroll: true })}
-                    onClick={onToggleShowRead}
-                  >
-                    {showRead ? 'Hide read notifications' : 'Show read notifications'}
-                  </ShowReadButton>
-                )}
-                {unreadExhausted &&
-                  showRead &&
-                  read.items.map(notification => (
-                    <NotificationRow
-                      key={notification.id}
-                      notification={notification}
-                      last={notification === lastRead && read.hasMore ? 'read' : undefined}
-                      onOpen={onOpen}
-                    />
-                  ))}
-                {unreadExhausted && showRead && read.hasMore && <Sentinel ref={readSentinel} />}
-                {unreadExhausted && showRead && (read.loading || read.loadingMore) && (
-                  <Message>Loading more…</Message>
-                )}
-              </>
+              </List>
             )}
-          </List>
-        </Panel>
-      </HoverZone>
+            {unread.hasMore && <div ref={unreadSentinel} className={styles.sentinel} />}
+            {unread.loadingMore && (
+              <p className={styles.message}>
+                <Text tone="secondary">Loading more…</Text>
+              </p>
+            )}
+            {!unread.items.length && (
+              <p className={styles.message}>
+                <Text tone="secondary">You’re all caught up.</Text>
+              </p>
+            )}
+            {unreadExhausted && hasRead && (
+              <div className={styles.showRead}>
+                <Button
+                  navId={nav(NOTIFICATIONS_NAV.showRead)}
+                  size="sm"
+                  aria-expanded={showRead}
+                  onClick={onToggleShowRead}
+                >
+                  {showRead ? 'Hide read notifications' : 'Show read notifications'}
+                </Button>
+              </div>
+            )}
+            {unreadExhausted && showRead && read.items.length > 0 && (
+              <List label="Read notifications" divided>
+                {read.items.map(notification => (
+                  <NotificationRow
+                    key={notification.id}
+                    navId={nav(NOTIFICATIONS_NAV.row(notification.id))}
+                    notification={notification}
+                    onOpen={onOpen}
+                  />
+                ))}
+              </List>
+            )}
+            {unreadExhausted && showRead && read.hasMore && (
+              <div ref={readSentinel} className={styles.sentinel} />
+            )}
+            {unreadExhausted && showRead && (read.loading || read.loadingMore) && (
+              <p className={styles.message}>
+                <Text tone="secondary">Loading more…</Text>
+              </p>
+            )}
+          </>
+        )}
+      </div>
     </>
+  );
+
+  return (
+    <div
+      ref={keysRef}
+      className={styles.zone}
+      {...{ [NOTIFICATIONS_PANEL_ATTRIBUTE]: '' }}
+      onMouseEnter={onPointerEnter}
+    >
+      <section className={styles.panel} aria-label="Notifications">
+        {focused ? (
+          <FocusScope id={NOTIFICATIONS_NAV.scope} contain initialId={firstId}>
+            {content}
+          </FocusScope>
+        ) : (
+          content
+        )}
+      </section>
+    </div>
   );
 };

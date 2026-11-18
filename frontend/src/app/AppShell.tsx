@@ -8,7 +8,6 @@ import {
   navigate,
   navigateBack,
   useRoute,
-  useRouteFocus,
 } from '@app/router';
 import { resolveScreen } from '@app/screens';
 import { IntroAnimation } from '@app/shell/IntroAnimation';
@@ -22,7 +21,6 @@ import ProfileEditorPage from '@pages/profiles/ProfileEditorPage';
 import WhosWatchingPage from '@pages/profiles/WhosWatchingPage';
 import QrApprovalPage from '@pages/qr/QrApprovalPage';
 import SearchPage from '@pages/search/SearchPage';
-import SettingsPage from '@pages/settings/SettingsPage';
 import SourcesPage from '@pages/settings/SourcesPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
@@ -63,7 +61,6 @@ const LoadingContainer = styled.div`
 export function AppShell() {
   const dispatch = useAppDispatch();
   const route = useRoute();
-  const settingsFocus = useRouteFocus();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAdmin = useAppSelector(selectIsAdmin);
   const appState = useKeyboardClosedAppState(useAppState());
@@ -209,29 +206,11 @@ export function AppShell() {
       case 'requiredConfig':
         return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
       case 'configuration':
-        return (
-          <ConfigWizardPage key="route-configuration" onDismiss={backTo({ type: 'settings' })} />
-        );
+        return <ConfigWizardPage key="route-configuration" onDismiss={backTo(HOME)} />;
       case 'storage':
-        return <StoragePage key="route-storage" onDismiss={backTo({ type: 'settings' })} />;
+        return <StoragePage key="route-storage" onDismiss={backTo(HOME)} />;
       case 'sources':
-        return <SourcesPage key="route-sources" onDismiss={backTo({ type: 'settings' })} />;
-      case 'settings':
-        return (
-          <SettingsPage
-            key="settings"
-            canConfigure={isAdmin}
-            onConfiguration={() => navigate({ type: 'configuration' })}
-            canManageStorage={isAdmin}
-            onStorage={() => navigate({ type: 'storage' })}
-            canManageSources={isAdmin}
-            onSources={() => navigate({ type: 'sources' })}
-            initialFocus={settingsFocus}
-            onDismiss={backTo(
-              getRouteParent()?.type === 'search' ? { type: 'search' } : { type: 'home' }
-            )}
-          />
-        );
+        return <SourcesPage key="route-sources" onDismiss={backTo(HOME)} />;
       case 'search':
         return <SearchPage key="search" onDismiss={backTo({ type: 'home' })} />;
       case 'redirect':

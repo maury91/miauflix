@@ -1,6 +1,8 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
+import { NavigationProvider } from '@shared/navigation';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn } from 'storybook/test';
+import { useEffect, useState } from 'react';
+import { expect, fn, waitFor, within } from 'storybook/test';
 
 import {
   notificationReadItems as readItems,
@@ -38,9 +40,11 @@ const meta = {
   parameters: { layout: 'fullscreen', backgrounds: { default: 'dark' } },
   decorators: [
     Story => (
-      <div style={{ minHeight: '100vh', background: '#000' }}>
-        <Story />
-      </div>
+      <NavigationProvider>
+        <div style={{ minHeight: '100vh', background: '#000' }}>
+          <Story />
+        </div>
+      </NavigationProvider>
     ),
   ],
   args: baseArgs,
@@ -51,7 +55,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Unread: Story = {
   play: async ({ canvas, args, userEvent }) => {
-    const rows = canvas.getAllByRole('button', { name: /available/ });
+    const rows = within(canvas.getByRole('list', { name: 'Unread notifications' })).getAllByRole(
+      'button'
+    );
     await expect(rows[0]).toHaveFocus();
     await userEvent.keyboard('{ArrowDown}');
     await expect(rows[1]).toHaveFocus();
@@ -59,6 +65,37 @@ export const Unread: Story = {
     await expect(args.onExit).toHaveBeenCalled();
     await userEvent.click(rows[2]);
     await expect(args.onOpen).toHaveBeenCalledWith(unreadItems[2]);
+  },
+};
+
+/** Delivers the first page to the mounted ArrivingLater, when the story's play says so. */
+const firstPage: { deliver?: () => void } = {};
+
+/** Entered while the first page loads; the unread count is known, so Mark all as read shows. */
+function ArrivingLater(args: NotificationsMenuProps) {
+  const [items, setItems] = useState<NotificationItem[]>([]);
+  useEffect(() => {
+    firstPage.deliver = () => setItems(unreadItems);
+    return () => {
+      firstPage.deliver = undefined;
+    };
+  }, []);
+  return <NotificationsMenu {...args} unread={{ ...stream(items), loading: items.length === 0 }} />;
+}
+
+/** Entered before the first page arrived: it lands on Mark all, then moves to the newest row. */
+export const EnteredWhileLoading: Story = {
+  render: args => <ArrivingLater {...args} />,
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: 'Mark all as read' })).toHaveFocus();
+    // The page arrives only now, after the loading state was checked
+    if (!firstPage.deliver) throw new Error('The story did not mount');
+    firstPage.deliver();
+    await waitFor(() =>
+      expect(
+        within(canvas.getByRole('list', { name: 'Unread notifications' })).getAllByRole('button')[0]
+      ).toHaveFocus()
+    );
   },
 };
 

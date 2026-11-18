@@ -1,6 +1,6 @@
 import { navigate } from '@app/router';
 import type { RootState } from '@store/store';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
@@ -15,6 +15,7 @@ const {
   markNotificationRead,
   resetNotificationsApi,
   rowProps,
+  rowMedia,
   mediaIndexes,
   useUpdateIntentMutation,
   removeIntent,
@@ -22,6 +23,8 @@ const {
   selectMovie,
   initiateMovie,
   initiateShow,
+  selectMediaCard,
+  initiateMediaCard,
   dispatch,
   getAssociation,
   currentSession,
@@ -44,6 +47,7 @@ const {
   markNotificationRead: vi.fn(),
   resetNotificationsApi: vi.fn(() => ({ type: 'notificationsApi/resetApiState' })),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
+  rowMedia: new Map<string, unknown[] | undefined>(),
   mediaIndexes: new Map<number, number>(),
   useUpdateIntentMutation: vi.fn(),
   removeIntent: vi.fn(),
@@ -51,6 +55,8 @@ const {
   selectMovie: vi.fn(),
   initiateMovie: vi.fn(),
   initiateShow: vi.fn(),
+  selectMediaCard: vi.fn(),
+  initiateMediaCard: vi.fn(),
   dispatch: vi.fn(),
   getAssociation: vi.fn(),
   currentSession: vi.fn(),
@@ -101,6 +107,7 @@ vi.mock('@features/media/api/media.api', () => ({
     endpoints: {
       getMovie: { select: selectMovie, initiate: initiateMovie },
       getShow: { select: vi.fn(() => () => ({})), initiate: initiateShow },
+      getMediaCard: { select: selectMediaCard, initiate: initiateMediaCard },
     },
   },
 }));
@@ -185,6 +192,7 @@ vi.mock('./hooks/useMediaBoxSizes', () => ({
     gap: 12,
     margin: 24,
     rowHeight: 300,
+    windowHeight: 1080,
   }),
 }));
 const emptyRows = vi.hoisted(() => ({ value: new Set<string>() as ReadonlySet<string> }));
@@ -208,6 +216,7 @@ vi.mock('./components/CategoryRow', async () => {
         loadIntent: props.loadIntent,
         visible: props.visible,
       });
+      rowMedia.set(props.category.slug, props.mediaOverride);
       const { mediaOverride, onActive, categoryIndex, isCurrentRow, loadIntent, onDataReady } =
         props;
       const slug = props.category.slug;
@@ -310,6 +319,7 @@ vi.mock('@features/details/ui/MediaDetails', async () => {
 import { progressApi } from '@features/progress/api/progress.api';
 import { homeNavigationSlice, initialHomeNavigationState } from '@store/slices/homeNavigation';
 
+import { CONTINUE_CATEGORY } from './home-feed';
 import { homeMountedRows } from './home-layout';
 import HomePage from './HomePage';
 
@@ -372,6 +382,8 @@ describe('HomePage focus transitions', () => {
     heroControls.ready = null;
     initiateMovie.mockReset();
     initiateShow.mockReset();
+    initiateMediaCard.mockReset();
+    selectMediaCard.mockReset().mockReturnValue(() => ({}));
     const baseState = { mediaApi: {}, progressApi: {} };
     selectSession.mockReset().mockImplementation(selector => selector(baseState));
     currentSession.mockReset().mockReturnValue(null);
@@ -383,6 +395,7 @@ describe('HomePage focus transitions', () => {
     removeIntent.mockReset();
     useUpdateIntentMutation.mockReturnValue([vi.fn(), {}]);
     rowProps.clear();
+    rowMedia.clear();
     mediaIndexes.clear();
     useGetListsInfiniteQuery.mockReset().mockReturnValue({
       data: { pages: [{ results: categories, totalPages: 1 }] },
@@ -454,9 +467,9 @@ describe('HomePage focus transitions', () => {
     expect(screen.getByRole('region', { name: 'Notifications' })).toBeInTheDocument();
 
     press('ArrowRight');
-    expect(
-      screen.getByRole('button', { name: /Just added\. Movie\..*1080p.*unread/ })
-    ).toHaveFocus();
+    const row = screen.getByRole('button', { name: 'Just added' });
+    expect(row).toHaveFocus();
+    expect(row).toHaveAccessibleDescription(/Movie\..*1080p.*Unread/);
 
     press('ArrowLeft');
     expect(bell).toHaveFocus();
@@ -464,6 +477,43 @@ describe('HomePage focus transitions', () => {
 
     press('ArrowDown');
     expect(screen.queryByRole('region', { name: 'Notifications' })).not.toBeInTheDocument();
+  });
+
+  it('opens the settings panel from the rail and an area from the panel', () => {
+    currentUserIsAdmin.mockReturnValue(true);
+    render(<HomePage />);
+
+    press('ArrowLeft');
+    expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
+    press('ArrowDown');
+    const settings = screen.getByRole('button', { name: 'Settings' });
+    expect(settings).toHaveFocus();
+    // Highlighting Settings shows its panel; Right hands it the keys
+    const panel = screen.getByRole('region', { name: 'Settings' });
+    expect(
+      within(panel)
+        .getAllByRole('button')
+        .map(button => button.textContent)
+    ).toEqual([
+      expect.stringMatching(/^Configuration/),
+      expect.stringMatching(/^Storage/),
+      expect.stringMatching(/^Sources/),
+    ]);
+    press('ArrowRight');
+    expect(within(panel).getByRole('button', { name: 'Configuration' })).toHaveFocus();
+    press('ArrowLeft');
+    expect(settings).toHaveFocus();
+
+    press('ArrowRight');
+    press('ArrowDown');
+    expect(within(panel).getByRole('button', { name: 'Storage' })).toHaveFocus();
+    press('Enter');
+    expect(window.location.pathname).toBe('/settings/storage');
+    // Coming back, Settings on the rail has the keyboard
+    expect(homeNavigationState.value).toMatchObject({
+      activeRegion: 'sidebar',
+      railItem: 'settings',
+    });
   });
 
   it('marks a notification read and plays it when clicked', () => {
@@ -491,7 +541,7 @@ describe('HomePage focus transitions', () => {
     render(<HomePage />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Notifications' }));
-    fireEvent.click(screen.getByRole('button', { name: /Just added\. Movie/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Just added' }));
 
     expect(markNotificationRead).toHaveBeenCalledWith(7);
     expect(screen.getByTestId('player')).toHaveAttribute('data-playable-kind', 'movie');
@@ -726,9 +776,9 @@ describe('HomePage focus transitions', () => {
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress } })) as never);
-    // The query cache keeps a response object until its data changes.
-    const savedMovie = { id: 1, mediaId: 100, title: 'Saved movie' };
-    selectMovie.mockReturnValue(() => ({ data: savedMovie }));
+    // The query cache keeps a card object until its data changes.
+    const savedMovie = { _type: 'movie', id: 1, mediaId: 100, title: 'Saved movie' };
+    selectMediaCard.mockReturnValue(() => ({ data: savedMovie }));
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     try {
       // Only the rows around the focused one are mounted.
@@ -747,6 +797,63 @@ describe('HomePage focus transitions', () => {
       fireEvent.click(screen.getByTestId('card-0'));
       expect(screen.getByTestId('details')).toBeInTheDocument();
       expect(screen.queryByTestId('player')).not.toBeInTheDocument();
+    } finally {
+      progressSelector.mockRestore();
+    }
+  });
+
+  it.each([
+    ['moves focus to Continue Watching when it arrives above the first list', 'none'],
+    ['leaves focus where a key put it when Continue Watching arrives', 'key'],
+    ['leaves focus on a card the pointer chose when Continue Watching arrives', 'pointer-focus'],
+    ['leaves focus where it is after a real pointer movement', 'pointer-move'],
+    ['still moves focus after content slid under a resting pointer', 'pointer-rest'],
+  ] as const)('%s', async (_name, input) => {
+    const state = { mediaApi: {}, progressApi: {} };
+    currentSession.mockReturnValue('test-session');
+    const progress = [
+      {
+        playable: { kind: 'movie', mediaId: 100 },
+        state: 'watching',
+        positionSeconds: 60,
+        durationSeconds: 600,
+        updatedAt: '2026-10-03T00:00:00Z',
+      },
+    ];
+    const progressSelector = vi
+      .spyOn(progressApi.endpoints.getProgress, 'select')
+      .mockReturnValue((() => ({ data: { progress } })) as never);
+    // The title's card loads after the lists: no Continue Watching row yet
+    let savedMovie: unknown;
+    selectMediaCard.mockReturnValue(() => ({ data: savedMovie }));
+    selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
+    try {
+      const view = render(<HomePage />);
+      const firstList = screen.getByTestId('card-0');
+      expect(firstList).toHaveAttribute('data-slug', categories[0].slug);
+      await waitFor(() => expect(firstList).toHaveFocus());
+      if (input === 'key') fireEvent.keyDown(firstList, { key: 'ArrowRight' });
+      if (input === 'pointer-focus') {
+        // Away and back: the first list holds focus again, now by the pointer's choice
+        fireEvent.mouseMove(screen.getByTestId('card-1'));
+        fireEvent.mouseMove(firstList);
+        await waitFor(() => expect(firstList).toHaveFocus());
+      }
+      if (input === 'pointer-move' || input === 'pointer-rest') {
+        const move = new MouseEvent('pointermove', { bubbles: true });
+        Object.defineProperty(move, 'movementX', { value: input === 'pointer-move' ? 4 : 0 });
+        Object.defineProperty(move, 'movementY', { value: 0 });
+        fireEvent(window, move);
+      }
+
+      savedMovie = { _type: 'movie', id: 1, mediaId: 100, title: 'Saved movie' };
+      state.mediaApi = {};
+      view.rerender(<HomePage />);
+
+      expect(screen.getByTestId('card-0')).toHaveAttribute('data-slug', 'continue-watching');
+      const focusedSlug =
+        input === 'none' || input === 'pointer-rest' ? 'continue-watching' : categories[0].slug;
+      await waitFor(() => expect(document.activeElement).toHaveAttribute('data-slug', focusedSlug));
     } finally {
       progressSelector.mockRestore();
     }
@@ -773,26 +880,32 @@ describe('HomePage focus transitions', () => {
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress } })) as never);
-    const movieSubscription = { unsubscribe: vi.fn() };
-    const showSubscription = { unsubscribe: vi.fn() };
-    initiateMovie.mockReturnValue(movieSubscription);
-    initiateShow.mockReturnValue(showSubscription);
+    const subscriptions = new Map<string, { unsubscribe: ReturnType<typeof vi.fn> }>();
+    initiateMediaCard.mockImplementation(({ mediaType, mediaId }) => {
+      const key = `${mediaType}:${mediaId}`;
+      if (!subscriptions.has(key)) subscriptions.set(key, { unsubscribe: vi.fn() });
+      return subscriptions.get(key);
+    });
     dispatch.mockImplementation(action => action);
-    selectMovie.mockReturnValue(() => ({}));
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     try {
       const view = render(<HomePage />);
-      expect(initiateMovie).toHaveBeenCalledWith(100);
-      expect(initiateShow).toHaveBeenCalledWith(200);
+      expect(initiateMediaCard).toHaveBeenCalledWith({ mediaType: 'movie', mediaId: 100 });
+      expect(initiateMediaCard).toHaveBeenCalledWith({ mediaType: 'tv', mediaId: 200 });
+      // Cards come from the batched card query, never one details request per title.
+      expect(initiateMovie).not.toHaveBeenCalled();
+      expect(initiateShow).not.toHaveBeenCalled();
+      const movieSubscription = subscriptions.get('movie:100')!;
+      const showSubscription = subscriptions.get('tv:200')!;
       expect(movieSubscription.unsubscribe).not.toHaveBeenCalled();
       expect(showSubscription.unsubscribe).not.toHaveBeenCalled();
       state.mediaApi = {};
       view.rerender(<HomePage />);
-      expect(initiateMovie).toHaveBeenCalledTimes(1);
+      expect(initiateMediaCard).toHaveBeenCalledTimes(2);
       // A fresh progress response with the same watched titles must retain the subscriptions.
       progress = [...progress];
       view.rerender(<HomePage />);
-      expect(initiateMovie).toHaveBeenCalledTimes(1);
+      expect(initiateMediaCard).toHaveBeenCalledTimes(2);
       const savedProgress = progress;
       progress = [];
       view.rerender(<HomePage />);
@@ -803,6 +916,57 @@ describe('HomePage focus transitions', () => {
       view.unmount();
       expect(movieSubscription.unsubscribe).toHaveBeenCalledTimes(2);
       expect(showSubscription.unsubscribe).toHaveBeenCalledTimes(2);
+    } finally {
+      progressSelector.mockRestore();
+    }
+  });
+
+  it('shows every Continue Watching card for a long row without a details request per title', () => {
+    const state = { mediaApi: {}, progressApi: {} };
+    const progress = Array.from({ length: 24 }, (_, index) =>
+      index % 2
+        ? {
+            playable: { kind: 'episode', showMediaId: 2000 + index, season: 1, episode: 1 },
+            state: 'paused',
+            positionSeconds: 60,
+            durationSeconds: 600,
+            updatedAt: `2026-10-${String(index + 1).padStart(2, '0')}T00:00:00Z`,
+          }
+        : {
+            playable: { kind: 'movie', mediaId: 1000 + index },
+            state: 'paused',
+            positionSeconds: 60,
+            durationSeconds: 600,
+            updatedAt: `2026-10-${String(index + 1).padStart(2, '0')}T00:00:00Z`,
+          }
+    );
+    const progressSelector = vi
+      .spyOn(progressApi.endpoints.getProgress, 'select')
+      .mockReturnValue((() => ({ data: { progress } })) as never);
+    const cards = new Map<string, object>();
+    selectMediaCard.mockImplementation(({ mediaType, mediaId }) => {
+      const key = `${mediaType}:${mediaId}`;
+      if (!cards.has(key))
+        cards.set(
+          key,
+          mediaType === 'movie'
+            ? { _type: 'movie', id: mediaId, mediaId, title: `Movie ${mediaId}` }
+            : { _type: 'tvshow', id: mediaId, mediaId, name: `Show ${mediaId}` }
+        );
+      return () => ({ data: cards.get(key) });
+    });
+    currentSession.mockReturnValue('test-session');
+    dispatch.mockImplementation(action => action);
+    selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
+    try {
+      render(<HomePage />);
+      expect(initiateMediaCard).toHaveBeenCalledTimes(24);
+      expect(initiateMovie).not.toHaveBeenCalled();
+      expect(initiateShow).not.toHaveBeenCalled();
+      const continueMedia = rowMedia.get(CONTINUE_CATEGORY.slug);
+      expect(continueMedia).toHaveLength(24);
+      // Newest first, as progress orders them.
+      expect(continueMedia?.[0]).toMatchObject({ _type: 'tvshow', mediaId: 2023 });
     } finally {
       progressSelector.mockRestore();
     }

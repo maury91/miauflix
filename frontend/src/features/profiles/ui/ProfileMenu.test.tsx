@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { NavigationProvider } from '@shared/navigation';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ProfileMenu } from './ProfileMenu';
 
@@ -25,9 +26,28 @@ const setupTest = (focused = true) => {
     onExit: vi.fn(),
     onPointerEnter: vi.fn(),
   };
-  render(<ProfileMenu profile={profile} focused={focused} {...handlers} />);
+  render(
+    <NavigationProvider>
+      <ProfileMenu profile={profile} focused={focused} {...handlers} />
+    </NavigationProvider>
+  );
   return handlers;
 };
+
+beforeEach(() => {
+  // jsdom lays nothing out; the navigation layer only focuses elements on screen
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+    () => [{}] as unknown as DOMRectList
+  );
+});
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+const press = (key: string) =>
+  act(() => {
+    fireEvent.keyDown(document.activeElement ?? document.body, { key });
+  });
 
 describe('ProfileMenu', () => {
   it('shows who is watching and its options', () => {
@@ -45,25 +65,25 @@ describe('ProfileMenu', () => {
     const { onSwitch, onEdit, onLogout } = setupTest();
     const switchProfile = screen.getByRole('button', { name: 'Switch profile' });
     const editProfile = screen.getByRole('button', { name: 'Edit profile' });
+    const logout = screen.getByRole('button', { name: 'Logout' });
     expect(switchProfile).toHaveFocus();
 
-    const logout = screen.getByRole('button', { name: 'Logout' });
-    fireEvent.keyDown(switchProfile, { key: 'ArrowDown' });
+    press('ArrowDown');
     expect(editProfile).toHaveFocus();
-    fireEvent.keyDown(editProfile, { key: 'Enter' });
+    press('Enter');
     expect(onEdit).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(editProfile, { key: 'ArrowDown' });
+    press('ArrowDown');
     expect(logout).toHaveFocus();
     // The last option stays put
-    fireEvent.keyDown(logout, { key: 'ArrowDown' });
+    press('ArrowDown');
     expect(logout).toHaveFocus();
-    fireEvent.keyDown(logout, { key: 'Enter' });
+    press('Enter');
     expect(onLogout).toHaveBeenCalledTimes(1);
 
-    fireEvent.keyDown(logout, { key: 'ArrowUp' });
-
-    fireEvent.keyDown(editProfile, { key: 'ArrowUp' });
-    fireEvent.keyDown(switchProfile, { key: 'Enter' });
+    press('ArrowUp');
+    press('ArrowUp');
+    expect(switchProfile).toHaveFocus();
+    press('Enter');
     expect(onSwitch).toHaveBeenCalledTimes(1);
   });
 

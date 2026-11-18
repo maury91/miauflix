@@ -227,10 +227,16 @@ describe('CategoryRow page window', () => {
     });
   });
 
-  it('skips all page queries while dormant', () => {
+  it('reads the cached pages while dormant, so rows mounted above the loaded ones keep their cards', () => {
     render(layer(<CategoryRow {...makeProps(19, false)} />));
 
-    expect(useGetListQuery.mock.calls.every(([query]) => query === skipToken)).toBe(true);
+    // Reading never fetches: homeFeedMiddleware loads only the rows Home wants
+    expect(useGetListQuery).toHaveBeenCalledWith({
+      category: 'popular',
+      page: 0,
+      limit: 20,
+      priority: 'prefetch',
+    });
   });
 
   it('loads a prefetched row with the lower downstream priority tier', () => {

@@ -41,7 +41,8 @@ has_lane() {
 cd "$root_dir"
 
 # Storybook and the details lanes need Linux builds of native packages (esbuild, rollup), so they
-# share one container with its own node_modules, as `npm run test:frontend:visual` does.
+# share one container with its own node_modules (scripts/playwright-docker.sh), as
+# `npm run test:frontend:visual` does.
 container_steps=()
 if has_lane storybook; then
   # Match CI's single worker so concurrent software-rendered stories don't stall captures.
@@ -55,13 +56,8 @@ fi
 if [[ ${#container_steps[@]} -gt 0 ]]; then
   steps=$(printf ' && %s' "${container_steps[@]}")
   echo "📸 Updating ${lanes[*]} baselines in $playwright_image..."
-  docker run --rm --ipc=host --network=host \
-    -v "$root_dir:/workspace" \
-    -v /workspace/node_modules \
-    -v /workspace/frontend/node_modules \
-    -w /workspace \
-    "$playwright_image" \
-    bash -lc "npm install -g bun@1.4.0 && bun install --frozen-lockfile && npm run build:backend && cd frontend${steps}"
+  PLAYWRIGHT_IMAGE="$playwright_image" scripts/playwright-docker.sh -- \
+    "npm run build:backend && cd frontend${steps}"
 fi
 
 if has_lane e2e; then

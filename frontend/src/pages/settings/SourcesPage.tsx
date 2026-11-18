@@ -355,7 +355,7 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
         />
         <Gap />
       </Content>
-      <BackRail ref={backRef} label="Back to Settings" onBack={onDismiss} />
+      <BackRail ref={backRef} label="Back to Home" onBack={onDismiss} />
     </Page>
   );
 }

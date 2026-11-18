@@ -5,12 +5,15 @@ import { clearAuth, setSession } from '@store/slices/auth';
 
 interface HomeNavigationState {
   activeRegion: HomeRegion;
+  /** With `activeRegion: 'sidebar'`: the rail item whose panel opened the screen being left. */
+  railItem: 'profile' | 'settings';
   activeCategory: number;
   selectedByCategory: Record<string, number>;
 }
 
 export const initialHomeNavigationState: HomeNavigationState = {
   activeRegion: 'carousel',
+  railItem: 'profile',
   activeCategory: 0,
   selectedByCategory: {},
 };
@@ -21,6 +24,11 @@ export const homeNavigationSlice = createSlice({
   reducers: {
     setActiveRegion(state, action: PayloadAction<HomeRegion>) {
       state.activeRegion = action.payload;
+    },
+    /** Leaving Home from a rail panel: coming back, its rail item has the keyboard. */
+    returnToRail(state, action: PayloadAction<'profile' | 'settings'>) {
+      state.activeRegion = 'sidebar';
+      state.railItem = action.payload;
     },
     setActiveCategory(state, action: PayloadAction<number>) {
       state.activeCategory = Math.max(0, action.payload);

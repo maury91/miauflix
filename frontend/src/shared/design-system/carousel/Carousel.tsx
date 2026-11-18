@@ -81,6 +81,8 @@ export interface CarouselProps {
   };
   /** Items mounted beyond each edge of the visible ones; a page by default. */
   overscan?: number;
+  /** What the carousel sits on: the peeking items fade into it. */
+  surface?: 'canvas' | 'black';
 }
 
 /**
@@ -102,6 +104,7 @@ export const Carousel = memo(function Carousel({
   onPointerFocus: onPointerFocusProp,
   pageButtons,
   overscan,
+  surface = 'canvas',
   navId,
   navigation,
   hasMore = false,
@@ -204,10 +207,20 @@ export const Carousel = memo(function Carousel({
           {slots}
         </ul>
         {canGoBack && peek > 0 && (
-          <span className={styles.edge} data-side="start" style={{ width: peek }} />
+          <span
+            className={styles.edge}
+            data-side="start"
+            data-surface={surface}
+            style={{ width: peek }}
+          />
         )}
         {canGoForward && peek > 0 && (
-          <span className={styles.edge} data-side="end" style={{ width: peek }} />
+          <span
+            className={styles.edge}
+            data-side="end"
+            data-surface={surface}
+            style={{ width: peek }}
+          />
         )}
         {pageButtons && (
           <SurfaceContextProvider value="overMedia">

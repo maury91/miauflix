@@ -204,7 +204,7 @@ describe('SourcesPage', () => {
 
   it('cycles from Back to the last control and wraps back exactly once', () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
-    const back = screen.getByRole('button', { name: 'Back to Settings' });
+    const back = screen.getByRole('button', { name: 'Back to Home' });
     const controls = screen
       .getAllByRole('button')
       .filter(button => button !== back && !button.hasAttribute('disabled'));
@@ -236,7 +236,7 @@ describe('SourcesPage', () => {
     openMenu('INDEXER-A');
     fireEvent.click(screen.getByRole('menuitem', { name: 'Settings' }));
     const select = screen.getByRole('combobox', { name: 'Sort by' });
-    const back = screen.getByRole('button', { name: 'Back to Settings' });
+    const back = screen.getByRole('button', { name: 'Back to Home' });
     const controls = Array.from(
       screen
         .getByRole('main')
@@ -443,7 +443,7 @@ describe('SourcesPage', () => {
     });
     await browse();
     const select = screen.getByRole('combobox', { name: 'Source' });
-    const back = screen.getByRole('button', { name: 'Back to Settings' });
+    const back = screen.getByRole('button', { name: 'Back to Home' });
     const controls = Array.from(
       screen
         .getByRole('main')
@@ -791,9 +791,9 @@ describe('SourcesPage', () => {
   it('goes back with the back arrow and the remote back key', () => {
     const onDismiss = vi.fn();
     render(<SourcesPage onDismiss={onDismiss} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Back to Settings' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Back to Home' }));
     expect(onDismiss).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(screen.getByRole('button', { name: 'Back to Settings' }), { key: 'Escape' });
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Back to Home' }), { key: 'Escape' });
     expect(onDismiss).toHaveBeenCalledTimes(2);
   });
 });

@@ -123,7 +123,7 @@ test.describe('Home catalog cross-loading', () => {
     // the first popular row without causing the infinite popular-list query
     // to fetch another provider page.
     for (let attempt = 0; attempt < 6; attempt += 1) {
-      if ((await topMarvelRow.locator('[aria-current="true"]').count()) > 0) break;
+      if ((await topMarvelRow.locator('button[data-focused]').count()) > 0) break;
       await page.keyboard.press('ArrowDown');
     }
 

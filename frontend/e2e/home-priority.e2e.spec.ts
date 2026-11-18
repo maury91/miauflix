@@ -66,7 +66,7 @@ test.describe('Home row loading priority', () => {
         { timeout: 30000 }
       )
       .toBeGreaterThanOrEqual(1);
-    await expect(page.locator('main [aria-current="true"]').first()).toBeVisible({
+    await expect(page.locator('main button[data-focused]').first()).toBeVisible({
       timeout: 30000,
     });
     await expect.poll(() => promotionRequests.length, { timeout: 30000 }).toBeGreaterThanOrEqual(2);

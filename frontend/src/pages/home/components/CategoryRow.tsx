@@ -145,7 +145,6 @@ export const CategoryRow = memo(
     const navId = HOME_NAV.row(category.slug);
     const layer = useOptionalNavigation();
     const { itemWidth, perPage } = geometry;
-    const fetching = !mediaOverride && loadIntent !== 'dormant';
 
     // The selection lives in the carousel; the pages around it are read from the cache, which
     // homeFeedMiddleware fills for the rows Home wants. Until the first page arrives the row's
@@ -163,8 +162,11 @@ export const CategoryRow = memo(
       navigation,
       position => rowPagesFor(position.focused, total).neighbour
     )!;
+    // Read from the cache whatever the row's intent: a dormant row (mounted above the loaded
+    // ones) shows the pages it loaded before, instead of nothing until Home wants it again.
+    // `loadIntent` only decides what Home asks to load (homeFeedMiddleware), not what is read.
     const pageQuery = (index: number | null) =>
-      fetching && index !== null
+      !mediaOverride && index !== null
         ? listPageArgs(category.slug, index, loadIntent === 'visible' ? 'visible' : 'prefetch')
         : skipToken;
     const current = useListPage(pageQuery(currentPage));
@@ -251,6 +253,14 @@ export const CategoryRow = memo(
     useEffect(() => {
       showInHero();
     }, [categoryIndex, isCurrentRow, mediaByIndex, onActive, showInHero]);
+    // Home loads the pages around the reported card, and a held key reports only once it pauses:
+    // entering a new page reports at once (once per page), so the pages ahead are requested
+    // before the selection runs past the loaded ones (the row went black)
+    useEffect(() => {
+      if (total) reportSelection(navigation.position().focused);
+      // On the page changing only
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentPage]);
 
     const openCard = useCallback(
       (index: number, media: MediaDto) => {
@@ -530,6 +540,7 @@ export const CategoryRow = memo(
             navigation={navigation}
             overscan={expanded ? EXPANDED_OVERSCAN : 1}
             pageButtons={pageButtons}
+            surface="black"
           />
           {/* A row still loading holds its place, and focus can rest on it meanwhile. Off screen
               on the TV, no spinner: Chromium 69 keeps animating it out of view. */}

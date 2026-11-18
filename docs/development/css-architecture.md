@@ -257,7 +257,7 @@ the stories, unit tests and visual snapshots passing, and add a CHANGELOG line.
    1. `features/server-discovery/ui/ServerPicker.tsx`
    2. `features/auth/ui/login/QRDisplay.tsx`, `LoginWithEmail.tsx`, `Sections.tsx`,
       `ErrorMessage.tsx`, and `pages/login/LoginPage.tsx`
-   3. `pages/settings/SettingsPage.tsx`, `pages/settings/StoragePage.tsx`
+   3. `pages/settings/StoragePage.tsx` (the Settings page is gone: Home's Settings panel lists the areas)
    4. `shared/ui/switch/Switch.tsx`, `form-controls/FormControls.tsx`, `alert/Alert.tsx`,
       `action-row/ActionRow.tsx`
 7. **Web-only screens**
