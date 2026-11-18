@@ -16,6 +16,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- A list row no longer fails to open when a later page of the list cannot be loaded from its provider (Trakt, AniList): it shows the titles already loaded and continues from there on the next page
 - Home: Continue watching shows every title you are watching, even with many in progress. On a TV with about 17 titles, several cards used to stay missing because the app asked for each title separately and the server turned the extra requests away
 - The catalog service's Docker image starts without internet access: it used to download its image library from the package registry on every start, and stopped with an error when it could not
 - Rows from Trakt lists that also hold episodes (like the Marvel Cinematic Universe list) no longer turn into empty cards after the first twenty: they show every film and show in the list, with no empty cards in between, and end where the list does
@@ -58,6 +59,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Development
 
+- `bun run test:backend:e2e` and `bun run test:frontend:snapshots:update` pass again, and the snapshot update no longer reinstalls every dependency on each run
 - Bun now installs the dependencies everywhere (Docker images, CI, local setup): run `bun install` instead of `npm install`. `bun.lock` is the only lockfile; `package-lock.json` is gone
 - Code is easier to find: backend services and the web app's Home screen are reorganized by area (player, title details, progress, notifications, Trakt), with no change in behaviour
 - Backend layers point one way: services no longer depend on route files, routes no longer reach into repositories, and the largest services are wired with named options instead of long argument lists. No change in behaviour

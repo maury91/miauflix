@@ -307,6 +307,70 @@ describe('ListService refresh safety', () => {
     expect(result.total).toBe(61);
   });
 
+  it('keeps the provider estimate when a page read only to count the total fails', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    // The first page drops 10 of its 50 entries but still fills the requested 20 cards
+    listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => {
+      if (page !== 1) throw new Error('provider page unavailable');
+      return {
+        listId: 'trakt-community-1',
+        page,
+        totalPages: 3,
+        totalItems: 150,
+        items: Array.from({ length: 40 }, (_, index) => ({
+          key: `movie:${index + 1}`,
+          rank: index + 1,
+          media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+        })),
+      };
+    });
+    echoCatalog(catalogClient, database);
+
+    const result = await service.getListPage('trakt-community-1', 'en', 0, 20);
+
+    expect(result.medias.map(media => media.mediaId)).toEqual(
+      Array.from({ length: 20 }, (_, index) => index + 1)
+    );
+    expect(result.total).toBe(140);
+  });
+
+  it('serves a short page when a provider page needed to fill it fails', async () => {
+    const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    // Only 12 of the first page's 50 entries are kept: filling 20 cards needs page 2, which fails
+    listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => {
+      if (page !== 1) throw new Error('provider page unavailable');
+      return {
+        listId: 'trakt-community-1',
+        page,
+        totalPages: 3,
+        totalItems: 150,
+        items: Array.from({ length: 12 }, (_, index) => ({
+          key: `movie:${index + 1}`,
+          rank: index + 1,
+          media: { mediaType: 'movie' as const, ids: { tmdb: index + 1 } },
+        })),
+      };
+    });
+    echoCatalog(catalogClient, database);
+
+    const result = await service.getListPage('trakt-community-1', 'en', 0, 20);
+    expect(result.medias.map(media => media.mediaId)).toEqual(
+      Array.from({ length: 12 }, (_, index) => index + 1)
+    );
+    expect(result.total).toBe(112);
+
+    // The next page has nothing in hand, so the same failure is an error, not an empty page
+    await expect(service.getListPage('trakt-community-1', 'en', 1, 20)).rejects.toThrow(
+      'provider page unavailable'
+    );
+  });
+
   it('fills unstored list pages past the items the catalog did not return', async () => {
     const { database, listClient, catalogClient, mediaListRepository, service } = setupTest();
     mediaListRepository.findBySlug = jest

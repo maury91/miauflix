@@ -544,13 +544,33 @@ export class ListService {
       providerItems.push(...result.items);
       providerPage += 1;
     };
-    do await fetchProviderPage();
-    while (providerItems.length < start + limit && providerPage <= totalPages);
+    // A provider page that fails once this page already has items ends the walk: the page is
+    // served short (the next request continues from where it stopped) instead of failing. With
+    // nothing to show yet the failure is a real one, never an empty page
+    let providerFailed = false;
+    let providerError: unknown;
+    const fetchMore = async (itemsInHand: number) => {
+      try {
+        await fetchProviderPage();
+      } catch (error) {
+        if (itemsInHand <= start) throw error;
+        logger.warn('ListService', `${slug} stopped at provider page ${providerPage}`, error);
+        providerFailed = true;
+        providerError = error;
+      }
+    };
+    do await fetchMore(providerItems.length);
+    while (!providerFailed && providerItems.length < start + limit && providerPage <= totalPages);
     // The provider's count includes what was dropped: once some was, count the kept ones to the
-    // end (pages are cached), or a row would offer cards past the list's end
+    // end (pages are cached), or a row would offer cards past the list's end. Counting only
+    // refines the total, so a failure there keeps the provider's estimate
     const filtered = providerItems.length < rawSeen;
-    while (filtered && providerPage <= Math.min(totalPages, ON_DEMAND_COUNT_PAGES)) {
-      await fetchProviderPage();
+    while (
+      !providerFailed &&
+      filtered &&
+      providerPage <= Math.min(totalPages, ON_DEMAND_COUNT_PAGES)
+    ) {
+      await fetchMore(Infinity);
     }
     // Entries can still drop after that: an IMDb id that doesn't resolve, an item the catalog
     // doesn't return. Fill the page from the next entries, remembering the order that resolved so
@@ -568,8 +588,8 @@ export class ListService {
     const extend = async () => {
       while (order.refs.length < start + limit) {
         if (order.consumed >= providerItems.length) {
-          if (providerPage > totalPages) break;
-          await fetchProviderPage();
+          if (providerFailed || providerPage > totalPages) break;
+          await fetchMore(order.refs.length);
           continue;
         }
         const chunk = providerItems.slice(
@@ -595,6 +615,8 @@ export class ListService {
     const extended = order.ready.then(extend, extend);
     order.ready = extended.catch(() => undefined);
     await extended;
+    // Raw entries in hand may still all drop: a failure is never answered with an empty page
+    if (providerFailed && order.refs.length <= start) throw providerError;
     const pageRefs = order.refs.slice(start, start + limit);
     const missing = pageRefs.filter(ref => !details.has(refKey(ref)));
     if (missing.length) {

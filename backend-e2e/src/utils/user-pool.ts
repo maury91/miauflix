@@ -130,3 +130,31 @@ export class UserPool {
     return this.adminCredentials;
   }
 }
+
+/**
+ * Create a dedicated user for a suite that logs in many times. Every suite otherwise shares the
+ * generated admin, whose device slots (20 at most) such a suite would exhaust, evicting the
+ * sessions other suites running in parallel are still using.
+ */
+export async function createIsolatedUser(
+  adminCredentials: UserCredentials
+): Promise<UserCredentials> {
+  const adminClient = new TestClient();
+  await adminClient.login(adminCredentials);
+  const credentials = {
+    email: `isolated-${randomUUID()}@example.com`,
+    password: testUtils.randomPassword(),
+  };
+  try {
+    const response = await adminClient.post(['api', 'auth', 'users'], {
+      json: { ...credentials, role: 'user' as UserRole.USER },
+    });
+    if (response.status !== 201) {
+      throw new Error(`Failed to create isolated test user: ${JSON.stringify(response.data)}`);
+    }
+  } finally {
+    // Free the admin's device slot right away
+    await adminClient.logout().catch(() => undefined);
+  }
+  return credentials;
+}

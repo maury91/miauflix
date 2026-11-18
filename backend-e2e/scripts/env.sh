@@ -424,11 +424,13 @@ else
             if [[ "$FRONTEND_ONLY" == "true" ]]; then
                 frontend_test_args=("$@")
             fi
-            # Install inside the container so host-built native packages never reach Linux.
+            # Install inside the container so host-built native packages never reach Linux; the named
+            # volumes keep that install between runs (see scripts/update-ui-snapshots.sh).
             docker run --rm --ipc=host --network=host \
                 -v "$root_dir:/workspace" \
-                -v /workspace/node_modules \
-                -v /workspace/frontend/node_modules \
+                -v miauflix-playwright-node-modules:/workspace/node_modules \
+                -v miauflix-playwright-frontend-node-modules:/workspace/frontend/node_modules \
+                -v miauflix-playwright-bun-cache:/root/.bun/install/cache \
                 -w /workspace \
                 -e BACKEND_URL="http://127.0.0.1:$PORT" \
                 "$E2E_PLAYWRIGHT_IMAGE" \

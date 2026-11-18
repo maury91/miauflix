@@ -14,6 +14,13 @@ set -euo pipefail
 
 root_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 playwright_image="mcr.microsoft.com/playwright:v1.56.1-jammy"
+# Linux node_modules and bun's package cache persist in named volumes (shared with the E2E lane in
+# env.sh), so after the first run `bun install --frozen-lockfile` only checks the lockfile.
+playwright_cache_volumes=(
+  -v miauflix-playwright-node-modules:/workspace/node_modules
+  -v miauflix-playwright-frontend-node-modules:/workspace/frontend/node_modules
+  -v miauflix-playwright-bun-cache:/root/.bun/install/cache
+)
 
 lanes=("$@")
 if [[ ${#lanes[@]} -eq 0 ]]; then
@@ -57,8 +64,7 @@ if [[ ${#container_steps[@]} -gt 0 ]]; then
   echo "📸 Updating ${lanes[*]} baselines in $playwright_image..."
   docker run --rm --ipc=host --network=host \
     -v "$root_dir:/workspace" \
-    -v /workspace/node_modules \
-    -v /workspace/frontend/node_modules \
+    "${playwright_cache_volumes[@]}" \
     -w /workspace \
     "$playwright_image" \
     bash -lc "npm install -g bun@1.4.0 && bun install --frozen-lockfile && npm run build:backend && cd frontend${steps}"
