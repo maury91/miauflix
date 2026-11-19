@@ -2,6 +2,33 @@ import { computedEnv, env } from './env';
 import { readTvServer } from './tv-server';
 
 export const builtForTizen = env.TIZEN;
+/** localStorage[key], or null when storage is missing or blocked (reading it can throw). */
+function readStorage(key: string): string | null {
+  try {
+    return typeof localStorage === 'undefined' ? null : localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+/** Spike (VITE_TV_GL_ROWS): Home's rows drawn in one WebGL canvas on the TV build. */
+export const glRowsEnabled =
+  (builtForTizen && env.TV_GL_ROWS) ||
+  // Development: localStorage['miauflix:gl-rows'] = '1' tries it in a browser. Keys only: the
+  // canvas draws the cards, and the (hidden) DOM buttons under it aren't where they're drawn
+  (Boolean(import.meta.env?.DEV) && readStorage('miauflix:gl-rows') === '1');
+/**
+ * Debugging the GL surface on the TV (and in development): localStorage['miauflix:gl-tuning'] as
+ * JSON, e.g. {"antialias": false, "textureBudget": 33554432}, read at start.
+ */
+export const glTuningOverride: Record<string, unknown> | undefined = (() => {
+  if (!(builtForTizen || import.meta.env?.DEV)) return;
+  const raw = readStorage('miauflix:gl-tuning');
+  try {
+    return raw ? (JSON.parse(raw) as Record<string, unknown>) : undefined;
+  } catch {
+    return undefined;
+  }
+})();
 /**
  * The backend. The TV app uses the server picked on the TV (see features/server-discovery), or
  * the one it was packaged with; '' until one is picked.

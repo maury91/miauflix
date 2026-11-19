@@ -58,6 +58,7 @@
     "gsap": "3.13.0",
     "hono": "4.13.18",
     "jassub": "2.5.36",
+    "pixi.js": "^8.23.0",
     "pluralize": "8.0.0",
     "plushies": "^0.1.0-alpha.0",
     "react": "19.2.0",

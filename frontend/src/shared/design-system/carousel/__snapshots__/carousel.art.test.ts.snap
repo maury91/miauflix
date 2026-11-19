@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Carousel edges > fades only the sides with more to scroll to 1`] = `
+[
+  {
+    "axis": "x",
+    "box": [
+      960,
+      0,
+      40,
+      200,
+    ],
+    "from": "rgba(0, 0, 0, 0)",
+    "op": "gradient",
+    "options": undefined,
+    "to": "rgba(0, 0, 0, 1)",
+  },
+]
+`;

@@ -51,7 +51,8 @@
         "VITE_TIZEN",
         "VITE_TV_PAIRING_URL",
         "VITE_TV_HERO_BACKDROP",
-        "VITE_TV_HERO_BACKDROP_RESTING"
+        "VITE_TV_HERO_BACKDROP_RESTING",
+        "VITE_TV_GL_ROWS"
       ],
       "cache": true
     },

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { pushBackdrop, revealBackdrop, settleBackdrop } from './backdrop-stack';
+import { dropBackdrop, pushBackdrop, revealBackdrop, settleBackdrop } from './backdrop-stack';
 
 const names = (stack: ReadonlyArray<{ backdrop: string }>) => stack.map(layer => layer.backdrop);
 
@@ -28,6 +28,10 @@ describe('backdrop stack', () => {
     let stack = revealedStack();
     stack = settleBackdrop(stack, 3);
     expect(names(stack)).toEqual(['C']);
+  });
+
+  it('drops only a layer that failed, keeping the ones under it', () => {
+    expect(names(dropBackdrop(revealedStack(), 3))).toEqual(['A', 'B']);
   });
 
   it('keeps layers added after the one that settled', () => {

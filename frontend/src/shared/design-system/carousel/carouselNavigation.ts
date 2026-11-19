@@ -11,9 +11,11 @@ export interface CarouselLayout {
   perPage: number;
   /**
    * `item`: Left/Right move one item and bring it to the leading slot (Home today). `page`: they
-   * scroll by a page and focus the item landing in the leading slot.
+   * scroll by a page and focus the item landing in the leading slot. `anchor`: like `item`, but the
+   * focused item is always in the leading slot, to the row's end (the last items rest there with
+   * empty space after), so focus always rests in the same place (a static outline, GL Home).
    */
-  paging: 'item' | 'page';
+  paging: 'item' | 'page' | 'anchor';
 }
 
 /** The furthest leading slot: the last page is full, never followed by empty space. */
@@ -34,6 +36,11 @@ export function stepCarousel(
   const { count, perPage, paging } = layout;
   if (count === 0) return null;
   const last = maxLeading(layout);
+  if (paging === 'anchor') {
+    const focused = position.focused + direction;
+    if (focused < 0 || focused >= count) return null;
+    return { focused, leading: focused };
+  }
   if (paging === 'item') {
     const focused = position.focused + direction;
     if (focused < 0 || focused >= count) return null;
@@ -54,6 +61,7 @@ export function revealItem(
   layout: CarouselLayout
 ): CarouselPosition {
   const focused = clamp(index, 0, Math.max(0, layout.count - 1));
+  if (layout.paging === 'anchor') return { focused, leading: focused };
   // A shorter row (fewer items) may have moved the furthest leading slot below the kept one
   const leading = clamp(position.leading, 0, maxLeading(layout));
   if (focused >= leading && focused < leading + layout.perPage) return { focused, leading };
@@ -69,6 +77,11 @@ function boundPosition(
   // The item count can shrink under the focus (a reload): keep both inside it. A smaller page (a
   // resize) also brings the focused item back into view; otherwise an item outside the page stays
   // where it is, since the pointer focuses peeking items without scrolling.
+  if (layout.paging === 'anchor')
+    return layout.count > 0 &&
+      (position.focused >= layout.count || position.leading !== position.focused)
+      ? revealItem(position, position.focused, layout)
+      : position;
   const outOfView =
     position.focused < position.leading || position.focused >= position.leading + layout.perPage;
   return layout.count > 0 &&

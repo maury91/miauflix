@@ -45,3 +45,9 @@ export function collectionGeometry({
   const peek = Math.min(itemWidth * MAX_PEEK_OF_ITEM, Math.max(0, margin));
   return { itemWidth, gap, perPage, peek, contentWidth };
 }
+
+/** Where item `index` sits on the track's X axis (px): after the peek, one item and gap apart. */
+export function itemExtent(index: number, { itemWidth, gap, peek }: CollectionGeometry) {
+  const start = peek + index * (itemWidth + gap);
+  return { start, end: start + itemWidth };
+}

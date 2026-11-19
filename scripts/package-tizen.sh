@@ -15,6 +15,8 @@
 # The Home hero's backdrop size, while the selection moves and once it rests, is picked for the
 # TV's model year; MIAUFLIX_TV_HERO_BACKDROP and MIAUFLIX_TV_HERO_BACKDROP_RESTING set it instead
 # (w300, w780, w1280 or original; auto picks it).
+#
+# Spike: MIAUFLIX_TV_GL_ROWS=true draws Home's rows in one WebGL canvas (off by default).
 
 set -e
 
@@ -74,6 +76,7 @@ rm -rf "${BUILD_DIR}"
 VITE_TIZEN=true VITE_API_URL="${API_URL:-/}" VITE_TV_PAIRING_URL="${PAIRING_URL}" \
   VITE_TV_HERO_BACKDROP="${MIAUFLIX_TV_HERO_BACKDROP:-auto}" \
   VITE_TV_HERO_BACKDROP_RESTING="${MIAUFLIX_TV_HERO_BACKDROP_RESTING:-auto}" \
+  VITE_TV_GL_ROWS="${MIAUFLIX_TV_GL_ROWS:-false}" \
   npx turbo run build:tizen --filter='./frontend'
 
 sed "s/version=\"[^\"]*\" viewmodes/version=\"${VERSION}\" viewmodes/" \

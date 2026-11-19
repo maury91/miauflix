@@ -11,12 +11,22 @@ import {
   useRef,
 } from 'react';
 
+import {
+  easeStandard,
+  type GlNode,
+  GlParentProvider,
+  remPx,
+  useGlNode,
+  useGlPaint,
+  useGlParent,
+} from '../gl';
 import { IconButton } from '../icon-button/IconButton';
 import { SurfaceContextProvider } from '../surface';
-import { duration } from '../tokens';
+import { duration, space } from '../tokens';
+import { paintCarouselEdges } from './carousel.art';
 import * as styles from './carousel.css';
 import { type CarouselNavigation, maxLeading, useCarouselPosition } from './carouselNavigation';
-import type { CollectionGeometry } from './collectionGeometry';
+import { type CollectionGeometry, itemExtent } from './collectionGeometry';
 
 import ChevronLeftIcon from '~icons/mdi/chevron-left';
 import ChevronRightIcon from '~icons/mdi/chevron-right';
@@ -173,6 +183,33 @@ export const Carousel = memo(function Carousel({
     onPointerFocusRef.current?.(index);
   }, []);
 
+  // GL form (inside a GlSurface): the viewport clips, the track slides in the renderer, the edges
+  // fade over the peeks. The DOM below keeps only the list and its items, unpositioned.
+  const glParent = useGlParent();
+  const viewportNode = useGlNode();
+  const trackNode = useGlNode(viewportNode);
+  const edgesNode = useGlNode(viewportNode);
+  const viewportPadding = glParent ? remPx(space.xs) : 0;
+  const viewportWidth = contentWidth + peek * 2;
+  const viewportHeight = height + viewportPadding * 2;
+  const trackPlaced = useRef(false);
+  useLayoutEffect(() => {
+    if (!glParent || !viewportNode || !trackNode || !edgesNode) return;
+    viewportNode.set({
+      x: (glParent.width - viewportWidth) / 2,
+      width: viewportWidth,
+      height: viewportHeight,
+      clip: true,
+    });
+    trackNode.set({ y: viewportPadding });
+    edgesNode.set({ z: 2 });
+  });
+  useLayoutEffect(() => {
+    if (!trackNode) return;
+    placeTrack(trackNode, leadingIndex, geometry, trackPlaced.current);
+    trackPlaced.current = true;
+  }, [leadingIndex, geometry, trackNode]);
+
   const first = Math.max(0, leadingIndex - extra);
   const last = Math.min(count - 1, leadingIndex + perPage - 1 + extra);
   const slots: ReactNode[] = [];
@@ -182,18 +219,45 @@ export const Carousel = memo(function Carousel({
         key={index}
         index={index}
         count={count}
-        x={peek + index * step}
+        x={itemExtent(index, geometry).start}
         width={itemWidth}
         height={height}
         focused={index === focusedIndex}
         renderItem={renderItem}
         onPointer={handlePointer}
+        glTrack={trackNode}
       />
     );
   }
 
   const canGoBack = leadingIndex > 0;
   const canGoForward = leadingIndex < maxLeading({ count, perPage });
+  useGlPaint(
+    edgesNode,
+    painter =>
+      paintCarouselEdges(painter, {
+        peek,
+        width: viewportWidth,
+        height: viewportHeight,
+        surface,
+        canGoBack,
+        canGoForward,
+      }),
+    [peek, surface, canGoBack, canGoForward, viewportWidth, viewportHeight]
+  );
+  if (glParent) {
+    return (
+      <section
+        ref={composite.ref}
+        className={styles.glRoot}
+        aria-roledescription="carousel"
+        aria-labelledby={labelledBy}
+        aria-label={labelledBy ? undefined : label}
+      >
+        <ul className={styles.glList}>{slots}</ul>
+      </section>
+    );
+  }
   return (
     <section
       ref={composite.ref}
@@ -262,6 +326,8 @@ interface CarouselSlotProps {
   focused: boolean;
   renderItem: CarouselProps['renderItem'];
   onPointer: (index: number, event: MouseEvent) => void;
+  /** The GL track the slot's node joins (inside a GlSurface). */
+  glTrack: GlNode | null;
 }
 
 /** One positioned item. Memoized: a focus move re-renders only the slots whose focus changed. */
@@ -274,7 +340,32 @@ const CarouselSlot = memo(function CarouselSlot({
   focused,
   renderItem,
   onPointer,
+  glTrack,
 }: CarouselSlotProps) {
+  const glParent = useGlParent();
+  const node = useGlNode(glTrack);
+  useLayoutEffect(() => {
+    node?.set({ x, width, height, z: focused ? 1 : 0 });
+  });
+  const glValue = useMemo(
+    () =>
+      glParent && node ? { renderer: glParent.renderer, node, width, height, radius: 0 } : null,
+    [glParent, height, node, width]
+  );
+  if (glValue) {
+    return (
+      <li
+        className={styles.glSlot}
+        aria-setsize={count}
+        aria-posinset={index + 1}
+        data-focused={focused || undefined}
+        data-nav-part={index}
+        onMouseMove={event => onPointer(index, event)}
+      >
+        <GlParentProvider value={glValue}>{renderItem(index, { focused })}</GlParentProvider>
+      </li>
+    );
+  }
   return (
     <li
       className={styles.slot}
@@ -290,3 +381,18 @@ const CarouselSlot = memo(function CarouselSlot({
     </li>
   );
 });
+
+/**
+ * GL: moves the track so `leadingIndex` is the left-most whole item (at once the first time). The
+ * track's X is the only thing that moves when the carousel pages.
+ */
+function placeTrack(
+  track: GlNode,
+  leadingIndex: number,
+  { itemWidth, gap }: CollectionGeometry,
+  animate: boolean
+) {
+  const x = -leadingIndex * (itemWidth + gap);
+  if (animate) track.animate('x', x, parseFloat(duration.fast), easeStandard);
+  else track.set({ x });
+}

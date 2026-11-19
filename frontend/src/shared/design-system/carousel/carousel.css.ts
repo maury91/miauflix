@@ -97,3 +97,11 @@ export const pageButton = style({
     '&[data-side="end"]': { right: space.xs },
   },
 });
+
+/**
+ * GL form (inside a GlSurface, spike): the renderer draws the row; the DOM keeps the list for
+ * focus and semantics, unpositioned and untransformed, so it adds no paint layers.
+ */
+export const glRoot = style({ display: 'block' });
+export const glList = style({ margin: 0, padding: 0, listStyle: 'none' });
+export const glSlot = style({ display: 'block' });

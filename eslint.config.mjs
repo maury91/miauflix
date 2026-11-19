@@ -244,6 +244,50 @@ export default [
     },
   },
   {
+    // The GL engine's parts that describe what is drawn stay free of Pixi and React, so they run in
+    // unit tests and the backend can be loaded on its own (docs/plans/tv-gl-production-plan.md)
+    files: ['frontend/src/shared/design-system/gl/{core,paint,resources,bake}/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            { name: 'styled-components', message: 'The GL engine has no DOM styles.' },
+            { name: 'pixi.js', message: 'Only gl/pixi imports Pixi.' },
+            { name: 'react', message: 'Only gl/react imports React.' },
+          ],
+          patterns: [
+            { group: ['**/pixi/**', '**/react/**'], message: 'Only gl/pixi imports Pixi.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // A component's picture and metrics are pure: any Painter draws them (GL, canvas 2D, tests) and
+    // the CSS evaluates the metrics at build time
+    files: ['frontend/src/**/*.{art,metrics}.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            { name: 'styled-components', message: 'Pictures and metrics have no DOM styles.' },
+            { name: 'pixi.js', message: 'Pictures draw on a Painter: only gl/pixi imports Pixi.' },
+            { name: 'react', message: 'Pictures and metrics are plain functions and numbers.' },
+          ],
+          patterns: [
+            {
+              regex: '(^|/)gl(/index)?$|/gl/(pixi|react)/',
+              message: "Import the engine's pure parts from 'gl/art'.",
+            },
+            { group: ['*.css', '**/*.css'], message: 'Metrics feed the CSS, not the other way.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.ts', '**/*.spec.{ts,tsx}'],
     languageOptions: {
       globals: {

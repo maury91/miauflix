@@ -9,7 +9,19 @@ import { subtitleLanguageForMedia } from '@features/player/lib/subtitle-language
 import { PlayerView } from '@features/player/ui/PlayerView';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
-import { builtForTizen } from '@shared/config/constants';
+import { builtForTizen, glRowsEnabled, glTuningOverride } from '@shared/config/constants';
+import { GlFocusAnchor, tokens } from '@shared/design-system';
+import {
+  easeRowSlide,
+  GlGroup,
+  GlLayer,
+  GlScroller,
+  type GlScrollerHandle,
+  GlSurface,
+  glSurfaceSupported,
+  type GlTuning,
+  remPx,
+} from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { getMediaTitle } from '@shared/lib/media.utils';
 import { FocusGroup, type InputKind, NavigationProvider } from '@shared/navigation';
@@ -48,6 +60,7 @@ import { useSessionChange } from './hooks/useSessionChange';
 import { useSmoothScroller } from './hooks/useSmoothScroller';
 import { CONTINUE_CATEGORY } from './home-feed';
 import { homeMountedRows, homeRowLoadState, WARM_ROWS } from './home-layout';
+import { HOME_GL_LAYERS } from './homeGlLayers';
 import { HOME_NAV } from './homeNav';
 import * as styles from './homePage.css';
 
@@ -59,18 +72,22 @@ import * as styles from './homePage.css';
  */
 const HomeRow = memo(function HomeRow({
   top,
+  rowHeight,
   rowRef,
   initialIndexOf,
   ...row
 }: Omit<ComponentProps<typeof CategoryRow>, 'ref' | 'initialIndex'> & {
   top: number;
+  rowHeight: number;
   rowRef: Ref<CategoryRowHandle>;
   initialIndexOf: (slug: string) => number;
 }) {
   const [initialIndex] = useState(() => initialIndexOf(row.category.slug));
   return (
     <div className={styles.rowSlot} style={{ top }}>
-      <CategoryRow ref={rowRef} initialIndex={initialIndex} {...row} />
+      <GlGroup y={top} height={rowHeight}>
+        <CategoryRow ref={rowRef} initialIndex={initialIndex} {...row} />
+      </GlGroup>
     </div>
   );
 });
@@ -112,7 +129,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     sessionId,
     userId: currentUser?.id,
   });
-  const { geometry, margin, rowHeight, windowHeight } = useMediaBoxSizes();
+  const { geometry, margin, rowHeight, windowWidth, windowHeight } = useMediaBoxSizes();
   // The hero and the fixed app logo line up with the rows' left edge.
   useEffect(() => {
     document.body.style.setProperty('--home-content-left', `${margin}px`);
@@ -149,6 +166,17 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     transform: builtForTizen,
     onRest: builtForTizen ? () => contentRest.current() : undefined,
   });
+  // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
+  // Back to DOM if the surface can't start after all (the probe passed, Pixi didn't)
+  const [glRows, setGlRows] = useState(() => glRowsEnabled && glSurfaceSupported());
+  const glScroller = useRef<GlScrollerHandle>(null);
+  const scrollRows = useCallback(
+    (target: number, options?: { instant?: boolean }) => {
+      if (glScroller.current) glScroller.current.scrollTo(target, options);
+      else content.scrollTo(target, options);
+    },
+    [content]
+  );
   const navigation = useHomeNavigation({
     route: activeRoute,
     view,
@@ -216,12 +244,36 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   });
   const handleContentScroll = useCallback(() => {
     publishInterestAfterScroll();
-    setFirstShownRow(Math.floor(content.position() / rowHeight));
+    const position = glScroller.current ? glScroller.current.position() : content.position();
+    setFirstShownRow(Math.floor(position / rowHeight));
   }, [content, publishInterestAfterScroll, rowHeight]);
   contentRest.current = () => {
     handleContentScroll();
     rowsRested();
   };
+  // The rows' height changed (a resize): the focused row's offset with it, so the rows jump to it
+  // (the GL scroller keeps its target in px, and the focus outline stays where rows rest)
+  const scrolledRowHeight = useRef(rowHeight);
+  useEffect(() => {
+    if (scrolledRowHeight.current === rowHeight) return;
+    scrolledRowHeight.current = rowHeight;
+    scrollRows(activeCategory * rowHeight, { instant: true });
+  }, [activeCategory, rowHeight, scrollRows]);
+  // Back on the rows (from details or the player): the GL scroller is a new one, at the top until
+  // told otherwise; it starts on the focused row
+  useEffect(() => {
+    if (glRows && browsing) scrollRows(activeCategory * rowHeight, { instant: true });
+    // Only on arriving: later moves are the focus's
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [glRows, browsing]);
+  const onGlUnavailable = useCallback(() => setGlRows(false), []);
+  // The DOM rows took over from the GL ones: bring the focused row into view there
+  const wasGlRows = useRef(glRows);
+  useEffect(() => {
+    if (wasGlRows.current && !glRows)
+      content.scrollTo(activeCategory * rowHeight, { instant: true });
+    wasGlRows.current = glRows;
+  }, [activeCategory, content, glRows, rowHeight]);
   const mountedRows = withRowsAround(
     homeMountedRows(loadAnchor, firstShownRow, displayCategories.length, warmUntil),
     activeCategory,
@@ -239,7 +291,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       if (index >= 0 && index < activeCategory) {
         followedRow.current = { categories: displayCategories, slug: previous.slug };
         dispatch(homeNavigationActions.setActiveCategory(index));
-        content.scrollTo(index * rowHeight, { instant: true });
+        scrollRows(index * rowHeight, { instant: true });
         return;
       }
       if (index < 0 && displayCategories.length) {
@@ -249,7 +301,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         followedRow.current = { categories: displayCategories, slug };
         if (next !== activeCategory) dispatch(homeNavigationActions.setActiveCategory(next));
         // The navigation layer moves focus to that row too
-        content.scrollTo(next * rowHeight, { instant: true });
+        scrollRows(next * rowHeight, { instant: true });
         return;
       }
     }
@@ -257,7 +309,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       categories: displayCategories,
       slug: displayCategories[activeCategory]?.slug,
     };
-  }, [activeCategory, content, dispatch, displayCategories, rowHeight]);
+  }, [activeCategory, dispatch, displayCategories, rowHeight, scrollRows]);
   /**
    * Focus moved to another row: Home follows it (the hero, the rows that load). A key brings it
    * into view with the slide between rows; the pointer focuses without scrolling; focus placed by
@@ -268,7 +320,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     if (index < 0) return;
     if (index !== activeCategory) dispatch(homeNavigationActions.setActiveCategory(index));
     if (input === 'pointer') return;
-    content.scrollTo(index * rowHeight, input === 'key' ? undefined : { instant: true });
+    scrollRows(index * rowHeight, input === 'key' ? undefined : { instant: true });
     // Web scroll events refine the visible row. On TV, wait until the slide stops.
     if (!builtForTizen) setFirstShownRow(index);
   });
@@ -334,6 +386,78 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     return callbacks;
   };
 
+  const hero = (
+    <PreparedMediaHero
+      media={selectedMedia}
+      preparationInputs={preparationInputs}
+      onReady={onHeroReady}
+    />
+  );
+  const rowsContent = (
+    <div
+      ref={builtForTizen ? undefined : content.ref}
+      className={glRows ? styles.contentGl : builtForTizen ? styles.contentTv : styles.contentWeb}
+      onScroll={builtForTizen ? undefined : handleContentScroll}
+    >
+      <FocusGroup
+        id={HOME_NAV.rows}
+        layout="vertical"
+        // Past the last row loaded, Down waits for the next page of lists
+        more={{ end: feed.hasMoreRows }}
+        onMore={() => {
+          feed.requestNextPage();
+        }}
+      >
+        <div
+          ref={builtForTizen ? content.ref : undefined}
+          className={builtForTizen ? styles.rowsTv : styles.rows}
+          // Room for the last row to scroll to the top like the others (the content is 58vh
+          // with 6vh + 8vh of padding): stopped short, the row above it showed under the fade
+          style={{
+            height: Math.max(
+              displayCategories.length * rowHeight,
+              (displayCategories.length - 1) * rowHeight + windowHeight * 0.44
+            ),
+          }}
+        >
+          {mountedRows.map(index => {
+            const category = displayCategories[index];
+            return (
+              <HomeRow
+                key={category.slug}
+                top={index * rowHeight}
+                rowHeight={rowHeight}
+                rowRef={callbacksForRow(category.slug, index).ref}
+                category={category}
+                categoryIndex={index}
+                initialIndexOf={initialIndexOf}
+                onSelectionChange={callbacksForRow(category.slug, index).onSelectionChange}
+                loadIntent={
+                  rowLoadState.visible.has(index)
+                    ? 'visible'
+                    : rowLoadState.prefetch.has(index) || rowLoadState.warm.has(index)
+                      ? 'prefetch'
+                      : 'dormant'
+                }
+                visible={rowLoadState.visible.has(index)}
+                warm={rowLoadState.warm.has(index)}
+                geometry={geometry}
+                isCurrentRow={activeCategory === index}
+                onDataReady={onRowReady}
+                onActive={onRowActive}
+                onInterest={publishInterestAfterScroll}
+                onMediaLoaded={onRowMediaLoaded}
+                progress={progressEntries}
+                mediaOverride={category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined}
+                onSelect={onRowSelect}
+              />
+            );
+          })}
+        </div>
+      </FocusGroup>
+    </div>
+  );
+
   if (view === 'browse' && isLoading) {
     return (
       <main className={styles.page}>
@@ -364,74 +488,57 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               onSearch={onSidebarSearch}
               onOpenNotification={onOpenNotification}
             >
-              <PreparedMediaHero
-                media={selectedMedia}
-                preparationInputs={preparationInputs}
-                onReady={onHeroReady}
-              />
-              <div
-                ref={builtForTizen ? undefined : content.ref}
-                className={builtForTizen ? styles.contentTv : styles.contentWeb}
-                onScroll={builtForTizen ? undefined : handleContentScroll}
-              >
-                <FocusGroup
-                  id={HOME_NAV.rows}
-                  layout="vertical"
-                  // Past the last row loaded, Down waits for the next page of lists
-                  more={{ end: feed.hasMoreRows }}
-                  onMore={() => {
-                    feed.requestNextPage();
-                  }}
+              {glRows ? (
+                <GlSurface
+                  className={styles.glCanvas}
+                  width={windowWidth}
+                  height={windowHeight}
+                  prefetch={{ x: geometry.itemWidth * 2, y: rowHeight }}
+                  exposeAs={import.meta.env.DEV || builtForTizen ? '__glRows' : undefined}
+                  tuning={glTuningOverride as GlTuning | undefined}
+                  onUnavailable={onGlUnavailable}
                 >
-                  <div
-                    ref={builtForTizen ? content.ref : undefined}
-                    className={builtForTizen ? styles.rowsTv : styles.rows}
-                    style={{
-                      height: Math.max(
-                        displayCategories.length * rowHeight,
-                        (displayCategories.length - 1) * rowHeight + windowHeight * 0.44
-                      ),
-                    }}
+                  {/* The hero under the rows: its backdrops live, its shade baked; together
+                      what shows through the rows' fade edge */}
+                  <GlLayer name={HOME_GL_LAYERS.heroBackground}>
+                    <GlLayer name={HOME_GL_LAYERS.heroBackdrops} z={-1} />
+                    <GlLayer baked>{hero}</GlLayer>
+                  </GlLayer>
+                  <GlLayer name={HOME_GL_LAYERS.heroDetails} z={0.5} />
+                  {/* The rows from content's top (42vh) past its padding (6vh), faded like its
+                      mask (transparent 5vh to opaque 8vh) */}
+                  <GlScroller
+                    ref={glScroller}
+                    z={1}
+                    clipTop={windowHeight * 0.42}
+                    contentTop={windowHeight * 0.48}
+                    fade={[windowHeight * 0.47, windowHeight * 0.5]}
+                    fadeFrom={HOME_GL_LAYERS.heroBackground}
+                    scrollDuration={300}
+                    scrollEasing={easeRowSlide}
+                    onScrollRest={() => contentRest.current()}
                   >
-                    {mountedRows.map(index => {
-                      const category = displayCategories[index];
-                      return (
-                        <HomeRow
-                          key={category.slug}
-                          top={index * rowHeight}
-                          rowRef={callbacksForRow(category.slug, index).ref}
-                          category={category}
-                          categoryIndex={index}
-                          initialIndexOf={initialIndexOf}
-                          onSelectionChange={
-                            callbacksForRow(category.slug, index).onSelectionChange
-                          }
-                          loadIntent={
-                            rowLoadState.visible.has(index)
-                              ? 'visible'
-                              : rowLoadState.prefetch.has(index) || rowLoadState.warm.has(index)
-                                ? 'prefetch'
-                                : 'dormant'
-                          }
-                          visible={rowLoadState.visible.has(index)}
-                          warm={rowLoadState.warm.has(index)}
-                          geometry={geometry}
-                          isCurrentRow={activeCategory === index}
-                          onDataReady={onRowReady}
-                          onActive={onRowActive}
-                          onInterest={publishInterestAfterScroll}
-                          onMediaLoaded={onRowMediaLoaded}
-                          progress={progressEntries}
-                          mediaOverride={
-                            category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
-                          }
-                          onSelect={onRowSelect}
-                        />
-                      );
-                    })}
-                  </div>
-                </FocusGroup>
-              </div>
+                    {/* The focused card always rests here: the rows' top (48vh), the title (5vh +
+                        1vh), the carousel's padding; centred by the geometry's margin */}
+                    <GlFocusAnchor
+                      layer={HOME_GL_LAYERS.focus}
+                      x={(windowWidth - geometry.contentWidth) / 2}
+                      y={windowHeight * 0.54 + remPx(tokens.space.xs)}
+                      width={geometry.itemWidth}
+                      height={(geometry.itemWidth * 9) / 16}
+                      scale={1.03}
+                    >
+                      {rowsContent}
+                    </GlFocusAnchor>
+                  </GlScroller>
+                  <GlLayer name={HOME_GL_LAYERS.focus} z={2} />
+                </GlSurface>
+              ) : (
+                <>
+                  {hero}
+                  {rowsContent}
+                </>
+              )}
             </HomeBrowse>
           </NavigationProvider>
         ) : view === 'details' && selectedMedia ? (

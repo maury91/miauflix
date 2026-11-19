@@ -41,9 +41,15 @@ export const color = {
   focusOutline: '#FFFFFF',
 } as const;
 
+/** The tile scrim's stops as data: the CSS gradient below and the tile's picture both use them. */
+export const tileScrim = {
+  from: { color: 'rgba(10, 13, 15, 0)', at: 0.35 },
+  to: { color: 'rgba(10, 13, 15, 0.85)', at: 1 },
+} as const;
+
 export const scrim = {
   modal: 'rgba(10, 13, 15, 0.7)',
-  tile: 'linear-gradient(rgba(10, 13, 15, 0) 35%, rgba(10, 13, 15, 0.85) 100%)',
+  tile: `linear-gradient(${tileScrim.from.color} ${tileScrim.from.at * 100}%, ${tileScrim.to.color} ${tileScrim.to.at * 100}%)`,
   heroSide: 'linear-gradient(to right, rgba(10, 13, 15, 0.9) 0%, rgba(10, 13, 15, 0) 60%)',
   heroBottom: 'linear-gradient(rgba(10, 13, 15, 0) 70%, #0A0D0F 100%)',
 } as const;
