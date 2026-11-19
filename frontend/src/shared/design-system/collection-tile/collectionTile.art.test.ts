@@ -33,7 +33,9 @@ describe('CollectionTile picture', () => {
     const base = { label: 'Dune', labelPlacement: 'overlay' as const, width: 200 };
     const calls = RecordingPainter.record(collectionTileArt({ ...base, badge: { text: '4k' } }));
     expect(calls).toContainEqual(expect.objectContaining({ op: 'text', text: '4K' }));
-    expect(collectionTileArt({ ...base, badge: { text: '4k' } }).key).not.toBe(collectionTileArt(base).key);
+    expect(collectionTileArt({ ...base, badge: { text: '4k' } }).key).not.toBe(
+      collectionTileArt(base).key
+    );
   });
 
   it('changes key exactly when a prop changes', () => {

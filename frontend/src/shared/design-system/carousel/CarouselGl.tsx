@@ -24,7 +24,7 @@ import { useCarousel } from './useCarousel';
  */
 export function CarouselGl(props: CarouselProps) {
   const { labelledBy, label, count, renderItem, geometry, surface = 'canvas' } = props;
-  const carousel = useCarousel(props);
+  const carousel = useCarousel(props, { pointerLock: 'settle' });
   const { composite, focusedIndex, leadingIndex, height, canGoBack, canGoForward } = carousel;
   const { itemWidth, peek, contentWidth } = geometry;
   const parent = useGlParent();
@@ -46,11 +46,23 @@ export function CarouselGl(props: CarouselProps) {
     trackNode.set({ y: viewportPadding });
     edgesNode.set({ z: 2 });
   });
+  // The pointer stays locked until the track lands (useCarousel), even when its frames start late
+  const { releasePointer } = carousel;
   useLayoutEffect(() => {
     if (!trackNode) return;
-    placeTrack(trackNode, leadingIndex, geometry, trackPlaced.current);
+    trackNode.onSettle = property => {
+      if (property === 'x') releasePointer();
+    };
+    return () => {
+      trackNode.onSettle = null;
+    };
+  }, [releasePointer, trackNode]);
+  useLayoutEffect(() => {
+    if (!trackNode) return;
+    const moving = placeTrack(trackNode, leadingIndex, geometry, trackPlaced.current);
     trackPlaced.current = true;
-  }, [leadingIndex, geometry, trackNode]);
+    if (!moving) releasePointer();
+  }, [leadingIndex, geometry, releasePointer, trackNode]);
   useGlPaint(
     edgesNode,
     painter =>
@@ -131,7 +143,7 @@ const GlSlot = memo(function GlSlot({
 
 /**
  * Moves the track so `leadingIndex` is the left-most whole item (at once the first time). The
- * track's X is the only thing that moves when the carousel pages.
+ * track's X is the only thing that moves when the carousel pages. True while it slides.
  */
 function placeTrack(
   track: GlNode,
@@ -142,4 +154,6 @@ function placeTrack(
   const x = -leadingIndex * (itemWidth + gap);
   if (animate) track.animate('x', x, parseFloat(duration.fast), easeStandard);
   else track.set({ x });
+  /** Whether it's sliding (it lands with the track's onSettle). */
+  return 'x' in track.animations;
 }

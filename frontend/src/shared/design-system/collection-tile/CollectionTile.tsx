@@ -44,7 +44,10 @@ export type CollectionTileProps = Omit<
    * one baked picture (collectionTile.art.ts) and `visual` isn't rendered.
    */
   glVisual?: TileVisualArt;
-  /** Inside a GlSurface: `badge` as a label Badge's picture (the twin keeps `badge` for the reader). */
+  /**
+   * Inside a GlSurface, with `glVisual`: `badge` as a label Badge's picture, baked into the tile
+   * (the twin keeps `badge` for the reader). Without `glVisual` it isn't drawn.
+   */
   glBadge?: BadgeArtProps;
 } & NavigableProps;
 

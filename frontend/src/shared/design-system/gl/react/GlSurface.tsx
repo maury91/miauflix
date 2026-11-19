@@ -3,7 +3,6 @@ import {
   type MouseEvent,
   type ReactNode,
   Suspense,
-  use,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -15,7 +14,7 @@ import { hitTest } from '../core/hitTest';
 import { followReducedMotion } from '../core/motion';
 import type { GlBackend, GlBackendOptions, GlTuning } from '../core/renderer';
 import { GlNode } from '../core/scene';
-import { loadedGlBackend, preloadGlBackend } from './backendModule';
+import { useGlBackend } from './backendModule';
 import { reportGlFailure } from './glSupport';
 import { GlLayers, GlLayersProvider, GlParentProvider } from './hooks';
 
@@ -51,8 +50,8 @@ type BackendClass = new (options: GlBackendOptions) => GlBackend;
  * the same commit as the page; otherwise nothing shows until it is.
  */
 export function GlSurface(props: GlSurfaceProps) {
-  const module = loadedGlBackend();
-  if (module) return <Surface {...props} Backend={module.PixiBackend} />;
+  // One component path whether the backend was preloaded or not: switching paths once it loads
+  // would remount the surface and its children
   return (
     <Suspense fallback={null}>
       <LoadingSurface {...props} />
@@ -61,8 +60,8 @@ export function GlSurface(props: GlSurfaceProps) {
 }
 
 function LoadingSurface(props: GlSurfaceProps) {
-  const { PixiBackend } = use(preloadGlBackend());
-  return <Surface {...props} Backend={PixiBackend} />;
+  const module = useGlBackend();
+  return <Surface {...props} Backend={module?.PixiBackend ?? null} />;
 }
 
 function Surface({
@@ -75,7 +74,7 @@ function Surface({
   exposeAs,
   tuning,
   children,
-}: GlSurfaceProps & { Backend: BackendClass }) {
+}: GlSurfaceProps & { Backend: BackendClass | null }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const disposal = useRef(0);
   const [root] = useState(() => new GlNode());
@@ -84,6 +83,8 @@ function Surface({
   // initial focus looks for the rows in its first effects). The GPU side starts async.
   const [failed, setFailed] = useState(false);
   const [backend] = useState<GlBackend | null>(() => {
+    // The chunk failed to load (already reported): children render as DOM
+    if (!Backend) return null;
     try {
       const canvas = document.createElement('canvas');
       canvas.setAttribute('aria-hidden', 'true');
@@ -111,8 +112,15 @@ function Surface({
   // The pointer over a node goes to its target (the hidden DOM isn't where nodes are drawn)
   const forward = (event: MouseEvent<HTMLDivElement>) => {
     if (!backend || failed) return;
+    // The drawn box, CSS transforms included (a scaled ancestor): back to the scene's px
     const box = event.currentTarget.getBoundingClientRect();
-    const target = hitTest(root, event.clientX - box.left, event.clientY - box.top)?.target;
+    const scaleX = box.width ? width / box.width : 1;
+    const scaleY = box.height ? height / box.height : 1;
+    const target = hitTest(
+      root,
+      (event.clientX - box.left) * scaleX,
+      (event.clientY - box.top) * scaleY
+    )?.target;
     event.currentTarget.style.cursor = target ? 'pointer' : '';
     if (!target || (target as HTMLButtonElement).disabled) return;
     const { clientX, clientY, screenX, screenY } = event;

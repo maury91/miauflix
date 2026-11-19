@@ -63,6 +63,9 @@ function useHeroLogo(media: MediaDto | null) {
 /** How long the intro waits for the GL hero's backdrop texture before showing Home anyway. */
 const GL_READY_TIMEOUT_MS = 3000;
 
+/** How long a backdrop waits for its focus point (fetched, can be analysed first) before showing. */
+const BACKDROP_FOCUS_WAIT_MS = 1500;
+
 /**
  * Resolves once the surface's texture for `src` is drawable or failed (the hero then draws its
  * fallback), or after GL_READY_TIMEOUT_MS. At once outside a GL surface.
@@ -222,12 +225,20 @@ export function useMediaHero(
                 return result.backdropFocus;
               })
               .catch(() => null);
+      // A slow focus request doesn't hold the backdrop (or Home's readiness): past the wait it
+      // shows centred, and the focus, cached once it arrives, serves the title's next showing
+      const boundedFocus = Promise.race([
+        focusPromise,
+        new Promise<null>(resolve =>
+          window.setTimeout(() => resolve(null), BACKDROP_FOCUS_WAIT_MS)
+        ),
+      ]);
       // Decoded before the swap; a backdrop the row already preloaded resolves at once.
       const imagePromise = imagePreloader.load(url, URGENT);
-      const focus = await focusPromise;
+      let focus: BackdropFocus | null;
       let imageSize: { width: number; height: number };
       try {
-        imageSize = await imagePromise;
+        [focus, imageSize] = await Promise.all([boundedFocus, imagePromise]);
       } catch {
         if (current()) {
           setLayers(() => []);

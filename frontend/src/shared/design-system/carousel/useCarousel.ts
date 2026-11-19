@@ -7,24 +7,30 @@ import { maxLeading, useCarouselPosition } from './carouselNavigation';
 
 /** How long after the track starts moving the pointer is locked: the translate plus a frame. */
 const POINTER_LOCK_MS = parseFloat(duration.fast) + 30;
+/** GL releases the lock when the track lands; this bounds it if no frame runs (a hidden page). */
+const GL_POINTER_LOCK_MAX_MS = 1000;
 
 /**
  * What both of Carousel's views need: the row's navigation composite, the focused and leading
  * items, the pointer (locked while the track moves), the item size and which items are mounted.
  */
-export function useCarousel({
-  count,
-  geometry,
-  itemHeight,
-  focusedIndex: focusedIndexProp = null,
-  leadingIndex: leadingIndexProp,
-  onPointerFocus: onPointerFocusProp,
-  overscan,
-  navId,
-  navigation,
-  hasMore = false,
-  onLoadMore,
-}: CarouselProps) {
+export function useCarousel(
+  {
+    count,
+    geometry,
+    itemHeight,
+    focusedIndex: focusedIndexProp = null,
+    leadingIndex: leadingIndexProp,
+    onPointerFocus: onPointerFocusProp,
+    overscan,
+    navId,
+    navigation,
+    hasMore = false,
+    onLoadMore,
+  }: CarouselProps,
+  /** `settle`: the view calls `releasePointer` when the track lands (GL, whose frames can lag). */
+  { pointerLock = 'timer' }: { pointerLock?: 'timer' | 'settle' } = {}
+) {
   const layered = useHasNavigation() && navId !== undefined && navigation !== undefined;
   const latestNavigation = useRef(navigation);
   latestNavigation.current = navigation;
@@ -70,14 +76,25 @@ export function useCarousel({
     const state = pointer.current;
     state.locked = true;
     window.clearTimeout(state.timer);
-    state.timer = window.setTimeout(() => {
-      state.locked = false;
-    }, POINTER_LOCK_MS);
-  }, [leadingIndex]);
+    state.timer = window.setTimeout(
+      () => {
+        state.locked = false;
+      },
+      pointerLock === 'settle' ? GL_POINTER_LOCK_MAX_MS : POINTER_LOCK_MS
+    );
+  }, [leadingIndex, pointerLock]);
   useEffect(() => () => window.clearTimeout(pointer.current.timer), []);
+  const releasePointer = useCallback(() => {
+    const state = pointer.current;
+    state.locked = false;
+    window.clearTimeout(state.timer);
+  }, []);
 
+  // Set after commit: a render React discards must not leave its callback here
   const onPointerFocusRef = useRef(onPointerFocus);
-  onPointerFocusRef.current = onPointerFocus;
+  useLayoutEffect(() => {
+    onPointerFocusRef.current = onPointerFocus;
+  });
   const handlePointer = useCallback((index: number, event: MouseEvent) => {
     const state = pointer.current;
     const moved = event.clientX !== state.x || event.clientY !== state.y;
@@ -92,6 +109,8 @@ export function useCarousel({
     focusedIndex,
     leadingIndex,
     handlePointer,
+    /** Unlocks the pointer: the track landed (`pointerLock: 'settle'`). */
+    releasePointer,
     /** Item height (px). */
     height,
     /** Mounted items: a margin of `overscan` beyond the visible ones. */

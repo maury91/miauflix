@@ -483,8 +483,10 @@ export class SceneSync {
   /** Everything paints again (a lost context took every texture). */
   repaintAll() {
     for (const [node, state] of this.states) {
+      // Released, not just dropped: an entry that keeps the node as a user is never evicted
+      for (const entry of state.used) this.options.store.release(entry, node);
       state.used = [];
-      state.pictures = [];
+      this.options.releasePictures(node, state);
       if (state.baked) state.baked.dirty = true;
       if (state.band) state.band.dirty = true;
       node.repaint();

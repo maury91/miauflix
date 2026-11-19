@@ -6,6 +6,8 @@ export interface ArtworkArtProps {
   src?: string | null;
   /** Drawn under `src` while it loads: the version it replaces (Artwork's `holdPrevious`). */
   previous?: string | null;
+  /** false: `src` shows at once when ready, not fading in (it replaces a held picture). */
+  fade?: boolean;
   /** The box (px), from (0, 0). */
   width: number;
   height: number;
@@ -22,11 +24,17 @@ export interface ArtworkArtProps {
  */
 export function drawArtwork(
   painter: Painter,
-  { src, previous, width, height, fit = 'cover', radius = 0, fallbackText }: ArtworkArtProps
+  { src, previous, fade, width, height, fit = 'cover', radius = 0, fallbackText }: ArtworkArtProps
 ): ImageStatus {
   // An image still loading draws nothing, so the previous one shows until it covers it
   if (previous) painter.image(previous, 0, 0, width, height, { radius, fit });
-  const status = src ? painter.image(src, 0, 0, width, height, { radius, fit }) : 'failed';
+  const status = src
+    ? painter.image(src, 0, 0, width, height, {
+        radius,
+        fit,
+        ...(fade === false && { fade }),
+      })
+    : 'failed';
   if (status !== 'failed' || !fallbackText) return status;
   const padding = remPx(artworkFallback.padding);
   const type = artworkFallback.type;

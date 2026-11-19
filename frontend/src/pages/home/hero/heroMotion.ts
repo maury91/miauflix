@@ -13,3 +13,5 @@ export const BACKDROP_FADE_MS = 400;
 export const BACKDROP_REST_MS = DETAILS_FADE_MS;
 /** How long the details wait for a logo still being made before showing the title (GL). */
 export const LOGO_WAIT_MS = 600;
+/** How long the details wait for a known logo's image before showing the title as text. */
+export const LOGO_IMAGE_WAIT_MS = 1500;

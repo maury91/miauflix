@@ -1,9 +1,11 @@
-import { forwardRef, useLayoutEffect, useMemo } from 'react';
+import { useOptionalNavigation } from '@shared/navigation/hooks';
+import { forwardRef, useLayoutEffect, useMemo, useState } from 'react';
 
 import { GlParentProvider, remPx, useGlNode, useGlPaint, useGlParent, useGlTarget } from '../gl';
 import { useMergedRef } from '../navFocus';
 import type { CollectionTileProps } from './CollectionTile';
 import {
+  belowTextHeight,
   collectionTileArt,
   paintFocusRing,
   paintTileFrame,
@@ -40,19 +42,30 @@ export const CollectionTileGl = forwardRef<HTMLButtonElement, CollectionTileProp
     const { id, active, buttonProps } = useCollectionTile(props, forwardedRef);
     const parent = useGlParent();
     const tileNode = useGlNode();
-    // The pointer over the drawn tile goes to the button
-    const ref = useMergedRef(buttonProps.ref, useGlTarget(tileNode));
+    // The text under a `below` frame: outside the tile's box (its scale's pivot is the frame's
+    // centre), so it has a box of its own for the pointer
+    const textNode = useGlNode(tileNode);
+    // The pointer over the drawn tile, or the text under it, goes to the button
+    const ref = useMergedRef(buttonProps.ref, useGlTarget(tileNode), useGlTarget(textNode));
     const visualNode = useGlNode(tileNode);
     const overlayNode = useGlNode(tileNode);
     const tileWidth = parent?.width ?? 0;
     const frameHeight = tileWidth * TILE_RATIO[ratio];
-    // Under a GlFocusAnchor the outline is drawn once, where the focused tile rests
+    // The lines drawn under a `below` frame: the supporting text stays with the label hidden
+    const textHeight =
+      labelPlacement === 'below' ? belowTextHeight(Boolean(supportingText), !labelHidden) : 0;
+    // Under a GlFocusAnchor the outline is drawn once, where keys bring the focused tile to rest.
+    // The pointer focuses a tile where it is (no scroll): that tile draws its own outline.
     const anchor = useFocusAnchor();
+    const lastInput = useOptionalNavigation()?.lastInput;
+    const [pointerFocused, setPointerFocused] = useState(false);
     useLayoutEffect(() => {
       if (!anchor) return;
-      anchor.set(id, active);
+      const byPointer = active && lastInput?.() === 'pointer';
+      setPointerFocused(byPointer);
+      anchor.set(id, active && !byPointer);
       return () => anchor.set(id, false);
-    }, [anchor, active, id]);
+    }, [anchor, active, id, lastInput]);
     useLayoutEffect(() => {
       if (!tileNode || !overlayNode) return;
       tileNode.set({
@@ -63,6 +76,7 @@ export const CollectionTileGl = forwardRef<HTMLButtonElement, CollectionTileProp
         opacity: disabled ? tileMetrics.disabledOpacity : 1,
       });
       overlayNode.set({ z: 1 });
+      textNode?.set({ y: frameHeight, width: tileWidth, height: textHeight });
     });
     const art = glVisual
       ? collectionTileArt(
@@ -99,7 +113,7 @@ export const CollectionTileGl = forwardRef<HTMLButtonElement, CollectionTileProp
             labelPlacement,
             progress,
           });
-        if (active && !anchor) paintFocusRing(painter, tileWidth, frameHeight);
+        if (active && (!anchor || pointerFocused)) paintFocusRing(painter, tileWidth, frameHeight);
       },
       [
         anchor,
@@ -112,6 +126,7 @@ export const CollectionTileGl = forwardRef<HTMLButtonElement, CollectionTileProp
         labelPlacement,
         progress,
         active,
+        pointerFocused,
       ]
     );
     const visualValue = useMemo(

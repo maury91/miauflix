@@ -115,8 +115,8 @@ const withRowsAround = (rows: number[], activeCategory: number, categoryCount: n
 };
 
 /**
- * With the WebGL rows, Home waits for the renderer's chunk (preloaded at startup) as a whole: its
- * first focus looks for the rows, which mount inside the surface.
+ * With the WebGL rows, browsing Home waits for the renderer's chunk (preloaded at startup) as a
+ * whole: its first focus looks for the rows, which mount inside the surface.
  */
 const HomePage: FC<HomePageProps> = props => (
   <Suspense fallback={null}>
@@ -129,7 +129,6 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
   // Decided once; a surface that loses its context for good turns it off (the DOM rows remount)
   const [glWanted] = useState(() => glRowsEnabled && glSurfaceSupported());
   const glRows = useGlAvailable() && glWanted;
-  useGlBackendReady(glRows);
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
   const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
@@ -139,6 +138,8 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
 
   const { view, playable, routeQuery, routeMedia, nextEpisode } = useMediaRoute(activeRoute);
   const browsing = view === 'browse';
+  // Only the rows need the renderer: details and the player don't wait for its chunk
+  useGlBackendReady(glRows && browsing);
   const [browseSelection, setBrowseSelection] = useState<MediaDto | null>(null);
   useSessionChange(sessionId, () => setBrowseSelection(null));
   const selectedMedia = selectedMediaFor(activeRoute, routeMedia, browseSelection);

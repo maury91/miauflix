@@ -16,7 +16,7 @@ export function ArtworkGl(props: ArtworkProps) {
   const node = useGlNode();
   const status = useGlImageStatus(src);
   const failed = !src || status === 'failed';
-  const { held } = useArtwork(props, {
+  const { held, replacing } = useArtwork(props, {
     failed,
     loaded: Boolean(src) && status === 'ready',
   });
@@ -32,6 +32,9 @@ export function ArtworkGl(props: ArtworkProps) {
       drawArtwork(painter, {
         src,
         previous: held,
+        // A replacement shows at once: fading in would uncover the box once the held one goes.
+        // Not a dep: it turns false just after the swap, and a repaint then would fade it again
+        fade: !replacing,
         width,
         height,
         fit,

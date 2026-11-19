@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { expect, fireEvent, fn, waitFor, within } from 'storybook/test';
 
 import { GlGroup, type GlRendererStats, GlSurface, useGlAvailable } from '../../gl';
+import { resetGlFailure } from '../../gl/react/glSupport';
 import { SurfaceStage } from '../../storyHelpers';
 import { MediaTile } from './MediaTile';
 
@@ -111,6 +112,11 @@ const glStats = () =>
 
 export const PointerAndFallback: Story = {
   render: args => <Tiles {...args} />,
+  // The lost context turns GL off for the session: not for a rerun, or the stories after this one
+  beforeEach: () => {
+    resetGlFailure();
+    return resetGlFailure;
+  },
   play: async ({ args, canvasElement, step }) => {
     const host = await waitFor(() => {
       const canvas = canvasElement.querySelector('canvas');

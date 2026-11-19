@@ -16,6 +16,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- Samsung TVs with the WebGL rows: the pointer outlines the title it is on (not the first one in the row) and opens a title from its name or description under the picture too; quality badges on the drawn cards are as wide as elsewhere; Home no longer stays loading when a backdrop's framing or a logo is slow to arrive, or shows an error screen when the WebGL part of the app fails to download (it uses the regular rows); a busy button's spinner stays in the button; and with reduced motion an updated card no longer shows its old picture through the new one
 - A list row no longer fails to open when a later page of the list cannot be loaded from its provider (Trakt, AniList): it shows the titles already loaded, and the rest once the provider answers again. A title the catalog fails to load for a moment keeps its place in the row instead of disappearing from it
 - Home: Continue watching shows every title you are watching, even with many in progress. On a TV with about 17 titles, several cards used to stay missing because the app asked for each title separately and the server turned the extra requests away. Its cards never stay loading when the server answers with something unexpected
 - The catalog service's Docker image starts without internet access: it used to download its image library from the package registry on every start, and stopped with an error when it could not

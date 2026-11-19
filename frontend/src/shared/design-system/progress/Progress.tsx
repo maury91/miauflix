@@ -29,10 +29,11 @@ export type ProgressSpinnerProps = ProgressSemantics & {
 /**
  * An indeterminate spinner: the animated icon in the current text color. Labelled, it is a polite
  * status announced once; decorative, it is hidden from assistive technology. Drawn by the
- * GlSurface it's in (ProgressSpinnerGl), or as DOM (ProgressSpinnerDom).
+ * GlSurface it's in (ProgressSpinnerGl), or as DOM (ProgressSpinnerDom). An `inherit` spinner sits
+ * in DOM text (a button's icon slot), so it stays DOM even inside a surface.
  */
 export function ProgressSpinner(props: ProgressSpinnerProps) {
-  return useRenderMode() === 'gl' ? (
+  return useRenderMode() === 'gl' && props.size !== 'inherit' ? (
     <ProgressSpinnerGl {...props} />
   ) : (
     <ProgressSpinnerDom {...props} />

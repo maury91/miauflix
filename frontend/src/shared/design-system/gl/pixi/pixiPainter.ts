@@ -10,6 +10,7 @@ import {
 
 import type { Picture } from '../bake/bakery';
 import { rgbNumber } from '../core/color';
+import { motion } from '../core/motion';
 import type { GlNode } from '../core/scene';
 import type { GlArt, Painter } from '../paint/painter';
 import { GRADIENT_TEXELS } from '../paint/rasters';
@@ -213,7 +214,9 @@ export function createPixiPainter(
       const held = art.holdKey ? context.held(node) : undefined;
       const previous =
         held && held !== picture && held.art.holdKey === art.holdKey ? held : undefined;
-      if (!picture.texture || frame.now - picture.readyAt < FADE_IN_MS) {
+      // Under reduced motion nothing fades: the earlier version goes once this one is ready
+      const fadingIn = !motion.reduced && frame.now - picture.readyAt < FADE_IN_MS;
+      if (!picture.texture || fadingIn) {
         if (previous) {
           show(previous);
           const sprite = new Sprite(previous.texture!);

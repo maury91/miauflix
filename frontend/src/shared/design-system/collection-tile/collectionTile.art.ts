@@ -92,13 +92,14 @@ export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVi
   };
 }
 
-/** The text under a `below` tile's frame (px). */
-function belowTextHeight(supporting: boolean) {
+/** The text under a `below` tile's frame (px): the label's line and the supporting text's. */
+export function belowTextHeight(supporting: boolean, label = true) {
+  if (!label && !supporting) return 0;
   const line = (style: { fontSize: string; lineHeight: string }) =>
     Math.ceil(remPx(style.fontSize) * parseFloat(style.lineHeight)) + 2;
   return (
     remPx(tileMetrics.belowGap) +
-    line(typeScale.label) +
+    (label ? line(typeScale.label) : 0) +
     (supporting ? remPx(tileMetrics.supportingGap) + line(typeScale.caption) : 0)
   );
 }

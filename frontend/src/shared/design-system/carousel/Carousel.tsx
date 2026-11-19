@@ -56,7 +56,10 @@ export interface CarouselProps {
    * and for synthetic events after it (content that stopped under a resting pointer).
    */
   onPointerFocus?: (index: number) => void;
-  /** Previous/next page buttons for the pointer (web). Labels from the feature (i18n). */
+  /**
+   * Previous/next page buttons for the pointer (web). Labels from the feature (i18n). DOM only:
+   * inside a GlSurface (the TV, where rows pass none) they aren't drawn.
+   */
   pageButtons?: {
     previousLabel: string;
     nextLabel: string;

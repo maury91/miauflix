@@ -18,7 +18,7 @@ import { HOME_GL_LAYERS } from '../homeGlLayers';
 import { HOME_VH } from '../homeLayout';
 import { type HeroDetailsArt, heroDetailsArt } from './heroDetails.art';
 import { heroDetailsModel, type SourceAvailability } from './heroDetailsModel';
-import { BACKDROP_FADE_MS, DETAILS_FADE_MS, LOGO_WAIT_MS } from './heroMotion';
+import { BACKDROP_FADE_MS, DETAILS_FADE_MS, LOGO_IMAGE_WAIT_MS, LOGO_WAIT_MS } from './heroMotion';
 import { paintHeroShade } from './heroShade.art';
 import { HERO_DETAILS } from './heroType';
 import { type BackdropLayerState, type MediaHeroProps, useMediaHero } from './useMediaHero';
@@ -150,6 +150,16 @@ function GlHero({
     const timer = window.setTimeout(() => setLogoWaitOver(true), LOGO_WAIT_MS);
     return () => window.clearTimeout(timer);
   }, [logoPending, media]);
+  // A logo whose image doesn't arrive in time: the title shows as text, and stays so for this
+  // title (the logo arriving later would replace it, a flash)
+  const [logoImageGaveUp, setLogoImageGaveUp] = useState(false);
+  const logoSettled = logoStatus === 'ready' || logoStatus === 'failed';
+  useEffect(() => setLogoImageGaveUp(false), [logoUrl, media]);
+  useEffect(() => {
+    if (!logoUrl || logoSettled) return;
+    const timer = window.setTimeout(() => setLogoImageGaveUp(true), LOGO_IMAGE_WAIT_MS);
+    return () => window.clearTimeout(timer);
+  }, [logoUrl, logoSettled, media]);
   // The next title's texts and logo load while the details fade out
   const upcomingMedia = upcoming?.media ?? null;
   const upcomingDetails = useMemo(
@@ -181,7 +191,7 @@ function GlHero({
       if (!details || !detailsNode) return;
       // Asked for here (and held), not only where it's drawn: the details wait for it
       const loaded = logoUrl ? painter.load(logoUrl, HERO_DETAILS.logoMaxWidth) : 'failed';
-      const useLogo = Boolean(logoUrl) && loaded !== 'failed';
+      const useLogo = Boolean(logoUrl) && loaded !== 'failed' && !logoImageGaveUp;
       // Shown only whole: every text, and the logo settled (or the title, the logo failing)
       const measured = details.texts(useLogo).map(spec => painter.measure(spec));
       const ready =
@@ -206,6 +216,7 @@ function GlHero({
       logoStatus,
       logoPending,
       logoWaitOver,
+      logoImageGaveUp,
       moving,
       upcomingDetails,
       upcomingLogo,

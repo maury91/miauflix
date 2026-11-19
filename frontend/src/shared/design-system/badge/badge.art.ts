@@ -31,7 +31,8 @@ export function paintBadge(
   const height = remPx(badgeLabel.height);
   const border = remPx(badgeLabel.border);
   const corner = remPx(badgeLabel.radius);
-  const width = label.width + remPx(badgeLabel.paddingX) * 2;
+  // As the DOM badge: the padding inside the borders
+  const width = label.width + remPx(badgeLabel.paddingX) * 2 + border * 2;
   painter.rect(x, y, width, height, hex(colors.border), { radius: corner });
   painter.rect(
     x + border,

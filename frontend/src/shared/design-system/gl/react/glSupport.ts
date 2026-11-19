@@ -29,6 +29,16 @@ export function reportGlFailure() {
   for (const listener of listeners) listener();
 }
 
+/**
+ * GL is available again (stories and tests only: a failure they induce, like a lost context,
+ * must not turn GL off for whatever runs after them).
+ */
+export function resetGlFailure() {
+  if (!failedAtRuntime) return;
+  failedAtRuntime = false;
+  for (const listener of listeners) listener();
+}
+
 /** False once a surface failed (reportGlFailure): the page renders its DOM form. */
 export function useGlAvailable() {
   return useSyncExternalStore(
