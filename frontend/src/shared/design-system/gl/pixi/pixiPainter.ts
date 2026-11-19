@@ -26,6 +26,8 @@ export interface PixiPainterContext {
   /** The last baked picture with a holdKey the node showed, if still baked. */
   held(node: GlNode): Picture<RenderTexture> | undefined;
   hold(node: GlNode, picture: Picture<RenderTexture>): void;
+  /** Texture px per CSS px for what this paint rasterizes (texts, images' decode size). */
+  resolution: number;
 }
 
 /**
@@ -38,12 +40,15 @@ export function createPixiPainter(
   state: NodeState,
   baking: boolean
 ): Painter {
-  const { store, frame, fades } = context;
+  const { store, frame, fades, resolution } = context;
+  // Drawn into a picture baked above the device pixel ratio (a focusable tile): images decode
+  // that much larger too
+  const oversample = resolution / frame.dpr;
   const add = <T extends Container>(object: T) => state.drawn.addChild(object);
   const fadeIn = (object: Container, readyAt: number, onDone?: () => void) =>
     !baking && fades.add(object, readyAt, node, frame.now, onDone);
   const text = (spec: Parameters<Painter['text']>[0]) => {
-    const entry = store.text(spec);
+    const entry = store.text(spec, resolution);
     store.use(entry, node, state);
     return entry;
   };
@@ -98,7 +103,7 @@ export function createPixiPainter(
       }
     },
     image(src, x, y, w, h, options = {}) {
-      const entry = store.image(src, w * state.scale);
+      const entry = store.image(src, w * state.scale * oversample);
       store.use(entry, node, state);
       if (entry.state === 'failed') return 'failed';
       if (entry.state !== 'ready') return 'loading';

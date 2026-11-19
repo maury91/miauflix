@@ -588,3 +588,16 @@ Build `index-CBlhQ126.js`. Row 3 first pass 45–47 fps, back 51–53, held Righ
 35–46; 28 pictures baked per standard run, 0 errors, 46–59 MB of textures. Cold start to the
 first focused tile 10.2–11.5 s. Within the noise of Phase 3: the hero draws the same calls from
 the shared model and pictures.
+
+### Phase 5 (production requirements)
+
+Build `index-ClOgeYsr.js`. Row 3 first pass 44–47 fps, back 50–51, held Right 42–47, 3×Down
+35–41; 28 pictures baked per standard run, 0 errors, 43–56 MB of textures (tiles now bake at
+1.03×). Cold start to the first focused tile 5.9–12.5 s (most about 10 s).
+
+The first Phase 5 package (`index-DvO6BdvV.js`) baked 41 pictures per run instead of 28: Home's
+first pictures were drawn before their font weights had loaded, so the font epoch redrew all of
+them once (since the spike, those first pictures had kept the fallback font). Texts now wait for
+their own face (`document.fonts.load`), and the epoch stays at 0 on a cold load. Held Right is the
+best measured since the spike (spike 44–48; Phase 4 22–36), likely from fewer picture redraws while
+moving; 3×Down is within the noise of Phase 4.

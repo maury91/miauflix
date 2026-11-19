@@ -1,7 +1,8 @@
 import { style } from '@vanilla-extract/css';
 
 import * as actionStyles from '../action/action.css';
-import { color, fontFamily, radius, space, typeScale } from '../tokens';
+import { color, fontFamily, radius, space } from '../tokens';
+import { badgeLabel } from './badge.metrics';
 
 /**
  * Badge (docs/plans/style-guide.md, sections 5 and 8.4): a passive, compact label. Every badge has
@@ -33,15 +34,15 @@ export const badge = style({
   whiteSpace: 'nowrap',
   selectors: {
     '&[data-kind="label"]': {
-      height: '1.5rem',
-      padding: `0 ${space.xs}`,
-      border: `0.0625rem solid ${color.borderControl}`,
-      borderRadius: radius.sm,
-      backgroundColor: color.canvas,
-      color: color.text,
-      fontSize: typeScale.caption.fontSize,
+      height: badgeLabel.height,
+      padding: `0 ${badgeLabel.paddingX}`,
+      border: `${badgeLabel.border} solid ${badgeLabel.borderColor}`,
+      borderRadius: badgeLabel.radius,
+      backgroundColor: badgeLabel.fill,
+      color: badgeLabel.textColor,
+      fontSize: badgeLabel.fontSize,
       lineHeight: 1,
-      fontWeight: 600,
+      fontWeight: badgeLabel.fontWeight,
       textTransform: 'uppercase',
     },
     ...toneSelectors,

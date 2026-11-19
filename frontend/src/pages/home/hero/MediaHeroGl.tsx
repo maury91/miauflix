@@ -26,13 +26,6 @@ import { type BackdropLayerState, type MediaHeroProps, useMediaHero } from './us
 /** CSS `ease`, as the DOM crossfade. */
 const ease = cubicBezier(0.25, 0.1, 0.25, 1);
 
-/** Fades end at once for those who asked for less motion (as the DOM hero's transitions). */
-const fadeMs = (ms: number) =>
-  typeof window.matchMedia === 'function' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ? 0
-    : ms;
-
 /**
  * MediaHero drawn in Home's GL surface, under the rows. The shared hook chooses the title, loads
  * the backdrop and its focus and stacks the crossfade layers; this draws them: the backdrops
@@ -198,14 +191,14 @@ function GlHero({
       if (ready) shown.current = { details, media: media!, useLogo, logoUrl };
       // The same title's details changing (its quality known) keep the last whole ones meanwhile
       const current = ready ? shown.current : shown.current?.media === media ? shown.current : null;
-      if (moving || !current) detailsNode.animate('opacity', 0, fadeMs(DETAILS_FADE_MS), ease);
+      if (moving || !current) detailsNode.animate('opacity', 0, DETAILS_FADE_MS, ease);
       if (!current) return;
       current.details.draw(painter, {
         left: detailsLeft,
         bottom: detailsBottom,
         logoUrl: current.useLogo ? current.logoUrl : null,
       });
-      if (!moving) detailsNode.animate('opacity', 1, fadeMs(DETAILS_FADE_MS), ease);
+      if (!moving) detailsNode.animate('opacity', 1, DETAILS_FADE_MS, ease);
     },
     [
       details,
@@ -295,7 +288,7 @@ function GlBackdrop({
     if (!node) return;
     if (!mounted.current) node.set({ opacity: visible && status === 'ready' ? 1 : 0 });
     else if (visible && status === 'ready') {
-      if (!paused) node.animate('opacity', 1, fadeMs(BACKDROP_FADE_MS), ease);
+      if (!paused) node.animate('opacity', 1, BACKDROP_FADE_MS, ease);
       // Interrupted: shown whole now (a set ends the animation), the layers under it drop below
       else if (node.animations.opacity) node.set({ opacity: 1 });
     }
@@ -366,7 +359,13 @@ function GlHeroText({
   const details = heroDetailsModel(media, preparation, availability);
   const status = details.status;
   const statusLabel =
-    status?.kind === 'quality' ? status.label : status?.kind === 'unavailable' ? 'No source' : null;
+    status?.kind === 'quality'
+      ? status.label
+      : status?.kind === 'unavailable'
+        ? 'No source'
+        : status?.kind === 'checking'
+          ? 'Checking…'
+          : null;
   return (
     <header
       aria-live="polite"

@@ -1,5 +1,6 @@
 import { type ButtonHTMLAttributes, forwardRef, type ReactNode } from 'react';
 
+import type { BadgeArtProps } from '../badge/badge.art';
 import { useRenderMode } from '../gl';
 import type { NavigableProps } from '../navFocus';
 import type { TileVisualArt } from './collectionTile.art';
@@ -30,8 +31,6 @@ export type CollectionTileProps = Omit<
   labelHidden?: boolean;
   /** A Badge at the frame's top start corner. Its text joins the description. */
   badge?: ReactNode;
-  /** The badge's label for the GL form, where the tile is one picture. */
-  glBadge?: string;
   /** Watched share, 0 to 1: a decorative hairline at the frame's bottom. */
   progress?: number;
   /** The share in words ("40% watched"), read as part of the description. */
@@ -45,6 +44,8 @@ export type CollectionTileProps = Omit<
    * one baked picture (collectionTile.art.ts) and `visual` isn't rendered.
    */
   glVisual?: TileVisualArt;
+  /** Inside a GlSurface: `badge` as a label Badge's picture (the twin keeps `badge` for the reader). */
+  glBadge?: BadgeArtProps;
 } & NavigableProps;
 
 /**

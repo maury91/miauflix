@@ -1,4 +1,7 @@
-import type { CollectionGeometry } from '@shared/design-system/carousel/collectionGeometry';
+import {
+  type CollectionGeometry,
+  ITEM_WIDTH_OF_HEIGHT,
+} from '@shared/design-system/carousel/collectionGeometry';
 import { remPx } from '@shared/design-system/gl/art';
 import { space } from '@shared/design-system/tokens';
 
@@ -30,10 +33,18 @@ export const HOME_VH = {
 
 const share = (vh: number, windowHeight: number) => (vh / 100) * windowHeight;
 
-/** Within a row (px from its top): its carousel, and the middle of its message in the cards' place. */
+/**
+ * Within a row (px from its top): its carousel, the middle of its cards (where a loading row's
+ * spinner is) and the middle of its message in the cards' place.
+ */
 export function homeRowLayout(windowHeight: number) {
   const carouselTop = share(HOME_VH.rowTitle + HOME_VH.rowTitleGap, windowHeight);
-  return { carouselTop, stateMiddle: carouselTop + share(HOME_VH.rowState, windowHeight) / 2 };
+  const cardHeight = (windowHeight * ITEM_WIDTH_OF_HEIGHT * 9) / 16;
+  return {
+    carouselTop,
+    cardsMiddle: carouselTop + remPx(space.xs) + cardHeight / 2,
+    stateMiddle: carouselTop + share(HOME_VH.rowState, windowHeight) / 2,
+  };
 }
 
 /** Home's layout in px for a window height (and its rows' collection geometry). */

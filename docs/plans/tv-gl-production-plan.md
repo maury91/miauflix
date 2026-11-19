@@ -385,6 +385,25 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
   - Found on the way: an apostrophe in a CSS comment inside the DOM hero's `::before` made
     styled-components drop its `::after` rule, so the DOM hero never drew the band darkening the
     backdrop's bottom right (the GL hero did). Fixed.
+- **Phase 5 (done, measured: held Right 42–47 fps, the rest as Phase 4).** Production requirements:
+  - Pointer: `gl/core/hitTest.ts` hit-tests the scene (transforms, clips, fade edges); `GlSurface`
+    takes the pointer and forwards `mousemove`/`click` to the node's `target` (`useGlTarget`),
+    the tile's button. Home's hidden rows are out of the pointer's way.
+  - Fallback: `ContextLossPolicy` (3 s to restore, or the third loss) → the surface renders DOM
+    and `reportGlFailure()`; `useGlAvailable()` switches Home to its DOM rows for the session.
+    Not done: a device blocklist (none needed yet) and the runtime override (Phase 8).
+  - Reduced motion (`gl/core/motion.ts`): animations land at once, no fade-ins, spinners still.
+  - Fonts (`FontEpoch`): each text waits for its face (`document.fonts.load`); one drawn in a
+    fallback anyway re-keys texts and pictures when a font loads later. The first package re-keyed
+    on every load: Home's first pictures were drawn before their weights loaded.
+  - Text at the focused size: texts rasterize at the paint's resolution; `GlArt.scale` bakes the
+    tile at `dpr × 1.03`.
+  - GL forms: `ProgressSpinnerGl` (`spinner.art.ts`, `GlNode.spin`), the tile's badge
+    (`badge.art.ts`, `CollectionTile.glBadge`), the failed row as a danger Message
+    (`message.art.ts`, the icon's mdi path drawn with `Path2D`). Each has a `*.metrics.ts` its CSS
+    reads too. The empty row stays plain text, as in the DOM.
+  - Tested: unit tests for each pure part and picture snapshots; a Storybook test in Chromium for
+    the pointer and the fallback (`MediaTile/WebGL`).
 
 ## Open decisions
 

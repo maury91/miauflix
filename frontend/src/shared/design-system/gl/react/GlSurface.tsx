@@ -1,5 +1,6 @@
 import {
   type CSSProperties,
+  type MouseEvent,
   type ReactNode,
   Suspense,
   use,
@@ -10,9 +11,12 @@ import {
   useState,
 } from 'react';
 
+import { hitTest } from '../core/hitTest';
+import { followReducedMotion } from '../core/motion';
 import type { GlBackend, GlBackendOptions, GlTuning } from '../core/renderer';
 import { GlNode } from '../core/scene';
 import { loadedGlBackend, preloadGlBackend } from './backendModule';
+import { reportGlFailure } from './glSupport';
 import { GlLayers, GlLayersProvider, GlParentProvider } from './hooks';
 
 export interface GlSurfaceProps {
@@ -27,11 +31,6 @@ export interface GlSurfaceProps {
   exposeAs?: string;
   /** Read once, when the surface starts. */
   tuning?: GlTuning;
-  /**
-   * The backend couldn't be created or failed to start: children render as DOM from here on, so a
-   * caller that hid DOM for the canvas (or scrolls through a GlScroller) should go back to DOM.
-   */
-  onUnavailable?: () => void;
   /** Layers (GlLayer, GlScroller) and the components drawn into them. */
   children: ReactNode;
 }
@@ -41,7 +40,12 @@ type BackendClass = new (options: GlBackendOptions) => GlBackend;
 /**
  * A WebGL canvas that design-system components draw into. Children render their DOM as usual;
  * those with a GL form draw into the canvas instead (the caller hides the DOM they replace and
- * keeps it for focus). If the backend can't start, children render as DOM.
+ * keeps it for focus). If the backend can't start, or loses its context for good, children render
+ * as DOM and `reportGlFailure` tells the page (useGlAvailable).
+ *
+ * The canvas takes the pointer: a move or click over a node with a `target` (useGlTarget) goes to
+ * that element, so the hidden DOM handles it as if it were there. Elsewhere nothing happens.
+ * Engine animations follow `prefers-reduced-motion`.
  *
  * The backend is its own chunk (preloadGlBackend). Loaded, the surface and its children mount in
  * the same commit as the page; otherwise nothing shows until it is.
@@ -70,7 +74,6 @@ function Surface({
   prefetch = { x: 0, y: 0 },
   exposeAs,
   tuning,
-  onUnavailable,
   children,
 }: GlSurfaceProps & { Backend: BackendClass }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -93,6 +96,7 @@ function Surface({
         onError: error => {
           console.error('[gl] surface unavailable', error);
           setFailed(true);
+          reportGlFailure();
         },
       });
       return created;
@@ -101,6 +105,28 @@ function Surface({
       return null;
     }
   });
+
+  useEffect(() => followReducedMotion(() => backend?.invalidate()), [backend]);
+
+  // The pointer over a node goes to its target (the hidden DOM isn't where nodes are drawn)
+  const forward = (event: MouseEvent<HTMLDivElement>) => {
+    if (!backend || failed) return;
+    const box = event.currentTarget.getBoundingClientRect();
+    const target = hitTest(root, event.clientX - box.left, event.clientY - box.top)?.target;
+    event.currentTarget.style.cursor = target ? 'pointer' : '';
+    if (!target || (target as HTMLButtonElement).disabled) return;
+    const { clientX, clientY, screenX, screenY } = event;
+    target.dispatchEvent(
+      new window.MouseEvent(event.type, {
+        bubbles: true,
+        cancelable: true,
+        clientX,
+        clientY,
+        screenX,
+        screenY,
+      })
+    );
+  };
 
   useLayoutEffect(() => {
     if (!backend) return;
@@ -140,19 +166,14 @@ function Surface({
     backend.invalidate();
   });
 
-  const latestUnavailable = useRef(onUnavailable);
-  useLayoutEffect(() => {
-    latestUnavailable.current = onUnavailable;
-  });
   useEffect(() => {
     if (backend && !failed) return;
-    // Failed while mounted: children render as DOM; the renderer stops and its canvas goes
     if (backend) {
       root.owner = null;
-      backend.dispose();
       backend.canvas.remove();
+      backend.dispose();
     }
-    latestUnavailable.current?.();
+    reportGlFailure();
   }, [backend, failed, root]);
 
   useEffect(() => {
@@ -172,8 +193,10 @@ function Surface({
       <div
         ref={hostRef}
         className={className}
-        style={{ ...style, width, height, pointerEvents: 'none' }}
+        style={{ ...style, width, height, pointerEvents: value ? undefined : 'none' }}
         aria-hidden="true"
+        onMouseMove={forward}
+        onClick={forward}
       />
       {/* Children draw into the backend, or render as DOM if it can't be created */}
       {value ? (

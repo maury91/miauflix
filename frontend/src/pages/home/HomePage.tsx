@@ -21,6 +21,7 @@ import {
   GlSurface,
   glSurfaceSupported,
   type GlTuning,
+  useGlAvailable,
   useGlBackendReady,
 } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
@@ -125,8 +126,9 @@ const HomePage: FC<HomePageProps> = props => (
 
 const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
   // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
-  // Back to DOM if the surface cannot start after the support probe passes.
-  const [glRows, setGlRows] = useState(() => glRowsEnabled && glSurfaceSupported());
+  // Decided once; a surface that loses its context for good turns it off (the DOM rows remount)
+  const [glWanted] = useState(() => glRowsEnabled && glSurfaceSupported());
+  const glRows = useGlAvailable() && glWanted;
   useGlBackendReady(glRows);
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
@@ -281,7 +283,6 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
     // Only on arriving: later moves are the focus's
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [glRows, browsing]);
-  const onGlUnavailable = useCallback(() => setGlRows(false), []);
   // The DOM rows took over from the GL ones: bring the focused row into view there
   const wasGlRows = useRef(glRows);
   useEffect(() => {
@@ -511,7 +512,6 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                   prefetch={{ x: geometry.itemWidth * 2, y: rowHeight }}
                   exposeAs={import.meta.env.DEV || builtForTizen ? '__glRows' : undefined}
                   tuning={glTuningOverride as GlTuning | undefined}
-                  onUnavailable={onGlUnavailable}
                 >
                   {/* The hero under the rows: its backdrops live, its shade baked; together
                       what shows through the rows' fade edge */}

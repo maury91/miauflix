@@ -1,6 +1,7 @@
 import { globalStyle, style, type StyleRule } from '@vanilla-extract/css';
 
 import { color, fontFamily, radius, space, typeScale } from '../tokens';
+import { messageMetrics } from './message.metrics';
 
 /**
  * Message (docs/plans/style-guide.md, section 8.5): the one owner of feedback visuals. The tone
@@ -12,12 +13,7 @@ import { color, fontFamily, radius, space, typeScale } from '../tokens';
  *   a raised box with an accent edge
  */
 
-const tones = {
-  info: color.info,
-  success: color.success,
-  warning: color.warning,
-  danger: color.danger,
-};
+const tones = messageMetrics.tones;
 
 const toneSelectors: Record<string, StyleRule> = {};
 for (const [tone, value] of Object.entries(tones)) {
@@ -61,13 +57,13 @@ export const icon = style({
   display: 'flex',
   flex: 'none',
   alignItems: 'center',
-  height: `${parseFloat(typeScale.body.fontSize) * parseFloat(typeScale.body.lineHeight)}rem`,
-  marginRight: space.sm,
-  fontSize: '1.25rem',
+  height: messageMetrics.lineHeight,
+  marginRight: messageMetrics.iconGap,
+  fontSize: messageMetrics.iconSize,
   lineHeight: 0,
   selectors: {
     ...iconSelectors,
-    '[dir="rtl"] &': { marginRight: 0, marginLeft: space.sm },
+    '[dir="rtl"] &': { marginRight: 0, marginLeft: messageMetrics.iconGap },
   },
 });
 

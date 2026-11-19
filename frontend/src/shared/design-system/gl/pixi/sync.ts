@@ -164,7 +164,15 @@ export class SceneSync {
     }
     const localX = node.x + (node.width / 2) * (1 - node.scale);
     const localY = node.y + (node.height / 2) * (1 - node.scale);
-    view.position.set(localX, localY);
+    if (node.rotation !== 0) {
+      // A spinner: turned about its centre (culling and the canvas box ignore the turn)
+      view.pivot.set(node.width / 2, node.height / 2);
+      view.position.set(node.x + node.width / 2, node.y + node.height / 2);
+    } else {
+      view.pivot.set(0, 0);
+      view.position.set(localX, localY);
+    }
+    view.rotation = node.rotation;
     view.scale.set(node.scale);
     view.alpha = node.opacity;
     const scale = s * node.scale;

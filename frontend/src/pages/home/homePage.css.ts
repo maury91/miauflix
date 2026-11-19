@@ -65,10 +65,14 @@ export const rows = style({
 export const rowsTv = style([rows, { willChange: 'transform' }]);
 
 /**
- * Spike (VITE_TV_GL_ROWS): the rows are drawn by the GL canvas over them. The DOM rows stay for
- * focus and semantics, invisible (Chromium skips painting an opacity 0 subtree), unpromoted.
+ * VITE_TV_GL_ROWS: the rows are drawn by the GL canvas over them. The DOM rows stay for focus and
+ * semantics, invisible (Chromium skips painting an opacity 0 subtree), unpromoted, and out of the
+ * pointer's way: the canvas hit-tests what it draws and forwards to them.
  */
-export const contentGl = style([content, { overflow: 'hidden', opacity: 0 }]);
+export const contentGl = style([
+  content,
+  { overflow: 'hidden', opacity: 0, pointerEvents: 'none' },
+]);
 
 /** The GL canvas: the whole page, the hero under the rows, above the DOM they replace. */
 export const glCanvas = style({

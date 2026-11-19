@@ -1,6 +1,7 @@
 import { forwardRef, useLayoutEffect, useMemo } from 'react';
 
-import { GlParentProvider, remPx, useGlNode, useGlPaint, useGlParent } from '../gl';
+import { GlParentProvider, remPx, useGlNode, useGlPaint, useGlParent, useGlTarget } from '../gl';
+import { useMergedRef } from '../navFocus';
 import type { CollectionTileProps } from './CollectionTile';
 import {
   collectionTileArt,
@@ -15,9 +16,10 @@ import { useCollectionTile } from './useCollectionTile';
 
 /**
  * CollectionTile drawn by the GlSurface: the frame, scrim, progress, text and focus outline are
- * drawn by the renderer; the button stays, unpositioned, for focus and the reader (its name and
- * description as text). With `glVisual` the tile is one baked picture (collectionTile.art.ts) and
- * only the outline is live; otherwise the visual registers its own nodes in the frame.
+ * drawn by the renderer; the button stays, unpositioned, for focus, the reader (its name and
+ * description as text) and the pointer (the surface forwards moves and clicks over the tile). With
+ * `glVisual` the tile is one baked picture (collectionTile.art.ts, with `glBadge`) and only the
+ * outline is live; otherwise the visual registers its own nodes in the frame.
  */
 export const CollectionTileGl = forwardRef<HTMLButtonElement, CollectionTileProps>(
   function CollectionTileGl(props, forwardedRef) {
@@ -29,15 +31,17 @@ export const CollectionTileGl = forwardRef<HTMLButtonElement, CollectionTileProp
       labelPlacement = 'below',
       labelHidden = false,
       badge,
-      glBadge,
       progress,
       progressText,
       glVisual,
+      glBadge,
       disabled,
     } = props;
     const { id, active, buttonProps } = useCollectionTile(props, forwardedRef);
     const parent = useGlParent();
     const tileNode = useGlNode();
+    // The pointer over the drawn tile goes to the button
+    const ref = useMergedRef(buttonProps.ref, useGlTarget(tileNode));
     const visualNode = useGlNode(tileNode);
     const overlayNode = useGlNode(tileNode);
     const tileWidth = parent?.width ?? 0;
@@ -124,7 +128,7 @@ export const CollectionTileGl = forwardRef<HTMLButtonElement, CollectionTileProp
       [frameHeight, parent, tileWidth, visualNode]
     );
     return (
-      <button {...buttonProps} className={styles.glTile}>
+      <button {...buttonProps} ref={ref} className={styles.glTile}>
         <span id={`${id}-label`}>{label}</span>
         {supportingText && <span id={`${id}-supporting`}>{supportingText}</span>}
         {badge && <span id={`${id}-badge`}>{badge}</span>}

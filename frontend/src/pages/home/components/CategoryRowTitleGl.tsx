@@ -1,9 +1,13 @@
 import type { CollectionGeometry } from '@shared/design-system/carousel/collectionGeometry';
 import { ITEM_WIDTH_OF_HEIGHT } from '@shared/design-system/carousel/collectionGeometry';
 import { remPx, useGlNode, useGlPaint, useGlParent } from '@shared/design-system/gl';
+import { paintMessage } from '@shared/design-system/message/message.art';
 import { color, typeScale } from '@shared/design-system/tokens';
 
 import { homeRowLayout } from '../homeLayout';
+
+/** What a row without cards says in their place, as its DOM: a danger Message, or plain text. */
+export type CategoryRowState = { kind: 'failed' | 'empty'; text: string } | null;
 
 /**
  * A row's title, and its state when it has no cards, drawn by the GlSurface. The
@@ -16,7 +20,7 @@ export function CategoryRowTitleGl({
 }: {
   name: string;
   /** The message in place of the cards, if any. */
-  state: string | null;
+  state: CategoryRowState;
   geometry: CollectionGeometry;
 }) {
   const parent = useGlParent();
@@ -40,10 +44,18 @@ export function CategoryRowTitleGl({
         margin,
         0
       );
-      if (state)
+      if (state?.kind === 'failed')
+        paintMessage(
+          painter,
+          { tone: 'danger', text: state.text },
+          margin,
+          stateMiddle,
+          width - margin * 2
+        );
+      else if (state)
         painter.text(
           {
-            text: state,
+            text: state.text,
             size: remPx(typeScale.body.fontSize),
             weight: 400,
             lineHeight: parseFloat(typeScale.body.lineHeight),
@@ -55,7 +67,7 @@ export function CategoryRowTitleGl({
           { anchorY: 0.5 }
         );
     },
-    [name, state, width, margin, stateMiddle]
+    [name, state?.kind, state?.text, width, margin, stateMiddle]
   );
   return null;
 }

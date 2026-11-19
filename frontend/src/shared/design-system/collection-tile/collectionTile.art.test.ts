@@ -31,9 +31,9 @@ describe('CollectionTile picture', () => {
 
   it('draws a label badge at the top start corner, in the key', () => {
     const base = { label: 'Dune', labelPlacement: 'overlay' as const, width: 200 };
-    const calls = RecordingPainter.record(collectionTileArt({ ...base, badge: '4k' }));
+    const calls = RecordingPainter.record(collectionTileArt({ ...base, badge: { text: '4k' } }));
     expect(calls).toContainEqual(expect.objectContaining({ op: 'text', text: '4K' }));
-    expect(collectionTileArt({ ...base, badge: '4k' }).key).not.toBe(collectionTileArt(base).key);
+    expect(collectionTileArt({ ...base, badge: { text: '4k' } }).key).not.toBe(collectionTileArt(base).key);
   });
 
   it('changes key exactly when a prop changes', () => {
@@ -41,6 +41,22 @@ describe('CollectionTile picture', () => {
     expect(collectionTileArt(base).key).toBe(collectionTileArt({ ...base }).key);
     expect(collectionTileArt({ ...base, progress: 0.5 }).key).not.toBe(collectionTileArt(base).key);
     expect(collectionTileArt({ ...base, width: 201 }).key).not.toBe(collectionTileArt(base).key);
+    expect(collectionTileArt({ ...base, badge: { text: '4K' } }).key).not.toBe(
+      collectionTileArt(base).key
+    );
+  });
+
+  it('draws a badge at the frame’s top start corner, and bakes at the focused size', () => {
+    const art = collectionTileArt({
+      label: 'Dune',
+      labelPlacement: 'overlay',
+      badge: { text: '4K' },
+      width: 200,
+    });
+    expect(art.scale).toBe(1.03);
+    const calls = RecordingPainter.record(art);
+    expect(calls.filter(call => call.op === 'text').map(call => call.text)).toEqual(['Dune', '4K']);
+    expect(calls.slice(-3)).toMatchSnapshot();
   });
 
   it('draws the focus outline around the frame', () => {

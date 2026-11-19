@@ -20,7 +20,7 @@ export const MediaTileGl = forwardRef<HTMLButtonElement, MediaTileProps>(functio
       label={title}
       ratio={ratio}
       glVisual={mediaTileVisual({ title, artwork, ratio, logo, titledArtwork })}
-      glBadge={badge?.label}
+      glBadge={badge ? { text: badge.label } : undefined}
       badge={
         badge ? <Badge accessibleLabel={badge.accessibleLabel}>{badge.label}</Badge> : undefined
       }

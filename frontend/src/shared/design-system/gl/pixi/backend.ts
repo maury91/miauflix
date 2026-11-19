@@ -3,9 +3,11 @@ import './compat/legacy';
 
 import { WebGLRenderer } from 'pixi.js';
 
+import { ContextLossPolicy } from '../core/contextLoss';
 import { FrameBudget, FrameScheduler } from '../core/frameScheduler';
 import type { GlBackend, GlBackendOptions, GlRendererStats, GlTuning } from '../core/renderer';
 import { type GlNode, stepAnimations } from '../core/scene';
+import { FontEpoch } from '../paint/fontEpoch';
 import type { ImageStatus } from '../paint/painter';
 import { pickEvictions, TEXTURE_BUDGET } from '../resources/textureBudget';
 import { quietPixiGlWarnings } from './compat/pixiWorkarounds';
@@ -67,7 +69,8 @@ export class PixiBackend implements GlBackend {
   private readonly pictures: PictureBaker;
   private readonly sync: SceneSync;
   private readonly onError: (error: unknown) => void;
-  private fontsReady = typeof document.fonts === 'undefined' || document.fonts.status === 'loaded';
+  private readonly fonts: FontEpoch;
+  private readonly contextLoss: ContextLossPolicy;
   private started = false;
   /** Frames that threw in a row. */
   private frameFailures = 0;
@@ -98,6 +101,7 @@ export class PixiBackend implements GlBackend {
     const pixi = () => this.pixi!;
     this.store = new TextureStore({
       pixi,
+      fontReady: (font, text) => this.fonts.fontReady(font, text),
       frame: this.frame,
       invalidate: this.invalidate,
       onSettled: entry => {
@@ -110,6 +114,7 @@ export class PixiBackend implements GlBackend {
       store: this.store,
       sync: () => this.sync,
       stats: this.stats,
+      fontEpoch: () => this.fonts.value,
     });
     this.sync = new SceneSync({
       pixi,
@@ -126,6 +131,7 @@ export class PixiBackend implements GlBackend {
             picture: art => this.pictures.picture(art),
             held: node => this.pictures.held(node),
             hold: (node, picture) => this.pictures.hold(node, picture),
+            resolution: this.pictures.resolutionOf(node),
           },
           node,
           state,
@@ -134,32 +140,30 @@ export class PixiBackend implements GlBackend {
       releasePictures: (node, state) => this.pictures.release(node, state),
       stats: this.stats,
     });
-    if (!this.fontsReady)
-      void document.fonts.ready.then(() => {
-        this.fontsReady = true;
+    // Text waits for the fonts, and each for its face; a face that loads after a text was drawn
+    // in a fallback redraws every text and picture
+    this.fonts = new FontEpoch(
+      typeof document.fonts === 'undefined' ? undefined : document.fonts,
+      () => {
+        if (this.disposed) return;
+        if (this.store.fontEpoch !== this.fonts.value) {
+          this.store.nextFontEpoch(this.fonts.value);
+          this.sync.repaintAll();
+        }
         this.invalidate();
-      });
+      }
+    );
+    this.contextLoss = new ContextLossPolicy(reason => {
+      if (this.disposed) return;
+      console.error(`[gl] ${reason}: falling back to the DOM`);
+      onError(new Error(reason));
+    });
   }
-
-  private onFontsLoaded = (event: Event) => {
-    if (this.disposed || !this.pixi) return;
-    // Only Poppins draws GL text
-    const faces = (event as FontFaceSetLoadEvent).fontfaces;
-    if (faces && !faces.some(face => face.family.replace(/["']/g, '') === 'Poppins')) return;
-    for (const node of this.store.dropTexts()) if (!this.pictures.settled(node)) node.repaint();
-    this.pictures.dropTextPictures();
-    this.invalidate();
-  };
 
   /** Starts Pixi (async: it loads its renderer modules); the scene builds meanwhile. */
   start() {
     if (this.started) return;
     this.started = true;
-    // Here, not in the constructor: a backend React creates and discards (StrictMode runs state
-    // initializers twice) never starts, so it never listens. A face that loads later (a weight
-    // first used now): texts drawn meanwhile used the fallback
-    if (typeof document.fonts !== 'undefined')
-      document.fonts.addEventListener('loadingdone', this.onFontsLoaded);
     const { canvas } = this;
     const { width, height, dpr } = this.frame;
     const pixi = new WebGLRenderer();
@@ -221,8 +225,8 @@ export class PixiBackend implements GlBackend {
   dispose() {
     if (this.disposed) return;
     this.disposed = true;
-    if (typeof document.fonts !== 'undefined')
-      document.fonts.removeEventListener('loadingdone', this.onFontsLoaded);
+    this.fonts.dispose();
+    this.contextLoss.dispose();
     this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
     this.canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
     this.scheduler.dispose();
@@ -232,9 +236,11 @@ export class PixiBackend implements GlBackend {
     this.pixi?.destroy();
   }
 
+  /** Lost: drawn again once restored, or the surface falls back to the DOM (ContextLossPolicy). */
   private onContextLost = () => {
     this.stats.contextLosses++;
     console.warn('[gl] WebGL context lost');
+    this.contextLoss.lost();
   };
 
   /**
@@ -245,6 +251,7 @@ export class PixiBackend implements GlBackend {
    */
   private onContextRestored = () => {
     this.stats.contextRestores++;
+    this.contextLoss.restored();
     console.warn('[gl] WebGL context restored, painting everything again');
     if (this.pixi) quietPixiGlWarnings(this.pixi);
     this.store.clear();
@@ -266,7 +273,7 @@ export class PixiBackend implements GlBackend {
     stats.repaints = 0;
 
     store.upload(budget);
-    if (this.fontsReady) {
+    if (this.fonts.ready) {
       store.renderQueued(budget);
       this.pictures.bakeDue(budget);
     }
@@ -302,7 +309,7 @@ export class PixiBackend implements GlBackend {
       this.sync.retrying ||
       this.fades.size > 0 ||
       store.pendingUploads > 0 ||
-      (this.fontsReady && (store.pendingRenders > 0 || this.pictures.queued > 0))
+      (this.fonts.ready && (store.pendingRenders > 0 || this.pictures.queued > 0))
     );
   };
 

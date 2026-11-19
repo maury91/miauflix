@@ -1,5 +1,6 @@
 import type { Container } from 'pixi.js';
 
+import { motion } from '../core/motion';
 import type { GlNode } from '../core/scene';
 
 /** How long a texture that just became ready takes to fade in. */
@@ -16,7 +17,7 @@ export class FadeIns {
 
   /** Starts the object at its alpha for `now` if it became ready less than FADE_IN_MS ago. */
   add(object: Container, readyAt: number, node: GlNode, now: number, onDone?: () => void) {
-    if (now - readyAt >= FADE_IN_MS) return false;
+    if (motion.reduced || now - readyAt >= FADE_IN_MS) return false;
     object.alpha = Math.max(0, (now - readyAt) / FADE_IN_MS);
     this.fades.push({ object, readyAt, node, onDone });
     return true;

@@ -1,5 +1,6 @@
 import {
   createContext,
+  type RefCallback,
   useCallback,
   useContext,
   useLayoutEffect,
@@ -90,6 +91,19 @@ export function useGlNode(parentNode?: GlNode | null): GlNode | null {
     return () => parent.remove(node);
   }, [node, parent]);
   return context ? node : null;
+}
+
+/**
+ * A ref for the element the pointer over `node`'s box goes to: its semantic twin, which gets the
+ * surface's mouse moves and clicks there (see hitTest).
+ */
+export function useGlTarget(node: GlNode | null): RefCallback<Element> {
+  return useCallback(
+    (element: Element | null) => {
+      if (node) node.target = element;
+    },
+    [node]
+  );
 }
 
 /**

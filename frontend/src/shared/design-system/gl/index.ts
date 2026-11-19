@@ -8,7 +8,7 @@ export { preloadGlBackend, useGlBackendReady } from './react/backendModule';
 export { GlGroup, GlParentScope } from './react/GlGroup';
 export { GlLayer, type GlLayerProps } from './react/GlLayer';
 export { GlScroller, type GlScrollerHandle, type GlScrollerProps } from './react/GlScroller';
-export { glSurfaceSupported } from './react/glSupport';
+export { glSurfaceSupported, reportGlFailure, useGlAvailable } from './react/glSupport';
 export { GlSurface, type GlSurfaceProps } from './react/GlSurface';
 export {
   type GlParent,
@@ -19,5 +19,6 @@ export {
   useGlNode,
   useGlPaint,
   useGlParent,
+  useGlTarget,
   useRenderMode,
 } from './react/hooks';

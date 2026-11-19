@@ -15,6 +15,8 @@ export interface PictureBakerOptions {
   store: TextureStore;
   sync: () => SceneSync;
   stats: { artDraws: number; artBakes: number; artBakeMs: number };
+  /** The font epoch (FontEpoch): part of every picture's key. */
+  fontEpoch: () => number;
 }
 
 /** Bakes a picture may fail (Pixi throwing) before it's left to its placeholder. */
@@ -43,7 +45,12 @@ export class PictureBaker {
 
   picture(art: GlArt) {
     const { frame } = this.options;
-    return this.bakery.picture(art, frame.dpr, frame.index);
+    return this.bakery.picture(art, frame.dpr, frame.index, this.options.fontEpoch());
+  }
+
+  /** Texture px per CSS px a node draws at: its picture's, if it stands in for one. */
+  resolutionOf(node: GlNode) {
+    return this.bakery.ofStandIn(node)?.resolution ?? this.options.frame.dpr;
   }
 
   private failedForGood(picture: Picture<RenderTexture>) {
@@ -154,7 +161,7 @@ export class PictureBaker {
     const texture = RenderTexture.create({
       width: art.width,
       height: art.height,
-      resolution: frame.dpr,
+      resolution: picture.resolution,
     });
     try {
       this.options.pixi().render({

@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 import { color, duration, easing, fontFamily, radius, space, typeScale } from '../tokens';
+import { spinnerMetrics } from './progress.metrics';
 
 /**
  * Progress (docs/plans/style-guide.md, section 8.5): an indeterminate spinner (the animated
@@ -15,9 +16,9 @@ export const spinner = style({
   verticalAlign: 'middle',
   lineHeight: 0,
   selectors: {
-    '&[data-size="sm"]': { fontSize: '1.5rem' },
-    '&[data-size="md"]': { fontSize: '2rem' },
-    '&[data-size="lg"]': { fontSize: '3rem' },
+    '&[data-size="sm"]': { fontSize: spinnerMetrics.size.sm },
+    '&[data-size="md"]': { fontSize: spinnerMetrics.size.md },
+    '&[data-size="lg"]': { fontSize: spinnerMetrics.size.lg },
     // `inherit`: 1em of the surrounding text, as in a button's icon slot
   },
 });
@@ -25,16 +26,16 @@ export const spinner = style({
 export const spinnerWithLabel = style({
   display: 'inline-flex',
   alignItems: 'center',
-  color: color.textSecondary,
+  color: spinnerMetrics.labelledColor,
   fontFamily,
   fontSize: typeScale.body.fontSize,
   lineHeight: typeScale.body.lineHeight,
 });
 
 export const spinnerLabel = style({
-  marginLeft: space.sm,
+  marginLeft: spinnerMetrics.labelGap,
   selectors: {
-    '[dir="rtl"] &': { marginLeft: 0, marginRight: space.sm },
+    '[dir="rtl"] &': { marginLeft: 0, marginRight: spinnerMetrics.labelGap },
   },
 });
 

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { motion } from './motion';
 import { GlNode, stepAnimations } from './scene';
 
 const linear = (progress: number) => progress;
@@ -161,5 +162,42 @@ describe('stepAnimations', () => {
     expect(still.changed).toBe(false);
     expect(stepAnimations(root, 100)).toBe(false);
     expect(child.scale).toBe(2);
+  });
+});
+
+describe('motion', () => {
+  it('lands animations on the next frame under reduced motion, settling as usual', () => {
+    motion.reduced = true;
+    try {
+      const node = new GlNode();
+      const settled = vi.fn();
+      node.onSettle = settled;
+      node.animate('x', 100, 300, linear);
+      expect(node.x).toBe(0);
+
+      expect(stepAnimations(node, 1000)).toBe(false);
+      expect(node.x).toBe(100);
+      expect(settled).toHaveBeenCalledWith('x');
+    } finally {
+      motion.reduced = false;
+    }
+  });
+
+  it('turns a spinning node once per period, and stands it still under reduced motion', () => {
+    const node = new GlNode();
+    node.set({ spin: 1000 });
+    expect(stepAnimations(node, 2250)).toBe(true);
+    expect(node.rotation).toBeCloseTo(Math.PI / 2);
+
+    motion.reduced = true;
+    try {
+      expect(stepAnimations(node, 2500)).toBe(false);
+      expect(node.rotation).toBe(0);
+    } finally {
+      motion.reduced = false;
+    }
+
+    node.set({ spin: 0 });
+    expect(stepAnimations(node, 2750)).toBe(false);
   });
 });

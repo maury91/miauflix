@@ -1,6 +1,6 @@
 import { collectionGeometry } from '@shared/design-system/carousel/collectionGeometry';
 
-import { homeLayout } from './homeLayout';
+import { homeLayout, homeRowLayout } from './homeLayout';
 
 describe('homeLayout', () => {
   const window = { width: 1920, height: 1080 };
@@ -25,5 +25,12 @@ describe('homeLayout', () => {
   it('puts the hero details 9vh above its bottom', () => {
     expect(layout.heroHeight).toBeCloseTo(594);
     expect(layout.heroDetailsBottom).toBeCloseTo(496.8);
+  });
+
+  it('centres a loading row’s spinner on its cards, under the title and the carousel padding', () => {
+    const geometry = collectionGeometry(window);
+    const row = homeRowLayout(window.height);
+    expect(row.carouselTop).toBeCloseTo(64.8);
+    expect(row.cardsMiddle).toBeCloseTo(64.8 + 8 + (geometry.itemWidth * 9) / 16 / 2);
   });
 });
