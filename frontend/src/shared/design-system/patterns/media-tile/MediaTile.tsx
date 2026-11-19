@@ -76,6 +76,7 @@ export const MediaTile = forwardRef<HTMLButtonElement, MediaTileProps>(function 
       // In GL the visual says whether it names the tile (it knows what failed or is still loading)
       labelHidden={!glVisual && namesTile && labelPlacement === 'overlay'}
       ratio={ratio}
+      glBadge={glVisual ? badge?.label : undefined}
       badge={
         badge ? <Badge accessibleLabel={badge.accessibleLabel}>{badge.label}</Badge> : undefined
       }

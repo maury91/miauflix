@@ -29,6 +29,10 @@ export interface TextureEntry {
   visible: boolean;
   /** The widest it's drawn (px): larger images are scaled down to it as they decode. */
   wantWidth: number;
+  /** The width (device px, 0 for any) its current pixels were decoded for. */
+  loadWidth: number;
+  /** Ready, and a wider decode is on its way (the current texture shows meanwhile). */
+  upgrading: boolean;
   /** Nodes whose current paint uses it: repainted when it becomes ready or fails. */
   users: Set<GlNode>;
 }
@@ -66,20 +70,22 @@ export class TextureStore {
       concurrency: FETCHES_AT_ONCE,
       onLoaded: (src, bitmap) => {
         const entry = this.entries.get(src);
-        if (!entry || entry.state !== 'loading') {
+        const upgrade = entry?.state === 'ready' && entry.upgrading;
+        if (!entry || (entry.state !== 'loading' && !upgrade)) {
           bitmap.close?.();
           return;
         }
-        entry.state = 'decoded';
+        if (!upgrade) entry.state = 'decoded';
         entry.bitmap = bitmap;
         this.uploads.push(entry);
         options.invalidate();
       },
       onFailed: src => {
         const entry = this.entries.get(src);
+        // A wider decode failing keeps the pixels it has
+        if (entry?.upgrading) entry.upgrading = false;
         if (!entry || entry.state !== 'loading') return;
-        entry.state = 'failed';
-        this.failed++;
+        this.fail(entry);
         this.settled(entry);
       },
     });
@@ -110,6 +116,8 @@ export class TextureStore {
         bitmap: null,
         visible: false,
         wantWidth: 0,
+        loadWidth: 0,
+        upgrading: false,
         users: new Set(),
       };
       this.entries.set(key, entry);
@@ -139,6 +147,7 @@ export class TextureStore {
     const entry = this.entry(src, 'image');
     entry.wantWidth = Math.max(entry.wantWidth, width);
     if (entry.state === 'wanted') this.wanted.add(entry);
+    else if (entry.state === 'ready') this.upgrade(entry, 'near');
     return entry;
   }
 
@@ -147,9 +156,34 @@ export class TextureStore {
     const entry = this.entry(src, 'image');
     entry.wantWidth = Math.max(entry.wantWidth, width);
     entry.lastUsed = this.options.frame.index;
+    if (entry.state === 'ready') this.upgrade(entry, 'visible');
     if (entry.state !== 'wanted') return;
     this.wanted.delete(entry);
     this.fetch(entry, 'visible');
+  }
+
+  /**
+   * Drawn wider than its pixels were decoded for (a 160 px tile first, a 640 px hero later): a
+   * wider decode replaces the texture once uploaded, the current one showing meanwhile.
+   */
+  private upgrade(entry: TextureEntry, priority: ImagePriority) {
+    const want = Math.ceil(entry.wantWidth * this.options.frame.dpr);
+    if (
+      entry.upgrading ||
+      !entry.loadWidth ||
+      want <= entry.loadWidth * 1.25 ||
+      want <= entry.width
+    )
+      return;
+    entry.upgrading = true;
+    entry.visible = priority === 'visible';
+    this.images.request(entry.key, priority, () => this.loadWidth(entry));
+  }
+
+  /** Read as the decode starts: paints may draw it wider meanwhile. */
+  private loadWidth(entry: TextureEntry) {
+    entry.loadWidth = Math.ceil(entry.wantWidth * this.options.frame.dpr);
+    return entry.loadWidth;
   }
 
   status(src: string): ImageStatus {
@@ -186,9 +220,7 @@ export class TextureStore {
   private fetch(entry: TextureEntry, priority: ImagePriority) {
     entry.state = 'loading';
     entry.visible = priority === 'visible';
-    this.images.request(entry.key, priority, () =>
-      Math.ceil(entry.wantWidth * this.options.frame.dpr)
-    );
+    this.images.request(entry.key, priority, () => this.loadWidth(entry));
   }
 
   /** Decoded images to the GPU, visible first, within the frame's budget. */
@@ -197,18 +229,43 @@ export class TextureStore {
     for (let n = 0; n < UPLOADS_PER_FRAME && this.uploads.length && budget.allows(n); n++) {
       const entry = this.uploads.shift()!;
       if (this.entries.get(entry.key) !== entry || !entry.bitmap) continue;
-      budget.run('upload', () => {
-        const source = new ImageSource({
-          resource: entry.bitmap!,
-          alphaMode: 'premultiply-alpha-on-upload',
+      // A wider decode of a ready image: swapped in without a fade, the old texture freed
+      const previous = entry.upgrading && entry.state === 'ready' ? entry.texture : null;
+      entry.upgrading = false;
+      let source: ImageSource | null = null;
+      try {
+        budget.run('upload', () => {
+          source = new ImageSource({
+            resource: entry.bitmap!,
+            alphaMode: 'premultiply-alpha-on-upload',
+          });
+          // Now, not at first draw: uploads stay within the per-frame budget
+          this.options.pixi().texture.initSource(source);
+          entry.bitmap!.close?.();
+          entry.bitmap = null;
+          if (previous) {
+            const readyAt = entry.readyAt;
+            this.bytes -= entry.bytes;
+            previous.destroy(true);
+            this.ready(entry, new Texture({ source }));
+            entry.readyAt = readyAt;
+          } else this.ready(entry, new Texture({ source }));
         });
-        // Now, not at first draw: uploads stay within the per-frame budget
-        this.options.pixi().texture.initSource(source);
-        entry.bitmap!.close?.();
-        entry.bitmap = null;
-        this.ready(entry, new Texture({ source }));
-      });
-      this.uploaded++;
+        this.uploaded++;
+      } catch (error) {
+        if (previous) {
+          // The wider pixels didn't make it: the ones it has stay
+          console.error('[gl] image upgrade failed', entry.key, error);
+          (source as ImageSource | null)?.destroy();
+          entry.bitmap?.close?.();
+          entry.bitmap = null;
+          continue;
+        }
+        // Settled as failed: its users draw their fallback instead of waiting forever
+        console.error('[gl] image upload failed', entry.key, error);
+        (source as ImageSource | null)?.destroy();
+        this.fail(entry);
+      }
       this.settled(entry);
     }
   }
@@ -247,7 +304,12 @@ export class TextureStore {
       this.rendersQueued.delete(key);
       const entry = this.entries.get(key);
       if (!entry || entry.state !== 'loading') continue;
-      budget.run('text', () => this.ready(entry, this.pixels(render())));
+      try {
+        budget.run('text', () => this.ready(entry, this.pixels(render())));
+      } catch (error) {
+        console.error('[gl] texture render failed', key, error);
+        this.fail(entry);
+      }
       this.settled(entry);
       n++;
     }
@@ -309,6 +371,14 @@ export class TextureStore {
     this.bytes += entry.bytes;
   }
 
+  private fail(entry: TextureEntry) {
+    entry.bitmap?.close?.();
+    entry.bitmap = null;
+    entry.texture = null;
+    entry.state = 'failed';
+    if (entry.kind === 'image') this.failed++;
+  }
+
   /** It became ready or failed: its users paint again, listeners hear it. */
   private settled(entry: TextureEntry) {
     this.options.onSettled(entry);
@@ -326,6 +396,21 @@ export class TextureStore {
     return unused;
   }
 
+  /**
+   * Drops images nobody paints or listens to that hold no pixels (failed, or never fetched): they
+   * count for no bytes, so the budget never frees them. A later paint asks again.
+   */
+  prune() {
+    for (const entry of this.entries.values())
+      if (
+        entry.kind === 'image' &&
+        (entry.state === 'failed' || entry.state === 'wanted') &&
+        !entry.users.size &&
+        !this.listeners.has(entry.key)
+      )
+        this.free(entry);
+  }
+
   free(entry: TextureEntry) {
     entry.texture?.destroy(true);
     entry.bitmap?.close?.();
@@ -333,6 +418,22 @@ export class TextureStore {
     this.wanted.delete(entry);
     this.images.cancel(entry.key);
     this.bytes -= entry.bytes;
+  }
+
+  /**
+   * Drops every text texture (a font face loaded: they were drawn with the fallback), returning
+   * the nodes that drew them, to paint again.
+   */
+  dropTexts() {
+    const users = new Set<GlNode>();
+    for (const entry of [...this.entries.values()])
+      if (entry.kind === 'text') {
+        for (const user of entry.users) users.add(user);
+        this.free(entry);
+      }
+    this.renders = this.renders.filter(render => this.entries.has(render.key));
+    this.rendersQueued = new Set(this.renders.map(render => render.key));
+    return users;
   }
 
   /** Drops everything (a lost context took the pixels; disposal). Listeners stay. */

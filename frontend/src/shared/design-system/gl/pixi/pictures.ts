@@ -17,6 +17,9 @@ export interface PictureBakerOptions {
   stats: { artDraws: number; artBakes: number; artBakeMs: number };
 }
 
+/** Bakes a picture may fail (Pixi throwing) before it's left to its placeholder. */
+const BAKE_ATTEMPTS = 3;
+
 /**
  * Component pictures (GlArt) baked into textures: each is drawn by a stand-in node, and baked
  * once everything it asked for (images, texts) is ready or failed.
@@ -29,12 +32,30 @@ export class PictureBaker {
   });
   /** Bytes in baked textures. */
   bytes = 0;
+  /** The last baked picture with a holdKey each node showed (GlArt.holdKey). */
+  private heldBy = new WeakMap<GlNode, Picture<RenderTexture>>();
+  /** Pictures baked with text in them (redrawn when a font face loads). */
+  private withText = new WeakSet<Picture<RenderTexture>>();
+  /** Bakes that threw, by picture. */
+  private failures = new WeakMap<Picture<RenderTexture>, number>();
 
   constructor(private readonly options: PictureBakerOptions) {}
 
   picture(art: GlArt) {
     const { frame } = this.options;
     return this.bakery.picture(art, frame.dpr, frame.index);
+  }
+
+  held(node: GlNode) {
+    const picture = this.heldBy.get(node);
+    // Still baked: not freed, evicted or cleared since
+    return picture?.texture && this.bakery.pictures.get(picture.key) === picture
+      ? picture
+      : undefined;
+  }
+
+  hold(node: GlNode, picture: Picture<RenderTexture>) {
+    this.heldBy.set(node, picture);
   }
 
   /** A node's paint stopped showing its pictures. */
@@ -84,8 +105,10 @@ export class PictureBaker {
     state.onScreen = shown;
     stats.artDraws++;
     sync.paint(node, state, true);
-    // Something it draws isn't ready: drawn again once it settles
+    // Something it draws isn't ready, or a picture it draws (a badge) isn't baked: drawn again
+    // once it settles
     if (state.used.some(used => used.state !== 'ready' && used.state !== 'failed')) return;
+    if (state.pictures.some(nested => !nested.texture)) return;
     const { art } = picture;
     if (art.corners) {
       const { x, y, width, height, radius } = art.corners;
@@ -109,19 +132,32 @@ export class PictureBaker {
       height: art.height,
       resolution: frame.dpr,
     });
-    this.options.pixi().render({
-      container: state.view,
-      target: texture,
-      clear: true,
-      clearColor: [0, 0, 0, 0],
-    });
+    try {
+      this.options.pixi().render({
+        container: state.view,
+        target: texture,
+        clear: true,
+        clearColor: [0, 0, 0, 0],
+      });
+    } catch (error) {
+      console.error('[gl] picture bake failed', picture.key, error);
+      texture.destroy(true);
+      const failures = (this.failures.get(picture) ?? 0) + 1;
+      this.failures.set(picture, failures);
+      // Tried again a few times; then its users keep the placeholder
+      if (failures < BAKE_ATTEMPTS) this.bakery.requeue(picture);
+      else sync.forget(node);
+      return;
+    }
+    if (state.used.some(used => used.kind === 'text')) this.withText.add(picture);
     // The pixels are kept: what it drew is free to go (and evictable once nobody else uses it)
     sync.forget(node);
     picture.texture = texture;
     picture.bytes = texture.source.pixelWidth * texture.source.pixelHeight * 4;
     picture.readyAt = frame.now;
     this.bytes += picture.bytes;
-    for (const user of picture.users) user.repaint();
+    // A picture drawing this one (a card drawing its badge) bakes again; nodes paint again
+    for (const user of picture.users) if (!this.settled(user)) user.repaint();
     stats.artBakes++;
     stats.artBakeMs += performance.now() - start;
   }
@@ -145,19 +181,29 @@ export class PictureBaker {
         candidates.push({
           lastUsed: picture.users.size ? picture.lastUsed + 1e9 : picture.lastUsed,
           bytes: picture.bytes,
-          free: () => {
-            for (const user of picture.users) {
-              const state = sync.states.get(user);
-              if (state) state.pictures = state.pictures.filter(entry => entry !== picture);
-              user.repaint();
-            }
-            picture.users.clear();
-            picture.texture!.destroy(true);
-            this.bakery.remove(picture);
-            this.bytes -= picture.bytes;
-          },
+          free: () => this.free(picture),
         });
     return candidates;
+  }
+
+  /** Baked pictures with text drop their pixels: their users paint (and bake) them again. */
+  dropTextPictures() {
+    for (const picture of [...this.bakery.pictures.values()])
+      if (picture.texture && this.withText.has(picture)) this.free(picture);
+  }
+
+  /** A baked picture's pixels freed: its users paint it again (baked anew). */
+  private free(picture: Picture<RenderTexture>) {
+    const sync = this.options.sync();
+    for (const user of picture.users) {
+      const state = sync.states.get(user);
+      if (state) state.pictures = state.pictures.filter(entry => entry !== picture);
+      if (!this.settled(user)) user.repaint();
+    }
+    picture.users.clear();
+    picture.texture!.destroy(true);
+    this.bakery.remove(picture);
+    this.bytes -= picture.bytes;
   }
 
   /** Drops every picture (a lost context, disposal). */

@@ -25,6 +25,11 @@ export interface GlSurfaceProps {
   exposeAs?: string;
   /** Read once, when the surface starts. */
   tuning?: GlTuning;
+  /**
+   * The backend couldn't be created or failed to start: children render as DOM from here on, so a
+   * caller that hid DOM for the canvas (or scrolls through a GlScroller) should go back to DOM.
+   */
+  onUnavailable?: () => void;
   /** Layers (GlLayer, GlScroller) and the components drawn into them. */
   children: ReactNode;
 }
@@ -42,6 +47,7 @@ export function GlSurface({
   prefetch = { x: 0, y: 0 },
   exposeAs,
   tuning,
+  onUnavailable,
   children,
 }: GlSurfaceProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -109,6 +115,14 @@ export function GlSurface({
     root.set({ width, height });
     backend.invalidate();
   });
+
+  const latestUnavailable = useRef(onUnavailable);
+  useLayoutEffect(() => {
+    latestUnavailable.current = onUnavailable;
+  });
+  useEffect(() => {
+    if (!backend || failed) latestUnavailable.current?.();
+  }, [backend, failed]);
 
   useEffect(() => {
     if (!backend || failed) return;

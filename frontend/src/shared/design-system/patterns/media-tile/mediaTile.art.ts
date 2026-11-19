@@ -21,6 +21,9 @@ export function mediaTileVisual(props: MediaTileVisualProps): TileVisualArt {
   const { title, artwork, ratio, logo, titledArtwork } = props;
   return {
     key: artKey('media', { title, artwork, ratio, logo, titledArtwork }),
+    // A titled backdrop's newer revision keeps the last one in view while it bakes (holdPrevious
+    // in the DOM tile); another title (a reused slot) doesn't
+    holdKey: titledArtwork ? artKey('media-hold', { title, ratio }) : undefined,
     draw(painter, { width, height }) {
       const visual = resolveMediaTileVisual(props, src =>
         painter.load(src, src === logo ? width * LOGO_BOX.width : width)

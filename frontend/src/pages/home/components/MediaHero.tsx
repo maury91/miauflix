@@ -2,7 +2,7 @@ import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
 import { SourcePreparationStatus } from '@features/preload/ui/SourcePreparationStatus';
 import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
-import { useGlParent } from '@shared/design-system/gl';
+import { type GlRenderer, useGlParent } from '@shared/design-system/gl';
 import {
   type BackdropFocus,
   type BackdropPositionContext,
@@ -28,6 +28,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import {
+  dropBackdrop,
   pushBackdrop,
   revealBackdrop,
   settleBackdrop,
@@ -280,6 +281,31 @@ function useHeroLogo(media: MediaDto | null) {
     : { heroLogo: media.heroLogo ?? media.logo, pending: media.heroLogoStatus === 'pending' };
 }
 
+/** How long the intro waits for the GL hero's backdrop texture before showing Home anyway. */
+const GL_READY_TIMEOUT_MS = 3000;
+
+/**
+ * Resolves once the surface's texture for `src` is drawable or failed (the hero then draws its
+ * fallback), or after GL_READY_TIMEOUT_MS. At once outside a GL surface.
+ */
+function glImageSettled(renderer: GlRenderer | undefined, src: string, width: number) {
+  return new Promise<void>(resolve => {
+    if (!renderer) return resolve();
+    renderer.preload(src, width);
+    const settled = () => renderer.imageStatus(src) !== 'loading';
+    if (settled()) return resolve();
+    const done = () => {
+      unsubscribe();
+      window.clearTimeout(timer);
+      resolve();
+    };
+    const unsubscribe = renderer.subscribeImage(src, () => {
+      if (settled()) done();
+    });
+    const timer = window.setTimeout(done, GL_READY_TIMEOUT_MS);
+  });
+}
+
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
 export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onReady }) => {
   const mediaType = media?._type === 'movie' ? 'movie' : 'tv';
@@ -339,6 +365,11 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   );
   const settle = useCallback(
     (id: number) => setLayers(stack => settleBackdrop(stack, id)),
+    [setLayers]
+  );
+  // GL only: its texture loads apart from the DOM's preload, and can fail where that succeeded
+  const drop = useCallback(
+    (id: number) => setLayers(stack => dropBackdrop(stack, id)),
     [setLayers]
   );
   useEffect(() => {
@@ -433,8 +464,15 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       }
 
       if (!current()) return;
-      onReady?.(shown.mediaId);
       show({ key, url, focus, imageWidth: imageSize.width, imageHeight: imageSize.height });
+      // In GL the hero draws from its own texture (fetched, decoded, uploaded apart from the
+      // DOM's): the intro waits until it can draw (or draws its fallback)
+      const gl = glRef.current;
+      if (gl) {
+        await glImageSettled(gl.renderer, url, imageSize.width);
+        if (!current()) return;
+      }
+      onReady?.(shown.mediaId);
       if (url === restingUrl) return;
       imagePreloader.loadWhenIdle(HERO_RESTING_OWNER, restingUrl).then(
         resting => {
@@ -528,12 +566,13 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
           }
           layers={layers}
           onSettle={settle}
+          onFail={drop}
           detailsLeft={margin}
           windowHeight={windowHeight}
           preparation={preparation}
           availability={availability}
         />
-        <GlHeroText media={media} />
+        <GlHeroText media={media} preparation={preparation} availability={availability} />
       </>
     );
   }

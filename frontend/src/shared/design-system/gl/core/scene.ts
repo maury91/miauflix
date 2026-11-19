@@ -48,6 +48,9 @@ export class GlNode {
   /** Called when an animation of this node lands (from the frame loop). */
   onSettle: ((property: AnimatedProperty) => void) | null = null;
   private sorted = true;
+  /** When it was added to its parent: equal z paints in this order. */
+  private insertion = 0;
+  private static insertions = 0;
   /** Set by any change in this node or below since the renderer last looked (a bake's cue). */
   changed = true;
   /** The paint callback must run again (new props, a texture ready). */
@@ -57,6 +60,7 @@ export class GlNode {
     if (child.parent === this) return;
     child.parent?.remove(child);
     child.parent = this;
+    child.insertion = ++GlNode.insertions;
     this.children.push(child);
     this.sorted = false;
     this.invalidate();
@@ -75,10 +79,14 @@ export class GlNode {
     let changed = false;
     for (const key in props) {
       const value = props[key as keyof typeof props];
-      if (value === undefined || this[key as keyof this] === value) continue;
+      if (value === undefined) continue;
+      // A set wins over a running animation of the same property, even to the value it has now
+      if (this.animations[key as AnimatedProperty]) {
+        delete this.animations[key as AnimatedProperty];
+        changed = true;
+      }
+      if (this[key as keyof this] === value) continue;
       if (key === 'z') this.parent?.markUnsorted();
-      // A set wins over a running animation of the same property
-      delete this.animations[key as AnimatedProperty];
       (this as Record<string, unknown>)[key] = value;
       changed = true;
     }
@@ -116,10 +124,8 @@ export class GlNode {
 
   orderedChildren() {
     if (!this.sorted) {
-      // Stable: equal z keeps insertion order
-      const indexed = this.children.map((child, index) => ({ child, index }));
-      indexed.sort((a, b) => a.child.z - b.child.z || a.index - b.index);
-      this.children = indexed.map(entry => entry.child);
+      // Equal z keeps insertion order (not the last sort's order)
+      this.children.sort((a, b) => a.z - b.z || a.insertion - b.insertion);
       this.sorted = true;
     }
     return this.children;

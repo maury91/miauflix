@@ -40,8 +40,8 @@ interface Dirtiable {
  */
 export class SceneSync {
   readonly states = new Map<GlNode, NodeState>();
-  /** The fade band copying each source node. */
-  private bandBySource = new Map<GlNode, FadeBand>();
+  /** The fade bands copying each source node. */
+  private bandsBySource = new Map<GlNode, Set<FadeBand>>();
   /** Baked layers synced this frame, in tree order. */
   private bakedThisFrame: Array<{ node: GlNode; layer: BakedLayer }> = [];
   private bandsThisFrame: FadeBand[] = [];
@@ -124,8 +124,8 @@ export class SceneSync {
     const view = state.view;
     if (node.bake) marks = [...marks, this.bakedLayer(node, state)];
     else if (state.baked) this.dropBaked(state);
-    const band = this.bandBySource.get(node);
-    if (band) marks = [...marks, band];
+    const bands = this.bandsBySource.get(node);
+    if (bands) marks = [...marks, ...bands];
     if (node.changed) {
       node.changed = false;
       for (const mark of marks) mark.dirty = true;
@@ -265,7 +265,6 @@ export class SceneSync {
 
   private bake(node: GlNode, layer: BakedLayer) {
     const start = performance.now();
-    layer.dirty = false;
     this.options.pixi().render({
       container: this.state(node).view,
       target: layer.texture,
@@ -274,6 +273,8 @@ export class SceneSync {
       // At the texture's origin: the sprite places it
       transform: new Matrix(),
     });
+    // After the render: one that threw is tried again next frame
+    layer.dirty = false;
     this.options.stats.bakes++;
     this.options.stats.bakeMs += performance.now() - start;
   }
@@ -300,7 +301,9 @@ export class SceneSync {
       container.zIndex = Number.MAX_SAFE_INTEGER;
       state.view.addChild(container);
       band = state.band = { container, texture: null, key: '', start: 0, dirty: true, source };
-      this.bandBySource.set(source, band);
+      let bands = this.bandsBySource.get(source);
+      if (!bands) this.bandsBySource.set(source, (bands = new Set()));
+      bands.add(band);
     }
     this.bandsThisFrame.push(band);
     const { frame } = this.options;
@@ -340,8 +343,13 @@ export class SceneSync {
 
   private drawBand(band: FadeBand) {
     const source = this.states.get(band.source);
-    if (!band.texture || !source || source.x === Infinity) return;
-    band.dirty = false;
+    if (!band.texture) return;
+    // The source draws nothing now (culled, or off screen, which Pixi skips without clearing the
+    // target): the band would show stale pixels. Hidden, and still dirty: drawn when it's back
+    if (!source || source.x === Infinity || !source.onScreen) {
+      band.container.visible = false;
+      return;
+    }
     const view = band.source.bake ? source.baked!.sprite : source.view;
     // The source as it is on screen, moved up to the band's first row
     const scale = source.scale;
@@ -352,6 +360,8 @@ export class SceneSync {
       clearColor: [0, 0, 0, 0],
       transform: new Matrix(scale, 0, 0, scale, source.x, source.y - band.start),
     });
+    band.dirty = false;
+    band.container.visible = true;
     this.options.stats.bands++;
   }
 
@@ -363,7 +373,9 @@ export class SceneSync {
     }
     band.container.destroy();
     band.texture?.destroy(true);
-    if (this.bandBySource.get(band.source) === band) this.bandBySource.delete(band.source);
+    const bands = this.bandsBySource.get(band.source);
+    bands?.delete(band);
+    if (bands && !bands.size) this.bandsBySource.delete(band.source);
     state.band = null;
   }
 
@@ -381,7 +393,24 @@ export class SceneSync {
   forget(node: GlNode) {
     const state = this.states.get(node);
     if (!state) return;
-    for (const child of node.children) this.forget(child);
+    // The children it has, and the ones last synced into its container: a child detached in the
+    // same commit as this node is only in the latter, and must release what it painted too
+    const children = new Set(node.children);
+    for (const childView of state.view.children) {
+      const child = nodeOf.get(childView);
+      if (child) children.add(child);
+    }
+    for (const child of children) {
+      if (child.parent && child.parent !== node) {
+        // Moved under another node: kept, its container out of this one (destroyed below)
+        const childState = this.states.get(child);
+        if (childState?.view.parent === state.view) state.view.removeChild(childState.view);
+        if (childState?.baked?.sprite.parent === state.view)
+          state.view.removeChild(childState.baked.sprite);
+        continue;
+      }
+      this.forget(child);
+    }
     this.unpaint(node, state);
     if (state.band) this.dropBand(state);
     if (state.baked) this.dropBaked(state);

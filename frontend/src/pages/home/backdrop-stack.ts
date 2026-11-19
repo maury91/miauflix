@@ -41,6 +41,11 @@ export function revealBackdrop<T>(stack: ReadonlyArray<StackedBackdrop<T>>, id: 
   return stack.map(layer => (layer.id === id ? { ...layer, visible: true } : layer));
 }
 
+/** Layer `id` can't be drawn (its image failed): it goes, the layers under it stay. */
+export function dropBackdrop<T>(stack: ReadonlyArray<StackedBackdrop<T>>, id: number) {
+  return stack.filter(layer => layer.id !== id);
+}
+
 /** Layer `id` has fully faded in: drop the layers it now hides. */
 export function settleBackdrop<T>(stack: ReadonlyArray<StackedBackdrop<T>>, id: number) {
   const index = stack.findIndex(layer => layer.id === id);

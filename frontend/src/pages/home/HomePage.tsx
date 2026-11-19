@@ -167,7 +167,8 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     onRest: builtForTizen ? () => contentRest.current() : undefined,
   });
   // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
-  const [glRows] = useState(() => glRowsEnabled && glSurfaceSupported());
+  // Back to DOM if the surface can't start after all (the probe passed, Pixi didn't)
+  const [glRows, setGlRows] = useState(() => glRowsEnabled && glSurfaceSupported());
   const glScroller = useRef<GlScrollerHandle>(null);
   const scrollRows = useCallback(
     (target: number, options?: { instant?: boolean }) => {
@@ -250,6 +251,22 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     handleContentScroll();
     rowsRested();
   };
+  // The rows' height changed (a resize): the focused row's offset with it, so the rows jump to it
+  // (the GL scroller keeps its target in px, and the focus outline stays where rows rest)
+  const scrolledRowHeight = useRef(rowHeight);
+  useEffect(() => {
+    if (scrolledRowHeight.current === rowHeight) return;
+    scrolledRowHeight.current = rowHeight;
+    scrollRows(activeCategory * rowHeight, { instant: true });
+  }, [activeCategory, rowHeight, scrollRows]);
+  const onGlUnavailable = useCallback(() => setGlRows(false), []);
+  // The DOM rows took over from the GL ones: bring the focused row into view there
+  const wasGlRows = useRef(glRows);
+  useEffect(() => {
+    if (wasGlRows.current && !glRows)
+      content.scrollTo(activeCategory * rowHeight, { instant: true });
+    wasGlRows.current = glRows;
+  }, [activeCategory, content, glRows, rowHeight]);
   const mountedRows = withRowsAround(
     homeMountedRows(loadAnchor, firstShownRow, displayCategories.length, warmUntil),
     activeCategory,
@@ -472,6 +489,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                   prefetch={{ x: geometry.itemWidth * 2, y: rowHeight }}
                   exposeAs={import.meta.env.DEV || builtForTizen ? '__glRows' : undefined}
                   tuning={glTuningOverride as GlTuning | undefined}
+                  onUnavailable={onGlUnavailable}
                 >
                   {/* The hero under the rows: its backdrops live, its shade baked; together
                       what shows through the rows' fade edge */}

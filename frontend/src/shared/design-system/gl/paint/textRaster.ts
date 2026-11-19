@@ -3,11 +3,11 @@ import { wrapText } from './textLayout';
 
 /** A TextSpec's cache key: the same key, the same pixels. */
 export function textKey(spec: TextSpec) {
-  return `text:${spec.text}|${spec.size}|${spec.weight}|${spec.lineHeight}|${spec.color}|${Math.round(spec.maxWidth)}|${spec.maxLines ?? 1}|${spec.align ?? 'left'}|${spec.shadow ? 1 : 0}`;
+  return `text:${spec.text}|${spec.size}|${spec.weight}|${spec.lineHeight}|${spec.color}|${spec.maxWidth}|${spec.maxLines ?? 1}|${spec.align ?? 'left'}|${spec.shadow ? 1 : 0}`;
 }
 
 /**
- * Text drawn with canvas 2D into `canvas` (resized to fit): wrapped to `maxLines`, the last line
+ * Text drawn with canvas 2D into `canvas` (resized to fit): wrapped to `maxLines`, lines too wide
  * ellipsized, with a little padding (more with a shadow).
  */
 export function rasterizeText(spec: TextSpec, canvas: HTMLCanvasElement) {

@@ -101,7 +101,8 @@ export function Artwork({
   // A described image keeps its description when the picture is missing or fails
   const describedFallback = status === 'failed' && alt !== '';
   if (glParent) {
-    return describedFallback ? <span role="img" aria-label={alt} /> : null;
+    // The canvas is hidden from assistive technology: a described image keeps its description
+    return alt ? <span role="img" aria-label={alt} /> : null;
   }
   return (
     <span

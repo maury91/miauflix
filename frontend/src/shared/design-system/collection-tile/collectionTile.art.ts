@@ -1,5 +1,6 @@
+import { paintBadgeLabel } from '../badge/badge.art';
 import { artKey, type GlArt, hex, type Painter, remPx, type TextSpec } from '../gl/art';
-import { color, tileScrim, typeScale } from '../tokens';
+import { color, space, tileScrim, typeScale } from '../tokens';
 import {
   outlineDistanceRem,
   TILE_RATIO,
@@ -21,6 +22,8 @@ export interface CollectionTileArtProps {
   labelPlacement?: 'below' | 'overlay';
   labelHidden?: boolean;
   progress?: number;
+  /** A label Badge's text at the frame's top start corner (collectionTile.css.ts `badge`). */
+  badge?: string;
   /** The tile's width (px); the frame's height follows the ratio. */
   width: number;
 }
@@ -30,6 +33,8 @@ export interface TileVisualArt {
   /** Names what it draws (its props, artKey): part of the tile's picture key. */
   key: string;
   draw(painter: Painter, box: { width: number; height: number }): { namesTile: boolean };
+  /** Versions of the same visual share it (GlArt.holdKey): the last one shows while the next bakes. */
+  holdKey?: string;
 }
 
 /**
@@ -44,6 +49,7 @@ export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVi
     labelPlacement = 'below',
     labelHidden = false,
     progress,
+    badge,
     width,
   } = props;
   const frameHeight = width * TILE_RATIO[ratio];
@@ -51,6 +57,9 @@ export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVi
   const below = labelPlacement === 'below';
   return {
     key: artKey('tile', { ...props, visual: visual?.key }),
+    holdKey: visual?.holdKey
+      ? artKey('tile-hold', { width, ratio, visual: visual.holdKey })
+      : undefined,
     width,
     height: below ? frameHeight + belowTextHeight(Boolean(supportingText)) : frameHeight,
     corners: { x: 0, y: 0, width, height: frameHeight, radius: corner },
@@ -66,6 +75,7 @@ export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVi
         progress,
         radius: 0,
       });
+      if (badge) paintBadgeLabel(painter, badge, remPx(space.xs), remPx(space.xs));
     },
     placeholder(painter) {
       painter.rect(0, 0, width, frameHeight, FRAME, { radius: corner });

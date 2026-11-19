@@ -26,6 +26,8 @@ export class ImagePipeline {
   private queued = new Map<string, Request>();
   /** In flight, by src: a result whose request is gone (cancelled, cleared) is dropped. */
   private inFlight = new Map<string, Request>();
+  /** Loads still running, cancelled ones included: they hold their slot until they settle. */
+  private loading = 0;
   private readonly load: (src: string, maxWidth: number) => Promise<ImageBitmap>;
 
   constructor(private readonly options: ImagePipelineOptions) {
@@ -38,7 +40,7 @@ export class ImagePipeline {
   }
 
   get active() {
-    return this.inFlight.size;
+    return this.loading;
   }
 
   get waiting() {
@@ -79,10 +81,11 @@ export class ImagePipeline {
   }
 
   private pump() {
-    while (this.inFlight.size < this.options.concurrency && this.queue.length) {
+    while (this.loading < this.options.concurrency && this.queue.length) {
       const request = this.queue.shift()!;
       this.queued.delete(request.src);
       this.inFlight.set(request.src, request);
+      this.loading++;
       const current = () => this.inFlight.get(request.src) === request;
       this.load(request.src, request.maxWidth())
         .then(
@@ -100,7 +103,10 @@ export class ImagePipeline {
             this.options.onFailed(request.src, error);
           }
         )
-        .finally(() => this.pump());
+        .finally(() => {
+          this.loading--;
+          this.pump();
+        });
     }
   }
 }

@@ -32,6 +32,15 @@ describe('MediaTile picture', () => {
     expect(record({}, { title: 'Dune' } as typeof props)).toMatchSnapshot();
   });
 
+  it('holds an earlier titled backdrop of the same title only', () => {
+    const titled = (title: string, revision: number) =>
+      mediaTileVisual({ title, titledArtwork: `/card/${revision}.jpg`, ratio: 'landscape' });
+    expect(titled('Dune', 2).holdKey).toBe(titled('Dune', 1).holdKey);
+    expect(titled('Dune', 2).key).not.toBe(titled('Dune', 1).key);
+    expect(titled('Arrival', 1).holdKey).not.toBe(titled('Dune', 1).holdKey);
+    expect(mediaTileVisual({ title: 'Dune', artwork: '/b.jpg' }).holdKey).toBeUndefined();
+  });
+
   it('is keyed by the props it draws', () => {
     expect(tile(props).key).toBe(tile({ ...props }).key);
     expect(tile({ ...props, logo: 'other.png' }).key).not.toBe(tile(props).key);

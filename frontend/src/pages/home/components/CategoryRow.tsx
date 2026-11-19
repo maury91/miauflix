@@ -506,7 +506,18 @@ export const CategoryRow = memo(
     // From the geometry, not the store: the row's sizes all come from collectionGeometry
     const windowHeight = geometry.itemWidth / ITEM_WIDTH_OF_HEIGHT;
     const margin = ((glParent?.width ?? 0) - geometry.contentWidth) / 2;
-    const glState = useRef<string | null>(null);
+    // Loading until the row's size is known; a later page loading shows its cards as they come
+    const loading = !mediaOverride && !total && (loadIntent === 'dormant' || !current.currentData);
+    const failedText =
+      !mediaOverride && current.isError && !current.currentData
+        ? errorText(current.error, 'Failed to load content.')
+        : null;
+    // A row still loading holds its place, and focus can rest on it meanwhile. Off screen on the
+    // TV, no spinner: Chromium 69 keeps animating it out of view.
+    const showLoading = loading && loadIntent !== 'dormant' && !(builtForTizen && !visible);
+    // The row's state under its title in the GL form (read by the paint from this render's commit)
+    const glState =
+      failedText ?? (!loading && !total ? 'Nothing here yet.' : showLoading ? 'Loading...' : null);
     useGlPaint(titleNode, painter => {
       painter.text(
         {
@@ -520,10 +531,10 @@ export const CategoryRow = memo(
         margin,
         0
       );
-      if (glState.current)
+      if (glState)
         painter.text(
           {
-            text: glState.current,
+            text: glState,
             size: remPx(typeScale.body.fontSize),
             weight: 400,
             lineHeight: parseFloat(typeScale.body.lineHeight),
@@ -544,25 +555,20 @@ export const CategoryRow = memo(
         </Heading>
       </div>
     );
-    // Loading until the row's size is known; a later page loading shows its cards as they come
-    const loading = !mediaOverride && !total && (loadIntent === 'dormant' || !current.currentData);
-    glState.current = null;
-    if (!mediaOverride && current.isError && !current.currentData) {
-      glState.current = errorText(current.error, 'Failed to load content.');
+    if (failedText) {
       return (
         <div className={styles.row}>
           {title}
           {/* Polite, and only on screen: prefetched rows failing is not urgent. */}
           <div className={styles.state}>
             <Message tone="danger" live={visible ? 'polite' : undefined}>
-              {errorText(current.error, 'Failed to load content.')}
+              {failedText}
             </Message>
           </div>
         </div>
       );
     }
     if (!loading && !total) {
-      glState.current = 'Nothing here yet.';
       return (
         <div className={styles.row}>
           {title}
@@ -589,9 +595,7 @@ export const CategoryRow = memo(
               surface="black"
             />
           </GlGroup>
-          {/* A row still loading holds its place, and focus can rest on it meanwhile. Off screen
-              on the TV, no spinner: Chromium 69 keeps animating it out of view. */}
-          {loading && loadIntent !== 'dormant' && !(builtForTizen && !visible) && (
+          {showLoading && (
             <div className={styles.loading}>
               <ProgressSpinner label="Loading..." showLabel />
             </div>

@@ -118,6 +118,8 @@ export class PixiBackend implements GlBackend {
             frame: this.frame,
             fades: this.fades,
             picture: art => this.pictures.picture(art),
+            held: node => this.pictures.held(node),
+            hold: (node, picture) => this.pictures.hold(node, picture),
           },
           node,
           state,
@@ -130,8 +132,20 @@ export class PixiBackend implements GlBackend {
       void document.fonts.ready.then(() => {
         this.fontsReady = true;
         this.invalidate();
-      });
+      }); // A face that loads later (a weight first used now): texts drawn meanwhile used the fallback
+    if (typeof document.fonts !== 'undefined')
+      document.fonts.addEventListener('loadingdone', this.onFontsLoaded);
   }
+
+  private onFontsLoaded = (event: Event) => {
+    if (this.disposed || !this.pixi) return;
+    // Only Poppins draws GL text
+    const faces = (event as FontFaceSetLoadEvent).fontfaces;
+    if (faces && !faces.some(face => face.family.replace(/["']/g, '') === 'Poppins')) return;
+    for (const node of this.store.dropTexts()) if (!this.pictures.settled(node)) node.repaint();
+    this.pictures.dropTextPictures();
+    this.invalidate();
+  };
 
   /** Starts Pixi (async: it loads its renderer modules); the scene builds meanwhile. */
   start() {
@@ -197,6 +211,8 @@ export class PixiBackend implements GlBackend {
 
   dispose() {
     this.disposed = true;
+    if (typeof document.fonts !== 'undefined')
+      document.fonts.removeEventListener('loadingdone', this.onFontsLoaded);
     this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
     this.canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
     this.scheduler.dispose();
@@ -252,9 +268,14 @@ export class PixiBackend implements GlBackend {
     store.fetchWanted(node => {
       const state = this.sync.states.get(node);
       if (!state || state.x === Infinity) return null;
+      // A node under a culled one keeps its last placement: placed this frame, or a picture's
+      // stand-in (placed by its bake, outside the tree)
+      if (state.syncedAt !== frame.index && !this.pictures.bakery.ofStandIn(node)) return null;
       return state.onScreen ? 'visible' : 'near';
     });
     this.evict();
+    // Now and then: dead image entries hold no bytes, so evict() never sees them
+    if (frame.index % 120 === 0) store.prune();
 
     stats.frames++;
     stats.uploads = store.uploaded;

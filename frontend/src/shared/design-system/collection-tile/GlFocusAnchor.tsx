@@ -1,4 +1,4 @@
-import { type ReactNode, useLayoutEffect, useMemo } from 'react';
+import { type ReactNode, useLayoutEffect, useMemo, useRef } from 'react';
 
 import { useGlLayer, useGlNode, useGlPaint } from '../gl';
 import { paintFocusRing } from './collectionTile.art';
@@ -32,21 +32,24 @@ export function GlFocusAnchor({
   children,
 }: GlFocusAnchorProps) {
   const node = useGlNode(useGlLayer(layer));
-  const anchor = useMemo<FocusAnchor>(() => {
-    const holders = new Set<string>();
-    return {
+  // Kept across nodes: a tile reports focus once, maybe before this anchor's effects run
+  const holders = useRef(new Set<string>());
+  const anchor = useMemo<FocusAnchor>(
+    () => ({
       set(id, focused) {
-        if (focused) holders.add(id);
-        else holders.delete(id);
-        node?.set({ opacity: holders.size ? 1 : 0 });
+        if (focused) holders.current.add(id);
+        else holders.current.delete(id);
+        node?.set({ opacity: holders.current.size ? 1 : 0 });
       },
-    };
-  }, [node]);
+    }),
+    [node]
+  );
   useLayoutEffect(() => {
     node?.set({ x, y, width, height, scale });
   });
   useLayoutEffect(() => {
-    node?.set({ opacity: 0 });
+    // Hidden until a tile under it is focused (one may have reported it while mounting)
+    node?.set({ opacity: holders.current.size ? 1 : 0 });
   }, [node]);
   useGlPaint(node, painter => paintFocusRing(painter, width, height), [width, height]);
   return <FocusAnchorContext.Provider value={anchor}>{children}</FocusAnchorContext.Provider>;

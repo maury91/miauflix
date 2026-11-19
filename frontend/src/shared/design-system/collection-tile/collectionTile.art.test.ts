@@ -29,6 +29,13 @@ describe('CollectionTile picture', () => {
     expect(calls.some(call => call.op === 'text')).toBe(false);
   });
 
+  it('draws a label badge at the top start corner, in the key', () => {
+    const base = { label: 'Dune', labelPlacement: 'overlay' as const, width: 200 };
+    const calls = RecordingPainter.record(collectionTileArt({ ...base, badge: '4k' }));
+    expect(calls).toContainEqual(expect.objectContaining({ op: 'text', text: '4K' }));
+    expect(collectionTileArt({ ...base, badge: '4k' }).key).not.toBe(collectionTileArt(base).key);
+  });
+
   it('changes key exactly when a prop changes', () => {
     const base = { label: 'Dune', width: 200 };
     expect(collectionTileArt(base).key).toBe(collectionTileArt({ ...base }).key);

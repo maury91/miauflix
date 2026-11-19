@@ -23,6 +23,9 @@ export interface PixiPainterContext {
   fades: FadeIns;
   /** A picture's entry (created and queued for baking the first time). */
   picture(art: GlArt): Picture<RenderTexture>;
+  /** The last baked picture with a holdKey the node showed, if still baked. */
+  held(node: GlNode): Picture<RenderTexture> | undefined;
+  hold(node: GlNode, picture: Picture<RenderTexture>): void;
 }
 
 /**
@@ -128,11 +131,14 @@ export function createPixiPainter(
       }
       let object: Container;
       if (options.radius) {
-        // Half a texel in from each edge: the fill repeats (see gradient)
-        cropX += 0.5;
-        cropY += 0.5;
-        cropW -= 1;
-        cropH -= 1;
+        // Half a texel in from each edge: the fill repeats (see gradient). Less on an axis of a
+        // texel or two, so the span stays above 0
+        const insetX = Math.min(0.5, cropW / 4);
+        const insetY = Math.min(0.5, cropH / 4);
+        cropX += insetX;
+        cropY += insetY;
+        cropW -= insetX * 2;
+        cropH -= insetY * 2;
         const k = w / cropW;
         object = new Graphics().roundRect(x, y, w, h, options.radius).fill({
           texture: entry.texture!,
@@ -190,19 +196,35 @@ export function createPixiPainter(
       return true;
     },
     art(art) {
+      const show = (shown: Picture<RenderTexture>) => {
+        if (!shown.users.has(node)) {
+          shown.users.add(node);
+          state.pictures.push(shown);
+        }
+        shown.lastUsed = frame.index;
+      };
       const picture = context.picture(art);
-      if (!picture.users.has(node)) {
-        picture.users.add(node);
-        state.pictures.push(picture);
+      show(picture);
+      // An earlier version of this drawing, still baked: shown until this one has faded in
+      const held = art.holdKey ? context.held(node) : undefined;
+      const previous =
+        held && held !== picture && held.art.holdKey === art.holdKey ? held : undefined;
+      if (!picture.texture || frame.now - picture.readyAt < FADE_IN_MS) {
+        if (previous) {
+          show(previous);
+          const sprite = new Sprite(previous.texture!);
+          sprite.width = art.width;
+          sprite.height = art.height;
+          add(sprite);
+        } else art.placeholder?.(painter);
       }
-      picture.lastUsed = frame.index;
-      if (!picture.texture || frame.now - picture.readyAt < FADE_IN_MS) art.placeholder?.(painter);
-      if (!picture.texture) return false;
+      if (!picture.texture) return Boolean(previous);
       const sprite = new Sprite(picture.texture);
       sprite.width = art.width;
       sprite.height = art.height;
       fadeIn(sprite, picture.readyAt);
       add(sprite);
+      if (art.holdKey) context.hold(node, picture);
       return true;
     },
   };

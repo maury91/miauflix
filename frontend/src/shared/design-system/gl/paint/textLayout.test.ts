@@ -22,6 +22,10 @@ describe('wrapText', () => {
     expect(wrapText(measure, 'Supercalifragilistic', 60, 1)).toEqual(['Super…']);
   });
 
+  it('ellipsizes a long word on a line before the last', () => {
+    expect(wrapText(measure, 'abcdefghij ok', 60, 2)).toEqual(['abcde…', 'ok']);
+  });
+
   it('collapses whitespace and handles empty text', () => {
     expect(wrapText(measure, '  a   b  ', 100, 1)).toEqual(['a b']);
     expect(wrapText(measure, '   ', 100, 1)).toEqual([]);

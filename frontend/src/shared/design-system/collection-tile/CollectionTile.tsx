@@ -47,6 +47,8 @@ export type CollectionTileProps = Omit<
   labelHidden?: boolean;
   /** A Badge at the frame's top start corner. Its text joins the description. */
   badge?: ReactNode;
+  /** The badge's label for the GL form, where the tile is one picture (the DOM keeps `badge`). */
+  glBadge?: string;
   /** Watched share, 0 to 1: a decorative hairline at the frame's bottom. */
   progress?: number;
   /** The share in words ("40% watched"), read as part of the description. */
@@ -76,6 +78,7 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
       labelPlacement = 'below',
       labelHidden = false,
       badge,
+      glBadge,
       progress,
       progressText,
       focused = false,
@@ -139,6 +142,7 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
               labelPlacement,
               labelHidden,
               progress,
+              badge: glBadge,
               width: tileWidth,
             },
             glVisual

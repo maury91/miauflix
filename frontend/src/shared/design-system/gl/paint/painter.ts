@@ -38,6 +38,11 @@ export interface GlArt {
   corners?: { x: number; y: number; width: number; height: number; radius: number };
   /** Drawn live until the picture is baked, and under it while it fades in. */
   placeholder?(painter: Painter): void;
+  /**
+   * Pictures with the same holdKey are versions of one drawing (a newer artwork revision): while
+   * a node's new version bakes, the last one it showed stays (instead of the placeholder).
+   */
+  holdKey?: string;
 }
 
 /**

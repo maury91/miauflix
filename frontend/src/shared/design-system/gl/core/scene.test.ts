@@ -60,6 +60,20 @@ describe('GlNode', () => {
     expect(parent.orderedChildren()).toEqual([second, first, third]);
   });
 
+  it('keeps insertion order for equal z after an earlier sort reordered them', () => {
+    const parent = new GlNode();
+    const [a, b] = [new GlNode(), new GlNode()];
+    a.set({ z: 2 });
+    b.set({ z: 1 });
+    parent.add(a);
+    parent.add(b);
+    expect(parent.orderedChildren()).toEqual([b, a]);
+
+    a.set({ z: 1 });
+
+    expect(parent.orderedChildren()).toEqual([a, b]);
+  });
+
   it('animates from where it is, mid-animation too', () => {
     const node = new GlNode();
     node.animate('x', 100, 100, linear);
@@ -96,6 +110,17 @@ describe('GlNode', () => {
 
     expect(node.animations).toEqual({});
     expect(node.y).toBe(30);
+  });
+
+  it('lets a set to the current value end a running animation', () => {
+    const node = new GlNode();
+    node.animate('y', -100, 100, linear);
+    node.set({ y: 0 });
+    node.step(0);
+    node.step(50);
+
+    expect(node.animations).toEqual({});
+    expect(node.y).toBe(0);
   });
 
   it('does not restart an animation already heading there', () => {

@@ -59,7 +59,12 @@ export const GlScroller = forwardRef<GlScrollerHandle, GlScrollerProps>(function
 ) {
   const parent = useGlParent();
   const latestRest = useRef(onScrollRest);
-  latestRest.current = onScrollRest;
+  // Published on commit: a deferred rest must not see the callback of a discarded render
+  useLayoutEffect(() => {
+    latestRest.current = onScrollRest;
+  });
+  /** The pending deferred rest: replaced (cancelled) by the next scroll. */
+  const restTask = useRef(0);
   const [viewport] = useState(() => {
     const node = new GlNode();
     node.clip = true;
@@ -70,7 +75,9 @@ export const GlScroller = forwardRef<GlScrollerHandle, GlScrollerProps>(function
     viewport.add(node);
     // In a frame callback: hand the rest to a task, so its work isn't in the frame
     node.onSettle = property => {
-      if (property === 'y') window.setTimeout(() => latestRest.current?.());
+      if (property !== 'y') return;
+      window.clearTimeout(restTask.current);
+      restTask.current = window.setTimeout(() => latestRest.current?.());
     };
     return node;
   });
@@ -83,6 +90,7 @@ export const GlScroller = forwardRef<GlScrollerHandle, GlScrollerProps>(function
   const top = contentTop - clipTop;
   const parentNode = parent?.node;
 
+  useLayoutEffect(() => () => window.clearTimeout(restTask.current), []);
   useLayoutEffect(() => {
     if (!parentNode) return;
     parentNode.add(viewport);
@@ -93,7 +101,11 @@ export const GlScroller = forwardRef<GlScrollerHandle, GlScrollerProps>(function
     viewport.fade = fade ? [fade[0] - clipTop, fade[1] - clipTop] : null;
     viewport.fadeFrom = fade && fadeFrom ? fadeSource : null;
     content.set({ width, height: 0 });
-    if (!content.animations.y) content.set({ y: top - scroll.current });
+    const running = content.animations.y;
+    if (!running) content.set({ y: top - scroll.current });
+    // The layout moved mid-scroll: head for where the target is now
+    else if (running.to !== top - scroll.current)
+      content.animate('y', top - scroll.current, running.duration, running.easing);
     viewport.invalidate();
   });
 
@@ -105,7 +117,11 @@ export const GlScroller = forwardRef<GlScrollerHandle, GlScrollerProps>(function
         const instant = options?.instant || !scrolled.current;
         scrolled.current = true;
         scroll.current = next;
-        if (instant || !scrollEasing) {
+        // A rest still pending is from a scroll this one replaces
+        window.clearTimeout(restTask.current);
+        const settled = !content.animations.y && content.y === top - next;
+        if (instant || !scrollEasing || settled) {
+          // Already there (nothing will animate): at rest now
           content.set({ y: top - next });
           latestRest.current?.();
         } else content.animate('y', top - next, scrollDuration, scrollEasing);

@@ -48,6 +48,13 @@ const LOGO_WIDTH = 420;
 /** CSS `ease`, as the DOM crossfade. */
 const ease = cubicBezier(0.25, 0.1, 0.25, 1);
 
+/** Fades end at once for those who asked for less motion (as the DOM hero's transitions). */
+const fadeMs = (ms: number) =>
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 0
+    : ms;
+
 const clamp = (min: number, value: number, max: number) => Math.min(max, Math.max(min, value));
 
 interface GlHeroProps {
@@ -61,8 +68,10 @@ interface GlHeroProps {
   /** Where the selection is heading: its texts and logo load meanwhile. */
   upcoming: { media: MediaDto; heroLogo: string | null | undefined } | null;
   layers: StackedBackdrop<GlHeroLayer>[];
-  /** A layer's fade landed (or its image failed): the layers under it can go. */
+  /** A layer's fade landed: the layers under it can go. */
   onSettle: (id: number) => void;
+  /** A layer's image failed: it goes, the layers under it stay. */
+  onFail: (id: number) => void;
   /** The rows' left edge (`--home-content-left`). */
   detailsLeft: number;
   windowHeight: number;
@@ -78,6 +87,7 @@ export function GlHero({
   upcoming,
   layers,
   onSettle,
+  onFail,
   detailsLeft,
   windowHeight,
   preparation,
@@ -162,9 +172,11 @@ export function GlHero({
       // Asked for here (and held), not only where it's drawn: the details wait for it
       const loaded = logoUrl ? painter.load(logoUrl, LOGO_WIDTH) : 'failed';
       const useLogo = Boolean(logoUrl) && loaded !== 'failed';
-      // Shown only whole: every text, and the logo settled (or the title, the logo failing)
+      // Shown only whole: every text, and the logo settled (or the title, the logo failing). All
+      // measured (queued) at once, not up to the first missing
+      const measured = details.texts(useLogo).map(spec => painter.measure(spec));
       const ready =
-        details.texts(useLogo).every(spec => painter.measure(spec)) &&
+        measured.every(Boolean) &&
         (!useLogo || loaded === 'ready') &&
         (!logoPending || logoWaitOver);
       if (ready) shown.current = { details, useLogo, logoUrl };
@@ -174,7 +186,7 @@ export function GlHero({
         : shown.current?.details.media === media
           ? shown.current
           : null;
-      if (moving || !current) detailsNode.animate('opacity', 0, DETAILS_FADE_MS, ease);
+      if (moving || !current) detailsNode.animate('opacity', 0, fadeMs(DETAILS_FADE_MS), ease);
       if (!current) return;
       current.details.paint(painter, {
         left: detailsLeft,
@@ -183,7 +195,7 @@ export function GlHero({
         useLogo: current.useLogo,
         width,
       });
-      if (!moving) detailsNode.animate('opacity', 1, DETAILS_FADE_MS, ease);
+      if (!moving) detailsNode.animate('opacity', 1, fadeMs(DETAILS_FADE_MS), ease);
     },
     [
       details,
@@ -224,6 +236,7 @@ export function GlHero({
           visible={layer.visible}
           paused={moving}
           onSettle={() => onSettle(layer.id)}
+          onFail={() => onFail(layer.id)}
           targetX={layout?.targetX}
           targetY={layout?.targetY}
         />
@@ -240,6 +253,7 @@ function GlBackdrop({
   targetX,
   targetY,
   onSettle,
+  onFail,
 }: {
   layer: GlHeroLayer;
   visible: boolean;
@@ -249,6 +263,7 @@ function GlBackdrop({
    */
   paused: boolean;
   onSettle: () => void;
+  onFail: () => void;
   targetX?: number;
   targetY?: number;
 }) {
@@ -259,25 +274,29 @@ function GlBackdrop({
   // Fades in once revealed and its texture is up (until then it draws nothing, so the layer
   // under it stays)
   const status = useGlImageStatus(layer.url);
+  // Before the effect below reads them
+  const settleRef = useRef(onSettle);
+  const failRef = useRef(onFail);
+  useLayoutEffect(() => {
+    settleRef.current = onSettle;
+    failRef.current = onFail;
+  });
   const mounted = useRef(false);
   useLayoutEffect(() => {
     if (!node) return;
     if (!mounted.current) node.set({ opacity: visible && status === 'ready' ? 1 : 0 });
     else if (visible && status === 'ready') {
-      if (!paused) node.animate('opacity', 1, FADE_MS, ease);
+      if (!paused) node.animate('opacity', 1, fadeMs(FADE_MS), ease);
       // Interrupted: shown whole now (a set ends the animation), the layers under it drop below
       else if (node.animations.opacity) node.set({ opacity: 1 });
     }
     mounted.current = true;
     if (!visible) return;
-    if (
-      status === 'failed' ||
-      (status === 'ready' && node.opacity === 1 && !node.animations.opacity)
-    )
+    // Failed: only this layer goes (the one under it is the last that drew)
+    if (status === 'failed') failRef.current();
+    else if (status === 'ready' && node.opacity === 1 && !node.animations.opacity)
       settleRef.current();
   }, [node, paused, status, visible]);
-  const settleRef = useRef(onSettle);
-  settleRef.current = onSettle;
   useEffect(() => {
     if (!node) return;
     node.onSettle = property => {
@@ -582,8 +601,18 @@ function heroStatus(
 }
 
 /** The hidden DOM for assistive technology: the hero's text, announced as it changes. */
-export function GlHeroText({ media }: { media: MediaDto | null }) {
+export function GlHeroText({
+  media,
+  preparation,
+  availability,
+}: {
+  media: MediaDto | null;
+  preparation: PreloadPreparationSnapshot | null;
+  availability: GlHeroProps['availability'];
+}) {
   if (!media) return null;
+  // The source status drawn on the canvas ("No source", the quality), announced as it changes
+  const status = heroStatus(media, preparation, availability)?.label;
   const date = media._type === 'movie' ? media.releaseDate : media.firstAirDate;
   return (
     <header
@@ -602,6 +631,7 @@ export function GlHeroText({ media }: { media: MediaDto | null }) {
       </p>
       {media.genres.length > 0 && <p>{media.genres.join(' · ')}</p>}
       <p>{media.overview}</p>
+      {status && <p role="status">{status}</p>}
     </header>
   );
 }

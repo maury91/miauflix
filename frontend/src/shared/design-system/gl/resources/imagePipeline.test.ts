@@ -99,6 +99,21 @@ describe('ImagePipeline', () => {
     expect(onFailed).not.toHaveBeenCalled();
   });
 
+  it('keeps a cancelled load in the concurrency count until it settles', async () => {
+    const { images, order, pending, bitmap } = pipeline(1);
+    images.request('a', 'near', () => 0);
+    images.cancel('a');
+    images.request('b', 'near', () => 0);
+
+    expect(order).toEqual(['a']);
+    expect(images.active).toBe(1);
+
+    pending.get('a')!.resolve(bitmap());
+    await flush();
+
+    expect(order).toEqual(['a', 'b']);
+  });
+
   it('does not load a cancelled request still in the queue', async () => {
     const { images, order, pending, bitmap } = pipeline(1);
     images.request('a', 'near', () => 0);

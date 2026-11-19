@@ -1,6 +1,6 @@
 /**
  * Text wrapped to `maxWidth` in at most `maxLines` lines, the last one ellipsized when the text
- * doesn't fit. Words longer than a line stay whole on their own line (then ellipsized if last).
+ * doesn't fit. A word longer than a line gets its own line, ellipsized.
  * `measure` gives a string's width in the font the text is drawn with.
  */
 export function wrapText(
@@ -28,11 +28,10 @@ export function wrapText(
     }
   }
   if (line) lines.push(line);
-  const last = lines.length - 1;
-  if (last >= 0 && measure(lines[last]) > maxWidth) {
-    let cut = lines[last];
+  return lines.map(fitted => {
+    if (measure(fitted) <= maxWidth) return fitted;
+    let cut = fitted;
     while (cut.length > 1 && measure(`${cut}…`) > maxWidth) cut = cut.slice(0, -1);
-    lines[last] = `${cut.trimEnd()}…`;
-  }
-  return lines;
+    return `${cut.trimEnd()}…`;
+  });
 }
