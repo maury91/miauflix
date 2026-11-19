@@ -3,6 +3,8 @@ import { ITEM_WIDTH_OF_HEIGHT } from '@shared/design-system/carousel/collectionG
 import { remPx, useGlNode, useGlPaint, useGlParent } from '@shared/design-system/gl';
 import { color, typeScale } from '@shared/design-system/tokens';
 
+import { homeRowLayout } from '../homeLayout';
+
 /**
  * A row's title, and its state when it has no cards, drawn by the GlSurface. The
  * row's DOM title stays for the reader; the carousel draws itself below.
@@ -21,7 +23,7 @@ export function CategoryRowTitleGl({
   const node = useGlNode();
   const width = parent?.width ?? 0;
   // From the geometry, not the store: the row's sizes all come from collectionGeometry
-  const windowHeight = geometry.itemWidth / ITEM_WIDTH_OF_HEIGHT;
+  const { stateMiddle } = homeRowLayout(geometry.itemWidth / ITEM_WIDTH_OF_HEIGHT);
   const margin = (width - geometry.contentWidth) / 2;
   useGlPaint(
     node,
@@ -49,12 +51,11 @@ export function CategoryRowTitleGl({
             maxWidth: width - margin * 2,
           },
           margin,
-          // Under the title: 5vh + its 1vh margin, then the middle of the cards' 20vh
-          windowHeight * 0.06 + windowHeight * 0.1,
+          stateMiddle,
           { anchorY: 0.5 }
         );
     },
-    [name, state, width, margin, windowHeight]
+    [name, state, width, margin, stateMiddle]
   );
   return null;
 }

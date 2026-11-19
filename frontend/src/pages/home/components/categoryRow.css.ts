@@ -1,7 +1,7 @@
 import { color } from '@shared/design-system/tokens';
 import { style } from '@vanilla-extract/css';
 
-import { ROW_GAP_VH, ROW_HEIGHT_VH } from '../home-layout';
+import { HOME_VH } from '../homeLayout';
 
 /**
  * A Home row (docs/plans/style-guide.md, "Collection geometry"): a fixed height in vh, whatever it
@@ -10,14 +10,14 @@ import { ROW_GAP_VH, ROW_HEIGHT_VH } from '../home-layout';
  */
 export const row = style({
   boxSizing: 'border-box',
-  height: `${ROW_HEIGHT_VH - ROW_GAP_VH}vh`,
-  marginBottom: `${ROW_GAP_VH}vh`,
+  height: `${HOME_VH.rowHeight - HOME_VH.rowGap}vh`,
+  marginBottom: `${HOME_VH.rowGap}vh`,
 });
 
 export const title = style({
   boxSizing: 'border-box',
-  height: '5vh',
-  margin: '0 0 1vh',
+  height: `${HOME_VH.rowTitle}vh`,
+  margin: `0 0 ${HOME_VH.rowTitleGap}vh`,
   paddingLeft: 'var(--home-content-left, 5vw)',
   paddingRight: 'var(--home-content-left, 5vw)',
 });
@@ -41,7 +41,7 @@ export const loading = style({
 export const state = style({
   display: 'flex',
   alignItems: 'center',
-  minHeight: '20vh',
+  minHeight: `${HOME_VH.rowState}vh`,
   padding: `0 var(--home-content-left, 5vw)`,
   color: color.textSecondary,
 });

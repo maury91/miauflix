@@ -364,6 +364,28 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
   - `RenderMode` follows the GL parent context rather than a separate one, so a `GlParentScope`
     without a node also switches its children to DOM.
 
+- **Phase 4 (done, measured: no change from Phase 3).** Home's hero and layout:
+  - `pages/home/homeLayout.ts`: `HOME_VH` (the hero's height and padding, the rows' top,
+    padding and fade, a row's title, gap and message) and `homeLayout(window, geometry)` /
+    `homeRowLayout(windowHeight)` in px. `homePage.css.ts`, `categoryRow.css.ts`, the DOM hero,
+    `HomePage` (the scroller's clip, content top and fade, the last row's room, the focus anchor's
+    box), `CategoryRow` and the GL hero read them instead of repeating `windowHeight * 0.54 + …`.
+  - `pages/home/hero/`: `heroDetailsModel(media, preparation, availability)` (title, metadata,
+    rating, source status, genres, overview) used by the DOM details, the drawn ones and the
+    reader's hidden header; `heroType.ts` (`HERO_TYPE`, `heroTypeCss(role)` for the CSS `clamp()`,
+    `heroTypeScale(windowHeight)` in px, `HERO_DETAILS` spacing and boxes); `heroMotion.ts` (fade
+    and rest timings); `heroDetails.art.ts` and `heroShade.art.ts` (the pictures), with the shade's
+    stops and positions in `heroShade.metrics.ts`, which the DOM gradients use too.
+  - `MediaHero` picks `MediaHeroDom` or `MediaHeroGl`; `useMediaHero` holds the selection, the
+    resting details, the backdrop stack and its loading. `components/GlHero.tsx` is gone.
+  - Differences from the plan: the details picture is drawn live, not baked (`heroDetailsArt`
+    returns `texts()` and `draw()`; baking it ahead is Phase 6). The DOM status badge stays
+    `SourcePreparationStatus` (shared with the details page), so the model's `status` mirrors its
+    rules rather than replacing them.
+  - Found on the way: an apostrophe in a CSS comment inside the DOM hero's `::before` made
+    styled-components drop its `::after` rule, so the DOM hero never drew the band darkening the
+    backdrop's bottom right (the GL hero did). Fixed.
+
 ## Open decisions
 
 - **GL stays TV-only?** The plan assumes yes: browsers composite the DOM rows on the GPU. If a web

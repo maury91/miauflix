@@ -1,6 +1,10 @@
 import { color } from '@shared/design-system/tokens';
 import { style } from '@vanilla-extract/css';
 
+import { HOME_VH } from './homeLayout';
+
+const rowsMask = `linear-gradient(180deg, transparent ${HOME_VH.rowsFadeFrom}vh, #000 ${HOME_VH.rowsFadeTo}vh)`;
+
 /**
  * Home's page. Absolute, not fixed: a fixed element is its own stacking context, which would keep
  * the rail below the app logo. Nothing above Home scrolls, so it fills the viewport.
@@ -29,15 +33,15 @@ export const contents = style({
  */
 const content = style({
   position: 'absolute',
-  top: '42vh',
+  top: `${HOME_VH.rowsTop}vh`,
   right: 0,
   bottom: 0,
   left: 0,
   // Over the hero, which still layers its own parts (1 to 4)
   zIndex: 2,
-  padding: '6vh 0 8vh',
-  WebkitMaskImage: `linear-gradient(180deg, transparent 5vh, #000 8vh)`,
-  maskImage: `linear-gradient(180deg, transparent 5vh, #000 8vh)`,
+  padding: `${HOME_VH.rowsPaddingTop}vh 0 ${HOME_VH.rowsPaddingBottom}vh`,
+  WebkitMaskImage: rowsMask,
+  maskImage: rowsMask,
   scrollbarWidth: 'none',
   selectors: {
     '&::-webkit-scrollbar': { display: 'none' },

@@ -581,3 +581,10 @@ Build `index-B5EQJhKT.js`. Row 3 first pass 45–47 fps, back 51–53, held Righ
 9.6–12.4); one took 26.9 s and the benchmark's page script was gone after it, not reproduced
 since. Within the noise of Phases 1 and 2: on the TV the backend is still in the one bundle (the
 Tizen build inlines dynamic imports), and the split views run the same work as before.
+
+### Phase 4 (hero and Home layout from one source)
+
+Build `index-CBlhQ126.js`. Row 3 first pass 45–47 fps, back 51–53, held Right 22–36, 3×Down
+35–46; 28 pictures baked per standard run, 0 errors, 46–59 MB of textures. Cold start to the
+first focused tile 10.2–11.5 s. Within the noise of Phase 3: the hero draws the same calls from
+the shared model and pictures.

@@ -1,0 +1,210 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Hero details picture > stacks the overview, genres, metadata line and title bottom up 1`] = `
+[
+  {
+    "at": [
+      96,
+      497,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 1,
+    },
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1.5,
+      "maxLines": 3,
+      "maxWidth": 709.28,
+      "size": 20.8,
+      "weight": 400,
+    },
+    "text": "Paul Atreides travels to Arrakis.",
+  },
+  {
+    "at": [
+      96,
+      455,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 1,
+    },
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1.5,
+      "maxLines": 1,
+      "maxWidth": 720,
+      "size": 19.2,
+      "weight": 500,
+    },
+    "text": "Science Fiction",
+  },
+  {
+    "at": [
+      96,
+      401,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 0.5,
+    },
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1.5,
+      "maxLines": 1,
+      "maxWidth": 720,
+      "size": 19.2,
+      "weight": 500,
+    },
+    "text": "2h 35m",
+  },
+  {
+    "box": [
+      164.16,
+      398.31,
+      5.38,
+      5.38,
+    ],
+    "color": "rgba(166, 173, 175, 1)",
+    "op": "rect",
+    "options": {
+      "radius": 2.69,
+    },
+  },
+  {
+    "at": [
+      180.1,
+      401,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 0.5,
+    },
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1.5,
+      "maxLines": 1,
+      "maxWidth": 720,
+      "size": 19.2,
+      "weight": 500,
+    },
+    "text": "2021",
+  },
+  {
+    "box": [
+      229.06,
+      398.31,
+      5.38,
+      5.38,
+    ],
+    "color": "rgba(166, 173, 175, 1)",
+    "op": "rect",
+    "options": {
+      "radius": 2.69,
+    },
+  },
+  {
+    "at": [
+      244.99,
+      401,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 0.5,
+    },
+    "spec": {
+      "color": "#f6b93b",
+      "lineHeight": 1.5,
+      "maxLines": 1,
+      "maxWidth": 100,
+      "size": 20.16,
+      "weight": 500,
+    },
+    "text": "★",
+  },
+  {
+    "at": [
+      260.83,
+      401,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 0.5,
+    },
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1.5,
+      "maxLines": 1,
+      "maxWidth": 100,
+      "size": 19.2,
+      "weight": 500,
+    },
+    "text": "7.8",
+  },
+  {
+    "box": [
+      306.91,
+      387.8,
+      90.56,
+      26.4,
+    ],
+    "color": "rgba(0, 0, 0, 0)",
+    "op": "rect",
+    "options": {
+      "radius": 5.6,
+    },
+  },
+  {
+    "box": [
+      307.91,
+      388.8,
+      88.56,
+      24.4,
+    ],
+    "color": "rgba(0, 0, 0, 0)",
+    "op": "rect",
+    "options": {
+      "radius": 4.6,
+    },
+  },
+  {
+    "at": [
+      316.19,
+      401,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 0.5,
+    },
+    "spec": {
+      "color": "#A6ADAF",
+      "lineHeight": 1.4,
+      "maxLines": 1,
+      "maxWidth": 300,
+      "size": 16,
+      "weight": 600,
+    },
+    "text": "Checking…",
+  },
+  {
+    "at": [
+      96,
+      375.8,
+    ],
+    "op": "text",
+    "options": {
+      "anchorY": 1,
+    },
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1.05,
+      "maxLines": 2,
+      "maxWidth": 720,
+      "size": 54,
+      "weight": 600,
+    },
+    "text": "Dune",
+  },
+]
+`;

@@ -35,6 +35,7 @@ import {
   useState,
 } from 'react';
 
+import { homeRowLayout } from '../homeLayout';
 import { HOME_NAV } from '../homeNav';
 import { createCoalescer } from '../hooks/coalescer';
 import * as styles from './categoryRow.css';
@@ -550,8 +551,8 @@ export const CategoryRow = memo(
       <div className={styles.row}>
         {title}
         <div className={styles.carousel}>
-          {/* Title 5vh + its 1vh margin (categoryRow.css.ts) */}
-          <GlGroup y={windowHeight * 0.06}>
+          {/* Under the title and its margin (categoryRow.css.ts) */}
+          <GlGroup y={homeRowLayout(windowHeight).carouselTop}>
             <Carousel
               labelledBy={titleId}
               count={loading ? 0 : total}
