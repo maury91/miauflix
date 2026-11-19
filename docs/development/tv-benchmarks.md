@@ -572,3 +572,12 @@ back 49–53, held Right 27–35, 3×Down 34–40; 27 pictures baked per standar
 of textures. Within the run-to-run noise of Phase 1: moving the pictures to `*.art.ts` and
 generating their keys costs nothing measurable. No flashes in two more one-minute segments watched on this build
 (5 segments in all with the buffer copied, none with a flash).
+
+### Phase 3 (components split by render mode)
+
+Build `index-B5EQJhKT.js`. Row 3 first pass 45–47 fps, back 51–53, held Right 22–39 (six runs:
+22, 32, 39, 24, 24 and one lost), 3×Down 34–46; 28 pictures baked per standard run, 0 errors,
+46–58 MB of textures. Cold start to the first focused tile 8.8–10.9 s in 11 of 12 loads (Phase 2:
+9.6–12.4); one took 26.9 s and the benchmark's page script was gone after it, not reproduced
+since. Within the noise of Phases 1 and 2: on the TV the backend is still in the one bundle (the
+Tizen build inlines dynamic imports), and the split views run the same work as before.

@@ -1,6 +1,13 @@
 import { style } from '@vanilla-extract/css';
 
-import { color, duration, easing, radius } from '../tokens';
+import { color, duration, easing } from '../tokens';
+import { ARTWORK_RATIO, artworkRadius } from './artwork.metrics';
+
+const fixedRatio = (ratio: number) => ({
+  height: 0,
+  paddingTop: `${Math.round(ratio * 1e6) / 1e4}%`,
+  borderRadius: artworkRadius,
+});
 
 /**
  * Artwork (docs/plans/style-guide.md, section 8.4): an image whose geometry never depends on it. The
@@ -21,9 +28,9 @@ export const artwork = style({
   overflow: 'hidden',
   backgroundColor: color.surfaceRaised,
   selectors: {
-    '&[data-ratio="landscape"]': { height: 0, paddingTop: '56.25%', borderRadius: radius.md },
-    '&[data-ratio="portrait"]': { height: 0, paddingTop: '150%', borderRadius: radius.md },
-    '&[data-ratio="square"]': { height: 0, paddingTop: '100%', borderRadius: radius.md },
+    '&[data-ratio="landscape"]': fixedRatio(ARTWORK_RATIO.landscape),
+    '&[data-ratio="portrait"]': fixedRatio(ARTWORK_RATIO.portrait),
+    '&[data-ratio="square"]': fixedRatio(ARTWORK_RATIO.square),
     '&[data-ratio="fill"]': {
       position: 'absolute',
       top: 0,

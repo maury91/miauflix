@@ -1,6 +1,8 @@
 import {
   type CSSProperties,
   type ReactNode,
+  Suspense,
+  use,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -8,9 +10,9 @@ import {
   useState,
 } from 'react';
 
-import type { GlBackend, GlTuning } from '../core/renderer';
+import type { GlBackend, GlBackendOptions, GlTuning } from '../core/renderer';
 import { GlNode } from '../core/scene';
-import { PixiBackend } from '../pixi/backend';
+import { loadedGlBackend, preloadGlBackend } from './backendModule';
 import { GlLayers, GlLayersProvider, GlParentProvider } from './hooks';
 
 export interface GlSurfaceProps {
@@ -34,12 +36,33 @@ export interface GlSurfaceProps {
   children: ReactNode;
 }
 
+type BackendClass = new (options: GlBackendOptions) => GlBackend;
+
 /**
  * A WebGL canvas that design-system components draw into. Children render their DOM as usual;
  * those with a GL form draw into the canvas instead (the caller hides the DOM they replace and
  * keeps it for focus). If the backend can't start, children render as DOM.
+ *
+ * The backend is its own chunk (preloadGlBackend). Loaded, the surface and its children mount in
+ * the same commit as the page; otherwise nothing shows until it is.
  */
-export function GlSurface({
+export function GlSurface(props: GlSurfaceProps) {
+  const module = loadedGlBackend();
+  if (module) return <Surface {...props} Backend={module.PixiBackend} />;
+  return (
+    <Suspense fallback={null}>
+      <LoadingSurface {...props} />
+    </Suspense>
+  );
+}
+
+function LoadingSurface(props: GlSurfaceProps) {
+  const { PixiBackend } = use(preloadGlBackend());
+  return <Surface {...props} Backend={PixiBackend} />;
+}
+
+function Surface({
+  Backend,
   width,
   height,
   className,
@@ -49,7 +72,7 @@ export function GlSurface({
   tuning,
   onUnavailable,
   children,
-}: GlSurfaceProps) {
+}: GlSurfaceProps & { Backend: BackendClass }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const disposal = useRef(0);
   const [root] = useState(() => new GlNode());
@@ -61,7 +84,7 @@ export function GlSurface({
     try {
       const canvas = document.createElement('canvas');
       canvas.setAttribute('aria-hidden', 'true');
-      const created = new PixiBackend({
+      const created = new Backend({
         canvas,
         width,
         height,

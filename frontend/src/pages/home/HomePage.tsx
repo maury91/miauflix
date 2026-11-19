@@ -21,6 +21,7 @@ import {
   glSurfaceSupported,
   type GlTuning,
   remPx,
+  useGlBackendReady,
 } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { getMediaTitle } from '@shared/lib/media.utils';
@@ -34,6 +35,7 @@ import {
   type FC,
   memo,
   type Ref,
+  Suspense,
   useCallback,
   useEffect,
   useMemo,
@@ -110,7 +112,21 @@ const withRowsAround = (rows: number[], activeCategory: number, categoryCount: n
   return around.length ? [...rows, ...around].sort((left, right) => left - right) : rows;
 };
 
-const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
+/**
+ * With the WebGL rows, Home waits for the renderer's chunk (preloaded at startup) as a whole: its
+ * first focus looks for the rows, which mount inside the surface.
+ */
+const HomePage: FC<HomePageProps> = props => (
+  <Suspense fallback={null}>
+    <HomeContent {...props} />
+  </Suspense>
+);
+
+const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
+  // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
+  // Back to DOM if the surface cannot start after the support probe passes.
+  const [glRows, setGlRows] = useState(() => glRowsEnabled && glSurfaceSupported());
+  useGlBackendReady(glRows);
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
   const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
@@ -166,9 +182,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     transform: builtForTizen,
     onRest: builtForTizen ? () => contentRest.current() : undefined,
   });
-  // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
-  // Back to DOM if the surface can't start after all (the probe passed, Pixi didn't)
-  const [glRows, setGlRows] = useState(() => glRowsEnabled && glSurfaceSupported());
   const glScroller = useRef<GlScrollerHandle>(null);
   const scrollRows = useCallback(
     (target: number, options?: { instant?: boolean }) => {

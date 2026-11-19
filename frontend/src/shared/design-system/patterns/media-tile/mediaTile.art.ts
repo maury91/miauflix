@@ -5,7 +5,7 @@ import { LOGO_BOX } from './mediaTile.metrics';
 import { type MediaTileVisualProps, resolveMediaTileVisual } from './mediaTileVisual';
 
 /** The title logo in a frame of `width` × `height`. */
-export function drawTileLogo(painter: Painter, src: string, width: number, height: number) {
+function drawTileLogo(painter: Painter, src: string, width: number, height: number) {
   return painter.image(
     src,
     width * LOGO_BOX.left,

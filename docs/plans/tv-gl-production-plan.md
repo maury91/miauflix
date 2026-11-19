@@ -343,6 +343,27 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
   - Carousel's `itemExtent` moved to `collectionGeometry.ts` and `placeTrack` into `Carousel.tsx`
     (they move the track; they aren't drawing). The GL views come with Phase 3.
 
+- **Phase 3 (done, measured: no change from Phase 2).** Artwork, CollectionTile, MediaTile and Carousel are
+  each a public component that picks one view from `useRenderMode()` (`'gl'` inside a GlSurface's
+  parent, `'dom'` elsewhere), a shared hook (`useArtwork`, `useCollectionTile`, `useCarousel`:
+  load and failure reports, held images, nav focus, ids, description, pointer lock, mounted
+  range) and `*Dom.tsx`/`*Gl.tsx` views; the other view's hooks never run. MediaTile's views use
+  CollectionTile's directly, and its DOM view `ArtworkDom`. ESLint keeps `*Dom.tsx` from importing
+  `gl`, pictures or GL views. `GlSurface` loads the Pixi backend with `import()`
+  (`preloadGlBackend`, started at startup when the GL rows are on): the web entry chunk went from
+  1,502 KB to 1,093 KB (gzip 480 → 359 KB), Pixi is a 410 KB chunk the web never requests. Differences from the plan:
+  - **The GL views aren't lazy.** They're small and lazy-loading each would suspend every tile;
+    only Pixi (the backend) is its own chunk. The Tizen build inlines dynamic imports
+    (`inlineDynamicImports`), so on the TV everything is one file and the preload resolves at once.
+  - **Home waits for the backend as a whole** (`useGlBackendReady` inside a Suspense boundary):
+    with the surface suspending on its own, Home committed first, its first focus found no rows
+    and landed on the side menu (seen in Storybook, where nothing preloads).
+  - **CategoryRow** keeps one component (its data logic is shared): its drawn title and state
+    text are `CategoryRowTitleGl`, and the paging mode comes from `useRenderMode`. The ref the row
+    wrote during render for the paint to read is gone.
+  - `RenderMode` follows the GL parent context rather than a separate one, so a `GlParentScope`
+    without a node also switches its children to DOM.
+
 ## Open decisions
 
 - **GL stays TV-only?** The plan assumes yes: browsers composite the DOM rows on the GPU. If a web

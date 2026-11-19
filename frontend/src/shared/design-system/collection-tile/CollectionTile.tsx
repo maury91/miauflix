@@ -1,27 +1,10 @@
-import {
-  type ButtonHTMLAttributes,
-  forwardRef,
-  type ReactNode,
-  useId,
-  useLayoutEffect,
-  useMemo,
-} from 'react';
+import { type ButtonHTMLAttributes, forwardRef, type ReactNode } from 'react';
 
-import { visuallyHidden } from '../a11y.css';
-import { GlParentProvider, remPx, useGlNode, useGlPaint, useGlParent } from '../gl';
-import { joinIds } from '../ids';
-import { type NavigableProps, useNavFocus } from '../navFocus';
-import { ProgressBar } from '../progress/Progress';
-import {
-  collectionTileArt,
-  paintFocusRing,
-  paintTileFrame,
-  paintTileOverlay,
-  type TileVisualArt,
-} from './collectionTile.art';
-import * as styles from './collectionTile.css';
-import { TILE_RATIO, tileMetrics } from './collectionTile.metrics';
-import { useFocusAnchor } from './focusAnchor';
+import { useRenderMode } from '../gl';
+import type { NavigableProps } from '../navFocus';
+import type { TileVisualArt } from './collectionTile.art';
+import { CollectionTileDom } from './CollectionTileDom';
+import { CollectionTileGl } from './CollectionTileGl';
 
 export type CollectionTileProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -47,7 +30,7 @@ export type CollectionTileProps = Omit<
   labelHidden?: boolean;
   /** A Badge at the frame's top start corner. Its text joins the description. */
   badge?: ReactNode;
-  /** The badge's label for the GL form, where the tile is one picture (the DOM keeps `badge`). */
+  /** The badge's label for the GL form, where the tile is one picture. */
   glBadge?: string;
   /** Watched share, 0 to 1: a decorative hairline at the frame's bottom. */
   progress?: number;
@@ -66,244 +49,15 @@ export type CollectionTileProps = Omit<
 
 /**
  * One primary action led by artwork: media tiles, profile choices. Generic: it knows nothing about
- * media DTOs. Quick actions are siblings in the collection's recipe, never inside the tile.
+ * media DTOs. Quick actions are siblings in the collection's recipe, never inside the tile. Drawn
+ * by the GlSurface it's in (CollectionTileGl), or as DOM (CollectionTileDom).
  */
 export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>(
-  function CollectionTile(
-    {
-      label,
-      supportingText,
-      visual,
-      ratio = 'landscape',
-      labelPlacement = 'below',
-      labelHidden = false,
-      badge,
-      glBadge,
-      progress,
-      progressText,
-      focused = false,
-      onPointerFocus,
-      glVisual,
-      type = 'button',
-      onMouseMove,
-      navId,
-      'aria-describedby': callerDescribedBy,
-      ...props
-    },
-    forwardedRef
-  ) {
-    const id = useId();
-    const nav = useNavFocus(navId, { focused, disabled: props.disabled }, forwardedRef);
-    const labelId = `${id}-label`;
-    const describedBy = joinIds(
-      callerDescribedBy,
-      supportingText && `${id}-supporting`,
-      Boolean(badge) && `${id}-badge`,
-      progressText && `${id}-progress`
-    );
-    const hasProgress = progress !== undefined;
-
-    // GL form (inside a GlSurface): the frame, scrim, progress, text and focus outline are drawn
-    // by the renderer; the button stays for focus. With `glVisual` the tile is one baked picture
-    // and only the outline is live; otherwise the visual registers its own nodes in the frame.
-    const glParent = useGlParent();
-    const tileNode = useGlNode();
-    const visualNode = useGlNode(tileNode);
-    const overlayNode = useGlNode(tileNode);
-    const tileWidth = glParent?.width ?? 0;
-    const frameHeight = tileWidth * TILE_RATIO[ratio];
-    const active = nav.focused && !props.disabled;
-    // Under a GlFocusAnchor the outline is drawn once, where the focused tile rests
-    const focusAnchor = useFocusAnchor();
-    const anchor = glParent ? focusAnchor : null;
-    useLayoutEffect(() => {
-      if (!anchor) return;
-      anchor.set(id, active);
-      return () => anchor.set(id, false);
-    }, [anchor, active, id]);
-    useLayoutEffect(() => {
-      if (!tileNode || !overlayNode) return;
-      tileNode.set({
-        width: tileWidth,
-        height: frameHeight,
-        // On the TV the focus scale applies at once (collectionTile.css.ts)
-        scale: active ? tileMetrics.focusScale : 1,
-        opacity: props.disabled ? tileMetrics.disabledOpacity : 1,
-      });
-      overlayNode.set({ z: 1 });
-    });
-    const art =
-      glParent && glVisual
-        ? collectionTileArt(
-            {
-              label,
-              supportingText,
-              ratio,
-              labelPlacement,
-              labelHidden,
-              progress,
-              badge: glBadge,
-              width: tileWidth,
-            },
-            glVisual
-          )
-        : null;
-    useGlPaint(
-      tileNode,
-      painter => {
-        if (art) painter.art(art);
-        else paintTileFrame(painter, tileWidth, frameHeight);
-      },
-      [art?.key, tileWidth, frameHeight]
-    );
-    useGlPaint(
-      overlayNode,
-      painter => {
-        if (!art)
-          paintTileOverlay(painter, {
-            width: tileWidth,
-            height: frameHeight,
-            label: labelHidden ? undefined : label,
-            supportingText,
-            labelPlacement,
-            progress,
-          });
-        if (active && !anchor) paintFocusRing(painter, tileWidth, frameHeight);
-      },
-      [
-        anchor,
-        art?.key,
-        tileWidth,
-        frameHeight,
-        labelHidden,
-        label,
-        supportingText,
-        labelPlacement,
-        progress,
-        active,
-      ]
-    );
-    const visualValue = useMemo(
-      () =>
-        glParent && visualNode
-          ? {
-              renderer: glParent.renderer,
-              node: visualNode,
-              width: tileWidth,
-              height: frameHeight,
-              radius: remPx(tileMetrics.radius),
-            }
-          : null,
-      [frameHeight, glParent, tileWidth, visualNode]
-    );
-    if (visualValue) {
-      return (
-        <button
-          {...props}
-          ref={nav.ref}
-          type={type}
-          className={styles.glTile}
-          data-focused={nav.focused || undefined}
-          aria-labelledby={labelId}
-          aria-describedby={describedBy}
-          onMouseMove={event => {
-            nav.onPointerFocus();
-            onPointerFocus?.();
-            onMouseMove?.(event);
-          }}
-        >
-          <span id={labelId}>{label}</span>
-          {supportingText && <span id={`${id}-supporting`}>{supportingText}</span>}
-          {badge && <span id={`${id}-badge`}>{badge}</span>}
-          {progressText && <span id={`${id}-progress`}>{progressText}</span>}
-          {!art && <GlParentProvider value={visualValue}>{visual}</GlParentProvider>}
-        </button>
-      );
-    }
-
-    return (
-      <button
-        {...props}
-        ref={nav.ref}
-        type={type}
-        className={styles.tile}
-        data-focused={nav.focused || undefined}
-        data-ratio={ratio}
-        data-label={labelPlacement}
-        data-progress={hasProgress || undefined}
-        aria-labelledby={labelId}
-        aria-describedby={describedBy}
-        onMouseMove={event => {
-          nav.onPointerFocus();
-          onPointerFocus?.();
-          onMouseMove?.(event);
-        }}
-      >
-        <span className={styles.frame}>
-          <span className={styles.visual}>
-            {visual}
-            {labelPlacement === 'overlay' && (
-              <span className={styles.scrimLayer} aria-hidden="true" />
-            )}
-          </span>
-          {badge && (
-            <span id={`${id}-badge`} className={styles.badge}>
-              {badge}
-            </span>
-          )}
-          {hasProgress && (
-            <span className={styles.progress}>
-              <ProgressBar decorative value={progress} />
-            </span>
-          )}
-          {labelPlacement === 'overlay' && (
-            <TileText
-              id={id}
-              label={label}
-              labelHidden={labelHidden}
-              supportingText={supportingText}
-            />
-          )}
-        </span>
-        {labelPlacement === 'below' && (
-          <TileText
-            id={id}
-            label={label}
-            labelHidden={labelHidden}
-            supportingText={supportingText}
-          />
-        )}
-        {progressText && (
-          <span id={`${id}-progress`} className={visuallyHidden}>
-            {progressText}
-          </span>
-        )}
-      </button>
+  function CollectionTile(props, ref) {
+    return useRenderMode() === 'gl' ? (
+      <CollectionTileGl {...props} ref={ref} />
+    ) : (
+      <CollectionTileDom {...props} ref={ref} />
     );
   }
 );
-
-function TileText({
-  id,
-  label,
-  labelHidden,
-  supportingText,
-}: {
-  id: string;
-  label: string;
-  labelHidden: boolean;
-  supportingText?: string;
-}): ReactNode {
-  return (
-    <span className={styles.text}>
-      <span id={`${id}-label`} className={labelHidden ? visuallyHidden : styles.label}>
-        {label}
-      </span>
-      {supportingText && (
-        <span id={`${id}-supporting`} className={styles.supporting}>
-          {supportingText}
-        </span>
-      )}
-    </span>
-  );
-}

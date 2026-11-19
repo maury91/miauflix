@@ -36,6 +36,17 @@ export function useGlParent() {
 
 export const GlParentProvider = GlContext.Provider;
 
+/** How a component renders: DOM, or drawn by the GlSurface it's in. */
+export type RenderMode = 'dom' | 'gl';
+
+/**
+ * Inside a GlSurface (and not taken out of it by a GlParentScope without a node), `gl`: the
+ * component renders its GL view. Read once by the public component, which renders one view.
+ */
+export function useRenderMode(): RenderMode {
+  return useContext(GlContext) ? 'gl' : 'dom';
+}
+
 /**
  * The surface's named layers: nodes created on first use, by the GlLayer that places them or by a
  * component that draws into them from elsewhere in the tree (`useGlLayer`), in either order.
