@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { heroBackdropSizes, readTvDevice } from './tv-profile';
+import { glTextureBudget, heroBackdropSizes, readTvDevice } from './tv-profile';
 
 const AUTO = { moving: 'auto', resting: 'auto' };
 // The two TVs Miauflix was measured on
@@ -63,6 +63,19 @@ describe('heroBackdropSizes', () => {
       )
     ).toEqual({ moving: 'w1280', resting: 'original' });
     expect(warn).toHaveBeenCalledOnce();
+  });
+});
+
+describe('glTextureBudget', () => {
+  it('gives a 2020 or newer TV the measured budget, older and unknown ones less', () => {
+    const MB = 1024 * 1024;
+    expect(glTextureBudget({ modelYear: 2020, chromium: 69, screenWidth: 1920 })).toBe(64 * MB);
+    expect(glTextureBudget({ modelYear: 2023, chromium: 120, screenWidth: 1920 })).toBe(64 * MB);
+    // The TU8072 without productinfo: dated by its browser
+    expect(glTextureBudget({ modelYear: null, chromium: 69, screenWidth: 1920 })).toBe(64 * MB);
+    expect(glTextureBudget({ modelYear: 2018, chromium: 56, screenWidth: 1920 })).toBe(40 * MB);
+    expect(glTextureBudget({ modelYear: null, chromium: 63, screenWidth: 1920 })).toBe(40 * MB);
+    expect(glTextureBudget({ modelYear: null, chromium: null, screenWidth: 1920 })).toBe(40 * MB);
   });
 });
 

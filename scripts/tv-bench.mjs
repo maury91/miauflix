@@ -12,6 +12,10 @@
 //                                                    Home, after the intro: wait for a focused card)
 //   {"until": "<expression>", "ms": 30000}           wait until an expression is truthy (polled every 250 ms)
 //   {"start": true} / {"stop": true}                 record frames between them and print the summary
+//   {"stop": true, "settle": 1000}                   the same, over a window ending this long (ms)
+//                                                    after the last key the page received: the same
+//                                                    span for every run, however late DevTools
+//                                                    delivered the keys
 //   {"state": true}                                  print the page, heading, virtual and DOM focus
 //   {"eval": "<expression>"}                         print an expression's value
 //   {"inject": "scripts/react-commit-probe.js"}      run a script before the page's own on every
@@ -44,19 +48,26 @@ const steps = JSON.parse(stepsArg);
 // Runs in the TV's Chromium 69: ES2018 at most.
 const PROBE = `(function () {
   window.__bench = {
-    frames: [], recording: 0, startedAt: 0,
+    frames: [], at: [], keys: [], recording: 0, startedAt: 0,
     start: function () {
       // Each recording has its own number: a frame chain left over from an earlier start stops itself
       var b = this; var run = b.recording = (b.lastRun = (b.lastRun || 0) + 1);
-      b.frames = []; b.startedAt = performance.now();
+      b.frames = []; b.at = []; b.keys = []; b.startedAt = performance.now();
       var last = b.startedAt;
-      function tick(t) { if (b.recording !== run) return; b.frames.push(t - last); last = t; requestAnimationFrame(tick); }
+      function tick(t) { if (b.recording !== run) return; b.frames.push(t - last); b.at.push(t); last = t; requestAnimationFrame(tick); }
       requestAnimationFrame(tick);
+      if (!b.onKey) {
+        b.onKey = function () { if (b.recording) b.keys.push(performance.now()); };
+        document.addEventListener('keydown', b.onKey, true);
+      }
     },
-    stop: function () {
+    stop: function (settle) {
       this.recording = 0;
-      var elapsed = performance.now() - this.startedAt;
-      var f = this.frames.slice(1);
+      var end = performance.now();
+      if (settle && this.keys.length) end = Math.min(end, this.keys[this.keys.length - 1] + settle);
+      var elapsed = end - this.startedAt;
+      var times = this.at;
+      var f = this.frames.filter(function (_, i) { return times[i] <= end; }).slice(1);
       if (!f.length) return 'no frames';
       var s = f.slice().sort(function (a, b) { return a - b; });
       var at = function (q) { return s[Math.min(s.length - 1, Math.floor(s.length * q))].toFixed(1); };
@@ -272,7 +283,8 @@ ws.onopen = async () => {
         }
         console.log(`until: true after ${((Date.now() - startedAt) / 1000).toFixed(1)} s`);
       } else if (step.start) await evaluate('__bench.start()');
-      else if (step.stop) console.log(`frames: ${await evaluate('__bench.stop()')}`);
+      else if (step.stop)
+        console.log(`frames: ${await evaluate(`__bench.stop(${Number(step.settle) || 0})`)}`);
       else if (step.state) console.log(`state: ${await evaluate('__bench.state()')}`);
       else if (step.eval !== undefined) {
         const value = await evaluate(step.eval);

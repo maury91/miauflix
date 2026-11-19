@@ -28,10 +28,22 @@ export function wrapText(
     }
   }
   if (line) lines.push(line);
-  return lines.map(fitted => {
-    if (measure(fitted) <= maxWidth) return fitted;
-    let cut = fitted;
-    while (cut.length > 1 && measure(`${cut}…`) > maxWidth) cut = cut.slice(0, -1);
-    return `${cut.trimEnd()}…`;
-  });
+  return lines.map(line => (measure(line) > maxWidth ? ellipsize(measure, line, maxWidth) : line));
+}
+
+/**
+ * The longest start of `text` that fits `maxWidth` with an ellipsis (at least one character).
+ * A binary search: the last line of a long overview holds every word that didn't fit, and
+ * trimming it a character at a time took about 150 measures (40 ms on the TV).
+ */
+function ellipsize(measure: (text: string) => number, text: string, maxWidth: number) {
+  const fits = (length: number) => measure(`${text.slice(0, length).trimEnd()}…`) <= maxWidth;
+  let low = 1;
+  let high = text.length - 1;
+  while (low < high) {
+    const middle = Math.ceil((low + high) / 2);
+    if (fits(middle)) low = middle;
+    else high = middle - 1;
+  }
+  return `${text.slice(0, low).trimEnd()}…`;
 }

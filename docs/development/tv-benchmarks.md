@@ -563,7 +563,7 @@ The swapped buffer is shown undrawn now and then (the compositor presents the ca
 frame); with the buffer copied there is nothing undrawn to show. It's now the default
 (`GlTuning.preserveDrawingBuffer`), at no measurable cost. Switches for testing on the TV:
 `localStorage['miauflix:gl-tuning']` as JSON (`textureBudget`, `antialias`, `frameBudgetMs`,
-`preserveDrawingBuffer`), read when the surface starts, in the Tizen and development builds only.
+`preserveDrawingBuffer`, `transparent`), read when the surface starts, in the Tizen and development builds only.
 
 ### Phase 2 (pictures and metrics)
 
@@ -601,3 +601,56 @@ them once (since the spike, those first pictures had kept the fallback font). Te
 their own face (`document.fonts.load`), and the epoch stays at 0 on a cold load. Held Right is the
 best measured since the spike (spike 44–48; Phase 4 22–36), likely from fewer picture redraws while
 moving; 3×Down is within the noise of Phase 4.
+
+### Phase 6 (performance, first pass)
+
+Build `index-CO-avxVx.js`. Row 3 first pass 46–51 fps, back 51–52, held Right 37–49, 3×Down
+41–43; 0 errors, 47–58 MB of textures; 56 picture draws per standard run (72 in Phase 5).
+
+Profile of the first pass (4.8 s): 45% idle, the frame's own draw 18.5%. `syncRoot` is still about
+315 ms over the run (every tile's box changes while the track slides), the band redraw about
+105 ms (the hero crossfade redraws it every frame).
+
+Long frames: a probe recorded every frame over 34 ms with the time the frame's own draw took.
+Of 28 long frames (35–85 ms) in a run, the draw took 2–34 ms; the run had one long task (52 ms).
+The rest is GPU and compositor time. Checks:
+
+- `antialias: false`: no change; the TV's WebGL never had MSAA (`SAMPLES` 0).
+- The hero backdrop hidden (the largest fill): first pass 51 and 53 against 48 and 51, back 54
+  and 55 against 54 and 52, within the noise.
+
+### Phase 6 (fill)
+
+Fill per frame: about 2.4 screens of sprites at rest (the hero's baked layer alone a full screen).
+With every GL layer hidden (the canvas still cleared and presented) the first pass ran 53–55 fps
+and back 53; with Pixi's render switched off, 53–57 and 58–59.
+
+Build `index-C50YoBU8.js`: the baked hero layer ends at the hero's height (55vh) and the canvas is
+opaque. Row 3 first pass 50, 52, 52 fps, back 53, 52, 54, held Right 42, 52, 44, 3×Down 43, 40;
+0 errors, 49.8 MB of textures.
+
+Opaque against transparent (`GlTuning.transparent`), alternating cold runs: first pass 52, 52, 51
+against 48, 52, 51; back 56, 53, 50 against 53, 52, 55. Within the noise. 3×Down ran 40–50 in
+both; its window varied from 2.8 to 7.1 s (a long window takes in idle frames after the moves),
+so it can't tell them apart.
+
+### Phase 6 against the spike, the same day
+
+The plan's targets come from the spike's best session (first pass 51–60, back 58–60), on the
+server data of that day. Both builds measured cold, three runs each, one after the other; 3×Down
+ends 0.8 s after the last key (`"settle": 800`).
+
+| Scenario         | Spike (`index-BhR5SHS8.js`) | Phase 6 (`index-LPgnCQwF.js`) |
+| ---------------- | --------------------------- | ----------------------------- |
+| Row 3 first pass | 50, 51, 50                  | 50, 50, 50                    |
+| Row 3 back       | 54, 55, 55                  | 52, 55, 53                    |
+| Held Right 2.5 s | 47, 37, 40                  | 41, 44, 30                    |
+| 3 × Down         | 39, 40, 45                  | 48, 41, 41                    |
+
+Phase 6: 28 pictures baked per standard run, 0 errors, 46–53 MB of textures. Level with the
+spike: the refactoring cost nothing, and neither build reaches the targets on today's data.
+
+Texture budget 40 MB (`GlTuning.textureBudget`, what 2018–2019 TVs now get), two runs: first pass
+53 and 49, back 55 and 52, held Right 35 and 25, 3×Down 35 and 42 (`settle`); 0 errors, and Home
+still worked when coming back up and down after the hold. Holding Right fetches more images again
+(64–69 uploads against 56–59).

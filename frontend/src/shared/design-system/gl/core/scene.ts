@@ -74,6 +74,7 @@ export class GlNode {
     child.parent = this;
     child.insertion = ++GlNode.insertions;
     this.children.push(child);
+    if (child.spin || Object.keys(child.animations).length) moving.add(child);
     this.sorted = false;
     this.invalidate();
   }
@@ -83,6 +84,8 @@ export class GlNode {
     if (index < 0) return;
     this.children.splice(index, 1);
     child.parent = null;
+    // Off the tree: not stepped (an unmounted spinner would turn forever); back with `add`
+    moving.delete(child);
     this.invalidate();
   }
 
@@ -106,7 +109,10 @@ export class GlNode {
       (this as Record<string, unknown>)[key] = value;
       changed = true;
     }
-    if (changed) this.invalidate();
+    if (changed) {
+      if (this.spin) moving.add(this);
+      this.invalidate();
+    }
   }
 
   /**
@@ -123,6 +129,7 @@ export class GlNode {
       easing,
       start: null,
     };
+    moving.add(this);
     this.invalidate();
   }
 
@@ -167,6 +174,14 @@ export class GlNode {
   }
 
   invalidate() {
+    this.markChanged().owner?.invalidate();
+  }
+
+  /**
+   * Marks this node and its ancestors changed (the frame visits that path; unchanged subtrees are
+   * skipped), returning the root. From the frame loop itself, which needs no new frame.
+   */
+  markChanged(): GlNode {
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- walks up from here
     let node: GlNode = this;
     node.changed = true;
@@ -174,31 +189,40 @@ export class GlNode {
       node = node.parent;
       node.changed = true;
     }
-    node.owner?.invalidate();
+    return node;
   }
 }
 
 const TURN = Math.PI * 2;
 
+/** Nodes with animations or a spin: all stepAnimations visits (not the whole tree). */
+const moving = new Set<GlNode>();
+
+function rootOf(node: GlNode) {
+  while (node.parent) node = node.parent;
+  return node;
+}
+
 /**
- * Advances every animation in the tree to `now`; animated nodes count as changed. True while any
- * still runs.
+ * Advances every animation in the tree to `now`; animated nodes and their ancestors count as
+ * changed. True while any still runs.
  */
 export function stepAnimations(root: GlNode, now: number): boolean {
   let running = false;
-  const visit = (node: GlNode) => {
+  for (const node of moving) {
+    if (rootOf(node) !== root) continue;
     if (Object.keys(node.animations).length) {
-      node.changed = true;
+      node.markChanged();
       if (node.step(now)) running = true;
     }
-    const rotation = node.spin > 0 && !motion.reduced ? ((now % node.spin) / node.spin) * TURN : 0;
+    const spinning = node.spin > 0 && !motion.reduced;
+    const rotation = spinning ? ((now % node.spin) / node.spin) * TURN : 0;
     if (rotation !== node.rotation) {
       node.rotation = rotation;
-      node.changed = true;
+      node.markChanged();
     }
-    if (node.spin > 0 && !motion.reduced) running = true;
-    for (const child of node.children) visit(child);
-  };
-  visit(root);
+    if (spinning) running = true;
+    if (!node.spin && !Object.keys(node.animations).length) moving.delete(node);
+  }
   return running;
 }

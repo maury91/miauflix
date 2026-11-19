@@ -69,7 +69,7 @@ export class PixiBackend implements GlBackend {
   private readonly pictures: PictureBaker;
   private readonly sync: SceneSync;
   private readonly onError: (error: unknown) => void;
-  private readonly fonts: FontEpoch;
+  private fonts!: FontEpoch;
   private readonly contextLoss: ContextLossPolicy;
   private started = false;
   /** Frames that threw in a row. */
@@ -77,7 +77,9 @@ export class PixiBackend implements GlBackend {
   private disposed = false;
   private readonly tuning: Required<GlTuning>;
 
-  constructor({ canvas, width, height, dpr, onError, tuning }: GlBackendOptions) {
+  private readonly background: string | undefined;
+
+  constructor({ canvas, width, height, dpr, onError, tuning, background }: GlBackendOptions) {
     this.canvas = canvas;
     this.onError = onError;
     this.tuning = {
@@ -85,7 +87,9 @@ export class PixiBackend implements GlBackend {
       antialias: tuning?.antialias ?? true,
       frameBudgetMs: tuning?.frameBudgetMs ?? FRAME_BUDGET_MS,
       preserveDrawingBuffer: tuning?.preserveDrawingBuffer ?? true,
+      transparent: tuning?.transparent ?? false,
     };
+    this.background = this.tuning.transparent ? undefined : background;
     this.frame = { index: 0, now: 0, dpr, width, height };
     this.scheduler = new FrameScheduler({
       budgetMs: this.tuning.frameBudgetMs,
@@ -140,6 +144,17 @@ export class PixiBackend implements GlBackend {
       releasePictures: (node, state) => this.pictures.release(node, state),
       stats: this.stats,
     });
+    this.contextLoss = new ContextLossPolicy(reason => {
+      if (this.disposed) return;
+      console.error(`[gl] ${reason}: falling back to the DOM`);
+      onError(new Error(reason));
+    });
+  }
+
+  /** Starts Pixi (async: it loads its renderer modules); the scene builds meanwhile. */
+  start() {
+    if (this.started) return;
+    this.started = true;
     // Text waits for the fonts, and each for its face; a face that loads after a text was drawn
     // in a fallback redraws every text and picture
     this.fonts = new FontEpoch(
@@ -153,17 +168,6 @@ export class PixiBackend implements GlBackend {
         this.invalidate();
       }
     );
-    this.contextLoss = new ContextLossPolicy(reason => {
-      if (this.disposed) return;
-      console.error(`[gl] ${reason}: falling back to the DOM`);
-      onError(new Error(reason));
-    });
-  }
-
-  /** Starts Pixi (async: it loads its renderer modules); the scene builds meanwhile. */
-  start() {
-    if (this.started) return;
-    this.started = true;
     const { canvas } = this;
     const { width, height, dpr } = this.frame;
     const pixi = new WebGLRenderer();
@@ -174,7 +178,10 @@ export class PixiBackend implements GlBackend {
         height,
         resolution: dpr,
         autoDensity: false,
-        backgroundAlpha: 0,
+        // Opaque (Pixi then asks for a context without alpha) or transparent
+        ...(this.background
+          ? { background: this.background, backgroundAlpha: 1 }
+          : { backgroundAlpha: 0 }),
         antialias: this.tuning.antialias,
         preserveDrawingBuffer: this.tuning.preserveDrawingBuffer,
         // Our textures are evicted by the budget. Pixi's collector frees GPU textures unused for
@@ -225,7 +232,7 @@ export class PixiBackend implements GlBackend {
   dispose() {
     if (this.disposed) return;
     this.disposed = true;
-    this.fonts.dispose();
+    this.fonts?.dispose();
     this.contextLoss.dispose();
     this.canvas.removeEventListener('webglcontextlost', this.onContextLost);
     this.canvas.removeEventListener('webglcontextrestored', this.onContextRestored);
@@ -284,10 +291,8 @@ export class PixiBackend implements GlBackend {
     this.pixi.render({ container: stage });
     store.fetchWanted(node => {
       const state = this.sync.states.get(node);
-      if (!state || state.x === Infinity) return null;
-      // A node under a culled one keeps its last placement: placed this frame, or a picture's
-      // stand-in (placed by its bake, outside the tree)
-      if (state.syncedAt !== frame.index && !this.pictures.bakery.ofStandIn(node)) return null;
+      if (this.pictures.bakery.ofStandIn(node)) return 'near';
+      if (!state?.near) return null;
       return state.onScreen ? 'visible' : 'near';
     });
     this.evict();

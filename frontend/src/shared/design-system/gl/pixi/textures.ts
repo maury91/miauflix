@@ -483,22 +483,6 @@ export class TextureStore {
     this.bytes -= entry.bytes;
   }
 
-  /**
-   * Drops every text texture (a font face loaded: they were drawn with the fallback), returning
-   * the nodes that drew them, to paint again.
-   */
-  dropTexts() {
-    const users = new Set<GlNode>();
-    for (const entry of [...this.entries.values()])
-      if (entry.kind === 'text') {
-        for (const user of entry.users) users.add(user);
-        this.free(entry);
-      }
-    this.renders = this.renders.filter(render => this.entries.has(render.key));
-    this.rendersQueued = new Set(this.renders.map(render => render.key));
-    return users;
-  }
-
   /** Drops everything (a lost context took the pixels; disposal). Listeners stay. */
   clear() {
     for (const entry of this.entries.values()) {

@@ -70,6 +70,11 @@ export interface GlBackendOptions {
   /** The backend can't run (no WebGL, init failed): the surface falls back to DOM. */
   onError: (error: unknown) => void;
   tuning?: GlTuning;
+  /**
+   * An opaque canvas filled with this colour (CSS hex) before each frame, for a surface nothing
+   * shows through. Unset: transparent.
+   */
+  background?: string;
 }
 
 /** Settings a device class (or a debugging session) may change. */
@@ -86,4 +91,10 @@ export interface GlTuning {
    * for about 0.1 s (even while idle), and the copy cost no measurable fps there.
    */
   preserveDrawingBuffer?: boolean;
+  /**
+   * Keep the canvas transparent even with a `background` (for measuring). An opaque canvas spares
+   * the compositor blending it over the page: on the Tizen 5.5 TV, presenting the transparent
+   * full-screen canvas alone cost about 4 fps.
+   */
+  transparent?: boolean;
 }

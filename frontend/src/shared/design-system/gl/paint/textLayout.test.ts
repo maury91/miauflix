@@ -30,4 +30,22 @@ describe('wrapText', () => {
     expect(wrapText(measure, '  a   b  ', 100, 1)).toEqual(['a b']);
     expect(wrapText(measure, '   ', 100, 1)).toEqual([]);
   });
+
+  it('ellipsizes a long last line in a few measures', () => {
+    let measures = 0;
+    const counting = (text: string) => {
+      measures++;
+      return measure(text);
+    };
+    const words = Array.from({ length: 60 }, (_, index) => `word${index}`).join(' ');
+    const lines = wrapText(counting, words, 200, 3);
+    expect(lines).toHaveLength(3);
+    expect(lines[2].endsWith('…')).toBe(true);
+    expect(measure(lines[2])).toBeLessThanOrEqual(200);
+    const wrapping = measures;
+    measures = 0;
+    wrapText(counting, words, 200, 3);
+    // The wrap measures each candidate line; the ellipsis adds a binary search, not one per character
+    expect(wrapping).toBeLessThan(40);
+  });
 });
