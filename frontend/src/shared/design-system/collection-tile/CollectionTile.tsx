@@ -12,16 +12,15 @@ import { GlParentProvider, remPx, useGlNode, useGlPaint, useGlParent } from '../
 import { joinIds } from '../ids';
 import { type NavigableProps, useNavFocus } from '../navFocus';
 import { ProgressBar } from '../progress/Progress';
-import { radius } from '../tokens';
-import * as styles from './collectionTile.css';
 import {
   collectionTileArt,
   paintFocusRing,
   paintTileFrame,
   paintTileOverlay,
-  TILE_RATIO,
-  type TileVisualGl,
-} from './CollectionTile.gl';
+  type TileVisualArt,
+} from './collectionTile.art';
+import * as styles from './collectionTile.css';
+import { TILE_RATIO, tileMetrics } from './collectionTile.metrics';
 import { useFocusAnchor } from './focusAnchor';
 
 export type CollectionTileProps = Omit<
@@ -57,10 +56,10 @@ export type CollectionTileProps = Omit<
   /** Called when the pointer moves onto the tile. */
   onPointerFocus?: () => void;
   /**
-   * Inside a GlSurface: the visual's GL form (from the caller's `.gl.ts`). The whole tile is then
-   * one baked picture (CollectionTile.gl.ts) and `visual` isn't rendered.
+   * Inside a GlSurface: the visual's picture (from the caller's `*.art.ts`). The whole tile is then
+   * one baked picture (collectionTile.art.ts) and `visual` isn't rendered.
    */
-  glVisual?: TileVisualGl;
+  glVisual?: TileVisualArt;
 } & NavigableProps;
 
 /**
@@ -125,8 +124,8 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
         width: tileWidth,
         height: frameHeight,
         // On the TV the focus scale applies at once (collectionTile.css.ts)
-        scale: active ? 1.03 : 1,
-        opacity: props.disabled ? 0.4 : 1,
+        scale: active ? tileMetrics.focusScale : 1,
+        opacity: props.disabled ? tileMetrics.disabledOpacity : 1,
       });
       overlayNode.set({ z: 1 });
     });
@@ -188,7 +187,7 @@ export const CollectionTile = forwardRef<HTMLButtonElement, CollectionTileProps>
               node: visualNode,
               width: tileWidth,
               height: frameHeight,
-              radius: remPx(radius.md),
+              radius: remPx(tileMetrics.radius),
             }
           : null,
       [frameHeight, glParent, tileWidth, visualNode]

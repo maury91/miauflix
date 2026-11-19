@@ -303,7 +303,7 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
 ## Progress
 
 - **Phase 0 (done).** The spike as measured is the `tv-gl-spike` branch.
-- **Phase 1 (done, TV not re-measured).** `gl/` is split as above, with these differences:
+- **Phase 1 (done, measured: no change from the spike).** `gl/` is split as above, with these differences:
   - Text rasterizing is `paint/textRaster.ts` (canvas 2D, one scratch canvas); `Canvas2DPainter`
     and `RecordingPainter` come with Phases 2 and 7. Gradient and corner pixels are pure
     (`paint/rasters.ts`).
@@ -319,6 +319,29 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
   - One budget of 8 ms per frame; uploads keep their cap of 2 per frame within it.
   - `GlSurface` still imports the Pixi backend statically: the lazy chunk is Phase 3. `__glRows`
     (`exposeAs`) stays on the Tizen build so stats can be read there until Phase 8.
+  - Measuring it on the TV found the black flashes the spike had too (every GL layer blank for
+    about 0.1 s, a few times a minute): the swapped canvas buffer shown undrawn. The canvas now
+    keeps its buffer (`preserveDrawingBuffer`), at no measurable fps cost. `GlTuning` overrides
+    the engine's defaults for testing on the TV (tv-benchmarks.md, 2026-11-19).
+
+- **Phase 2 (done, measured: no change from Phase 1, no flashes).** Pictures are `artwork.art.ts`, `collectionTile.art.ts`,
+  `mediaTile.art.ts` and `carousel.art.ts` (the edges); the `.gl.ts` files are gone. They import
+  the engine's pure parts from `gl/art` and their numbers from `*.metrics.ts`
+  (`collectionTile.metrics.ts`: ratios, radius, focus scale and outline, disabled opacity,
+  progress and text insets; `artwork.metrics.ts`: the fallback title; `mediaTile.metrics.ts`:
+  `LOGO_BOX` from `CARD_IMAGE_LOGO_BOX`, via the browser-safe `card-image/v1` subpath), which the
+  CSS uses too. `tokens.tileScrim` holds the tile scrim's stops; `scrim.tile` is built from it.
+  `resolveMediaTileVisual` decides MediaTile's fallbacks for the DOM tile and the picture.
+  `RecordingPainter` (`gl/testing`) records draw calls: each picture has snapshot tests of its
+  variants. ESLint keeps `*.art.ts` and `*.metrics.ts` free of React, Pixi, styled-components,
+  `gl`'s index and CSS files. Differences from the plan:
+  - **Keys are generated from typed props, not recorded** (`artKey(name, props)`: every prop, in a
+    fixed order). A picture is a pure function of its props and the statuses of the images they
+    name, and the renderer already re-bakes a picture when one settles, so props are enough;
+    recording would run every drawing on every render and can't see branches a status hasn't
+    taken. Adding a prop to an art's props keys it without listing it anywhere.
+  - Carousel's `itemExtent` moved to `collectionGeometry.ts` and `placeTrack` into `Carousel.tsx`
+    (they move the track; they aren't drawing). The GL views come with Phase 3.
 
 ## Open decisions
 
@@ -326,7 +349,7 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
   GL mode is ever wanted, the boundaries above allow it, but it isn't planned.
 - **Text: baked at focused size, or an MSDF atlas?** Start with the first (cheap), switch only if
   the TV shows blur.
-- **Recorded keys vs typed keys.** Recorded keys remove a class of bugs; if recording every picture
-  on each render shows in the per-move trace, fall back to keys generated from typed props.
+- **Recorded keys vs typed keys.** Decided in Phase 2: keys generated from typed props (see
+  Progress).
 - **The DOM tile bitmap.** Worth keeping only if it beats the layers it removes on the TV; the web
   probably doesn't need it.

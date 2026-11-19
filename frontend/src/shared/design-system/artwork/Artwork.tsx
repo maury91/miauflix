@@ -2,8 +2,8 @@ import { type ReactNode, useEffect, useLayoutEffect, useState } from 'react';
 
 import { remPx, useGlImageStatus, useGlNode, useGlPaint, useGlParent } from '../gl';
 import { radius } from '../tokens';
+import { drawArtwork } from './artwork.art';
 import * as styles from './artwork.css';
-import { drawArtwork } from './Artwork.gl';
 import { useImageStatus } from './useImageStatus';
 
 export interface ArtworkProps {

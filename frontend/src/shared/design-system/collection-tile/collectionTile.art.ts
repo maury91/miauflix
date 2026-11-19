@@ -1,19 +1,23 @@
-import { type GlArt, hex, type Painter, remPx, type TextSpec } from '../gl';
-import { color, focusRing, radius, scrim, space, typeScale } from '../tokens';
+import { artKey, type GlArt, hex, type Painter, remPx, type TextSpec } from '../gl/art';
+import { color, tileScrim, typeScale } from '../tokens';
+import {
+  outlineDistanceRem,
+  TILE_RATIO,
+  tileMetrics,
+  type TileRatio,
+} from './collectionTile.metrics';
 
-export const TILE_RATIO = { landscape: 9 / 16, portrait: 3 / 2, square: 1 } as const;
 const FRAME = hex(color.surfaceRaised);
 const OUTLINE = hex(color.focusOutline);
 const TRACK = hex(color.borderSubtle);
 const BRAND = hex(color.brand);
-const SCRIM_FROM = hex('rgba(10, 13, 15, 0)');
-// The last stop of scrim.tile
-const SCRIM_TO = hex(/rgba\([^)]*\) 100%/.exec(scrim.tile)?.[0].replace(' 100%', '') ?? '#000');
+const SCRIM_FROM = hex(tileScrim.from.color);
+const SCRIM_TO = hex(tileScrim.to.color);
 
-export interface CollectionTileGlProps {
+export interface CollectionTileArtProps {
   label: string;
   supportingText?: string;
-  ratio?: 'landscape' | 'portrait' | 'square';
+  ratio?: TileRatio;
   labelPlacement?: 'below' | 'overlay';
   labelHidden?: boolean;
   progress?: number;
@@ -22,18 +26,18 @@ export interface CollectionTileGlProps {
 }
 
 /** What the tile's visual draws in the frame: whether it already shows the name (a logo). */
-export interface TileVisualGl {
-  /** Names what it draws (its sources): part of the tile's picture key. */
+export interface TileVisualArt {
+  /** Names what it draws (its props, artKey): part of the tile's picture key. */
   key: string;
   draw(painter: Painter, box: { width: number; height: number }): { namesTile: boolean };
 }
 
 /**
- * CollectionTile's GL form: the frame, the visual, scrim, progress and text in one picture,
- * baked once (see GlArt). The focus outline and scale aren't in it: they change with focus.
+ * CollectionTile's picture: the frame, the visual, scrim, progress and text in one picture, baked
+ * once (see GlArt). The focus outline and scale aren't in it: they change with focus.
  */
-export function collectionTileArt(
-  {
+export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVisualArt): GlArt {
+  const {
     label,
     supportingText,
     ratio = 'landscape',
@@ -41,14 +45,12 @@ export function collectionTileArt(
     labelHidden = false,
     progress,
     width,
-  }: CollectionTileGlProps,
-  visual?: TileVisualGl
-): GlArt {
+  } = props;
   const frameHeight = width * TILE_RATIO[ratio];
-  const corner = remPx(radius.md);
+  const corner = remPx(tileMetrics.radius);
   const below = labelPlacement === 'below';
   return {
-    key: `tile|${width}|${ratio}|${labelPlacement}|${labelHidden ? 1 : 0}|${label}|${supportingText ?? ''}|${progress ?? ''}|${visual?.key ?? ''}`,
+    key: artKey('tile', { ...props, visual: visual?.key }),
     width,
     height: below ? frameHeight + belowTextHeight(Boolean(supportingText)) : frameHeight,
     corners: { x: 0, y: 0, width, height: frameHeight, radius: corner },
@@ -76,28 +78,28 @@ function belowTextHeight(supporting: boolean) {
   const line = (style: { fontSize: string; lineHeight: string }) =>
     Math.ceil(remPx(style.fontSize) * parseFloat(style.lineHeight)) + 2;
   return (
-    remPx(space.xs) +
+    remPx(tileMetrics.belowGap) +
     line(typeScale.label) +
-    (supporting ? remPx(space['2xs']) + line(typeScale.caption) : 0)
+    (supporting ? remPx(tileMetrics.supportingGap) + line(typeScale.caption) : 0)
   );
 }
 
 /** The frame's fill, for live (unbaked) tiles. */
 export function paintTileFrame(painter: Painter, width: number, height: number) {
-  painter.rect(0, 0, width, height, FRAME, { radius: remPx(radius.md) });
+  painter.rect(0, 0, width, height, FRAME, { radius: remPx(tileMetrics.radius) });
 }
 
 /** The focus outline around a frame of `width` × `height`. */
 export function paintFocusRing(painter: Painter, width: number, height: number) {
-  const corner = remPx(radius.md);
-  const distance = remPx(focusRing.width) + remPx(focusRing.offset);
+  const corner = remPx(tileMetrics.radius);
+  const distance = remPx(`${outlineDistanceRem}rem`);
   painter.rect(-distance, -distance, width + distance * 2, height + distance * 2, OUTLINE, {
     radius: corner + distance,
-    border: remPx(focusRing.width),
+    border: remPx(tileMetrics.outlineWidth),
   });
 }
 
-/** The GL overlay: scrim, progress hairline and text, over the visual. */
+/** The overlay: scrim, progress hairline and text, over the visual. */
 export function paintTileOverlay(
   painter: Painter,
   {
@@ -107,7 +109,7 @@ export function paintTileOverlay(
     supportingText,
     labelPlacement,
     progress,
-    radius: corner = remPx(radius.md),
+    radius: corner = remPx(tileMetrics.radius),
   }: {
     width: number;
     height: number;
@@ -121,12 +123,13 @@ export function paintTileOverlay(
 ) {
   const overlay = labelPlacement === 'overlay';
   if (overlay) {
-    const top = height * 0.35;
-    painter.gradient(0, top, width, height - top, SCRIM_FROM, SCRIM_TO, 'y', { radius: corner });
+    const top = height * tileScrim.from.at;
+    const bottom = height * tileScrim.to.at;
+    painter.gradient(0, top, width, bottom - top, SCRIM_FROM, SCRIM_TO, 'y', { radius: corner });
   }
   if (progress !== undefined) {
-    const inset = remPx(space.xs);
-    const barHeight = remPx('0.25rem');
+    const inset = remPx(tileMetrics.progressInset);
+    const barHeight = remPx(tileMetrics.progressHeight);
     const barWidth = width - inset * 2;
     const y = height - inset - barHeight;
     painter.rect(inset, y, barWidth, barHeight, TRACK, { radius: barHeight / 2 });
@@ -135,7 +138,8 @@ export function paintTileOverlay(
         radius: barHeight / 2,
       });
   }
-  const side = remPx(space.sm);
+  const side = remPx(tileMetrics.overlayInset);
+  const gap = remPx(tileMetrics.supportingGap);
   const maxWidth = width - side * 2;
   const labelSpec: TextSpec | null = label
     ? {
@@ -159,15 +163,16 @@ export function paintTileOverlay(
     : null;
   if (overlay) {
     // Bottom up: supporting text, then the label above it
-    let bottom = height - (progress !== undefined ? remPx(space.lg) : side);
+    let bottom =
+      height - (progress !== undefined ? remPx(tileMetrics.overlayInsetOverProgress) : side);
     if (supportingSpec) {
       const drawn = painter.text(supportingSpec, side, bottom, { anchorY: 1 });
-      bottom -= (drawn?.height ?? 0) + remPx(space['2xs']);
+      bottom -= (drawn?.height ?? 0) + gap;
     }
     if (labelSpec) painter.text(labelSpec, side, bottom, { anchorY: 1 });
   } else {
-    let top = height + remPx(space.xs);
+    let top = height + remPx(tileMetrics.belowGap);
     if (labelSpec) top += painter.text(labelSpec, 0, top)?.height ?? 0;
-    if (supportingSpec) painter.text(supportingSpec, 0, top + remPx(space['2xs']));
+    if (supportingSpec) painter.text(supportingSpec, 0, top + gap);
   }
 }

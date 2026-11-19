@@ -9,7 +9,7 @@ import { subtitleLanguageForMedia } from '@features/player/lib/subtitle-language
 import { PlayerView } from '@features/player/ui/PlayerView';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
-import { builtForTizen, glRowsEnabled } from '@shared/config/constants';
+import { builtForTizen, glRowsEnabled, glTuningOverride } from '@shared/config/constants';
 import { GlFocusAnchor, tokens } from '@shared/design-system';
 import {
   easeRowSlide,
@@ -19,6 +19,7 @@ import {
   type GlScrollerHandle,
   GlSurface,
   glSurfaceSupported,
+  type GlTuning,
   remPx,
 } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
@@ -470,6 +471,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                   height={windowHeight}
                   prefetch={{ x: geometry.itemWidth * 2, y: rowHeight }}
                   exposeAs={import.meta.env.DEV || builtForTizen ? '__glRows' : undefined}
+                  tuning={glTuningOverride as GlTuning | undefined}
                 >
                   {/* The hero under the rows: its backdrops live, its shade baked; together
                       what shows through the rows' fade edge */}

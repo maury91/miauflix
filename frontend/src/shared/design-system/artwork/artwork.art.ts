@@ -1,8 +1,8 @@
-import type { ImageStatus, Painter } from '../gl';
-import { remPx } from '../gl';
-import { color, space, typeScale } from '../tokens';
+import { type ImageStatus, type Painter, remPx } from '../gl/art';
+import { color } from '../tokens';
+import { artworkFallback } from './artwork.metrics';
 
-export interface ArtworkGlProps {
+export interface ArtworkArtProps {
   src?: string | null;
   /** Drawn under `src` while it loads: the version it replaces (Artwork's `holdPrevious`). */
   previous?: string | null;
@@ -17,27 +17,28 @@ export interface ArtworkGlProps {
 }
 
 /**
- * Artwork's GL form: the image, or its fallback text once it fails. Returns the image's status
+ * Artwork's picture: the image, or its fallback text once it fails. Returns the image's status
  * (`failed` without one), so a caller can fall back further.
  */
 export function drawArtwork(
   painter: Painter,
-  { src, previous, width, height, fit = 'cover', radius = 0, fallbackText }: ArtworkGlProps
+  { src, previous, width, height, fit = 'cover', radius = 0, fallbackText }: ArtworkArtProps
 ): ImageStatus {
   // An image still loading draws nothing, so the previous one shows until it covers it
   if (previous) painter.image(previous, 0, 0, width, height, { radius, fit });
   const status = src ? painter.image(src, 0, 0, width, height, { radius, fit }) : 'failed';
   if (status !== 'failed' || !fallbackText) return status;
-  const padding = remPx(space.md);
+  const padding = remPx(artworkFallback.padding);
+  const type = artworkFallback.type;
   painter.text(
     {
       text: fallbackText,
-      size: remPx(typeScale.heading.fontSize),
-      weight: typeScale.heading.fontWeight,
-      lineHeight: parseFloat(typeScale.heading.lineHeight),
+      size: remPx(type.fontSize),
+      weight: type.fontWeight,
+      lineHeight: parseFloat(type.lineHeight),
       color: color.textSecondary,
       maxWidth: width - padding * 2,
-      maxLines: 3,
+      maxLines: artworkFallback.maxLines,
       align: 'center',
     },
     width / 2,

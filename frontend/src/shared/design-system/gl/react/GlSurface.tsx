@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import type { GlBackend } from '../core/renderer';
+import type { GlBackend, GlTuning } from '../core/renderer';
 import { GlNode } from '../core/scene';
 import { PixiBackend } from '../pixi/backend';
 import { GlLayers, GlLayersProvider, GlParentProvider } from './hooks';
@@ -23,6 +23,8 @@ export interface GlSurfaceProps {
   prefetch?: { x: number; y: number };
   /** Debugging: the backend (stats, last error) on `window[exposeAs]`. */
   exposeAs?: string;
+  /** Read once, when the surface starts. */
+  tuning?: GlTuning;
   /** Layers (GlLayer, GlScroller) and the components drawn into them. */
   children: ReactNode;
 }
@@ -39,6 +41,7 @@ export function GlSurface({
   style,
   prefetch = { x: 0, y: 0 },
   exposeAs,
+  tuning,
   children,
 }: GlSurfaceProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -57,6 +60,7 @@ export function GlSurface({
         width,
         height,
         dpr: window.devicePixelRatio || 1,
+        tuning,
         onError: error => {
           console.error('[gl] surface unavailable', error);
           setFailed(true);

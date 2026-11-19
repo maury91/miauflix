@@ -1,7 +1,7 @@
 import { type ReactNode, useLayoutEffect, useMemo } from 'react';
 
 import { useGlLayer, useGlNode, useGlPaint } from '../gl';
-import { paintFocusRing } from './CollectionTile.gl';
+import { paintFocusRing } from './collectionTile.art';
 import { type FocusAnchor, FocusAnchorContext } from './focusAnchor';
 
 export interface GlFocusAnchorProps {

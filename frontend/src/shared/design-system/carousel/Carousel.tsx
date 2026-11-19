@@ -11,14 +11,22 @@ import {
   useRef,
 } from 'react';
 
-import { type GlNode, GlParentProvider, remPx, useGlNode, useGlPaint, useGlParent } from '../gl';
+import {
+  easeStandard,
+  type GlNode,
+  GlParentProvider,
+  remPx,
+  useGlNode,
+  useGlPaint,
+  useGlParent,
+} from '../gl';
 import { IconButton } from '../icon-button/IconButton';
 import { SurfaceContextProvider } from '../surface';
 import { duration, space } from '../tokens';
+import { paintCarouselEdges } from './carousel.art';
 import * as styles from './carousel.css';
-import { itemExtent, paintCarouselEdges, placeTrack } from './Carousel.gl';
 import { type CarouselNavigation, maxLeading, useCarouselPosition } from './carouselNavigation';
-import type { CollectionGeometry } from './collectionGeometry';
+import { type CollectionGeometry, itemExtent } from './collectionGeometry';
 
 import ChevronLeftIcon from '~icons/mdi/chevron-left';
 import ChevronRightIcon from '~icons/mdi/chevron-right';
@@ -373,3 +381,18 @@ const CarouselSlot = memo(function CarouselSlot({
     </li>
   );
 });
+
+/**
+ * GL: moves the track so `leadingIndex` is the left-most whole item (at once the first time). The
+ * track's X is the only thing that moves when the carousel pages.
+ */
+function placeTrack(
+  track: GlNode,
+  leadingIndex: number,
+  { itemWidth, gap }: CollectionGeometry,
+  animate: boolean
+) {
+  const x = -leadingIndex * (itemWidth + gap);
+  if (animate) track.animate('x', x, parseFloat(duration.fast), easeStandard);
+  else track.set({ x });
+}

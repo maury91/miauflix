@@ -18,7 +18,7 @@ export interface TextSpec {
 export type ImageStatus = 'loading' | 'ready' | 'failed';
 
 /**
- * A component's picture, from its `.gl.ts` file: what its props draw, named by `key`. The renderer
+ * A component's picture, from its `*.art.ts` file: what its props draw, named by `key` (artKey). The renderer
  * runs `draw` once everything it asks for (images, texts) is ready or failed, bakes the result
  * into a texture, and every node showing the same key draws that one sprite. Immutable: new
  * props, a new key.

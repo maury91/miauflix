@@ -20,6 +20,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - Home: Continue watching shows every title you are watching, even with many in progress. On a TV with about 17 titles, several cards used to stay missing because the app asked for each title separately and the server turned the extra requests away. Its cards never stay loading when the server answers with something unexpected
 - The catalog service's Docker image starts without internet access: it used to download its image library from the package registry on every start, and stopped with an error when it could not
 - Samsung TVs with the WebGL rows: Home no longer stays black when the TV takes the graphics memory back; it redraws itself at once
+- Samsung TVs with the WebGL rows: Home's rows and hero no longer blink black for a moment every so often
 - Rows from Trakt lists that also hold episodes (like the Marvel Cinematic Universe list) no longer turn into empty cards after the first twenty: they show every film and show in the list, with no empty cards in between, and end where the list does
 - Home's hero no longer shows the left edge of its picture: the shade is fully dark up to where the picture starts
 - On Samsung TVs, rows above the ones you passed no longer show up empty (black) when you go back up quickly: they keep the cards they had
@@ -62,7 +63,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 - `bun run test:backend:e2e` and `bun run test:frontend:snapshots:update` pass again, and the snapshot update no longer reinstalls every dependency on each run
 - Samsung TVs, experimental: a build option (`MIAUFLIX_TV_GL_ROWS=true` for `scripts/package-tizen.sh`, off by default) draws Home's rows with WebGL instead of the page. Holding Right runs at 33–40 fps instead of 14–17, and moving between rows at 47–51 instead of 27–35. Pointer and screen-reader highlights don't line up with the drawn rows yet. With the option, Home's hero is drawn the same way, with PixiJS, each card is drawn once and reused, and the focus outline stays in one place while the cards slide under it: holding Right runs at 48 fps, a first pass along a row at 51–60 and going back at 58–60
-- The WebGL drawing behind that option is split into small, separately tested parts, with no change on screen; the spike as measured is kept on the `tv-gl-spike` branch for comparison
+- The WebGL drawing behind that option is split into small, separately tested parts, with no change on screen; the spike as measured is kept on the `tv-gl-spike` branch for comparison. Each tile's look is now described once and shared by the page and the WebGL drawing, so the two can't drift apart
 - Bun now installs the dependencies everywhere (Docker images, CI, local setup): run `bun install` instead of `npm install`. `bun.lock` is the only lockfile; `package-lock.json` is gone
 - Code is easier to find: backend services and the web app's Home screen are reorganized by area (player, title details, progress, notifications, Trakt), with no change in behaviour
 - Backend layers point one way: services no longer depend on route files, routes no longer reach into repositories, and the largest services are wired with named options instead of long argument lists. No change in behaviour

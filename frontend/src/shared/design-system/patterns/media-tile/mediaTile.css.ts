@@ -1,6 +1,10 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-import { color, space, typeScale } from '../../tokens';
+import { artworkFallback } from '../../artwork/artwork.metrics';
+import { color } from '../../tokens';
+import { LOGO_BOX } from './mediaTile.metrics';
+
+const percent = (share: number) => `${Math.round(share * 1e6) / 1e4}%`;
 
 /**
  * MediaTile (docs/plans/style-guide.md, section 8.6): the artwork layers inside a CollectionTile's
@@ -10,20 +14,19 @@ import { color, space, typeScale } from '../../tokens';
  */
 
 /**
- * The logo's box; the image keeps its own ratio inside it, anchored at the bottom start. It ends
- * above the overlay line (an episode such as `S1 E1`, from about 70% of the height), so the two
- * never overlap. Card images draw their logo in the same box (CARD_IMAGE_LOGO_BOX in
- * @miauflix/service-contracts): keep them in step.
+ * The logo's box (LOGO_BOX, shared with card images); the image keeps its own ratio inside it,
+ * anchored at the bottom start. It ends above the overlay line (an episode such as `S1 E1`, from
+ * about 70% of the height), so the two never overlap.
  */
 export const logo = style({
   position: 'absolute',
-  left: '5%',
-  top: '18%',
-  width: '64%',
-  height: '48%',
+  left: percent(LOGO_BOX.left),
+  top: percent(LOGO_BOX.top),
+  width: percent(LOGO_BOX.width),
+  height: percent(LOGO_BOX.height),
   pointerEvents: 'none',
   selectors: {
-    '[dir="rtl"] &': { left: 'auto', right: '5%' },
+    '[dir="rtl"] &': { left: 'auto', right: percent(LOGO_BOX.left) },
   },
 });
 
@@ -40,12 +43,12 @@ globalStyle(`[dir="rtl"] ${logo} > img`, { objectPosition: 'right bottom' });
 export const fallbackTitle = style({
   display: '-webkit-box',
   WebkitBoxOrient: 'vertical',
-  WebkitLineClamp: 3,
+  WebkitLineClamp: artworkFallback.maxLines,
   overflow: 'hidden',
-  padding: space.md,
+  padding: artworkFallback.padding,
   color: color.textSecondary,
-  fontSize: typeScale.heading.fontSize,
-  lineHeight: typeScale.heading.lineHeight,
-  fontWeight: typeScale.heading.fontWeight,
+  fontSize: artworkFallback.type.fontSize,
+  lineHeight: artworkFallback.type.lineHeight,
+  fontWeight: artworkFallback.type.fontWeight,
   textAlign: 'center',
 });

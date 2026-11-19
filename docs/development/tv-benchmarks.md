@@ -531,3 +531,44 @@ texts and fetched its logo.
   `replaceAll` (85) (`gl/legacy.ts`), and Pixi's GPU garbage collector re-uploads textures unused
   for a minute from their source, which the renderer had already closed: cards went blank after a
   minute (the collector is off; the renderer has its own 64 MB budget).
+
+## 2026-11-19: GL engine split (Phase 1) and black flashes
+
+Same TV and server for every run, `scripts/tv-bench.mjs`, 3 cold runs per scenario. The spike is
+the `tv-gl-spike` branch (`index-BhR5SHS8.js`), Phase 1 the split engine.
+
+| Scenario                  | Spike     | Phase 1   | Phase 1, buffer copied |
+| ------------------------- | --------- | --------- | ---------------------- |
+| Row 3 first pass, 4×Right | 49–51 fps | 47–51 fps | 46–49 fps              |
+| Row 3 back, 4×Left        | 53–57 fps | 51–54 fps | 53–55 fps              |
+| Held Right, 2.5 s         | 26–32 fps | 20–34 fps | 24–48 fps              |
+| 3×Down                    | 36–38 fps | 35–52 fps | 34–45 fps              |
+
+The split costs nothing measurable (going back may be 2–3 fps lower, within the run-to-run noise).
+
+### Black flashes
+
+Both builds showed every GL layer blank for about 0.1 s, a few times a minute, also while idle on
+a title. A probe reading the canvas each frame never caught an empty frame, a lost context or a
+canvas resize; the TV refuses the multisampled canvas (`antialias` false in the context
+attributes), and halving the texture budget to 32 MB didn't remove them. Flashes counted by eye
+over one-minute segments of the same moves, alternating:
+
+| Canvas buffer                         | Segments | Flashes                                            |
+| ------------------------------------- | -------: | -------------------------------------------------- |
+| Swapped (`preserveDrawingBuffer` off) |        7 | 1, 0, ~3, 1, 2 (double), 3 during a benchmark pass |
+| Copied (`preserveDrawingBuffer` on)   |        3 | 0, 0, 0                                            |
+
+The swapped buffer is shown undrawn now and then (the compositor presents the canvas without a new
+frame); with the buffer copied there is nothing undrawn to show. It's now the default
+(`GlTuning.preserveDrawingBuffer`), at no measurable cost. Switches for testing on the TV:
+`localStorage['miauflix:gl-tuning']` as JSON (`textureBudget`, `antialias`, `frameBudgetMs`,
+`preserveDrawingBuffer`), read when the surface starts, in the Tizen and development builds only.
+
+### Phase 2 (pictures and metrics)
+
+Build `index-C1URdnHu.js`, buffer copied, same session as above. Row 3 first pass 45–50 fps,
+back 49–53, held Right 27–35, 3×Down 34–40; 27 pictures baked per standard run, 0 errors, 46–53 MB
+of textures. Within the run-to-run noise of Phase 1: moving the pictures to `*.art.ts` and
+generating their keys costs nothing measurable. No flashes in two more one-minute segments watched on this build
+(5 segments in all with the buffer copied, none with a flash).

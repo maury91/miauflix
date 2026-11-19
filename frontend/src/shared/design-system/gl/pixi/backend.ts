@@ -4,7 +4,7 @@ import './compat/legacy';
 import { WebGLRenderer } from 'pixi.js';
 
 import { FrameBudget, FrameScheduler } from '../core/frameScheduler';
-import type { GlBackend, GlBackendOptions, GlRendererStats } from '../core/renderer';
+import type { GlBackend, GlBackendOptions, GlRendererStats, GlTuning } from '../core/renderer';
 import { type GlNode, stepAnimations } from '../core/scene';
 import type { ImageStatus } from '../paint/painter';
 import { pickEvictions, TEXTURE_BUDGET } from '../resources/textureBudget';
@@ -68,13 +68,20 @@ export class PixiBackend implements GlBackend {
   private fontsReady = typeof document.fonts === 'undefined' || document.fonts.status === 'loaded';
   private started = false;
   private disposed = false;
+  private readonly tuning: Required<GlTuning>;
 
-  constructor({ canvas, width, height, dpr, onError }: GlBackendOptions) {
+  constructor({ canvas, width, height, dpr, onError, tuning }: GlBackendOptions) {
     this.canvas = canvas;
     this.onError = onError;
+    this.tuning = {
+      textureBudget: tuning?.textureBudget ?? TEXTURE_BUDGET,
+      antialias: tuning?.antialias ?? true,
+      frameBudgetMs: tuning?.frameBudgetMs ?? FRAME_BUDGET_MS,
+      preserveDrawingBuffer: tuning?.preserveDrawingBuffer ?? true,
+    };
     this.frame = { index: 0, now: 0, dpr, width, height };
     this.scheduler = new FrameScheduler({
-      budgetMs: FRAME_BUDGET_MS,
+      budgetMs: this.tuning.frameBudgetMs,
       frame: this.draw,
       onError: error => {
         this.stats.errors++;
@@ -141,7 +148,8 @@ export class PixiBackend implements GlBackend {
         resolution: dpr,
         autoDensity: false,
         backgroundAlpha: 0,
-        antialias: true,
+        antialias: this.tuning.antialias,
+        preserveDrawingBuffer: this.tuning.preserveDrawingBuffer,
         // Our textures are evicted by the budget. Pixi's collector frees GPU textures unused for
         // a minute and re-uploads them from their source, but the bitmaps are closed after
         // upload: tiles came back empty
@@ -268,7 +276,8 @@ export class PixiBackend implements GlBackend {
   /** Over the budget: unused textures first, then pictures only far nodes show, LRU. */
   private evict() {
     const bytes = this.store.bytes + this.pictures.bytes;
-    if (bytes <= TEXTURE_BUDGET) return;
+    const budget = this.tuning.textureBudget;
+    if (bytes <= budget) return;
     const candidates = [
       ...this.store.unused().map(entry => ({
         lastUsed: entry.lastUsed,
@@ -277,6 +286,6 @@ export class PixiBackend implements GlBackend {
       })),
       ...this.pictures.evictable(),
     ];
-    for (const candidate of pickEvictions(candidates, bytes, TEXTURE_BUDGET)) candidate.free();
+    for (const candidate of pickEvictions(candidates, bytes, budget)) candidate.free();
   }
 }

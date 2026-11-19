@@ -10,6 +10,19 @@ export const glRowsEnabled =
     typeof localStorage !== 'undefined' &&
     localStorage.getItem('miauflix:gl-rows') === '1');
 /**
+ * Debugging the GL surface on the TV (and in development): localStorage['miauflix:gl-tuning'] as
+ * JSON, e.g. {"antialias": false, "textureBudget": 33554432}, read at start.
+ */
+export const glTuningOverride: Record<string, unknown> | undefined = (() => {
+  if (!(builtForTizen || import.meta.env.DEV) || typeof localStorage === 'undefined') return;
+  try {
+    const raw = localStorage.getItem('miauflix:gl-tuning');
+    return raw ? (JSON.parse(raw) as Record<string, unknown>) : undefined;
+  } catch {
+    return undefined;
+  }
+})();
+/**
  * The backend. The TV app uses the server picked on the TV (see features/server-discovery), or
  * the one it was packaged with; '' until one is picked.
  */

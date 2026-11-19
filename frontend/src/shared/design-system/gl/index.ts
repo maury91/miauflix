@@ -1,6 +1,6 @@
 export { hex, type Rgba } from './core/color';
 export { cubicBezier, easeRowSlide, easeStandard, type Easing } from './core/easing';
-export type { GlRenderer, GlRendererStats } from './core/renderer';
+export type { GlRenderer, GlRendererStats, GlTuning } from './core/renderer';
 export { GlNode } from './core/scene';
 export { remPx } from './core/units';
 export type { GlArt, ImageStatus, Painter, TextSpec } from './paint/painter';

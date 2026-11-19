@@ -69,4 +69,21 @@ export interface GlBackendOptions {
   dpr: number;
   /** The backend can't run (no WebGL, init failed): the surface falls back to DOM. */
   onError: (error: unknown) => void;
+  tuning?: GlTuning;
+}
+
+/** Settings a device class (or a debugging session) may change. */
+export interface GlTuning {
+  /** Texture memory kept, bytes. */
+  textureBudget?: number;
+  /** Multisampled canvas (smoother geometry edges; 4× the canvas's memory). */
+  antialias?: boolean;
+  /** Background work per frame, ms. */
+  frameBudgetMs?: number;
+  /**
+   * Keep the canvas's buffer between frames (copied to the screen instead of swapped). On by
+   * default: on the Tizen 5.5 TV a swapped buffer sometimes showed undrawn, every GL layer blank
+   * for about 0.1 s (even while idle), and the copy cost no measurable fps there.
+   */
+  preserveDrawingBuffer?: boolean;
 }

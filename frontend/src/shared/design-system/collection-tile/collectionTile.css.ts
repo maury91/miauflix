@@ -1,6 +1,7 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-import { color, focusRing, fontFamily, radius, scrim, space, typeScale } from '../tokens';
+import { color, fontFamily, scrim, space, typeScale } from '../tokens';
+import { outlineDistanceRem, TILE_RATIO, tileMetrics } from './collectionTile.metrics';
 
 /**
  * CollectionTile (docs/plans/style-guide.md, sections 5 and 8.4): one primary action led by its
@@ -18,8 +19,8 @@ import { color, focusRing, fontFamily, radius, scrim, space, typeScale } from '.
  */
 
 const rem = (value: string) => parseFloat(value);
-const outlineDistance = rem(focusRing.width) + rem(focusRing.offset);
-const outlineInset = `-${outlineDistance}rem`;
+const outlineInset = `-${outlineDistanceRem}rem`;
+const percent = (ratio: number) => `${Math.round(ratio * 1e6) / 1e4}%`;
 const focusMotion = '150ms cubic-bezier(0, 0, 0.2, 1)';
 
 export const tile = style({
@@ -43,7 +44,7 @@ export const tile = style({
   transform: 'scale(1)',
   transition: `transform ${focusMotion}`,
   selectors: {
-    '&[data-focused]:not(:disabled)': { zIndex: 1, transform: 'scale(1.03)' },
+    '&[data-focused]:not(:disabled)': { zIndex: 1, transform: `scale(${tileMetrics.focusScale})` },
     '&:disabled': { cursor: 'default' },
     // On the TV the scale applies at once: an animated scale lifts the old and new tiles onto
     // layers of their own and makes the compositor assume they overlap everything after them.
@@ -59,13 +60,13 @@ export const frame = style({
   position: 'relative',
   display: 'block',
   height: 0,
-  borderRadius: radius.md,
+  borderRadius: tileMetrics.radius,
   backgroundColor: color.surfaceRaised,
   selectors: {
-    [`${tile}[data-ratio="landscape"] &`]: { paddingTop: '56.25%' },
-    [`${tile}[data-ratio="portrait"] &`]: { paddingTop: '150%' },
-    [`${tile}[data-ratio="square"] &`]: { paddingTop: '100%' },
-    [`${tile}:disabled &`]: { opacity: 0.4 },
+    [`${tile}[data-ratio="landscape"] &`]: { paddingTop: percent(TILE_RATIO.landscape) },
+    [`${tile}[data-ratio="portrait"] &`]: { paddingTop: percent(TILE_RATIO.portrait) },
+    [`${tile}[data-ratio="square"] &`]: { paddingTop: percent(TILE_RATIO.square) },
+    [`${tile}:disabled &`]: { opacity: tileMetrics.disabledOpacity },
     // The focus outline: a pseudo-element following the radius, toggled by opacity
     '&::after': {
       content: '""',
@@ -74,8 +75,8 @@ export const frame = style({
       right: outlineInset,
       bottom: outlineInset,
       left: outlineInset,
-      border: `${focusRing.width} solid ${color.focusOutline}`,
-      borderRadius: `${rem(radius.md) + outlineDistance}rem`,
+      border: `${tileMetrics.outlineWidth} solid ${color.focusOutline}`,
+      borderRadius: `${rem(tileMetrics.radius) + outlineDistanceRem}rem`,
       opacity: 0,
       pointerEvents: 'none',
     },
@@ -124,24 +125,26 @@ export const badge = style({
 /** The watched share: a hairline at the frame's bottom, inside the radius. */
 export const progress = style({
   position: 'absolute',
-  right: space.xs,
-  bottom: space.xs,
-  left: space.xs,
+  right: tileMetrics.progressInset,
+  bottom: tileMetrics.progressInset,
+  left: tileMetrics.progressInset,
 });
 
 export const text = style({
   display: 'block',
   minWidth: 0,
   selectors: {
-    [`${tile}[data-label="below"] &`]: { paddingTop: space.xs },
+    [`${tile}[data-label="below"] &`]: { paddingTop: tileMetrics.belowGap },
     [`${tile}[data-label="overlay"] &`]: {
       position: 'absolute',
-      right: space.sm,
-      bottom: space.sm,
-      left: space.sm,
+      right: tileMetrics.overlayInset,
+      bottom: tileMetrics.overlayInset,
+      left: tileMetrics.overlayInset,
     },
     // Leaves room for the progress hairline under the text
-    [`${tile}[data-label="overlay"][data-progress] &`]: { bottom: space.lg },
+    [`${tile}[data-label="overlay"][data-progress] &`]: {
+      bottom: tileMetrics.overlayInsetOverProgress,
+    },
     [`${tile}:disabled &`]: { color: color.textDisabled },
   },
 });
@@ -162,7 +165,7 @@ export const supporting = style({
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
-  marginTop: space['2xs'],
+  marginTop: tileMetrics.supportingGap,
   color: color.textSecondary,
   fontSize: typeScale.caption.fontSize,
   lineHeight: typeScale.caption.lineHeight,

@@ -264,6 +264,30 @@ export default [
     },
   },
   {
+    // A component's picture and metrics are pure: any Painter draws them (GL, canvas 2D, tests) and
+    // the CSS evaluates the metrics at build time
+    files: ['frontend/src/**/*.{art,metrics}.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            { name: 'styled-components', message: 'Pictures and metrics have no DOM styles.' },
+            { name: 'pixi.js', message: 'Pictures draw on a Painter: only gl/pixi imports Pixi.' },
+            { name: 'react', message: 'Pictures and metrics are plain functions and numbers.' },
+          ],
+          patterns: [
+            {
+              regex: '(^|/)gl(/index)?$|/gl/(pixi|react)/',
+              message: "Import the engine's pure parts from 'gl/art'.",
+            },
+            { group: ['*.css', '**/*.css'], message: 'Metrics feed the CSS, not the other way.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.ts', '**/*.spec.{ts,tsx}'],
     languageOptions: {
       globals: {
