@@ -46,6 +46,10 @@ export class PictureBaker {
     return this.bakery.picture(art, frame.dpr, frame.index);
   }
 
+  private failedForGood(picture: Picture<RenderTexture>) {
+    return (this.failures.get(picture) ?? 0) >= BAKE_ATTEMPTS;
+  }
+
   held(node: GlNode) {
     const picture = this.heldBy.get(node);
     // Still baked: not freed, evicted or cleared since
@@ -90,8 +94,27 @@ export class PictureBaker {
     for (let n = 0; n < due.length && budget.allows(n); n++) {
       const { picture, shown } = due[n];
       this.bakery.take(picture);
-      budget.run('bake', () => this.bake(picture, shown));
+      try {
+        budget.run('bake', () => this.bake(picture, shown));
+      } catch (error) {
+        // Its draw or render threw: tried again, not lost from the queue (nor the frame)
+        this.failed(picture, error);
+      }
     }
+  }
+
+  /** A bake threw: queued again a few times, then its users keep its placeholder. */
+  private failed(picture: Picture<RenderTexture>, error: unknown) {
+    console.error('[gl] picture bake failed', picture.key, error);
+    const failures = (this.failures.get(picture) ?? 0) + 1;
+    this.failures.set(picture, failures);
+    if (failures < BAKE_ATTEMPTS) {
+      this.bakery.requeue(picture);
+      return;
+    }
+    this.options.sync().forget(picture.standIn);
+    // Those waiting on it bake (or paint) with its placeholder instead
+    for (const user of picture.users) if (!this.settled(user)) user.repaint();
   }
 
   private bake(picture: Picture<RenderTexture>, shown: boolean) {
@@ -108,7 +131,8 @@ export class PictureBaker {
     // Something it draws isn't ready, or a picture it draws (a badge) isn't baked: drawn again
     // once it settles
     if (state.used.some(used => used.state !== 'ready' && used.state !== 'failed')) return;
-    if (state.pictures.some(nested => !nested.texture)) return;
+    // (not one that failed for good: drawn with its placeholder)
+    if (state.pictures.some(nested => !nested.texture && !this.failedForGood(nested))) return;
     const { art } = picture;
     if (art.corners) {
       const { x, y, width, height, radius } = art.corners;
@@ -140,16 +164,15 @@ export class PictureBaker {
         clearColor: [0, 0, 0, 0],
       });
     } catch (error) {
-      console.error('[gl] picture bake failed', picture.key, error);
       texture.destroy(true);
-      const failures = (this.failures.get(picture) ?? 0) + 1;
-      this.failures.set(picture, failures);
-      // Tried again a few times; then its users keep the placeholder
-      if (failures < BAKE_ATTEMPTS) this.bakery.requeue(picture);
-      else sync.forget(node);
-      return;
+      throw error;
     }
-    if (state.used.some(used => used.kind === 'text')) this.withText.add(picture);
+    // Text drawn here, or in a picture drawn here (its pixels are copied in)
+    if (
+      state.used.some(used => used.kind === 'text') ||
+      state.pictures.some(nested => this.withText.has(nested))
+    )
+      this.withText.add(picture);
     // The pixels are kept: what it drew is free to go (and evictable once nobody else uses it)
     sync.forget(node);
     picture.texture = texture;
@@ -171,8 +194,10 @@ export class PictureBaker {
     const sync = this.options.sync();
     const { frame } = this.options;
     const near = (picture: Picture<RenderTexture>) => {
+      // A picture still baking that draws this one (a card and its badge) needs it too
       for (const user of picture.users)
-        if (sync.states.get(user)?.syncedAt === frame.index) return true;
+        if (sync.states.get(user)?.syncedAt === frame.index || this.bakery.ofStandIn(user))
+          return true;
       return false;
     };
     const candidates: Array<Evictable & { free: () => void }> = [];

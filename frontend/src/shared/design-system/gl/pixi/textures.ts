@@ -12,6 +12,8 @@ import type { FrameInfo, NodeState } from './nodeState';
 /** Image uploads (texImage2D) per frame, within the frame's budget. */
 const UPLOADS_PER_FRAME = 2;
 const FETCHES_AT_ONCE = 6;
+/** Wider decodes of a ready image that may fail before it keeps the pixels it has. */
+const UPGRADE_ATTEMPTS = 2;
 
 export interface TextureEntry {
   key: string;
@@ -29,8 +31,12 @@ export interface TextureEntry {
   visible: boolean;
   /** The widest it's drawn (px): larger images are scaled down to it as they decode. */
   wantWidth: number;
-  /** The width (device px, 0 for any) its current pixels were decoded for. */
+  /** The width (device px, 0 for any) its current pixels were decoded for (set on upload). */
   loadWidth: number;
+  /** The width the decode under way was asked for. */
+  decodeWidth: number;
+  /** Wider decodes that failed: after a couple, it keeps the pixels it has. */
+  upgradeFailures: number;
   /** Ready, and a wider decode is on its way (the current texture shows meanwhile). */
   upgrading: boolean;
   /** Nodes whose current paint uses it: repainted when it becomes ready or fails. */
@@ -83,7 +89,10 @@ export class TextureStore {
       onFailed: src => {
         const entry = this.entries.get(src);
         // A wider decode failing keeps the pixels it has
-        if (entry?.upgrading) entry.upgrading = false;
+        if (entry?.upgrading) {
+          entry.upgrading = false;
+          entry.upgradeFailures++;
+        }
         if (!entry || entry.state !== 'loading') return;
         this.fail(entry);
         this.settled(entry);
@@ -117,6 +126,8 @@ export class TextureStore {
         visible: false,
         wantWidth: 0,
         loadWidth: 0,
+        decodeWidth: 0,
+        upgradeFailures: 0,
         upgrading: false,
         users: new Set(),
       };
@@ -170,6 +181,7 @@ export class TextureStore {
     const want = Math.ceil(entry.wantWidth * this.options.frame.dpr);
     if (
       entry.upgrading ||
+      entry.upgradeFailures >= UPGRADE_ATTEMPTS ||
       !entry.loadWidth ||
       want <= entry.loadWidth * 1.25 ||
       want <= entry.width
@@ -182,8 +194,8 @@ export class TextureStore {
 
   /** Read as the decode starts: paints may draw it wider meanwhile. */
   private loadWidth(entry: TextureEntry) {
-    entry.loadWidth = Math.ceil(entry.wantWidth * this.options.frame.dpr);
-    return entry.loadWidth;
+    entry.decodeWidth = Math.ceil(entry.wantWidth * this.options.frame.dpr);
+    return entry.decodeWidth;
   }
 
   status(src: string): ImageStatus {
@@ -250,12 +262,15 @@ export class TextureStore {
             this.ready(entry, new Texture({ source }));
             entry.readyAt = readyAt;
           } else this.ready(entry, new Texture({ source }));
+          // Only now: a decode or upload that failed leaves the width of the pixels it has
+          entry.loadWidth = entry.decodeWidth;
         });
         this.uploaded++;
       } catch (error) {
         if (previous) {
           // The wider pixels didn't make it: the ones it has stay
           console.error('[gl] image upgrade failed', entry.key, error);
+          entry.upgradeFailures++;
           (source as ImageSource | null)?.destroy();
           entry.bitmap?.close?.();
           entry.bitmap = null;

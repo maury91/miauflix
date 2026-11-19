@@ -259,6 +259,13 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     scrolledRowHeight.current = rowHeight;
     scrollRows(activeCategory * rowHeight, { instant: true });
   }, [activeCategory, rowHeight, scrollRows]);
+  // Back on the rows (from details or the player): the GL scroller is a new one, at the top until
+  // told otherwise; it starts on the focused row
+  useEffect(() => {
+    if (glRows && browsing) scrollRows(activeCategory * rowHeight, { instant: true });
+    // Only on arriving: later moves are the focus's
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [glRows, browsing]);
   const onGlUnavailable = useCallback(() => setGlRows(false), []);
   // The DOM rows took over from the GL ones: bring the focused row into view there
   const wasGlRows = useRef(glRows);

@@ -114,6 +114,26 @@ describe('ImagePipeline', () => {
     expect(order).toEqual(['a', 'b']);
   });
 
+  it('aborts the fetches it cancels or clears', () => {
+    const signals: AbortSignal[] = [];
+    const images = new ImagePipeline({
+      concurrency: 2,
+      load: (_src, _width, signal) => {
+        signals.push(signal!);
+        return new Promise<ImageBitmap>(() => {});
+      },
+      onLoaded: vi.fn(),
+      onFailed: vi.fn(),
+    });
+    images.request('a', 'near', () => 0);
+    images.request('b', 'near', () => 0);
+
+    images.cancel('a');
+    expect(signals.map(signal => signal.aborted)).toEqual([true, false]);
+    images.clear();
+    expect(signals.map(signal => signal.aborted)).toEqual([true, true]);
+  });
+
   it('does not load a cancelled request still in the queue', async () => {
     const { images, order, pending, bitmap } = pipeline(1);
     images.request('a', 'near', () => 0);

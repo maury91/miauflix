@@ -21,6 +21,8 @@ export interface BakedLayer {
   texture: RenderTexture;
   sprite: Sprite;
   dirty: boolean;
+  /** Renders that threw in a row (SceneSync gives up after a few). */
+  failures: number;
 }
 
 /** A node's fade edge (GlNode.fade with fadeFrom): 1 px strips of a copy of its source. */
@@ -32,6 +34,7 @@ export interface FadeBand {
   /** Canvas px row of its first strip. */
   start: number;
   dirty: boolean;
+  failures: number;
   source: GlNode;
 }
 

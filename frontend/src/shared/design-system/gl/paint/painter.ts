@@ -81,7 +81,14 @@ export interface Painter {
     y: number,
     w: number,
     h: number,
-    options?: { radius?: number; fit?: 'cover' | 'contain'; alignX?: number; alignY?: number }
+    options?: {
+      radius?: number;
+      fit?: 'cover' | 'contain';
+      alignX?: number;
+      alignY?: number;
+      /** false: shown at once when ready (the caller fades its node itself). */
+      fade?: boolean;
+    }
   ): ImageStatus;
   /**
    * Text rendered to a texture once (canvas 2D) and drawn at its natural size. `anchorY` 1 puts

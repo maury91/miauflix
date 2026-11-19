@@ -15,13 +15,13 @@ export const glRowsEnabled =
   (builtForTizen && env.TV_GL_ROWS) ||
   // Development: localStorage['miauflix:gl-rows'] = '1' tries it in a browser. Keys only: the
   // canvas draws the cards, and the (hidden) DOM buttons under it aren't where they're drawn
-  (import.meta.env.DEV && readStorage('miauflix:gl-rows') === '1');
+  (Boolean(import.meta.env?.DEV) && readStorage('miauflix:gl-rows') === '1');
 /**
  * Debugging the GL surface on the TV (and in development): localStorage['miauflix:gl-tuning'] as
  * JSON, e.g. {"antialias": false, "textureBudget": 33554432}, read at start.
  */
 export const glTuningOverride: Record<string, unknown> | undefined = (() => {
-  if (!(builtForTizen || import.meta.env.DEV)) return;
+  if (!(builtForTizen || import.meta.env?.DEV)) return;
   const raw = readStorage('miauflix:gl-tuning');
   try {
     return raw ? (JSON.parse(raw) as Record<string, unknown>) : undefined;

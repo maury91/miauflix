@@ -119,9 +119,10 @@ export const GlScroller = forwardRef<GlScrollerHandle, GlScrollerProps>(function
         scroll.current = next;
         // A rest still pending is from a scroll this one replaces
         window.clearTimeout(restTask.current);
-        const settled = !content.animations.y && content.y === top - next;
+        // Shown where it's asked to be (a reversal before the first step too): nothing to move
+        const settled = content.y === top - next;
         if (instant || !scrollEasing || settled) {
-          // Already there (nothing will animate): at rest now
+          // At rest now; the set ends a running animation (one heading elsewhere)
           content.set({ y: top - next });
           latestRest.current?.();
         } else content.animate('y', top - next, scrollDuration, scrollEasing);

@@ -27,6 +27,11 @@ export class Bakery<T> {
   private queue = new Set<Picture<T>>();
   private byStandIn = new WeakMap<GlNode, Picture<T>>();
 
+  /** Still the bakery's picture for its key (not removed, dropped or cleared since). */
+  private current(picture: Picture<T>) {
+    return this.pictures.get(picture.key) === picture;
+  }
+
   constructor(private readonly createStandIn: (art: GlArt) => GlNode) {}
 
   /** The picture for `art` at `dpr`: created and queued the first time. */
@@ -53,12 +58,15 @@ export class Bakery<T> {
 
   /** The picture a stand-in node draws, if it is one. */
   ofStandIn(node: GlNode) {
-    return this.byStandIn.get(node);
+    const picture = this.byStandIn.get(node);
+    return picture && this.current(picture) ? picture : undefined;
   }
 
   /** Draw it again (something it waits on settled). */
   requeue(picture: Picture<T>) {
-    this.queue.add(picture);
+    // A late notice for a picture already gone must not bring it back (or, leaving the queue
+    // unused, take its replacement's key with it)
+    if (this.current(picture)) this.queue.add(picture);
   }
 
   get queued() {
@@ -77,7 +85,7 @@ export class Bakery<T> {
         continue;
       }
       this.queue.delete(picture);
-      if (!picture.texture) {
+      if (!picture.texture && this.current(picture)) {
         this.pictures.delete(picture.key);
         drop(picture);
       }
@@ -93,7 +101,7 @@ export class Bakery<T> {
 
   remove(picture: Picture<T>) {
     this.queue.delete(picture);
-    this.pictures.delete(picture.key);
+    if (this.current(picture)) this.pictures.delete(picture.key);
   }
 
   /** Forgets every picture, returning them (their textures are the caller's to free). */

@@ -21,6 +21,8 @@ import { TextureStore } from './textures';
  * budgets added up to about this on the TV.
  */
 const FRAME_BUDGET_MS = 8;
+/** Frames failing in a row before the surface gives up (its caller falls back to the DOM). */
+const FRAME_FAILURES_TO_GIVE_UP = 30;
 
 /**
  * The GlNode tree drawn with PixiJS (WebGL), retained the way a game engine draws: each node owns
@@ -67,6 +69,8 @@ export class PixiBackend implements GlBackend {
   private readonly onError: (error: unknown) => void;
   private fontsReady = typeof document.fonts === 'undefined' || document.fonts.status === 'loaded';
   private started = false;
+  /** Frames that threw in a row. */
+  private frameFailures = 0;
   private disposed = false;
   private readonly tuning: Required<GlTuning>;
 
@@ -87,6 +91,8 @@ export class PixiBackend implements GlBackend {
         this.stats.errors++;
         this.lastError = String((error as Error)?.stack ?? error).slice(0, 500);
         console.error('[gl] frame failed', error);
+        // Failing every frame: nothing draws, the caller shows its DOM instead
+        if (++this.frameFailures === FRAME_FAILURES_TO_GIVE_UP) this.onError(error);
       },
     });
     const pixi = () => this.pixi!;
@@ -132,9 +138,7 @@ export class PixiBackend implements GlBackend {
       void document.fonts.ready.then(() => {
         this.fontsReady = true;
         this.invalidate();
-      }); // A face that loads later (a weight first used now): texts drawn meanwhile used the fallback
-    if (typeof document.fonts !== 'undefined')
-      document.fonts.addEventListener('loadingdone', this.onFontsLoaded);
+      });
   }
 
   private onFontsLoaded = (event: Event) => {
@@ -151,6 +155,11 @@ export class PixiBackend implements GlBackend {
   start() {
     if (this.started) return;
     this.started = true;
+    // Here, not in the constructor: a backend React creates and discards (StrictMode runs state
+    // initializers twice) never starts, so it never listens. A face that loads later (a weight
+    // first used now): texts drawn meanwhile used the fallback
+    if (typeof document.fonts !== 'undefined')
+      document.fonts.addEventListener('loadingdone', this.onFontsLoaded);
     const { canvas } = this;
     const { width, height, dpr } = this.frame;
     const pixi = new WebGLRenderer();
@@ -210,6 +219,7 @@ export class PixiBackend implements GlBackend {
   }
 
   dispose() {
+    if (this.disposed) return;
     this.disposed = true;
     if (typeof document.fonts !== 'undefined')
       document.fonts.removeEventListener('loadingdone', this.onFontsLoaded);
@@ -277,6 +287,7 @@ export class PixiBackend implements GlBackend {
     // Now and then: dead image entries hold no bytes, so evict() never sees them
     if (frame.index % 120 === 0) store.prune();
 
+    this.frameFailures = 0;
     stats.frames++;
     stats.uploads = store.uploaded;
     stats.failed = store.failed;
@@ -288,6 +299,7 @@ export class PixiBackend implements GlBackend {
     stats.frameMs = performance.now() - start;
     return (
       animating ||
+      this.sync.retrying ||
       this.fades.size > 0 ||
       store.pendingUploads > 0 ||
       (this.fontsReady && (store.pendingRenders > 0 || this.pictures.queued > 0))

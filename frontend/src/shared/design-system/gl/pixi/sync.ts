@@ -28,6 +28,9 @@ export interface SceneSyncOptions {
   stats: { repaints: number; bakes: number; bakeMs: number; bands: number };
 }
 
+/** Renders of a baked layer or fade band that may throw in a row before it's left as it is. */
+const RENDER_ATTEMPTS = 3;
+
 /** Something to redraw when a node under it changes: a baked layer, a fade band. */
 interface Dirtiable {
   dirty: boolean;
@@ -46,6 +49,8 @@ export class SceneSync {
   private bakedThisFrame: Array<{ node: GlNode; layer: BakedLayer }> = [];
   private bandsThisFrame: FadeBand[] = [];
   private disposed = false;
+  /** A baked layer or band failed this frame and is tried again on the next. */
+  retrying = false;
 
   constructor(private readonly options: SceneSyncOptions) {}
 
@@ -83,14 +88,41 @@ export class SceneSync {
   syncRoot(root: GlNode) {
     this.bakedThisFrame = [];
     this.bandsThisFrame = [];
+    this.retrying = false;
     this.sync(root, 0, 0, 1, 1, []);
     // Inner layers first: an outer one draws their sprites
     for (let index = this.bakedThisFrame.length - 1; index >= 0; index--) {
       const { node, layer } = this.bakedThisFrame[index];
-      if (layer.dirty) this.bake(node, layer);
+      if (!layer.dirty) continue;
+      this.attempt(layer, () => {
+        this.bake(node, layer);
+        // Outer baked layers hold this one's pixels (stale, or empty if an earlier try failed):
+        // they bake after it, in this pass
+        for (let parent = node.parent; parent; parent = parent.parent) {
+          const baked = this.states.get(parent)?.baked;
+          if (baked && parent.bake) baked.dirty = true;
+        }
+      });
     }
-    for (const band of this.bandsThisFrame) if (band.dirty) this.drawBand(band);
+    // A clean band too, if its source stopped drawing (removed, culled with an ancestor)
+    for (const band of this.bandsThisFrame)
+      if (band.dirty || !this.sourceDrawn(band)) this.attempt(band, () => this.drawBand(band));
     return this.state(root).view;
+  }
+
+  /**
+   * A render that throws must not stop the frame (the rest of the scene still draws): it stays
+   * dirty for the next frames, then, failing every time, is left as it was last drawn.
+   */
+  private attempt(target: { dirty: boolean; failures: number }, render: () => void) {
+    try {
+      render();
+      target.failures = 0;
+    } catch (error) {
+      console.error('[gl] layer render failed', error);
+      if (++target.failures < RENDER_ATTEMPTS) this.retrying = true;
+      else target.dirty = false;
+    }
   }
 
   /** Runs the node's paint into fresh display objects (only when it changed). */
@@ -229,7 +261,7 @@ export class SceneSync {
       });
       const sprite = new Sprite(texture);
       nodeOf.set(sprite, node);
-      state.baked = { texture, sprite, dirty: true };
+      state.baked = { texture, sprite, dirty: true, failures: 0 };
     }
     return state.baked;
   }
@@ -300,7 +332,15 @@ export class SceneSync {
       const container = new Container();
       container.zIndex = Number.MAX_SAFE_INTEGER;
       state.view.addChild(container);
-      band = state.band = { container, texture: null, key: '', start: 0, dirty: true, source };
+      band = state.band = {
+        container,
+        texture: null,
+        key: '',
+        start: 0,
+        dirty: true,
+        failures: 0,
+        source,
+      };
       let bands = this.bandsBySource.get(source);
       if (!bands) this.bandsBySource.set(source, (bands = new Set()));
       bands.add(band);
@@ -344,10 +384,11 @@ export class SceneSync {
   private drawBand(band: FadeBand) {
     const source = this.states.get(band.source);
     if (!band.texture) return;
-    // The source draws nothing now (culled, or off screen, which Pixi skips without clearing the
-    // target): the band would show stale pixels. Hidden, and still dirty: drawn when it's back
-    if (!source || source.x === Infinity || !source.onScreen) {
+    // The source draws nothing now (removed, culled, or off screen, which Pixi skips without
+    // clearing the target): the band would show stale pixels. Hidden, and dirty: drawn when back
+    if (!source || !this.sourceDrawn(band)) {
       band.container.visible = false;
+      band.dirty = true;
       return;
     }
     const view = band.source.bake ? source.baked!.sprite : source.view;
@@ -363,6 +404,17 @@ export class SceneSync {
     band.dirty = false;
     band.container.visible = true;
     this.options.stats.bands++;
+  }
+
+  /** The band's source was placed on screen this frame. */
+  private sourceDrawn(band: FadeBand) {
+    const source = this.states.get(band.source);
+    return Boolean(
+      source &&
+        source.x !== Infinity &&
+        source.onScreen &&
+        source.syncedAt === this.options.frame.index
+    );
   }
 
   private dropBand(state: NodeState) {

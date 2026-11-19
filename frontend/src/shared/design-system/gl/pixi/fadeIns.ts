@@ -7,13 +7,19 @@ export const FADE_IN_MS = 180;
 
 /** Display objects fading in (images, pictures just ready), stepped each frame. */
 export class FadeIns {
-  private fades: Array<{ object: Container; readyAt: number; node: GlNode }> = [];
+  private fades: Array<{
+    object: Container;
+    readyAt: number;
+    node: GlNode;
+    onDone?: () => void;
+  }> = [];
 
   /** Starts the object at its alpha for `now` if it became ready less than FADE_IN_MS ago. */
-  add(object: Container, readyAt: number, node: GlNode, now: number) {
-    if (now - readyAt >= FADE_IN_MS) return;
+  add(object: Container, readyAt: number, node: GlNode, now: number, onDone?: () => void) {
+    if (now - readyAt >= FADE_IN_MS) return false;
     object.alpha = Math.max(0, (now - readyAt) / FADE_IN_MS);
-    this.fades.push({ object, readyAt, node });
+    this.fades.push({ object, readyAt, node, onDone });
+    return true;
   }
 
   /** The node's paint is gone (repainted, removed). */
@@ -27,7 +33,9 @@ export class FadeIns {
       const progress = Math.min(1, (now - fade.readyAt) / FADE_IN_MS);
       fade.object.alpha = progress;
       fade.node.changed = true;
-      return progress < 1;
+      if (progress < 1) return true;
+      fade.onDone?.();
+      return false;
     });
   }
 

@@ -40,9 +40,8 @@ export function createPixiPainter(
 ): Painter {
   const { store, frame, fades } = context;
   const add = <T extends Container>(object: T) => state.drawn.addChild(object);
-  const fadeIn = (object: Container, readyAt: number) => {
-    if (!baking) fades.add(object, readyAt, node, frame.now);
-  };
+  const fadeIn = (object: Container, readyAt: number, onDone?: () => void) =>
+    !baking && fades.add(object, readyAt, node, frame.now, onDone);
   const text = (spec: Parameters<Painter['text']>[0]) => {
     const entry = store.text(spec);
     store.use(entry, node, state);
@@ -160,7 +159,7 @@ export function createPixiPainter(
         sprite.height = h;
         object = sprite;
       }
-      fadeIn(object, entry.readyAt);
+      if (options.fade !== false) fadeIn(object, entry.readyAt);
       add(object);
       return 'ready';
     },
@@ -222,9 +221,11 @@ export function createPixiPainter(
       const sprite = new Sprite(picture.texture);
       sprite.width = art.width;
       sprite.height = art.height;
-      fadeIn(sprite, picture.readyAt);
+      // Over an earlier version: once opaque, paint again without it (it can be evicted)
+      const fading = fadeIn(sprite, picture.readyAt, previous ? () => node.repaint() : undefined);
       add(sprite);
-      if (art.holdKey) context.hold(node, picture);
+      // Held once faded in over an earlier version: a paint mid-fade still finds it to show under
+      if (art.holdKey && (!fading || !previous)) context.hold(node, picture);
       return true;
     },
   };

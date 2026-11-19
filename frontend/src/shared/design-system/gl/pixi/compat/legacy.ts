@@ -26,7 +26,18 @@ if (!proto['matchAll'])
     let match: RegExpExecArray | null;
     while ((match = regex.exec(this))) {
       matches.push(match);
-      if (match[0] === '') regex.lastIndex++;
+      // An empty match moves on one character: a whole code point with the u flag (as the
+      // spec's AdvanceStringIndex), or it lands inside a surrogate pair and matches forever
+      if (match[0] === '') regex.lastIndex = advance(this, regex.lastIndex, regex.unicode);
     }
     return matches[Symbol.iterator]();
   };
+
+function advance(text: string, index: number, unicode: boolean) {
+  if (!unicode || index + 1 >= text.length) return index + 1;
+  const first = text.charCodeAt(index);
+  const second = text.charCodeAt(index + 1);
+  return first >= 0xd800 && first <= 0xdbff && second >= 0xdc00 && second <= 0xdfff
+    ? index + 2
+    : index + 1;
+}

@@ -72,8 +72,6 @@ export function GlSurface({
           setFailed(true);
         },
       });
-      created.root = root;
-      root.owner = created;
       return created;
     } catch (error) {
       console.error('[gl] surface unavailable', error);
@@ -83,6 +81,9 @@ export function GlSurface({
 
   useLayoutEffect(() => {
     if (!backend) return;
+    // Wired here, not in the initializer: StrictMode runs it twice and keeps one backend
+    backend.root = root;
+    root.owner = backend;
     hostRef.current?.appendChild(backend.canvas);
     backend.start();
     const canvasStyle = backend.canvas.style;
@@ -121,8 +122,15 @@ export function GlSurface({
     latestUnavailable.current = onUnavailable;
   });
   useEffect(() => {
-    if (!backend || failed) latestUnavailable.current?.();
-  }, [backend, failed]);
+    if (backend && !failed) return;
+    // Failed while mounted: children render as DOM; the renderer stops and its canvas goes
+    if (backend) {
+      root.owner = null;
+      backend.dispose();
+      backend.canvas.remove();
+    }
+    latestUnavailable.current?.();
+  }, [backend, failed, root]);
 
   useEffect(() => {
     if (!backend || failed) return;

@@ -337,7 +337,9 @@ function GlBackdrop({
     node,
     painter => {
       // At its placed size (`contain` on a box of the image's own ratio), covering the container
-      painter.image(layer.url, rect.x, rect.y, rect.w, rect.h, { fit: 'contain' });
+      // No sprite fade: the node's crossfade is the fade (instant under reduced motion), and the
+      // layers under it go when it lands
+      painter.image(layer.url, rect.x, rect.y, rect.w, rect.h, { fit: 'contain', fade: false });
     },
     [layer.url, rect]
   );

@@ -294,15 +294,22 @@ function glImageSettled(renderer: GlRenderer | undefined, src: string, width: nu
     renderer.preload(src, width);
     const settled = () => renderer.imageStatus(src) !== 'loading';
     if (settled()) return resolve();
+    // Declared first: done may run (a notice) as soon as it subscribes
+    let unsubscribe = () => {};
+    let timer = 0;
+    let finished = false;
     const done = () => {
+      if (finished) return;
+      finished = true;
       unsubscribe();
       window.clearTimeout(timer);
       resolve();
     };
-    const unsubscribe = renderer.subscribeImage(src, () => {
+    timer = window.setTimeout(done, GL_READY_TIMEOUT_MS);
+    unsubscribe = renderer.subscribeImage(src, () => {
       if (settled()) done();
     });
-    const timer = window.setTimeout(done, GL_READY_TIMEOUT_MS);
+    if (finished) unsubscribe();
   });
 }
 
@@ -469,7 +476,9 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       // DOM's): the intro waits until it can draw (or draws its fallback)
       const gl = glRef.current;
       if (gl) {
-        await glImageSettled(gl.renderer, url, imageSize.width);
+        // At most as wide as it's drawn (the surface, zoomed up to 1.5 by its placement): the
+        // texture is scaled down to it, not uploaded at the source's width
+        await glImageSettled(gl.renderer, url, Math.min(imageSize.width, gl.width * 1.5));
         if (!current()) return;
       }
       onReady?.(shown.mediaId);
