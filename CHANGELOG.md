@@ -2,7 +2,7 @@
 
 Release notes for viewers and self-hosters. See the [detailed changelog](DETAILED_CHANGELOG.md) for implementation and upgrade notes.
 
-## Unreleased
+## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
 
 ### On Samsung TVs
 
