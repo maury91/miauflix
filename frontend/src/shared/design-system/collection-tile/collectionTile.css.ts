@@ -1,6 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-import { color, fontFamily, scrim, space, typeScale } from '../tokens';
+import { color, fontFamily, scrim, typeScale } from '../tokens';
 import { outlineDistanceRem, TILE_RATIO, tileMetrics } from './collectionTile.metrics';
 
 /**
@@ -114,11 +114,11 @@ export const scrimLayer = style({
 
 export const badge = style({
   position: 'absolute',
-  top: space.xs,
-  left: space.xs,
+  top: tileMetrics.badgeInset,
+  left: tileMetrics.badgeInset,
   lineHeight: 0,
   selectors: {
-    '[dir="rtl"] &': { left: 'auto', right: space.xs },
+    '[dir="rtl"] &': { left: 'auto', right: tileMetrics.badgeInset },
   },
 });
 

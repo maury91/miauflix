@@ -5,7 +5,7 @@ import type { FrameBudget } from '../core/frameScheduler';
 import type { GlNode } from '../core/scene';
 import type { ImageStatus, TextSpec } from '../paint/painter';
 import { cornerRaster, gradientRaster, type Raster } from '../paint/rasters';
-import { rasterizeText, textKey } from '../paint/textRaster';
+import { rasterizeText, textFont, textKey } from '../paint/textRaster';
 import { ImagePipeline, type ImagePriority } from '../resources/imagePipeline';
 import type { FrameInfo, NodeState } from './nodeState';
 
@@ -43,12 +43,21 @@ export interface TextureEntry {
   users: Set<GlNode>;
 }
 
+interface QueuedRender {
+  key: string;
+  render: () => Raster & { resolution?: number };
+  /** A text's face: drawn once it's loaded. */
+  face?: { font: string; text: string };
+}
+
 export interface TextureStoreOptions {
   pixi: () => WebGLRenderer;
   frame: FrameInfo;
   invalidate: () => void;
   /** An entry became ready or failed: its users paint again. */
   onSettled: (entry: TextureEntry) => void;
+  /** Whether a text's face is loaded (FontEpoch.fontReady): if not, it waits in the queue. */
+  fontReady: (font: string, text: string) => boolean;
 }
 
 /**
@@ -62,9 +71,12 @@ export class TextureStore {
   /** Images that failed to load, and images uploaded. */
   failed = 0;
   uploaded = 0;
+  /** The font epoch (FontEpoch): part of every text's key. */
+  fontEpoch = 0;
   private wanted = new Set<TextureEntry>();
   private uploads: TextureEntry[] = [];
-  private renders: Array<{ key: string; render: () => Raster }> = [];
+  private renders: QueuedRender[] = [];
+  private waitingForFaces = 0;
   private rendersQueued = new Set<string>();
   private listeners = new Map<string, Set<() => void>>();
   private corners = new Map<number, Texture>();
@@ -105,8 +117,9 @@ export class TextureStore {
     return this.uploads.length;
   }
 
+  /** Texts waiting for their face don't count: FontEpoch asks for a frame once it's in. */
   get pendingRenders() {
-    return this.renders.length;
+    return this.renders.length - this.waitingForFaces;
   }
 
   entry(key: string, kind: TextureEntry['kind']) {
@@ -287,11 +300,23 @@ export class TextureStore {
 
   // Texts and canvas drawings
 
-  /** A text's texture: rasterized in a coming frame. */
-  text(spec: TextSpec) {
-    const entry = this.entry(textKey(spec), 'text');
-    this.queueRender(entry, () => this.rasterize(rasterizeText(spec, this.scratch)));
+  /**
+   * A text's texture: rasterized in a coming frame, at `resolution` texture px per CSS px (its
+   * size stays in CSS px).
+   */
+  text(spec: TextSpec, resolution: number) {
+    const entry = this.entry(`${textKey(spec)}|${resolution}|${this.fontEpoch}`, 'text');
+    this.queueRender(
+      entry,
+      () => this.rasterize(rasterizeText(spec, this.scratch, resolution), resolution),
+      { font: textFont(spec), text: spec.text }
+    );
     return entry;
+  }
+
+  /** A font loaded after texts were drawn in a fallback: new keys for new texts (the old age out). */
+  nextFontEpoch(epoch: number) {
+    this.fontEpoch = epoch;
   }
 
   /** A texture drawn with canvas 2D (`width` × `height` px), cached by `key`. */
@@ -312,32 +337,53 @@ export class TextureStore {
     return entry;
   }
 
-  /** Rasterizes queued texts and drawings within the frame's budget (at least one). */
+  /**
+   * Rasterizes queued texts and drawings within the frame's budget (at least one). Texts whose
+   * face is still loading stay queued.
+   */
   renderQueued(budget: FrameBudget) {
+    const waiting: QueuedRender[] = [];
     for (let n = 0; this.renders.length && budget.allows(n); ) {
-      const { key, render } = this.renders.shift()!;
-      this.rendersQueued.delete(key);
-      const entry = this.entries.get(key);
-      if (!entry || entry.state !== 'loading') continue;
+      const queued = this.renders.shift()!;
+      const entry = this.entries.get(queued.key);
+      if (!entry || entry.state !== 'loading') {
+        this.rendersQueued.delete(queued.key);
+        continue;
+      }
+      if (queued.face && !this.options.fontReady(queued.face.font, queued.face.text)) {
+        waiting.push(queued);
+        continue;
+      }
+      this.rendersQueued.delete(queued.key);
       try {
-        budget.run('text', () => this.ready(entry, this.pixels(render())));
+        budget.run('text', () => {
+          const raster = queued.render();
+          this.ready(entry, this.pixels(raster, raster.resolution));
+        });
       } catch (error) {
-        console.error('[gl] texture render failed', key, error);
+        console.error('[gl] texture render failed', queued.key, error);
         this.fail(entry);
       }
       this.settled(entry);
       n++;
     }
+    this.renders.unshift(...waiting);
+    this.waitingForFaces = waiting.length;
   }
 
-  private queueRender(entry: TextureEntry, render: () => Raster) {
+  private queueRender(
+    entry: TextureEntry,
+    render: () => Raster & { resolution?: number },
+    face?: QueuedRender['face']
+  ) {
     if (entry.state !== 'loading' || this.rendersQueued.has(entry.key)) return;
     this.rendersQueued.add(entry.key);
-    this.renders.push({ key: entry.key, render });
+    this.renders.push({ key: entry.key, render, face });
   }
 
-  private rasterize(canvas: HTMLCanvasElement): Raster {
-    return canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height);
+  private rasterize(canvas: HTMLCanvasElement, resolution = 1): Raster & { resolution: number } {
+    const data = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height);
+    return { width: data.width, height: data.height, data: data.data, resolution };
   }
 
   // Generated textures
@@ -363,12 +409,13 @@ export class TextureStore {
    * Pixels to a texture. Not a canvas source: on the TV (Chromium 69) a canvas of about
    * 256 × 256 px or more is GPU-backed, and uploading it to WebGL gives an empty texture.
    */
-  private pixels(raster: Raster) {
+  private pixels(raster: Raster, resolution = 1) {
     const { data } = raster;
     const source = new BufferImageSource({
       resource: new Uint8Array(data.buffer, data.byteOffset, data.byteLength),
       width: raster.width,
       height: raster.height,
+      resolution,
       format: 'rgba8unorm',
       alphaMode: 'premultiply-alpha-on-upload',
     });
@@ -378,9 +425,10 @@ export class TextureStore {
 
   private ready(entry: TextureEntry, texture: Texture) {
     entry.texture = texture;
-    entry.width = texture.source.pixelWidth;
-    entry.height = texture.source.pixelHeight;
-    entry.bytes = entry.width * entry.height * 4;
+    // CSS px (a text at a higher resolution has more texture px)
+    entry.width = texture.width;
+    entry.height = texture.height;
+    entry.bytes = texture.source.pixelWidth * texture.source.pixelHeight * 4;
     entry.state = 'ready';
     entry.readyAt = entry.kind === 'image' ? this.options.frame.now : -Infinity;
     this.bytes += entry.bytes;
@@ -463,6 +511,7 @@ export class TextureStore {
     this.wanted.clear();
     this.images.clear();
     this.renders = [];
+    this.waitingForFaces = 0;
     this.rendersQueued.clear();
     for (const texture of this.corners.values()) texture.destroy(true);
     this.corners.clear();

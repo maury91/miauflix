@@ -1,5 +1,6 @@
 import type { Painter } from '../paint/painter';
 import type { Easing } from './easing';
+import { motion, motionDuration } from './motion';
 
 interface Animation {
   from: number;
@@ -40,6 +41,17 @@ export class GlNode {
    */
   bake = false;
   paint: ((painter: Painter) => void) | null = null;
+  /**
+   * Turns once per `spin` ms about its centre while it's set (a spinner); 0 stands still, as
+   * does every spin under reduced motion. `rotation` (radians) is stepped by the frame loop.
+   */
+  spin = 0;
+  rotation = 0;
+  /**
+   * The element the pointer over this node's box goes to (its semantic twin): see `hitTest`.
+   * Nodes without one are passed through.
+   */
+  target: Element | null = null;
   children: GlNode[] = [];
   parent: GlNode | null = null;
   /** Who draws the tree, on the root (set by the surface): told of every change. */
@@ -75,7 +87,11 @@ export class GlNode {
   }
 
   /** Change properties; the next frame draws them. Unchanged values cost nothing. */
-  set(props: Partial<Pick<GlNode, 'width' | 'height' | 'clip' | 'z' | 'bake' | AnimatedProperty>>) {
+  set(
+    props: Partial<
+      Pick<GlNode, 'width' | 'height' | 'clip' | 'z' | 'bake' | 'spin' | AnimatedProperty>
+    >
+  ) {
     let changed = false;
     for (const key in props) {
       const value = props[key as keyof typeof props];
@@ -93,11 +109,20 @@ export class GlNode {
     if (changed) this.invalidate();
   }
 
-  /** Animate a property to `to` from where it is now (mid-animation, from its current value). */
+  /**
+   * Animate a property to `to` from where it is now (mid-animation, from its current value). Under
+   * reduced motion it lands on the next frame.
+   */
   animate(property: AnimatedProperty, to: number, duration: number, easing: Easing) {
     const running = this.animations[property];
     if (running ? running.to === to : this[property] === to) return;
-    this.animations[property] = { from: this[property], to, duration, easing, start: null };
+    this.animations[property] = {
+      from: this[property],
+      to,
+      duration: motionDuration(duration),
+      easing,
+      start: null,
+    };
     this.invalidate();
   }
 
@@ -153,6 +178,8 @@ export class GlNode {
   }
 }
 
+const TURN = Math.PI * 2;
+
 /**
  * Advances every animation in the tree to `now`; animated nodes count as changed. True while any
  * still runs.
@@ -164,6 +191,12 @@ export function stepAnimations(root: GlNode, now: number): boolean {
       node.changed = true;
       if (node.step(now)) running = true;
     }
+    const rotation = node.spin > 0 && !motion.reduced ? ((now % node.spin) / node.spin) * TURN : 0;
+    if (rotation !== node.rotation) {
+      node.rotation = rotation;
+      node.changed = true;
+    }
+    if (node.spin > 0 && !motion.reduced) running = true;
     for (const child of node.children) visit(child);
   };
   visit(root);

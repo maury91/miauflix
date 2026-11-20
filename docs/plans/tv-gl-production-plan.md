@@ -343,6 +343,68 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
   - Carousel's `itemExtent` moved to `collectionGeometry.ts` and `placeTrack` into `Carousel.tsx`
     (they move the track; they aren't drawing). The GL views come with Phase 3.
 
+- **Phase 3 (done, measured: no change from Phase 2).** Artwork, CollectionTile, MediaTile and Carousel are
+  each a public component that picks one view from `useRenderMode()` (`'gl'` inside a GlSurface's
+  parent, `'dom'` elsewhere), a shared hook (`useArtwork`, `useCollectionTile`, `useCarousel`:
+  load and failure reports, held images, nav focus, ids, description, pointer lock, mounted
+  range) and `*Dom.tsx`/`*Gl.tsx` views; the other view's hooks never run. MediaTile's views use
+  CollectionTile's directly, and its DOM view `ArtworkDom`. ESLint keeps `*Dom.tsx` from importing
+  `gl`, pictures or GL views. `GlSurface` loads the Pixi backend with `import()`
+  (`preloadGlBackend`, started at startup when the GL rows are on): the web entry chunk went from
+  1,502 KB to 1,093 KB (gzip 480 → 359 KB), Pixi is a 410 KB chunk the web never requests. Differences from the plan:
+  - **The GL views aren't lazy.** They're small and lazy-loading each would suspend every tile;
+    only Pixi (the backend) is its own chunk. The Tizen build inlines dynamic imports
+    (`inlineDynamicImports`), so on the TV everything is one file and the preload resolves at once.
+  - **Home waits for the backend as a whole** (`useGlBackendReady` inside a Suspense boundary):
+    with the surface suspending on its own, Home committed first, its first focus found no rows
+    and landed on the side menu (seen in Storybook, where nothing preloads).
+  - **CategoryRow** keeps one component (its data logic is shared): its drawn title and state
+    text are `CategoryRowTitleGl`, and the paging mode comes from `useRenderMode`. The ref the row
+    wrote during render for the paint to read is gone.
+  - `RenderMode` follows the GL parent context rather than a separate one, so a `GlParentScope`
+    without a node also switches its children to DOM.
+
+- **Phase 4 (done, measured: no change from Phase 3).** Home's hero and layout:
+  - `pages/home/homeLayout.ts`: `HOME_VH` (the hero's height and padding, the rows' top,
+    padding and fade, a row's title, gap and message) and `homeLayout(window, geometry)` /
+    `homeRowLayout(windowHeight)` in px. `homePage.css.ts`, `categoryRow.css.ts`, the DOM hero,
+    `HomePage` (the scroller's clip, content top and fade, the last row's room, the focus anchor's
+    box), `CategoryRow` and the GL hero read them instead of repeating `windowHeight * 0.54 + …`.
+  - `pages/home/hero/`: `heroDetailsModel(media, preparation, availability)` (title, metadata,
+    rating, source status, genres, overview) used by the DOM details, the drawn ones and the
+    reader's hidden header; `heroType.ts` (`HERO_TYPE`, `heroTypeCss(role)` for the CSS `clamp()`,
+    `heroTypeScale(windowHeight)` in px, `HERO_DETAILS` spacing and boxes); `heroMotion.ts` (fade
+    and rest timings); `heroDetails.art.ts` and `heroShade.art.ts` (the pictures), with the shade's
+    stops and positions in `heroShade.metrics.ts`, which the DOM gradients use too.
+  - `MediaHero` picks `MediaHeroDom` or `MediaHeroGl`; `useMediaHero` holds the selection, the
+    resting details, the backdrop stack and its loading. `components/GlHero.tsx` is gone.
+  - Differences from the plan: the details picture is drawn live, not baked (`heroDetailsArt`
+    returns `texts()` and `draw()`; baking it ahead is Phase 6). The DOM status badge stays
+    `SourcePreparationStatus` (shared with the details page), so the model's `status` mirrors its
+    rules rather than replacing them.
+  - Found on the way: an apostrophe in a CSS comment inside the DOM hero's `::before` made
+    styled-components drop its `::after` rule, so the DOM hero never drew the band darkening the
+    backdrop's bottom right (the GL hero did). Fixed.
+- **Phase 5 (done, measured: held Right 42–47 fps, the rest as Phase 4).** Production requirements:
+  - Pointer: `gl/core/hitTest.ts` hit-tests the scene (transforms, clips, fade edges); `GlSurface`
+    takes the pointer and forwards `mousemove`/`click` to the node's `target` (`useGlTarget`),
+    the tile's button. Home's hidden rows are out of the pointer's way.
+  - Fallback: `ContextLossPolicy` (3 s to restore, or the third loss) → the surface renders DOM
+    and `reportGlFailure()`; `useGlAvailable()` switches Home to its DOM rows for the session.
+    Not done: a device blocklist (none needed yet) and the runtime override (Phase 8).
+  - Reduced motion (`gl/core/motion.ts`): animations land at once, no fade-ins, spinners still.
+  - Fonts (`FontEpoch`): each text waits for its face (`document.fonts.load`); one drawn in a
+    fallback anyway re-keys texts and pictures when a font loads later. The first package re-keyed
+    on every load: Home's first pictures were drawn before their weights loaded.
+  - Text at the focused size: texts rasterize at the paint's resolution; `GlArt.scale` bakes the
+    tile at `dpr × 1.03`.
+  - GL forms: `ProgressSpinnerGl` (`spinner.art.ts`, `GlNode.spin`), the tile's badge
+    (`badge.art.ts`, `CollectionTile.glBadge`), the failed row as a danger Message
+    (`message.art.ts`, the icon's mdi path drawn with `Path2D`). Each has a `*.metrics.ts` its CSS
+    reads too. The empty row stays plain text, as in the DOM.
+  - Tested: unit tests for each pure part and picture snapshots; a Storybook test in Chromium for
+    the pointer and the fallback (`MediaTile/WebGL`).
+
 ## Open decisions
 
 - **GL stays TV-only?** The plan assumes yes: browsers composite the DOM rows on the GPU. If a web

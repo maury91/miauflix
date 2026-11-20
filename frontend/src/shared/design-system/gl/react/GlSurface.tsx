@@ -1,6 +1,8 @@
 import {
   type CSSProperties,
+  type MouseEvent,
   type ReactNode,
+  Suspense,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -8,9 +10,12 @@ import {
   useState,
 } from 'react';
 
-import type { GlBackend, GlTuning } from '../core/renderer';
+import { hitTest } from '../core/hitTest';
+import { followReducedMotion } from '../core/motion';
+import type { GlBackend, GlBackendOptions, GlTuning } from '../core/renderer';
 import { GlNode } from '../core/scene';
-import { PixiBackend } from '../pixi/backend';
+import { useGlBackend } from './backendModule';
+import { reportGlFailure } from './glSupport';
 import { GlLayers, GlLayersProvider, GlParentProvider } from './hooks';
 
 export interface GlSurfaceProps {
@@ -25,21 +30,42 @@ export interface GlSurfaceProps {
   exposeAs?: string;
   /** Read once, when the surface starts. */
   tuning?: GlTuning;
-  /**
-   * The backend couldn't be created or failed to start: children render as DOM from here on, so a
-   * caller that hid DOM for the canvas (or scrolls through a GlScroller) should go back to DOM.
-   */
-  onUnavailable?: () => void;
   /** Layers (GlLayer, GlScroller) and the components drawn into them. */
   children: ReactNode;
 }
 
+type BackendClass = new (options: GlBackendOptions) => GlBackend;
+
 /**
  * A WebGL canvas that design-system components draw into. Children render their DOM as usual;
  * those with a GL form draw into the canvas instead (the caller hides the DOM they replace and
- * keeps it for focus). If the backend can't start, children render as DOM.
+ * keeps it for focus). If the backend can't start, or loses its context for good, children render
+ * as DOM and `reportGlFailure` tells the page (useGlAvailable).
+ *
+ * The canvas takes the pointer: a move or click over a node with a `target` (useGlTarget) goes to
+ * that element, so the hidden DOM handles it as if it were there. Elsewhere nothing happens.
+ * Engine animations follow `prefers-reduced-motion`.
+ *
+ * The backend is its own chunk (preloadGlBackend). Loaded, the surface and its children mount in
+ * the same commit as the page; otherwise nothing shows until it is.
  */
-export function GlSurface({
+export function GlSurface(props: GlSurfaceProps) {
+  // One component path whether the backend was preloaded or not: switching paths once it loads
+  // would remount the surface and its children
+  return (
+    <Suspense fallback={null}>
+      <LoadingSurface {...props} />
+    </Suspense>
+  );
+}
+
+function LoadingSurface(props: GlSurfaceProps) {
+  const module = useGlBackend();
+  return <Surface {...props} Backend={module?.PixiBackend ?? null} />;
+}
+
+function Surface({
+  Backend,
   width,
   height,
   className,
@@ -47,9 +73,8 @@ export function GlSurface({
   prefetch = { x: 0, y: 0 },
   exposeAs,
   tuning,
-  onUnavailable,
   children,
-}: GlSurfaceProps) {
+}: GlSurfaceProps & { Backend: BackendClass | null }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const disposal = useRef(0);
   const [root] = useState(() => new GlNode());
@@ -58,10 +83,12 @@ export function GlSurface({
   // initial focus looks for the rows in its first effects). The GPU side starts async.
   const [failed, setFailed] = useState(false);
   const [backend] = useState<GlBackend | null>(() => {
+    // The chunk failed to load (already reported): children render as DOM
+    if (!Backend) return null;
     try {
       const canvas = document.createElement('canvas');
       canvas.setAttribute('aria-hidden', 'true');
-      const created = new PixiBackend({
+      const created = new Backend({
         canvas,
         width,
         height,
@@ -70,6 +97,7 @@ export function GlSurface({
         onError: error => {
           console.error('[gl] surface unavailable', error);
           setFailed(true);
+          reportGlFailure();
         },
       });
       return created;
@@ -78,6 +106,35 @@ export function GlSurface({
       return null;
     }
   });
+
+  useEffect(() => followReducedMotion(() => backend?.invalidate()), [backend]);
+
+  // The pointer over a node goes to its target (the hidden DOM isn't where nodes are drawn)
+  const forward = (event: MouseEvent<HTMLDivElement>) => {
+    if (!backend || failed) return;
+    // The drawn box, CSS transforms included (a scaled ancestor): back to the scene's px
+    const box = event.currentTarget.getBoundingClientRect();
+    const scaleX = box.width ? width / box.width : 1;
+    const scaleY = box.height ? height / box.height : 1;
+    const target = hitTest(
+      root,
+      (event.clientX - box.left) * scaleX,
+      (event.clientY - box.top) * scaleY
+    )?.target;
+    event.currentTarget.style.cursor = target ? 'pointer' : '';
+    if (!target || (target as HTMLButtonElement).disabled) return;
+    const { clientX, clientY, screenX, screenY } = event;
+    target.dispatchEvent(
+      new window.MouseEvent(event.type, {
+        bubbles: true,
+        cancelable: true,
+        clientX,
+        clientY,
+        screenX,
+        screenY,
+      })
+    );
+  };
 
   useLayoutEffect(() => {
     if (!backend) return;
@@ -117,19 +174,14 @@ export function GlSurface({
     backend.invalidate();
   });
 
-  const latestUnavailable = useRef(onUnavailable);
-  useLayoutEffect(() => {
-    latestUnavailable.current = onUnavailable;
-  });
   useEffect(() => {
     if (backend && !failed) return;
-    // Failed while mounted: children render as DOM; the renderer stops and its canvas goes
     if (backend) {
       root.owner = null;
-      backend.dispose();
       backend.canvas.remove();
+      backend.dispose();
     }
-    latestUnavailable.current?.();
+    reportGlFailure();
   }, [backend, failed, root]);
 
   useEffect(() => {
@@ -149,8 +201,10 @@ export function GlSurface({
       <div
         ref={hostRef}
         className={className}
-        style={{ ...style, width, height, pointerEvents: 'none' }}
+        style={{ ...style, width, height, pointerEvents: value ? undefined : 'none' }}
         aria-hidden="true"
+        onMouseMove={forward}
+        onClick={forward}
       />
       {/* Children draw into the backend, or render as DOM if it can't be created */}
       {value ? (

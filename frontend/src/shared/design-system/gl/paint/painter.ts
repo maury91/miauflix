@@ -34,6 +34,11 @@ export interface GlArt {
    * let `corners` round them.
    */
   draw(painter: Painter): void;
+  /**
+   * Baked at this many times its size, and drawn scaled down to it: a picture shown scaled up
+   * (a focused tile, `focusScale`) stays sharp there. 1 by default.
+   */
+  scale?: number;
   /** The box whose corners are cut round (antialiased) after `draw`. */
   corners?: { x: number; y: number; width: number; height: number; radius: number };
   /** Drawn live until the picture is baked, and under it while it fades in. */

@@ -1,9 +1,10 @@
-import { visuallyHidden } from '../a11y.css';
+import { useRenderMode } from '../gl';
 import * as styles from './progress.css';
+import type { SpinnerSize } from './progress.metrics';
+import { ProgressSpinnerDom } from './ProgressSpinnerDom';
+import { ProgressSpinnerGl } from './ProgressSpinnerGl';
 
-import SpinnerIcon from '~icons/line-md/loading-twotone-loop';
-
-type Semantics =
+export type ProgressSemantics =
   | {
       /**
        * What is in progress, e.g. "Loading sources". Gives it status semantics (`status` for the
@@ -18,33 +19,28 @@ type Semantics =
       decorative: true;
     };
 
-export type ProgressSpinnerProps = Semantics & {
+export type ProgressSpinnerProps = ProgressSemantics & {
   /** `inherit` is 1em of the surrounding text, as in a button's icon slot. */
-  size?: 'inherit' | 'sm' | 'md' | 'lg';
+  size?: 'inherit' | SpinnerSize;
   /** Shows the label next to the spinner instead of only announcing it. */
   showLabel?: boolean;
 };
 
 /**
  * An indeterminate spinner: the animated icon in the current text color. Labelled, it is a polite
- * status announced once; decorative, it is hidden from assistive technology.
+ * status announced once; decorative, it is hidden from assistive technology. Drawn by the
+ * GlSurface it's in (ProgressSpinnerGl), or as DOM (ProgressSpinnerDom). An `inherit` spinner sits
+ * in DOM text (a button's icon slot), so it stays DOM even inside a surface.
  */
-export function ProgressSpinner({ label, size = 'md', showLabel = false }: ProgressSpinnerProps) {
-  const icon = (
-    <span className={styles.spinner} data-size={size} aria-hidden="true">
-      <SpinnerIcon />
-    </span>
-  );
-  if (label === undefined) return icon;
-  return (
-    <span role="status" className={styles.spinnerWithLabel}>
-      {icon}
-      <span className={showLabel ? styles.spinnerLabel : visuallyHidden}>{label}</span>
-    </span>
+export function ProgressSpinner(props: ProgressSpinnerProps) {
+  return useRenderMode() === 'gl' && props.size !== 'inherit' ? (
+    <ProgressSpinnerGl {...props} />
+  ) : (
+    <ProgressSpinnerDom {...props} />
   );
 }
 
-export type ProgressBarProps = Semantics & {
+export type ProgressBarProps = ProgressSemantics & {
   /** Completed share, from 0 to 1. Clamped. */
   value: number;
   /** The value in words or figures, formatted by the feature (i18n): "42%", "3 of 8 pieces". */

@@ -164,7 +164,15 @@ export class SceneSync {
     }
     const localX = node.x + (node.width / 2) * (1 - node.scale);
     const localY = node.y + (node.height / 2) * (1 - node.scale);
-    view.position.set(localX, localY);
+    if (node.rotation !== 0) {
+      // A spinner: turned about its centre (culling and the canvas box ignore the turn)
+      view.pivot.set(node.width / 2, node.height / 2);
+      view.position.set(node.x + node.width / 2, node.y + node.height / 2);
+    } else {
+      view.pivot.set(0, 0);
+      view.position.set(localX, localY);
+    }
+    view.rotation = node.rotation;
     view.scale.set(node.scale);
     view.alpha = node.opacity;
     const scale = s * node.scale;
@@ -475,8 +483,10 @@ export class SceneSync {
   /** Everything paints again (a lost context took every texture). */
   repaintAll() {
     for (const [node, state] of this.states) {
+      // Released, not just dropped: an entry that keeps the node as a user is never evicted
+      for (const entry of state.used) this.options.store.release(entry, node);
       state.used = [];
-      state.pictures = [];
+      this.options.releasePictures(node, state);
       if (state.baked) state.baked.dirty = true;
       if (state.band) state.band.dirty = true;
       node.repaint();

@@ -17,7 +17,16 @@ describe('Bakery', () => {
 
     expect(pictures.picture(art('tile:1'), 1, 5)).toBe(a);
     expect(pictures.picture(art('tile:1'), 2, 5)).not.toBe(a);
+    // A new font epoch: drawn again
+    expect(pictures.picture(art('tile:1'), 1, 5, 1)).not.toBe(a);
     expect(pictures.ofStandIn(a.standIn)).toBe(a);
+  });
+
+  it('bakes a scaled picture at the device pixel ratio times its scale', () => {
+    const pictures = bakery();
+    const focusable = pictures.picture({ ...art('tile:1'), scale: 1.03 }, 2, 0);
+    expect(focusable.resolution).toBeCloseTo(2.06);
+    expect(pictures.picture(art('tile:1'), 2, 0).resolution).toBe(2);
   });
 
   it('gives the queue shown pictures first', () => {

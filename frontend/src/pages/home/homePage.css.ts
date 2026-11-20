@@ -1,6 +1,10 @@
 import { color } from '@shared/design-system/tokens';
 import { style } from '@vanilla-extract/css';
 
+import { HOME_VH } from './homeLayout';
+
+const rowsMask = `linear-gradient(180deg, transparent ${HOME_VH.rowsFadeFrom}vh, #000 ${HOME_VH.rowsFadeTo}vh)`;
+
 /**
  * Home's page. Absolute, not fixed: a fixed element is its own stacking context, which would keep
  * the rail below the app logo. Nothing above Home scrolls, so it fills the viewport.
@@ -29,15 +33,15 @@ export const contents = style({
  */
 const content = style({
   position: 'absolute',
-  top: '42vh',
+  top: `${HOME_VH.rowsTop}vh`,
   right: 0,
   bottom: 0,
   left: 0,
   // Over the hero, which still layers its own parts (1 to 4)
   zIndex: 2,
-  padding: '6vh 0 8vh',
-  WebkitMaskImage: `linear-gradient(180deg, transparent 5vh, #000 8vh)`,
-  maskImage: `linear-gradient(180deg, transparent 5vh, #000 8vh)`,
+  padding: `${HOME_VH.rowsPaddingTop}vh 0 ${HOME_VH.rowsPaddingBottom}vh`,
+  WebkitMaskImage: rowsMask,
+  maskImage: rowsMask,
   scrollbarWidth: 'none',
   selectors: {
     '&::-webkit-scrollbar': { display: 'none' },
@@ -61,10 +65,14 @@ export const rows = style({
 export const rowsTv = style([rows, { willChange: 'transform' }]);
 
 /**
- * Spike (VITE_TV_GL_ROWS): the rows are drawn by the GL canvas over them. The DOM rows stay for
- * focus and semantics, invisible (Chromium skips painting an opacity 0 subtree), unpromoted.
+ * VITE_TV_GL_ROWS: the rows are drawn by the GL canvas over them. The DOM rows stay for focus and
+ * semantics, invisible (Chromium skips painting an opacity 0 subtree), unpromoted, and out of the
+ * pointer's way: the canvas hit-tests what it draws and forwards to them.
  */
-export const contentGl = style([content, { overflow: 'hidden', opacity: 0 }]);
+export const contentGl = style([
+  content,
+  { overflow: 'hidden', opacity: 0, pointerEvents: 'none' },
+]);
 
 /** The GL canvas: the whole page, the hero under the rows, above the DOM they replace. */
 export const glCanvas = style({

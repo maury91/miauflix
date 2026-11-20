@@ -288,6 +288,25 @@ export default [
     },
   },
   {
+    // A component's DOM view never draws in GL: the public component picks one view
+    // (docs/plans/tv-gl-production-plan.md, "Components: a shared hook, a DOM view, a GL view")
+    files: ['frontend/src/**/*Dom.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [{ name: 'pixi.js', message: 'DOM views draw nothing in GL.' }],
+          patterns: [
+            {
+              regex: '(^|/)gl(/.*)?$|\\.art$|Gl$',
+              message: "DOM views import nothing from 'gl', pictures or GL views.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.ts', '**/*.spec.{ts,tsx}'],
     languageOptions: {
       globals: {

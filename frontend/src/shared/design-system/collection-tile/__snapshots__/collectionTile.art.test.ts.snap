@@ -1,5 +1,55 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`CollectionTile picture > draws a badge at the frame’s top start corner, and bakes at the focused size 1`] = `
+[
+  {
+    "box": [
+      8,
+      8,
+      32,
+      24,
+    ],
+    "color": "rgba(112, 119, 122, 1)",
+    "op": "rect",
+    "options": {
+      "radius": 4,
+    },
+  },
+  {
+    "box": [
+      9,
+      9,
+      30,
+      22,
+    ],
+    "color": "rgba(10, 13, 15, 1)",
+    "op": "rect",
+    "options": {
+      "radius": 3,
+    },
+  },
+  {
+    "at": [
+      24,
+      20,
+    ],
+    "op": "text",
+    "options": {
+      "anchorX": 0.5,
+      "anchorY": 0.5,
+    },
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1,
+      "maxWidth": 1000,
+      "size": 14,
+      "weight": 600,
+    },
+    "text": "4K",
+  },
+]
+`;
+
 exports[`CollectionTile picture > draws the focus outline around the frame 1`] = `
 [
   {

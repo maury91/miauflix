@@ -10,7 +10,8 @@ import { PlayerView } from '@features/player/ui/PlayerView';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { builtForTizen, glRowsEnabled, glTuningOverride } from '@shared/config/constants';
-import { GlFocusAnchor, tokens } from '@shared/design-system';
+import { GlFocusAnchor } from '@shared/design-system';
+import { tileMetrics } from '@shared/design-system/collection-tile/collectionTile.metrics';
 import {
   easeRowSlide,
   GlGroup,
@@ -20,7 +21,8 @@ import {
   GlSurface,
   glSurfaceSupported,
   type GlTuning,
-  remPx,
+  useGlAvailable,
+  useGlBackendReady,
 } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { getMediaTitle } from '@shared/lib/media.utils';
@@ -34,6 +36,7 @@ import {
   type FC,
   memo,
   type Ref,
+  Suspense,
   useCallback,
   useEffect,
   useMemo,
@@ -61,6 +64,7 @@ import { useSmoothScroller } from './hooks/useSmoothScroller';
 import { CONTINUE_CATEGORY } from './home-feed';
 import { homeMountedRows, homeRowLoadState, WARM_ROWS } from './home-layout';
 import { HOME_GL_LAYERS } from './homeGlLayers';
+import { homeLayout } from './homeLayout';
 import { HOME_NAV } from './homeNav';
 import * as styles from './homePage.css';
 
@@ -110,7 +114,21 @@ const withRowsAround = (rows: number[], activeCategory: number, categoryCount: n
   return around.length ? [...rows, ...around].sort((left, right) => left - right) : rows;
 };
 
-const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
+/**
+ * With the WebGL rows, browsing Home waits for the renderer's chunk (preloaded at startup) as a
+ * whole: its first focus looks for the rows, which mount inside the surface.
+ */
+const HomePage: FC<HomePageProps> = props => (
+  <Suspense fallback={null}>
+    <HomeContent {...props} />
+  </Suspense>
+);
+
+const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
+  // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
+  // Decided once; a surface that loses its context for good turns it off (the DOM rows remount)
+  const [glWanted] = useState(() => glRowsEnabled && glSurfaceSupported());
+  const glRows = useGlAvailable() && glWanted;
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
   const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
@@ -120,6 +138,8 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
 
   const { view, playable, routeQuery, routeMedia, nextEpisode } = useMediaRoute(activeRoute);
   const browsing = view === 'browse';
+  // Only the rows need the renderer: details and the player don't wait for its chunk
+  useGlBackendReady(glRows && browsing);
   const [browseSelection, setBrowseSelection] = useState<MediaDto | null>(null);
   useSessionChange(sessionId, () => setBrowseSelection(null));
   const selectedMedia = selectedMediaFor(activeRoute, routeMedia, browseSelection);
@@ -130,6 +150,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     userId: currentUser?.id,
   });
   const { geometry, margin, rowHeight, windowWidth, windowHeight } = useMediaBoxSizes();
+  const layout = homeLayout({ width: windowWidth, height: windowHeight }, geometry);
   // The hero and the fixed app logo line up with the rows' left edge.
   useEffect(() => {
     document.body.style.setProperty('--home-content-left', `${margin}px`);
@@ -166,9 +187,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     transform: builtForTizen,
     onRest: builtForTizen ? () => contentRest.current() : undefined,
   });
-  // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
-  // Back to DOM if the surface can't start after all (the probe passed, Pixi didn't)
-  const [glRows, setGlRows] = useState(() => glRowsEnabled && glSurfaceSupported());
   const glScroller = useRef<GlScrollerHandle>(null);
   const scrollRows = useCallback(
     (target: number, options?: { instant?: boolean }) => {
@@ -266,7 +284,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     // Only on arriving: later moves are the focus's
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [glRows, browsing]);
-  const onGlUnavailable = useCallback(() => setGlRows(false), []);
   // The DOM rows took over from the GL ones: bring the focused row into view there
   const wasGlRows = useRef(glRows);
   useEffect(() => {
@@ -411,12 +428,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         <div
           ref={builtForTizen ? content.ref : undefined}
           className={builtForTizen ? styles.rowsTv : styles.rows}
-          // Room for the last row to scroll to the top like the others (the content is 58vh
-          // with 6vh + 8vh of padding): stopped short, the row above it showed under the fade
+          // Room for the last row to scroll to the top like the others: stopped short, the row
+          // above it showed under the fade
           style={{
             height: Math.max(
               displayCategories.length * rowHeight,
-              (displayCategories.length - 1) * rowHeight + windowHeight * 0.44
+              (displayCategories.length - 1) * rowHeight + layout.rowsViewport
             ),
           }}
         >
@@ -496,7 +513,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                   prefetch={{ x: geometry.itemWidth * 2, y: rowHeight }}
                   exposeAs={import.meta.env.DEV || builtForTizen ? '__glRows' : undefined}
                   tuning={glTuningOverride as GlTuning | undefined}
-                  onUnavailable={onGlUnavailable}
                 >
                   {/* The hero under the rows: its backdrops live, its shade baked; together
                       what shows through the rows' fade edge */}
@@ -505,28 +521,24 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                     <GlLayer baked>{hero}</GlLayer>
                   </GlLayer>
                   <GlLayer name={HOME_GL_LAYERS.heroDetails} z={0.5} />
-                  {/* The rows from content's top (42vh) past its padding (6vh), faded like its
-                      mask (transparent 5vh to opaque 8vh) */}
+                  {/* The rows from content's top past its padding, faded like its mask
+                      (homePage.css.ts) */}
                   <GlScroller
                     ref={glScroller}
                     z={1}
-                    clipTop={windowHeight * 0.42}
-                    contentTop={windowHeight * 0.48}
-                    fade={[windowHeight * 0.47, windowHeight * 0.5]}
+                    clipTop={layout.rowsClipTop}
+                    contentTop={layout.rowsContentTop}
+                    fade={layout.rowsFade}
                     fadeFrom={HOME_GL_LAYERS.heroBackground}
                     scrollDuration={300}
                     scrollEasing={easeRowSlide}
                     onScrollRest={() => contentRest.current()}
                   >
-                    {/* The focused card always rests here: the rows' top (48vh), the title (5vh +
-                        1vh), the carousel's padding; centred by the geometry's margin */}
+                    {/* The focused card always rests here: the first row's first whole card */}
                     <GlFocusAnchor
                       layer={HOME_GL_LAYERS.focus}
-                      x={(windowWidth - geometry.contentWidth) / 2}
-                      y={windowHeight * 0.54 + remPx(tokens.space.xs)}
-                      width={geometry.itemWidth}
-                      height={(geometry.itemWidth * 9) / 16}
-                      scale={1.03}
+                      {...layout.focusAnchor}
+                      scale={tileMetrics.focusScale}
                     >
                       {rowsContent}
                     </GlFocusAnchor>

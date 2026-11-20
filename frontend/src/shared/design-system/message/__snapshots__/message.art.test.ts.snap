@@ -1,0 +1,33 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Message picture > draws the tone’s icon on the first line, then the text 1`] = `
+[
+  {
+    "box": [
+      96,
+      90,
+      20,
+      20,
+    ],
+    "key": "message-icon|danger|40",
+    "op": "canvas",
+  },
+  {
+    "at": [
+      128,
+      88,
+    ],
+    "op": "text",
+    "options": undefined,
+    "spec": {
+      "color": "#F5F5F5",
+      "lineHeight": 1.5,
+      "maxLines": 2,
+      "maxWidth": 768,
+      "size": 16,
+      "weight": 400,
+    },
+    "text": "Failed to load content.",
+  },
+]
+`;

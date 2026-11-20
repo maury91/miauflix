@@ -17,8 +17,7 @@ import {
   useCarouselPosition,
 } from '@shared/design-system';
 import { ITEM_WIDTH_OF_HEIGHT } from '@shared/design-system/carousel/collectionGeometry';
-import { GlGroup, remPx, useGlNode, useGlPaint, useGlParent } from '@shared/design-system/gl';
-import { color, typeScale } from '@shared/design-system/tokens';
+import { GlGroup, useGlParent, useRenderMode } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { presentError } from '@shared/lib/api-error';
 import { IDLE, imagePreloader, NEARBY } from '@shared/lib/image-preloader';
@@ -36,9 +35,11 @@ import {
   useState,
 } from 'react';
 
+import { homeRowLayout } from '../homeLayout';
 import { HOME_NAV } from '../homeNav';
 import { createCoalescer } from '../hooks/coalescer';
 import * as styles from './categoryRow.css';
+import { type CategoryRowState, CategoryRowTitleGl } from './CategoryRowTitleGl';
 import { MediaCard } from './MediaCard';
 
 const VIEWPORT_PROMOTION_DEBOUNCE_MS = 300;
@@ -154,7 +155,8 @@ export const CategoryRow = memo(
     // size is unknown, and the carousel keeps the remembered card.
     const [total, setTotal] = useState(mediaOverride?.length ?? 0);
     // In GL the focused card always rests in the same place, under one static outline
-    const glRows = useGlParent() !== null;
+    const glRows = useRenderMode() === 'gl';
+    const glParent = useGlParent();
     const navigation = useCarouselNavigation(
       { count: total, perPage, paging: glRows ? 'anchor' : 'item' },
       initialIndex
@@ -500,75 +502,42 @@ export const CategoryRow = memo(
       [category.name, onPage]
     );
 
-    // GL form (VITE_TV_GL_ROWS): the title and states are drawn; the carousel draws itself below
-    const glParent = useGlParent();
-    const titleNode = useGlNode();
     // From the geometry, not the store: the row's sizes all come from collectionGeometry
     const windowHeight = geometry.itemWidth / ITEM_WIDTH_OF_HEIGHT;
-    const margin = ((glParent?.width ?? 0) - geometry.contentWidth) / 2;
+    const titleId = `category-${category.slug}`;
     // Loading until the row's size is known; a later page loading shows its cards as they come
     const loading = !mediaOverride && !total && (loadIntent === 'dormant' || !current.currentData);
-    const failedText =
-      !mediaOverride && current.isError && !current.currentData
-        ? errorText(current.error, 'Failed to load content.')
+    const failed = !mediaOverride && current.isError && !current.currentData;
+    const empty = !failed && !loading && !total;
+    const errorMessage = failed ? errorText(current.error, 'Failed to load content.') : '';
+    const glState: CategoryRowState = failed
+      ? { kind: 'failed', text: errorMessage }
+      : empty
+        ? { kind: 'empty', text: 'Nothing here yet.' }
         : null;
-    // A row still loading holds its place, and focus can rest on it meanwhile. Off screen on the
-    // TV, no spinner: Chromium 69 keeps animating it out of view.
-    const showLoading = loading && loadIntent !== 'dormant' && !(builtForTizen && !visible);
-    // The row's state under its title in the GL form (read by the paint from this render's commit)
-    const glState =
-      failedText ?? (!loading && !total ? 'Nothing here yet.' : showLoading ? 'Loading...' : null);
-    useGlPaint(titleNode, painter => {
-      painter.text(
-        {
-          text: category.name,
-          size: remPx(typeScale.heading.fontSize),
-          weight: typeScale.heading.fontWeight,
-          lineHeight: parseFloat(typeScale.heading.lineHeight),
-          color: color.text,
-          maxWidth: (glParent?.width ?? 0) - margin * 2,
-        },
-        margin,
-        0
-      );
-      if (glState)
-        painter.text(
-          {
-            text: glState,
-            size: remPx(typeScale.body.fontSize),
-            weight: 400,
-            lineHeight: parseFloat(typeScale.body.lineHeight),
-            color: color.textSecondary,
-            maxWidth: (glParent?.width ?? 0) - margin * 2,
-          },
-          margin,
-          windowHeight * 0.06 + windowHeight * 0.1,
-          { anchorY: 0.5 }
-        );
-    });
-
-    const titleId = `category-${category.slug}`;
+    const rowLayout = homeRowLayout(windowHeight);
     const title = (
       <div className={styles.title}>
         <Heading level={2} variant="heading" id={titleId} maxLines={1}>
           {category.name}
         </Heading>
+        {glRows && <CategoryRowTitleGl name={category.name} state={glState} geometry={geometry} />}
       </div>
     );
-    if (failedText) {
+    if (failed) {
       return (
         <div className={styles.row}>
           {title}
           {/* Polite, and only on screen: prefetched rows failing is not urgent. */}
           <div className={styles.state}>
             <Message tone="danger" live={visible ? 'polite' : undefined}>
-              {failedText}
+              {errorMessage}
             </Message>
           </div>
         </div>
       );
     }
-    if (!loading && !total) {
+    if (empty) {
       return (
         <div className={styles.row}>
           {title}
@@ -581,8 +550,8 @@ export const CategoryRow = memo(
       <div className={styles.row}>
         {title}
         <div className={styles.carousel}>
-          {/* Title 5vh + its 1vh margin (categoryRow.css.ts) */}
-          <GlGroup y={windowHeight * 0.06}>
+          {/* Under the title and its margin (categoryRow.css.ts) */}
+          <GlGroup y={rowLayout.carouselTop}>
             <Carousel
               labelledBy={titleId}
               count={loading ? 0 : total}
@@ -595,11 +564,25 @@ export const CategoryRow = memo(
               surface="black"
             />
           </GlGroup>
-          {showLoading && (
-            <div className={styles.loading}>
-              <ProgressSpinner label="Loading..." showLabel />
-            </div>
-          )}
+          {/* A row still loading holds its place, and focus can rest on it meanwhile. Off screen
+              on the TV, no spinner: Chromium 69 keeps animating it out of view. */}
+          {loading &&
+            loadIntent !== 'dormant' &&
+            !(builtForTizen && !visible) &&
+            (glRows ? (
+              // Drawn from the content's start, centred on the cards (as styles.loading)
+              <GlGroup
+                x={((glParent?.width ?? 0) - geometry.contentWidth) / 2}
+                y={rowLayout.cardsMiddle}
+                height={0}
+              >
+                <ProgressSpinner label="Loading..." showLabel />
+              </GlGroup>
+            ) : (
+              <div className={styles.loading}>
+                <ProgressSpinner label="Loading..." showLabel />
+              </div>
+            ))}
         </div>
       </div>
     );

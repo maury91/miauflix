@@ -1,5 +1,6 @@
 import {
   createContext,
+  type RefCallback,
   useCallback,
   useContext,
   useLayoutEffect,
@@ -35,6 +36,17 @@ export function useGlParent() {
 }
 
 export const GlParentProvider = GlContext.Provider;
+
+/** How a component renders: DOM, or drawn by the GlSurface it's in. */
+export type RenderMode = 'dom' | 'gl';
+
+/**
+ * Inside a GlSurface (and not taken out of it by a GlParentScope without a node), `gl`: the
+ * component renders its GL view. Read once by the public component, which renders one view.
+ */
+export function useRenderMode(): RenderMode {
+  return useContext(GlContext) ? 'gl' : 'dom';
+}
 
 /**
  * The surface's named layers: nodes created on first use, by the GlLayer that places them or by a
@@ -79,6 +91,19 @@ export function useGlNode(parentNode?: GlNode | null): GlNode | null {
     return () => parent.remove(node);
   }, [node, parent]);
   return context ? node : null;
+}
+
+/**
+ * A ref for the element the pointer over `node`'s box goes to: its semantic twin, which gets the
+ * surface's mouse moves and clicks there (see hitTest).
+ */
+export function useGlTarget(node: GlNode | null): RefCallback<Element> {
+  return useCallback(
+    (element: Element | null) => {
+      if (node) node.target = element;
+    },
+    [node]
+  );
 }
 
 /**

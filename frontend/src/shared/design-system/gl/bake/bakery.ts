@@ -3,9 +3,11 @@ import type { GlArt } from '../paint/painter';
 
 /** A component's picture (GlArt) and the texture it's baked into once everything it draws is ready. */
 export interface Picture<T> {
-  /** The art's key and the device pixel ratio it's baked at. */
+  /** The art's key, the resolution it's baked at and the font epoch. */
   key: string;
   art: GlArt;
+  /** Texture px per CSS px: the device pixel ratio times the art's `scale`. */
+  resolution: number;
   /** Stands in for the picture while it's drawn: the user of its images and texts. */
   standIn: GlNode;
   texture: T | null;
@@ -34,14 +36,19 @@ export class Bakery<T> {
 
   constructor(private readonly createStandIn: (art: GlArt) => GlNode) {}
 
-  /** The picture for `art` at `dpr`: created and queued the first time. */
-  picture(art: GlArt, dpr: number, frame: number): Picture<T> {
-    const key = `${art.key}|${dpr}`;
+  /**
+   * The picture for `art` at `dpr`: created and queued the first time. A new font `epoch` (fonts
+   * that loaded since) makes new pictures: their text was drawn in a fallback font.
+   */
+  picture(art: GlArt, dpr: number, frame: number, epoch = 0): Picture<T> {
+    const resolution = dpr * (art.scale ?? 1);
+    const key = `${art.key}|${resolution}|${epoch}`;
     let picture = this.pictures.get(key);
     if (!picture) {
       picture = {
         key,
         art,
+        resolution,
         standIn: this.createStandIn(art),
         texture: null,
         bytes: 0,

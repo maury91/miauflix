@@ -23,6 +23,8 @@ export const tileMetrics = {
   /** Overlay text: inset from the frame's sides and bottom, and from the bottom over progress. */
   overlayInset: space.sm,
   overlayInsetOverProgress: space.lg,
+  /** The badge: inset from the frame's top and start. */
+  badgeInset: space.xs,
   /** Below text: the gap under the frame. */
   belowGap: space.xs,
   /** Between the label and the supporting text. */

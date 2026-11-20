@@ -1,6 +1,6 @@
-import { paintBadgeLabel } from '../badge/badge.art';
+import { type BadgeArtProps, paintBadge } from '../badge/badge.art';
 import { artKey, type GlArt, hex, type Painter, remPx, type TextSpec } from '../gl/art';
-import { color, space, tileScrim, typeScale } from '../tokens';
+import { color, tileScrim, typeScale } from '../tokens';
 import {
   outlineDistanceRem,
   TILE_RATIO,
@@ -22,8 +22,8 @@ export interface CollectionTileArtProps {
   labelPlacement?: 'below' | 'overlay';
   labelHidden?: boolean;
   progress?: number;
-  /** A label Badge's text at the frame's top start corner (collectionTile.css.ts `badge`). */
-  badge?: string;
+  /** A label Badge at the frame's top start corner. */
+  badge?: BadgeArtProps;
   /** The tile's width (px); the frame's height follows the ratio. */
   width: number;
 }
@@ -38,8 +38,9 @@ export interface TileVisualArt {
 }
 
 /**
- * CollectionTile's picture: the frame, the visual, scrim, progress and text in one picture, baked
- * once (see GlArt). The focus outline and scale aren't in it: they change with focus.
+ * CollectionTile's picture: the frame, the visual, scrim, badge, progress and text in one picture,
+ * baked once (see GlArt) at the focused size, so its text stays sharp under the focus scale. The
+ * focus outline and scale aren't in it: they change with focus.
  */
 export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVisualArt): GlArt {
   const {
@@ -56,12 +57,17 @@ export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVi
   const corner = remPx(tileMetrics.radius);
   const below = labelPlacement === 'below';
   return {
-    key: artKey('tile', { ...props, visual: visual?.key }),
+    key: artKey('tile', {
+      ...props,
+      badge: badge && `${badge.tone ?? 'neutral'}|${badge.text}`,
+      visual: visual?.key,
+    }),
     holdKey: visual?.holdKey
       ? artKey('tile-hold', { width, ratio, visual: visual.holdKey })
       : undefined,
     width,
     height: below ? frameHeight + belowTextHeight(Boolean(supportingText)) : frameHeight,
+    scale: tileMetrics.focusScale,
     corners: { x: 0, y: 0, width, height: frameHeight, radius: corner },
     draw(painter) {
       painter.rect(0, 0, width, frameHeight, FRAME);
@@ -75,7 +81,10 @@ export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVi
         progress,
         radius: 0,
       });
-      if (badge) paintBadgeLabel(painter, badge, remPx(space.xs), remPx(space.xs));
+      if (badge) {
+        const inset = remPx(tileMetrics.badgeInset);
+        paintBadge(painter, badge, inset, inset);
+      }
     },
     placeholder(painter) {
       painter.rect(0, 0, width, frameHeight, FRAME, { radius: corner });
@@ -83,13 +92,14 @@ export function collectionTileArt(props: CollectionTileArtProps, visual?: TileVi
   };
 }
 
-/** The text under a `below` tile's frame (px). */
-function belowTextHeight(supporting: boolean) {
+/** The text under a `below` tile's frame (px): the label's line and the supporting text's. */
+export function belowTextHeight(supporting: boolean, label = true) {
+  if (!label && !supporting) return 0;
   const line = (style: { fontSize: string; lineHeight: string }) =>
     Math.ceil(remPx(style.fontSize) * parseFloat(style.lineHeight)) + 2;
   return (
     remPx(tileMetrics.belowGap) +
-    line(typeScale.label) +
+    (label ? line(typeScale.label) : 0) +
     (supporting ? remPx(tileMetrics.supportingGap) + line(typeScale.caption) : 0)
   );
 }
