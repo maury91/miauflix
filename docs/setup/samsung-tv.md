@@ -139,3 +139,12 @@ desktop) in its settings, pick the TV, choose **Custom WGT File** and select
 `dist/miauflix.wgt`.
 
 Rebuild and reinstall the package for every frontend update.
+
+If an install fails with `Connection reset by peer`, quit the Apps2Samsung desktop app: the TV
+accepts one SDB connection at a time. If it fails with `Author certificate not match`, the copy on
+the TV was signed with another certificate: remove it (`apps2samsung-cli uninstall
+8nvJKZYaJb.Mauflix --tv <ip>`, which erases its data on the TV: the server and the sign-in) and
+install again.
+
+To debug the app, `node scripts/tv-debug.mjs <tv-ip>` relaunches it in debug mode and serves its
+DevTools at `http://127.0.0.1:9222` (open `chrome://inspect` and add that address).

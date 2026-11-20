@@ -30,7 +30,9 @@ export function mediaTileVisual(props: MediaTileVisualProps): TileVisualArt {
       );
       if (visual.titled) {
         painter.image(visual.titled, 0, 0, width, height, { fit: 'cover' });
-        return { namesTile: visual.namesTile };
+        // The picture is baked only once the image settles (drawn again, failing, as artwork and
+        // logo): while it loads, the label it will hide isn't asked for (rasterized for nothing)
+        return { namesTile: true };
       }
       drawArtwork(painter, { src: visual.artwork, width, height, fallbackText: title });
       if (visual.logo) drawTileLogo(painter, visual.logo, width, height);

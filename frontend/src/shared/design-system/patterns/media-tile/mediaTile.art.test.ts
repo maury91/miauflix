@@ -16,8 +16,10 @@ describe('MediaTile picture', () => {
     expect(record({})).toMatchSnapshot();
   });
 
-  it('keeps the label while the titled backdrop loads', () => {
-    expect(record({ 't.jpg': 'loading' })).toMatchSnapshot();
+  it('asks for no label while the titled backdrop loads (it bakes once the image settles)', () => {
+    const calls = record({ 't.jpg': 'loading' });
+    expect(calls.some(call => call.op === 'text')).toBe(false);
+    expect(calls.some(call => call.op === 'image' && call.src === 't.jpg')).toBe(true);
   });
 
   it('draws the artwork and the logo when the titled backdrop fails', () => {

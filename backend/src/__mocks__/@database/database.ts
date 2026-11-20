@@ -170,6 +170,7 @@ const createMockRefreshTokenRepository = (): jest.Mocked<RefreshTokenRepository>
   return {
     findByToken: jest.fn(() => Promise.resolve(null)),
     findByPreviousToken: jest.fn(() => Promise.resolve(null)),
+    replaceRotatedToken: jest.fn(() => Promise.resolve(false)),
     create: jest.fn((tokenData: Partial<RefreshToken> & { token?: string }) => {
       const { token: _omit, ...rest } = tokenData;
       void _omit; // Raw token is hashed in real impl; omitted in mock

@@ -47,10 +47,12 @@ export class SceneSync {
   private bandsBySource = new Map<GlNode, Set<FadeBand>>();
   /** Baked layers synced this frame, in tree order. */
   private bakedThisFrame: Array<{ node: GlNode; layer: BakedLayer }> = [];
-  private bandsThisFrame: FadeBand[] = [];
   private disposed = false;
   /** A baked layer or band failed this frame and is tried again on the next. */
   retrying = false;
+  /** The canvas and margins the last frame culled with: changed, every node is visited. */
+  private cullKey = '';
+  private visitAll = true;
 
   constructor(private readonly options: SceneSyncOptions) {}
 
@@ -74,7 +76,11 @@ export class SceneSync {
         y: 0,
         scale: 1,
         onScreen: false,
-        syncedAt: -1,
+        near: false,
+        inX: NaN,
+        inY: NaN,
+        inScale: NaN,
+        inOpacity: NaN,
         baked: null,
         band: null,
       };
@@ -84,11 +90,19 @@ export class SceneSync {
     return state;
   }
 
-  /** Syncs the tree, then redraws the baked layers and fade bands that changed. */
+  /**
+   * Syncs the tree, then redraws the baked layers and fade bands that changed. Only the paths to
+   * what changed are visited: a subtree whose nodes didn't change, under the same parent
+   * transform, keeps its containers as they are.
+   */
   syncRoot(root: GlNode) {
     this.bakedThisFrame = [];
-    this.bandsThisFrame = [];
     this.retrying = false;
+    const { frame } = this.options;
+    const prefetch = this.options.prefetch();
+    const cullKey = `${frame.width}|${frame.height}|${frame.dpr}|${prefetch.x}|${prefetch.y}`;
+    this.visitAll = cullKey !== this.cullKey;
+    this.cullKey = cullKey;
     this.sync(root, 0, 0, 1, 1, []);
     // Inner layers first: an outer one draws their sprites
     for (let index = this.bakedThisFrame.length - 1; index >= 0; index--) {
@@ -103,10 +117,17 @@ export class SceneSync {
           if (baked && parent.bake) baked.dirty = true;
         }
       });
+      if (layer.dirty) node.markChanged();
     }
-    // A clean band too, if its source stopped drawing (removed, culled with an ancestor)
-    for (const band of this.bandsThisFrame)
-      if (band.dirty || !this.sourceDrawn(band)) this.attempt(band, () => this.drawBand(band));
+    // A band's source can move or be culled independently of the node that draws the band.
+    for (const bands of this.bandsBySource.values()) {
+      for (const band of bands) {
+        // Its node culled, the band isn't shown: it stays dirty, drawn when the node is back
+        if (!this.states.get(band.owner)?.near) continue;
+        if (band.dirty || (band.container.visible && !this.sourceDrawn(band)))
+          this.attempt(band, () => this.drawBand(band));
+      }
+    }
     return this.state(root).view;
   }
 
@@ -153,11 +174,27 @@ export class SceneSync {
     marks: readonly Dirtiable[]
   ) {
     const state = this.state(node);
+    if (
+      !node.changed &&
+      !this.visitAll &&
+      state.inX === tx &&
+      state.inY === ty &&
+      state.inScale === s &&
+      state.inOpacity === opacity
+    )
+      return;
+    state.inX = tx;
+    state.inY = ty;
+    state.inScale = s;
+    state.inOpacity = opacity;
     const view = state.view;
     if (node.bake) marks = [...marks, this.bakedLayer(node, state)];
     else if (state.baked) this.dropBaked(state);
     const bands = this.bandsBySource.get(node);
-    if (bands) marks = [...marks, ...bands];
+    if (bands) {
+      for (const band of bands) band.dirty = true;
+      marks = [...marks, ...bands];
+    }
     if (node.changed) {
       node.changed = false;
       for (const mark of marks) mark.dirty = true;
@@ -191,17 +228,17 @@ export class SceneSync {
         x > width + prefetch.x ||
         y > height + prefetch.y
       ) {
-        // Beyond the prefetch margin: not drawn, children not visited
+        // Beyond the prefetch margin: not drawn, children not visited (but the ones it lost let go)
         view.visible = false;
         if (state.baked) state.baked.sprite.visible = false;
-        state.x = Infinity;
-        state.onScreen = false;
+        this.releaseRemoved(node, state);
+        this.leave(node, state);
         return;
       }
       onScreen = x1 > 0 && y1 > 0 && x < width && y < height;
     }
     view.visible = alpha > 0 && onScreen;
-    state.syncedAt = this.options.frame.index;
+    state.near = true;
     state.x = x;
     state.y = y;
     state.scale = scale;
@@ -241,7 +278,12 @@ export class SceneSync {
       this.sync(child, x, y, scale, alpha, marks);
       if (child.bake) childState.view.parent?.removeChild(childState.view);
     });
-    // Children removed from the node
+    this.releaseRemoved(node, state);
+  }
+
+  /** The containers of children removed from the node go, and the children are released. */
+  private releaseRemoved(node: GlNode, state: NodeState) {
+    const { view } = state;
     for (const childView of [...view.children]) {
       if (
         childView === state.drawn ||
@@ -254,6 +296,22 @@ export class SceneSync {
         view.removeChild(childView);
         if (childNode) this.release(childNode);
       }
+    }
+  }
+
+  /** Culled: the node and what was near under it aren't any more (their textures may go). */
+  private leave(node: GlNode, state: NodeState) {
+    state.x = Infinity;
+    state.onScreen = false;
+    const wasNear = state.near;
+    state.near = false;
+    for (const child of node.children) {
+      const childState = this.states.get(child);
+      // Under a node already culled only a child moved in from a near parent is still near
+      if (!childState || (!wasNear && !childState.near)) continue;
+      // Visited again (not skipped) when it comes back
+      childState.inX = NaN;
+      this.leave(child, childState);
     }
   }
 
@@ -348,12 +406,12 @@ export class SceneSync {
         dirty: true,
         failures: 0,
         source,
+        owner: node,
       };
       let bands = this.bandsBySource.get(source);
       if (!bands) this.bandsBySource.set(source, (bands = new Set()));
       bands.add(band);
     }
-    this.bandsThisFrame.push(band);
     const { frame } = this.options;
     const top = y + node.fade![0] * scale;
     const bottom = y + node.fade![1] * scale;
@@ -414,15 +472,9 @@ export class SceneSync {
     this.options.stats.bands++;
   }
 
-  /** The band's source was placed on screen this frame. */
   private sourceDrawn(band: FadeBand) {
     const source = this.states.get(band.source);
-    return Boolean(
-      source &&
-        source.x !== Infinity &&
-        source.onScreen &&
-        source.syncedAt === this.options.frame.index
-    );
+    return Boolean(source?.near && source.onScreen);
   }
 
   private dropBand(state: NodeState) {

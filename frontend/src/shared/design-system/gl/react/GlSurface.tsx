@@ -13,7 +13,7 @@ import {
 import { hitTest } from '../core/hitTest';
 import { followReducedMotion } from '../core/motion';
 import type { GlBackend, GlBackendOptions, GlTuning } from '../core/renderer';
-import { GlNode } from '../core/scene';
+import { GlNode, releaseTree } from '../core/scene';
 import { useGlBackend } from './backendModule';
 import { reportGlFailure } from './glSupport';
 import { GlLayers, GlLayersProvider, GlParentProvider } from './hooks';
@@ -30,6 +30,11 @@ export interface GlSurfaceProps {
   exposeAs?: string;
   /** Read once, when the surface starts. */
   tuning?: GlTuning;
+  /**
+   * The canvas is opaque, filled with this colour (CSS hex), when nothing under it needs to show
+   * through: cheaper to composite. Read once, when the surface starts.
+   */
+  background?: string;
   /** Layers (GlLayer, GlScroller) and the components drawn into them. */
   children: ReactNode;
 }
@@ -73,6 +78,7 @@ function Surface({
   prefetch = { x: 0, y: 0 },
   exposeAs,
   tuning,
+  background,
   children,
 }: GlSurfaceProps & { Backend: BackendClass | null }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -94,6 +100,7 @@ function Surface({
         height,
         dpr: window.devicePixelRatio || 1,
         tuning,
+        background,
         onError: error => {
           console.error('[gl] surface unavailable', error);
           setFailed(true);
@@ -152,6 +159,7 @@ function Surface({
     return () => {
       disposal.current = window.setTimeout(() => {
         root.owner = null;
+        releaseTree(root);
         backend.dispose();
       });
     };

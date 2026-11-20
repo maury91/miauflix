@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { motion } from './motion';
-import { GlNode, stepAnimations } from './scene';
+import { GlNode, releaseTree, stepAnimations } from './scene';
 
 const linear = (progress: number) => progress;
 
@@ -162,6 +162,67 @@ describe('stepAnimations', () => {
     expect(still.changed).toBe(false);
     expect(stepAnimations(root, 100)).toBe(false);
     expect(child.scale).toBe(2);
+  });
+
+  it('stops stepping a spinner deep in a removed subtree, and resumes it when it is back', () => {
+    const root = new GlNode();
+    const branch = new GlNode();
+    const spinner = new GlNode();
+    root.add(branch);
+    branch.add(spinner);
+    spinner.set({ spin: 1000 });
+    expect(stepAnimations(root, 250)).toBe(true);
+
+    root.remove(branch);
+    // Off the tree it isn't stepped, even as the root of its own subtree
+    expect(stepAnimations(branch, 500)).toBe(false);
+    expect(spinner.rotation).toBeCloseTo(Math.PI / 2);
+
+    root.add(branch);
+    expect(stepAnimations(root, 750)).toBe(true);
+    expect(spinner.rotation).toBeCloseTo((Math.PI * 3) / 2);
+  });
+
+  it('keeps a removed spinner still through changes made while it is off the tree', () => {
+    const root = new GlNode();
+    const branch = new GlNode();
+    const spinner = new GlNode();
+    root.add(branch);
+    branch.add(spinner);
+    spinner.set({ spin: 1000 });
+    stepAnimations(root, 250);
+
+    root.remove(branch);
+    spinner.set({ x: 1 });
+    spinner.animate('scale', 2, 100, linear);
+    expect(stepAnimations(branch, 500)).toBe(false);
+    expect(spinner.rotation).toBeCloseTo(Math.PI / 2);
+  });
+
+  it('stands still a spinner whose spin stopped while it was off the tree', () => {
+    const root = new GlNode();
+    const spinner = new GlNode();
+    root.add(spinner);
+    spinner.set({ spin: 1000 });
+    stepAnimations(root, 250);
+
+    root.remove(spinner);
+    spinner.set({ spin: 0 });
+    root.add(spinner);
+    expect(stepAnimations(root, 500)).toBe(false);
+    expect(spinner.rotation).toBe(0);
+  });
+
+  it('stops stepping a released tree', () => {
+    const root = new GlNode();
+    const spinner = new GlNode();
+    root.add(spinner);
+    spinner.set({ spin: 1000 });
+    stepAnimations(root, 250);
+
+    releaseTree(root);
+    spinner.set({ x: 1 });
+    expect(stepAnimations(root, 500)).toBe(false);
   });
 });
 

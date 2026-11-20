@@ -122,18 +122,13 @@ describe('CategoryRow on the Samsung TV', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders only the cards in view while off screen', () => {
-    render(layer(<CategoryRow {...props(false)} />));
-    expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
-  });
-
-  it('renders two cards of margin past a page once it has been in view a moment', () => {
+  it('renders one card past each side of the page, in view or not', () => {
     const view = render(layer(<CategoryRow {...props(false)} />));
-    view.rerender(layer(<CategoryRow {...props(true)} />));
     expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
 
+    view.rerender(layer(<CategoryRow {...props(true)} />));
     act(() => vi.advanceTimersByTime(400));
-    expect(renderedCards()).toEqual([8, 9, 10, 11, 12, 13, 14, 15]);
+    expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
   });
 
   it('shows no spinner while loading off screen', () => {
@@ -256,7 +251,7 @@ describe('CategoryRow on the Samsung TV', () => {
     expect(onSelectionChange).toHaveBeenLastCalledWith(11);
     expect(useGetListQuery.mock.calls.length).toBe(rowRenders);
     // The two cards whose focus changed, and the one the kept window gained
-    expect(cardRenders.sort((left, right) => left - right)).toEqual([10, 11, 16]);
+    expect(cardRenders.sort((left, right) => left - right)).toEqual([10, 11, 15]);
   });
 
   it('shows the bounded card in the hero when the first page brings fewer cards than remembered', () => {
@@ -287,17 +282,5 @@ describe('CategoryRow on the Samsung TV', () => {
 
     expect(onSelectionChange).toHaveBeenLastCalledWith(39);
     expect(onActive).toHaveBeenLastCalledWith(0, 39, expect.objectContaining({ id: 39 }));
-  });
-
-  it('goes back to the cards in view when it leaves view, unless kept warm', () => {
-    const view = render(layer(<CategoryRow {...props(true)} />));
-    act(() => vi.advanceTimersByTime(400));
-    expect(renderedCards()).toHaveLength(8);
-
-    view.rerender(layer(<CategoryRow {...props(false)} warm />));
-    expect(renderedCards()).toHaveLength(8);
-
-    view.rerender(layer(<CategoryRow {...props(false)} />));
-    expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
   });
 });

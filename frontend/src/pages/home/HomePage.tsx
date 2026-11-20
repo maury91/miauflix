@@ -10,6 +10,7 @@ import { PlayerView } from '@features/player/ui/PlayerView';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { builtForTizen, glRowsEnabled, glTuningOverride } from '@shared/config/constants';
+import { getTvGlTextureBudget } from '@shared/config/tv-profile';
 import { GlFocusAnchor } from '@shared/design-system';
 import { tileMetrics } from '@shared/design-system/collection-tile/collectionTile.metrics';
 import {
@@ -68,6 +69,11 @@ import { homeLayout } from './homeLayout';
 import { HOME_NAV } from './homeNav';
 import * as styles from './homePage.css';
 
+/** The GL rows' tuning: the TV's texture budget, then any debugging override. */
+const glTuning: GlTuning | undefined = builtForTizen
+  ? { textureBudget: getTvGlTextureBudget(), ...(glTuningOverride as GlTuning | undefined) }
+  : (glTuningOverride as GlTuning | undefined);
+
 /**
  * A row in its slot. Memoized whole: a row change re-renders Home, and every slot's wrapper would
  * re-render with it (a new `style` each time) even though only one row changed. The remembered card
@@ -125,7 +131,7 @@ const HomePage: FC<HomePageProps> = props => (
 );
 
 const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
-  // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
+  // The rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics.
   // Decided once; a surface that loses its context for good turns it off (the DOM rows remount)
   const [glWanted] = useState(() => glRowsEnabled && glSurfaceSupported());
   const glRows = useGlAvailable() && glWanted;
@@ -457,7 +463,6 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                       : 'dormant'
                 }
                 visible={rowLoadState.visible.has(index)}
-                warm={rowLoadState.warm.has(index)}
                 geometry={geometry}
                 isCurrentRow={activeCategory === index}
                 onDataReady={onRowReady}
@@ -511,14 +516,19 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                   width={windowWidth}
                   height={windowHeight}
                   prefetch={{ x: geometry.itemWidth * 2, y: rowHeight }}
-                  exposeAs={import.meta.env.DEV || builtForTizen ? '__glRows' : undefined}
-                  tuning={glTuningOverride as GlTuning | undefined}
+                  exposeAs={import.meta.env.DEV || glTuningOverride ? '__glRows' : undefined}
+                  tuning={glTuning}
+                  // Opaque: the page under it is black and every layer is drawn on it
+                  background="#000000"
                 >
                   {/* The hero under the rows: its backdrops live, its shade baked; together
                       what shows through the rows' fade edge */}
                   <GlLayer name={HOME_GL_LAYERS.heroBackground}>
                     <GlLayer name={HOME_GL_LAYERS.heroBackdrops} z={-1} />
-                    <GlLayer baked>{hero}</GlLayer>
+                    {/* The hero's height: the texture (and what it fills every frame) ends with it */}
+                    <GlLayer baked height={layout.heroHeight}>
+                      {hero}
+                    </GlLayer>
                   </GlLayer>
                   <GlLayer name={HOME_GL_LAYERS.heroDetails} z={0.5} />
                   {/* The rows from content's top past its padding, faded like its mask

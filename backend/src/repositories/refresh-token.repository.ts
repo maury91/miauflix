@@ -41,7 +41,7 @@ export class RefreshTokenRepository {
 
   /** The session whose token was `token` before its last rotation, if any. */
   async findByPreviousToken(token: string, session: string): Promise<RefreshToken | null> {
-    const stored = await this.repository.findOne({ where: { session } });
+    const stored = await this.repository.findOne({ where: { session }, relations: { user: true } });
     if (!stored?.previousTokenHash) return null;
     return verifyToken(token, stored.previousTokenHash) ? stored : null;
   }
@@ -129,6 +129,43 @@ export class RefreshTokenRepository {
         .execute()
     );
 
+    return result.affected ? result.affected > 0 : false;
+  }
+
+  /**
+   * Replaces the session's current token with `newToken`, for a client that lost the response of
+   * the last rotation and presents the token before it again: the token it never received is
+   * dropped, and the previous token and rotation time stay as they were, so the grace for racing
+   * refreshes isn't extended. False if the session's token changed meanwhile.
+   */
+  async replaceRotatedToken(
+    existingToken: RefreshToken,
+    newToken: string,
+    expiresAt: Date,
+    lastIpAddress: string,
+    userAgent?: string
+  ): Promise<boolean> {
+    const updateFields: Partial<RefreshToken> = {
+      tokenHash: hashToken(newToken),
+      expiresAt,
+      lastIpAddress,
+      lastAccessedAt: new Date(),
+      updatedAt: new Date(),
+    };
+    if (userAgent) updateFields.userAgent = userAgent;
+
+    const result = await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(RefreshToken)
+        .set({ ...updateFields, accessCount: () => 'accessCount + 1' })
+        .where('tokenHash = :tokenHash AND userId = :userId AND session = :session', {
+          tokenHash: existingToken.tokenHash,
+          userId: existingToken.userId,
+          session: existingToken.session,
+        })
+        .execute()
+    );
     return result.affected ? result.affected > 0 : false;
   }
 

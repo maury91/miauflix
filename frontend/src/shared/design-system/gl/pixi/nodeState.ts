@@ -36,6 +36,8 @@ export interface FadeBand {
   dirty: boolean;
   failures: number;
   source: GlNode;
+  /** The node that draws the band (its container holds it). */
+  owner: GlNode;
 }
 
 /** What a node is in Pixi. */
@@ -54,8 +56,14 @@ export interface NodeState {
   y: number;
   scale: number;
   onScreen: boolean;
-  /** The frame it was last synced within the prefetch margin (culled nodes and their subtree aren't). */
-  syncedAt: number;
+  /** Within the prefetch margin as last synced (culled nodes and their subtree aren't). */
+  near: boolean;
+  /** What its parent passed in the last sync (canvas origin, scale, opacity): unchanged, and the
+   * node unchanged, its subtree is skipped. */
+  inX: number;
+  inY: number;
+  inScale: number;
+  inOpacity: number;
   baked: BakedLayer | null;
   band: FadeBand | null;
 }

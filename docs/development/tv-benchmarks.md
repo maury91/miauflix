@@ -8,7 +8,12 @@ these numbers feed is [tv-performance-plan.md](../plans/tv-performance-plan.md),
 ## How to measure
 
 1. Install the build on the TV (`scripts/install-tizen.sh`) and open its DevTools at
-   `127.0.0.1:9222` (for example, through the Tizen debugger's port forwarding).
+   `127.0.0.1:9222` with `node scripts/tv-debug.mjs <tv-ip>`: it closes the app, launches it in
+   debug mode over SDB (no Tizen SDK needed) and forwards the inspector until stopped. Quit the
+   Apps2Samsung desktop app first: while it's open it holds the TV's only SDB connection, and
+   installs and the debug launch get `Connection reset by peer`. A reinstall ends the debug
+   session; run the script again. `localStorage['miauflix:gl-tuning'] = '{}'`, then a reload
+   (it's read at start), exposes the GL stats as `window.__glRows` without changing anything else.
 2. Run the scenarios with [`scripts/tv-bench.mjs`](../../scripts/tv-bench.mjs). It finds the
    Miauflix page, sends remote keys over the DevTools protocol, and records
    `requestAnimationFrame` intervals between `start` and `stop`:
@@ -563,7 +568,7 @@ The swapped buffer is shown undrawn now and then (the compositor presents the ca
 frame); with the buffer copied there is nothing undrawn to show. It's now the default
 (`GlTuning.preserveDrawingBuffer`), at no measurable cost. Switches for testing on the TV:
 `localStorage['miauflix:gl-tuning']` as JSON (`textureBudget`, `antialias`, `frameBudgetMs`,
-`preserveDrawingBuffer`), read when the surface starts, in the Tizen and development builds only.
+`preserveDrawingBuffer`, `transparent`), read when the surface starts, in the Tizen and development builds only.
 
 ### Phase 2 (pictures and metrics)
 
@@ -601,3 +606,223 @@ them once (since the spike, those first pictures had kept the fallback font). Te
 their own face (`document.fonts.load`), and the epoch stays at 0 on a cold load. Held Right is the
 best measured since the spike (spike 44–48; Phase 4 22–36), likely from fewer picture redraws while
 moving; 3×Down is within the noise of Phase 4.
+
+### Phase 6 (performance, first pass)
+
+Build `index-CO-avxVx.js`. Row 3 first pass 46–51 fps, back 51–52, held Right 37–49, 3×Down
+41–43; 0 errors, 47–58 MB of textures; 56 picture draws per standard run (72 in Phase 5).
+
+Profile of the first pass (4.8 s): 45% idle, the frame's own draw 18.5%. `syncRoot` is still about
+315 ms over the run (every tile's box changes while the track slides), the band redraw about
+105 ms (the hero crossfade redraws it every frame).
+
+Long frames: a probe recorded every frame over 34 ms with the time the frame's own draw took.
+Of 28 long frames (35–85 ms) in a run, the draw took 2–34 ms; the run had one long task (52 ms).
+The rest is GPU and compositor time. Checks:
+
+- `antialias: false`: no change; the TV's WebGL never had MSAA (`SAMPLES` 0).
+- The hero backdrop hidden (the largest fill): first pass 51 and 53 against 48 and 51, back 54
+  and 55 against 54 and 52, within the noise.
+
+### Phase 6 (fill)
+
+Fill per frame: about 2.4 screens of sprites at rest (the hero's baked layer alone a full screen).
+With every GL layer hidden (the canvas still cleared and presented) the first pass ran 53–55 fps
+and back 53; with Pixi's render switched off, 53–57 and 58–59.
+
+Build `index-C50YoBU8.js`: the baked hero layer ends at the hero's height (55vh) and the canvas is
+opaque. Row 3 first pass 50, 52, 52 fps, back 53, 52, 54, held Right 42, 52, 44, 3×Down 43, 40;
+0 errors, 49.8 MB of textures.
+
+Opaque against transparent (`GlTuning.transparent`), alternating cold runs: first pass 52, 52, 51
+against 48, 52, 51; back 56, 53, 50 against 53, 52, 55. Within the noise. 3×Down ran 40–50 in
+both; its window varied from 2.8 to 7.1 s (a long window takes in idle frames after the moves),
+so it can't tell them apart.
+
+### Phase 6 against the spike, the same day
+
+The plan's targets come from the spike's best session (first pass 51–60, back 58–60), on the
+server data of that day. Both builds measured cold, three runs each, one after the other; 3×Down
+ends 0.8 s after the last key (`"settle": 800`).
+
+| Scenario         | Spike (`index-BhR5SHS8.js`) | Phase 6 (`index-LPgnCQwF.js`) |
+| ---------------- | --------------------------- | ----------------------------- |
+| Row 3 first pass | 50, 51, 50                  | 50, 50, 50                    |
+| Row 3 back       | 54, 55, 55                  | 52, 55, 53                    |
+| Held Right 2.5 s | 47, 37, 40                  | 41, 44, 30                    |
+| 3 × Down         | 39, 40, 45                  | 48, 41, 41                    |
+
+Phase 6: 28 pictures baked per standard run, 0 errors, 46–53 MB of textures. Level with the
+spike: the refactoring cost nothing, and neither build reaches the targets on today's data.
+
+Texture budget 40 MB (`GlTuning.textureBudget`, what 2018–2019 TVs now get), two runs: first pass
+53 and 49, back 55 and 52, held Right 35 and 25, 3×Down 35 and 42 (`settle`); 0 errors, and Home
+still worked when coming back up and down after the hold. Holding Right fetches more images again
+(64–69 uploads against 56–59).
+
+## 2026-11-20: GL on by default (Phase 8)
+
+Build `index-BLBQcG5U.js`, packaged with the defaults (`scripts/package-tizen.sh
+https://my.miauflix.cat`, GL on), installed with `scripts/install-tizen.sh` and measured through
+`scripts/tv-debug.mjs`. Same TV (TU8072), cold, 3×Down with `"settle": 800`. Phase 6's build with
+the flag's default flipped, so the numbers should match Phase 6's:
+
+| Scenario         | Phase 8        | Phase 6 (2026-11-19) |
+| ---------------- | -------------- | -------------------- |
+| Row 3 first pass | 51, 48, 48     | 50, 50, 50           |
+| Row 3 back       | 51, 50, 49     | 52, 55, 53           |
+| Held Right 2.5 s | 30, 19, 34, 26 | 41, 44, 30           |
+| 3 × Down         | 46, 41, 39     | 48, 41, 41           |
+
+27 pictures baked per standard run, 39–40 after a hold; 0 errors; 48 MB of textures after a
+standard run, 53–56 MB after a hold. The first pass and 3×Down are level with Phase 6, going back
+2–4 fps lower. Held Right is lower (19–34 against 30–44) with the same pictures and uploads; it
+has been the noisiest scenario since the spike (Phase 4: 22–36, Phase 5: 42–47), and 19 fps is one
+run. Re-measure it before reading a regression into it.
+
+The runs logged the TV out once, during a held-Right run: a reload that cut off a token refresh
+after the server had rotated the token. Fixed in the backend (a TV presenting the token the last
+rotation replaced, within 30 s, gets a new one); the held-Right and 3×Down runs above came after
+signing in again, before the fix was deployed.
+
+### GL against DOM, and the card image on the DOM rows
+
+Same build and session, after the backend fix was deployed. DOM is the same package with
+`localStorage['miauflix:gl-rows'] = '0'`. Both use the server's card images (backdrop and logo in
+one picture). Cold, three runs each, Project Hail Mary focused on row 3 in every run:
+
+| Scenario         | GL         | DOM        |
+| ---------------- | ---------- | ---------- |
+| Row 3 first pass | 50, 51, 50 | 29, 33, 37 |
+| Row 3 back       | 55, 51, 53 | 42, 43, 45 |
+| Held Right 2.5 s | 32, 32, 30 | 12, 11, 16 |
+| 3 × Down         | 41, 43, 39 | 41, 34, 31 |
+
+Whether the card image still helps the DOM rows: the same DOM runs with the card images answered
+404 (`serve` with `"ext": "none"`), so every tile falls back to its backdrop and logo layers. The
+browser cache has to be off in both conditions (`{"cache": false}`): Chromium 69's request
+interception never sees requests the cache answers, and a first attempt with the cache on left 52
+of 76 tiles showing their card image.
+
+| Scenario, cache off | Card image | Backdrop + logo |
+| ------------------- | ---------- | --------------- |
+| Row 3 first pass    | 33, 35, 36 | 32, 33, 30      |
+| Row 3 back          | 38, 42, 43 | 39, 42, 35      |
+| Held Right 2.5 s    | 9, 10, 10  | 11, 12, 14      |
+| 3 × Down            | 29, 20, 26 | 21, 23, 19      |
+
+On today's DOM rows the card image is worth about 3 fps on a first pass and a few on 3×Down,
+within the noise for going back, and nothing holding Right. On 2026-11-17 it was worth about 6 fps
+on a first pass, when the DOM rows ran a first pass at 37–46 with card images (50–59 that evening).
+The DOM rows are now slower than then (29–37 with the cache on, 33–36 with it off), so
+something else in them costs more than the second image did. With GL the default, they are the
+fallback; the card image stays for both forms (GL bakes it into the tile too).
+
+## 2026-11-20: Why the DOM rows measure lower than on 2026-11-17
+
+The section above has the DOM rows at 29–37 fps on a first pass and 11–16 holding Right, against
+50–59 and 14–17 for the spike's DOM build on 2026-11-17. To tell our code from the conditions,
+three builds were measured the same evening, one after the other, on the same TV (TU8072), server
+data and card images (live, cache on), cold, Project Hail Mary focused on row 3 in every run:
+
+- **GL build, DOM forced**: the Phase 8 package (`index-BLBQcG5U.js`) with
+  `localStorage['miauflix:gl-rows'] = '0'`, as in the section above.
+- **DOM package**: the same tree packaged with `MIAUFLIX_TV_GL_ROWS=false` (`index-xTYmuP0e.js`).
+- **Spike, DOM**: the frozen spike (`tv-gl-spike`, `b00934df`) packaged with its default, the GL
+  rows off (`index-BNx0rU_V.js`): the code the 2026-11-17 DOM numbers came from, before the DOM
+  views were split from the GL ones.
+
+| Scenario                   | GL build, DOM forced | DOM package            | Spike, DOM     |
+| -------------------------- | -------------------- | ---------------------- | -------------- |
+| Row 3 first pass           | 40, 39               | 37, 36, 37             | 38, 37, 41     |
+| Row 3 back                 | 39, 43               | 40, 44, 44             | 39, 44, 47     |
+| Held Right 2.5 s           | –                    | 13, 12, 11, 16, 12, 15 | 15, 16, 11, 14 |
+| 3 × Down (`"settle": 800`) | –                    | 12, 22, 15, 26, 30, 19 | 26, 20, 30, 24 |
+
+The spike's own DOM build runs at the same frame rate as today's DOM rows: the 2026-11-17 numbers
+don't reproduce with the 2026-11-17 code. The GL build with the DOM rows forced is level with the
+DOM package, so the runtime switch costs nothing either (in DOM mode it mounts no surface or
+canvas; the Pixi code is in the one bundle on the TV, but never runs).
+
+Traces of one first pass each (4 × Right, `devtools.timeline`, the renderer's main thread):
+
+| Build                | Main frames | `UpdateLayerTree` | JavaScript |
+| -------------------- | ----------: | ----------------: | ---------: |
+| GL build, DOM forced |          54 |            867 ms |     658 ms |
+| DOM package          |          61 |            712 ms |     500 ms |
+| Spike, DOM           |          80 |            713 ms |     436 ms |
+
+And of held Right: DOM package 37 main frames, 918 ms of `UpdateLayerTree`, 680 ms of
+JavaScript; spike 33, 781 ms and 618 ms. Each is a single cold run, and the spread between them
+is the spread between runs (the frame-rate runs above overlap). As on 2026-11-17, the frames are
+bounded by the layer update of the mounted rows (about 990 elements, 850 of them positioned, 68
+cards), not by React. The DOM is the same size as then (992 positioned elements, 75 cards).
+
+### What it means
+
+The DOM rows are not slower because of the GL work: the same code measures the same today. The
+50–59 fps of 2026-11-17 was the best session measured, not the DOM rows' usual rate: earlier that
+day the same rows with card images ran their first pass at 37–46 (the card image section), and
+the spike's GL build, 54–55 that evening, ran 49–51 on 2026-11-19. Conditions that changed between
+sessions and aren't ours: the server's lists (what row 3 holds, how many cards show progress or
+a badge), the order and warmth of the TV's caches, and the TV's own state (uptime, memory). The
+DOM rows on this TV run their first pass at about 36–41 fps on today's data; comparisons between
+builds need runs from the same session, as here.
+
+## 2026-11-20: Cards mounted past each side of a row
+
+A Home row on the TV mounted 2 cards past each side of its page once it had been in view 400 ms
+(1 until then, the peeking card). The same package was measured with
+`localStorage['miauflix:tv-overscan']` (a temporary override, removed since) setting every row to
+2, 1 or 0, cold, Project Hail Mary focused on row 3. Cards mounted at the end of a standard run:
+54–57 with 2, 49–54 with 1, 38–45 with 0.
+
+GL rows (the default), alternating 2 and 1, three rounds:
+
+| Scenario                   | 2 per side | 1 per side |
+| -------------------------- | ---------- | ---------- |
+| Row 3 first pass           | 50, 48, 52 | 50, 52, 52 |
+| Row 3 back                 | 53, 51, 52 | 50, 52, 50 |
+| Held Right 2.5 s           | 28, 21, 29 | 18, 34, 30 |
+| 3 × Down (`"settle": 800`) | 37, 41, 39 | 44, 46, 45 |
+
+3 × Down had 9–15 frames over 50 ms with 2 and 4–6 with 1.
+
+DOM rows (`localStorage['miauflix:gl-rows'] = '0'`), 2, then 1, then 0:
+
+| Scenario                   | 2 per side | 1 per side | 0 per side |
+| -------------------------- | ---------- | ---------- | ---------- |
+| Row 3 first pass           | 39, 36, 30 | 41, 37, 36 | 32, 34, 41 |
+| Row 3 back                 | 36, 40, 41 | 43, 43, 42 | 46, 44, 46 |
+| Held Right 2.5 s           | 13, 14     | 14, 12     | 18, 16     |
+| 3 × Down (`"settle": 800`) | 19, 30     | 31, 32     | 36, 38     |
+
+### What it means
+
+With GL, one card per side moves between rows about 6 fps faster and with fewer long frames: each
+row brought into view mounts, registers and syncs fewer cards. Moves along a row don't change
+(GL draws only what's on screen), and held Right is within its usual noise. The DOM rows gain on
+going back and moving down. With none, the peeking card at each end of a row is missing and the
+row no longer shows there is more, so the TV now keeps one card per side in every row, in view or
+not (`CategoryRow`'s overscan), and the 400 ms switch to two is gone.
+
+## 2026-11-20: GL rows without the hidden text for assistive technology
+
+Under the GL canvas, the DOM keeps what screen readers read: each card's twin button with its
+label, supporting line, badge and progress as text, the rows' headings, and the hero's hidden live
+region (title, metadata, genres, the whole overview, the source status), redrawn on every rested
+move. To see what that text costs, a stylesheet injected once Home was ready hid it
+(`display: none` on the twin buttons' spans, the rows' `h2` and the hero's `header[aria-live]`),
+keeping the twin buttons, so focus and keys worked as before. Build `index-DImUA1qa.js` (one card
+past each side), GL rows, cold, alternating, three rounds:
+
+| Scenario                   | Text kept  | Text hidden |
+| -------------------------- | ---------- | ----------- |
+| Row 3 first pass           | 48, 53, 48 | 52, 52, 46  |
+| Row 3 back                 | 54, 51, 51 | 51, 53, 51  |
+| Held Right 2.5 s           | 27, 32, 27 | 36, 29, 27  |
+| 3 × Down (`"settle": 800`) | 45, 43, 41 | 41, 47, 44  |
+
+No difference beyond the noise in any scenario: the text kept for assistive technology costs
+nothing measurable on the TV. The hidden DOM is about 330 elements in GL (against 800 with the DOM
+rows), and what limits the GL rows lies elsewhere.

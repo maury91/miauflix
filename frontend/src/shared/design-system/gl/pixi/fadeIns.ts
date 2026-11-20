@@ -28,12 +28,12 @@ export class FadeIns {
     if (this.fades.length) this.fades = this.fades.filter(fade => fade.node !== node);
   }
 
-  /** Advances them; their nodes count as changed (a baked layer showing one re-bakes). */
+  /** Advances them; their nodes (and ancestors) count as changed: a baked layer showing one re-bakes. */
   step(now: number) {
     this.fades = this.fades.filter(fade => {
       const progress = Math.min(1, (now - fade.readyAt) / FADE_IN_MS);
       fade.object.alpha = progress;
-      fade.node.changed = true;
+      fade.node.markChanged();
       if (progress < 1) return true;
       fade.onDone?.();
       return false;

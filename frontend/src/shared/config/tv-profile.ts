@@ -58,12 +58,14 @@ const CHROMIUM_YEARS: readonly [chromium: number, year: number][] = [
   [94, 2023],
   [85, 2022],
   [76, 2021],
+  [69, 2020],
+  [63, 2019],
 ];
 
 const yearOf = ({ modelYear, chromium }: TvDevice): number | null => {
   if (modelYear) return modelYear;
   if (!chromium) return null;
-  return CHROMIUM_YEARS.find(([version]) => chromium >= version)?.[1] ?? 2020;
+  return CHROMIUM_YEARS.find(([version]) => chromium >= version)?.[1] ?? 2018;
 };
 
 const sizeSetting = (value: string): ImageSizeName | null => {
@@ -108,6 +110,33 @@ export function readTvDevice(): TvDevice {
     chromium: chromium ? Number(chromium[1] ?? chromium[2]) : null,
     screenWidth: window.innerWidth * (window.devicePixelRatio || 1),
   };
+}
+
+const MB = 1024 * 1024;
+/**
+ * Texture memory Home's WebGL rows keep, per TV generation, newest first (bytes). Beyond it the
+ * least recently used textures go, and come back (fetched or baked again) when they're needed.
+ */
+const GL_TEXTURE_BUDGETS: readonly [fromYear: number, bytes: number][] = [
+  // A 2020 TU8072 (1.5 GB) shows Home in about 50 MB: the rows around the focus and the hero
+  [2020, 64 * MB],
+  // 2018-2019 TVs (Tizen 4 and 5) have less memory; not measured: fewer rows kept around
+  [0, 40 * MB],
+];
+
+/** The WebGL texture budget for this TV (bytes): its generation's, the oldest's if unknown. */
+export function glTextureBudget(device: TvDevice): number {
+  const year = yearOf(device) ?? 0;
+  return (GL_TEXTURE_BUDGETS.find(([fromYear]) => year >= fromYear) ??
+    GL_TEXTURE_BUDGETS[GL_TEXTURE_BUDGETS.length - 1])![1];
+}
+
+let tvGlTextureBudget: number | null = null;
+
+/** This TV's WebGL texture budget, read once. */
+export function getTvGlTextureBudget(): number {
+  tvGlTextureBudget ??= glTextureBudget(readTvDevice());
+  return tvGlTextureBudget;
 }
 
 let tvHeroBackdropSizes: HeroBackdropSizes | null = null;

@@ -1,7 +1,8 @@
 # Plan: GL rendering, from spike to production
 
-Status: in progress (2026-11-18). Follows the [GL rows spike](tv-gl-rows-plan.md). Phases 0 and 1
-have landed (see [Progress](#progress)); Phase 1's TV numbers are still to be measured. The spike's numbers are in the
+Status: Phases 0–6 and 8 done (2026-11-20); GL is on by default in the Tizen build. Phase 7 is
+open (see [Progress](#progress)). Follows the [GL rows spike](tv-gl-rows-plan.md). How it works
+now is in the [GL rendering reference](../architecture/tv-gl-rendering.md); the numbers are in the
 [benchmarks](../development/tv-benchmarks.md#2026-11-17-home-rows-and-hero-drawn-with-pixijs-spike).
 
 ## Goal
@@ -309,7 +310,7 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
     (`paint/rasters.ts`).
   - Pixi's side is `backend.ts` (wiring, frame, context loss), `textures.ts` (every texture and its
     queues), `pixiPainter.ts`, `sync.ts` (containers, culling, clips, baked layers, fade bands) and
-    `pictures.ts` (baking GlArt). `bake/atlas.ts` is Phase 6.
+    `pictures.ts` (baking GlArt). `bake/atlas.ts` was planned for Phase 6 and dropped (see Progress).
   - "Baked" and "fade edge" are node properties (`GlNode.bake`, `GlNode.fade` + `fadeFrom`) that
     `GlLayer` and `GlScroller` set. Named layers (`useGlLayer`) let a component draw into a layer
     declared elsewhere: the hero's backdrops and details sit in their own layers while its React
@@ -379,7 +380,7 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
   - `MediaHero` picks `MediaHeroDom` or `MediaHeroGl`; `useMediaHero` holds the selection, the
     resting details, the backdrop stack and its loading. `components/GlHero.tsx` is gone.
   - Differences from the plan: the details picture is drawn live, not baked (`heroDetailsArt`
-    returns `texts()` and `draw()`; baking it ahead is Phase 6). The DOM status badge stays
+    returns `texts()` and `draw()`; baking it ahead was planned for Phase 6 and dropped). The DOM status badge stays
     `SourcePreparationStatus` (shared with the details page), so the model's `status` mirrors its
     rules rather than replacing them.
   - Found on the way: an apostrophe in a CSS comment inside the DOM hero's `::before` made
@@ -404,6 +405,61 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
     reads too. The empty row stays plain text, as in the DOM.
   - Tested: unit tests for each pure part and picture snapshots; a Storybook test in Chromium for
     the pointer and the fallback (`MediaTile/WebGL`).
+
+- **Phase 6 (done, measured: first pass 50 fps, back 52–55, held Right 30–44, 3×Down 41–48; the
+  spike the same day 50–51, 54–55, 37–47, 39–45).** The targets above were the spike's best
+  session; measured the same day the spike misses them too, and this build is level with it. What
+  bounds the frame now is the TV's GPU and compositor, not the engine. Per-frame work cut where
+  profiles showed it:
+  - Text: the last line's ellipsis is found by binary search (about 8 measures, was one per
+    character cut: up to 40 ms on the TV for a long synopsis).
+  - Scene sync: a node whose inputs (box, parent transform, opacity) and paint are unchanged is
+    skipped with its subtree; culled subtrees are left once (`near` flag) instead of visited every
+    frame. Animations step through a set of moving nodes instead of walking the scene.
+  - Bands redraw from the sources they copy, once per frame; a titled tile no longer asks for its
+    label while its backdrop loads (one picture draw less per tile: 56 per run, was 72).
+  - What's left is not JavaScript: a long-frame probe on the TV found frames of 35–85 ms whose own
+    draw took 2–34 ms, with one long task (52 ms) in a run. Hiding the hero backdrop (the largest
+    fill) moved the numbers within the noise (first pass 51–53 against 48–51). The GPU and
+    compositor bound the frame; atlas bakes (28 bakes per run, none in the long frames) and the
+    hero baked ahead are not expected to move these numbers and are dropped. So is the minimal
+    semantic twin (React's per-move work isn't what drops frames).
+  - Fill: with every layer hidden the TV ran 53–55 fps, with Pixi's render off 57–59, so presenting
+    the canvas and filling it cost about 4 fps each. Home's baked hero layer was a full-screen
+    texture for a 55vh hero; it now ends with the hero (0.9 screens less fill per frame, 3.6 MB
+    less): first pass 50–52 (was 46–51). Home's canvas is also opaque (`GlSurface` `background`),
+    which measured within the noise against a transparent one (`GlTuning.transparent`).
+  - Texture budget per TV generation (`glTextureBudget` in `shared/config/tv-profile.ts`): 64 MB
+    from 2020 (the TU8072 shows Home in about 50 MB), 40 MB for 2018–2019 TVs and unknown ones,
+    dated by model code or else by the browser's version. At 40 MB on the TU8072: no errors, the
+    first pass and 3×Down as at 64 MB, held Right lower (25 and 35 fps: more images fetched
+    again).
+  - `tv-bench.mjs` `{"stop": true, "settle": 800}` ends the recording 0.8 s after the last key the
+    page received: 3×Down's window used to vary from 2.8 to 7.1 s with DevTools' delivery.
+
+- **Phase 7 (not started).** With GL on by default, the DOM TV build is the fallback (no WebGL,
+  a lost context, or `miauflix:gl-rows` = `'0'`) rather than what most TVs run, so the case for
+  a tile bitmap in it is weaker than when the plan was written. Each of its items is a TV
+  measurement first, and none has been run. Still worth trying, cheapest first: anchor paging
+  and the static outline on the DOM TV rows (point 4 of [Shared with the DOM](#shared-with-the-dom);
+  no new engine code), then the tile as one bitmap (`Canvas2DPainter`).
+
+- **Phase 8 (done, measured: first pass 48–51, back 49–51, held Right 19–34, 3×Down 39–46).**
+  - `VITE_TV_GL_ROWS` defaults to on (`scripts/package-tizen.sh`'s `MIAUFLIX_TV_GL_ROWS`, default
+    `true`; `false` packages the DOM rows). It applies to the Tizen build only.
+  - Runtime override, read at start (`resolveGlRows` in `shared/config/constants.ts`):
+    `localStorage['miauflix:gl-rows']` `'0'` forces the DOM rows on any build, `'1'` turns GL on
+    in a Tizen build packaged without it, or in development.
+  - `window.__glRows` is exposed in development, and on the TV only while
+    `miauflix:gl-tuning` is set (debugging).
+  - Docs: the [GL rendering reference](../architecture/tv-gl-rendering.md) and the style guide's
+    "Writing a component's picture"; the spike plan is marked done.
+  - Not done from the plan: the parity stories (each component's DOM and GL forms compared). A
+    change to a metric reaches both forms by construction; a change to one form's markup or
+    picture alone is caught only by the picture's snapshot. A device blocklist stays unneeded.
+  - Measured with the default build (tv-benchmarks.md, 2026-11-20): level with Phase 6 except
+    held Right, lower in 3 of 4 runs and to be re-measured. `scripts/tv-debug.mjs` opens the TV
+    app's DevTools without the Tizen SDK.
 
 ## Open decisions
 

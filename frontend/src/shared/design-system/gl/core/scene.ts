@@ -67,6 +67,11 @@ export class GlNode {
   changed = true;
   /** The paint callback must run again (new props, a texture ready). */
   paintDirty = true;
+  /**
+   * Taken off its tree (`remove`) or its surface gone (`releaseTree`): nothing in the subtree is
+   * stepped, whatever changes in it, until `add` puts it back.
+   */
+  detached = false;
 
   add(child: GlNode) {
     if (child.parent === this) return;
@@ -74,6 +79,8 @@ export class GlNode {
     child.parent = this;
     child.insertion = ++GlNode.insertions;
     this.children.push(child);
+    child.detached = false;
+    if (!rootOf(this).detached) trackMoving(child, true);
     this.sorted = false;
     this.invalidate();
   }
@@ -83,6 +90,10 @@ export class GlNode {
     if (index < 0) return;
     this.children.splice(index, 1);
     child.parent = null;
+    // Off the tree, with all it holds: not stepped (an unmounted spinner would turn forever, and
+    // keep the subtree alive); back with `add`
+    child.detached = true;
+    trackMoving(child, false);
     this.invalidate();
   }
 
@@ -106,7 +117,10 @@ export class GlNode {
       (this as Record<string, unknown>)[key] = value;
       changed = true;
     }
-    if (changed) this.invalidate();
+    if (changed) {
+      if (this.spin && !rootOf(this).detached) moving.add(this);
+      this.invalidate();
+    }
   }
 
   /**
@@ -123,6 +137,7 @@ export class GlNode {
       easing,
       start: null,
     };
+    if (!rootOf(this).detached) moving.add(this);
     this.invalidate();
   }
 
@@ -167,6 +182,14 @@ export class GlNode {
   }
 
   invalidate() {
+    this.markChanged().owner?.invalidate();
+  }
+
+  /**
+   * Marks this node and its ancestors changed (the frame visits that path; unchanged subtrees are
+   * skipped), returning the root. From the frame loop itself, which needs no new frame.
+   */
+  markChanged(): GlNode {
     // eslint-disable-next-line @typescript-eslint/no-this-alias -- walks up from here
     let node: GlNode = this;
     node.changed = true;
@@ -174,31 +197,59 @@ export class GlNode {
       node = node.parent;
       node.changed = true;
     }
-    node.owner?.invalidate();
+    return node;
   }
 }
 
 const TURN = Math.PI * 2;
 
+/** Nodes with animations or a spin: all stepAnimations visits (not the whole tree). */
+const moving = new Set<GlNode>();
+
 /**
- * Advances every animation in the tree to `now`; animated nodes count as changed. True while any
- * still runs.
+ * Puts the subtree's animated and spinning nodes in `moving` (attached) or takes them out. A node
+ * left turned (its spin stopped while it was off the tree) goes in too: the next step stands it
+ * still.
+ */
+function trackMoving(node: GlNode, attached: boolean) {
+  if (!attached) {
+    if (!moving.size) return;
+    moving.delete(node);
+  } else if (node.spin || node.rotation || Object.keys(node.animations).length) moving.add(node);
+  for (const child of node.children) trackMoving(child, attached);
+}
+
+/** The surface showing `root` is gone: nothing under it is stepped, or kept by the frame loop. */
+export function releaseTree(root: GlNode) {
+  root.detached = true;
+  trackMoving(root, false);
+}
+
+function rootOf(node: GlNode) {
+  while (node.parent) node = node.parent;
+  return node;
+}
+
+/**
+ * Advances every animation in the tree to `now`; animated nodes and their ancestors count as
+ * changed. True while any still runs.
  */
 export function stepAnimations(root: GlNode, now: number): boolean {
   let running = false;
-  const visit = (node: GlNode) => {
+  for (const node of moving) {
+    if (rootOf(node) !== root) continue;
     if (Object.keys(node.animations).length) {
-      node.changed = true;
+      node.markChanged();
       if (node.step(now)) running = true;
     }
-    const rotation = node.spin > 0 && !motion.reduced ? ((now % node.spin) / node.spin) * TURN : 0;
+    const spinning = node.spin > 0 && !motion.reduced;
+    const rotation = spinning ? ((now % node.spin) / node.spin) * TURN : 0;
     if (rotation !== node.rotation) {
       node.rotation = rotation;
-      node.changed = true;
+      node.markChanged();
     }
-    if (node.spin > 0 && !motion.reduced) running = true;
-    for (const child of node.children) visit(child);
-  };
-  visit(root);
+    if (spinning) running = true;
+    if (!node.spin && !Object.keys(node.animations).length) moving.delete(node);
+  }
   return running;
 }

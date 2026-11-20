@@ -310,6 +310,20 @@ These rules apply to every platform, not only Tizen 5.5 / Chromium 69:
 
 Geometry-dependent APIs need a Tizen-compatible path; ResizeObserver or modern CSS must not become an untested requirement.
 
+### Writing a component's picture (GL on the TV)
+
+On the TV, Home's rows and hero are drawn with WebGL; the [GL rendering reference](../architecture/tv-gl-rendering.md) describes the engine. A component that appears there has a DOM view and a GL view that must look the same. To keep them in step:
+
+1. **Numbers go in `*.metrics.ts`.** Ratios, insets, sizes, opacities and gradient stops that both forms use are defined once there (as token strings where a token exists) and imported by the `*.css.ts` and the `*.art.ts`. Never write a number in the picture that the CSS also has, or the reverse. Colors come from `tokens.ts`; when the CSS only has a string (a gradient), add a structured token next to it (as `tileScrim`).
+2. **The picture is a pure function.** `*.art.ts` exports `fooArt(props): GlArt` (or a `paintFoo(painter, …)` helper drawn into a larger picture) and imports the engine only from `gl/art`: no React, Pixi, styled-components or CSS. Its key is `artKey('foo', props)` with every prop the drawing reads; never a hand-built string.
+3. **Ask, then branch on the status.** `painter.image()` returns `loading | ready | failed` and `painter.text()` returns null until ready; the picture is drawn again when one settles. Fallbacks are branches on those statuses. When the DOM view has the same fallbacks, put the rule in a pure model both views call (as `resolveMediaTileVisual`).
+4. **Square corners, then `corners`.** Bakes have no multisampling: draw rectangles square and let `GlArt.corners` cut the rounded corners. A focusable picture sets `scale` to the focused size so its text stays sharp under the focus scale.
+5. **Split the component, not the branches.** The public component picks `FooDom` or `FooGl` from `useRenderMode()`; what both need (focus, ids, aria, pointer) is in `useFoo`. The GL view registers its nodes, paints the picture and renders the semantic twin: the same button or element with its accessible name, unpositioned, which keeps focus, `data-focused`, activation and the pointer (`useGlTarget`). The DOM view imports nothing from `gl` (lint).
+6. **Snapshot the variants.** `foo.art.test.ts` records each variant with `RecordingPainter.record(art)` (statuses loading, ready and failed where they change the drawing) and checks that a prop changing the drawing changes the key. Review the snapshot diff with the DOM story side by side: there is no automated DOM/GL comparison yet.
+7. **Measure on the TV.** A new picture on Home is checked with `scripts/tv-bench.mjs` against the numbers in [tv-benchmarks.md](../development/tv-benchmarks.md).
+
+What does not need a picture: anything outside Home on the TV, and anything on the web. Things that only animate (the focus scale, fades) are node properties set by the GL view, not part of the picture.
+
 ## 7. Internal primitives
 
 Implementation foundations, not a menu of low-level APIs every feature must assemble:

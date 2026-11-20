@@ -37,7 +37,6 @@ export class PictureBaker {
   /** The last baked picture with a holdKey each node showed (GlArt.holdKey). */
   private heldBy = new WeakMap<GlNode, Picture<RenderTexture>>();
   /** Pictures baked with text in them (redrawn when a font face loads). */
-  private withText = new WeakSet<Picture<RenderTexture>>();
   /** Bakes that threw, by picture. */
   private failures = new WeakMap<Picture<RenderTexture>, number>();
 
@@ -174,12 +173,6 @@ export class PictureBaker {
       texture.destroy(true);
       throw error;
     }
-    // Text drawn here, or in a picture drawn here (its pixels are copied in)
-    if (
-      state.used.some(used => used.kind === 'text') ||
-      state.pictures.some(nested => this.withText.has(nested))
-    )
-      this.withText.add(picture);
     // The pixels are kept: what it drew is free to go (and evictable once nobody else uses it)
     sync.forget(node);
     picture.texture = texture;
@@ -199,12 +192,10 @@ export class PictureBaker {
    */
   evictable(): Array<Evictable & { free: () => void }> {
     const sync = this.options.sync();
-    const { frame } = this.options;
     const near = (picture: Picture<RenderTexture>) => {
       // A picture still baking that draws this one (a card and its badge) needs it too
       for (const user of picture.users)
-        if (sync.states.get(user)?.syncedAt === frame.index || this.bakery.ofStandIn(user))
-          return true;
+        if (sync.states.get(user)?.near || this.bakery.ofStandIn(user)) return true;
       return false;
     };
     const candidates: Array<Evictable & { free: () => void }> = [];
@@ -216,12 +207,6 @@ export class PictureBaker {
           free: () => this.free(picture),
         });
     return candidates;
-  }
-
-  /** Baked pictures with text drop their pixels: their users paint (and bake) them again. */
-  dropTextPictures() {
-    for (const picture of [...this.bakery.pictures.values()])
-      if (picture.texture && this.withText.has(picture)) this.free(picture);
   }
 
   /** A baked picture's pixels freed: its users paint it again (baked anew). */
