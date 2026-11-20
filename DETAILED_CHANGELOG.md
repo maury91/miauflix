@@ -4,9 +4,7 @@ Implementation and upgrade notes. For a shorter overview, see the [release notes
 
 ## Unreleased
 
-## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
-
-#### Features
+### Features
 
 - Samsung TV builds use PixiJS 8 (WebGL 2) for Home's rows and hero by default. Set `MIAUFLIX_TV_GL_ROWS=false` when running `scripts/package-tizen.sh` to package the DOM renderer as the default. At runtime, `localStorage['miauflix:gl-rows'] = '0'` selects the DOM renderer, and `'1'` enables WebGL on Tizen or in development. The web production bundle uses the DOM renderer and omits the WebGL code.
   - The renderer bakes cards into reusable textures and slides them under a fixed focus ring. The rows keep a DOM representation for accessibility. Pointer hit-testing uses the drawn card bounds, and reduced-motion preferences apply to both the rows and the hero.
@@ -33,7 +31,7 @@ Implementation and upgrade notes. For a shorter overview, see the [release notes
   - Search uses the same wide `MediaTile` as Home. TV shows an on-screen keyboard and scrolling genre and history column. Other devices start in the search field. Returning from details restores the selected result.
   - Who's Watching shows profile tiles with their Plushies and an edit action under the focused tile. `ChoiceTileGroup` handles the profile editor's picture tiles and color swatches. The form scrolls to follow remote focus, and OK applies the choice. Back closes the TV keyboard before leaving the editor.
 
-#### Fixes
+### Fixes
 
 - Home's hero shade stays opaque up to the backdrop's left edge. Previously visited rows keep their cached cards when you scroll back quickly, and the final row can scroll to the same position under the hero as the others.
 - Token-based TV sessions recover when a reload interrupts refresh-token rotation. Within `REFRESH_REUSE_GRACE_MS` (30 seconds), the previous token can list, refresh or sign out of the session. Recovery keeps the original rotation timestamp. Browser tabs continue to share a cookie and cannot refresh with the previous token.
@@ -104,7 +102,7 @@ Implementation and upgrade notes. For a shorter overview, see the [release notes
   - Backend `GET /api/artwork/card/:mediaType/:mediaId/:size.(jpg|webp)?rev=N.L` (new `artwork.routes.ts`): unauthenticated, like the provider artwork it is drawn from, since the TV's `<img>` cannot send its bearer token; rate limited to 60 a second. A URL whose `rev` matches the drawn revision is `immutable` for a year, any other (and any image without a revision) for 5 minutes. The catalog request is bounded by `CATALOG_SERVICE_TIMEOUT_MS` (`RemoteService.timeoutMs()` is now protected). Unknown titles answer 404, a catalog without card images (older than contract 2.2, or not configured) 503, a failed drawing 502 and a catalog past the timeout 504 (the image is read before answering, so a body that stalls past the timeout is a 504 too, never a truncated 200); the card then shows its two layers.
   - Frontend: `MediaTile` takes `titledArtwork`, preferred over `artwork` + `logo` and standing in for the visible title once it has shown (the overlay title stays until then, and a newer revision keeps the previous image in view while it loads, then shows it at once instead of fading in over an empty box: `Artwork` gains `onLoad` and `holdPrevious`, which its GL form honours too; the GL tile shows its label while the titled backdrop loads. The title hides only while the image in view has it drawn in: over a plain backdrop after a failed revision it shows, and a carousel slot reused for another title holds nothing from the old one); if it fails, the tile shows the two layers (`Artwork` gains `onError`). `MediaCard` asks for `cardImageUrl` (the smallest size covering the card, JPEG on the TV, which decodes it in about 6 ms against 10 for WebP, and WebP elsewhere, versioned by `artworkRevision` and the layout) when the title has a backdrop and a logo or a drawable name. The logo layer (fallback, and Search results) uses the same box as the drawn images.
 
-#### Cleanup
+### Cleanup
 
 - Home's DOM and WebGL components share sizing, colors and artwork rules. The renderer separates scene traversal, painting, resources and the Pixi backend under `shared/design-system/gl/`. Home's layout and hero details also share a single model. The Pixi backend loads only where WebGL is enabled.
 - Backend E2E: `auth`, `cookie-security` and `multi-session-auth` log in about 40 times between them; as the shared generated admin (20 device slots at most, `MAX_DEVICE_SLOTS_PER_USER`) they evicted the sessions other suites running in parallel still held (`sources.test.ts` got 401s). They now each use a user of their own, created by `createIsolatedUser` (`backend-e2e/src/utils/user-pool.ts`), which logs the admin out right after.
@@ -143,7 +141,7 @@ Implementation and upgrade notes. For a shorter overview, see the [release notes
 - Pre-commit formats and lints staged files and runs type checks. Unit tests run before push. The root `bun.lock` also replaces `backend-e2e/package-lock.json` and `services/media-catalog/bun.lock`. The [development workflow](docs/development/workflow.md#toolchain-at-a-glance) lists which tools and test runners each workspace uses.
 - Removed with the Home and Search migration: the legacy row and Search resolvers (`shared/lib/homeNavigation.ts`'s `resolveCarouselAction`/`moveIndex`, `pages/home/categoryNavigation.ts`, `pages/search/searchNavigation.ts`, with their tests), Search's `OnScreenKeyboard`, `SearchBox` and `search.styles.ts`, and `shared/ui`'s `StatePanel`, which only Search used. `shared/lib/homeNavigation.ts` keeps the region and view types.
 
-#### Documentation
+### Documentation
 
 - [tv-benchmarks](docs/development/tv-benchmarks.md) "Why the DOM rows measure lower than on 2026-11-17": the DOM rows' drop (first pass 29–37 fps against 50–59 on 2026-11-17) is not in the code. Measured in one session on the TV: the frozen spike's DOM build (`tv-gl-spike`, the code behind the 2026-11-17 numbers) ran its first pass at 37–41 fps and held Right at 11–16, today's DOM package at 36–37 and 11–16, and the Phase 8 GL package with `localStorage['miauflix:gl-rows'] = '0'` at 39–40, so neither the split of the DOM and GL views nor the runtime switch costs anything measurable (in DOM mode no surface mounts and the backend isn't preloaded). Traces put the frames in `UpdateLayerTree` as before. The 50–59 was the best session measured (37–46 earlier the same day; the spike's GL build fell from 54–55 to 49–51 by 2026-11-19 too): server data and the TV's state, not ours. No code change
 - `docs/plans/style-guide.md` is the design system plan in one document (the earlier baseline merged in): principles, the frontend's current state, tokens and palette, the action model (focus as an inverted white fill, no tones; an outline for controls that cannot invert), rem units with density as the root font size, the type, spacing, size, shape, motion and layer scales, styling and rendering performance rules, the component catalog, direction rules, the focus architecture, Storybook as the specification, the adoption plan, a decision log and open questions. Values draw on Google TV design guidance, Material 3, MUI and Ant Design.
