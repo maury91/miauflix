@@ -1,7 +1,8 @@
 # Plan: GL rendering, from spike to production
 
-Status: in progress (2026-11-18). Follows the [GL rows spike](tv-gl-rows-plan.md). Phases 0 and 1
-have landed (see [Progress](#progress)); Phase 1's TV numbers are still to be measured. The spike's numbers are in the
+Status: Phases 0–6 and 8 done (2026-11-20); GL is on by default in the Tizen build. Phase 7 is
+open (see [Progress](#progress)). Follows the [GL rows spike](tv-gl-rows-plan.md). How it works
+now is in the [GL rendering reference](../architecture/tv-gl-rendering.md); the numbers are in the
 [benchmarks](../development/tv-benchmarks.md#2026-11-17-home-rows-and-hero-drawn-with-pixijs-spike).
 
 ## Goal
@@ -435,6 +436,30 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
     again).
   - `tv-bench.mjs` `{"stop": true, "settle": 800}` ends the recording 0.8 s after the last key the
     page received: 3×Down's window used to vary from 2.8 to 7.1 s with DevTools' delivery.
+
+- **Phase 7 (not started).** With GL on by default, the DOM TV build is the fallback (no WebGL,
+  a lost context, or `miauflix:gl-rows` = `'0'`) rather than what most TVs run, so the case for
+  a tile bitmap in it is weaker than when the plan was written. Each of its items is a TV
+  measurement first, and none has been run. Still worth trying, cheapest first: anchor paging
+  and the static outline on the DOM TV rows (point 4 of [Shared with the DOM](#shared-with-the-dom);
+  no new engine code), then the tile as one bitmap (`Canvas2DPainter`).
+
+- **Phase 8 (done, measured: first pass 48–51, back 49–51, held Right 19–34, 3×Down 39–46).**
+  - `VITE_TV_GL_ROWS` defaults to on (`scripts/package-tizen.sh`'s `MIAUFLIX_TV_GL_ROWS`, default
+    `true`; `false` packages the DOM rows). It applies to the Tizen build only.
+  - Runtime override, read at start (`resolveGlRows` in `shared/config/constants.ts`):
+    `localStorage['miauflix:gl-rows']` `'0'` forces the DOM rows on any build, `'1'` turns GL on
+    in a Tizen build packaged without it, or in development.
+  - `window.__glRows` is exposed in development, and on the TV only while
+    `miauflix:gl-tuning` is set (debugging).
+  - Docs: the [GL rendering reference](../architecture/tv-gl-rendering.md) and the style guide's
+    "Writing a component's picture"; the spike plan is marked done.
+  - Not done from the plan: the parity stories (each component's DOM and GL forms compared). A
+    change to a metric reaches both forms by construction; a change to one form's markup or
+    picture alone is caught only by the picture's snapshot. A device blocklist stays unneeded.
+  - Measured with the default build (tv-benchmarks.md, 2026-11-20): level with Phase 6 except
+    held Right, lower in 3 of 4 runs and to be re-measured. `scripts/tv-debug.mjs` opens the TV
+    app's DevTools without the Tizen SDK.
 
 ## Open decisions
 

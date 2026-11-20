@@ -1,8 +1,9 @@
 # Plan: Home rows drawn with WebGL on the TV
 
-Status: spike (2026-11-17), behind `VITE_TV_GL_ROWS` (`MIAUFLIX_TV_GL_ROWS=true` with
-`scripts/package-tizen.sh`), off by default. Not decided.
-The plan to take it to production is [TV GL production plan](tv-gl-production-plan.md).
+Status: done (2026-11-20). The spike was taken to production by the
+[TV GL production plan](tv-gl-production-plan.md): GL is on by default in the Tizen build
+(`MIAUFLIX_TV_GL_ROWS=false` packages the DOM rows). How it works now is in the
+[GL rendering reference](../architecture/tv-gl-rendering.md); this plan is kept as the spike's record.
 
 ## Why
 

@@ -11,5 +11,6 @@ These references describe Miauflix's implemented runtime, ownership boundaries, 
 | [Source identity and file claims](source-identity-and-file-claims.md)              | Source associations, explicit targets, file claims, retention, reclamation, and concurrency  |
 | [TV source and episode playback](tv-source-support.md)                             | Episode matching, authorization, prefetch, watchlist acquisition, credits, and notifications |
 | [Trakt playback synchronization](trakt-playback-sync.md)                           | Local progress, durable export, provider snapshots, merging, and connection isolation        |
+| [GL rendering on the TV](tv-gl-rendering.md)                                       | When the TV draws Home with WebGL, component views and pictures, the engine, and fallbacks   |
 
 Implementation links in each reference identify the modules that own its behavior. Internal service protocols are distinct from the public `/api` routes and realtime browser connection.

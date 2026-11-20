@@ -41,11 +41,11 @@ const envSchema = z.object({
    */
   TV_HERO_BACKDROP: z.string().default('auto'),
   TV_HERO_BACKDROP_RESTING: z.string().default('auto'),
-  /** Spike: the TV draws Home's rows in one WebGL canvas (design-system GL forms). */
+  /** The TV draws Home's rows and hero with WebGL (design-system GL forms); on unless 'false'. */
   TV_GL_ROWS: z
     .string()
-    .transform(val => val === 'true')
-    .default(false),
+    .transform(val => val !== 'false')
+    .default(true),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
@@ -96,7 +96,7 @@ function parseEnv(): EnvConfig {
       TV_PAIRING_URL: '',
       TV_HERO_BACKDROP: 'auto',
       TV_HERO_BACKDROP_RESTING: 'auto',
-      TV_GL_ROWS: false,
+      TV_GL_ROWS: true,
     };
   }
 }

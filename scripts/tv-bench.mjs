@@ -31,6 +31,10 @@
 //                                                    names; missing, or ext "none": a 404), to try
 //                                                    server responses that are not deployed yet
 //   {"served": true}                                 print how many requests "serve" answered
+//   {"cache": false}                                 disable the browser cache for the rest of the run
+//                                                    (put it before a reload): "serve" never sees
+//                                                    requests the cache answers, so compare a served
+//                                                    condition against one with the cache off too
 //   {"profile": "start"} / {"profile": "stop", "out": "file.cpuprofile"}
 //                                                    record a CPU profile (open it in Chrome DevTools)
 // Keys: ArrowUp/Down/Left/Right, Enter, Back (the remote's Return, as Tizen reports it).
@@ -304,6 +308,10 @@ ws.onopen = async () => {
         console.log(
           `serving ${step.match ?? '/api/artwork/card/'} from ${step.serve} (${step.ext ?? 'jpeg'})`
         );
+      } else if (step.cache === false) {
+        await send('Network.enable');
+        await send('Network.setCacheDisabled', { cacheDisabled: true });
+        console.log('cache disabled for the rest of the run');
       } else if (step.served) {
         console.log(`served: ${served.hits} files, ${served.misses} not found`);
       } else if (step.profile === 'start') {

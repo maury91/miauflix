@@ -289,7 +289,7 @@ export default [
   },
   {
     // A component's DOM view never draws in GL: the public component picks one view
-    // (docs/plans/tv-gl-production-plan.md, "Components: a shared hook, a DOM view, a GL view")
+    // (docs/architecture/tv-gl-rendering.md, "A component with a GL form")
     files: ['frontend/src/**/*Dom.tsx'],
     rules: {
       'no-restricted-imports': [

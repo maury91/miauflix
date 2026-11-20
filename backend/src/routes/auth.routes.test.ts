@@ -92,7 +92,8 @@ describe('auth routes token transport', () => {
     expect(authService.refreshTokens).toHaveBeenCalledWith(
       'stored-refresh',
       'session-1',
-      expect.anything()
+      expect.anything(),
+      { tokenTransport: true }
     );
     expect(await response.json()).toEqual({
       user,
@@ -110,7 +111,8 @@ describe('auth routes token transport', () => {
     expect(authService.refreshTokens).toHaveBeenCalledWith(
       'cookie-refresh',
       'session-1',
-      expect.anything()
+      expect.anything(),
+      { tokenTransport: false }
     );
     expect(await response.json()).toEqual({ user });
     expect(response.headers.get('Set-Cookie')).toContain('__rt_session-1=refresh-token');

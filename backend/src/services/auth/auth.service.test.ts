@@ -670,6 +670,80 @@ describe('AuthService', () => {
       expect(mockRefreshTokenRepository.deleteByUserAndSession).not.toHaveBeenCalled();
     });
 
+    describe('a token-transport client that lost the rotation (the TV reloaded mid-refresh)', () => {
+      const current = (rotatedAgoMs: number) =>
+        ({
+          ...rotated(rotatedAgoMs),
+          tokenHash: 'hash-of-token-never-received',
+          expiresAt: new Date(Date.now() + 86_400_000),
+          user: { id: 'user-123', email: 'test@example.com', role: UserRole.USER } as User,
+        }) as RefreshToken;
+
+      beforeEach(() => {
+        mockRefreshTokenRepository.findByToken.mockResolvedValue(null);
+        mockRefreshTokenRepository.isChainExpired.mockResolvedValue(false);
+      });
+
+      it('refreshes with the replaced token within the grace, replacing the lost one', async () => {
+        const session = current(1_000);
+        mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(session);
+        mockRefreshTokenRepository.replaceRotatedToken.mockResolvedValue(true);
+
+        const result = await authService.refreshTokens('old-token', 'session-1', mockContext, {
+          tokenTransport: true,
+        });
+
+        expect(result?.refreshToken).toEqual(expect.any(String));
+        expect(result?.refreshToken).not.toBe('old-token');
+        expect(mockRefreshTokenRepository.replaceRotatedToken).toHaveBeenCalledWith(
+          session,
+          result?.refreshToken,
+          expect.any(Date),
+          expect.any(String),
+          undefined
+        );
+        expect(mockRefreshTokenRepository.updateToken).not.toHaveBeenCalled();
+        expect(mockRefreshTokenRepository.deleteByUserAndSession).not.toHaveBeenCalled();
+      });
+
+      it('lists the session for the replaced token within the grace', async () => {
+        mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(current(1_000));
+
+        await expect(
+          authService.verifyOpaqueRefreshToken('old-token', 'session-1', {
+            acceptJustRotated: true,
+          })
+        ).resolves.toMatchObject({ session: 'session-1' });
+      });
+
+      it('still revokes the session after the grace', async () => {
+        mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(
+          current(REFRESH_REUSE_GRACE_MS + 1_000)
+        );
+
+        const result = await authService.refreshTokens('old-token', 'session-1', mockContext, {
+          tokenTransport: true,
+        });
+
+        expect(result).toBeNull();
+        expect(mockRefreshTokenRepository.replaceRotatedToken).not.toHaveBeenCalled();
+        expect(mockRefreshTokenRepository.deleteByUserAndSession).toHaveBeenCalledWith(
+          'user-123',
+          'session-1'
+        );
+      });
+
+      it('keeps refusing it from a cookie client (browser tabs share the cookie)', async () => {
+        mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(current(1_000));
+
+        const result = await authService.refreshTokens('old-token', 'session-1', mockContext);
+
+        expect(result).toBeNull();
+        expect(mockRefreshTokenRepository.replaceRotatedToken).not.toHaveBeenCalled();
+        expect(mockRefreshTokenRepository.deleteByUserAndSession).not.toHaveBeenCalled();
+      });
+    });
+
     it('does nothing more for a token the session never had', async () => {
       mockRefreshTokenRepository.findByToken.mockResolvedValue(null);
       mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(null);

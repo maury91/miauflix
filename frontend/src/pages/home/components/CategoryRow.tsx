@@ -58,13 +58,13 @@ const NO_RESULT = {};
 /** How long after the track moved the cards in view count as settled (realtime interest). */
 const TRACK_SETTLE_MS = 160;
 
-/** How long a row that came into view waits before rendering its cards out of view (TV). */
-const CARD_WINDOW_EXPAND_MS = 400;
 /**
- * Cards mounted past each side of the visible page once a row has expanded: the TV styles and
- * rasterizes every card it keeps, so it keeps fewer. Until then, one (the peeking card).
+ * Cards mounted past each side of the visible page. On the TV, one: the peeking card, so a row
+ * still shows there is more. Each card kept costs the TV styling and layers in the DOM rows, and a
+ * node to sync in the GL ones; with two, moving between rows ran about 6 fps slower in both
+ * (docs/development/tv-benchmarks.md, 2026-11-20).
  */
-const EXPANDED_OVERSCAN = builtForTizen ? 2 : 4;
+const OVERSCAN = builtForTizen ? 1 : 4;
 
 export interface CategoryRowHandle {
   getInterestWindow: () => {
@@ -83,8 +83,6 @@ interface CategoryRowProps {
   onSelectionChange?: (index: number) => void;
   loadIntent?: 'visible' | 'prefetch' | 'dormant';
   visible?: boolean;
-  /** Rendered in full off screen too: Home readies it while idle (see RowLoadState.warm). */
-  warm?: boolean;
   /** Home's row geometry (collectionGeometry). */
   geometry: CollectionGeometry;
   /** The row whose selected media supplies the hero. */
@@ -133,7 +131,6 @@ export const CategoryRow = memo(
       onSelectionChange,
       loadIntent = 'dormant',
       visible = false,
-      warm = false,
       geometry,
       isCurrentRow,
       onActive,
@@ -197,22 +194,6 @@ export const CategoryRow = memo(
     }, [adjacent.currentData, current.currentData, mediaOverride]);
 
     const progressLookup = useMemo(() => progressByMedia(progress), [progress]);
-    // On the TV, a row off screen keeps only the cards in view, and gets the rest shortly after
-    // it comes into view rather than during the move that brings it there.
-    const [expanded, setExpanded] = useState(!builtForTizen || visible);
-    // A row that leaves view (and is not kept warm) goes back to the cards in view, so rows
-    // passed on the way stay small off screen.
-    const wantsExpansion = visible || warm;
-    useEffect(() => {
-      if (!builtForTizen) return;
-      if (!wantsExpansion) {
-        setExpanded(false);
-        return;
-      }
-      if (expanded) return;
-      const timeout = window.setTimeout(() => setExpanded(true), CARD_WINDOW_EXPAND_MS);
-      return () => window.clearTimeout(timeout);
-    }, [expanded, wantsExpansion]);
     const [promoteListMedia] = usePromoteListMediaMutation(IGNORE_RESULT);
     const [queueBackdropFocus] = useQueueBackdropFocusMutation(IGNORE_RESULT);
 
@@ -559,7 +540,7 @@ export const CategoryRow = memo(
               geometry={geometry}
               navId={navId}
               navigation={navigation}
-              overscan={expanded ? EXPANDED_OVERSCAN : 1}
+              overscan={OVERSCAN}
               pageButtons={pageButtons}
               surface="black"
             />

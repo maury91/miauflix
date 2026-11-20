@@ -131,7 +131,7 @@ const HomePage: FC<HomePageProps> = props => (
 );
 
 const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
-  // Spike: the rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics
+  // The rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics.
   // Decided once; a surface that loses its context for good turns it off (the DOM rows remount)
   const [glWanted] = useState(() => glRowsEnabled && glSurfaceSupported());
   const glRows = useGlAvailable() && glWanted;
@@ -463,7 +463,6 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                       : 'dormant'
                 }
                 visible={rowLoadState.visible.has(index)}
-                warm={rowLoadState.warm.has(index)}
                 geometry={geometry}
                 isCurrentRow={activeCategory === index}
                 onDataReady={onRowReady}
@@ -517,7 +516,7 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                   width={windowWidth}
                   height={windowHeight}
                   prefetch={{ x: geometry.itemWidth * 2, y: rowHeight }}
-                  exposeAs={import.meta.env.DEV || builtForTizen ? '__glRows' : undefined}
+                  exposeAs={import.meta.env.DEV || glTuningOverride ? '__glRows' : undefined}
                   tuning={glTuning}
                   // Opaque: the page under it is black and every layer is drawn on it
                   background="#000000"

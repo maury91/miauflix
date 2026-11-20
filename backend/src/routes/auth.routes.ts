@@ -157,7 +157,9 @@ export const createAuthRoutes = ({
         }
 
         // Refresh tokens with rotation
-        const authResult = await authService.refreshTokens(refreshToken, session, c);
+        const authResult = await authService.refreshTokens(refreshToken, session, c, {
+          tokenTransport: wantsTokenTransport(c, authService.getSessionCookiePrefixes()),
+        });
 
         if (!authResult) {
           // Clear invalid cookies

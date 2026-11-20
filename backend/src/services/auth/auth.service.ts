@@ -37,7 +37,9 @@ export const MAX_LISTED_SESSIONS = 8;
 /**
  * A rotated refresh token presented again this soon after its rotation is taken for a request
  * that raced the rotation (two tabs refreshing at once) and only refused; later, the session is
- * revoked, since only a copy of the token can still be using it.
+ * revoked, since only a copy of the token can still be using it. A token-transport client (the TV
+ * app) presenting it is let back in instead: it holds one copy of its tokens and refreshes one at
+ * a time, so it lost the rotation's response (the app reloaded or closed mid-request).
  */
 export const REFRESH_REUSE_GRACE_MS = 30_000;
 
@@ -495,9 +497,36 @@ export class AuthService {
     }
   }
 
+  /**
+   * The session's refresh token if `opaqueToken` is it. With `acceptJustRotated` (token-transport
+   * clients only, see REFRESH_REUSE_GRACE_MS), also the token the last rotation replaced, within
+   * the grace: the client lost that rotation's response.
+   */
   @traced('AuthService')
-  async verifyOpaqueRefreshToken(opaqueToken: string, session: string): Promise<RefreshToken> {
-    const refreshToken = await this.refreshTokenRepository.findByToken(opaqueToken, session);
+  async verifyOpaqueRefreshToken(
+    opaqueToken: string,
+    session: string,
+    options: { acceptJustRotated?: boolean } = {}
+  ): Promise<RefreshToken> {
+    return (await this.findValidRefreshToken(opaqueToken, session, options)).refreshToken;
+  }
+
+  /** verifyOpaqueRefreshToken, and whether the token was the one the last rotation replaced. */
+  private async findValidRefreshToken(
+    opaqueToken: string,
+    session: string,
+    { acceptJustRotated = false }: { acceptJustRotated?: boolean }
+  ): Promise<{ refreshToken: RefreshToken; justRotated: boolean }> {
+    let refreshToken = await this.refreshTokenRepository.findByToken(opaqueToken, session);
+    let justRotated = false;
+
+    if (!refreshToken && acceptJustRotated) {
+      const rotated = await this.refreshTokenRepository.findByPreviousToken(opaqueToken, session);
+      if (rotated && this.rotatedWithinGrace(rotated)) {
+        refreshToken = rotated;
+        justRotated = true;
+      }
+    }
 
     if (!refreshToken) {
       await this.detectRefreshTokenReuse(opaqueToken, session);
@@ -529,7 +558,14 @@ export class AuthService {
       throw new InvalidTokenError();
     }
 
-    return refreshToken;
+    return { refreshToken, justRotated };
+  }
+
+  private rotatedWithinGrace(refreshToken: RefreshToken): boolean {
+    return Boolean(
+      refreshToken.rotatedAt &&
+        Date.now() - refreshToken.rotatedAt.getTime() < REFRESH_REUSE_GRACE_MS
+    );
   }
 
   /**
@@ -539,10 +575,7 @@ export class AuthService {
    */
   private async detectRefreshTokenReuse(opaqueToken: string, session: string): Promise<void> {
     const reused = await this.refreshTokenRepository.findByPreviousToken(opaqueToken, session);
-    if (!reused) return;
-    if (reused.rotatedAt && Date.now() - reused.rotatedAt.getTime() < REFRESH_REUSE_GRACE_MS) {
-      return;
-    }
+    if (!reused || this.rotatedWithinGrace(reused)) return;
     await this.refreshTokenRepository.deleteByUserAndSession(reused.userId, session);
     this.sessionRevoked({ userId: reused.userId, session });
     const user = await this.userRepository.findById(reused.userId);
@@ -563,7 +596,8 @@ export class AuthService {
   async refreshTokens(
     opaqueToken: string,
     session: string,
-    context: Context
+    context: Context,
+    { tokenTransport = false }: { tokenTransport?: boolean } = {}
   ): Promise<AuthResult | null> {
     try {
       const ipAddress =
@@ -571,7 +605,9 @@ export class AuthService {
       const userAgent = context.req.header('user-agent');
 
       // Verify the refresh token
-      const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
+      const { refreshToken, justRotated } = await this.findValidRefreshToken(opaqueToken, session, {
+        acceptJustRotated: tokenTransport,
+      });
 
       // Generate new access token
       const newAccessToken = await this.generateAccessToken(refreshToken.user, session);
@@ -581,16 +617,25 @@ export class AuthService {
       const expiresAt = new Date();
       expiresAt.setTime(expiresAt.getTime() + this.refreshTokenTTL);
 
-      // Atomically update the refresh token (race condition detection)
-      const updateSuccessful = await this.refreshTokenRepository.updateToken(
-        opaqueToken,
-        newOpaqueToken,
-        refreshToken.userId,
-        session,
-        expiresAt,
-        ipAddress,
-        userAgent
-      );
+      // Atomically update the refresh token (race condition detection). A client that lost the
+      // last rotation's response gets the token it never received replaced
+      const updateSuccessful = justRotated
+        ? await this.refreshTokenRepository.replaceRotatedToken(
+            refreshToken,
+            newOpaqueToken,
+            expiresAt,
+            ipAddress,
+            userAgent
+          )
+        : await this.refreshTokenRepository.updateToken(
+            opaqueToken,
+            newOpaqueToken,
+            refreshToken.userId,
+            session,
+            expiresAt,
+            ipAddress,
+            userAgent
+          );
 
       if (!updateSuccessful) {
         // Token was already used (race condition or reuse)
@@ -702,6 +747,7 @@ export class AuthService {
       .map(([name, value]) => ({
         session: name.substring(refreshTokenPrefix.length),
         token: value,
+        tokenTransport: false,
       }))
       .filter(({ session, token }) => session && token)
       .sort((left, right) => {
@@ -717,11 +763,15 @@ export class AuthService {
     // Validate each refresh token and collect valid sessions
     const verifiedSessions = await Promise.all(
       // Keep validation work bounded while prioritizing the currently active browser sessions.
-      [...refreshTokenCookies, ...headerTokens]
+      [...refreshTokenCookies, ...headerTokens.map(pair => ({ ...pair, tokenTransport: true }))]
         .slice(0, MAX_LISTED_SESSIONS)
-        .map(async ({ session, token }) => {
+        .map(async ({ session, token, tokenTransport }) => {
           try {
-            const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
+            // A TV that lost a rotation's response still lists the session, and recovers it with
+            // its next refresh (see REFRESH_REUSE_GRACE_MS)
+            const refreshToken = await this.verifyOpaqueRefreshToken(token, session, {
+              acceptJustRotated: tokenTransport,
+            });
             const user = await this.userRepository.findById(refreshToken.userId);
             if (user) {
               return {

@@ -10,15 +10,34 @@ function readStorage(key: string): string | null {
     return null;
   }
 }
-/** Spike (VITE_TV_GL_ROWS): Home's rows drawn in one WebGL canvas on the TV build. */
-export const glRowsEnabled =
-  (builtForTizen && env.TV_GL_ROWS) ||
-  // Development: localStorage['miauflix:gl-rows'] = '1' tries it in a browser. Keys only: the
-  // canvas draws the cards, and the (hidden) DOM buttons under it aren't where they're drawn
-  (Boolean(import.meta.env?.DEV) && readStorage('miauflix:gl-rows') === '1');
+/**
+ * Whether Home's rows and hero are drawn with WebGL, from the build and the runtime override.
+ * The Tizen build has them on unless packaged with `MIAUFLIX_TV_GL_ROWS=false`; the web build
+ * never does. `localStorage['miauflix:gl-rows']` overrides it, read at start: '0' forces the DOM
+ * rows (support, on any build), '1' turns GL on in a Tizen build packaged without it or in
+ * development (keys only there: the hidden DOM buttons under the canvas aren't where the cards
+ * are drawn on a web page).
+ */
+export function resolveGlRows(build: {
+  tizen: boolean;
+  glRows: boolean;
+  dev: boolean;
+  override: string | null;
+}): boolean {
+  if (build.override === '0') return false;
+  if (build.override === '1') return build.tizen || build.dev;
+  return build.tizen && build.glRows;
+}
+export const glRowsEnabled = resolveGlRows({
+  tizen: builtForTizen,
+  glRows: env.TV_GL_ROWS,
+  dev: Boolean(import.meta.env?.DEV),
+  override: readStorage('miauflix:gl-rows'),
+});
 /**
  * Debugging the GL surface on the TV (and in development): localStorage['miauflix:gl-tuning'] as
- * JSON, e.g. {"antialias": false, "textureBudget": 33554432}, read at start.
+ * JSON, e.g. {"antialias": false, "textureBudget": 33554432}, read at start. While it's set, the
+ * TV build also exposes the surface's backend (stats, last error) as `window.__glRows`.
  */
 export const glTuningOverride: Record<string, unknown> | undefined = (() => {
   if (!(builtForTizen || import.meta.env?.DEV)) return;
