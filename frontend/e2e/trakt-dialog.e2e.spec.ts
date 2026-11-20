@@ -62,6 +62,10 @@ test('contains keyboard navigation and returns control to Home after closing', a
   await expect(close).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(begin).toBeFocused();
+
+  // Let Home handle the next key before the dialog's focus restoration frame runs.
+  await page.clock.install();
+  await page.clock.pauseAt((await page.evaluate(() => Date.now())) + 1000);
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
 
@@ -71,6 +75,9 @@ test('contains keyboard navigation and returns control to Home after closing', a
   const labelId = await selected.getAttribute('aria-labelledby');
   await page.keyboard.press('ArrowRight');
   await expect(selected).not.toHaveAttribute('aria-labelledby', labelId!);
+  const nextLabelId = await selected.getAttribute('aria-labelledby');
+  await page.clock.runFor(32);
+  await expect(selected).toHaveAttribute('aria-labelledby', nextLabelId!);
   await expect(selected).toBeFocused();
 });
 

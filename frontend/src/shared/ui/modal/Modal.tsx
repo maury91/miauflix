@@ -76,7 +76,9 @@ export function Modal({
     return () => {
       if (previous instanceof HTMLElement && previous.isConnected) {
         requestAnimationFrame(() => {
-          if (previous.isConnected) previous.focus();
+          if (document.activeElement === document.body && previous.isConnected) {
+            previous.focus();
+          }
         });
       }
     };

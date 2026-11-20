@@ -67,8 +67,13 @@ export function useTraktPrompt({
     };
   }, [enabled, sessionId, userId]);
 
-  const restoreFocus = () =>
-    requestAnimationFrame(() => focusOnClose.current?.focus({ preventScroll: true }));
+  const restoreFocus = () => {
+    const previous = focusOnClose.current;
+    requestAnimationFrame(() => {
+      // Home can already have handled a key by the time this frame runs.
+      if (document.activeElement === document.body) previous?.focus({ preventScroll: true });
+    });
+  };
 
   const dismiss = useCallback(
     (permanent: boolean) => {
