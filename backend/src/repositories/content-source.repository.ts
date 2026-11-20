@@ -174,11 +174,12 @@ export class ContentSourceRepository {
   }
 
   /** Sources with their linked movies, for labelling stored downloads. */
-  findWithMovies(sourceIds: number[]): Promise<ContentSource[]> {
+  /** Sources with the movies and episodes (their season and show) they belong to. */
+  findWithMedia(sourceIds: number[]): Promise<ContentSource[]> {
     if (!sourceIds.length) return Promise.resolve([]);
     return this.repository.find({
       where: { id: In(sourceIds) },
-      relations: { movies: { movie: true } },
+      relations: { movies: { movie: true }, episodes: { episode: { season: { tvShow: true } } } },
     });
   }
 

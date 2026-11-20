@@ -5,278 +5,62 @@ import {
   useTestServiceConfigMutation,
 } from '@features/config/api/config.api';
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { Button as BaseButton, Button } from '@shared/ui';
-import { motion } from 'framer-motion';
+import { SettingsLayout } from '@pages/settings/SettingsLayout';
+import {
+  ActionGroup,
+  Badge,
+  Button,
+  Disclosure,
+  List,
+  ListItem,
+  Message,
+  Stack,
+  Text,
+} from '@shared/design-system';
+import { FocusGroup, useNavigation } from '@shared/navigation';
 import type { FC } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ServiceConfigGroup } from './components/ServiceConfigGroup';
 import { useConfigForm } from './hooks/useConfigForm';
-import { sortServiceGroups } from './config.utils';
+import { formatServiceName, sortServiceGroups } from './config.utils';
+import * as styles from './configurationWizardPage.css';
+import { serviceGroupNav } from './navIds';
 
-import ChevronLeftIcon from '~icons/line-md/chevron-left';
-import ChevronRightIcon from '~icons/line-md/chevron-right';
+import ArrowLeftIcon from '~icons/mdi/arrow-left';
+import CheckIcon from '~icons/mdi/check';
 
-/** Fades in like the login and setup pages, while the logo moves to the header. */
-const Page = styled(motion.div).attrs({
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-})`
-  position: fixed;
-  inset: 0;
-  overflow-y: auto;
-  z-index: 1000;
-  background: ${SETTINGS_PALETTE.background.primary};
-  color: ${SETTINGS_PALETTE.text.primary};
-  font-family: 'Poppins', sans-serif;
-`;
+const NAV = {
+  stepActions: 'wizard-step-actions',
+  previous: 'wizard-previous',
+  next: 'wizard-next',
+  optional: 'wizard-optional',
+  advanced: 'wizard-advanced',
+  finish: 'wizard-finish',
+  finishActions: 'wizard-finish-actions',
+} as const;
 
-const Content = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 132px 24px 40px;
-`;
+const optionalNavId = (name: string) => `wizard-optional:${name}`;
 
-const Title = styled.h1`
-  margin: 0 0 8px;
-  font-size: 28px;
-  font-weight: 400;
-`;
-
-const Subtitle = styled.p`
-  margin: 0 0 28px;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 14px;
-`;
-
-const Timeline = styled.ol`
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin: 0 0 28px;
-  padding: 0;
-  list-style: none;
-`;
-
-const TimelineItem = styled.li<{ $state: 'complete' | 'current' | 'optional' | 'upcoming' }>`
-  position: relative;
-  display: grid;
-  justify-items: center;
-  flex: 1 1 100px;
-  min-width: 0;
-  color: ${props =>
-    props.$state === 'complete'
-      ? SETTINGS_PALETTE.color.primaryButton
-      : props.$state === 'current'
-        ? SETTINGS_PALETTE.color.interactive
-        : props.$state === 'optional'
-          ? SETTINGS_PALETTE.text.optional
-          : SETTINGS_PALETTE.text.secondary};
-  font-size: 12px;
-
-  &:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    top: 9px;
-    left: calc(50% + 9px);
-    width: 100%;
-    height: 1px;
-    background: ${props =>
-      props.$state === 'complete'
-        ? SETTINGS_PALETTE.color.primaryButton
-        : SETTINGS_PALETTE.background.border};
-  }
-`;
-
-const OptionalServicesGroup = styled.li`
-  display: grid;
-  justify-items: center;
-  flex: 1 1 100px;
-  min-width: 0;
-  color: ${SETTINGS_PALETTE.text.optional};
-  font-size: 12px;
-`;
-
-const TimelineDot = styled.span<{ $state: 'complete' | 'current' | 'optional' | 'upcoming' }>`
-  position: relative;
-  z-index: 1;
-  display: grid;
-  width: 18px;
-  height: 18px;
-  place-items: center;
-  border: 1px solid
-    ${props =>
-      props.$state === 'complete'
-        ? SETTINGS_PALETTE.color.primaryButton
-        : props.$state === 'current'
-          ? SETTINGS_PALETTE.color.interactive
-          : props.$state === 'optional'
-            ? SETTINGS_PALETTE.text.optional
-            : SETTINGS_PALETTE.background.border};
-  border-radius: 50%;
-  background: ${props =>
-    props.$state === 'complete'
-      ? SETTINGS_PALETTE.color.primaryButton
-      : props.$state === 'current'
-        ? SETTINGS_PALETTE.color.interactive
-        : props.$state === 'optional'
-          ? SETTINGS_PALETTE.text.optional
-          : SETTINGS_PALETTE.background.surface};
-  color: ${props => (props.$state === 'upcoming' ? SETTINGS_PALETTE.text.secondary : '#0a0d0f')};
-  font-size: 11px;
-`;
-
-const TimelineName = styled.span`
-  display: block;
-  margin-top: 6px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  white-space: nowrap;
-`;
-
-const Navigation = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 24px;
-`;
-
-const ServiceStep = styled.div`
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) 42px;
-  align-items: center;
-  gap: 16px;
-
-  @media (max-width: 720px) {
-    grid-template-columns: 32px minmax(0, 1fr) 32px;
-    gap: 8px;
-  }
-`;
-
-const NextStepArea = styled.div`
-  display: grid;
-  justify-items: center;
-`;
-
-const NextStepHint = styled.span`
-  display: block;
-  max-width: 520px;
-  margin: 12px auto 0;
-  color: ${SETTINGS_PALETTE.color.warning};
-  font-size: 11px;
-  line-height: 1.35;
-  text-align: center;
-`;
-
-const OptionalList = styled.div`
-  display: grid;
-  gap: 12px;
-`;
-
-// eslint-disable-next-line no-restricted-syntax -- Service-selection card owns its multi-line content layout; see shared/ui/README.md.
-const OptionalService = styled(BaseButton)`
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  justify-content: space-between;
-  width: 100%;
-  padding: 16px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 8px;
-  background: ${SETTINGS_PALETTE.background.surface};
-  color: ${SETTINGS_PALETTE.text.primary};
-  box-shadow: none;
-  cursor: pointer;
-  text-align: left;
-
-  &:hover {
-    border-color: ${SETTINGS_PALETTE.color.interactive};
-  }
-`;
-
-const OptionalServiceContent = styled.span`
-  display: grid;
-  gap: 5px;
-  min-width: 0;
-`;
-
-const OptionalServiceTitle = styled.span`
-  font-weight: 600;
-`;
-
-const OptionalServiceSummary = styled.span`
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 12px;
-  line-height: 1.4;
-`;
-
-const OptionalServiceMeta = styled.span`
-  display: grid;
-  flex: 0 0 auto;
-  justify-items: end;
-  gap: 6px;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 11px;
-  white-space: nowrap;
-`;
-
-const ReadinessBadge = styled.span`
-  padding: 2px 8px;
-  border: 1px solid rgba(66, 184, 131, 0.42);
-  border-radius: 20px;
-  color: ${SETTINGS_PALETTE.color.success};
-`;
-
-const OptionalIntro = styled.p`
-  margin: -12px 0 20px;
-  padding: 12px 14px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 8px;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 13px;
-  line-height: 1.5;
-`;
-
-const AdvancedOptionalSettings = styled.details`
-  margin-top: 24px;
-  border-top: 1px solid ${SETTINGS_PALETTE.background.border};
-  padding-top: 18px;
-
-  & > summary {
-    color: ${SETTINGS_PALETTE.text.primary};
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-  }
-
-  & > ${OptionalList} {
-    margin-top: 14px;
-  }
-`;
+/** Moves virtual focus to `id` whenever `step` changes (not on the first render). */
+function FocusOnStep({ step, id }: { step: string; id: string }) {
+  const navigation = useNavigation();
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    navigation.focus(id);
+    // Only a new step moves focus
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+  return null;
+}
 
 interface Props {
   onDismiss: () => void;
 }
-
-const formatServiceName = (name: string) =>
-  name === 'LIST'
-    ? 'Trakt lists'
-    : name === 'CATALOG'
-      ? 'Media catalog'
-      : name === 'CATALOG_RUNTIME'
-        ? 'Catalog runtime'
-        : name === name.toUpperCase() && name.length > 4
-          ? name
-              .toLowerCase()
-              .split('_')
-              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-              .join(' ')
-          : name;
 
 const SERVICE_SUMMARIES: Record<string, string> = {
   CATALOG: 'Movie and show metadata from The Movie Database.',
@@ -380,18 +164,26 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const advancedOptionalGroups = optionalGroups.filter(([name]) =>
     ADVANCED_OPTIONAL_GROUPS.has(name)
   );
-  const renderOptionalService = ([name, group]: [string, ConfigEntryView[]]) => (
-    <OptionalService key={name} type="button" onClick={() => setOptionalService(name)}>
-      <OptionalServiceContent>
-        <OptionalServiceTitle>{formatServiceName(name)}</OptionalServiceTitle>
-        <OptionalServiceSummary>{getServiceSummary(name, group)}</OptionalServiceSummary>
-      </OptionalServiceContent>
-      <OptionalServiceMeta>
-        <ReadinessBadge>{getReadiness(group)}</ReadinessBadge>
-        <span>{group.length} settings</span>
-      </OptionalServiceMeta>
-    </OptionalService>
-  );
+  const renderOptionalService = ([name, group]: [string, ConfigEntryView[]]) => {
+    const readiness = getReadiness(group);
+    return (
+      <ListItem
+        key={name}
+        navId={optionalNavId(name)}
+        title={formatServiceName(name)}
+        description={getServiceSummary(name, group)}
+        metadata={
+          <span className={styles.optionalMeta}>
+            <Badge tone={readiness === 'Ready' ? 'success' : 'warning'}>{readiness}</Badge>
+            <Text as="span" variant="caption" tone="secondary">
+              {group.length} settings
+            </Text>
+          </span>
+        }
+        onClick={() => setOptionalService(name)}
+      />
+    );
+  };
 
   const handleFieldChange = useCallback(
     (key: string, value: string) => {
@@ -472,47 +264,57 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     [getServiceEntries, markServiceSaved, optionalService, saveServiceConfig, testServiceConfig]
   );
 
-  if (isLoading) return <Page />;
+  if (isLoading) return <SettingsLayout title="Set up Miauflix">{null}</SettingsLayout>;
 
   const isOptionalStep = Boolean(optionalService);
   if (!current || !currentName) {
+    const firstOptional = primaryOptionalGroups[0]?.[0];
     return (
-      <Page>
-        <Content>
-          <Title>Optional settings</Title>
-          <Subtitle>
-            Everything required is configured. Review integrations for watching, or finish setup
-            with the defaults already in place.
-          </Subtitle>
-          <OptionalIntro role="note">
-            <strong>Required settings are complete:</strong> you can finish setup now. Optional
-            integrations are ready to review; open one to review or change it.
-          </OptionalIntro>
-          <OptionalList>{primaryOptionalGroups.map(renderOptionalService)}</OptionalList>
-          {advancedOptionalGroups.length > 0 && (
-            <AdvancedOptionalSettings>
-              <summary>Advanced settings ({advancedOptionalGroups.length} groups)</summary>
-              <OptionalList>{advancedOptionalGroups.map(renderOptionalService)}</OptionalList>
-            </AdvancedOptionalSettings>
-          )}
-          <Navigation>
-            <Button
-              appearance="settings"
-              size="medium"
-              color="secondary"
-              iconOnly
-              type="button"
-              aria-label="Previous step"
-              onClick={() => setStep(Math.max(0, requiredGroups.length - 1))}
-            >
-              <ChevronLeftIcon aria-hidden="true" />
-            </Button>
-            <Button appearance="settings" size="medium" type="button" onClick={onDismiss}>
+      <SettingsLayout
+        title="Optional settings"
+        description="Everything required is configured. Review integrations for watching, or finish setup with the defaults already in place."
+        initialNavId={NAV.finish}
+      >
+        <FocusOnStep
+          step="optional"
+          id={firstOptional ? optionalNavId(firstOptional) : NAV.finish}
+        />
+        <Stack gap="lg">
+          <Message tone="info" title="Required settings are complete">
+            You can finish setup now. Optional integrations are ready to review; open one to review
+            or change it.
+          </Message>
+          <ActionGroup navId={NAV.finishActions}>
+            <Button navId={NAV.finish} onClick={onDismiss}>
               Finish and start using Miauflix
             </Button>
-          </Navigation>
-        </Content>
-      </Page>
+            {requiredGroups.length > 0 && (
+              <Button
+                navId={NAV.previous}
+                icon={<ArrowLeftIcon />}
+                onClick={() => setStep(Math.max(0, requiredGroups.length - 1))}
+              >
+                Previous step
+              </Button>
+            )}
+          </ActionGroup>
+          <List navId={NAV.optional} label="Optional services">
+            {primaryOptionalGroups.map(renderOptionalService)}
+          </List>
+          {advancedOptionalGroups.length > 0 && (
+            <Disclosure
+              navId={NAV.advanced}
+              title={`Advanced settings (${advancedOptionalGroups.length} ${
+                advancedOptionalGroups.length === 1 ? 'group' : 'groups'
+              })`}
+            >
+              <List label="Advanced services">
+                {advancedOptionalGroups.map(renderOptionalService)}
+              </List>
+            </Disclosure>
+          )}
+        </Stack>
+      </SettingsLayout>
     );
   }
 
@@ -530,11 +332,22 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
       ? 'Save these settings to continue.'
       : 'Complete the required settings to continue.'
     : undefined;
+  const groupName = formatServiceName(currentName);
+  const groupNav = serviceGroupNav(groupName);
   return (
-    <Page>
-      <Content>
+    <SettingsLayout
+      title={isOptionalStep ? groupName : 'Set up Miauflix'}
+      description={
+        isOptionalStep
+          ? 'Review these settings, then save them or go back to the optional settings.'
+          : 'Fill in the settings each service needs, then save them to continue.'
+      }
+      initialNavId={groupNav.group}
+    >
+      <FocusOnStep step={currentName} id={groupNav.group} />
+      <Stack gap="lg">
         {!isOptionalStep && (
-          <Timeline aria-label="Required configuration steps">
+          <ol className={styles.timeline} aria-label="Required configuration steps">
             {requiredGroups.map(([name], index) => {
               const state = savedServices.has(name)
                 ? 'complete'
@@ -542,75 +355,75 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
                   ? 'current'
                   : 'upcoming';
               return (
-                <TimelineItem key={name} $state={state}>
-                  <TimelineDot $state={state}>{index + 1}</TimelineDot>
-                  <TimelineName>{formatServiceName(name)}</TimelineName>
-                </TimelineItem>
+                <li
+                  key={name}
+                  className={styles.timelineItem}
+                  data-state={state}
+                  aria-current={state === 'current' ? 'step' : undefined}
+                >
+                  <span className={styles.timelineMarker} aria-hidden="true">
+                    {state === 'complete' ? <CheckIcon /> : index + 1}
+                  </span>
+                  <span className={styles.timelineName}>{formatServiceName(name)}</span>
+                </li>
               );
             })}
             {optionalGroups.length > 0 && (
-              <OptionalServicesGroup>
-                <TimelineDot $state="optional">{requiredGroups.length + 1}</TimelineDot>
-                <TimelineName>Optional services</TimelineName>
-              </OptionalServicesGroup>
+              <li className={styles.timelineItem} data-state="upcoming">
+                <span className={styles.timelineMarker} aria-hidden="true">
+                  {requiredGroups.length + 1}
+                </span>
+                <span className={styles.timelineName}>Optional services</span>
+              </li>
             )}
-          </Timeline>
+          </ol>
         )}
-        <ServiceStep>
-          <div>
-            {hasPreviousStep && (
+        <ServiceConfigGroup
+          groupName={groupName}
+          entries={current}
+          values={values}
+          onChange={handleFieldChange}
+          onTest={() => void runAction(currentName, 'test')}
+          onSave={() => void runAction(currentName, 'save')}
+          hasChanges={dirtyServices.has(currentName)}
+          activeAction={actions[currentName]}
+          result={currentResult}
+          serviceStatus={serviceStatuses[currentName]}
+        />
+        <FocusGroup id={NAV.stepActions} layout="horizontal">
+          <div className={styles.stepActions}>
+            {hasPreviousStep ? (
               <Button
-                appearance="settings"
-                size="medium"
-                color="secondary"
-                iconOnly
-                type="button"
-                aria-label="Previous step"
+                navId={NAV.previous}
+                icon={<ArrowLeftIcon />}
                 onClick={() =>
                   isOptionalStep ? setOptionalService(null) : setStep(Math.max(0, step - 1))
                 }
               >
-                <ChevronLeftIcon aria-hidden="true" />
+                Previous step
               </Button>
+            ) : (
+              <span />
             )}
-          </div>
-          <ServiceConfigGroup
-            groupName={formatServiceName(currentName)}
-            entries={current}
-            values={values}
-            onChange={handleFieldChange}
-            onTest={() => void runAction(currentName, 'test')}
-            onSave={() => void runAction(currentName, 'save')}
-            hasChanges={dirtyServices.has(currentName)}
-            activeAction={actions[currentName]}
-            result={currentResult}
-            serviceStatus={serviceStatuses[currentName]}
-          />
-          {!isOptionalStep && (
-            <NextStepArea>
+            {!isOptionalStep && (
               <Button
-                appearance="settings"
-                size="medium"
-                color="secondary"
-                iconOnly
-                type="button"
-                aria-label="Next step"
+                navId={NAV.next}
                 aria-describedby={nextStepHint ? 'next-step-hint' : undefined}
                 onClick={() => setStep(step + 1)}
                 disabled={!canContinue}
               >
-                <ChevronRightIcon aria-hidden="true" />
+                Next step
               </Button>
-            </NextStepArea>
-          )}
-        </ServiceStep>
+            )}
+          </div>
+        </FocusGroup>
         {nextStepHint && (
-          <NextStepHint id="next-step-hint" role="note">
+          <Text id="next-step-hint" variant="caption" tone="secondary" align="end">
             {nextStepHint}
-          </NextStepHint>
+          </Text>
         )}
-      </Content>
-    </Page>
+      </Stack>
+    </SettingsLayout>
   );
 };
 

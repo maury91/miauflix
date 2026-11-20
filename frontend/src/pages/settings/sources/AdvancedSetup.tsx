@@ -4,108 +4,27 @@ import {
   useRefreshRepositoryMutation,
   useRemoveRepositoryMutation,
 } from '@features/sources/api/sources.api';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { Button, FieldLabel, Input } from '@shared/ui';
-import { type FormEvent, useState } from 'react';
-import styled from 'styled-components';
+import {
+  Badge,
+  Button,
+  Disclosure,
+  FormSection,
+  IconButton,
+  List,
+  ListItem,
+  Message,
+  Section,
+  TextField,
+} from '@shared/design-system';
+import { useState } from 'react';
 
 import SourcesAddProviders from '../SourcesAddProviders';
 import { errorMessage } from './errors';
-import { Badge, BORDER, IconBox, Message, Muted, Panel, Pill } from './styles';
+import { ADVANCED_NAV } from './navIds';
+import * as styles from './sources.css';
 
-import ChevronIcon from '~icons/mdi/chevron-down';
-import SettingsIcon from '~icons/mdi/cog-outline';
-
-const Toggle = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  padding: 14px 18px;
-  border: 0;
-  border-radius: 12px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid ${SETTINGS_PALETTE.color.interactive};
-    outline-offset: -2px;
-  }
-`;
-
-const Grow = styled.span`
-  flex: 1;
-  min-width: 0;
-`;
-
-const Title = styled.span`
-  display: block;
-  font-size: 18px;
-  font-weight: 600;
-  text-transform: none;
-`;
-
-const Chevron = styled.span<{ $open: boolean }>`
-  display: grid;
-  font-size: 24px;
-  transform: rotate(${({ $open }) => ($open ? 180 : 0)}deg);
-`;
-
-const Body = styled.div`
-  display: grid;
-  gap: 4px;
-  padding: 0 18px 20px;
-`;
-
-const Section = styled.section`
-  display: grid;
-  gap: 12px;
-  padding: 18px 0 4px;
-  border-top: 1px solid ${BORDER};
-`;
-
-const Heading = styled.h3`
-  margin: 0;
-  text-transform: none;
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: none;
-`;
-
-const List = styled.ul`
-  display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`;
-
-const RepositoryRow = styled.li`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px 16px;
-  padding: 12px 14px;
-  border: 1px solid ${BORDER};
-  border-radius: 10px;
-`;
-
-const Controls = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-`;
-
-const AddRow = styled.form`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  align-items: end;
-`;
+import RefreshIcon from '~icons/mdi/refresh';
+import RemoveIcon from '~icons/mdi/trash-can-outline';
 
 interface AdvancedSetupProps {
   open: boolean;
@@ -114,6 +33,7 @@ interface AdvancedSetupProps {
   onError: (message: string) => void;
 }
 
+/** Jackett, Torznab and repositories: collapsed until asked for, since most people never need it. */
 export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: AdvancedSetupProps) {
   const repositories = useGetRepositoriesQuery();
   const [addRepository, adding] = useAddRepositoryMutation();
@@ -129,10 +49,9 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
       onError(errorMessage(error, failure));
     }
   };
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
+  const submit = () => {
     const value = url.trim();
-    if (!value) return;
+    if (!value || adding.isLoading) return;
     void run(
       async () => {
         await addRepository({ url: value }).unwrap();
@@ -144,112 +63,116 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
   };
 
   return (
-    <Panel id="advanced-setup">
-      <Toggle
-        type="button"
-        aria-expanded={open}
-        aria-controls="advanced-setup-body"
-        onClick={() => onOpenChange(!open)}
+    <div id="advanced-setup">
+      <Disclosure
+        navId={ADVANCED_NAV.toggle}
+        title="Advanced setup"
+        description="Jackett, Torznab endpoints, and repositories."
+        headingLevel={2}
+        expanded={open}
+        onExpandedChange={onOpenChange}
       >
-        <IconBox $size={44} aria-hidden="true">
-          <SettingsIcon />
-        </IconBox>
-        <Grow>
-          <Title>Advanced setup</Title>
-          <Muted>Jackett, Torznab endpoints, and repositories.</Muted>
-        </Grow>
-        <Pill>3 items</Pill>
-        <Chevron $open={open} aria-hidden="true">
-          <ChevronIcon />
-        </Chevron>
-      </Toggle>
-      {open && (
-        <Body id="advanced-setup-body">
-          <SourcesAddProviders onNotice={onNotice} />
-          <Section aria-label="Repositories">
-            <Heading>Repositories</Heading>
-            <Muted>A repository is a list of sources. Add one by its web address.</Muted>
+        <SourcesAddProviders onNotice={onNotice} />
+        <div className={styles.setupPart}>
+          <Section
+            title="Repositories"
+            headingLevel={3}
+            description="A repository is a list of sources. Add one by its web address."
+          >
             {repositories.error && !repositories.data && (
-              <Message role="alert">Could not load repositories.</Message>
+              <Message tone="danger" toneLabel="Error" live="assertive">
+                Could not load repositories.
+              </Message>
             )}
-            <List aria-label="Repositories">
-              {(repositories.data ?? []).map(repository => (
-                <RepositoryRow key={repository.id}>
-                  <div>
-                    <strong>{repository.name ?? repository.url}</strong>{' '}
-                    {repository.builtIn && <Badge>built-in</Badge>}
-                    {!repository.builtIn && repository.id !== 'local:user' && (
-                      <Muted>{repository.url}</Muted>
-                    )}
-                    <Muted>
-                      {repository.providerCount} provider{repository.providerCount === 1 ? '' : 's'}
-                      {repository.lastFetchedAt
-                        ? ` · updated ${new Date(repository.lastFetchedAt).toLocaleString()}`
-                        : ''}
-                    </Muted>
-                    {repository.lastError && <Muted>Problem: {repository.lastError}</Muted>}
-                  </div>
-                  {!repository.builtIn && repository.id !== 'local:user' && (
-                    <Controls>
-                      <Button
-                        size="small"
-                        appearance="settings"
-                        color="secondary"
-                        aria-label={`Refresh ${repository.name ?? repository.url}`}
-                        onClick={() =>
-                          void run(
-                            () => refreshRepository(repository.id).unwrap(),
-                            'Repository refreshed.',
-                            'Could not refresh repository.'
-                          )
-                        }
-                      >
-                        Refresh
-                      </Button>
-                      <Button
-                        size="small"
-                        appearance="settings"
-                        color="secondary"
-                        aria-label={`Remove ${repository.name ?? repository.url}`}
-                        onClick={() =>
-                          void run(
-                            () => removeRepository(repository.id).unwrap(),
-                            'Repository removed.',
-                            'Could not remove repository.'
-                          )
-                        }
-                      >
-                        Remove
-                      </Button>
-                    </Controls>
-                  )}
-                </RepositoryRow>
-              ))}
+            <List label="Repositories" divided>
+              {(repositories.data ?? []).map(repository => {
+                const name = repository.name ?? repository.url;
+                const managed = !repository.builtIn && repository.id !== 'local:user';
+                return (
+                  <ListItem
+                    key={repository.id}
+                    navId={managed ? `repository:${repository.id}` : undefined}
+                    title={name}
+                    metadata={repository.builtIn ? <Badge>built-in</Badge> : undefined}
+                    description={
+                      <span className={styles.facts}>
+                        {managed && <span>{repository.url}</span>}
+                        <span>
+                          {repository.providerCount} provider
+                          {repository.providerCount === 1 ? '' : 's'}
+                          {repository.lastFetchedAt
+                            ? ` · updated ${new Date(repository.lastFetchedAt).toLocaleString()}`
+                            : ''}
+                        </span>
+                        {repository.lastError && <span>Problem: {repository.lastError}</span>}
+                      </span>
+                    }
+                    trailing={
+                      managed ? (
+                        <>
+                          <IconButton
+                            navId={ADVANCED_NAV.refresh(repository.id)}
+                            label={`Refresh ${name}`}
+                            tooltip="Refresh"
+                            icon={<RefreshIcon />}
+                            onClick={() =>
+                              void run(
+                                () => refreshRepository(repository.id).unwrap(),
+                                'Repository refreshed.',
+                                'Could not refresh repository.'
+                              )
+                            }
+                          />
+                          <IconButton
+                            navId={ADVANCED_NAV.remove(repository.id)}
+                            label={`Remove ${name}`}
+                            tooltip="Remove"
+                            icon={<RemoveIcon />}
+                            onClick={() =>
+                              void run(
+                                () => removeRepository(repository.id).unwrap(),
+                                'Repository removed.',
+                                'Could not remove repository.'
+                              )
+                            }
+                          />
+                        </>
+                      ) : undefined
+                    }
+                  />
+                );
+              })}
             </List>
-            <AddRow onSubmit={submit} aria-label="Add repository">
-              <div>
-                <FieldLabel htmlFor="repository-url">Repository URL</FieldLabel>
-                <Input
-                  id="repository-url"
-                  type="url"
-                  placeholder="https://example.com/providers.json"
-                  value={url}
-                  onChange={event => setUrl(event.target.value)}
-                />
-              </div>
-              <Button
-                type="submit"
-                size="small"
-                appearance="settings"
-                color="primary"
-                disabled={adding.isLoading || !url.trim()}
-              >
-                {adding.isLoading ? 'Adding…' : 'Add repository'}
-              </Button>
-            </AddRow>
+            <FormSection
+              title="Add repository"
+              titleHidden
+              headingLevel={3}
+              onSubmit={submit}
+              busy={adding.isLoading}
+              actions={
+                <Button
+                  type="submit"
+                  navId={ADVANCED_NAV.repositoryAdd}
+                  loading={adding.isLoading}
+                  disabled={!url.trim()}
+                >
+                  Add repository
+                </Button>
+              }
+            >
+              <TextField
+                navId={ADVANCED_NAV.repositoryUrl}
+                id="repository-url"
+                label="Repository URL"
+                type="url"
+                placeholder="https://example.com/providers.json"
+                value={url}
+                onChange={event => setUrl(event.target.value)}
+              />
+            </FormSection>
           </Section>
-        </Body>
-      )}
-    </Panel>
+        </div>
+      </Disclosure>
+    </div>
   );
 }

@@ -1,139 +1,35 @@
-import { ActionRow } from '@shared/ui/action-row/ActionRow';
-import styled from 'styled-components';
+import { Icon, Message, Stack, Text } from '@shared/design-system';
 
-import { Action, Copy } from './TraktModal.styles';
+import * as styles from './traktModal.css';
 
-import StarIcon from '~icons/line-md/star';
 import BookmarkIcon from '~icons/mdi/bookmark-outline';
-import ExternalIcon from '~icons/mdi/open-in-new';
 import ProgressIcon from '~icons/mdi/progress-clock';
+import StarIcon from '~icons/mdi/star-outline';
 
-const Benefits = styled.ul`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  padding: 0;
-  margin: 38px 0 0;
-  list-style: none;
+const BENEFITS = [
+  { icon: <BookmarkIcon />, label: 'Sync your watchlist' },
+  { icon: <ProgressIcon />, label: 'Track your progress' },
+  { icon: <StarIcon />, label: 'Get movie recommendations' },
+];
 
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-`;
-
-const Benefit = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  color: #e1e4e9;
-  font-size: 18px;
-  line-height: 1.4;
-`;
-
-const IconTile = styled.span`
-  flex: 0 0 56px;
-  height: 56px;
-  display: grid;
-  place-items: center;
-  //border: 2px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  //background: linear-gradient(135deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
-  color: #fa438a;
-
-  svg {
-    width: 28px;
-    height: 28px;
-  }
-`;
-
-const Actions = styled(ActionRow)`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: stretch;
-  gap: 24px;
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 0;
-
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 1fr;
-    gap: 12px;
-    margin-top: 24px;
-    padding-top: 24px;
-  }
-`;
-
-const BenefitsSubtitle = styled.p`
-  color: #bac1ca;
-  font-size: clamp(16px, 1.65vw, 24px);
-  line-height: 1.4;
-  margin: 48px 0 0;
-  font-weight: 600;
-`;
-
-interface LandingProps {
-  busy: boolean;
-  error: string | null;
-  onBegin: () => void;
-  onDismiss: () => void;
-}
-
-/** Offer Trakt connection or permanent dismissal, disabling the connection action while busy. */
-export function TraktLanding({ busy, error, onBegin, onDismiss }: LandingProps) {
+/** What connecting Trakt brings, and why starting failed if it did. */
+export function TraktLanding({ error }: { error: string | null }) {
   return (
-    <>
-      <BenefitsSubtitle>With Trakt you can:</BenefitsSubtitle>
-      <Benefits aria-label="Trakt benefits">
-        <Benefit>
-          <IconTile>
-            <BookmarkIcon />
-          </IconTile>
-          <span>
-            Sync
-            <br />
-            watchlist
-          </span>
-        </Benefit>
-        <Benefit>
-          <IconTile>
-            <ProgressIcon />
-          </IconTile>
-          <span>
-            Track
-            <br />
-            progress
-          </span>
-        </Benefit>
-        <Benefit>
-          <IconTile>
-            <StarIcon />
-          </IconTile>
-          <span>
-            Get movies
-            <br />
-            recommendations
-          </span>
-        </Benefit>
-      </Benefits>
-      {error && <Copy role="alert">{error}</Copy>}
-      <Actions>
-        <Action
-          color="primary"
-          fullWidth
-          type="button"
-          disabled={busy}
-          onClick={onBegin}
-          data-modal-action="0"
-        >
-          <ExternalIcon aria-hidden="true" />
-          {busy ? 'Connecting…' : "Let's go"}
-        </Action>
-        <Action color="secondary" fullWidth type="button" data-modal-action="1" onClick={onDismiss}>
-          Don’t ask again
-        </Action>
-      </Actions>
-    </>
+    <Stack gap="md">
+      <Text variant="label">With Trakt you can:</Text>
+      <ul className={styles.benefits} aria-label="Trakt benefits">
+        {BENEFITS.map(benefit => (
+          <li key={benefit.label} className={styles.benefit}>
+            <Icon size="lg">{benefit.icon}</Icon>
+            <Text as="span">{benefit.label}</Text>
+          </li>
+        ))}
+      </ul>
+      {error && (
+        <Message tone="danger" toneLabel="Error" live="assertive">
+          {error}
+        </Message>
+      )}
+    </Stack>
   );
 }

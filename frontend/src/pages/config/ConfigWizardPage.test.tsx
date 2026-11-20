@@ -10,7 +10,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock('@features/config/api/config.api', () => mocks);
-vi.mock('framer-motion', () => ({ motion: { div: 'div' } }));
+vi.mock('framer-motion', () => ({ motion: { div: 'div', main: 'main' } }));
 
 import ConfigurationWizardPage from './ConfigurationWizardPage';
 import ConfigWizardPage from './ConfigWizardPage';

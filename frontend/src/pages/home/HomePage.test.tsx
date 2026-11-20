@@ -732,23 +732,17 @@ describe('HomePage focus transitions', () => {
         background.focus();
         await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 });
         const first = screen.getByRole('button', { name: "Let's go" });
-        const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
         const never = screen.getByRole('button', { name: 'Don’t ask again' });
         await waitFor(() => expect(first).toHaveFocus());
-        // A late-loading carousel must not be able to reclaim keyboard focus.
-        background.focus();
+        press('ArrowRight');
+        expect(never).toHaveFocus();
+        press('ArrowLeft');
         expect(first).toHaveFocus();
+        // Behind the dialog everything is inert (which jsdom doesn't implement): Home's keys
+        // never move its rows
         fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowDown' });
         expect(screen.getByTestId('card-1')).toHaveAttribute('data-active', 'false');
-        fireEvent.keyDown(first, { key: 'ArrowRight' });
-        expect(never).toHaveFocus();
-        fireEvent.keyDown(never, { key: 'Tab' });
-        expect(close).toHaveFocus();
-        fireEvent.keyDown(close, { key: 'Tab' });
-        expect(first).toHaveFocus();
-        fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
-        expect(close).toHaveFocus();
-        fireEvent.keyDown(close, { key: 'Escape' });
+        press('Escape');
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         await waitFor(() => expect(background).toHaveFocus());
         press('ArrowDown');

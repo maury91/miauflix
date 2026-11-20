@@ -141,10 +141,14 @@ export const layer = {
   content: 0,
   stickyChrome: 100,
   popover: 200,
-  modalBackdrop: 300,
-  modal: 310,
-  tooltip: 400,
-  notification: 500,
+  /** A full-screen page over the app shell (settings, search, profiles). */
+  page: 1000,
+  // Above the app shell's own chrome (the logo and rail, up to 1002) and the pages: a Dialog is
+  // portalled to the document's body
+  modalBackdrop: 1100,
+  modal: 1110,
+  tooltip: 1200,
+  notification: 1300,
 } as const;
 
 /** Web window size classes (Material 3), in em so media queries follow user zoom. */

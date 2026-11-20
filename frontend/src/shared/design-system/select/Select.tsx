@@ -47,6 +47,7 @@ type LabelledProps = FieldAnatomyProps & {
 /** …or by a row around it, such as SettingRow's `control` props. */
 type RowLabelledProps = {
   label?: undefined;
+  labelHidden?: undefined;
   indicator?: undefined;
   description?: undefined;
   error?: undefined;
@@ -65,7 +66,7 @@ export type SelectProps<Value extends string = string> = SelectBaseProps<Value> 
  * closes, Back closes without changing anything, Left/Right stay inside. A press outside closes.
  */
 export function Select<Value extends string = string>(props: SelectProps<Value>) {
-  const { label, indicator, description, error, id } = props;
+  const { label, labelHidden, indicator, description, error, id } = props;
   if (label === undefined) {
     return (
       <SelectControl
@@ -80,7 +81,14 @@ export function Select<Value extends string = string>(props: SelectProps<Value>)
     );
   }
   return (
-    <Field label={label} indicator={indicator} description={description} error={error} id={id}>
+    <Field
+      label={label}
+      labelHidden={labelHidden}
+      indicator={indicator}
+      description={description}
+      error={error}
+      id={id}
+    >
       {control => (
         <SelectControl
           {...props}

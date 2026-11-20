@@ -2,6 +2,21 @@
 
 Implementation and upgrade notes. For a shorter overview, see the [release notes](CHANGELOG.md).
 
+## Unreleased
+
+### Features
+
+- Configuration, the first-run wizard, Sources, Storage, the Trakt dialog and QR approval now use the design system.
+  - Configuration, the first-run wizard, Sources and Storage share `pages/settings/SettingsLayout`: a back `NavRail` (when there is somewhere to go back to) beside a `ScrollArea`, in one `FocusScope`. `shared/hooks/usePageBack` keeps DOM focus on the page so Back works while a text field holds virtual focus, and ends editing first (the profile editor uses it too).
+  - Configuration groups are `Surface` sections with a status `Badge`, `Disclosure`s for optional and advanced values, and Save/Test in an `ActionGroup`. Each value kind has its control: `Switch`, `Select`, `NumberField` (with a unit `Select` for sizes and durations), `PasswordField` or `TextField`. The wizard's required steps are a list with the current step marked.
+  - Sources rows are a `Switch` named by the source (description, usage, errors and badges as its description), a Test `IconButton` and a `Menu` (Settings, Move up/down, Remove). Provider settings register with the navigation layer instead of mapping DOM focus, and opening them focuses the first field. Advanced setup is a `Disclosure`; Add source opens and focuses it. The indexer catalog uses `TextField`, `Select`, `FilterChip`s and `Badge`s; Torznab and repositories use `FormSection`.
+  - Storage opens with `storage/StorageUsage`: a bar over the whole filesystem (`filesystem.totalBytes`) split into movies, episodes, anime, unmatched downloads, TV remuxes and other data (used space Miauflix doesn't account for), plus free space, with a marker at the configured limit. Video segments are `physicalBytes - remuxBytes` by kind; without filesystem stats the bar spans the larger of the limit and the used bytes. A legend repeats the values in text, and a note gives the bytes charged against the limit, reservations included. `storage/storageInventory` holds `computeUsage`, `sortItems` and `formatBytes`.
+  - Downloads are `ListItem`s with landscape `Artwork` (backdrop, falling back to the episode still or poster), a kind `Badge`, quality, size, status, progress (with a bar while incomplete), file name, reservation and remux size. A `Select` sorts by size, name, type, progress or status. Free space is an `IconButton` that confirms with `Dialog` (Cancel first).
+  - `StorageItemView` adds `kind` (`movie`, `episode`, `anime` for shows with AniList season layout, `unknown`), `subtitle` (the year, or the episodes such as `S01E02 · Name` or `Season 1 · 3 episodes`), `image` and `remuxBytes`. `ContentSourceRepository.findWithMovies` becomes `findWithMedia` and also loads episodes with their season and show. The `media-load` contract documents `StorageItem.remuxBytes` (since 1.2), which media-load already sent.
+  - The Trakt dialog is a `Dialog` with a `PairingPanel` for the code; focus moves to Open Trakt once the code arrives. QR approval is a `Surface` card on its own navigation layer.
+  - `layer.page` (1000) names the full-screen pages' z-index. The dialog, tooltip and notification layers move to 1100–1300, above those pages and the app shell's legacy chrome (up to 1002), so a `Dialog` opened from a settings page is no longer drawn behind it.
+  - ESLint bans `styled-components` in `pages/{config,qr,settings}` and `features/integrations/ui`. Storybook mocks the config, sources and storage APIs (`__mocks__` with `sb.mock`) for the new Settings stories. The `initial-user-setup` end-to-end spec finds fields by `data-config-field` and the Trakt group by its region; its screenshots need regenerating.
+
 ## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
 
 ### Features

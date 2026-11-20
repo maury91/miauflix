@@ -30,7 +30,7 @@ import {
   TextField,
 } from '@shared/design-system';
 import { TIZEN_IME_DONE } from '@shared/hooks/useKeyboard';
-import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { usePageBack } from '@shared/hooks/usePageBack';
 import { FocusGroup, FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
 import { useAppSelector } from '@store/hooks';
@@ -62,53 +62,18 @@ export interface ProfileEditorPageProps {
   onCancel: () => void;
 }
 
-const isEditing = (element: Element | null) =>
-  element instanceof HTMLInputElement && element.type !== 'range';
-
 /** Create or edit a profile: its name and Plushie. */
 const ProfileEditorPage: FC<ProfileEditorPageProps> = props => {
   const { onCancel } = props;
   // The logo lines up with the content beside the back rail, as on the other inner pages.
   useRailContentLeft();
-  // Back ends editing a field first (closing a TV's keyboard), then leaves the page. An element
-  // scope, so it wins over the page-wide navigation keys.
-  const keysRef = useKeyboardNavigation({
-    onBack: event => {
-      const active = document.activeElement;
-      if (isEditing(active)) {
-        if (event.key === 'Backspace') return false;
-        (active as HTMLElement).blur();
-        return true;
-      }
-      onCancel();
-      return true;
-    },
-  });
-  // A text field holds no DOM focus outside edit mode (the editor opens on the name): keep DOM
-  // focus on the page then, so its keys (Back) still reach it rather than the document body
-  const mainRef = useRef<HTMLElement | null>(null);
-  const keepFocusInPage = useCallback(() => {
-    queueMicrotask(() => {
-      const active = document.activeElement;
-      if (!active || active === document.body) mainRef.current?.focus({ preventScroll: true });
-    });
-  }, []);
-  const pageRef = useCallback(
-    (element: HTMLElement | null) => {
-      mainRef.current = element;
-      keysRef(element);
-      if (element) keepFocusInPage();
-    },
-    [keysRef, keepFocusInPage]
-  );
+  // Back ends editing a field first (closing a TV's keyboard), then leaves the page
+  const back = usePageBack(onCancel);
   return (
     <motion.main
-      ref={pageRef}
+      {...back}
       className={styles.page}
       aria-labelledby="profile-editor-title"
-      // Programmatic focus only (see keepFocusInPage), never a Tab stop
-      tabIndex={-1}
-      onBlur={keepFocusInPage}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

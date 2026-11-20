@@ -1,65 +1,12 @@
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import styled from 'styled-components';
+import { Grid, Heading, Icon, Surface, Text } from '@shared/design-system';
+import type { ReactNode } from 'react';
 
-import { IconBox, Panel } from './styles';
+import * as styles from './sources.css';
 
 import FindIcon from '~icons/mdi/format-list-checks';
 import InfoIcon from '~icons/mdi/information-outline';
 import SearchIcon from '~icons/mdi/magnify';
 import WatchIcon from '~icons/mdi/play-circle-outline';
-
-const Steps = styled(Panel)`
-  display: grid;
-  grid-template-columns: minmax(150px, 0.8fr) repeat(3, minmax(0, 1.2fr));
-  align-items: center;
-  margin: 24px 0 36px;
-  padding: 16px 12px;
-
-  @media (max-width: 1000px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 16px 0;
-  }
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const Heading = styled.h2`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0;
-  padding: 0 12px;
-  font-size: 18px;
-  font-weight: 600;
-  text-transform: none;
-`;
-
-const Step = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 0 16px;
-  border-left: 1px solid #252b2e;
-
-  @media (max-width: 600px) {
-    border-left: 0;
-  }
-`;
-
-const StepTitle = styled.h3`
-  margin: 0 0 2px;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: none;
-`;
-
-const StepText = styled.p`
-  margin: 0;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 13px;
-  line-height: 1.45;
-`;
 
 const STEPS = [
   { icon: <SearchIcon />, title: 'Search', text: 'Miauflix checks your enabled sources in order.' },
@@ -75,26 +22,41 @@ const STEPS = [
   },
 ];
 
+function StepIcon({ children }: { children: ReactNode }) {
+  return (
+    <span className={styles.stepIcon} aria-hidden="true">
+      <Icon size="md">{children}</Icon>
+    </span>
+  );
+}
+
+/** What sources are for, in three steps. Passive: nothing here takes focus. */
 export function HowItWorks() {
   return (
-    <Steps aria-labelledby="how-it-works">
-      <Heading id="how-it-works">
-        <IconBox $size={40} aria-hidden="true">
-          <InfoIcon />
-        </IconBox>
-        How it works
-      </Heading>
-      {STEPS.map(step => (
-        <Step key={step.title}>
-          <IconBox $size={40} aria-hidden="true">
-            {step.icon}
-          </IconBox>
-          <div>
-            <StepTitle>{step.title}</StepTitle>
-            <StepText>{step.text}</StepText>
+    <Surface as="section" border radius="lg" padding="md" aria-labelledby="how-it-works">
+      <Grid columns={{ compact: 1, medium: 2, expanded: 4 }} gap="md" align="center">
+        <div className={styles.step}>
+          <StepIcon>
+            <InfoIcon />
+          </StepIcon>
+          <Heading level={2} variant="heading" id="how-it-works">
+            How it works
+          </Heading>
+        </div>
+        {STEPS.map(step => (
+          <div key={step.title} className={styles.step}>
+            <StepIcon>{step.icon}</StepIcon>
+            <div className={styles.stepText}>
+              <Heading level={3} variant="label">
+                {step.title}
+              </Heading>
+              <Text variant="caption" tone="secondary">
+                {step.text}
+              </Text>
+            </div>
           </div>
-        </Step>
-      ))}
-    </Steps>
+        ))}
+      </Grid>
+    </Surface>
   );
 }

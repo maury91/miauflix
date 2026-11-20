@@ -179,7 +179,10 @@ test('completes first-run admin and required configuration through the UI', asyn
   });
 
   await expect(page.getByText('Failed to test TMDB')).toBeVisible();
-  await expect(catalogUrlInput.locator('xpath=..')).toHaveAttribute('data-test-failure', 'true');
+  await expect(page.locator('[data-config-field="TMDB_API_URL"]')).toHaveAttribute(
+    'data-test-failure',
+    'true'
+  );
   await expect(nextButton).toBeDisabled();
   await expect(page).toHaveScreenshot('catalog-test-failure.png', screenshotOptions);
 
@@ -215,9 +218,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   const traktSaveResponsePromise = page.waitForResponse(response => {
     return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
   });
-  const traktGroup = page
-    .getByRole('heading', { name: 'TRAKT', exact: true })
-    .locator('xpath=../../..');
+  const traktGroup = page.getByRole('region', { name: 'Trakt', exact: true });
   await traktGroup.getByRole('button', { name: 'Save', exact: true }).click();
   const traktSaveResponse = await traktSaveResponsePromise;
   expect(traktSaveResponse.ok()).toBeTruthy();

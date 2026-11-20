@@ -2,6 +2,13 @@
 
 Release notes for viewers and self-hosters. See the [detailed changelog](DETAILED_CHANGELOG.md) for implementation and upgrade notes.
 
+## Unreleased
+
+### App and navigation
+
+- Configuration, Sources, Storage, the Trakt dialog and the page that approves a TV's QR sign-in now match the rest of the app and work with the remote. Back leaves a text field before it leaves the page. Opening a source's settings takes you to its first field, and on a phone each source's buttons sit under its description.
+- Storage shows a bar of the server's disk split into movies, episodes, anime, TV copies, other files and free space, with Miauflix's limit marked. Downloads show their artwork, size, progress and status, and you can sort them by size, name, type, progress or status.
+
 ## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
 
 ### On Samsung TVs

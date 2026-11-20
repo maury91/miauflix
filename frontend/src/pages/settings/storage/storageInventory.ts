@@ -1,0 +1,140 @@
+import type { StorageInventoryResponse, StorageItemView } from '@miauflix/backend';
+
+export type UsageCategory = 'movie' | 'episode' | 'anime' | 'unknown' | 'remux' | 'other';
+
+export interface UsageSegment {
+  category: UsageCategory;
+  label: string;
+  bytes: number;
+}
+
+export interface StorageUsage {
+  /** What the bar spans: the disk, or Miauflix's limit when the disk's size is unknown. */
+  totalBytes: number;
+  /** Whether `totalBytes` is the disk's size. */
+  isDisk: boolean;
+  /** Used space, in the bar's order; empty categories left out. */
+  segments: UsageSegment[];
+  usedBytes: number;
+  freeBytes: number | null;
+  /** Miauflix's storage limit, where the bar marks it (null without a limit). */
+  limitBytes: number | null;
+  /** What Miauflix counts against its limit (written plus reserved for downloads). */
+  chargedBytes: number;
+}
+
+export const CATEGORY_LABELS: Record<UsageCategory, string> = {
+  movie: 'Movies',
+  episode: 'Episodes',
+  anime: 'Anime',
+  unknown: 'Unmatched downloads',
+  remux: 'TV remuxes',
+  other: 'Other data',
+};
+
+export function formatBytes(bytes: number | null | undefined): string {
+  if (bytes === null || bytes === undefined || !Number.isFinite(bytes) || bytes < 0) {
+    return 'Unavailable';
+  }
+  if (bytes === 0) return '0 B';
+
+  const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+  const unitIndex = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+  const value = bytes / 1024 ** unitIndex;
+  const formattedValue = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 }).format(
+    value
+  );
+
+  return `${formattedValue} ${units[unitIndex]}`;
+}
+
+/** The video files a download holds, apart from its TV copies. */
+const videoBytes = (item: StorageItemView) =>
+  Math.max(0, (item.physicalBytes ?? 0) - item.remuxBytes);
+
+/**
+ * The disk as the bar shows it: each kind of media Miauflix stored, its TV copies, then whatever
+ * else is on the disk (other data) and the free space, with Miauflix's limit marked on it.
+ */
+export function computeUsage({ summary, items }: StorageInventoryResponse): StorageUsage {
+  const byCategory = new Map<UsageCategory, number>();
+  const add = (category: UsageCategory, bytes: number) =>
+    byCategory.set(category, (byCategory.get(category) ?? 0) + bytes);
+  for (const item of items) {
+    add(item.kind, videoBytes(item));
+    add('remux', item.remuxBytes);
+  }
+  const miauflixBytes = [...byCategory.values()].reduce((sum, bytes) => sum + bytes, 0);
+  const { filesystem } = summary;
+  if (filesystem) {
+    const diskUsed = Math.max(0, filesystem.totalBytes - filesystem.freeBytes);
+    // Everything on the disk that isn't Miauflix's: the system, other apps, their files
+    add('other', Math.max(0, diskUsed - miauflixBytes));
+  }
+  const order: UsageCategory[] = ['movie', 'episode', 'anime', 'unknown', 'remux', 'other'];
+  const segments = order
+    .map(category => ({
+      category,
+      label: CATEGORY_LABELS[category],
+      bytes: byCategory.get(category) ?? 0,
+    }))
+    .filter(segment => segment.bytes > 0);
+  const usedBytes = segments.reduce((sum, segment) => sum + segment.bytes, 0);
+  const limitBytes = summary.storageBudgetBytes > 0 ? summary.storageBudgetBytes : null;
+  const totalBytes = filesystem
+    ? Math.max(filesystem.totalBytes, usedBytes)
+    : Math.max(limitBytes ?? 0, usedBytes, 1);
+  return {
+    totalBytes,
+    isDisk: filesystem !== null,
+    segments,
+    usedBytes,
+    freeBytes: filesystem ? filesystem.freeBytes : null,
+    limitBytes,
+    chargedBytes: summary.chargedBytes,
+  };
+}
+
+export type StorageSort = 'size' | 'name' | 'type' | 'progress' | 'status';
+
+export const SORT_OPTIONS: { value: StorageSort; label: string }[] = [
+  { value: 'size', label: 'Size (largest first)' },
+  { value: 'name', label: 'Name (A–Z)' },
+  { value: 'type', label: 'Type' },
+  { value: 'progress', label: 'Download progress' },
+  { value: 'status', label: 'Status' },
+];
+
+const KIND_ORDER: Record<StorageItemView['kind'], number> = {
+  movie: 0,
+  episode: 1,
+  anime: 2,
+  unknown: 3,
+};
+/** Busiest first: what is playing or downloading, then what can still go away. */
+const ACTIVITY_ORDER: Record<StorageItemView['activity'], number> = {
+  active: 0,
+  available_offline: 1,
+  inactive: 2,
+  local_only: 3,
+};
+
+const byName = (a: StorageItemView, b: StorageItemView) =>
+  a.title.localeCompare(b.title) || (a.subtitle ?? '').localeCompare(b.subtitle ?? '');
+const bySize = (a: StorageItemView, b: StorageItemView) =>
+  (b.physicalBytes ?? 0) - (a.physicalBytes ?? 0) || b.reservedBytes - a.reservedBytes;
+
+export function sortItems(items: readonly StorageItemView[], sort: StorageSort) {
+  const compare: Record<StorageSort, (a: StorageItemView, b: StorageItemView) => number> = {
+    size: (a, b) => bySize(a, b) || byName(a, b),
+    name: (a, b) => byName(a, b) || bySize(a, b),
+    type: (a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind] || byName(a, b),
+    // Least downloaded first: what is still coming
+    progress: (a, b) => a.progressPercent - b.progressPercent || byName(a, b),
+    status: (a, b) =>
+      b.activeStreams - a.activeStreams ||
+      ACTIVITY_ORDER[a.activity] - ACTIVITY_ORDER[b.activity] ||
+      byName(a, b),
+  };
+  return [...items].sort(compare[sort]);
+}

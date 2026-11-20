@@ -14,6 +14,10 @@ sb.mock(import('../src/features/media/api/ratings.api.ts'));
 sb.mock(import('../src/features/notifications/api/notifications.api.ts'));
 sb.mock(import('../src/features/preload/api/preload.api.ts'));
 sb.mock(import('../src/features/progress/api/progress.api.ts'));
+// Settings and configuration stories supply their data the same way
+sb.mock(import('../src/features/config/api/config.api.ts'));
+sb.mock(import('../src/features/sources/api/sources.api.ts'));
+sb.mock(import('../src/features/storage/api/storage.api.ts'));
 
 const preview: Preview = {
   // Design system density is only the root font size (docs/plans/style-guide.md)

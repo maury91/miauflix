@@ -1,56 +1,24 @@
 import { beginTraktAssociation } from '@features/integrations/api/trakt.api';
 import type { ProviderAuthorization } from '@miauflix/service-contracts';
-import { Modal } from '@shared/ui/modal/Modal';
-import { useState } from 'react';
-import styled from 'styled-components';
+import { Button, Dialog, Stack } from '@shared/design-system';
+import { useOptionalNavigation } from '@shared/navigation';
+import { useEffect, useState } from 'react';
 
 import { TraktAuthorization } from './TraktAuthorization';
 import { TraktLanding } from './TraktLanding';
-import { Copy } from './TraktModal.styles';
+import * as styles from './traktModal.css';
 import { useTraktAuthorizationPolling } from './useTraktAuthorizationPolling';
 
 import TraktIcon from '~icons/cib/trakt';
+import CopyIcon from '~icons/mdi/content-copy';
+import ExternalIcon from '~icons/mdi/open-in-new';
 
-const Introduction = styled.div`
-  display: grid;
-  grid-template-columns: 160px minmax(0, 1fr);
-  align-items: center;
-  gap: 8px;
-
-  @media (max-width: 600px) {
-    grid-template-columns: 72px minmax(0, 1fr);
-    gap: 16px;
-  }
-`;
-
-const TraktMark = styled(TraktIcon)`
-  color: #ff2547;
-  stroke-width: 2;
-  aspect-ratio: 1/1;
-  width: 1em;
-  height: 1em;
-  font-size: 104px;
-  justify-self: center;
-  filter: drop-shadow(0 0 24px rgba(255, 24, 67, 0.5));
-
-  @media (max-width: 600px) {
-    font-size: 72px;
-  }
-`;
-
-const Title = styled.h2`
-  margin: 0 0 12px;
-  color: #f5f6f8;
-  font-size: clamp(25.6px, 3vw, 42px);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: 0;
-  text-transform: none;
-
-  span {
-    color: #fa2449;
-  }
-`;
+const TRAKT_NAV = {
+  begin: 'trakt-begin',
+  dismiss: 'trakt-dismiss',
+  open: 'trakt-open',
+  copy: 'trakt-copy',
+} as const;
 
 interface TraktConnectModalProps {
   sessionId: string;
@@ -59,8 +27,9 @@ interface TraktConnectModalProps {
 }
 
 /**
- * Run the Trakt device authorization flow and report connection success to the caller.
- * onDismiss receives true for “Don’t ask again” and false when the dialog is closed.
+ * Run the Trakt device authorization flow and report connection success to the caller, as a
+ * Dialog under the page's navigation layer. onDismiss receives true for “Don’t ask again” and
+ * false when the dialog is closed (its close button, the scrim or Back).
  */
 export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectModalProps) {
   const [authorization, setAuthorization] = useState<ProviderAuthorization | null>(null);
@@ -73,6 +42,13 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
     : '';
 
   useTraktAuthorizationPolling({ authorization, sessionId, onConnected, onError: setError });
+
+  // Once the code arrives, its first action replaces the ones that asked for it
+  const navigation = useOptionalNavigation();
+  const hasAuthorization = authorization !== null;
+  useEffect(() => {
+    if (hasAuthorization) navigation?.focus(TRAKT_NAV.open);
+  }, [hasAuthorization, navigation]);
 
   const copyCode = async () => {
     if (!authorization) return;
@@ -102,39 +78,57 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
   };
 
   return (
-    <Modal
-      onClose={() => onDismiss(false)}
-      labelledBy="trakt-connect-title"
-      describedBy="trakt-connect-description"
+    <Dialog
+      open
+      size="lg"
+      title="Connect Trakt"
+      description="Connect your Trakt account to your Miauflix account to get started."
+      onDismiss={() => onDismiss(false)}
       closeLabel="Close Trakt dialog"
+      actions={
+        authorization ? (
+          <>
+            <Button
+              navId={TRAKT_NAV.open}
+              icon={<ExternalIcon />}
+              onClick={() => window.open(activationUrl, '_blank', 'noopener,noreferrer')}
+            >
+              Open Trakt
+            </Button>
+            <Button navId={TRAKT_NAV.copy} icon={<CopyIcon />} onClick={() => void copyCode()}>
+              Copy code
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              navId={TRAKT_NAV.begin}
+              icon={<ExternalIcon />}
+              loading={busy}
+              onClick={() => void begin()}
+            >
+              Let&apos;s go
+            </Button>
+            <Button navId={TRAKT_NAV.dismiss} onClick={() => onDismiss(true)}>
+              Don’t ask again
+            </Button>
+          </>
+        )
+      }
     >
-      <Introduction>
-        <TraktMark aria-hidden="true" />
-        <div>
-          <Title id="trakt-connect-title">
-            Connect <span>Trakt</span>
-          </Title>
-          <Copy id="trakt-connect-description">
-            Connect your Trakt account to your Miauflix account to get started.
-          </Copy>
-        </div>
-      </Introduction>
       {authorization ? (
         <TraktAuthorization
           authorization={authorization}
           activationUrl={activationUrl}
           error={error}
           copied={copied}
-          onCopyCode={() => void copyCode()}
         />
       ) : (
-        <TraktLanding
-          busy={busy}
-          error={error}
-          onBegin={() => void begin()}
-          onDismiss={() => onDismiss(true)}
-        />
+        <Stack gap="lg">
+          <TraktIcon className={styles.mark} aria-hidden="true" />
+          <TraktLanding error={error} />
+        </Stack>
       )}
-    </Modal>
+    </Dialog>
   );
 }

@@ -227,6 +227,9 @@ export default [
       'frontend/src/**/*.css.ts',
       'frontend/src/shared/ui/media-card/**/*.{ts,tsx}',
       'frontend/src/shared/design-system/**/*.{ts,tsx}',
+      // Phase 6 of docs/plans/style-guide.md: the web flows on the design system
+      'frontend/src/pages/{config,qr,settings}/**/*.{ts,tsx}',
+      'frontend/src/features/integrations/ui/**/*.{ts,tsx}',
     ],
     rules: {
       'no-restricted-imports': [

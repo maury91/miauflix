@@ -9,40 +9,16 @@ import {
   Switch,
   TextField,
 } from '@shared/design-system';
-import { type FocusEvent, useState } from 'react';
+import { useOptionalNavigation } from '@shared/navigation';
+import { useEffect, useState } from 'react';
 
 import { errorMessage } from './errors';
 import * as styles from './providerSettingsForm.css';
 
-/** The submit button's key in the focus map: no setting can be named with a leading colon. */
-const SUBMIT = ':submit';
-
-interface FocusedPart {
-  /** The setting's name, or SUBMIT. */
-  key: string;
-  /** For a password: the input or its reveal toggle. */
-  part: 'input' | 'reveal';
-}
-
-/**
- * Which part of the form holds DOM focus. Sources still moves DOM focus itself (its own key
- * handling, not the navigation layer), so this hands that focus to the design system's controls as
- * their virtual focus; it goes once Sources moves to the navigation layer (phase 6).
- */
-function useDomFocus() {
-  const [focused, setFocused] = useState<FocusedPart | null>(null);
-  const track = (event: FocusEvent<HTMLElement>) => {
-    const target = event.target;
-    const owner = target.closest<HTMLElement>('[data-provider-setting]');
-    const key = owner?.dataset['providerSetting'];
-    setFocused(key ? { key, part: target instanceof HTMLInputElement ? 'input' : 'reveal' } : null);
-  };
-  const clear = (event: FocusEvent<HTMLElement>) => {
-    if (!(event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)))
-      setFocused(null);
-  };
-  return { focused, containerProps: { onFocus: track, onBlur: clear } };
-}
+/** The navigation IDs of a source's settings: one per setting and the submit button. */
+const providerSettingNav = (providerId: string, name: string) =>
+  `source-setting:${providerId}:${name}`;
+const providerSettingsSaveNav = (providerId: string) => `source-settings-save:${providerId}`;
 
 /**
  * A provider's credentials and options: the same FormSection, fields and Message as sign-in and
@@ -65,8 +41,16 @@ export function ProviderSettingsForm({
     )
   );
   const [error, setError] = useState('');
-  const { focused, containerProps } = useDomFocus();
-  const isFocused = (key: string) => focused?.key === key;
+  const navigation = useOptionalNavigation();
+  const firstNavId = provider.settingsSchema[0]
+    ? providerSettingNav(provider.id, provider.settingsSchema[0].name)
+    : providerSettingsSaveNav(provider.id);
+  // Opened from the row's menu: the form's first field is where the remote goes next
+  useEffect(() => {
+    navigation?.focus(firstNavId);
+    // On opening only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const setValue = (name: string, value: string | boolean) => {
     setValues(current => ({ ...current, [name]: value }));
     // The failed save was about the values before this edit
@@ -85,7 +69,7 @@ export function ProviderSettingsForm({
   };
 
   return (
-    <div className={styles.form} {...containerProps}>
+    <div className={styles.form}>
       <FormSection
         title={`${provider.name} settings`}
         titleHidden
@@ -100,18 +84,14 @@ export function ProviderSettingsForm({
           ) : undefined
         }
         actions={
-          <Button
-            type="submit"
-            data-provider-setting={SUBMIT}
-            loading={isLoading}
-            focused={isFocused(SUBMIT)}
-          >
+          <Button type="submit" navId={providerSettingsSaveNav(provider.id)} loading={isLoading}>
             Save settings
           </Button>
         }
       >
         {provider.settingsSchema.map(setting => {
           const id = `${provider.id}-${setting.name}`;
+          const navId = providerSettingNav(provider.id, setting.name);
           const value = values[setting.name];
           const placeholder = setting.default === undefined ? undefined : String(setting.default);
           let control;
@@ -122,7 +102,7 @@ export function ProviderSettingsForm({
                 label={setting.label}
                 checked={value === true}
                 onCheckedChange={checked => setValue(setting.name, checked)}
-                focused={isFocused(setting.name)}
+                navId={navId}
               />
             );
           } else if (setting.type === 'select' && setting.options) {
@@ -143,7 +123,7 @@ export function ProviderSettingsForm({
                 ]}
                 value={String(value ?? '')}
                 onChange={next => setValue(setting.name, next)}
-                focused={isFocused(setting.name)}
+                navId={navId}
               />
             );
           } else if (setting.type === 'password') {
@@ -157,7 +137,7 @@ export function ProviderSettingsForm({
                 placeholder={placeholder}
                 autoComplete="off"
                 onChange={event => setValue(setting.name, event.target.value)}
-                focusedPart={isFocused(setting.name) ? focused?.part : undefined}
+                navId={navId}
               />
             );
           } else {
@@ -169,15 +149,11 @@ export function ProviderSettingsForm({
                 placeholder={placeholder}
                 autoComplete="off"
                 onChange={event => setValue(setting.name, event.target.value)}
-                focused={isFocused(setting.name)}
+                navId={navId}
               />
             );
           }
-          return (
-            <div key={setting.name} data-provider-setting={setting.name}>
-              {control}
-            </div>
-          );
+          return <div key={setting.name}>{control}</div>;
         })}
       </FormSection>
     </div>

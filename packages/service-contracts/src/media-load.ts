@@ -185,6 +185,8 @@ export interface StorageItem {
   seedEndsAt: string | null;
   /** Since 1.1. */
   transfer?: TransferState;
+  /** Of `allocatedBytes`, what the storage's TV remuxes hold. Since 1.2. */
+  remuxBytes?: number;
 }
 
 export interface StorageInventory {
