@@ -142,6 +142,9 @@ function GlHero({
   );
   const logoUrl = heroLogo ? artworkUrl(heroLogo, 'logo', 500) : null;
   const logoStatus = useGlImageStatus(logoUrl);
+  // The waits below are keyed by the title, not the MediaDto: the same title's refreshed object
+  // keeps them
+  const titleKey = media ? `${media._type}:${media.mediaId}` : null;
   // A logo still being made: wait a little for it, then show the title
   const [logoWaitOver, setLogoWaitOver] = useState(false);
   useEffect(() => {
@@ -149,17 +152,17 @@ function GlHero({
     if (!logoPending) return;
     const timer = window.setTimeout(() => setLogoWaitOver(true), LOGO_WAIT_MS);
     return () => window.clearTimeout(timer);
-  }, [logoPending, media]);
+  }, [logoPending, titleKey]);
   // A logo whose image doesn't arrive in time: the title shows as text, and stays so for this
   // title (the logo arriving later would replace it, a flash)
   const [logoImageGaveUp, setLogoImageGaveUp] = useState(false);
   const logoSettled = logoStatus === 'ready' || logoStatus === 'failed';
-  useEffect(() => setLogoImageGaveUp(false), [logoUrl, media]);
+  useEffect(() => setLogoImageGaveUp(false), [logoUrl, titleKey]);
   useEffect(() => {
     if (!logoUrl || logoSettled) return;
     const timer = window.setTimeout(() => setLogoImageGaveUp(true), LOGO_IMAGE_WAIT_MS);
     return () => window.clearTimeout(timer);
-  }, [logoUrl, logoSettled, media]);
+  }, [logoUrl, logoSettled, titleKey]);
   // The next title's texts and logo load while the details fade out
   const upcomingMedia = upcoming?.media ?? null;
   const upcomingDetails = useMemo(
