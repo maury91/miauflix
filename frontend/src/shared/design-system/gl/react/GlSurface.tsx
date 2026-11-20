@@ -13,7 +13,7 @@ import {
 import { hitTest } from '../core/hitTest';
 import { followReducedMotion } from '../core/motion';
 import type { GlBackend, GlBackendOptions, GlTuning } from '../core/renderer';
-import { GlNode } from '../core/scene';
+import { GlNode, releaseTree } from '../core/scene';
 import { useGlBackend } from './backendModule';
 import { reportGlFailure } from './glSupport';
 import { GlLayers, GlLayersProvider, GlParentProvider } from './hooks';
@@ -159,6 +159,7 @@ function Surface({
     return () => {
       disposal.current = window.setTimeout(() => {
         root.owner = null;
+        releaseTree(root);
         backend.dispose();
       });
     };

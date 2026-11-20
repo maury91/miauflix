@@ -12,8 +12,8 @@ these numbers feed is [tv-performance-plan.md](../plans/tv-performance-plan.md),
    debug mode over SDB (no Tizen SDK needed) and forwards the inspector until stopped. Quit the
    Apps2Samsung desktop app first: while it's open it holds the TV's only SDB connection, and
    installs and the debug launch get `Connection reset by peer`. A reinstall ends the debug
-   session; run the script again. `localStorage['miauflix:gl-tuning'] = '{}'` exposes the GL
-   stats as `window.__glRows` without changing anything else.
+   session; run the script again. `localStorage['miauflix:gl-tuning'] = '{}'`, then a reload
+   (it's read at start), exposes the GL stats as `window.__glRows` without changing anything else.
 2. Run the scenarios with [`scripts/tv-bench.mjs`](../../scripts/tv-bench.mjs). It finds the
    Miauflix page, sends remote keys over the DevTools protocol, and records
    `requestAnimationFrame` intervals between `start` and `stop`:

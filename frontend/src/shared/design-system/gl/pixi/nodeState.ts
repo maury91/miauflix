@@ -36,6 +36,8 @@ export interface FadeBand {
   dirty: boolean;
   failures: number;
   source: GlNode;
+  /** The node that draws the band (its container holds it). */
+  owner: GlNode;
 }
 
 /** What a node is in Pixi. */

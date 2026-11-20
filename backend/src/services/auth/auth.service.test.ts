@@ -742,6 +742,22 @@ describe('AuthService', () => {
         expect(mockRefreshTokenRepository.replaceRotatedToken).not.toHaveBeenCalled();
         expect(mockRefreshTokenRepository.deleteByUserAndSession).not.toHaveBeenCalled();
       });
+
+      it('logs out with the replaced token within the grace', async () => {
+        mockRefreshTokenRepository.findByPreviousToken.mockResolvedValue(current(1_000));
+        const revoked = jest.fn();
+        authService.onSessionRevoked(revoked);
+
+        await expect(authService.logout('old-token', 'session-1')).resolves.toMatchObject({
+          id: 'user-123',
+        });
+
+        expect(mockRefreshTokenRepository.deleteByUserAndSession).toHaveBeenCalledWith(
+          'user-123',
+          'session-1'
+        );
+        expect(revoked).toHaveBeenCalledWith({ userId: 'user-123', session: 'session-1' });
+      });
     });
 
     it('does nothing more for a token the session never had', async () => {

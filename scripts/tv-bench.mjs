@@ -80,6 +80,18 @@ const PROBE = `(function () {
         f.length + ' frames, p50 ' + at(0.5) + ' ms, p90 ' + at(0.9) + ' ms, p95 ' + at(0.95) +
         ' ms, max ' + s[s.length - 1].toFixed(0) + ' ms | over 34 ms: ' + over(34) + ', over 50 ms: ' + over(50);
     },
+    // Stops once settle ms have passed since the last key, even one that arrives while waiting:
+    // checked and stopped in the same task, so no key slips in between
+    stopSettled: function (settle) {
+      var b = this;
+      return new Promise(function (resolve) {
+        (function check() {
+          var left = settle && b.keys.length ? b.keys[b.keys.length - 1] + settle - performance.now() : 0;
+          if (left > 0) setTimeout(check, left);
+          else resolve(b.stop(settle));
+        })();
+      });
+    },
     state: function () {
       var h = document.querySelector('h1,h2');
       var focused = [].map.call(document.querySelectorAll('[data-focused]'), function (e) {
@@ -287,9 +299,10 @@ ws.onopen = async () => {
         }
         console.log(`until: true after ${((Date.now() - startedAt) / 1000).toFixed(1)} s`);
       } else if (step.start) await evaluate('__bench.start()');
-      else if (step.stop)
-        console.log(`frames: ${await evaluate(`__bench.stop(${Number(step.settle) || 0})`)}`);
-      else if (step.state) console.log(`state: ${await evaluate('__bench.state()')}`);
+      else if (step.stop) {
+        const settle = Number(step.settle) || 0;
+        console.log(`frames: ${await evaluate(`__bench.stopSettled(${settle})`)}`);
+      } else if (step.state) console.log(`state: ${await evaluate('__bench.state()')}`);
       else if (step.eval !== undefined) {
         const value = await evaluate(step.eval);
         console.log(`eval: ${typeof value === 'string' ? value : JSON.stringify(value)}`);

@@ -17,6 +17,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- Samsung TVs: signing out right after a reload interrupted a session refresh now ends the session, instead of failing and leaving it open on the server
 - Samsung TVs: moving between Home's rows is smoother (about 6 fps faster with the WebGL rows): each row keeps fewer titles ready out of view, still showing the next one peeking at its edge
 - Samsung TVs no longer sign out when the app is closed or reloaded while it renews its session: opened again within 30 seconds, it carries on signed in
 - Samsung TVs with the WebGL rows: the pointer outlines the title it is on (not the first one in the row) and opens a title from its name or description under the picture too; quality badges on the drawn cards are as wide as elsewhere; Home no longer stays loading when a backdrop's framing or a logo is slow to arrive, or shows an error screen when the WebGL part of the app fails to download (it uses the regular rows); a busy button's spinner stays in the button; and with reduced motion an updated card no longer shows its old picture through the new one

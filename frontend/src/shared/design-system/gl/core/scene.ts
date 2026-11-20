@@ -67,6 +67,11 @@ export class GlNode {
   changed = true;
   /** The paint callback must run again (new props, a texture ready). */
   paintDirty = true;
+  /**
+   * Taken off its tree (`remove`) or its surface gone (`releaseTree`): nothing in the subtree is
+   * stepped, whatever changes in it, until `add` puts it back.
+   */
+  detached = false;
 
   add(child: GlNode) {
     if (child.parent === this) return;
@@ -74,7 +79,8 @@ export class GlNode {
     child.parent = this;
     child.insertion = ++GlNode.insertions;
     this.children.push(child);
-    if (child.spin || Object.keys(child.animations).length) moving.add(child);
+    child.detached = false;
+    if (!rootOf(this).detached) trackMoving(child, true);
     this.sorted = false;
     this.invalidate();
   }
@@ -84,8 +90,10 @@ export class GlNode {
     if (index < 0) return;
     this.children.splice(index, 1);
     child.parent = null;
-    // Off the tree: not stepped (an unmounted spinner would turn forever); back with `add`
-    moving.delete(child);
+    // Off the tree, with all it holds: not stepped (an unmounted spinner would turn forever, and
+    // keep the subtree alive); back with `add`
+    child.detached = true;
+    trackMoving(child, false);
     this.invalidate();
   }
 
@@ -110,7 +118,7 @@ export class GlNode {
       changed = true;
     }
     if (changed) {
-      if (this.spin) moving.add(this);
+      if (this.spin && !rootOf(this).detached) moving.add(this);
       this.invalidate();
     }
   }
@@ -129,7 +137,7 @@ export class GlNode {
       easing,
       start: null,
     };
-    moving.add(this);
+    if (!rootOf(this).detached) moving.add(this);
     this.invalidate();
   }
 
@@ -197,6 +205,25 @@ const TURN = Math.PI * 2;
 
 /** Nodes with animations or a spin: all stepAnimations visits (not the whole tree). */
 const moving = new Set<GlNode>();
+
+/**
+ * Puts the subtree's animated and spinning nodes in `moving` (attached) or takes them out. A node
+ * left turned (its spin stopped while it was off the tree) goes in too: the next step stands it
+ * still.
+ */
+function trackMoving(node: GlNode, attached: boolean) {
+  if (!attached) {
+    if (!moving.size) return;
+    moving.delete(node);
+  } else if (node.spin || node.rotation || Object.keys(node.animations).length) moving.add(node);
+  for (const child of node.children) trackMoving(child, attached);
+}
+
+/** The surface showing `root` is gone: nothing under it is stepped, or kept by the frame loop. */
+export function releaseTree(root: GlNode) {
+  root.detached = true;
+  trackMoving(root, false);
+}
 
 function rootOf(node: GlNode) {
   while (node.parent) node = node.parent;

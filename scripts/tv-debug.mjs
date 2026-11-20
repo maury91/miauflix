@@ -25,6 +25,11 @@ if (!tvIp) {
 }
 
 const SDB_PORT = 26101;
+/** Connecting and launching the app must be done by then (a TV that never answers hangs). */
+const STARTUP_MS = 60_000;
+/** Bytes queued for the TV on one stream above which its local client is paused, and below which it resumes. */
+const QUEUE_HIGH = 1024 * 1024;
+const QUEUE_LOW = 256 * 1024;
 const CMD = {
   CNXN: 0x4e584e43,
   OPEN: 0x4e45504f,
@@ -55,16 +60,47 @@ function connectSdb(host) {
     let pending = Buffer.alloc(0);
     let nextId = 1;
     let connected = false;
+    let closed = false;
+    /** The most the TV takes in one message's payload (its CNXN's maxdata). */
+    let maxData = 0;
 
     const sdb = {
       device: '',
-      /** Opens a service ('shell:…', 'tcp:<port>'); data and close arrive through the handlers. */
-      open(service, { onData, onClose }) {
-        const stream = { id: nextId++, remote: 0, queue: [], inFlight: false, onData, onClose };
+      /**
+       * Opens a service ('shell:…', 'tcp:<port>'); data and close arrive through the handlers.
+       * Flow control both ways: `write` returns false once enough waits for the TV (`onDrain`
+       * follows when it's taken), and `onData` returning false holds the TV's next data until
+       * `resume`.
+       */
+      open(service, { onData, onClose, onDrain }) {
+        const stream = {
+          id: nextId++,
+          remote: 0,
+          queue: [],
+          queued: 0,
+          blocked: false,
+          inFlight: false,
+          held: null,
+          onData,
+          onClose,
+        };
+        if (closed) {
+          // The connection is gone: nothing would ever answer
+          stream.close = stream.resume = () => {};
+          stream.write = () => true;
+          queueMicrotask(onClose);
+          return stream;
+        }
         const flush = () => {
           if (!stream.remote || stream.inFlight || !stream.queue.length) return;
           stream.inFlight = true;
-          socket.write(message(CMD.WRTE, stream.id, stream.remote, stream.queue.shift()));
+          const data = stream.queue.shift();
+          stream.queued -= data.length;
+          socket.write(message(CMD.WRTE, stream.id, stream.remote, data));
+          if (stream.blocked && stream.queued <= QUEUE_LOW) {
+            stream.blocked = false;
+            onDrain?.();
+          }
         };
         stream.acknowledged = () => {
           stream.inFlight = false;
@@ -72,12 +108,27 @@ function connectSdb(host) {
         };
         stream.write = data => {
           // The TV takes at most its max payload per message
-          for (let offset = 0; offset < data.length; offset += 64 * 1024)
-            stream.queue.push(data.subarray(offset, offset + 64 * 1024));
+          for (let offset = 0; offset < data.length; offset += maxData)
+            stream.queue.push(data.subarray(offset, offset + maxData));
+          stream.queued += data.length;
           flush();
+          if (stream.queued > QUEUE_HIGH) stream.blocked = true;
+          return !stream.blocked;
+        };
+        /** Takes the TV's next data (held back while the handler couldn't). */
+        stream.resume = () => {
+          if (!stream.held || !streams.has(stream.id)) return;
+          socket.write(stream.held);
+          stream.held = null;
         };
         stream.close = () => {
-          if (!streams.delete(stream.id)) return;
+          if (!streams.has(stream.id)) return;
+          // Not open yet: a CLSE needs the TV's id for the stream, which its OKAY brings
+          if (!stream.remote) {
+            stream.closing = true;
+            return;
+          }
+          streams.delete(stream.id);
           socket.write(message(CMD.CLSE, stream.id, stream.remote));
         };
         streams.set(stream.id, stream);
@@ -95,13 +146,17 @@ function connectSdb(host) {
         });
       },
       close: () => socket.end(),
+      /** Called when the TV ends the connection after it was up. */
+      onDisconnect: null,
     };
 
     socket.on('error', error => (connected ? console.error(error.message) : reject(error)));
     socket.on('close', () => {
+      closed = true;
       if (!connected) reject(new Error(`${host} closed the SDB connection`));
       for (const stream of streams.values()) stream.onClose();
       streams.clear();
+      if (connected) sdb.onDisconnect?.();
     });
     socket.on('connect', () =>
       socket.write(message(CMD.CNXN, 0x02000000, 256 * 1024, Buffer.from('host::\0')))
@@ -119,6 +174,12 @@ function connectSdb(host) {
 
         if (command === CMD.CNXN) {
           if (!connected) {
+            if (!arg1) {
+              reject(new Error(`${host} announced no payload size`));
+              socket.destroy();
+              return;
+            }
+            maxData = arg1;
             connected = true;
             sdb.device = data.toString().replace(/\0/g, '').split('::')[1] ?? '';
             resolve(sdb);
@@ -129,10 +190,13 @@ function connectSdb(host) {
         if (!stream) continue;
         if (command === CMD.OKAY) {
           stream.remote = arg0;
-          stream.acknowledged();
+          if (stream.closing) stream.close();
+          else stream.acknowledged();
         } else if (command === CMD.WRTE) {
-          socket.write(message(CMD.OKAY, arg1, arg0));
-          stream.onData(data);
+          // The TV sends this stream's next data after our OKAY: held while the handler is full
+          const okay = message(CMD.OKAY, arg1, arg0);
+          if (stream.onData(data) === false) stream.held = okay;
+          else socket.write(okay);
         } else if (command === CMD.CLSE) {
           streams.delete(arg1);
           stream.onClose();
@@ -141,6 +205,12 @@ function connectSdb(host) {
     });
   });
 }
+
+let stage = 'connecting';
+const startup = setTimeout(() => {
+  console.error(`Startup took over ${STARTUP_MS / 1000} s (${stage}): the TV stopped answering.`);
+  process.exit(1);
+}, STARTUP_MS);
 
 let sdb;
 try {
@@ -156,8 +226,11 @@ console.log(`Connected to ${sdb.device || tvIp}`);
 
 // A debug launch of a running app never answers: close it first
 const packageId = appId.split('.')[0];
+stage = 'closing the app';
 await sdb.shell(`0 kill ${packageId}`);
+stage = 'launching it in debug mode';
 const launched = await sdb.shell(`0 debug ${appId}`);
+clearTimeout(startup);
 const inspectorPort = Number(/port:\s*(\d+)/.exec(launched)?.[1]);
 if (!inspectorPort) {
   console.error(`The debug launch of ${appId} failed: ${launched || 'no answer'}`);
@@ -168,8 +241,12 @@ const server = net.createServer(client => {
   const stream = sdb.open(`tcp:${inspectorPort}`, {
     onData: data => client.write(data),
     onClose: () => client.end(),
+    onDrain: () => client.resume(),
   });
-  client.on('data', data => stream.write(data));
+  client.on('data', data => {
+    if (!stream.write(data)) client.pause();
+  });
+  client.on('drain', () => stream.resume());
   client.on('close', () => stream.close());
   client.on('error', () => stream.close());
 });
@@ -177,6 +254,12 @@ server.listen(localPort, '127.0.0.1', () => {
   console.log(`${appId} launched in debug mode; its DevTools are at http://127.0.0.1:${localPort}`);
   console.log('Keep this running while you use them (Ctrl-C stops it).');
 });
+// Every later client would hang on a dead connection
+sdb.onDisconnect = () => {
+  console.error('The TV closed the SDB connection: run this again.');
+  server.close();
+  process.exitCode = 1;
+};
 process.on('SIGINT', () => {
   server.close();
   sdb.close();

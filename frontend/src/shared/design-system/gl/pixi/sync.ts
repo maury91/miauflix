@@ -122,6 +122,8 @@ export class SceneSync {
     // A band's source can move or be culled independently of the node that draws the band.
     for (const bands of this.bandsBySource.values()) {
       for (const band of bands) {
+        // Its node culled, the band isn't shown: it stays dirty, drawn when the node is back
+        if (!this.states.get(band.owner)?.near) continue;
         if (band.dirty || (band.container.visible && !this.sourceDrawn(band)))
           this.attempt(band, () => this.drawBand(band));
       }
@@ -226,9 +228,10 @@ export class SceneSync {
         x > width + prefetch.x ||
         y > height + prefetch.y
       ) {
-        // Beyond the prefetch margin: not drawn, children not visited
+        // Beyond the prefetch margin: not drawn, children not visited (but the ones it lost let go)
         view.visible = false;
         if (state.baked) state.baked.sprite.visible = false;
+        this.releaseRemoved(node, state);
         this.leave(node, state);
         return;
       }
@@ -275,7 +278,12 @@ export class SceneSync {
       this.sync(child, x, y, scale, alpha, marks);
       if (child.bake) childState.view.parent?.removeChild(childState.view);
     });
-    // Children removed from the node
+    this.releaseRemoved(node, state);
+  }
+
+  /** The containers of children removed from the node go, and the children are released. */
+  private releaseRemoved(node: GlNode, state: NodeState) {
+    const { view } = state;
     for (const childView of [...view.children]) {
       if (
         childView === state.drawn ||
@@ -295,11 +303,12 @@ export class SceneSync {
   private leave(node: GlNode, state: NodeState) {
     state.x = Infinity;
     state.onScreen = false;
-    if (!state.near) return;
+    const wasNear = state.near;
     state.near = false;
     for (const child of node.children) {
       const childState = this.states.get(child);
-      if (!childState) continue;
+      // Under a node already culled only a child moved in from a near parent is still near
+      if (!childState || (!wasNear && !childState.near)) continue;
       // Visited again (not skipped) when it comes back
       childState.inX = NaN;
       this.leave(child, childState);
@@ -397,6 +406,7 @@ export class SceneSync {
         dirty: true,
         failures: 0,
         source,
+        owner: node,
       };
       let bands = this.bandsBySource.get(source);
       if (!bands) this.bandsBySource.set(source, (bands = new Set()));

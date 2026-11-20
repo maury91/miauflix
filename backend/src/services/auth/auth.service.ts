@@ -676,8 +676,11 @@ export class AuthService {
 
   @traced('AuthService')
   async logout(opaqueToken: string, session: string): Promise<User | null> {
-    // Verify the refresh token before deleting it
-    const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
+    // Verify the refresh token before deleting it. The one the last rotation replaced counts too: a
+    // TV that lost that rotation's response still holds it, and ending a session grants nothing
+    const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session, {
+      acceptJustRotated: true,
+    });
     const user = refreshToken.user;
 
     // Revoke only the refresh token for this specific session
