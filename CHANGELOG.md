@@ -4,16 +4,14 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 
 ## Unreleased
 
-## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
-
-#### On Samsung TVs
+### On Samsung TVs
 
 - Home uses WebGL for its rows and hero, reaching about 50 fps on a first pass along a row in our tests. It switches back to the regular renderer if WebGL fails. The hero waits for you to pause on a title before updating its details and backdrop.
 - Miauflix builds a TV-friendly copy of downloaded files with audio the TV can't play, such as TrueHD or DTS. It keeps the original picture, one compatible audio track per language and all the subtitles. The player switches over once the copy is ready or at least a minute ahead of where you're watching. The next episode is prepared once it downloads, and deleting the download removes its TV copy.
 - TVs that report their codecs can tell Miauflix which releases they can play directly. The player skips releases with unsupported video and looks for a compatible source when audio would otherwise need live conversion. A source with a compatible TV copy ready or in progress keeps its place.
 - Closing or reloading the TV app during session renewal keeps you signed in if you reopen it within 30 seconds. Signing out during that window also ends the session on the server.
 
-#### App and navigation
+### App and navigation
 
 - Sign-in and first-time setup work entirely with the remote. Down moves between fields, OK starts typing, and Done on the TV keyboard moves from email to password. A failed sign-in returns focus to the password.
 - Home starts on Continue Watching when there's something in progress. Left from the first title in a row opens the sidebar, and Back switches between the sidebar and the rows. Notifications, profile actions and Settings open beside the sidebar. Settings gives admins direct access to Configuration, Storage and Sources, plus the server picker on TV.
@@ -25,14 +23,14 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 - Continue Watching loads cards in batches so long lists don't hit the server's request limit. Trakt and AniList rows keep showing available titles if a later provider page fails. Trakt lists with mixed entries show movies and shows without gaps where episodes were filtered out.
 - Search distinguishes an empty result from a service error and offers Clear search or Try again. Errors on Search, Home and title pages explain what admins can fix or give an error ID to look up in the server logs.
 
-#### Playback fixes
+### Playback fixes
 
 - New large downloads can start streaming without checking a whole empty file first.
 - Seeking or changing audio tracks during live conversion shows whether Miauflix is waiting for the download or converting it. Resume works when a stream reports its length late, including files with converted audio. Blu-ray H.264 sources with converted audio play on Chrome for Mac, and Samsung TVs stop jumping during live conversion.
 - Playback moves on when a source fails before inspection finishes. A source downloading faster than playback needs gets more time to start, and sources that can't fit on disk are skipped. If none fit, the player explains that there isn't enough space.
 - Next-episode preparation follows changes to the queued episode. Season-pack progress reflects the selected episode, and background downloads resume after playback releases them.
 
-#### Self-hosting and security
+### Self-hosting and security
 
 - New downloads use a separate encryption key and random disk names. Size padding is enabled by default. Files over 64 KiB grow by up to about 3%, and smaller files occupy 64 KiB. Set `STORAGE_PAD_FILE_SIZES=false` to opt out. Existing downloads still play. `DOWNLOAD_SALT` is retired.
 - On startup, media-load removes untracked files in its download directory, including downloads left after a database reset. Set `DOWNLOAD_PATH_EXCLUSIVE=false` if you store other files there.
@@ -46,7 +44,7 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 - Trakt setup needs only the client ID and redirect URI. Sign-in goes through `auth.trakt.tv`, and Home shows your Trakt lists as soon as you connect.
 - Failed settings saves roll back, and setup reports all failing service checks together. In the setup wizard, Enter keeps a saved password and `--only-config` exits with an error if a required setting is missing.
 
-#### Development and removals
+### Development and removals
 
 - Run `bun install` to install dependencies. Docker and CI use Bun too, and the root `bun.lock` covers the whole workspace.
 - Pre-commit formats and lints staged files and runs type checks. Unit tests run before push. Backend E2E and frontend snapshot updates work again. See the [development workflow](docs/development/workflow.md#toolchain-at-a-glance).
