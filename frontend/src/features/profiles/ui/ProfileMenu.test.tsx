@@ -22,6 +22,7 @@ const setupTest = (focused = true) => {
   const handlers = {
     onSwitch: vi.fn(),
     onEdit: vi.fn(),
+    onPreferences: vi.fn(),
     onLogout: vi.fn(),
     onExit: vi.fn(),
     onPointerEnter: vi.fn(),
@@ -57,14 +58,16 @@ describe('ProfileMenu', () => {
     expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual([
       'Switch profile',
       'Edit profile',
+      'Preferences',
       'Logout',
     ]);
   });
 
   it('lands on Switch profile, moves with Up and Down and confirms with Enter', () => {
-    const { onSwitch, onEdit, onLogout } = setupTest();
+    const { onSwitch, onEdit, onPreferences, onLogout } = setupTest();
     const switchProfile = screen.getByRole('button', { name: 'Switch profile' });
     const editProfile = screen.getByRole('button', { name: 'Edit profile' });
+    const preferences = screen.getByRole('button', { name: 'Preferences' });
     const logout = screen.getByRole('button', { name: 'Logout' });
     expect(switchProfile).toHaveFocus();
 
@@ -73,6 +76,10 @@ describe('ProfileMenu', () => {
     press('Enter');
     expect(onEdit).toHaveBeenCalledTimes(1);
     press('ArrowDown');
+    expect(preferences).toHaveFocus();
+    press('Enter');
+    expect(onPreferences).toHaveBeenCalledTimes(1);
+    press('ArrowDown');
     expect(logout).toHaveFocus();
     // The last option stays put
     press('ArrowDown');
@@ -80,6 +87,7 @@ describe('ProfileMenu', () => {
     press('Enter');
     expect(onLogout).toHaveBeenCalledTimes(1);
 
+    press('ArrowUp');
     press('ArrowUp');
     press('ArrowUp');
     expect(switchProfile).toHaveFocus();

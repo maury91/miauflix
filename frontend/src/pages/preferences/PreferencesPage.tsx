@@ -15,7 +15,7 @@ import {
 } from '@shared/i18n';
 import { useAppSelector } from '@store';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { SettingsLayout } from '../settings/SettingsLayout';
 
@@ -54,12 +54,29 @@ export default function PreferencesPage({ onDismiss }: { onDismiss: () => void }
   const session = useAppSelector(selectCurrentSessionId);
   const [save, saving] = useUpdateLanguagePreferencesMutation();
   const [changed, setChanged] = useState(false);
-  const preferences = languagePreferencesOf(user);
+  // Choices not yet saved. Each save replaces every preference, so later choices build on these
+  // rather than on the stored profile; kept after a failure, so the next choice retries them.
+  const [draft, setDraft] = useState<LanguagePreferences | null>(null);
+  const latest = useRef<LanguagePreferences | null>(null);
+  const queue = useRef<Promise<void>>(Promise.resolve());
+  const preferences = draft ?? languagePreferencesOf(user);
 
   const update = (next: LanguagePreferences) => {
     if (!session) return;
     setChanged(true);
-    void save({ session, preferences: next });
+    setDraft(next);
+    latest.current = next;
+    // One save at a time, so an older payload never lands after a newer one
+    queue.current = queue.current.then(async () => {
+      // Superseded: the newer save carries this choice too
+      if (latest.current !== next) return;
+      try {
+        await save({ session, preferences: next }).unwrap();
+        if (latest.current === next) setDraft(null);
+      } catch {
+        // The message reports the failure; the draft stays for the next choice to retry
+      }
+    });
   };
   const fromValue = (value: string) => (value === AUTOMATIC ? null : value);
   const choose = (kind: Kind, audience: Audience) => (value: string) =>
