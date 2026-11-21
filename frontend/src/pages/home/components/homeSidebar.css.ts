@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 /**
  * Home's rail over the page's left edge. Above the app logo, which is still positioned by the
- * legacy chrome (z-index 1002, see shared/ui/logo); the rail comes later in the document.
+ * legacy chrome (z-index 1002, see shared/brand/logo); the rail comes later in the document.
  */
 export const position = style({
   position: 'absolute',

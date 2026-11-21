@@ -1,7 +1,7 @@
 /**
- * The declaration-level CSS rewrites Chromium 69 (2020 Samsung TVs) needs, shared by the runtime
- * stylis plugin for styled-components (legacy-chromium.ts) and the build-time PostCSS pass for
- * extracted stylesheets (legacy-chromium-postcss.ts). Plain string functions, no dependencies.
+ * The declaration-level CSS rewrites Chromium 69 (2020 Samsung TVs) needs, applied by the
+ * build-time PostCSS pass over the extracted stylesheets (legacy-chromium-postcss.ts). Plain
+ * string functions, no dependencies.
  */
 
 export interface LegacyViewport {

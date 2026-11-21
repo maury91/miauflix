@@ -226,7 +226,7 @@ export default defineConfig({
               // Render the SSR content
               const { appHtml, head } = render([...jsFiles, ...cssFiles]);
 
-              // Inject head content (styled-components styles) before closing head tag
+              // Inject any head content the render returns before the closing head tag
               html = html.replace('</head>', `  ${head}\n  </head>`);
 
               // Replace the app div content with SSR content and remove Hello! text

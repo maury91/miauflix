@@ -1,6 +1,6 @@
 /**
- * The Miauflix design system (docs/plans/style-guide.md). Built alongside `shared/ui` and not used
- * by the app yet; screens adopt it during the migration.
+ * The Miauflix design system (docs/plans/style-guide.md): the app's one UI library. Import from
+ * here; features keep their state, API calls and copy, and pass them in.
  */
 export type { ActionStateProps } from './action/actionInternals';
 export { ActionGroup, type ActionGroupProps } from './action-group/ActionGroup';

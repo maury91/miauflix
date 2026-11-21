@@ -3,11 +3,10 @@ import type { AtRule, Declaration, Plugin, Rule } from 'postcss';
 import { legacyDeclarations, legacyUnits, pairSides } from './legacy-css';
 
 /**
- * The build-time counterpart of legacy-chromium.ts, for stylesheets extracted at build time
- * (vanilla-extract `*.css.ts`, global.css): the Samsung TV build runs it over them, so Chromium 69
- * gets CSS it parses without anything compiled in the browser.
+ * Rewrites the stylesheets extracted at build time (vanilla-extract `*.css.ts`, global.css) for the
+ * Samsung TV build, so Chromium 69 gets CSS it parses without anything compiled in the browser.
  *
- * It applies the same rewrites, except that nothing is resolved against a viewport: the build
+ * Nothing is resolved against a viewport: the build
  * doesn't know the TV's. So `clamp()`, `min()` and `max()` fail the build (size with `vh`, `rem` or
  * `em` instead, see docs/development/css-architecture.md), and `aspect-ratio` becomes a height in
  * the width's own unit (`18em` wide at 16 / 9 is `10.125em` high).
