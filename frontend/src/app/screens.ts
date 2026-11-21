@@ -11,6 +11,8 @@ export type AppScreen =
   | { kind: 'whosWatching'; startup: boolean }
   | { kind: 'newProfile' }
   | { kind: 'editProfile'; userId: string }
+  /** The watching profile's languages. */
+  | { kind: 'preferences' }
   /** Something is not configured, but the app can be used: the admin may skip it. */
   | { kind: 'optionalConfig' }
   /** Essential configuration is missing (or the admin is still finishing it). */
@@ -66,6 +68,7 @@ export function resolveScreen({
   if (route.type === 'configuration' || route.type === 'storage' || route.type === 'sources')
     return isAdmin ? { kind: route.type } : { kind: 'redirect', to: HOME };
   if (route.type === 'search') return { kind: 'search' };
+  if (route.type === 'preferences') return { kind: 'preferences' };
   if (route.type === 'notFound') return { kind: 'notFound' };
   return { kind: 'media' };
 }

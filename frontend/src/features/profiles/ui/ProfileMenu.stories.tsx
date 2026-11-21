@@ -14,6 +14,7 @@ const meta = {
     focused: true,
     onSwitch: fn(),
     onEdit: fn(),
+    onPreferences: fn(),
     onLogout: fn(),
     onExit: fn(),
     onPointerEnter: fn(),

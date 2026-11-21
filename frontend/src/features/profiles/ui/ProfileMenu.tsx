@@ -1,6 +1,7 @@
 import { ProfileAvatar } from '@features/profiles/avatar/ProfileAvatar';
 import { Divider, Heading, List, ListItem, Text, useFlyoutBottom } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { useT } from '@shared/i18n';
 import { FocusScope } from '@shared/navigation';
 import type { SessionInfo } from '@store/slices/auth';
 import type { FC, ReactNode } from 'react';
@@ -10,6 +11,7 @@ import * as styles from './profileMenu.css';
 import SwitchIcon from '~icons/mdi/account-switch-outline';
 import LogoutIcon from '~icons/mdi/logout';
 import EditIcon from '~icons/mdi/pencil-outline';
+import PreferencesIcon from '~icons/mdi/tune-variant';
 
 /** Marks the panel, so the rail can tell the pointer moved onto it rather than away. */
 export const PROFILE_PANEL_ATTRIBUTE = 'data-profile-panel';
@@ -22,6 +24,7 @@ const PROFILE_MENU_NAV = {
   scope: 'profile-menu',
   switch: 'profile-menu:switch',
   edit: 'profile-menu:edit',
+  preferences: 'profile-menu:preferences',
   logout: 'profile-menu:logout',
 } as const;
 
@@ -34,6 +37,8 @@ export interface ProfileMenuProps {
   focused: boolean;
   onSwitch: () => void;
   onEdit: () => void;
+  /** Open the profile's language preferences. */
+  onPreferences: () => void;
   /** Sign this profile out of the device. */
   onLogout: () => void;
   /** Left or Back: hand the keyboard back to the rail, keeping the panel open. */
@@ -43,8 +48,8 @@ export interface ProfileMenuProps {
 }
 
 /**
- * The profile panel beside the rail: who is watching, then Switch profile, Edit profile and
- * Logout as ListItems. While it has the keyboard it is a contained scope of the navigation layer
+ * The profile panel beside the rail: who is watching, then Switch profile, Edit profile,
+ * Preferences and Logout as ListItems. While it has the keyboard it is a contained scope of the navigation layer
  * (Up/Down move, OK runs, the ends stay put); Left or Back hand the keyboard back to the rail.
  */
 export const ProfileMenu: FC<ProfileMenuProps> = ({
@@ -52,10 +57,12 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
   focused,
   onSwitch,
   onEdit,
+  onPreferences,
   onLogout,
   onExit,
   onPointerEnter,
 }) => {
+  const t = useT();
   const bottom = useFlyoutBottom(`[${PROFILE_RAIL_ITEM_ATTRIBUTE}]`);
   // Hidden until measured, the panel can only take the keyboard once it is placed
   const placed = bottom !== null;
@@ -76,26 +83,32 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
   const nav = (id: string) => (inUse ? id : undefined);
   const options: ReactNode = (
     <>
-      <List label="Profile">
+      <List label={t('profileMenu.label')}>
         <ListItem
           navId={nav(PROFILE_MENU_NAV.switch)}
           leading={<SwitchIcon />}
-          title="Switch profile"
+          title={t('profileMenu.switch')}
           onClick={onSwitch}
         />
         <ListItem
           navId={nav(PROFILE_MENU_NAV.edit)}
           leading={<EditIcon />}
-          title="Edit profile"
+          title={t('profileMenu.edit')}
           onClick={onEdit}
+        />
+        <ListItem
+          navId={nav(PROFILE_MENU_NAV.preferences)}
+          leading={<PreferencesIcon />}
+          title={t('profileMenu.preferences')}
+          onClick={onPreferences}
         />
       </List>
       <Divider />
-      <List label="Session">
+      <List label={t('profileMenu.session')}>
         <ListItem
           navId={nav(PROFILE_MENU_NAV.logout)}
           leading={<LogoutIcon />}
-          title="Logout"
+          title={t('profileMenu.logout')}
           onClick={onLogout}
         />
       </List>
@@ -112,7 +125,7 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
       style={{ bottom: bottom ?? undefined, visibility: placed ? undefined : 'hidden' }}
       onMouseEnter={onPointerEnter}
     >
-      <section className={styles.panel} aria-label="Profile">
+      <section className={styles.panel} aria-label={t('profileMenu.label')}>
         <header className={styles.header}>
           <span className={styles.avatar} aria-hidden="true">
             <ProfileAvatar user={profile.user} session={profile.session} />
@@ -122,7 +135,7 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
               {name}
             </Heading>
             <Text variant="caption" tone="secondary">
-              Watching now
+              {t('profileMenu.watchingNow')}
             </Text>
           </div>
         </header>

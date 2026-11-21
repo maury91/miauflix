@@ -1,0 +1,30 @@
+import type { home as english } from '../en/home';
+import type { Translation } from '../types';
+
+export const home: Translation<typeof english> = {
+  'home.loadingCategories': 'Caricamento delle categorie…',
+  'home.categoriesFailed': 'Non è stato possibile caricare le categorie.',
+  'home.titleFailedHeading': 'Impossibile caricare questo titolo',
+  'home.titleFailed': 'Impossibile caricare questo titolo.',
+  'home.loadingTitle': 'Caricamento del titolo…',
+  'home.continueWatching': 'Continua a guardare',
+  'home.previousItems': '{category}: precedenti',
+  'home.nextItems': '{category}: successivi',
+  'home.loadFailed': 'Impossibile caricare i contenuti.',
+  'home.nothingHere': 'Ancora niente qui.',
+  'home.navigation': 'Navigazione della Home',
+  'home.profile': 'Profilo',
+  'home.profileWatching': 'Profilo, sta guardando {name}',
+  'home.settings': 'Impostazioni',
+  'home.notifications': 'Notifiche',
+  'home.unread': '{count} da leggere',
+  'home.area.configuration': 'Configurazione',
+  'home.area.storage': 'Archiviazione',
+  'home.area.sources': 'Fonti',
+  'home.area.server': 'Cambia server',
+  'home.areaDescription.configuration': 'Servizi, integrazioni e configurazione del server',
+  'home.areaDescription.storage': 'File scaricati e lo spazio che occupano',
+  'home.areaDescription.sources': 'Provider delle fonti e l’ordine in cui vengono cercati',
+  'home.noSource': 'Nessuna fonte',
+  'home.checking': 'Verifica…',
+};

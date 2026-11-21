@@ -1,5 +1,6 @@
 import type { UserDto } from '@miauflix/backend';
 import { ProfileTile } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { useCallback, useEffect, useState } from 'react';
 
 import { PlushieLive } from '../avatar/PlushieLive';
@@ -60,11 +61,12 @@ export function ProfileCard({ navId, user, session, live, focused, onActivate }:
 
 /** Adds a profile to the device (administrators only). */
 export function AddProfileCard({ navId, onActivate }: { navId: string; onActivate: () => void }) {
+  const t = useT();
   return (
     <ProfileTile
       navId={navId}
       data-profile-id="add"
-      name="Add profile"
+      name={t('profiles.add')}
       placeholder={<PlusIcon />}
       onClick={onActivate}
     />

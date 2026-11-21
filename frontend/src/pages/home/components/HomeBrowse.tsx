@@ -256,6 +256,7 @@ export function HomeBrowse({
       focused={panelInUse === 'profile'}
       onSwitch={() => openPanelScreen('profile', { type: 'profiles' })}
       onEdit={() => openPanelScreen('profile', { type: 'editProfile', userId: profile.user.id })}
+      onPreferences={() => openPanelScreen('profile', { type: 'preferences' })}
       onLogout={() => {
         // Who's watching (or sign-in, with no other profile) takes over once it is gone:
         // every session of this profile on the device ends, or it would still be listed.

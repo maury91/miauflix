@@ -1,6 +1,7 @@
 import { ProfileAvatar } from '@features/profiles/avatar/ProfileAvatar';
 import { PROFILE_RAIL_ITEM_ATTRIBUTE } from '@features/profiles/ui/ProfileMenu';
 import { NavItem, NavRail } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { useActiveIdWithin } from '@shared/navigation';
 import type { SessionInfo } from '@store/slices/auth';
 import { memo, type ReactNode, useState } from 'react';
@@ -51,6 +52,7 @@ export const HomeSidebar = memo(function HomeSidebar({
   unreadCount,
   flyout,
 }: HomeSidebarProps) {
+  const t = useT();
   const [hovered, setHovered] = useState(false);
   const holdsFocus = useActiveIdWithin(HOME_NAV.rail) !== null;
   const showProfile = Boolean(profile && onEnterProfile);
@@ -59,7 +61,7 @@ export const HomeSidebar = memo(function HomeSidebar({
   return (
     <div className={styles.position} data-home-rail="">
       <NavRail
-        label="Home navigation"
+        label={t('home.navigation')}
         navId={HOME_NAV.rail}
         defaultNavId={HOME_NAV.railItem('search')}
         expanded={openPanel !== null || hovered || holdsFocus}
@@ -81,8 +83,8 @@ export const HomeSidebar = memo(function HomeSidebar({
                     </span>
                   </span>
                 }
-                label={profile.user.displayName || 'Profile'}
-                aria-label={`Profile, ${name} is watching`}
+                label={profile.user.displayName || t('home.profile')}
+                aria-label={t('home.profileWatching', { name })}
                 aria-expanded={openPanel === 'profile'}
                 {...{ [PROFILE_RAIL_ITEM_ATTRIBUTE]: '' }}
                 onClick={onEnterProfile}
@@ -92,7 +94,7 @@ export const HomeSidebar = memo(function HomeSidebar({
               <NavItem
                 navId={HOME_NAV.railItem('settings')}
                 icon={<SettingsIcon />}
-                label="Settings"
+                label={t('home.settings')}
                 aria-expanded={openPanel === 'settings'}
                 {...{ [SETTINGS_RAIL_ITEM_ATTRIBUTE]: '' }}
                 onClick={onEnterSettings}
@@ -104,16 +106,16 @@ export const HomeSidebar = memo(function HomeSidebar({
         <NavItem
           navId={HOME_NAV.railItem('notifications')}
           icon={<NotificationsIcon />}
-          label="Notifications"
+          label={t('home.notifications')}
           badge={unreadCount ? (unreadCount > 99 ? '99+' : String(unreadCount)) : undefined}
-          badgeLabel={unreadCount ? `${unreadCount} unread` : undefined}
+          badgeLabel={unreadCount ? t('home.unread', { count: unreadCount }) : undefined}
           aria-expanded={openPanel === 'notifications'}
           onClick={onEnterNotifications}
         />
         <NavItem
           navId={HOME_NAV.railItem('search')}
           icon={<SearchIcon />}
-          label="Search"
+          label={t('search.search')}
           onClick={onSearch}
         />
       </NavRail>

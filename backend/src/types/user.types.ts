@@ -1,8 +1,9 @@
 import type { UserRole } from '@entities/user.entity';
 
 import type { AvatarLook } from './avatar.types';
+import type { LanguagePreferences } from './language-preferences.types';
 
-export type { AvatarLook, UserRole };
+export type { AvatarLook, LanguagePreferences, UserRole };
 
 /** A user as the API and the services see it; never carries credentials. */
 export interface UserDto {
@@ -13,4 +14,5 @@ export interface UserDto {
   avatar: AvatarLook | null;
   /** Changes whenever a new avatar image is saved; null when the profile has no image. */
   avatarVersion: number | null;
+  languagePreferences: LanguagePreferences;
 }

@@ -3,6 +3,7 @@ import '@app/startup/tizen';
 import '@shared/styles/global.css';
 import '@shared/design-system/density.css';
 
+import { AppI18n } from '@app/AppI18n';
 import { AppShell } from '@app/AppShell';
 import { installBrowserMeasurements } from '@app/browserMeasurements';
 import { probeServer } from '@features/server-discovery/lib/probe';
@@ -30,7 +31,9 @@ export function ClientApp() {
   return (
     <StrictMode>
       <Provider store={store}>
-        <AppShell />
+        <AppI18n>
+          <AppShell />
+        </AppI18n>
       </Provider>
     </StrictMode>
   );

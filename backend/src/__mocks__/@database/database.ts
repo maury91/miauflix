@@ -119,6 +119,7 @@ const createMockUser = (overrides: Partial<User> = {}): User => {
     displayName: null,
     avatar: null,
     avatarRenderedAt: null,
+    languagePreferences: null,
     refreshTokens: [],
     createdAt: now,
     updatedAt: now,

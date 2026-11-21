@@ -1,5 +1,11 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { AvatarLook, LoginResponse, UserDto, UserRole } from '@miauflix/backend';
+import type {
+  AvatarLook,
+  LanguagePreferences,
+  LoginResponse,
+  UserDto,
+  UserRole,
+} from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import {
   type ApiRequestResult,
@@ -9,6 +15,7 @@ import {
 } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 import { API_CREDENTIALS } from '@shared/config/constants';
+import { t } from '@shared/i18n';
 import { addSession, profileUpdated, type SessionInfo, sessionRemoved } from '@store/slices/auth';
 
 export interface CreateProfileRequest {
@@ -58,7 +65,7 @@ function uploadAvatarImage(
         }
       ),
     session,
-    errorContext: 'Failed to save the profile picture',
+    errorContext: t('api.failedToSaveTheProfilePicture'),
     onInvalidSession: onInvalidSession(dispatch, session),
   });
 }
@@ -80,7 +87,7 @@ export const profilesApi = createApi({
               { headers: sessionHeaders(adminSession) }
             ),
           session: adminSession,
-          errorContext: 'Failed to create the profile',
+          errorContext: t('api.failedToCreateTheProfile'),
           onInvalidSession: onInvalidSession(dispatch, adminSession),
         });
         // Taken: maybe by this very profile, created on an earlier try whose sign-in failed.
@@ -90,7 +97,7 @@ export const profilesApi = createApi({
 
         const signedIn = await request<LoginResponse>(
           () => backendClient.api.auth.login.$post({ json: { email, password } }),
-          'The profile was created, but signing it in failed: try again'
+          t('api.profileSignInFailed')
         );
         if ('error' in signedIn) return taken ? created : signedIn;
 
@@ -114,7 +121,7 @@ export const profilesApi = createApi({
               { headers: sessionHeaders(session) }
             ),
           session,
-          errorContext: 'Failed to save the profile',
+          errorContext: t('api.failedToSaveTheProfile'),
           onInvalidSession: onInvalidSession(dispatch, session),
         });
         if ('error' in updated) return updated;
@@ -138,10 +145,36 @@ export const profilesApi = createApi({
         return { data: uploaded.data };
       },
     }),
+
+    /** Replace the session's profile languages; every copy of the profile picks them up. */
+    updateLanguagePreferences: builder.mutation<
+      UserDto,
+      { session: string; preferences: LanguagePreferences }
+    >({
+      async queryFn({ session, preferences }, { dispatch }) {
+        const updated = await authenticatedRequest<UserDto>({
+          requestFn: () =>
+            backendClient.api.auth.session.preferences.$put(
+              { json: preferences },
+              { headers: sessionHeaders(session) }
+            ),
+          session,
+          errorContext: t('api.failedToSaveThePreferences'),
+          onInvalidSession: onInvalidSession(dispatch, session),
+        });
+        if ('error' in updated) return updated;
+        dispatch(profileUpdated(updated.data));
+        return { data: updated.data };
+      },
+    }),
   }),
 });
 
-export const { useCreateProfileMutation, useUpdateProfileMutation } = profilesApi;
+export const {
+  useCreateProfileMutation,
+  useUpdateProfileMutation,
+  useUpdateLanguagePreferencesMutation,
+} = profilesApi;
 
 const avatarImages = new Map<string, Promise<string | null>>();
 

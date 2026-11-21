@@ -1,5 +1,6 @@
 import type { MigrationInterface } from 'typeorm';
 
+import { AddLanguagePreferences1795286483967 } from './AddLanguagePreferences1795286483967';
 import { AddMediaVariant1794649236030 } from './AddMediaVariant1794649236030';
 import { Baseline1794506434316 } from './Baseline1794506434316';
 
@@ -13,4 +14,5 @@ export type SchemaMigration = new () => MigrationInterface;
 export const schemaMigrations: SchemaMigration[] = [
   Baseline1794506434316,
   AddMediaVariant1794649236030,
+  AddLanguagePreferences1795286483967,
 ];

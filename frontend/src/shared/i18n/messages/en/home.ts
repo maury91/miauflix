@@ -1,0 +1,30 @@
+import type { MessageSection } from '../types';
+
+/** Home: rows, the rail and its panels, the hero. */
+export const home = {
+  'home.loadingCategories': 'Loading categories…',
+  'home.categoriesFailed': 'Failed to load categories.',
+  'home.titleFailedHeading': 'Unable to load this title',
+  'home.titleFailed': 'Unable to load this title.',
+  'home.loadingTitle': 'Loading the title…',
+  'home.continueWatching': 'Continue watching',
+  'home.previousItems': 'Previous {category} items',
+  'home.nextItems': 'Next {category} items',
+  'home.loadFailed': 'Failed to load content.',
+  'home.nothingHere': 'Nothing here yet.',
+  'home.navigation': 'Home navigation',
+  'home.profile': 'Profile',
+  'home.profileWatching': 'Profile, {name} is watching',
+  'home.settings': 'Settings',
+  'home.notifications': 'Notifications',
+  'home.unread': '{count} unread',
+  'home.area.configuration': 'Configuration',
+  'home.area.storage': 'Storage',
+  'home.area.sources': 'Sources',
+  'home.area.server': 'Change server',
+  'home.areaDescription.configuration': 'Services, integrations and server configuration',
+  'home.areaDescription.storage': 'Downloaded files and the space they use',
+  'home.areaDescription.sources': 'Source providers and the order they are searched in',
+  'home.noSource': 'No source',
+  'home.checking': 'Checking…',
+} satisfies MessageSection;

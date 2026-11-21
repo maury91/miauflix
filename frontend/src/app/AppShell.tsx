@@ -17,6 +17,7 @@ import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
+import PreferencesPage from '@pages/preferences/PreferencesPage';
 import ProfileEditorPage from '@pages/profiles/ProfileEditorPage';
 import WhosWatchingPage from '@pages/profiles/WhosWatchingPage';
 import QrApprovalPage from '@pages/qr/QrApprovalPage';
@@ -27,9 +28,7 @@ import SetupPage from '@pages/setup/SetupPage';
 import { Logo } from '@shared/brand/logo/Logo';
 import { ErrorBoundary } from '@shared/components';
 import { builtForTizen } from '@shared/config/constants';
-import { Button, EmptyState, SurfaceContextProvider } from '@shared/design-system';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
-import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { useAppDispatch, useAppSelector } from '@store';
 import { dismissConfigWizard } from '@store/slices/appState';
 import {
@@ -41,6 +40,7 @@ import {
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 
+import { NotFoundScreen } from './shell/NotFoundScreen';
 import * as styles from './appShell.css';
 
 /** Replace a route that is not allowed, without mounting its page. */
@@ -136,7 +136,8 @@ export function AppShell() {
               configurationWizardActive ||
               appState === 'config' ||
               route.type === 'configuration' ||
-              route.type === 'storage'
+              route.type === 'storage' ||
+              route.type === 'preferences'
             ? 'home'
             : appState;
   const logoMotionDisabled =
@@ -213,28 +214,12 @@ export function AppShell() {
         return <SourcesPage key="route-sources" onDismiss={backTo(HOME)} />;
       case 'search':
         return <SearchPage key="search" onDismiss={backTo({ type: 'home' })} />;
+      case 'preferences':
+        return <PreferencesPage key="preferences" onDismiss={backTo(HOME)} />;
       case 'redirect':
         return <Redirect key="redirect" to={screen.to} />;
       case 'notFound':
-        return (
-          <main key="not-found" className={styles.notFound}>
-            <NavigationProvider>
-              <SurfaceContextProvider value="solid">
-                <FocusScope autoFocus>
-                  <EmptyState
-                    heading="Page not found"
-                    headingLevel={2}
-                    actions={
-                      <Button navId="not-found-home" onClick={() => navigate({ type: 'home' })}>
-                        Home
-                      </Button>
-                    }
-                  />
-                </FocusScope>
-              </SurfaceContextProvider>
-            </NavigationProvider>
-          </main>
-        );
+        return <NotFoundScreen key="not-found" />;
       case 'media': {
         const homeInteractive = route.type === 'home' && introPhase === 'complete';
         const homeVisible = route.type === 'home' && (homeEligible || homeInteractive);

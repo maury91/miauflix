@@ -22,6 +22,10 @@ export interface ShowResponse {
   cardLogoStatus?: 'failed' | 'pending' | 'ready';
   heroLogoStatus?: 'failed' | 'pending' | 'ready';
   genres: string[];
+  /** ISO 639-1 language the title was made in; null when unknown. */
+  originalLanguage: string | null;
+  /** Japanese animation: the anime language preferences apply. */
+  anime: boolean;
   popularity: number | null;
   rating: number | null;
   seasons: SeasonResponse[];

@@ -16,6 +16,11 @@ const profile = (
     role: role as UserRole,
     avatar,
     avatarVersion: null,
+    languagePreferences: {
+      interface: null,
+      audio: { default: null, anime: null },
+      subtitles: { default: null, anime: null },
+    },
   },
 });
 

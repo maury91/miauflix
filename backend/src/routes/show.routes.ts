@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { HttpError } from '@errors/http.error';
 import { authGuard } from '@middleware/auth.middleware';
+import { isAnimeDetail } from '@utils/media-language.util';
 
 import type { RouteDeps } from './common.types';
 import type { SeasonResponse, ShowResponse } from './show.types';
@@ -69,6 +70,8 @@ export const createShowRoutes = ({
           cardLogoStatus: detail.cardLogoStatus,
           heroLogoStatus: detail.heroLogoStatus,
           genres: detail.genres.map(genre => genre.name),
+          originalLanguage: detail.originalLanguage ?? null,
+          anime: isAnimeDetail(detail),
           popularity: detail.popularity,
           rating: detail.rating,
           seasons: detail.seasons.map(season => ({

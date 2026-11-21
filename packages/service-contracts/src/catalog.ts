@@ -50,6 +50,8 @@ export interface MovieDetail extends ArtworkFields {
   mediaId: number;
   imdbId: string | null;
   title: string;
+  /** ISO 639-1 language the title was made in; null when the catalog doesn't know it yet. */
+  originalLanguage?: string | null;
   overview: string;
   tagline: string;
   releaseDate: string;
@@ -78,6 +80,8 @@ export interface TVShowDetail extends ArtworkFields {
   mediaId: number;
   imdbId: string | null;
   name: string;
+  /** ISO 639-1 language the title was made in; null when the catalog doesn't know it yet. */
+  originalLanguage?: string | null;
   overview: string;
   tagline: string;
   firstAirDate: string;

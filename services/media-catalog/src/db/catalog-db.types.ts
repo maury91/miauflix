@@ -2,6 +2,7 @@ export interface MovieRow {
   media_id: number;
   imdb_id: string | null;
   title: string;
+  original_language: string | null;
   overview: string;
   tagline: string;
   release_date: string;
@@ -18,6 +19,7 @@ export interface TVShowRow {
   media_id: number;
   imdb_id: string | null;
   name: string;
+  original_language: string | null;
   overview: string;
   tagline: string;
   first_air_date: string;
@@ -63,6 +65,7 @@ export interface UpsertableMovie {
   mediaId: number;
   imdbId: string | null;
   title: string;
+  originalLanguage?: string;
   overview: string;
   tagline: string;
   releaseDate: string;
@@ -87,6 +90,7 @@ export interface UpsertableTVShow {
   mediaId: number;
   imdbId: string | null;
   name: string;
+  originalLanguage?: string;
   overview: string;
   tagline: string;
   firstAirDate: string;

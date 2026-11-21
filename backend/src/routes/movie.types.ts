@@ -34,6 +34,10 @@ export interface MovieResponse {
   cardLogoStatus?: 'failed' | 'pending' | 'ready';
   heroLogoStatus?: 'failed' | 'pending' | 'ready';
   genres: string[];
+  /** ISO 639-1 language the title was made in; null when unknown. */
+  originalLanguage: string | null;
+  /** Japanese animation: the anime language preferences apply. */
+  anime: boolean;
   popularity: number;
   rating: number;
   /** `unavailable` once every source found proved fake, or the finished search found none. */

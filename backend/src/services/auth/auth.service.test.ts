@@ -8,6 +8,7 @@ import type { RefreshToken } from '@entities/refresh-token.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
+import { DEFAULT_LANGUAGE_PREFERENCES } from '@mytypes/language-preferences.types';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import { ConfigurationService } from '@services/configuration/configuration.service';
@@ -378,6 +379,7 @@ describe('AuthService', () => {
         role: UserRole.USER,
         avatar: null,
         avatarVersion: null,
+        languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
       });
 
       expect(mockRefreshTokenRepository.updateToken).toHaveBeenCalledWith(
@@ -491,6 +493,7 @@ describe('AuthService', () => {
             role: user.role,
             avatar: null,
             avatarVersion: null,
+            languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
           },
         },
       ]);
@@ -544,6 +547,7 @@ describe('AuthService', () => {
             role: user.role,
             avatar: null,
             avatarVersion: null,
+            languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
           },
         },
       ]);

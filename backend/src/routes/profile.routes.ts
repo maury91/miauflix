@@ -11,7 +11,7 @@ import { InvalidAvatarImageError, MAX_AVATAR_IMAGE_BYTES } from '@services/profi
 
 import type { UserDto } from './auth.types';
 import type { RouteDeps } from './common.types';
-import { updateProfileSchema } from './profile.schema';
+import { languagePreferencesSchema, updateProfileSchema } from './profile.schema';
 
 /** Profile routes, mounted under `/api/auth`: each session edits its own profile. */
 export const createProfileRoutes = ({
@@ -27,6 +27,21 @@ export const createProfileRoutes = ({
       async c => {
         const { user } = c.get('sessionInfo');
         const updated = await profileService.updateProfile(user.id, c.req.valid('json'));
+        if (!updated) throw new InvalidTokenError();
+        return c.json(toUserDto(updated) satisfies UserDto);
+      }
+    )
+    .put(
+      '/session/preferences',
+      rateLimitGuard(2),
+      authGuard(),
+      zValidator('json', languagePreferencesSchema),
+      async c => {
+        const { user } = c.get('sessionInfo');
+        const updated = await profileService.updateLanguagePreferences(
+          user.id,
+          c.req.valid('json')
+        );
         if (!updated) throw new InvalidTokenError();
         return c.json(toUserDto(updated) satisfies UserDto);
       }

@@ -73,6 +73,8 @@ describe('catalog Drizzle migrations', () => {
     original.db.run(sql`DROP TABLE media_artwork`);
     original.db.run(sql`ALTER TABLE movies DROP COLUMN logo_candidates`);
     original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo_candidates`);
+    original.db.run(sql`ALTER TABLE movies DROP COLUMN original_language`);
+    original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN original_language`);
     original.db.run(sql`
       DELETE FROM __drizzle_migrations
       WHERE created_at > (SELECT MIN(created_at) FROM __drizzle_migrations)
@@ -112,6 +114,8 @@ describe('catalog Drizzle migrations', () => {
     original.db.run(sql`DROP TABLE media_artwork`);
     original.db.run(sql`ALTER TABLE movies DROP COLUMN logo_candidates`);
     original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo_candidates`);
+    original.db.run(sql`ALTER TABLE movies DROP COLUMN original_language`);
+    original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN original_language`);
     original.db.run(sql`DELETE FROM __drizzle_migrations WHERE created_at >= 1791481200000`);
     original.close();
 

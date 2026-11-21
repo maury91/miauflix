@@ -1,12 +1,15 @@
 import { ChoiceTileGroup, Slider } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import type { PlushieKind } from 'plushies';
 import { useEffect, useMemo, useState } from 'react';
 
 import {
+  colorLabel,
   COLORS,
   EYES,
   FABRICS,
   FINE_TUNES,
+  fineTuneLabel,
   GLASSES,
   HATS,
   KINDS,
@@ -80,6 +83,7 @@ export function ShapePicker({
   fabric: PlushieLook['fabric'];
   onChange: (kind: PlushieKind) => void;
 }) {
+  const t = useT();
   const outline = useOutline();
   // One mask per shape, made once the outlines load
   const masks = useMemo(
@@ -90,7 +94,7 @@ export function ShapePicker({
   const fabricLayout = fabricCell && spriteCrop(fabricCell, FABRIC_CROP.width, FABRIC_CROP.height);
   return (
     <ChoiceTileGroup
-      label="Shape"
+      label={t('look.shape')}
       labelHidden
       navId={partNavId(navId, 'shape')}
       value={value}
@@ -132,14 +136,19 @@ export function ColorPicker({
   onChange,
   navId,
 }: PartProps & { value: string; onChange: (color: string) => void }) {
+  const t = useT();
   return (
     <ChoiceTileGroup
-      label="Color"
+      label={t('look.color')}
       shape="swatch"
       navId={partNavId(navId, 'color')}
       value={value}
       onChange={onChange}
-      options={COLORS.map(color => ({ value: color.value, label: color.name, color: color.value }))}
+      options={COLORS.map(color => ({
+        value: color.value,
+        label: colorLabel(color.name),
+        color: color.value,
+      }))}
     />
   );
 }
@@ -221,9 +230,10 @@ export function FabricPicker({
   color: string;
   onChange: (fabric: PlushieLook['fabric']) => void;
 }) {
+  const t = useT();
   return (
     <PicturePicker
-      label="Fabric"
+      label={t('look.fabric')}
       category="fabric"
       values={FABRICS}
       value={value}
@@ -245,7 +255,7 @@ export function FineTuneControls({
         <Slider
           key={tune.key}
           navId={partNavId(navId, tune.key)}
-          label={tune.label}
+          label={fineTuneLabel(tune.key)}
           min={tune.min}
           max={tune.max}
           step={tune.step}
@@ -263,10 +273,11 @@ type LookProps = PartProps & {
 };
 
 export function FaceControls({ look, onChange, navId }: LookProps) {
+  const t = useT();
   return (
     <div className={styles.controls}>
       <PicturePicker
-        label="Eyes"
+        label={t('look.eyes')}
         category="eyes"
         values={EYES}
         value={look.eyes}
@@ -274,7 +285,7 @@ export function FaceControls({ look, onChange, navId }: LookProps) {
         navId={navId}
       />
       <PicturePicker
-        label="Mouth"
+        label={t('look.mouth')}
         category="mouth"
         values={MOUTHS}
         value={look.mouth}
@@ -282,7 +293,7 @@ export function FaceControls({ look, onChange, navId }: LookProps) {
         navId={navId}
       />
       <PicturePicker
-        label="Cheeks"
+        label={t('look.cheeks')}
         category="cheeks"
         values={['none', 'blush'] as const}
         value={look.cheeks ? 'blush' : 'none'}
@@ -290,7 +301,7 @@ export function FaceControls({ look, onChange, navId }: LookProps) {
         navId={navId}
       />
       <PicturePicker
-        label="Moustache"
+        label={t('look.moustache')}
         category="moustache"
         values={MOUSTACHES}
         value={look.moustache}
@@ -302,10 +313,11 @@ export function FaceControls({ look, onChange, navId }: LookProps) {
 }
 
 export function AccessoryControls({ look, onChange, navId }: LookProps) {
+  const t = useT();
   return (
     <div className={styles.controls}>
       <PicturePicker
-        label="Hat"
+        label={t('look.hat')}
         category="hat"
         values={HATS}
         value={look.hat}
@@ -313,7 +325,7 @@ export function AccessoryControls({ look, onChange, navId }: LookProps) {
         navId={navId}
       />
       <PicturePicker
-        label="Glasses"
+        label={t('look.glasses')}
         category="glasses"
         values={GLASSES}
         value={look.glasses}
@@ -321,7 +333,7 @@ export function AccessoryControls({ look, onChange, navId }: LookProps) {
         navId={navId}
       />
       <PicturePicker
-        label="Pin"
+        label={t('look.pin')}
         category="pin"
         values={PINS}
         value={look.pin}
@@ -329,7 +341,7 @@ export function AccessoryControls({ look, onChange, navId }: LookProps) {
         navId={navId}
       />
       <PicturePicker
-        label="Neckwear"
+        label={t('look.neckwear')}
         category="neck"
         values={NECKS}
         value={look.neck}

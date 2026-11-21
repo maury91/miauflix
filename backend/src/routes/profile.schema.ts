@@ -29,3 +29,19 @@ export const updateProfileSchema = z.object({
   // Not null: every profile keeps a look (generated when it had none).
   avatar: avatarLookSchema.optional(),
 });
+
+const languageCode = z.string().regex(/^[a-z]{2,3}$/);
+const audioLanguage = z.union([languageCode, z.literal('original')]);
+
+/** A profile's languages; null follows the device (anime: the movies and TV shows choice). */
+export const languagePreferencesSchema = z
+  .object({
+    interface: languageCode.nullable(),
+    audio: z
+      .object({ default: audioLanguage.nullable(), anime: audioLanguage.nullable() })
+      .strict(),
+    subtitles: z
+      .object({ default: languageCode.nullable(), anime: languageCode.nullable() })
+      .strict(),
+  })
+  .strict();

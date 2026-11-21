@@ -7,6 +7,7 @@ import type { Database } from '@database/database';
 import type { User } from '@entities/user.entity';
 import type { AvatarLook } from '@mytypes/avatar.types';
 import type { ConfigService } from '@mytypes/configuration';
+import type { LanguagePreferences } from '@mytypes/language-preferences.types';
 import type { UserRepository } from '@repositories/user.repository';
 import { traced } from '@utils/tracing.util';
 
@@ -77,6 +78,15 @@ export class ProfileService {
     }
     if (!Object.keys(changes).length) return this.userRepository.findById(userId);
     return this.userRepository.update(userId, changes);
+  }
+
+  /** Replace the profile's interface, audio and subtitle languages. */
+  @traced('ProfileService')
+  async updateLanguagePreferences(
+    userId: string,
+    languagePreferences: LanguagePreferences
+  ): Promise<User | null> {
+    return this.userRepository.update(userId, { languagePreferences });
   }
 
   @traced('ProfileService')

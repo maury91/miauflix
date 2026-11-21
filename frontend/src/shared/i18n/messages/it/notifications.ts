@@ -1,0 +1,31 @@
+import type { notifications as english } from '../en/notifications';
+import type { Translation } from '../types';
+
+export const notifications: Translation<typeof english> = {
+  'notifications.unread': 'Da leggere',
+  'notifications.new': 'Nuova',
+  'notifications.markAll': 'Segna tutte come lette',
+  'notifications.loadFailed': 'Impossibile caricare le notifiche.',
+  'notifications.loading': 'Caricamento delle notifiche…',
+  'notifications.unreadList': 'Notifiche da leggere',
+  'notifications.loadingMore': 'Caricamento di altre notifiche…',
+  'notifications.caughtUp': 'Sei in pari.',
+  'notifications.hideRead': 'Nascondi le notifiche lette',
+  'notifications.showRead': 'Mostra le notifiche lette',
+  'notifications.readList': 'Notifiche lette',
+  'notifications.betterQuality': 'Disponibile in qualità migliore',
+  'notifications.was': '(prima {previous})',
+  'notifications.availableIn': '{title} è ora disponibile in',
+  'notifications.availableAs': '{title} è ora disponibile come',
+  'notifications.newEpisode': 'Nuovo episodio disponibile',
+  'notifications.aNewEpisode': 'Un nuovo episodio',
+  'notifications.episodeAvailable': '{episode} è ora disponibile',
+  'notifications.justAdded': 'Appena aggiunto',
+  'notifications.titleAvailable': '{title} è ora disponibile',
+  'notifications.withQuality': '{sentence} in',
+  'notifications.sentence': '{sentence}.',
+  'notifications.justNow': 'proprio ora',
+  'notifications.minutesAgo': '{count} min fa',
+  'notifications.hoursAgo': '{count} h fa',
+  'notifications.daysAgo': '{count} g fa',
+};
