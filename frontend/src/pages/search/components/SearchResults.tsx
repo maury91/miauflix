@@ -1,6 +1,7 @@
 import type { SearchResultDetailDto, SearchResultDto } from '@miauflix/backend';
 import { ErrorNotice } from '@shared/components';
 import { Heading, MediaTile, Message, Text } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { artworkUrl, formatRuntime } from '@shared/lib/media.utils';
 import { FocusGroup, useActiveIdWithin } from '@shared/navigation';
 import { searchResultKey } from '@store/slices/search';
@@ -64,6 +65,7 @@ export function SearchResults({
   onRetry,
   onClear,
 }: SearchResultsProps) {
+  const t = useT();
   const panel = searchPanelKind(status, results.length);
   const tilePixels =
     typeof window === 'undefined' ? 200 : (window.innerWidth * styles.TILE_WIDTH_VW) / 100;
@@ -105,16 +107,13 @@ export function SearchResults({
         <div className={styles.notice}>
           {/* Polite: a later page can fail while focus stays on a tile */}
           <Message tone="warning" live="polite">
-            <ErrorNotice
-              error={error}
-              fallback="Part of this search failed. Try again in a moment."
-            />
+            <ErrorNotice error={error} fallback={t('search.partFailed')} />
           </Message>
         </div>
       )}
       {status === 'loading' && !results.length && (
         <Text role="status" tone="secondary">
-          Searching…
+          {t('search.searching')}
         </Text>
       )}
       {results.length > 0 && (

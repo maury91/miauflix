@@ -1,3 +1,4 @@
+import { t } from '@shared/i18n';
 export interface DeviceDescription {
   kind: 'tv' | 'phone' | 'computer' | 'unknown';
   /** A short name for people, e.g. "Samsung TV" or "Chrome on macOS". */
@@ -33,16 +34,16 @@ const BROWSERS: Array<[RegExp, string]> = [
 
 /** What kind of device asked to sign in, from its user agent. */
 export function describeDevice(userAgent: string | null | undefined): DeviceDescription {
-  if (!userAgent) return { kind: 'unknown', name: 'A new device' };
+  if (!userAgent) return { kind: 'unknown', name: t('auth.newDevice') };
   const tv = TVS.find(([pattern]: [RegExp, string]) => pattern.test(userAgent));
   if (tv) return { kind: 'tv', name: tv[1] };
   const system = SYSTEMS.find(([pattern]: [RegExp, string, DeviceDescription['kind']]) =>
     pattern.test(userAgent)
   );
   const browser = BROWSERS.find(([pattern]: [RegExp, string]) => pattern.test(userAgent));
-  if (!system) return { kind: 'unknown', name: browser?.[1] ?? 'A new device' };
+  if (!system) return { kind: 'unknown', name: browser?.[1] ?? t('auth.newDevice') };
   return {
     kind: system[2],
-    name: browser ? `${browser[1]} on ${system[1]}` : system[1],
+    name: browser ? t('auth.browserOn', { browser: browser[1], system: system[1] }) : system[1],
   };
 }

@@ -9,6 +9,7 @@ import {
   Text,
   TextField,
 } from '@shared/design-system';
+import { t as translate, useT } from '@shared/i18n';
 import type { FC } from 'react';
 
 import { configFieldNavId } from '../navIds';
@@ -27,7 +28,7 @@ function booleanStateLabel(
   stateDescriptions?: { true: string; false: string }
 ): string {
   if (stateDescriptions) return stateDescriptions[String(value) as 'true' | 'false'];
-  if (!key.startsWith('DISABLE_')) return value ? 'Enabled' : 'Disabled';
+  if (!key.startsWith('DISABLE_')) return translate(value ? 'config.enabled' : 'config.disabled');
 
   const featureName = key.slice('DISABLE_'.length).toLowerCase().replace(/_/g, ' ');
   return `${featureName.charAt(0).toUpperCase()}${featureName.slice(1)} ${
@@ -36,14 +37,9 @@ function booleanStateLabel(
 }
 
 function timeUnitLabel(unit: string): string {
-  const labels: Record<string, string> = {
-    s: 'Seconds',
-    m: 'Minutes',
-    h: 'Hours',
-    d: 'Days',
-  };
-
-  return labels[unit] ?? unit;
+  return unit === 's' || unit === 'm' || unit === 'h' || unit === 'd'
+    ? translate(`config.unit.${unit}`)
+    : unit;
 }
 
 const DISPLAY_TOKEN_OVERRIDES: Record<string, string> = {
@@ -100,17 +96,18 @@ export const ConfigField: FC<ConfigFieldProps> = ({
   onChange,
   hasTestFailure = false,
 }) => {
+  const t = useT();
   const fieldLabel = entry.label ?? humanizeConfigKey(entry.key);
   const navId = configFieldNavId(entry.key);
   const isMissingRequired = entry.required && !entry.hasValue;
-  const indicator = isMissingRequired ? 'Required' : undefined;
-  const error = hasTestFailure ? 'The last test failed: check this value.' : undefined;
+  const indicator = isMissingRequired ? t('config.required') : undefined;
+  const error = hasTestFailure ? t('config.lastTestFailed') : undefined;
   const isSize = entry.inputType === 'size';
   const isTime = entry.inputType === 'time';
   const integer = entry.numberOptions?.integer ?? false;
   const numberSteps = {
-    decrementLabel: `Decrease ${fieldLabel}`,
-    incrementLabel: `Increase ${fieldLabel}`,
+    decrementLabel: t('config.decrease', { field: fieldLabel }),
+    incrementLabel: t('config.increase', { field: fieldLabel }),
   };
   const help = `${entry.description} (${entry.key})`;
 
@@ -184,7 +181,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
             <div className={styles.unitSelect}>
               <Select
                 navId={`${navId}:unit`}
-                label={`${fieldLabel} unit`}
+                label={t('config.unitLabel', { field: fieldLabel })}
                 labelHidden
                 items={units.map(option => ({
                   value: option,
@@ -226,9 +223,9 @@ export const ConfigField: FC<ConfigFieldProps> = ({
 
     const placeholder =
       entry.isSecret && entry.hasValue
-        ? 'A value is saved — enter a new value to replace it'
+        ? t('config.secretSaved')
         : entry.example
-          ? `e.g. ${entry.example}`
+          ? t('config.example', { example: entry.example })
           : undefined;
     if (entry.isSecret) {
       return (
@@ -239,8 +236,8 @@ export const ConfigField: FC<ConfigFieldProps> = ({
           indicator={indicator}
           description={help}
           error={error}
-          showLabel={`Show ${fieldLabel}`}
-          hideLabel={`Hide ${fieldLabel}`}
+          showLabel={t('config.show', { field: fieldLabel })}
+          hideLabel={t('config.hide', { field: fieldLabel })}
           value={value}
           placeholder={placeholder}
           autoComplete="new-password"
@@ -269,13 +266,13 @@ export const ConfigField: FC<ConfigFieldProps> = ({
       {renderControl()}
       {entry.warning && (
         <div className={styles.extra}>
-          <Message tone="warning">Warning: {entry.warning}</Message>
+          <Message tone="warning">{t('config.warning', { warning: entry.warning })}</Message>
         </div>
       )}
       {entry.link && (
         <div className={styles.extra}>
           <Link navId={`${navId}:link`} href={entry.link} variant="standalone" external>
-            {entry.linkLabel ?? 'Open setup page'}
+            {entry.linkLabel ?? t('config.openSetupPage')}
           </Link>
         </div>
       )}

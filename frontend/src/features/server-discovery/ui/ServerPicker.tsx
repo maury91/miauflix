@@ -14,6 +14,7 @@ import {
   TextField,
 } from '@shared/design-system';
 import { TIZEN_IME_DONE } from '@shared/hooks/useKeyboard';
+import { t as translate, useT } from '@shared/i18n';
 import { FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -125,6 +126,7 @@ export function ServerPicker(props: ServerPickerProps) {
 }
 
 function ServerPickerContent({ lastServer }: ServerPickerProps) {
+  const t = useT();
   const navigation = useNavigation();
   const [address, setAddress] = useState('');
   const [connecting, setConnecting] = useState<string | null>(null);
@@ -144,7 +146,7 @@ function ServerPickerContent({ lastServer }: ServerPickerProps) {
     }
     connectingRef.current = false;
     setConnecting(null);
-    setError(`No Miauflix server answers at ${displayServerAddress(url)}`);
+    setError(translate('server.noAnswer', { address: displayServerAddress(url) }));
   }, []);
 
   // The last server may only be restarting: connect as soon as it is back
@@ -176,7 +178,7 @@ function ServerPickerContent({ lastServer }: ServerPickerProps) {
   const submitAddress = () => {
     const url = normalizeServerAddress(address);
     if (!url) {
-      setError('Type the address of your server, like 192.168.1.10:3000');
+      setError(t('server.typeAddress'));
       return;
     }
     void connect(url);
@@ -188,20 +190,20 @@ function ServerPickerContent({ lastServer }: ServerPickerProps) {
     <Stack gap="xl">
       <Stack gap="xs">
         <Heading level={1} variant="title" align="center" id="server-picker-title">
-          Connect to your Miauflix server
+          {t('server.title')}
         </Heading>
         <Text tone="secondary" align="center">
           {lastServer
-            ? `${displayServerAddress(lastServer)} doesn't answer. The TV reconnects when it is back.`
-            : 'The TV needs to know where your Miauflix server is.'}
+            ? t('server.lastDown', { address: displayServerAddress(lastServer) })
+            : t('server.needsServer')}
         </Text>
       </Stack>
 
       <Surface border radius="lg" padding="xl">
-        <Section title="On your network">
+        <Section title={t('server.onNetwork')}>
           <Stack gap="md">
             {servers.length > 0 && (
-              <ActionGroup layout="column" label="Servers">
+              <ActionGroup layout="column" label={t('server.servers')}>
                 {servers.map(url => (
                   <Button
                     key={url}
@@ -212,21 +214,21 @@ function ServerPickerContent({ lastServer }: ServerPickerProps) {
                     onClick={() => void connect(url)}
                   >
                     {displayServerAddress(url)}
-                    {url === lastServer ? ' (last used)' : ''}
+                    {url === lastServer ? ` ${t('server.lastUsed')}` : ''}
                   </Button>
                 ))}
               </ActionGroup>
             )}
             <Text tone="secondary" align="center">
               {searching
-                ? 'Looking for servers…'
+                ? t('server.looking')
                 : found.length === 0
-                  ? 'No server found. It has to be on the same network as the TV.'
-                  : 'Pick your server.'}
+                  ? t('server.noneFound')
+                  : t('server.pick')}
             </Text>
             <ActionGroup align="center">
               <Button navId={NAV.rescan} size="lg" loading={searching} onClick={rescan}>
-                {searching ? 'Searching…' : 'Search again'}
+                {t(searching ? 'search.searching' : 'server.searchAgain')}
               </Button>
             </ActionGroup>
           </Stack>
@@ -235,12 +237,12 @@ function ServerPickerContent({ lastServer }: ServerPickerProps) {
 
       <FormSection
         navId="server-manual"
-        title="Server address"
+        title={t('server.address')}
         titleHidden
         onSubmit={submitAddress}
         message={
           error ? (
-            <Message tone="danger" toneLabel="Error" live="assertive">
+            <Message tone="danger" toneLabel={t('common.error')} live="assertive">
               {error}
             </Message>
           ) : undefined
@@ -252,14 +254,14 @@ function ServerPickerContent({ lastServer }: ServerPickerProps) {
             size="lg"
             loading={connecting !== null && connecting === normalizeServerAddress(address)}
           >
-            Connect
+            {t('server.connect')}
           </Button>
         }
       >
         <TextField
           navId={NAV.address}
           id="server-address"
-          label="Or type its address"
+          label={t('server.orType')}
           inputMode="url"
           autoComplete="off"
           autoCapitalize="off"

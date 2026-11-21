@@ -1,4 +1,5 @@
 import { Heading, Surface, Text } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import type { ReactNode } from 'react';
 
 import { formatBytes, type StorageUsage as Usage, type UsageSegment } from './storageInventory';
@@ -12,6 +13,7 @@ const percent = (share: number) => `${Math.min(100, Math.max(0, share * 100))}%`
  * everything else on the disk, which Miauflix doesn't control. The bar itself is decorative: the legend says the same in words.
  */
 export function StorageUsage({ usage }: { usage: Usage }) {
+  const t = useT();
   const { totalBytes, segments, usedBytes, freeBytes, limitBytes, reserveBytes, chargedBytes } =
     usage;
   const limitShare = limitBytes === null ? null : Math.min(1, limitBytes / totalBytes);
@@ -40,12 +42,12 @@ export function StorageUsage({ usage }: { usage: Usage }) {
     <Surface as="section" border radius="lg" padding="lg" aria-labelledby="storage-usage-title">
       <div className={styles.header}>
         <Heading level={2} variant="heading" id="storage-usage-title">
-          {usage.isDisk ? 'Disk usage' : 'Storage usage'}
+          {t(usage.isDisk ? 'storage.diskUsage' : 'storage.storageUsage')}
         </Heading>
         <div className={styles.totals}>
           {usedBytes === null ? (
             <Text variant="label" tone="secondary">
-              Usage unavailable
+              {t('storage.usageUnavailable')}
             </Text>
           ) : (
             <>
@@ -72,32 +74,35 @@ export function StorageUsage({ usage }: { usage: Usage }) {
         {limitShare !== null && (
           <span className={styles.limit} style={{ left: percent(limitShare) }}>
             <span className={styles.limitLabel} data-side={limitShare > 0.5 ? 'end' : 'start'}>
-              Limit {formatBytes(limitBytes)}
-              {usage.limitDraft ? ' (not saved)' : ''}
+              {t('storage.limit', { size: formatBytes(limitBytes) })}
+              {usage.limitDraft ? ` ${t('storage.notSaved')}` : ''}
             </span>
           </span>
         )}
       </div>
-      <ul className={styles.legend} aria-label="Space by kind">
+      <ul className={styles.legend} aria-label={t('storage.spaceByKind')}>
         {miauflix.map(legend)}
         {shownReserve > 0 && (
           <LegendItem
             swatch={styles.reserveSwatch}
-            label="Reserved for playback"
+            label={t('storage.field.STORAGE_PLAYBACK_RESERVE')}
             bytes={shownReserve}
           />
         )}
         {shownFree !== null && (
-          <LegendItem swatch={styles.swatch.free} label="Free" bytes={shownFree} />
+          <LegendItem swatch={styles.swatch.free} label={t('storage.free')} bytes={shownFree} />
         )}
         {other && legend(other)}
       </ul>
       {limitBytes !== null && (
         <div className={styles.note}>
           <Text variant="caption" tone="secondary">
-            {`Miauflix counts ${formatBytes(chargedBytes)} against its ${formatBytes(limitBytes)} limit, including room reserved for downloads in progress.`}
+            {t('storage.counts', {
+              charged: formatBytes(chargedBytes),
+              limit: formatBytes(limitBytes),
+            })}
             {reserveBytes !== null && reserveBytes < limitBytes
-              ? ` Downloads made ahead of time stop at ${formatBytes(limitBytes - reserveBytes)}, keeping the rest for playback.`
+              ? ` ${t('storage.aheadStop', { size: formatBytes(limitBytes - reserveBytes) })}`
               : ''}
           </Text>
         </div>

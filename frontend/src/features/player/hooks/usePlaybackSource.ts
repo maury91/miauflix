@@ -10,6 +10,7 @@ import type {
   PlayableRef,
   PlaybackDelivery,
 } from '@miauflix/backend';
+import { t } from '@shared/i18n';
 import {
   realtimeActions,
   selectPlaybackDelivered,
@@ -52,6 +53,8 @@ interface PlaybackSourceOptions {
    * does not start a new session; the current one follows it through `sessionSubtitleKey`.
    */
   subtitleKey: string;
+  /** The profile's audio language for this title (ISO 639-1); the device's when absent. */
+  audioLanguage?: string;
 }
 
 /**
@@ -59,7 +62,13 @@ interface PlaybackSourceOptions {
  * is reported to the backend through `avoidSourceIds`, so the next session brings the next
  * candidate; a repeat, or nothing left to try, ends in an error that offers a retry.
  */
-export function usePlaybackSource({ playable, title, avplay, subtitleKey }: PlaybackSourceOptions) {
+export function usePlaybackSource({
+  playable,
+  title,
+  avplay,
+  subtitleKey,
+  audioLanguage,
+}: PlaybackSourceOptions) {
   const dispatch = useDispatch<AppDispatch>();
   const [createSession, sessionRequest] = useCreateSessionMutation();
   const resetSessionRequestRef = useRef(sessionRequest.reset);
@@ -114,6 +123,9 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
   titleRef.current = title;
   const subtitleKeyRef = useRef(subtitleKey);
   subtitleKeyRef.current = subtitleKey;
+  // Read when a session is requested; a later change applies to the next one
+  const audioLanguageRef = useRef(audioLanguage);
+  audioLanguageRef.current = audioLanguage;
 
   useEffect(() => {
     if (sessionSubtitleKey.current !== null) sessionSubtitleKey.current = subtitleKey;
@@ -201,9 +213,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
     }
     resetSessionRequest();
     setStatus('error');
-    setError(
-      `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`
-    );
+    setError(t('player.failure.selectedSource', { title }));
   }, [playable, resetSessionRequest, sessionRequest.data, title]);
 
   /** The media element rejected the stream. */
@@ -267,7 +277,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
         promise: createSession({
           playable,
           ...(avoidSourceIds.length ? { avoidSourceIds } : {}),
-          preferences: playbackPreferences(avplay),
+          preferences: playbackPreferences(avplay, audioLanguageRef.current),
         }).unwrap(),
       };
     void sessionInFlight.current.promise
@@ -278,9 +288,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
           // Nothing new to try: the only sources left already failed here.
           resetSessionRequest();
           setStatus('error');
-          setError(
-            `Playback for “${titleRef.current}” could not load any of its sources. Retry to try source preparation again.`
-          );
+          setError(t('player.failure.allSources', { title: titleRef.current }));
           return;
         }
         setStatus(result.preparation.state === 'warm' ? 'ready' : 'preparing');
@@ -295,9 +303,7 @@ export function usePlaybackSource({ playable, title, avplay, subtitleKey }: Play
         if (isUnavailablePlaybackFailure(reason) && avoidSourceIds.length) {
           // Only sources that already failed here are left.
           setStatus('error');
-          setError(
-            `Playback for “${titleRef.current}” could not load any of its sources. Retry to try source preparation again.`
-          );
+          setError(t('player.failure.allSources', { title: titleRef.current }));
           return;
         }
         if (isUnavailablePlaybackFailure(reason)) {

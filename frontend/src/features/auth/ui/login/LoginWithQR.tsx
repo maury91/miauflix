@@ -2,6 +2,7 @@ import { useClaimQrLoginMutation, useCreateQrLoginMutation } from '@features/aut
 import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
 import { qrApprovalUrl } from '@features/auth/lib/qrApprovalUrl';
 import { Button, Message, PairingPanel } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { useNavigation } from '@shared/navigation';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
@@ -21,6 +22,7 @@ export const LoginWithQR: FC<{
   /** Where focus goes after asking for a new code, whose button then goes away. */
   focusAfterNewCode?: string;
 }> = ({ focusAfterNewCode }) => {
+  const t = useT();
   const [createQrLogin, { data: qrData, isLoading: isQrLoading, isError: isQrError }] =
     useCreateQrLoginMutation();
   const [claimQrLogin] = useClaimQrLoginMutation();
@@ -84,32 +86,39 @@ export const LoginWithQR: FC<{
     <PairingPanel
       navId={LOGIN_NAV.qrPanel}
       fill
-      title="Sign in with QR"
-      instructions="Scan with phone to sign in"
+      title={t('auth.qrTitle')}
+      instructions={t('auth.qrInstructions')}
       state={state}
-      loadingLabel="Getting a code"
+      loadingLabel={t('auth.gettingCode')}
       qr={
         qrData ? (
           <QRCode
             value={qrApprovalUrl(qrData.approvalPath)}
             level="M"
             style={qrStyle}
-            aria-label="Login QR code"
+            aria-label={t('auth.qrLabel')}
           />
         ) : undefined
       }
-      status={state === 'ready' ? `Expires in ${formatTimeRemaining(timeRemaining)}` : undefined}
+      status={
+        state === 'ready'
+          ? t('auth.expiresIn', { time: formatTimeRemaining(timeRemaining) })
+          : undefined
+      }
       message={
         state === 'expired' ? (
-          <Message tone={isQrError ? 'danger' : 'info'} toneLabel={isQrError ? 'Error' : undefined}>
-            {isQrError ? 'Failed to generate QR code' : 'Code expired'}
+          <Message
+            tone={isQrError ? 'danger' : 'info'}
+            toneLabel={isQrError ? t('common.error') : undefined}
+          >
+            {t(isQrError ? 'auth.qrFailed' : 'auth.codeExpired')}
           </Message>
         ) : undefined
       }
       actions={
         state === 'expired' ? (
           <Button navId={LOGIN_NAV.qrNewCode} onClick={requestNewCode}>
-            Get a new code
+            {t('auth.newCode')}
           </Button>
         ) : undefined
       }

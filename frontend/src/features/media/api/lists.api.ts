@@ -1,8 +1,10 @@
 import { authApi } from '@features/auth/api/auth.api';
+import { catalogLanguage } from '@features/media/lib/catalog-language';
 import type { ListResponse, ListsPageResponse } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -14,7 +16,7 @@ type WatchlistMembership = {
 
 export const listsApi = createApi({
   reducerPath: 'listsApi',
-  tagTypes: ['Watchlist', 'Rating'],
+  tagTypes: ['Watchlist', 'Rating', 'Catalog'],
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
   endpoints: builder => ({
     getList: builder.query<
@@ -35,7 +37,7 @@ export const listsApi = createApi({
               {
                 param: { slug: category },
                 query: {
-                  lang: 'en',
+                  lang: catalogLanguage(),
                   page: String(page),
                   limit: String(limit),
                   priority,
@@ -44,7 +46,7 @@ export const listsApi = createApi({
               { headers }
             ),
           session: sessionId,
-          errorContext: 'Failed to fetch list',
+          errorContext: t('api.failedToFetchList'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -52,7 +54,7 @@ export const listsApi = createApi({
         });
       },
       providesTags: (_result, _error, args) =>
-        args.category === 'my-watchlist' ? ['Watchlist'] : [],
+        args.category === 'my-watchlist' ? ['Watchlist', 'Catalog'] : ['Catalog'],
     }),
 
     promoteListMedia: builder.mutation<
@@ -72,7 +74,7 @@ export const listsApi = createApi({
           requestFn: () =>
             backendClient.api.list.priorities.$post({ json: { items } }, { headers }),
           session: sessionId,
-          errorContext: 'Failed to promote list media priority',
+          errorContext: t('api.failedToPromoteListMediaPriority'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -98,7 +100,7 @@ export const listsApi = createApi({
               { headers }
             ),
           session: sessionId,
-          errorContext: 'Failed to fetch lists',
+          errorContext: t('api.failedToFetchLists'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -121,7 +123,7 @@ export const listsApi = createApi({
               { headers }
             ),
           session: sessionId,
-          errorContext: 'Failed to fetch watchlist membership',
+          errorContext: t('api.failedToFetchWatchlistMembership'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -142,7 +144,7 @@ export const listsApi = createApi({
         return authenticatedRequest<WatchlistMembership>({
           requestFn: () => backendClient.api.watchlist.$post({ json: item }, { headers }),
           session: sessionId,
-          errorContext: 'Failed to add to watchlist',
+          errorContext: t('api.failedToAddToWatchlist'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -161,7 +163,7 @@ export const listsApi = createApi({
         return authenticatedRequest<WatchlistMembership>({
           requestFn: () => backendClient.api.watchlist.$delete({ json: item }, { headers }),
           session: sessionId,
-          errorContext: 'Failed to remove from watchlist',
+          errorContext: t('api.failedToRemoveFromWatchlist'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));

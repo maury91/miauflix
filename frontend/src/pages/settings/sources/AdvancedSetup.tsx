@@ -16,6 +16,7 @@ import {
   Section,
   TextField,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { useState } from 'react';
 
 import SourcesAddProviders from '../SourcesAddProviders';
@@ -35,6 +36,7 @@ interface AdvancedSetupProps {
 
 /** Jackett, Torznab and repositories: collapsed until asked for, since most people never need it. */
 export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: AdvancedSetupProps) {
+  const t = useT();
   const repositories = useGetRepositoriesQuery();
   const [addRepository, adding] = useAddRepositoryMutation();
   const [refreshRepository] = useRefreshRepositoryMutation();
@@ -57,8 +59,8 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
         await addRepository({ url: value }).unwrap();
         setUrl('');
       },
-      'Repository added.',
-      'Could not add repository.'
+      t('sources.repositoryAdded'),
+      t('sources.repositoryAddFailed')
     );
   };
 
@@ -66,8 +68,8 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
     <div id="advanced-setup">
       <Disclosure
         navId={ADVANCED_NAV.toggle}
-        title="Advanced setup"
-        description="Jackett, Torznab endpoints, and repositories."
+        title={t('sources.advanced')}
+        description={t('sources.advancedDescription')}
         headingLevel={2}
         expanded={open}
         onExpandedChange={onOpenChange}
@@ -75,16 +77,16 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
         <SourcesAddProviders onNotice={onNotice} />
         <div className={styles.setupPart}>
           <Section
-            title="Repositories"
+            title={t('sources.repositories')}
             headingLevel={3}
-            description="A repository is a list of sources. Add one by its web address."
+            description={t('sources.repositoriesDescription')}
           >
             {repositories.error && !repositories.data && (
-              <Message tone="danger" toneLabel="Error" live="assertive">
-                Could not load repositories.
+              <Message tone="danger" toneLabel={t('common.error')} live="assertive">
+                {t('sources.repositoriesFailed')}
               </Message>
             )}
-            <List label="Repositories" divided>
+            <List label={t('sources.repositories')} divided>
               {(repositories.data ?? []).map(repository => {
                 const name = repository.name ?? repository.url;
                 const managed = !repository.builtIn && repository.id !== 'local:user';
@@ -93,18 +95,23 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
                     key={repository.id}
                     navId={managed ? `repository:${repository.id}` : undefined}
                     title={name}
-                    metadata={repository.builtIn ? <Badge>built-in</Badge> : undefined}
+                    metadata={
+                      repository.builtIn ? <Badge>{t('sources.builtIn')}</Badge> : undefined
+                    }
                     description={
                       <span className={styles.facts}>
                         {managed && <span>{repository.url}</span>}
                         <span>
-                          {repository.providerCount} provider
-                          {repository.providerCount === 1 ? '' : 's'}
+                          {t('sources.providers', { count: repository.providerCount })}
                           {repository.lastFetchedAt
-                            ? ` · updated ${new Date(repository.lastFetchedAt).toLocaleString()}`
+                            ? t('sources.updatedAt', {
+                                date: new Date(repository.lastFetchedAt).toLocaleString(),
+                              })
                             : ''}
                         </span>
-                        {repository.lastError && <span>Problem: {repository.lastError}</span>}
+                        {repository.lastError && (
+                          <span>{t('sources.problem', { error: repository.lastError })}</span>
+                        )}
                       </span>
                     }
                     trailing={
@@ -112,27 +119,27 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
                         <>
                           <IconButton
                             navId={ADVANCED_NAV.refresh(repository.id)}
-                            label={`Refresh ${name}`}
-                            tooltip="Refresh"
+                            label={t('sources.refreshName', { name })}
+                            tooltip={t('sources.refresh')}
                             icon={<RefreshIcon />}
                             onClick={() =>
                               void run(
                                 () => refreshRepository(repository.id).unwrap(),
-                                'Repository refreshed.',
-                                'Could not refresh repository.'
+                                t('sources.repositoryRefreshed'),
+                                t('sources.repositoryRefreshFailed')
                               )
                             }
                           />
                           <IconButton
                             navId={ADVANCED_NAV.remove(repository.id)}
-                            label={`Remove ${name}`}
-                            tooltip="Remove"
+                            label={t('sources.removeName', { name })}
+                            tooltip={t('sources.remove')}
                             icon={<RemoveIcon />}
                             onClick={() =>
                               void run(
                                 () => removeRepository(repository.id).unwrap(),
-                                'Repository removed.',
-                                'Could not remove repository.'
+                                t('sources.repositoryRemoved'),
+                                t('sources.repositoryRemoveFailed')
                               )
                             }
                           />
@@ -144,7 +151,7 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
               })}
             </List>
             <FormSection
-              title="Add repository"
+              title={t('sources.addRepository')}
               titleHidden
               headingLevel={3}
               onSubmit={submit}
@@ -156,14 +163,14 @@ export function AdvancedSetup({ open, onOpenChange, onNotice, onError }: Advance
                   loading={adding.isLoading}
                   disabled={!url.trim()}
                 >
-                  Add repository
+                  {t('sources.addRepository')}
                 </Button>
               }
             >
               <TextField
                 navId={ADVANCED_NAV.repositoryUrl}
                 id="repository-url"
-                label="Repository URL"
+                label={t('sources.repositoryUrl')}
                 type="url"
                 placeholder="https://example.com/providers.json"
                 value={url}

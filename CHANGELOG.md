@@ -4,6 +4,11 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 
 ## Unreleased
 
+### Languages
+
+- Miauflix is now available in Italian. A new Preferences page in the profile menu sets each profile's interface language, its preferred audio and subtitle languages, and separate audio and subtitle choices for anime. Audio can also be set to the title's original language. Titles, descriptions and genres on Home and in details follow the interface language.
+- Under the player's seek bar, up to three buttons switch between your audio language, the original language with subtitles, and your audio language with subtitles.
+
 ### App and navigation
 
 - Configuration, Sources, Storage, the Trakt dialog and the page that approves a TV's QR sign-in now match the rest of the app and work with the remote. Back leaves a text field before it leaves the page. Opening a source's settings takes you to its first field, and on a phone each source's buttons sit under its description.

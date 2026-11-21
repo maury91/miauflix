@@ -18,14 +18,15 @@ import {
   Select,
   Text,
 } from '@shared/design-system';
+import { type MessageKey, t as translate, useT } from '@shared/i18n';
 import { getImageUrl } from '@shared/lib/media.utils';
 import { useMemo, useState } from 'react';
 
 import {
   computeUsage,
   formatBytes,
-  SORT_OPTIONS,
   sortItems,
+  sortOptions,
   type StorageSort,
 } from './storage/storageInventory';
 import { StorageSettings } from './storage/StorageSettings';
@@ -47,10 +48,10 @@ const STORAGE_NAV = {
   confirm: 'storage-confirm',
 } as const;
 
-const KIND_LABELS: Record<StorageItemView['kind'], string | null> = {
-  movie: 'Movie',
-  episode: 'Episode',
-  anime: 'Anime',
+const KIND_LABELS: Record<StorageItemView['kind'], MessageKey | null> = {
+  movie: 'storage.kind.movie',
+  episode: 'storage.kind.episode',
+  anime: 'storage.kind.anime',
   unknown: null,
 };
 
@@ -63,25 +64,23 @@ function storageErrorMessage(error: unknown): string {
   if (data && typeof data === 'object' && 'error' in data && typeof data.error === 'string') {
     return data.error;
   }
-  return 'Could not free this download. Please try again.';
+  return translate('storage.freeFailed');
 }
 
 function statusLabel(activity: StorageItemView['activity']): string {
   switch (activity) {
     case 'active':
-      return 'Active';
     case 'available_offline':
-      return 'Available offline';
     case 'local_only':
-      return 'Local only';
     case 'inactive':
-      return 'Inactive';
+      return translate(`storage.status.${activity}`);
     default:
-      return 'Unknown';
+      return translate('storage.status.unknown');
   }
 }
 
 export default function StoragePage({ onDismiss }: StoragePageProps) {
+  const t = useT();
   const { data, error, isLoading, isFetching, refetch } = useGetStorageInventoryQuery(undefined, {
     pollingInterval: 5_000,
   });
@@ -102,10 +101,10 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
   )?.value;
   const seeding =
     savedSeeding === undefined
-      ? 'Completed downloads seed for the configured time before becoming local only.'
+      ? t('storage.seedingConfigured')
       : describeDuration(savedSeeding) === null
-        ? 'Completed downloads become local only right away.'
-        : `Completed downloads seed for ${describeDuration(savedSeeding)} before becoming local only.`;
+        ? t('storage.seedingNone')
+        : t('storage.seedingFor', { duration: describeDuration(savedSeeding)! });
   const items = useMemo(() => (data ? sortItems(data.items, sort) : []), [data, sort]);
 
   const openConfirmation = (item: StorageItemView) => {
@@ -125,7 +124,9 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
     try {
       await removeStorage(item.sourceId).unwrap();
       setConfirmingId(null);
-      setNotice(`Freed ${formatBytes(item.physicalBytes)} used by ${itemName(item)}.`);
+      setNotice(
+        t('storage.freed', { size: formatBytes(item.physicalBytes), name: itemName(item) })
+      );
     } catch (requestError) {
       setDialogError(storageErrorMessage(requestError));
     }
@@ -135,25 +136,25 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
   const retry = (
     <ActionGroup>
       <Button navId={STORAGE_NAV.retry} onClick={() => void refetch()}>
-        Try again
+        {t('common.tryAgain')}
       </Button>
     </ActionGroup>
   );
 
   return (
     <SettingsLayout
-      title="Storage"
-      description="What Miauflix keeps on this server’s disk. Free space to remove a download."
+      title={t('storage.title')}
+      description={t('storage.description')}
       onBack={onDismiss}
-      backLabel="Back to Home"
+      backLabel={t('storage.back')}
       width="full"
       overlay={
         <Dialog
           open={confirmedItem !== undefined}
-          title={confirmedItem ? `Free space used by ${itemName(confirmedItem)}?` : ''}
+          title={confirmedItem ? t('storage.confirmTitle', { name: itemName(confirmedItem) }) : ''}
           description={
             confirmedItem
-              ? `This deletes ${formatBytes(confirmedItem.physicalBytes)} from this server. Future playback will require downloading it again.`
+              ? t('storage.confirmDescription', { size: formatBytes(confirmedItem.physicalBytes) })
               : undefined
           }
           size="sm"
@@ -165,20 +166,20 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
                 disabled={removal.isLoading}
                 onClick={closeConfirmation}
               >
-                Cancel
+                {t('common.cancel')}
               </Button>
               <Button
                 navId={STORAGE_NAV.confirm}
                 loading={removal.isLoading}
                 onClick={() => confirmedItem && void confirmRemoval(confirmedItem)}
               >
-                Delete download
+                {t('storage.deleteDownload')}
               </Button>
             </>
           }
         >
           {dialogError && (
-            <Message tone="danger" toneLabel="Error" live="assertive">
+            <Message tone="danger" toneLabel={t('common.error')} live="assertive">
               {dialogError}
             </Message>
           )}
@@ -193,18 +194,16 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
 
       <div className={styles.status} role="status" aria-live="polite">
         <Text variant="caption" tone="secondary">
-          {notice || (isFetching && !isLoading ? 'Updating storage…' : '')}
+          {notice || (isFetching && !isLoading ? t('storage.updating') : '')}
         </Text>
       </div>
 
       {(isLoading || error) && (
         <div className={styles.section}>
-          {isLoading && <ProgressSpinner label="Loading storage…" />}
+          {isLoading && <ProgressSpinner label={t('storage.loading')} />}
           {!isLoading && error && (
-            <Message tone="danger" toneLabel="Error" live="assertive" actions={retry}>
-              {data
-                ? 'Could not refresh storage. Showing the last loaded results.'
-                : 'Could not load storage. Check your connection and try again.'}
+            <Message tone="danger" toneLabel={t('common.error')} live="assertive" actions={retry}>
+              {data ? t('storage.refreshFailed') : t('storage.loadFailed')}
             </Message>
           )}
         </div>
@@ -212,18 +211,18 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
 
       {data && (
         <Section
-          title="Downloads"
+          title={t('storage.downloads')}
           actions={
             data.items.length > 1 ? (
               <div className={styles.sort}>
                 <span aria-hidden="true">
-                  <Text tone="secondary">Sort by</Text>
+                  <Text tone="secondary">{t('storage.sortBy')}</Text>
                 </span>
                 <Select
                   navId={STORAGE_NAV.sort}
-                  label="Sort by"
+                  label={t('storage.sortBy')}
                   labelHidden
-                  items={SORT_OPTIONS}
+                  items={sortOptions()}
                   value={sort}
                   onChange={value => setSort(value as StorageSort)}
                 />
@@ -232,9 +231,9 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
           }
         >
           {data.items.length === 0 ? (
-            <Text tone="secondary">No downloaded content is using storage.</Text>
+            <Text tone="secondary">{t('storage.empty')}</Text>
           ) : (
-            <List label="Downloaded content" divided>
+            <List label={t('storage.list')} divided>
               {items.map(item => (
                 <ListItem
                   key={item.sourceId}
@@ -242,14 +241,16 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
                   leading={<Thumbnail item={item} />}
                   title={item.title}
                   metadata={
-                    KIND_LABELS[item.kind] ? <Badge>{KIND_LABELS[item.kind]!}</Badge> : undefined
+                    KIND_LABELS[item.kind] ? <Badge>{t(KIND_LABELS[item.kind]!)}</Badge> : undefined
                   }
                   description={<ItemDetails item={item} />}
                   trailing={
                     <IconButton
                       navId={STORAGE_NAV.free(item.sourceId)}
-                      label={`Free space used by ${itemName(item)}`}
-                      tooltip={item.activeStreams > 0 ? 'Being watched' : 'Free space'}
+                      label={t('storage.freeLabel', { name: itemName(item) })}
+                      tooltip={t(
+                        item.activeStreams > 0 ? 'storage.beingWatched' : 'storage.freeSpace'
+                      )}
                       icon={<DeleteIcon />}
                       disabled={item.activeStreams > 0 || removal.isLoading}
                       onClick={() => openConfirmation(item)}
@@ -261,11 +262,7 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
           )}
           <div className={styles.legend}>
             <Text variant="caption" tone="secondary">
-              Inactive is incomplete and not loaded; Active is incomplete and loaded by the torrent.
-              Available offline means the video is complete but its torrent may still load. Local
-              only means it is complete and will never be loaded by its torrent again. {seeding}{' '}
-              Free space deletes a download; you’ll need to download it again before future
-              playback.
+              {t('storage.legend', { seeding })}
             </Text>
           </div>
         </Section>
@@ -292,18 +289,21 @@ function Thumbnail({ item }: { item: StorageItemView }) {
 }
 
 function ItemDetails({ item }: { item: StorageItemView }) {
+  const t = useT();
   const facts = [
     item.quality,
     formatBytes(item.physicalBytes),
     statusLabel(item.activity),
-    item.videoComplete ? 'Video complete' : `${Math.round(item.progressPercent)}% downloaded`,
+    item.videoComplete
+      ? t('storage.videoComplete')
+      : t('storage.percentDownloaded', { percent: Math.round(item.progressPercent) }),
   ].filter(Boolean);
   return (
     <span className={styles.details}>
       {item.subtitle && <span>{item.subtitle}</span>}
       <span>
         {facts.join(' · ')}
-        {item.activeStreams > 0 ? ' · Currently being watched' : ''}
+        {item.activeStreams > 0 ? ` · ${t('storage.currentlyWatched')}` : ''}
       </span>
       {!item.videoComplete && (
         <span className={styles.progress} aria-hidden="true">
@@ -315,10 +315,12 @@ function ItemDetails({ item }: { item: StorageItemView }) {
       )}
       <span>
         {item.fileName ? `${item.fileName} · ` : ''}
-        {formatBytes(item.reservedBytes)} reserved
-        {item.remuxBytes > 0 ? ` · TV remux ${formatBytes(item.remuxBytes)}` : ''}
+        {t('storage.reserved', { size: formatBytes(item.reservedBytes) })}
+        {item.remuxBytes > 0
+          ? ` · ${t('storage.tvRemux', { size: formatBytes(item.remuxBytes) })}`
+          : ''}
         {item.activity === 'available_offline' && item.seedEndsAt
-          ? ` · Torrent ${item.torrentLoaded ? 'loaded' : 'may reload'} until ${new Date(item.seedEndsAt).toLocaleString()}`
+          ? ` · ${t(item.torrentLoaded ? 'storage.torrentLoadedUntil' : 'storage.torrentMayReloadUntil', { date: new Date(item.seedEndsAt).toLocaleString(t('meta.locale')) })}`
           : ''}
       </span>
     </span>

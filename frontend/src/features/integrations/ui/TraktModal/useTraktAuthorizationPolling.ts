@@ -1,5 +1,6 @@
 import { pollTraktAssociation } from '@features/integrations/api/trakt.api';
 import type { ProviderAuthorization } from '@miauflix/service-contracts';
+import { t } from '@shared/i18n';
 import { useEffect, useRef } from 'react';
 
 interface TraktAuthorizationPollingOptions {
@@ -37,7 +38,7 @@ export function useTraktAuthorizationPolling({
       } catch (error) {
         if (cancelled) return;
         callbacks.current.onError(
-          error instanceof Error ? error.message : 'Unable to check Trakt association'
+          error instanceof Error ? error.message : t('api.unableToCheckTraktAssociation')
         );
         timer = window.setTimeout(poll, delay);
         return;

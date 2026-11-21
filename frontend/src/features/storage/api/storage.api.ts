@@ -3,6 +3,7 @@ import type { StorageInventoryResponse } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -19,7 +20,7 @@ export const storageApi = createApi({
         return authenticatedRequest<StorageInventoryResponse>({
           requestFn: () => backendClient.api.storage.$get({}, { headers }),
           session,
-          errorContext: 'Failed to load storage',
+          errorContext: t('api.failedToLoadStorage'),
           onInvalidSession: () => {
             api.dispatch({ type: 'auth/clearAuth' });
             api.dispatch(
@@ -41,7 +42,7 @@ export const storageApi = createApi({
               { headers }
             ),
           session,
-          errorContext: 'Failed to free storage',
+          errorContext: t('api.failedToFreeStorage'),
           onInvalidSession: () => {
             api.dispatch({ type: 'auth/clearAuth' });
             api.dispatch(

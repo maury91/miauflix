@@ -1,4 +1,5 @@
 import type { StorageInventoryResponse, StorageItemView } from '@miauflix/backend';
+import { t } from '@shared/i18n';
 
 export type UsageCategory = 'movie' | 'episode' | 'anime' | 'unknown' | 'remux' | 'other';
 
@@ -33,18 +34,11 @@ export interface StorageUsage {
   chargedBytes: number;
 }
 
-export const CATEGORY_LABELS: Record<UsageCategory, string> = {
-  movie: 'Movies',
-  episode: 'Episodes',
-  anime: 'Anime',
-  unknown: 'Unmatched downloads',
-  remux: 'TV remuxes',
-  other: 'Other data',
-};
+const categoryLabel = (category: UsageCategory) => t(`storage.category.${category}`);
 
 export function formatBytes(bytes: number | null | undefined): string {
   if (bytes === null || bytes === undefined || !Number.isFinite(bytes) || bytes < 0) {
-    return 'Unavailable';
+    return t('storage.unavailable');
   }
   if (bytes === 0) return '0 B';
 
@@ -100,7 +94,7 @@ export function computeUsage(
   const segments = order
     .map(category => ({
       category,
-      label: CATEGORY_LABELS[category],
+      label: categoryLabel(category),
       bytes: byCategory.get(category) ?? 0,
     }))
     .filter(segment => segment.bytes > 0);
@@ -134,13 +128,11 @@ export function computeUsage(
 
 export type StorageSort = 'size' | 'name' | 'type' | 'progress' | 'status';
 
-export const SORT_OPTIONS: { value: StorageSort; label: string }[] = [
-  { value: 'size', label: 'Size (largest first)' },
-  { value: 'name', label: 'Name (A–Z)' },
-  { value: 'type', label: 'Type' },
-  { value: 'progress', label: 'Download progress' },
-  { value: 'status', label: 'Status' },
-];
+const SORTS: readonly StorageSort[] = ['size', 'name', 'type', 'progress', 'status'];
+
+/** The sort choices, labelled in the interface language. */
+export const sortOptions = (): { value: StorageSort; label: string }[] =>
+  SORTS.map(value => ({ value, label: t(`storage.sort.${value}`) }));
 
 const KIND_ORDER: Record<StorageItemView['kind'], number> = {
   movie: 0,

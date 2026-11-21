@@ -1,5 +1,6 @@
 import { hex, type Painter, type TextSpec } from '@shared/design-system/gl/art';
 import { color } from '@shared/design-system/tokens';
+import { t } from '@shared/i18n';
 
 import type { HeroDetailsModel, HeroStatus } from './heroDetailsModel';
 import { HERO_DETAILS, HERO_TYPE, heroTypeScale } from './heroType';
@@ -14,10 +15,11 @@ const TEXT_DIM = '#50585B';
 
 /** The status badge's text and colours, as the hero has drawn them since before the Badge. */
 function statusLook(status: HeroStatus) {
-  if (status.kind === 'unavailable') return { label: 'No source', color: TEXT_DIM, ...NEUTRAL };
+  if (status.kind === 'unavailable')
+    return { label: t('home.noSource'), color: TEXT_DIM, ...NEUTRAL };
   if (status.kind === 'checking')
     return {
-      label: 'Checking…',
+      label: t('home.checking'),
       color: color.textSecondary,
       border: 'rgba(0,0,0,0)',
       fill: 'rgba(0,0,0,0)',

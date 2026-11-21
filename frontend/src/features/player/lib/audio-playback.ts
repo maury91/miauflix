@@ -1,4 +1,5 @@
 import { API_CREDENTIALS } from '@shared/config/constants';
+import { t } from '@shared/i18n';
 
 interface AudioPlaybackOptions {
   video: HTMLVideoElement;
@@ -347,9 +348,7 @@ export function startAudioPlayback(options: AudioPlaybackOptions): StopAudioPlay
     if (!response.ok || !response.body) {
       const failure = (await response.json().catch(() => null)) as { error?: unknown } | null;
       throw new Error(
-        typeof failure?.error === 'string'
-          ? failure.error
-          : 'Audio conversion could not start. Retry playback.'
+        typeof failure?.error === 'string' ? failure.error : t('player.audioConversionFailed')
       );
     }
     const offsetHeader = response.headers.get('X-Playback-Timestamp-Offset');
@@ -404,8 +403,7 @@ export function startAudioPlayback(options: AudioPlaybackOptions): StopAudioPlay
     }
   };
   void run().catch(error => {
-    if (!signal.aborted)
-      onError(error instanceof Error ? error.message : 'Audio playback failed. Retry playback.');
+    if (!signal.aborted) onError(error instanceof Error ? error.message : t('player.audioFailed'));
     controller.abort();
     void reader?.cancel().catch(() => undefined);
   });

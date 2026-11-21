@@ -9,11 +9,19 @@ export function backendUrl(path: string): string {
   return builtForTizen && path.startsWith('/') ? `${API_URL.replace(/\/+$/, '')}${path}` : path;
 }
 
-/** What this client can decode, so the backend can choose how to deliver the file. */
-export function playbackPreferences(avplay: boolean): PlaybackPreferences {
+/**
+ * What this client can decode, so the backend can choose how to deliver the file, and the audio
+ * languages it starts with: the profile's (`audioLanguage`) before the device's.
+ */
+export function playbackPreferences(avplay: boolean, audioLanguage?: string): PlaybackPreferences {
+  const capabilities = playbackAudioCapabilities(document.createElement('video'));
+  const audioLanguages = audioLanguage
+    ? [...new Set([audioLanguage, ...(capabilities.audioLanguages ?? [])])].slice(0, 20)
+    : capabilities.audioLanguages;
   return {
     quality: 'auto',
-    ...playbackAudioCapabilities(document.createElement('video')),
+    ...capabilities,
+    audioLanguages,
     ...(avplay ? avplayCapabilities() : {}),
   };
 }

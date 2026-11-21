@@ -11,10 +11,12 @@ import { parseVtt, type SubtitleCue } from '@features/player/lib/vtt';
 import type { SubtitleTimingCue } from '@features/player/ui/SubtitleTiming';
 import type { SubtitleCandidateDto } from '@miauflix/backend';
 import { API_CREDENTIALS, API_URL } from '@shared/config/constants';
+import { t } from '@shared/i18n';
 import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ResumePoint } from './usePlaybackProgress';
 import type { PlaybackSource } from './usePlaybackSource';
+import { type SubtitleSearchOptions } from './useSubtitleLanguage';
 
 /** The start of the minute holding `seconds`: embedded tracks are served a window at a time. */
 function minuteWindow(seconds: number): number {
@@ -45,11 +47,13 @@ interface SubtitlesOptions {
   /** A converted-audio restart or track switch, after which the track is set up again. */
   audioSeek: unknown;
   audioTrackIndex: number | undefined;
+  /** The profile's subtitle language for this title (ISO 639-1); the device's when absent. */
+  preferredLanguage?: string;
 }
 
 /**
  * Subtitle search, choice and timing for the current session: restores the remembered choice
- * (or searches locally in the browser's language), loads the chosen track as WebVTT, as styled
+ * (or searches locally in the profile's subtitle language), loads the chosen track as WebVTT, as styled
  * ASS, or as cues for AVPlay, and keeps the remembered choice and offset up to date.
  */
 export function useSubtitles({
@@ -63,6 +67,7 @@ export function useSubtitles({
   playsInAvplay,
   audioSeek,
   audioTrackIndex,
+  preferredLanguage,
 }: SubtitlesOptions) {
   const [searchSubtitles] = useSearchSubtitlesMutation();
   const rememberedSubtitles = useRef<MediaSubtitles | null>(readMediaSubtitles(storageKey));
@@ -149,7 +154,11 @@ export function useSubtitles({
   }, [applyOffset]);
 
   const search = useCallback(
-    async (language: string, hearingImpaired: boolean, restoring = false, localOnly = false) => {
+    async (
+      language: string,
+      hearingImpaired: boolean,
+      { restoring = false, localOnly = false, autoSelect = false }: SubtitleSearchOptions = {}
+    ) => {
       if (!session || sessionStorageKey.current !== storageKey) return;
       const request = ++requestId.current;
       const streamingKey = session.streamingKey;
@@ -178,9 +187,11 @@ export function useSubtitles({
         setAvailable(result.available);
         if (result.available && (result.configured || result.candidates.length > 0)) {
           const selected =
-            remembered?.selectedFileId == null
+            (remembered?.selectedFileId == null
               ? undefined
-              : result.candidates.find(candidate => candidate.fileId === remembered.selectedFileId);
+              : result.candidates.find(
+                  candidate => candidate.fileId === remembered.selectedFileId
+                )) ?? (autoSelect ? result.candidates[0] : undefined);
           const preferences: MediaSubtitles = {
             language,
             hearingImpaired,
@@ -194,13 +205,13 @@ export function useSubtitles({
         }
         setMessage(
           result.configured && result.available && result.candidates.length === 0
-            ? 'No subtitles found for this language.'
+            ? t('subtitles.noneFound')
             : ''
         );
       } catch {
         if (requestId.current === request && currentStreamingKey.current === streamingKey) {
           setAvailable(false);
-          setMessage('Subtitle search failed. Playback can continue.');
+          setMessage(t('subtitles.searchFailed'));
         }
       } finally {
         if (requestId.current === request) setLoading(false);
@@ -209,6 +220,10 @@ export function useSubtitles({
     [searchSubtitles, session, sessionStorageKey, storageKey]
   );
 
+  // Read when a session starts, not a dependency: the title's details can arrive later
+  const preferredLanguageRef = useRef('en');
+  preferredLanguageRef.current = preferredLanguage ?? (navigator.language.split('-')[0] || 'en');
+
   useEffect(() => {
     if (!session || sessionStorageKey.current !== storageKey) return;
     rememberedSubtitles.current = readMediaSubtitles(storageKey);
@@ -216,8 +231,9 @@ export function useSubtitles({
     const saved = resumeRef.current;
     if (remembered && saved && saved.state !== 'completed' && saved.positionSeconds > 5)
       setSubtitleWindow(minuteWindow(saved.positionSeconds));
-    if (remembered) void search(remembered.language, remembered.hearingImpaired, true);
-    else void search(navigator.language.split('-')[0] || 'en', false, true, true);
+    if (remembered)
+      void search(remembered.language, remembered.hearingImpaired, { restoring: true });
+    else void search(preferredLanguageRef.current, false, { restoring: true, localOnly: true });
   }, [session, storageKey, search, sessionStorageKey, sessionKeyVersion, resumeRef]);
 
   const select = useCallback(
@@ -307,7 +323,7 @@ export function useSubtitles({
         setCues(parsed);
       })
       .catch(() => {
-        if (!controller.signal.aborted) setMessage('The selected subtitle could not be loaded.');
+        if (!controller.signal.aborted) setMessage(t('subtitles.loadFailed'));
       });
     return () => controller.abort();
   }, [playsInAvplay, url]);
@@ -315,7 +331,7 @@ export function useSubtitles({
   useEffect(() => {
     const track = trackRef.current;
     if (!track || !selected) return;
-    const failed = () => setMessage('The selected subtitle could not be loaded.');
+    const failed = () => setMessage(t('subtitles.loadFailed'));
     // Track load/error events do not bubble; subscribe to the native element.
     track.addEventListener('load', handleTrackLoaded);
     track.addEventListener('error', failed);

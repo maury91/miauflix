@@ -1,4 +1,5 @@
 import { Button, Disclosure, EmptyState, SurfaceContextProvider } from '@shared/design-system';
+import { t } from '@shared/i18n';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import type { ComponentType, ReactNode } from 'react';
 import { Component } from 'react';
@@ -27,19 +28,18 @@ const DefaultErrorFallback: ComponentType<{ error?: Error; resetError: () => voi
       <FocusScope autoFocus>
         <div className={styles.fallback} role="alert">
           <EmptyState
-            heading="Something went wrong"
+            heading={t('common.somethingWrong')}
             actions={
               <Button navId="error-boundary-retry" onClick={resetError}>
-                Try Again
+                {t('common.tryAgain')}
               </Button>
             }
           >
-            We're sorry, but something unexpected happened. Please try refreshing the page or
-            contact support if the problem persists.
+            {t('common.unexpected')}
           </EmptyState>
           {error && (
             <div className={styles.details}>
-              <Disclosure navId="error-boundary-details" title="Technical Details">
+              <Disclosure navId="error-boundary-details" title={t('common.technicalDetails')}>
                 <pre className={styles.stack}>{error.stack}</pre>
               </Disclosure>
             </div>

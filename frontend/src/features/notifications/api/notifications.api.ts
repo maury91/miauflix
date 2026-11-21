@@ -3,6 +3,7 @@ import type { PlayableRef } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import type { SourceQuality, SourceReleaseType } from '@shared/lib/source-quality';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
@@ -71,7 +72,7 @@ export const notificationsApi = createApi({
               { headers }
             ),
           session: sessionId,
-          errorContext: 'Failed to fetch notifications',
+          errorContext: t('api.failedToFetchNotifications'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -87,7 +88,7 @@ export const notificationsApi = createApi({
         return authenticatedRequest<NotificationCounts>({
           requestFn: () => backendClient.api.notifications['unread-count'].$get({}, { headers }),
           session: sessionId,
-          errorContext: 'Failed to fetch notification counts',
+          errorContext: t('api.failedToFetchNotificationCounts'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -107,7 +108,7 @@ export const notificationsApi = createApi({
               { headers }
             ),
           session: sessionId,
-          errorContext: 'Failed to mark notification as read',
+          errorContext: t('api.failedToMarkNotificationAsRead'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -123,7 +124,7 @@ export const notificationsApi = createApi({
         return authenticatedRequest<{ read: number }>({
           requestFn: () => backendClient.api.notifications['read-all'].$post({}, { headers }),
           session: sessionId,
-          errorContext: 'Failed to mark notifications as read',
+          errorContext: t('api.failedToMarkNotificationsAsRead'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -141,7 +142,7 @@ export const notificationsApi = createApi({
           requestFn: () =>
             backendClient.api.notifications.availability.$post({ json: { playable } }, { headers }),
           session: sessionId,
-          errorContext: 'Failed to request an availability notification',
+          errorContext: t('api.failedToRequestAnAvailabilityNotification'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));

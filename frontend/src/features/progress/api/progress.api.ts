@@ -3,6 +3,7 @@ import type { PlayableRef, ProgressListResponse, ProgressRequest } from '@miaufl
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { AppDispatch, RootState } from '@store/store';
 
@@ -19,7 +20,7 @@ export const progressApi = createApi({
         return authenticatedRequest<ProgressListResponse>({
           requestFn: () => backendClient.api.progress.$get({}, { headers }),
           session,
-          errorContext: 'Failed to load playback progress',
+          errorContext: t('api.failedToLoadPlaybackProgress'),
           onInvalidSession: () => {
             api.dispatch({ type: 'auth/clearAuth' });
             api.dispatch(
@@ -37,7 +38,7 @@ export const progressApi = createApi({
         return authenticatedRequest<void>({
           requestFn: () => backendClient.api.progress.$post({ json: progress }, { headers }),
           session,
-          errorContext: 'Failed to save playback progress',
+          errorContext: t('api.failedToSavePlaybackProgress'),
           onInvalidSession: () => {
             api.dispatch({ type: 'auth/clearAuth' });
             api.dispatch(

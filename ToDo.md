@@ -4,14 +4,28 @@
 
 See [TV source support plan](docs/architecture/tv-source-support.md).
 
-- [ ] Support multi-episode video releases correctly (for example, two broadcast episodes in one file). Exact single-episode sources remain preferred and combined videos remain a last resort. Resolve catalog numbering, episode boundaries, resume/progress attribution, and subtitle timing before treating a combined file as episode-accurate; never split its duration evenly.
-- [ ] Evaluate bounded credits-tail analysis and mid/post-credit story-scene detection. Current playback uses named end-credit chapters (including anime ED/Ending), skips to a chapter-marked scene after credits, and otherwise uses the final-90-second countdown; validate any detector against offline fixtures before enabling automatic transitions.
-- [ ] Add end-to-end coverage for shared-pack playback and subtitles, late episode reattachment, competing watchlist capacity, notification focus behavior, and next-episode countdown cancellation.
+- [ ] Support episode-accurate playback of multi-episode video releases (for example, two broadcast episodes in one file).
+  - [x] Prefer exact single-episode sources, with combined files as a last resort.
+  - [x] Mark combined matches in playback sessions and suppress the timed next-episode countdown for them.
+  - [ ] Map each segment in a combined file to its catalog episode and resolve its actual boundaries without dividing the duration evenly.
+  - [ ] Attribute resume and viewing progress to the correct episode and align its subtitles to the segment.
+- [ ] Evaluate bounded credits-tail analysis and mid/post-credit story-scene detection.
+  - [x] Recognize named end-credit chapters, including anime ED/Ending, and skip to a chapter-marked scene after the credits when available.
+  - [x] Use the final-90-second next-episode countdown when chapter timing is unavailable.
+  - [ ] Evaluate bounded credits-tail and mid/post-credit scene detection on offline fixtures before enabling detector-driven transitions.
+- [ ] Add end-to-end coverage for TV source and playback flows.
+  - [x] Cover notification keyboard focus in a Storybook browser test.
+  - [x] Cover next-episode countdown cancellation in a player unit test.
+  - [ ] Add end-to-end tests for shared-pack playback and subtitles, late episode reattachment, and watchlist items competing for storage capacity.
+  - [ ] Cover notification focus and next-episode countdown cancellation in the full app flow.
 
 ## Details page
 
 - [ ] Add trailers
-- [ ] Change to icon buttons with tooltips
+  - [x] Store movie trailer codes when a source provider supplies them.
+  - [ ] Expose trailer availability on the details page and let users play the trailer.
+- [x] Change to icon buttons with tooltips
+- [ ] Add "You may also like" section
 
 ## Player
 
@@ -21,12 +35,14 @@ See [TV source support plan](docs/architecture/tv-source-support.md).
 
 ## Storage page
 
-- [ ] Redesign the page
+- [x] Redesign the page
 
 ## Sources
 
 - [ ] Extend the Watch Now button to have a quality selector for users that want to choose the quality
 - [ ] Update the source quality pill to show the highest quality available
+  - [x] Show the selected source's resolution and release type when available.
+  - [ ] Show the highest available quality even when playback selects a different source.
 
 ## Account
 
@@ -38,7 +54,10 @@ See [TV source support plan](docs/architecture/tv-source-support.md).
 
 ## VPN
 
-- [ ] Add an option in settings (gluetun service) to check the VPN tunnel's bandwidth, and to choose the country or exit node. Miauflix shares gluetun's network, so it can reach gluetun's control server at `127.0.0.1:8000` (`/v1/vpn/status`, `/v1/publicip/ip`; changing settings needs an entry in gluetun's `/gluetun/auth/config.toml`). Measure the tunnel apart from the torrents: latency and failure rate of the VPN IP checks plus a small download test, so a bad exit server can be told apart from a weak swarm.
+- [ ] Add Settings controls for VPN tunnel diagnostics and country or exit-node selection.
+  - [x] Use Gluetun health for VPN protection checks and support country selection through Docker configuration.
+  - [ ] Connect Settings to Gluetun's control server at `127.0.0.1:8000` using `/v1/vpn/status` and `/v1/publicip/ip`. Configure write access in `/gluetun/auth/config.toml` for changing country or exit node.
+  - [ ] Measure VPN IP-check latency and failure rate and run a small download test through the tunnel, independently of torrent performance.
 
 ## Storage privacy
 
@@ -46,17 +65,31 @@ See [Downloads, storage, and privacy](docs/features/storage-privacy.md#planned-e
 
 - [ ] Optional external database (for example AWS RDS PostgreSQL) for everything that links downloads to torrents: media-load's records (layouts with their per-download salts, source descriptors) and the backend's sources table. The server then keeps only the master key and unreadable files.
 - [ ] Encrypt what is stored there with the server's master key, so a dump of the external database is unreadable on its own.
+  - [x] Encrypt sensitive download layouts and source descriptors in local storage with the server's master key.
+  - [ ] Protect sensitive data in the external database, including exact file geometry that is currently stored in plaintext.
 - [ ] Optional locked boot: the master key is stored encrypted and unlocked by a passphrase given at startup (command line or UI), so a stopped server's disk holds nothing usable.
 - [ ] Re-encrypt downloads from before per-download keys, or offer to delete them.
-- [ ] Redact source identifiers in media-load's crash output (it has no uncaught-error handler).
+  - [x] Continue reading legacy downloads and allow admins to remove individual inactive downloads from Storage.
+  - [ ] Re-encrypt legacy downloads or identify them in the UI and offer targeted deletion.
+- [ ] Redact source identifiers in media-load's crash output.
+  - [x] Redact info hashes and magnet links in messages written through the media-load logger.
+  - [ ] Redact fatal errors and unhandled rejections that bypass the logger.
 
 ## Language
 
-- [ ] Add support for i18n
-- [ ] Translate into Italian
+- [x] Add support for i18n
+  - [x] Support localized catalog metadata and genres in the catalog service.
+  - [x] Localize interface strings.
+  - [x] Request catalog metadata in the profile's interface language.
+  - [ ] Localize search results and season and episode details (their routes take no language yet).
+- [x] Translate into Italian
 - [ ] Translate into Lithuanian
-- [ ] Allow users to choose a language for the interface (and default language for subs and audio)
+- [x] Allow users to choose a language for the interface (and default language for subs and audio)
+  - [x] Use browser language preferences for audio selection and subtitle search defaults.
+  - [x] Let users set their own interface, subtitle, and audio language defaults.
 - [ ] Allow users to choose if they want subs auto-enabled and which language
+  - [x] Remember per-title subtitle language and track selection, including subtitles turned off.
+  - [ ] Add a user-wide setting for automatic subtitle enablement and its language.
 
 ## Auto-translation
 
@@ -68,4 +101,4 @@ See [Downloads, storage, and privacy](docs/features/storage-privacy.md#planned-e
 
 ## UI
 
-- [ ] Use the same input elements everywhere ( like in the admin setup page )
+- [x] Use the same input elements everywhere ( like in the admin setup page )

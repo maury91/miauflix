@@ -3,6 +3,7 @@ import type { MediaIntentRef, PreloadIntentResponse, ReachableIntent } from '@mi
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -32,7 +33,7 @@ export const preloadApi = createApi({
               { headers }
             ),
           session,
-          errorContext: 'Failed to update playback preparation intent',
+          errorContext: t('api.failedToUpdatePlaybackPreparationIntent'),
           onInvalidSession: () => {
             api.dispatch({ type: 'auth/clearAuth' });
             api.dispatch(
@@ -55,7 +56,7 @@ export const preloadApi = createApi({
               { headers }
             ),
           session,
-          errorContext: 'Failed to clear playback preparation intent',
+          errorContext: t('api.failedToClearPlaybackPreparationIntent'),
         });
       },
     }),

@@ -2,6 +2,7 @@ import type { AppState } from '@app/hooks/useAppState';
 import { MotionConfig } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
+import { t } from '../../i18n';
 import * as styles from './logo.css';
 
 const logoSvgUrl = `${import.meta.env.BASE_URL}assets/images/logo.svg`;
@@ -136,7 +137,7 @@ export const Logo = ({
         data-above-intro={aboveIntro || undefined}
         data-pulsing={isIntro && pulsing ? 'true' : undefined}
         src={logoSvgUrl}
-        alt="Miauflix logo"
+        alt={t('common.logo')}
         onTransitionEnd={event => {
           if (event.propertyName === 'top') onPositionTransitionEnd?.();
         }}

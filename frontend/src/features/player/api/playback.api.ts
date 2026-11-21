@@ -7,6 +7,7 @@ import type {
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -39,7 +40,7 @@ export const playbackApi = createApi({
               { headers }
             ),
           session,
-          errorContext: 'Failed to search subtitles',
+          errorContext: t('api.failedToSearchSubtitles'),
           onInvalidSession: () => {
             api.dispatch({ type: 'auth/clearAuth' });
             api.dispatch(
@@ -68,7 +69,7 @@ export const playbackApi = createApi({
               { headers }
             ),
           session,
-          errorContext: 'Failed to start playback',
+          errorContext: t('api.failedToStartPlayback'),
           onInvalidSession: () => {
             api.dispatch({ type: 'auth/clearAuth' });
             api.dispatch(

@@ -8,6 +8,7 @@ import {
   useGlPaint,
   useGlParent,
 } from '@shared/design-system/gl';
+import { t } from '@shared/i18n';
 import { getBackdropPlacement } from '@shared/lib/backdrop-focus';
 import { artworkUrl } from '@shared/lib/media.utils';
 import { type FC, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -376,9 +377,9 @@ function GlHeroText({
     status?.kind === 'quality'
       ? status.label
       : status?.kind === 'unavailable'
-        ? 'No source'
+        ? t('home.noSource')
         : status?.kind === 'checking'
-          ? 'Checking…'
+          ? t('home.checking')
           : null;
   return (
     <header

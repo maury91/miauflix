@@ -1,4 +1,5 @@
 import { Button, Disclosure, EmptyState, Message, Text } from '@shared/design-system';
+import { t } from '@shared/i18n';
 import { presentError } from '@shared/lib/api-error';
 import { FocusGroup } from '@shared/navigation';
 import type { ReactNode } from 'react';
@@ -14,12 +15,16 @@ function technicalDetails(error: unknown): { label: string; value: ReactNode }[]
   const presentation = presentError(error, '');
   if (presentation.code === undefined) return [];
   const items: { label: string; value: ReactNode }[] = [];
-  if (presentation.message) items.push({ label: 'Error', value: presentation.message });
+  if (presentation.message)
+    items.push({ label: t('search.detail.error'), value: presentation.message });
   if (presentation.detail)
-    items.push({ label: 'Server error', value: <code>{presentation.detail}</code> });
-  items.push({ label: 'Code', value: <code>{presentation.code}</code> });
+    items.push({
+      label: t('search.detail.serverError'),
+      value: <code>{presentation.detail}</code>,
+    });
+  items.push({ label: t('search.detail.code'), value: <code>{presentation.code}</code> });
   if (presentation.errorId)
-    items.push({ label: 'Error id', value: <code>{presentation.errorId}</code> });
+    items.push({ label: t('search.detail.errorId'), value: <code>{presentation.errorId}</code> });
   return items;
 }
 
@@ -56,15 +61,17 @@ export function SearchStatePanel({
         <EmptyState
           visual={<SearchIcon />}
           heading={
-            isGenre ? `Nothing popular in “${query}” yet` : `No results for ‘${query.trim()}’`
+            isGenre
+              ? t('search.nothingPopular', { genre: query })
+              : t('search.noResults', { query: query.trim() })
           }
           actions={
             <Button navId={SEARCH_NAV.panelAction} onClick={onClear}>
-              Clear search
+              {t('search.clearSearch')}
             </Button>
           }
         >
-          {isGenre ? 'Try another genre.' : 'Try a shorter title or check the spelling.'}
+          {t(isGenre ? 'search.tryGenre' : 'search.tryShorter')}
         </EmptyState>
       </FocusGroup>
     );
@@ -74,13 +81,11 @@ export function SearchStatePanel({
   const items = technicalDetails(error);
   // Something an admin can fix is spelled out; anything else stays short, with the details
   // (and the error id to search the logs for) one press away.
-  const title = presentation.needsConfiguration
-    ? 'Search needs to be set up'
-    : 'Search is temporarily unavailable';
+  const title = presentation.needsConfiguration ? t('search.needsSetup') : t('search.unavailable');
   const description =
     presentation.needsConfiguration || presentation.code === 'service_unavailable'
       ? presentation.message
-      : 'Try again in a moment.';
+      : t('search.tryLater');
   return (
     <FocusGroup id={SEARCH_NAV.panel} layout="vertical">
       <div role="alert">
@@ -94,7 +99,7 @@ export function SearchStatePanel({
           }
           actions={
             <Button navId={SEARCH_NAV.panelAction} onClick={onRetry}>
-              Try again
+              {t('common.tryAgain')}
             </Button>
           }
         >
@@ -103,7 +108,11 @@ export function SearchStatePanel({
       </div>
       {items.length > 0 && (
         <div className={styles.details}>
-          <Disclosure navId={SEARCH_NAV.panelDetails} title="Technical details" headingLevel={3}>
+          <Disclosure
+            navId={SEARCH_NAV.panelDetails}
+            title={t('search.technicalDetails')}
+            headingLevel={3}
+          >
             <dl className={styles.list}>
               {items.map(item => (
                 <div key={item.label} className={styles.item}>

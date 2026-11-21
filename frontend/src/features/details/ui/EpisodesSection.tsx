@@ -10,6 +10,7 @@ import {
   ProgressSpinner,
   ScrollArea,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { artworkUrl } from '@shared/lib/media.utils';
 import { FocusGroup, type MoreRequest } from '@shared/navigation';
 import { realtimePlayableKey } from '@store/slices/realtime';
@@ -68,6 +69,7 @@ export function EpisodesSection({
   onNearEnd,
   pushedAvailability = {},
 }: EpisodesSectionProps) {
+  const t = useT();
   const headingId = useId();
   // Pointer users scroll without moving focus: near the end, the next season loads too
   const handleScroll = (viewport: HTMLDivElement) => {
@@ -81,7 +83,7 @@ export function EpisodesSection({
   return (
     <section className={styles.episodes} aria-labelledby={headingId}>
       <Heading level={2} id={headingId}>
-        Episodes
+        {t('details.episodes')}
       </Heading>
       <div className={styles.episodeScroll}>
         <ScrollArea onScroll={onNearEnd ? handleScroll : undefined}>
@@ -111,14 +113,17 @@ export function EpisodesSection({
                         <EpisodeItem
                           key={episode.id}
                           navId={episodeNavId(section.seasonNumber, episode.episodeNumber)}
-                          title={`E${episode.episodeNumber} · ${episode.title}`}
+                          title={t('details.episodeTitle', {
+                            number: episode.episodeNumber,
+                            title: episode.title,
+                          })}
                           description={episode.overview ?? undefined}
                           still={artworkUrl(episode.still ?? fallbackStill, 'still', 300)}
                           progress={episodeProgress(entry)}
                           progressText={episodeProgressLabel(entry) ?? undefined}
                           badge={
                             unavailable ? (
-                              <Badge icon={<NoSourceIcon />}>No source available</Badge>
+                              <Badge icon={<NoSourceIcon />}>{t('details.noSource')}</Badge>
                             ) : undefined
                           }
                           // Still playable: the player offers to notify when a source is out
@@ -136,24 +141,24 @@ export function EpisodesSection({
                 <div key={`error-${item.seasonNumber}`} className={styles.listStatus}>
                   <Message
                     tone="danger"
-                    toneLabel="Error"
+                    toneLabel={t('common.error')}
                     actions={
                       <Button
                         navId={`season-retry:${item.seasonNumber}`}
                         onClick={() => onRetrySeason(item.seasonNumber)}
                       >
-                        Retry
+                        {t('common.retry')}
                       </Button>
                     }
                   >
-                    Failed to load {item.name}.
+                    {t('details.seasonFailed', { season: item.name })}
                   </Message>
                 </div>
               ))}
           </FocusGroup>
           {loading && (
             <div className={styles.listStatus}>
-              <ProgressSpinner label="Loading more episodes..." showLabel />
+              <ProgressSpinner label={t('details.loadingEpisodes')} showLabel />
             </div>
           )}
         </ScrollArea>

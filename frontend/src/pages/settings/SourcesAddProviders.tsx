@@ -21,6 +21,8 @@ import {
   Text,
   TextField,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
+import { t as translate } from '@shared/i18n';
 import { FocusGroup } from '@shared/navigation';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
@@ -50,15 +52,15 @@ const SEARCH_DEBOUNCE_MS = 250;
 
 type Flag = 'imdb' | 'tmdb' | 'tvdb' | 'movies' | 'tv' | 'anime' | 'publicOnly' | 'supportedOnly';
 type Filters = Record<Flag, boolean>;
-const FILTERS: { flag: Flag; label: string }[] = [
-  { flag: 'imdb', label: 'IMDb search' },
-  { flag: 'tmdb', label: 'TMDB search' },
-  { flag: 'tvdb', label: 'TVDB search' },
-  { flag: 'movies', label: 'Movies' },
-  { flag: 'tv', label: 'TV' },
-  { flag: 'anime', label: 'Anime' },
-  { flag: 'publicOnly', label: 'Public only' },
-  { flag: 'supportedOnly', label: 'Hide unsupported' },
+const FILTERS: Flag[] = [
+  'imdb',
+  'tmdb',
+  'tvdb',
+  'movies',
+  'tv',
+  'anime',
+  'publicOnly',
+  'supportedOnly',
 ];
 /** IMDb search finds the exact title, and public ones need no account: the sensible start. */
 const DEFAULT_FILTERS: Filters = {
@@ -75,37 +77,43 @@ const DEFAULT_FILTERS: Filters = {
 function updatedText(sync: CardigannSyncStatus): string {
   if (sync.syncing)
     return sync.total
-      ? `Updating indexers… ${sync.ready} of ${sync.total} read`
-      : 'Downloading the indexer list…';
-  if (!sync.lastSyncAt) return 'The indexer list has not been downloaded yet.';
+      ? translate('indexers.updating', { ready: sync.ready, total: sync.total })
+      : translate('indexers.downloading');
+  if (!sync.lastSyncAt) return translate('indexers.neverDownloaded');
   const minutes = Math.max(0, Math.round((Date.now() - Date.parse(sync.lastSyncAt)) / 60_000));
   const ago =
     minutes < 1
-      ? 'just now'
+      ? translate('indexers.justNow')
       : minutes < 60
-        ? `${minutes} min ago`
-        : `${Math.round(minutes / 60)} h ago`;
+        ? translate('indexers.minutesAgo', { count: minutes })
+        : translate('indexers.hoursAgo', { count: Math.round(minutes / 60) });
   const change = sync.lastChange;
   const changes = change
     ? [
-        change.added && `${change.added} added`,
-        change.updated && `${change.updated} updated`,
-        change.removed && `${change.removed} removed`,
+        change.added && translate('indexers.added', { count: change.added }),
+        change.updated && translate('indexers.changed', { count: change.updated }),
+        change.removed && translate('indexers.removed', { count: change.removed }),
       ]
         .filter(Boolean)
         .join(', ')
     : '';
-  return `Updated ${ago}${changes ? ` (${changes})` : ''}. Refreshes every ${
-    sync.intervalMinutes === 60 ? 'hour' : `${sync.intervalMinutes} min`
-  }.`;
+  return translate('indexers.updated', {
+    ago,
+    changes: changes ? ` (${changes})` : '',
+    interval:
+      sync.intervalMinutes === 60
+        ? translate('indexers.hour')
+        : translate('indexers.minutes', { count: sync.intervalMinutes }),
+  });
 }
 
 function Supports({ entry, showSource }: { entry: CardigannDefinitionEntry; showSource: boolean }) {
+  const t = useT();
   const name = entry.name ?? entry.id;
   if (entry.status !== 'ready')
     return (
       <Text variant="caption" tone="secondary">
-        {entry.status === 'failed' ? 'Could not be read yet.' : 'Not read yet.'}
+        {entry.status === 'failed' ? t('indexers.readFailed') : t('indexers.notRead')}
       </Text>
     );
   const { supports } = entry;
@@ -113,20 +121,22 @@ function Supports({ entry, showSource }: { entry: CardigannDefinitionEntry; show
     <>
       {!entry.supported && (
         <Text variant="caption" tone="secondary">
-          {entry.reason ?? 'Not supported'}
+          {entry.reason ?? t('indexers.notSupported')}
         </Text>
       )}
-      <span className={styles.badges} aria-label={`${name} supports`} role="group">
-        {supports.imdb && <Badge tone="success">IMDb search</Badge>}
-        {supports.tmdb && <Badge tone="success">TMDB search</Badge>}
-        {supports.tvdb && <Badge tone="success">TVDB search</Badge>}
-        {supports.movies && <Badge>Movies</Badge>}
-        {supports.tv && <Badge>TV</Badge>}
-        {supports.anime && <Badge>Anime</Badge>}
-        {!supports.imdb && <Badge>Title search only</Badge>}
-        {entry.type && <Badge>{entry.type === 'public' ? 'Public' : entry.type}</Badge>}
+      <span className={styles.badges} aria-label={t('indexers.supports', { name })} role="group">
+        {supports.imdb && <Badge tone="success">{t('indexers.filter.imdb')}</Badge>}
+        {supports.tmdb && <Badge tone="success">{t('indexers.filter.tmdb')}</Badge>}
+        {supports.tvdb && <Badge tone="success">{t('indexers.filter.tvdb')}</Badge>}
+        {supports.movies && <Badge>{t('indexers.filter.movies')}</Badge>}
+        {supports.tv && <Badge>{t('indexers.filter.tv')}</Badge>}
+        {supports.anime && <Badge>{t('indexers.filter.anime')}</Badge>}
+        {!supports.imdb && <Badge>{t('indexers.titleOnly')}</Badge>}
+        {entry.type && <Badge>{entry.type === 'public' ? t('indexers.public') : entry.type}</Badge>}
         {entry.language && <Badge>{entry.language}</Badge>}
-        {entry.requiresFlareSolverr && <Badge tone="warning">Needs FlareSolverr</Badge>}
+        {entry.requiresFlareSolverr && (
+          <Badge tone="warning">{t('indexers.needsFlareSolverr')}</Badge>
+        )}
         {showSource && <Badge>{entry.sourceLabel}</Badge>}
       </span>
     </>
@@ -138,6 +148,7 @@ interface SourcesAddProvidersProps {
 }
 
 export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersProps) {
+  const t = useT();
   const [browsing, setBrowsing] = useState(false);
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
@@ -182,12 +193,12 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
         setEntries(current => (offset === 0 ? page.entries : [...current, ...page.entries]));
       } catch (requestError) {
         if (id === requestId.current)
-          setError(errorMessage(requestError, 'Could not load the indexer list.'));
+          setError(errorMessage(requestError, t('indexers.listFailed')));
       } finally {
         if (id === requestId.current) setLoading(false);
       }
     },
-    [loadPage]
+    [loadPage, t]
   );
 
   const filterKey = JSON.stringify([query, source, filters]);
@@ -238,9 +249,9 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
             : entry
         )
       );
-      onNotice(`Added ${view.name}. Turn it on when you are ready.`);
+      onNotice(t('indexers.addedNotice', { name: view.name }));
     } catch (requestError) {
-      setError(errorMessage(requestError, 'Could not add this indexer.'));
+      setError(errorMessage(requestError, t('indexers.addFailed')));
     }
   };
 
@@ -249,7 +260,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
     try {
       setSync(await syncNow().unwrap());
     } catch (requestError) {
-      setError(errorMessage(requestError, 'Could not update the indexer list.'));
+      setError(errorMessage(requestError, t('indexers.updateFailed')));
     }
   };
 
@@ -263,29 +274,29 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
         ...(form.apiKey ? { apiKey: form.apiKey } : {}),
       }).unwrap();
       setForm({ name: '', baseUrl: '', apiKey: '' });
-      onNotice(`Added ${view.name}. Turn it on when you are ready.`);
+      onNotice(t('indexers.addedNotice', { name: view.name }));
     } catch (requestError) {
-      setError(errorMessage(requestError, 'Could not add this endpoint.'));
+      setError(errorMessage(requestError, t('indexers.endpointFailed')));
     }
   };
 
   return (
     <>
       {error && (
-        <Message tone="danger" toneLabel="Error" live="assertive">
+        <Message tone="danger" toneLabel={t('common.error')} live="assertive">
           {error}
         </Message>
       )}
       <div className={styles.setupPart}>
         <Section
-          title="Add Jackett indexer"
+          title={t('indexers.jackettTitle')}
           headingLevel={3}
-          description="Public indexers from the Jackett definition list, kept up to date automatically. Some need FlareSolverr, and tracker definitions that need an account are not supported."
+          description={t('indexers.jackettDescription')}
         >
           {!browsing ? (
             <ActionGroup>
               <Button navId={NAV.browse} onClick={() => setBrowsing(true)}>
-                Browse indexers
+                {t('indexers.browse')}
               </Button>
             </ActionGroup>
           ) : (
@@ -294,7 +305,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                 <TextField
                   navId={NAV.search}
                   id="definition-search"
-                  label="Search indexers"
+                  label={t('indexers.search')}
                   value={search}
                   onChange={event => setSearch(event.target.value)}
                   placeholder="nyaa"
@@ -303,12 +314,12 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                   <Select
                     navId={NAV.source}
                     id="definition-source"
-                    label="Source"
+                    label={t('indexers.source')}
                     fullWidth
                     value={source}
                     onChange={setSource}
                     items={[
-                      { value: '', label: 'All sources' },
+                      { value: '', label: t('indexers.allSources') },
                       ...sync.sources.map(item => ({
                         value: item.key,
                         label: `${item.label}${item.total ? ` (${item.total})` : ''}`,
@@ -317,8 +328,8 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                   />
                 )}
                 <FocusGroup id={NAV.filters} layout="horizontal">
-                  <div className={styles.filters} role="group" aria-label="Filter indexers">
-                    {FILTERS.map(({ flag, label }) => (
+                  <div className={styles.filters} role="group" aria-label={t('indexers.filters')}>
+                    {FILTERS.map(flag => (
                       <FilterChip
                         key={flag}
                         navId={NAV.filter(flag)}
@@ -327,7 +338,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                           setFilters(current => ({ ...current, [flag]: selected }))
                         }
                       >
-                        {label}
+                        {t(`indexers.filter.${flag}`)}
                       </FilterChip>
                     ))}
                   </div>
@@ -345,20 +356,28 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                       disabled={sync.syncing || syncing.isLoading}
                       onClick={() => void checkNow()}
                     >
-                      Check for updates
+                      {t('indexers.check')}
                     </Button>
                   </div>
                 )}
                 {sync?.sources
                   .filter(item => item.lastError)
                   .map(item => (
-                    <Message key={item.key} tone="danger" toneLabel="Error" live="assertive">
-                      Last update of {item.label} failed: {item.lastError}
+                    <Message
+                      key={item.key}
+                      tone="danger"
+                      toneLabel={t('common.error')}
+                      live="assertive"
+                    >
+                      {t('indexers.sourceFailed', {
+                        source: item.label,
+                        error: item.lastError ?? '',
+                      })}
                     </Message>
                   ))}
                 {sync && sync.failed > 0 && !sync.syncing && (
-                  <Message tone="warning" toneLabel="Warning">
-                    {sync.failed} indexers could not be read and will be retried.
+                  <Message tone="warning" toneLabel={t('common.warning')}>
+                    {t('indexers.retrying', { count: sync.failed })}
                   </Message>
                 )}
                 <FocusGroup id={NAV.results} layout="vertical">
@@ -366,7 +385,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                     ref={resultsRef}
                     className={styles.results}
                     role="list"
-                    aria-label="Available indexers"
+                    aria-label={t('indexers.available')}
                   >
                     {entries.map(entry => {
                       const unusable = entry.status === 'ready' && !entry.supported;
@@ -394,19 +413,19 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                             disabled={entry.installed || unusable || cardigann.isLoading}
                             aria-label={
                               manySources
-                                ? `Add ${entry.id} from ${entry.sourceLabel}`
-                                : `Add ${entry.id}`
+                                ? t('indexers.addFrom', { id: entry.id, source: entry.sourceLabel })
+                                : t('indexers.addId', { id: entry.id })
                             }
                             onClick={() => void install(entry)}
                           >
-                            {entry.installed ? 'Added' : 'Add'}
+                            {entry.installed ? t('indexers.addedButton') : t('indexers.add')}
                           </Button>
                         </div>
                       );
                     })}
                     {loading && entries.length === 0 && (
                       <div className={styles.empty}>
-                        <ProgressSpinner label="Loading indexers…" />
+                        <ProgressSpinner label={t('indexers.loading')} />
                       </div>
                     )}
                     {more && hasObserver && (
@@ -420,16 +439,14 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                           disabled={loading}
                           onClick={() => void load(entries.length)}
                         >
-                          Show more
+                          {t('indexers.more')}
                         </Button>
                       </div>
                     )}
                     {!loading && entries.length === 0 && !error && (
                       <div className={styles.empty}>
                         <Text tone="secondary">
-                          {sync && sync.total === 0
-                            ? 'No indexers yet. They appear here once the list has been downloaded.'
-                            : 'No indexers match these filters.'}
+                          {sync && sync.total === 0 ? t('indexers.none') : t('indexers.noMatch')}
                         </Text>
                       </div>
                     )}
@@ -438,8 +455,8 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                 {sync && (
                   <span role="status">
                     <Text variant="caption" tone="secondary">
-                      Showing {entries.length} of {total} matching indexers
-                      {sync.total ? ` (${sync.total} in total)` : ''}
+                      {t('indexers.showing', { shown: entries.length, total })}
+                      {sync.total ? t('indexers.inTotal', { count: sync.total }) : ''}
                     </Text>
                   </span>
                 )}
@@ -451,8 +468,8 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
 
       <div className={styles.setupPart}>
         <FormSection
-          title="Add Torznab endpoint"
-          description="Use an indexer from your own Jackett or Prowlarr."
+          title={t('indexers.torznabTitle')}
+          description={t('indexers.torznabDescription')}
           headingLevel={3}
           onSubmit={() => void submitTorznab()}
           busy={torznab.isLoading}
@@ -463,21 +480,21 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
               loading={torznab.isLoading}
               disabled={!form.name.trim() || !form.baseUrl.trim()}
             >
-              Add endpoint
+              {t('indexers.addEndpoint')}
             </Button>
           }
         >
           <TextField
             navId={NAV.torznabName}
             id="torznab-name"
-            label="Name"
+            label={t('indexers.name')}
             value={form.name}
             onChange={event => setForm({ ...form, name: event.target.value })}
           />
           <TextField
             navId={NAV.torznabUrl}
             id="torznab-url"
-            label="Torznab URL"
+            label={t('indexers.url')}
             type="url"
             placeholder="http://jackett:9117/api/v2.0/indexers/all/results/torznab/"
             value={form.baseUrl}
@@ -486,9 +503,9 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
           <PasswordField
             navId={NAV.torznabKey}
             id="torznab-key"
-            label="API key"
-            showLabel="Show API key"
-            hideLabel="Hide API key"
+            label={t('indexers.apiKey')}
+            showLabel={t('indexers.showKey')}
+            hideLabel={t('indexers.hideKey')}
             autoComplete="off"
             value={form.apiKey}
             onChange={event => setForm({ ...form, apiKey: event.target.value })}
