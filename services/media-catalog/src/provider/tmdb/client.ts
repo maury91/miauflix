@@ -34,6 +34,7 @@ interface TmdbMovieDetails {
   id: number;
   imdb_id: string | null;
   title: string;
+  original_language?: string;
   overview: string;
   tagline: string | null;
   release_date: string;
@@ -55,6 +56,7 @@ interface TmdbTVShowDetails {
   id: number;
   external_ids: { imdb_id: string | null };
   name: string;
+  original_language?: string;
   overview: string;
   tagline: string | null;
   first_air_date: string;
@@ -302,6 +304,7 @@ export class TmdbClient {
       mediaId: data.id,
       imdbId: data.imdb_id,
       title: data.title,
+      originalLanguage: data.original_language ?? '',
       overview: data.overview,
       tagline: data.tagline ?? '',
       releaseDate: data.release_date,
@@ -364,6 +367,7 @@ export class TmdbClient {
       mediaId: data.id,
       imdbId: data.external_ids.imdb_id || null,
       name: data.name,
+      originalLanguage: data.original_language ?? '',
       overview: data.overview,
       tagline: data.tagline ?? '',
       firstAirDate: data.first_air_date,

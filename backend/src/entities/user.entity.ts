@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import type { AvatarLook } from '@mytypes/avatar.types';
+import type { LanguagePreferences } from '@mytypes/language-preferences.types';
 
 import { RefreshToken } from './refresh-token.entity';
 
@@ -48,6 +49,10 @@ export class User {
   /** When the pre-rendered avatar image was last saved; null when there is none. */
   @Column({ type: 'datetime', nullable: true })
   avatarRenderedAt: Date | null;
+
+  /** Interface, audio and subtitle languages; null until the profile sets them. */
+  @Column({ type: 'simple-json', nullable: true })
+  languagePreferences: LanguagePreferences | null;
 
   @OneToMany(() => RefreshToken, refreshToken => refreshToken.user)
   refreshTokens: Relation<RefreshToken>[];

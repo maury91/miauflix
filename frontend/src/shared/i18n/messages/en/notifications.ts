@@ -1,0 +1,31 @@
+import type { MessageSection } from '../types';
+
+/** The notifications panel and what each notification says. */
+export const notifications = {
+  'notifications.unread': 'Unread',
+  'notifications.new': 'New',
+  'notifications.markAll': 'Mark all as read',
+  'notifications.loadFailed': 'Notifications could not be loaded.',
+  'notifications.loading': 'Loading notifications…',
+  'notifications.unreadList': 'Unread notifications',
+  'notifications.loadingMore': 'Loading more…',
+  'notifications.caughtUp': 'You’re all caught up.',
+  'notifications.hideRead': 'Hide read notifications',
+  'notifications.showRead': 'Show read notifications',
+  'notifications.readList': 'Read notifications',
+  'notifications.betterQuality': 'Better quality available',
+  'notifications.was': '(was {previous})',
+  'notifications.availableIn': '{title} is now available in',
+  'notifications.availableAs': '{title} is now available as',
+  'notifications.newEpisode': 'New episode available',
+  'notifications.aNewEpisode': 'A new episode',
+  'notifications.episodeAvailable': '{episode} is now available to watch',
+  'notifications.justAdded': 'Just added',
+  'notifications.titleAvailable': '{title} is now available',
+  'notifications.withQuality': '{sentence} in',
+  'notifications.sentence': '{sentence}.',
+  'notifications.justNow': 'just now',
+  'notifications.minutesAgo': '{count}m ago',
+  'notifications.hoursAgo': '{count}h ago',
+  'notifications.daysAgo': '{count}d ago',
+} satisfies MessageSection;

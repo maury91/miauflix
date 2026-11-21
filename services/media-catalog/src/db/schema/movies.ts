@@ -9,6 +9,8 @@ export const movies = sqliteTable(
     mediaId: integer('media_id').primaryKey(),
     imdbId: text('imdb_id'),
     title: text().notNull().default(''),
+    /** ISO 639-1; null marks rows synced before it was stored, for one-time hydration. */
+    originalLanguage: text('original_language'),
     overview: text().notNull().default(''),
     tagline: text().notNull().default(''),
     releaseDate: text('release_date').notNull().default(''),

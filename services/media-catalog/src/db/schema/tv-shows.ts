@@ -6,6 +6,8 @@ export const tvShows = sqliteTable('tv_shows', {
   mediaId: integer('media_id').primaryKey(),
   imdbId: text('imdb_id'),
   name: text().notNull().default(''),
+  /** ISO 639-1; null marks rows synced before it was stored, for one-time hydration. */
+  originalLanguage: text('original_language'),
   overview: text().notNull().default(''),
   tagline: text().notNull().default(''),
   firstAirDate: text('first_air_date').notNull().default(''),

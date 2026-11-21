@@ -78,6 +78,18 @@ describe('upgradeSchema', () => {
     for (const name of present) {
       if (!baselineNames.has(name)) await legacy.query(`DROP TABLE "${name}"`);
     }
+    // Columns later migrations add did not exist yet either.
+    const columns = async (source: DataSource, table: string) =>
+      ((await source.query(`PRAGMA table_info("${table}")`)) as { name: string }[]).map(
+        column => column.name
+      );
+    for (const name of baselineNames) {
+      if (!present.has(name)) continue;
+      const kept = new Set(await columns(baseline, name));
+      for (const column of await columns(legacy, name)) {
+        if (!kept.has(column)) await legacy.query(`ALTER TABLE "${name}" DROP COLUMN "${column}"`);
+      }
+    }
     return legacy;
   };
 

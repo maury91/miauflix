@@ -1,0 +1,31 @@
+import type { MessageSection } from '../types';
+
+/** Search, its on-screen keyboard and its empty and error states. */
+export const search = {
+  'search.key.space': 'Space',
+  'search.key.delete': 'Delete',
+  'search.key.clear': 'Clear',
+  'search.search': 'Search',
+  'search.popularIn': 'Popular in “{genre}”',
+  'search.resultsFor': 'Results for “{query}”',
+  'search.keyboard': 'On-screen keyboard',
+  'search.placeholder': 'Search for movies, TV shows, anime...',
+  'search.detail.error': 'Error',
+  'search.detail.serverError': 'Server error',
+  'search.detail.code': 'Code',
+  'search.detail.errorId': 'Error id',
+  'search.nothingPopular': 'Nothing popular in “{genre}” yet',
+  'search.noResults': 'No results for ‘{query}’',
+  'search.clearSearch': 'Clear search',
+  'search.tryGenre': 'Try another genre.',
+  'search.tryShorter': 'Try a shorter title or check the spelling.',
+  'search.needsSetup': 'Search needs to be set up',
+  'search.unavailable': 'Search is temporarily unavailable',
+  'search.tryLater': 'Try again in a moment.',
+  'search.technicalDetails': 'Technical details',
+  'search.partFailed': 'Part of this search failed. Try again in a moment.',
+  'search.searching': 'Searching…',
+  'search.popular': 'Popular searches',
+  'search.recent': 'Recent searches',
+  'search.remove': 'Remove “{label}”',
+} satisfies MessageSection;

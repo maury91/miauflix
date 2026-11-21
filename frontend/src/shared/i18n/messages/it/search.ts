@@ -1,0 +1,31 @@
+import type { search as english } from '../en/search';
+import type { Translation } from '../types';
+
+export const search: Translation<typeof english> = {
+  'search.key.space': 'Spazio',
+  'search.key.delete': 'Cancella',
+  'search.key.clear': 'Svuota',
+  'search.search': 'Cerca',
+  'search.popularIn': 'Popolari in “{genre}”',
+  'search.resultsFor': 'Risultati per “{query}”',
+  'search.keyboard': 'Tastiera su schermo',
+  'search.placeholder': 'Cerca film, serie TV, anime...',
+  'search.detail.error': 'Errore',
+  'search.detail.serverError': 'Errore del server',
+  'search.detail.code': 'Codice',
+  'search.detail.errorId': 'Id dell’errore',
+  'search.nothingPopular': 'Ancora niente di popolare in “{genre}”',
+  'search.noResults': 'Nessun risultato per ‘{query}’',
+  'search.clearSearch': 'Cancella ricerca',
+  'search.tryGenre': 'Prova un altro genere.',
+  'search.tryShorter': 'Prova un titolo più breve o controlla l’ortografia.',
+  'search.needsSetup': 'La ricerca deve essere configurata',
+  'search.unavailable': 'La ricerca non è al momento disponibile',
+  'search.tryLater': 'Riprova tra poco.',
+  'search.technicalDetails': 'Dettagli tecnici',
+  'search.partFailed': 'Parte di questa ricerca non è riuscita. Riprova tra poco.',
+  'search.searching': 'Ricerca in corso…',
+  'search.popular': 'Ricerche popolari',
+  'search.recent': 'Ricerche recenti',
+  'search.remove': 'Rimuovi “{label}”',
+};

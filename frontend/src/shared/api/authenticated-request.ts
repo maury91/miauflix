@@ -1,6 +1,7 @@
 import type { ApiErrorBody, RefreshResponse } from '@miauflix/backend';
 import { isApiErrorBody, reportApiError } from '@shared/lib/api-error';
 
+import { t } from '../i18n';
 import { backendClient } from './backend-client';
 
 export interface ApiRequestError {
@@ -46,7 +47,7 @@ async function parseResponse<T>(
 function networkError(error: unknown): ApiRequestError {
   return {
     status: (error as { status?: number })?.status ?? 500,
-    data: error instanceof Error ? error.message : 'Unknown error',
+    data: error instanceof Error ? error.message : t('api.unknownError'),
   };
 }
 
@@ -67,7 +68,7 @@ export function refreshSession(session: string): Promise<ApiRequestResult<Refres
 
   const refresh = request<RefreshResponse>(
     () => backendClient.api.auth.refresh[':session'].$post({ param: { session } }),
-    'Refresh failed'
+    t('api.refreshFailed')
   ).finally(() => refreshes.delete(session));
 
   refreshes.set(session, refresh);

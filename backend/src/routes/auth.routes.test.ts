@@ -8,6 +8,7 @@ import { Hono } from 'hono';
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError, UserAlreadyExistsError } from '@errors/auth.errors';
 import { handleError } from '@middleware/error-handler.middleware';
+import { DEFAULT_LANGUAGE_PREFERENCES } from '@mytypes/language-preferences.types';
 
 import { createAuthRoutes } from './auth.routes';
 
@@ -201,6 +202,7 @@ describe('auth routes account creation', () => {
       role: UserRole.USER,
       avatar: created.avatar,
       avatarVersion: null,
+      languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
     });
   });
 

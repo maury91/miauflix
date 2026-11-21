@@ -1,0 +1,102 @@
+import type { storage as english } from '../en/storage';
+import type { Translation } from '../types';
+
+export const storage: Translation<typeof english> = {
+  'storage.kind.movie': 'Film',
+  'storage.kind.episode': 'Episodio',
+  'storage.kind.anime': 'Anime',
+  'storage.category.movie': 'Film',
+  'storage.category.episode': 'Episodi',
+  'storage.category.anime': 'Anime',
+  'storage.category.unknown': 'Download non riconosciuti',
+  'storage.category.remux': 'Remux per TV',
+  'storage.category.other': 'Altri dati',
+  'storage.unavailable': 'Non disponibile',
+  'storage.sort.size': 'Dimensione (dalla più grande)',
+  'storage.sort.name': 'Nome (A–Z)',
+  'storage.sort.type': 'Tipo',
+  'storage.sort.progress': 'Avanzamento del download',
+  'storage.sort.status': 'Stato',
+  'storage.status.active': 'Attivo',
+  'storage.status.available_offline': 'Disponibile offline',
+  'storage.status.local_only': 'Solo locale',
+  'storage.status.inactive': 'Inattivo',
+  'storage.status.unknown': 'Sconosciuto',
+  'storage.freeFailed': 'Impossibile liberare questo download. Riprova.',
+  'storage.seedingConfigured':
+    'I download completati restano in condivisione per il tempo configurato prima di diventare solo locali.',
+  'storage.seedingNone': 'I download completati diventano subito solo locali.',
+  'storage.seedingFor':
+    'I download completati restano in condivisione per {duration} prima di diventare solo locali.',
+  'storage.freed': 'Liberati {size} occupati da {name}.',
+  'storage.title': 'Archiviazione',
+  'storage.description':
+    'Cosa Miauflix conserva sul disco di questo server. Libera spazio per rimuovere un download.',
+  'storage.back': 'Torna alla Home',
+  'storage.confirmTitle': 'Liberare lo spazio occupato da {name}?',
+  'storage.confirmDescription':
+    'Verranno eliminati {size} da questo server. Per riprodurlo di nuovo dovrà essere scaricato ancora.',
+  'storage.deleteDownload': 'Elimina download',
+  'storage.updating': 'Aggiornamento dell’archiviazione…',
+  'storage.loading': 'Caricamento dell’archiviazione…',
+  'storage.refreshFailed':
+    'Impossibile aggiornare l’archiviazione. Vengono mostrati gli ultimi risultati caricati.',
+  'storage.loadFailed': 'Impossibile caricare l’archiviazione. Controlla la connessione e riprova.',
+  'storage.downloads': 'Download',
+  'storage.sortBy': 'Ordina per',
+  'storage.empty': 'Nessun contenuto scaricato occupa spazio.',
+  'storage.list': 'Contenuti scaricati',
+  'storage.freeLabel': 'Libera lo spazio occupato da {name}',
+  'storage.beingWatched': 'In riproduzione',
+  'storage.freeSpace': 'Libera spazio',
+  'storage.legend':
+    'Inattivo significa incompleto e non caricato; Attivo significa incompleto e caricato dal torrent. Disponibile offline significa che il video è completo ma il torrent può ancora caricarsi. Solo locale significa che è completo e il torrent non lo caricherà più. {seeding} Libera spazio elimina un download: dovrai scaricarlo di nuovo per riprodurlo.',
+  'storage.videoComplete': 'Video completo',
+  'storage.percentDownloaded': '{percent}% scaricato',
+  'storage.currentlyWatched': 'In riproduzione ora',
+  'storage.reserved': '{size} riservati',
+  'storage.tvRemux': 'Remux per TV {size}',
+  'storage.torrentLoadedUntil': 'Torrent caricato fino al {date}',
+  'storage.torrentMayReloadUntil': 'Il torrent può ricaricarsi fino al {date}',
+  'storage.duration.day': { one: '{count} giorno', other: '{count} giorni' },
+  'storage.duration.hour': { one: '{count} ora', other: '{count} ore' },
+  'storage.duration.minute': { one: '{count} minuto', other: '{count} minuti' },
+  'storage.duration.second': { one: '{count} secondo', other: '{count} secondi' },
+  'storage.field.STORAGE_THRESHOLD': 'Limite di archiviazione',
+  'storage.field.STORAGE_PLAYBACK_RESERVE': 'Riservato alla riproduzione',
+  'storage.field.CONTENT_SEED_DURATION_SECONDS': 'Condivisione dopo il download',
+  'storage.field.DOWNLOAD_PATH': 'Cartella dei download',
+  'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'La cartella dei download è riservata a Miauflix',
+  'storage.field.STORAGE_PAD_FILE_SIZES': 'Prealloca le dimensioni dei file',
+  'storage.seedDescription':
+    'Per quanto continuare a condividere un download dopo che il video è completo. Imposta 0 per smettere subito.',
+  'storage.zeroLimit':
+    'Un limite di 0 non conserva nulla: Miauflix non può salvare alcun download.',
+  'storage.limitOverDisk':
+    'Il limite supera lo spazio che questo disco può dare a Miauflix ({capacity}): i download si fermeranno quando il disco sarà pieno, prima di raggiungere il limite.',
+  'storage.reserveTakesAll':
+    'La riserva per la riproduzione occupa tutto il limite, quindi nulla viene scaricato in anticipo.',
+  'storage.settingsTitle': 'Impostazioni di archiviazione',
+  'storage.settingsDescription':
+    'Quanto può conservare Miauflix, quanto resta libero per la riproduzione e per quanto i download finiti continuano a essere condivisi. Le modifiche si applicano senza riavvio.',
+  'storage.settingsLoading': 'Caricamento delle impostazioni di archiviazione…',
+  'storage.settingsLoadFailed':
+    'Impossibile caricare le impostazioni di archiviazione. Puoi comunque modificarle nella pagina Configurazione.',
+  'storage.advanced': 'Avanzate',
+  'storage.advancedDescription': 'La cartella dei download e come vi vengono scritti i file.',
+  'storage.settingsActions': 'Azioni delle impostazioni di archiviazione',
+  'storage.saved': 'Impostazioni di archiviazione salvate.',
+  'storage.saveFailed': 'Impossibile salvare le impostazioni di archiviazione. Riprova.',
+  'storage.diskUsage': 'Uso del disco',
+  'storage.storageUsage': 'Uso dell’archiviazione',
+  'storage.usageUnavailable': 'Utilizzo non disponibile',
+  'storage.limit': 'Limite {size}',
+  'storage.notSaved': '(non salvato)',
+  'storage.spaceByKind': 'Spazio per tipo',
+  'storage.free': 'Libero',
+  'storage.counts':
+    'Miauflix conta {charged} sul suo limite di {limit}, incluso lo spazio riservato ai download in corso.',
+  'storage.aheadStop':
+    'I download anticipati si fermano a {size}, lasciando il resto alla riproduzione.',
+  'storage.checkValues': 'Controlla questi valori: {keys}.',
+};

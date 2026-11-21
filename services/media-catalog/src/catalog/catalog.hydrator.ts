@@ -27,6 +27,7 @@ export class CatalogHydrator {
       if (
         row &&
         row.logo_candidates !== null &&
+        row.original_language !== null &&
         row.details_synced_at &&
         Date.now() - row.details_synced_at < this.hydrationTtlMs
       ) {
@@ -55,6 +56,7 @@ export class CatalogHydrator {
         row &&
         row.logo !== null &&
         row.logo_candidates !== null &&
+        row.original_language !== null &&
         row.details_synced_at &&
         Date.now() - row.details_synced_at < this.hydrationTtlMs
       ) {

@@ -33,6 +33,8 @@ export interface ProviderMovie {
   mediaId: number;
   imdbId: string | null;
   title: string;
+  /** ISO 639-1 language the title was made in (TMDB's `original_language`); '' when unknown. */
+  originalLanguage?: string;
   overview: string;
   tagline: string;
   /** YYYY-MM-DD */
@@ -73,6 +75,8 @@ export interface ProviderTVShow {
   mediaId: number;
   imdbId: string | null;
   name: string;
+  /** ISO 639-1 language the title was made in (TMDB's `original_language`); '' when unknown. */
+  originalLanguage?: string;
   overview: string;
   tagline: string;
   /** YYYY-MM-DD */

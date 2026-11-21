@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
 import { handleError } from '@middleware/error-handler.middleware';
+import { DEFAULT_LANGUAGE_PREFERENCES } from '@mytypes/language-preferences.types';
 import type { ProfileService } from '@services/profile/profile.service';
 import { InvalidAvatarImageError, MAX_AVATAR_IMAGE_BYTES } from '@services/profile/profile.service';
 
@@ -25,6 +26,10 @@ const setupTest = (authenticated = true) => {
     updateProfile: jest.fn().mockResolvedValue(storedUser),
     saveAvatarImage: jest.fn().mockResolvedValue(storedUser),
     getAvatarImage: jest.fn().mockResolvedValue(Buffer.from(PNG)),
+    updateLanguagePreferences: jest.fn(async (_userId: string, languagePreferences: unknown) => ({
+      ...storedUser,
+      languagePreferences,
+    })),
   };
   const app = new Hono();
   app.use('*', async (c, next) => {
@@ -74,6 +79,7 @@ describe('profile routes', () => {
       role: UserRole.USER,
       avatar: storedUser.avatar,
       avatarVersion: storedUser.avatarRenderedAt.getTime(),
+      languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
     });
   });
 
@@ -105,6 +111,44 @@ describe('profile routes', () => {
   it('requires a session', async () => {
     const { app } = setupTest(false);
     expect((await patchProfile(app, { displayName: 'Sam' })).status).toBe(401);
+  });
+
+  describe('language preferences', () => {
+    const putPreferences = (app: Hono, body: unknown) =>
+      app.request('/auth/session/preferences', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+    const preferences = {
+      interface: 'it',
+      audio: { default: 'it', anime: 'original' },
+      subtitles: { default: 'it', anime: null },
+    };
+
+    it('saves the profile languages and returns its user with them', async () => {
+      const { app, profileService } = setupTest();
+
+      const response = await putPreferences(app, preferences);
+
+      expect(response.status).toBe(200);
+      expect(profileService.updateLanguagePreferences).toHaveBeenCalledWith(USER_ID, preferences);
+      expect(
+        ((await response.json()) as { languagePreferences: unknown }).languagePreferences
+      ).toEqual(preferences);
+    });
+
+    it.each([
+      ['original subtitles', { ...preferences, subtitles: { default: 'original', anime: null } }],
+      ['an original interface', { ...preferences, interface: 'original' }],
+      ['a region tag', { ...preferences, interface: 'it-IT' }],
+      ['a missing choice', { ...preferences, audio: { default: 'it' } }],
+      ['an unknown field', { ...preferences, theme: 'dark' }],
+    ])('rejects %s', async (_label, body) => {
+      const { app, profileService } = setupTest();
+      expect((await putPreferences(app, body)).status).toBe(400);
+      expect(profileService.updateLanguagePreferences).not.toHaveBeenCalled();
+    });
   });
 
   it('stores an uploaded PNG for the signed-in profile', async () => {

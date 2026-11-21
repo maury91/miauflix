@@ -13,6 +13,7 @@ import {
   randomPlushieLook,
   seededRandom,
 } from '@miauflix/service-contracts/profiles/v1';
+import { type MessageKey, t } from '@shared/i18n';
 import type {
   PlushieEyes,
   PlushieFabric,
@@ -136,16 +137,21 @@ export function toAvatar(look: PlushieLook): AvatarLook {
   ) as AvatarLook;
 }
 
-/** Labels for option values, e.g. `hardhat` → `Hard hat`. */
-const LABELS: Partial<Record<string, string>> = {
-  hardhat: 'Hard hat',
-  top: 'Top hat',
-  bowtie: 'Bow tie',
-  necktie: 'Necktie',
-  none: 'None',
-  graduation: 'Grad cap',
-};
-
+/** An option value's name, e.g. `hardhat` → "Hard hat"; unknown values are capitalized. */
 export function optionLabel(value: string): string {
-  return LABELS[value] ?? value.charAt(0).toUpperCase() + value.slice(1);
+  const key = `look.option.${value}` as MessageKey;
+  const label = t(key);
+  return label === key ? value.charAt(0).toUpperCase() + value.slice(1) : label;
+}
+
+/** A fur colour's name. */
+export function colorLabel(name: string): string {
+  const key = `look.color.${name.toLowerCase()}` as MessageKey;
+  const label = t(key);
+  return label === key ? name : label;
+}
+
+/** A fine-tune slider's name. */
+export function fineTuneLabel(key: FineTune['key']): string {
+  return t(`look.tune.${key}`);
 }
