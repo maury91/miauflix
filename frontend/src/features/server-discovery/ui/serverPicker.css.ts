@@ -9,16 +9,17 @@ export const page = style({
   bottom: 0,
   left: 0,
   zIndex: layer.page,
-  boxSizing: 'border-box',
-  overflowY: 'auto',
-  padding: `${space.xl} ${space.lg}`,
+  // Its ScrollArea scrolls, revealing what remote focus reaches
+  overflow: 'hidden',
   backgroundColor: color.canvas,
   color: color.text,
   fontFamily,
 });
 
 export const column = style({
+  boxSizing: 'border-box',
   width: '100%',
   maxWidth: '36rem',
   margin: '0 auto',
+  padding: `${space.xl} ${space.lg}`,
 });

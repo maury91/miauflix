@@ -1,9 +1,22 @@
 import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import type { AddressInfo } from 'node:net';
 import { test } from 'node:test';
 
-import { vpnConfigVariables, VpnGuard, type VpnGuardSettings, vpnSettingsFrom } from './index.js';
+import {
+  detectGluetun,
+  type GluetunState,
+  vpnConfigVariables,
+  VpnGuard,
+  type VpnGuardSettings,
+  vpnSettingsFrom,
+} from './index.js';
 
-const setup = (answer: () => unknown, initial: Partial<VpnGuardSettings> = {}) => {
+const setup = (
+  answer: () => unknown,
+  initial: Partial<VpnGuardSettings> = {},
+  gluetun: () => Promise<GluetunState> = async () => 'absent'
+) => {
   let now = 0;
   let calls = 0;
   const settings: VpnGuardSettings = { disabled: false, knownVpnIps: '', ...initial };
@@ -15,6 +28,7 @@ const setup = (answer: () => unknown, initial: Partial<VpnGuardSettings> = {}) =
       return answer();
     },
     now: () => now,
+    gluetun,
   });
   return {
     guard,
@@ -92,6 +106,7 @@ test('a check NordVPN never answers fails closed after the timeout', async () =>
     const guard = new VpnGuard({
       settings: () => ({ disabled: false, knownVpnIps: '' }),
       timeoutMs: 20,
+      gluetun: async () => 'absent',
     });
     // AbortSignal.timeout does not keep the process alive; a running service always is.
     const keepAlive = setInterval(() => undefined, 1000);
@@ -146,4 +161,105 @@ test('names the settings after the service', () => {
     vpnSettingsFrom('SOURCES', key => values[key]),
     { disabled: true, knownVpnIps: '' }
   );
+});
+
+test('behind a healthy gluetun is protected without asking NordVPN', async () => {
+  const { guard, calls } = setup(
+    () => ({ protected: false }),
+    {},
+    async () => 'healthy'
+  );
+  assert.equal(await guard.isProtected(), true);
+  assert.equal(guard.state, 'protected');
+  assert.equal(calls(), 0);
+});
+
+test('behind an unhealthy gluetun is unprotected without asking NordVPN', async () => {
+  const { guard, calls } = setup(
+    () => ({ protected: true }),
+    {},
+    async () => 'unhealthy'
+  );
+  assert.equal(await guard.isProtected(), false);
+  assert.equal(calls(), 0);
+});
+
+test('a failing gluetun detection falls back to NordVPN', async () => {
+  const { guard, calls } = setup(
+    () => ({ protected: true }),
+    {},
+    async () => {
+      throw new Error('detection failed');
+    }
+  );
+  assert.equal(await guard.isProtected(), true);
+  assert.equal(calls(), 1);
+});
+
+test('the disabled setting wins over gluetun', async () => {
+  let asked = false;
+  const { guard } = setup(
+    () => ({ protected: false }),
+    { disabled: true },
+    async () => {
+      asked = true;
+      return 'unhealthy';
+    }
+  );
+  assert.equal(await guard.isProtected(), true);
+  assert.equal(guard.state, 'disabled');
+  assert.equal(asked, false);
+});
+
+/** A health server answering `status`; returns its URL and a function closing it. */
+const healthServer = async (status: number) => {
+  const server = createServer((_request, response) => {
+    response.statusCode = status;
+    response.end(status === 200 ? '' : 'lookup github.com: i/o timeout');
+  });
+  await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
+  const { port } = server.address() as AddressInfo;
+  return {
+    url: `http://127.0.0.1:${port}/`,
+    close: () => new Promise<void>(resolve => server.close(() => resolve())),
+  };
+};
+
+test('detectGluetun reads the health server: 200 healthy, 500 unhealthy', async () => {
+  for (const [status, expected] of [
+    [200, 'healthy'],
+    [500, 'unhealthy'],
+    [404, 'absent'],
+  ] as const) {
+    const server = await healthServer(status);
+    try {
+      assert.equal(
+        await detectGluetun(undefined, { url: server.url, inContainer: () => true }),
+        expected
+      );
+    } finally {
+      await server.close();
+    }
+  }
+});
+
+test('detectGluetun is absent with nothing listening', async () => {
+  const server = await healthServer(200);
+  await server.close();
+  assert.equal(
+    await detectGluetun(undefined, { url: server.url, inContainer: () => true }),
+    'absent'
+  );
+});
+
+test('detectGluetun is absent outside a container, whatever answers', async () => {
+  const server = await healthServer(200);
+  try {
+    assert.equal(
+      await detectGluetun(undefined, { url: server.url, inContainer: () => false }),
+      'absent'
+    );
+  } finally {
+    await server.close();
+  }
 });

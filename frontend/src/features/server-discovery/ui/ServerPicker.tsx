@@ -5,6 +5,7 @@ import {
   FormSection,
   Heading,
   Message,
+  ScrollArea,
   Section,
   Stack,
   Surface,
@@ -103,7 +104,7 @@ const NAV = {
  * Shown on the TV until it has a server: among the servers found on its network, or by typing
  * the address. Its own navigation layer: Down goes through the servers, Search again, the address
  * and Connect; the address has the focus first, and the first server found takes it while nothing
- * was typed.
+ * was typed. A `ScrollArea` brings what the remote reaches into view when the list is long.
  */
 export function ServerPicker(props: ServerPickerProps) {
   return (
@@ -111,9 +112,11 @@ export function ServerPicker(props: ServerPickerProps) {
       <NavigationProvider>
         <SurfaceContextProvider value="solid">
           <FocusScope autoFocus initialId={NAV.address}>
-            <div className={styles.column}>
-              <ServerPickerContent {...props} />
-            </div>
+            <ScrollArea>
+              <div className={styles.column}>
+                <ServerPickerContent {...props} />
+              </div>
+            </ScrollArea>
           </FocusScope>
         </SurfaceContextProvider>
       </NavigationProvider>

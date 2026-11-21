@@ -24,14 +24,17 @@ import CloseIcon from '~icons/mdi/close';
 
 /**
  * A body taller than the dialog scrolls: then it joins Tab order, so a keyboard can scroll it
- * (a remote moves through the actions instead). Measured as it resizes.
+ * (a remote moves through the actions instead). Measured as it mounts (a dialog mounted closed
+ * renders its body only once it opens) and as it resizes.
  */
 function useScrollable<E extends HTMLElement>() {
-  const ref = useRef<E>(null);
+  const [element, ref] = useState<E | null>(null);
   const [scrollable, setScrollable] = useState(false);
   useLayoutEffect(() => {
-    const element = ref.current;
-    if (!element) return undefined;
+    if (!element) {
+      setScrollable(false);
+      return undefined;
+    }
     const measure = () => setScrollable(element.scrollHeight > element.clientHeight);
     measure();
     if (typeof ResizeObserver === 'undefined') return undefined;
@@ -39,7 +42,7 @@ function useScrollable<E extends HTMLElement>() {
     observer.observe(element);
     for (const child of Array.from(element.children)) observer.observe(child);
     return () => observer.disconnect();
-  }, []);
+  }, [element]);
   return { ref, scrollable };
 }
 

@@ -17,7 +17,10 @@
   if (original) {
     window.createImageBitmap = function (source) {
       var options = arguments[arguments.length - 1];
-      var resize = options && typeof options === 'object' && 'resizeWidth' in options;
+      var resize =
+        options &&
+        typeof options === 'object' &&
+        ('resizeWidth' in options || 'resizeHeight' in options);
       var entry = { kind: kindOf(source) + (resize ? '+resize' : ''), sync: 0, total: 0 };
       var t0 = now();
       var promise = original.apply(window, arguments);
@@ -31,6 +34,19 @@
     };
   }
 
+  // The pixels WebGL uploads: WebGL2's explicit width and height when given (texImage2D with 9
+  // arguments, texSubImage2D with 9), else a raster image's own size rather than its displayed
+  // one. An SVG without an intrinsic size (naturalWidth 0) uploads at its width and height.
+  var uploadSize = function (name, args, source, kind) {
+    if (args.length === 9) {
+      return name === 'texImage2D' ? [args[3], args[4]] : [args[4], args[5]];
+    }
+    if (kind === 'HTMLImageElement' && source.naturalWidth) {
+      return [source.naturalWidth, source.naturalHeight];
+    }
+    return [source.width, source.height];
+  };
+
   var wrap = function (proto, name) {
     if (!proto || !proto[name]) return;
     var fn = proto[name];
@@ -42,12 +58,8 @@
       }
       var t0 = now();
       var result = fn.apply(this, arguments);
-      log.upload.push({
-        kind: name + ':' + kind,
-        sync: now() - t0,
-        w: source.width,
-        h: source.height,
-      });
+      var size = uploadSize(name, arguments, source, kind);
+      log.upload.push({ kind: name + ':' + kind, sync: now() - t0, w: size[0], h: size[1] });
       return result;
     };
   };
