@@ -26,11 +26,11 @@ export const subtitles: Translation<typeof english> = {
   'subtitles.otherLanguages': 'Kitos kalbos',
   'subtitles.adjustTiming': 'Koreguoti subtitrų laiką ({offset} sek.)',
   'subtitles.notConfigured':
-    'Paieškai internete sukonfigūruokite „OpenSubtitles“. Vis dar galite naudoti vaizdo įrašo ar „torrent“ failo subtitrus.',
+    'Nustatykite „OpenSubtitles“, kad galėtumėte ieškoti internete. Vaizdo įrašo ar „torrent“ subtitrus galite naudoti ir toliau.',
   'subtitles.providerUnavailable': 'Subtitrų paslauga laikinai nepasiekiama.',
   'subtitles.noneFound': 'Subtitrų šia kalba nerasta.',
   'subtitles.searchFailed': 'Nepavyko ieškoti subtitrų. Galite žiūrėti toliau.',
-  'subtitles.loadFailed': 'Nepavyko įkelti pasirinkto subtitrų takelio.',
+  'subtitles.loadFailed': 'Nepavyko įkelti šio subtitrų takelio. Pabandykite pasirinkti kitą.',
   'subtitles.synchronization': 'Subtitrų sinchronizavimas',
   'subtitles.preview': 'Subtitrų laiko peržiūra',
   'subtitles.now': 'Dabar',

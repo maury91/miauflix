@@ -11,7 +11,7 @@ export const home = {
   'home.previousItems': 'Previous {category} items',
   'home.nextItems': 'Next {category} items',
   'home.loadFailed': 'Failed to load content.',
-  'home.nothingHere': 'Nothing here yet.',
+  'home.nothingHere': 'No titles here yet.',
   'home.navigation': 'Home navigation',
   'home.profile': 'Profile',
   'home.profileWatching': 'Profile for {name}',

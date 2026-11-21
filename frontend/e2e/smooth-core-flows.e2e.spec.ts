@@ -161,7 +161,7 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
                   kind === 'show'
                     ? document.body.textContent?.includes('First episode')
                     : [...document.querySelectorAll('button')].some(button =>
-                        button.textContent?.includes('Watch Now')
+                        button.textContent?.includes('Watch now')
                       ),
                 loading: document.body.textContent?.includes('Loading more episodes'),
               },
@@ -181,7 +181,7 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
     if (kind === 'show')
       await expect(page.getByRole('button', { name: /First episode/ })).toBeVisible();
     else
-      await expect(page.getByRole('button', { name: 'Watch Now', exact: true })).toBeInViewport();
+      await expect(page.getByRole('button', { name: 'Watch now', exact: true })).toBeInViewport();
     await page.waitForFunction(() =>
       Boolean((window as unknown as { firstDetailsFrame: unknown }).firstDetailsFrame)
     );
@@ -283,7 +283,7 @@ test('live Watch to first frame after three second details dwell', async ({ page
   await page.goto(process.env['SMOOTH_LIVE_DETAILS_URL']!);
   await page.waitForTimeout(3000);
   const start = Date.now();
-  await page.getByRole('button', { name: /Watch Now|Resume Watching/ }).click();
+  await page.getByRole('button', { name: /Watch now|Resume watching/ }).click();
   await page.waitForFunction(() => {
     const video = document.querySelector('video');
     return video && video.currentTime > 0 && video.readyState >= 2;

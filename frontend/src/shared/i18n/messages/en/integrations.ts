@@ -19,6 +19,6 @@ export const integrations = {
   'integrations.close': 'Close Trakt dialog',
   'integrations.openTrakt': 'Open Trakt',
   'integrations.copyCode': 'Copy code',
-  'integrations.letsGo': "Let's go",
+  'integrations.letsGo': 'Connect Trakt',
   'integrations.neverAsk': 'Don’t ask again',
 } satisfies MessageSection;

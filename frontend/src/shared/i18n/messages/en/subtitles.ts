@@ -26,11 +26,11 @@ export const subtitles = {
   'subtitles.otherLanguages': 'Other languages',
   'subtitles.adjustTiming': 'Adjust subtitle timing ({offset}s)',
   'subtitles.notConfigured':
-    'Set up OpenSubtitles to search online. You can still use subtitles from the video or torrent.',
+    'Set up OpenSubtitles to search online. Subtitles from the video or torrent still work.',
   'subtitles.providerUnavailable': 'The subtitle service is temporarily unavailable.',
   'subtitles.noneFound': 'No subtitles found for this language.',
   'subtitles.searchFailed': "Couldn't search for subtitles. You can keep watching.",
-  'subtitles.loadFailed': "Couldn't load the selected subtitle track.",
+  'subtitles.loadFailed': "Couldn't load this subtitle track. Try another track.",
   'subtitles.synchronization': 'Subtitle synchronization',
   'subtitles.preview': 'Subtitle timing preview',
   'subtitles.now': 'Now',

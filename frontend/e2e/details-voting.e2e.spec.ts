@@ -231,7 +231,7 @@ test.describe('details page voting controls', () => {
       'aria-pressed',
       'true'
     );
-    await expect(page.getByRole('button', { name: 'Watch Now', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Watch now', exact: true })).toBeVisible();
   });
 
   test('keeps the voting group usable on a narrow details layout', async ({ page }) => {

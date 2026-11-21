@@ -158,7 +158,7 @@ describe('Storage settings page', () => {
     expect(screen.getByText(/used or reserved 3 GiB of its 50 GiB limit/)).toBeInTheDocument();
     expect(
       screen.getByText(
-        /Local only means the video is complete and Miauflix will no longer load its torrent/
+        /Local only\. The video is complete and Miauflix will keep it on this server without reloading its torrent/
       )
     ).toBeInTheDocument();
     const row = within(screen.getByRole('list', { name: 'Downloaded content' }));
@@ -190,7 +190,7 @@ describe('Storage settings page', () => {
     expect(legend.getByText('Anime').parentElement).toHaveTextContent('Anime1 GiB');
     expect(screen.getByText('S01E03 · The Third')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Free space used by Example Anime (S01E03 · The Third)' })
+      screen.getByRole('button', { name: 'Delete download for Example Anime (S01E03 · The Third)' })
     ).toBeInTheDocument();
   });
 
@@ -419,9 +419,9 @@ describe('Storage settings page', () => {
 
   it('lets the admin cancel a removal without calling the API', () => {
     render(<StoragePage onDismiss={vi.fn()} />);
-    const free = screen.getByRole('button', { name: 'Free space used by Example Film' });
+    const free = screen.getByRole('button', { name: 'Delete download for Example Film' });
     pointerPress(free);
-    const dialog = screen.getByRole('dialog', { name: 'Free space used by Example Film?' });
+    const dialog = screen.getByRole('dialog', { name: 'Delete download for Example Film?' });
     expect(dialog).toHaveAccessibleDescription(/This frees up 2 GiB on the server/);
     // The least destructive choice comes first, and takes focus
     const cancel = screen.getByRole('button', { name: 'Cancel' });
@@ -435,7 +435,7 @@ describe('Storage settings page', () => {
   it('closes the confirmation on Back, then leaves the page on the next Back', () => {
     const onDismiss = vi.fn();
     render(<StoragePage onDismiss={onDismiss} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Delete download for Example Film' }));
     press('Escape');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(onDismiss).not.toHaveBeenCalled();
@@ -448,20 +448,22 @@ describe('Storage settings page', () => {
       unwrap: async () => ({ success: true }),
     }));
     render(<StoragePage onDismiss={vi.fn()} />);
-    pointerPress(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    pointerPress(screen.getByRole('button', { name: 'Delete download for Example Film' }));
     fireEvent.click(screen.getByRole('button', { name: 'Delete download' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     expect(storageApi.removeStorage).toHaveBeenCalledWith(7);
     expect(storageApi.refetch).not.toHaveBeenCalled();
     expect(screen.getByText(/Freed .* used by Example Film/)).toBeInTheDocument();
-    expect(focused()).toBe(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    expect(focused()).toBe(
+      screen.getByRole('button', { name: 'Delete download for Example Film' })
+    );
   });
 
   it('prevents removing a download while it is being watched', () => {
     storageApi.data!.items[0] = { ...baseItem, activeStreams: 1 };
     render(<StoragePage onDismiss={vi.fn()} />);
     expect(screen.getByText(/Playing now/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Free space used by Example Film' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Delete download for Example Film' })).toBeDisabled();
   });
 
   it('keeps the confirmation open and explains an API deletion failure', async () => {
@@ -471,7 +473,7 @@ describe('Storage settings page', () => {
       },
     }));
     render(<StoragePage onDismiss={vi.fn()} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Delete download for Example Film' }));
     fireEvent.click(screen.getByRole('button', { name: 'Delete download' }));
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'This download is currently being watched'

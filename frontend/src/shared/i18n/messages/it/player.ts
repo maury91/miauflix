@@ -14,11 +14,10 @@ export const player: Translation<typeof english> = {
   'player.failure.unavailable':
     '“{title}” non è ancora disponibile. Riprova più tardi o scegli un altro titolo.',
   'player.failure.session': 'Accedi di nuovo per guardare “{title}”.',
-  'player.failure.rateLimited':
-    'Troppe richieste per riprodurre “{title}”. Aspetta un attimo e riprova.',
+  'player.failure.rateLimited': 'Aspetta un attimo prima di riprovare a riprodurre “{title}”.',
   'player.failure.detail': 'Impossibile riprodurre “{title}”. {detail}',
   'player.failure.offline':
-    'Miauflix non riesce a contattare il servizio di riproduzione per “{title}”. Controlla la connessione e riprova.',
+    'Impossibile collegarsi per riprodurre “{title}”. Controlla la connessione e riprova.',
   'player.failure.server':
     'Impossibile preparare la fonte per “{title}”. Riprova o scegli un altro titolo.',
   'player.failure.generic': 'Impossibile avviare “{title}”. Riprova.',
@@ -52,7 +51,7 @@ export const player: Translation<typeof english> = {
   'player.watchCredits': 'Guarda i titoli di coda',
   'player.nextEpisode': 'Prossimo episodio',
   'player.playNext': 'Guarda il prossimo episodio ({seconds} s)',
-  'player.stay': 'Resta',
+  'player.stay': 'Resta su questo episodio',
   'player.notifyPromised': 'Ti avviseremo appena potrai guardare “{title}”.',
   'player.notifyMe': 'Avvisami',
   'player.notifyFailed': 'Impossibile attivare l’avviso. Riprova.',

@@ -124,6 +124,6 @@ describe('NotificationsMenu', () => {
       })
     );
 
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Retry' })).toHaveFocus());
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Try again' })).toHaveFocus());
   });
 });

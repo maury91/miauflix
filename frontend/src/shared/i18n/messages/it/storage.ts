@@ -33,9 +33,9 @@ export const storage: Translation<typeof english> = {
   'storage.description':
     'Qui trovi i file che Miauflix conserva sul server. Elimina i download per liberare spazio.',
   'storage.back': 'Torna alla Home',
-  'storage.confirmTitle': 'Liberare lo spazio occupato da {name}?',
+  'storage.confirmTitle': 'Eliminare il download di {name}?',
   'storage.confirmDescription':
-    'Libererai {size} sul server. Per riguardarlo dovrai scaricarlo di nuovo.',
+    'Libererai {size} sul server. Per guardarlo di nuovo dovrai riscaricarlo.',
   'storage.deleteDownload': 'Elimina download',
   'storage.updating': 'Aggiornamento dell’archiviazione…',
   'storage.loading': 'Caricamento dell’archiviazione…',
@@ -46,11 +46,11 @@ export const storage: Translation<typeof english> = {
   'storage.sortBy': 'Ordina per',
   'storage.empty': 'Nessun download salvato sul server.',
   'storage.list': 'Contenuti scaricati',
-  'storage.freeLabel': 'Libera lo spazio occupato da {name}',
+  'storage.freeLabel': 'Elimina il download di {name}',
   'storage.beingWatched': 'In riproduzione',
-  'storage.freeSpace': 'Libera spazio',
+  'storage.freeSpace': 'Elimina download',
   'storage.legend':
-    'Inattivo indica un download incompleto con il torrent non caricato. Attivo indica un download incompleto con il torrent caricato. Disponibile offline indica che il video è completo e Miauflix può ancora caricarne il torrent. Solo locale indica che il video è completo e Miauflix non caricherà più il torrent. {seeding} Libera spazio elimina il download. Per rivederlo dovrai scaricarlo di nuovo.',
+    'Attivo. Il download è incompleto e il torrent è caricato. Inattivo. Il download è incompleto e il torrent non è caricato. Disponibile offline. Il video è completo e Miauflix può ancora caricarne il torrent. Solo locale. Il video è completo e resta sul server senza che Miauflix ne ricarichi il torrent. {seeding}',
   'storage.videoComplete': 'Video completo',
   'storage.percentDownloaded': '{percent}% scaricato',
   'storage.currentlyWatched': 'In riproduzione ora',
@@ -69,7 +69,7 @@ export const storage: Translation<typeof english> = {
   'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'La cartella dei download è riservata a Miauflix',
   'storage.field.STORAGE_PAD_FILE_SIZES': 'Prealloca spazio per i file',
   'storage.seedDescription':
-    'Per quanto tempo Miauflix continua a condividere un video dopo averlo scaricato. Imposta 0 per interrompere subito la condivisione.',
+    'Scegli per quanto tempo condividere un download dopo che è terminato. Imposta 0 per interrompere subito la condivisione.',
   'storage.zeroLimit': 'Con un limite di 0, Miauflix non può salvare i download.',
   'storage.limitOverDisk':
     'Il limite supera lo spazio che Miauflix può usare su questo disco ({capacity}). I download si fermeranno quando il disco sarà pieno.',

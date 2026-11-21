@@ -58,7 +58,8 @@ export const indexers: Translation<typeof english> = {
   'indexers.loading': 'Įkeliamos indeksavimo paslaugos…',
   'indexers.more': 'Rodyti daugiau',
   'indexers.none': 'Indeksavimo paslaugos čia pasirodys, kai „Miauflix“ atsisiųs sąrašą.',
-  'indexers.noMatch': 'Nė viena indeksavimo paslauga neatitinka filtrų.',
+  'indexers.noMatch':
+    'Filtrų neatitinka nė viena indeksavimo paslauga. Pabandykite pakeisti filtrus.',
   'indexers.showing': 'Rodoma {shown} iš {total} atitikmenų',
   'indexers.inTotal': ' (iš viso {count})',
   'indexers.torznabTitle': 'Pridėti „Torznab“ API adresą',

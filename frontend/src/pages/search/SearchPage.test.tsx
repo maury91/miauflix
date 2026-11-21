@@ -61,7 +61,7 @@ describe('SearchPage', () => {
     // No submit arrow: the search runs as the keyboard types
     expect(screen.queryByRole('button', { name: 'Search' })).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Delete last character' }));
     expect(store.getState().search.query).toBe('a');
     fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
     expect(store.getState().search.query).toBe('');
@@ -148,7 +148,7 @@ describe('SearchPage', () => {
       );
     });
 
-    expect(screen.getByRole('heading', { name: 'Set up search to use it' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Search needs setup' })).toBeInTheDocument();
     expect(screen.getByText('Media Catalog is not configured.')).toBeInTheDocument();
     expect(screen.getByText('An admin needs to configure TMDB.')).toBeInTheDocument();
     const retry = screen.getByRole('button', { name: 'Try again' });
@@ -263,7 +263,7 @@ describe('SearchPage', () => {
 
   it('forgets a recent search from its remove action', () => {
     const { store } = setupTest(searchStateFixture);
-    fireEvent.click(screen.getByRole('button', { name: 'Remove “Silo”' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Remove “Silo” from recent searches' }));
     expect(store.getState().search.recents.map(recent => recent.label)).not.toContain('Silo');
   });
 

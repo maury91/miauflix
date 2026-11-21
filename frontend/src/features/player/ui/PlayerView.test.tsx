@@ -262,7 +262,7 @@ describe('PlayerView', () => {
     expect(
       await screen.findByText(/There isn't enough space to play this movie\./)
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 
   it('keeps a remote working while preparing and after a failure', async () => {
@@ -274,7 +274,7 @@ describe('PlayerView', () => {
 
     // While preparing, Back holds the focus so a remote's Back works
     expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
-    expect(await screen.findByRole('button', { name: 'Retry' })).toHaveFocus();
+    expect(await screen.findByRole('button', { name: 'Try again' })).toHaveFocus();
   });
 
   it('gives the focus back to Back when Retry removes its button', async () => {
@@ -286,12 +286,12 @@ describe('PlayerView', () => {
 
     render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
 
-    const retry = await screen.findByRole('button', { name: 'Retry' });
+    const retry = await screen.findByRole('button', { name: 'Try again' });
     retry.focus();
     fireEvent.click(retry);
 
     await waitFor(() =>
-      expect(screen.queryByRole('button', { name: 'Retry' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument()
     );
     expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
   });
@@ -362,8 +362,8 @@ describe('PlayerView', () => {
 
     render(<PlayerView playable={playable} title="The Shawshank Redemption" onBack={vi.fn()} />);
 
-    await screen.findByRole('button', { name: 'Retry' });
-    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    await screen.findByRole('button', { name: 'Try again' });
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
 
     await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
     expect(

@@ -14,7 +14,7 @@ export const api: Translation<typeof english> = {
   'api.failedToPromoteListMediaPriority': 'Nepavyko padidinti sąraše esančių kūrinių prioriteto',
   'api.failedToFetchLists': 'Nepavyko įkelti sąrašų',
   'api.failedToFetchWatchlistMembership':
-    'Nepavyko patikrinti, ar šis kūrinys įtrauktas į sąrašą „Žiūrėti vėliau“',
+    'Nepavyko patikrinti, ar kūrinys yra sąraše „Žiūrėti vėliau“',
   'api.failedToAddToWatchlist': 'Nepavyko įtraukti į sąrašą „Žiūrėti vėliau“',
   'api.failedToRemoveFromWatchlist': 'Nepavyko pašalinti iš sąrašo „Žiūrėti vėliau“',
   'api.failedToFetchMovieDetails': 'Nepavyko įkelti filmo informacijos',

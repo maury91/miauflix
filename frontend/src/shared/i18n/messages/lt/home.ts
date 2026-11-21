@@ -11,7 +11,7 @@ export const home: Translation<typeof english> = {
   'home.previousItems': 'Ankstesni kategorijos „{category}“ kūriniai',
   'home.nextItems': 'Kiti kategorijos „{category}“ kūriniai',
   'home.loadFailed': 'Nepavyko įkelti turinio.',
-  'home.nothingHere': 'Čia kol kas nieko nėra.',
+  'home.nothingHere': 'Čia kol kas nėra kūrinių.',
   'home.navigation': 'Pradžios meniu',
   'home.profile': 'Profilis',
   'home.profileWatching': 'Profilis „{name}“',

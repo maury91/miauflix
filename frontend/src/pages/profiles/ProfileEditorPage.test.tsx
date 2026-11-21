@@ -190,7 +190,9 @@ describe('ProfileEditorPage', () => {
     expect(screen.getByRole('heading', { name: 'Add profile' })).toBeInTheDocument();
     expect(screen.getByLabelText('Profile name')).toHaveValue('');
     fireEvent.change(screen.getByLabelText('Profile name'), { target: { value: 'Sam' } });
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email address'), {
+      target: { value: 'sam@example.com' },
+    });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'short' } });
     fireEvent.click(screen.getByRole('button', { name: 'Create profile' }));
     expect(await screen.findByText(/at least 8 characters/)).toBeInTheDocument();
@@ -213,10 +215,12 @@ describe('ProfileEditorPage', () => {
   it('moves on with the TV keyboard’s Done without submitting the form', () => {
     setupTest(null);
     fireEvent.change(screen.getByLabelText('Profile name'), { target: { value: 'Sam' } });
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email address'), {
+      target: { value: 'sam@example.com' },
+    });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough' } });
     const done = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, keyCode: 65376 });
-    screen.getByLabelText('Email').dispatchEvent(done);
+    screen.getByLabelText('Email address').dispatchEvent(done);
     expect(done.defaultPrevented).toBe(true);
     // The last field before Save: Done still never submits
     const lastDone = new KeyboardEvent('keydown', {
@@ -242,7 +246,9 @@ describe('ProfileEditorPage', () => {
     });
     setupTest(null);
     fireEvent.change(screen.getByLabelText('Profile name'), { target: { value: 'Sam' } });
-    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'sam@example.com' } });
+    fireEvent.change(screen.getByLabelText('Email address'), {
+      target: { value: 'sam@example.com' },
+    });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'long-enough' } });
     fireEvent.click(screen.getByRole('button', { name: 'Create profile' }));
     expect(

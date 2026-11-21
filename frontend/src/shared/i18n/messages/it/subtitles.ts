@@ -26,12 +26,13 @@ export const subtitles: Translation<typeof english> = {
   'subtitles.otherLanguages': 'Altre lingue',
   'subtitles.adjustTiming': 'Regola la sincronizzazione ({offset} s)',
   'subtitles.notConfigured':
-    'Per cercare online, configura OpenSubtitles. Puoi comunque usare i sottotitoli del video o del torrent.',
+    'Configura OpenSubtitles per cercare online. Puoi comunque usare i sottotitoli del video o del torrent.',
   'subtitles.providerUnavailable': 'Il servizio dei sottotitoli è momentaneamente indisponibile.',
   'subtitles.noneFound': 'Nessun sottotitolo trovato per questa lingua.',
   'subtitles.searchFailed':
     'La ricerca dei sottotitoli non è riuscita. Puoi continuare a guardare.',
-  'subtitles.loadFailed': 'Impossibile caricare la traccia selezionata.',
+  'subtitles.loadFailed':
+    'Impossibile caricare questa traccia. Prova un’altra traccia di sottotitoli.',
   'subtitles.synchronization': 'Sincronizzazione dei sottotitoli',
   'subtitles.preview': 'Anteprima della sincronizzazione',
   'subtitles.now': 'Adesso',

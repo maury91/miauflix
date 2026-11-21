@@ -56,7 +56,7 @@ export const indexers: Translation<typeof english> = {
   'indexers.loading': 'Caricamento degli indexer…',
   'indexers.more': 'Mostra altri',
   'indexers.none': 'Gli indexer compariranno qui appena Miauflix avrà scaricato l’elenco.',
-  'indexers.noMatch': 'Nessun indexer corrisponde a questi filtri.',
+  'indexers.noMatch': 'Nessun indexer corrisponde. Prova a cambiare i filtri.',
   'indexers.showing': '{shown} risultati su {total}',
   'indexers.inTotal': ' ({count} in totale)',
   'indexers.torznabTitle': 'Aggiungi un endpoint Torznab',

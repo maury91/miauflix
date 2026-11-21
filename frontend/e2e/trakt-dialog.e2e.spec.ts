@@ -46,7 +46,7 @@ test('contains keyboard navigation and returns control to Home after closing', a
   });
   expect((await firstListPageResponse).ok()).toBe(true);
   const dialog = page.getByRole('dialog', { name: 'Connect Trakt', exact: true });
-  const begin = dialog.getByRole('button', { name: "Let's go" });
+  const begin = dialog.getByRole('button', { name: 'Connect Trakt' });
   const dismiss = dialog.getByRole('button', { name: 'Don’t ask again' });
   const close = dialog.getByRole('button', { name: 'Close Trakt dialog' });
 

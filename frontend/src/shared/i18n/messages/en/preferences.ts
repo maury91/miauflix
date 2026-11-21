@@ -20,7 +20,7 @@ export const preferences = {
   'preferences.moviesAndShows': 'Movies and TV shows',
   'preferences.anime': 'Anime',
   'preferences.audioDescription':
-    'Miauflix starts in this language when the audio track is available.',
+    'Playback starts in this language when an audio track is available.',
   'preferences.animeAudioDescription': 'Choose a different audio language for anime.',
   'preferences.subtitlesDescription':
     'Miauflix looks for subtitles in this language first and offers them below the progress bar.',
@@ -29,6 +29,6 @@ export const preferences = {
   'preferences.sameAsMovies': 'Same as movies and TV shows',
   'preferences.original': 'Original language',
   'preferences.saving': 'Saving…',
-  'preferences.saved': 'Saved',
+  'preferences.saved': 'Preferences saved',
   'preferences.saveFailed': "Couldn't save your preferences. Try again.",
 } satisfies MessageSection;

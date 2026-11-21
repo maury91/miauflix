@@ -17,7 +17,7 @@ export const details: Translation<typeof english> = {
   'details.resume': 'Tęsti peržiūrą',
   'details.watchNow': 'Žiūrėti dabar',
   'details.notifyPromised': 'Pranešime, kai filmą bus galima žiūrėti.',
-  'details.noSourceYet': 'Šaltinio dar nėra',
+  'details.noSourceYet': 'Filmo dar negalima žiūrėti.',
   'details.loading': 'Įkeliama informacija…',
   'details.loadFailed': 'Nepavyko įkelti informacijos.',
   'details.noOverview': 'Aprašymo nėra.',

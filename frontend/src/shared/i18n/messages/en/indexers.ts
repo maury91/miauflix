@@ -56,7 +56,7 @@ export const indexers = {
   'indexers.loading': 'Loading indexers…',
   'indexers.more': 'Show more',
   'indexers.none': 'Indexers will appear here once Miauflix downloads the list.',
-  'indexers.noMatch': 'No indexers match these filters.',
+  'indexers.noMatch': 'No indexers match these filters. Try changing the filters.',
   'indexers.showing': 'Showing {shown} of {total} matches',
   'indexers.inTotal': ' ({count} in total)',
   'indexers.torznabTitle': 'Add Torznab endpoint',

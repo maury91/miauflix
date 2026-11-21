@@ -3,7 +3,7 @@ import type { MessageSection } from '../types';
 /** Search, its on-screen keyboard and its empty and error states. */
 export const search = {
   'search.key.space': 'Space',
-  'search.key.delete': 'Delete',
+  'search.key.delete': 'Delete last character',
   'search.key.clear': 'Clear',
   'search.search': 'Search',
   'search.popularIn': 'Popular in “{genre}”',
@@ -18,8 +18,8 @@ export const search = {
   'search.noResults': 'No results for “{query}”',
   'search.clearSearch': 'Clear search',
   'search.tryGenre': 'Try another genre.',
-  'search.tryShorter': 'Try a shorter title or check the spelling.',
-  'search.needsSetup': 'Set up search to use it',
+  'search.tryShorter': 'Try a shorter search or check your spelling.',
+  'search.needsSetup': 'Search needs setup',
   'search.unavailable': 'Search is temporarily unavailable',
   'search.tryLater': 'Try again in a moment.',
   'search.technicalDetails': 'Technical details',
@@ -28,5 +28,5 @@ export const search = {
   'search.resultCount': { one: '{count} result', other: '{count} results' },
   'search.popular': 'Popular searches',
   'search.recent': 'Recent searches',
-  'search.remove': 'Remove “{label}”',
+  'search.remove': 'Remove “{label}” from recent searches',
 } satisfies MessageSection;

@@ -14,11 +14,10 @@ export const player = {
   'player.failure.unavailable':
     "“{title}” isn't available to watch yet. Try again later or pick something else.",
   'player.failure.session': 'Sign in again to watch “{title}”.',
-  'player.failure.rateLimited':
-    'Too many requests to check playback for “{title}”. Wait a moment and try again.',
+  'player.failure.rateLimited': 'Wait a moment before trying to play “{title}” again.',
   'player.failure.detail': "Couldn't play “{title}”. {detail}",
   'player.failure.offline':
-    "Miauflix couldn't reach the playback service for “{title}”. Check your connection and try again.",
+    "Couldn't connect to play “{title}”. Check your connection and try again.",
   'player.failure.server':
     "Couldn't prepare the source for “{title}”. Try again or pick something else.",
   'player.failure.generic': "Couldn't start “{title}”. Try again.",
@@ -51,7 +50,7 @@ export const player = {
   'player.watchCredits': 'Watch credits',
   'player.nextEpisode': 'Next episode',
   'player.playNext': 'Play next episode ({seconds}s)',
-  'player.stay': 'Stay',
+  'player.stay': 'Stay on this episode',
   'player.notifyPromised': "We'll let you know when “{title}” is available to watch.",
   'player.notifyMe': 'Notify me',
   'player.notifyFailed': "Couldn't set up the alert. Try again.",

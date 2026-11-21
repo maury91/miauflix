@@ -20,7 +20,7 @@ export const preferences: Translation<typeof english> = {
   'preferences.moviesAndShows': 'Film e serie TV',
   'preferences.anime': 'Anime',
   'preferences.audioDescription':
-    'Miauflix avvia la riproduzione in questa lingua quando la traccia audio è disponibile.',
+    'La riproduzione inizia in questa lingua se è disponibile una traccia audio.',
   'preferences.animeAudioDescription': 'Puoi scegliere una lingua audio diversa per gli anime.',
   'preferences.subtitlesDescription':
     'Miauflix cerca prima i sottotitoli in questa lingua e li propone sotto la barra di avanzamento.',
@@ -30,6 +30,6 @@ export const preferences: Translation<typeof english> = {
   'preferences.sameAsMovies': 'Come film e serie TV',
   'preferences.original': 'Lingua originale',
   'preferences.saving': 'Salvataggio…',
-  'preferences.saved': 'Salvate',
+  'preferences.saved': 'Preferenze salvate',
   'preferences.saveFailed': 'Impossibile salvare le preferenze. Riprova.',
 };

@@ -3,7 +3,7 @@ import type { Translation } from '../types';
 
 export const search: Translation<typeof english> = {
   'search.key.space': 'Spazio',
-  'search.key.delete': 'Cancella',
+  'search.key.delete': 'Cancella l’ultimo carattere',
   'search.key.clear': 'Cancella tutto',
   'search.search': 'Cerca',
   'search.popularIn': 'I più popolari in “{genre}”',
@@ -18,8 +18,8 @@ export const search: Translation<typeof english> = {
   'search.noResults': 'Nessun risultato per “{query}”',
   'search.clearSearch': 'Cancella ricerca',
   'search.tryGenre': 'Prova un altro genere.',
-  'search.tryShorter': 'Prova un titolo più breve o controlla l’ortografia.',
-  'search.needsSetup': 'Configura la ricerca per poterla usare',
+  'search.tryShorter': 'Prova con meno parole o controlla l’ortografia.',
+  'search.needsSetup': 'La ricerca va configurata',
   'search.unavailable': 'La ricerca non è al momento disponibile',
   'search.tryLater': 'Riprova tra poco.',
   'search.technicalDetails': 'Dettagli tecnici',
@@ -28,5 +28,5 @@ export const search: Translation<typeof english> = {
   'search.resultCount': { one: '{count} risultato', other: '{count} risultati' },
   'search.popular': 'Ricerche popolari',
   'search.recent': 'Ricerche recenti',
-  'search.remove': 'Rimuovi “{label}”',
+  'search.remove': 'Rimuovi “{label}” dalle ricerche recenti',
 };

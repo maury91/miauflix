@@ -10,11 +10,12 @@ export const api: Translation<typeof english> = {
   'api.unableToCheckTraktAssociation': 'Impossibile verificare il collegamento con Trakt',
   'api.unableToLoadTraktAssociation': 'Impossibile caricare il collegamento con Trakt',
   'api.unableToDisconnectTrakt': 'Impossibile scollegare Trakt',
-  'api.failedToFetchList': 'Impossibile caricare la lista',
+  'api.failedToFetchList': 'Impossibile caricare l’elenco',
   'api.failedToPromoteListMediaPriority':
     'Impossibile aumentare la priorità dei titoli della lista',
-  'api.failedToFetchLists': 'Impossibile caricare le liste',
-  'api.failedToFetchWatchlistMembership': 'Impossibile verificare se il titolo è nella watchlist',
+  'api.failedToFetchLists': 'Impossibile caricare gli elenchi',
+  'api.failedToFetchWatchlistMembership':
+    'Impossibile verificare se il titolo è nella tua watchlist',
   'api.failedToAddToWatchlist': 'Impossibile aggiungere il titolo alla watchlist',
   'api.failedToRemoveFromWatchlist': 'Impossibile rimuovere il titolo dalla watchlist',
   'api.failedToFetchMovieDetails': 'Impossibile caricare i dettagli del film',

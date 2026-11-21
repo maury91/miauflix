@@ -74,7 +74,7 @@ describe('QrApprovalPage', () => {
     expect(await screen.findByText('Samsung TV')).toBeInTheDocument();
     expect(screen.getByText(/Code expires in \d:\d\d/)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Approve' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Approve sign-in' }));
     expect(await screen.findByRole('heading', { name: 'Sign-in approved' })).toBeInTheDocument();
     const approval = fetchMock.mock.calls.find((call: unknown[]) =>
       String(call[0] instanceof Request ? call[0].url : call[0]).endsWith('/approve')
@@ -83,20 +83,20 @@ describe('QrApprovalPage', () => {
     expect(requestHeaders(approval!).get('X-Session-Id')).toBe('phone');
   });
 
-  it('focuses Approve once the request has been checked, so the remote can confirm at once', async () => {
+  it('focuses Approve sign-in once the request has been checked, so the remote can confirm at once', async () => {
     // jsdom lays nothing out: give every element a box, so the navigation layer can focus it
     vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
       () => [{}] as unknown as DOMRectList
     );
     setupTest();
-    const approve = await screen.findByRole('button', { name: 'Approve' });
+    const approve = await screen.findByRole('button', { name: 'Approve sign-in' });
     await waitFor(() => expect(approve).toHaveAttribute('data-focused'));
     vi.mocked(Element.prototype.getClientRects).mockRestore();
   });
 
   it('declines the device', async () => {
     setupTest({ approve: json({ state: 'rejected' }) });
-    fireEvent.click(await screen.findByRole('button', { name: 'Decline' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Decline sign-in' }));
     expect(await screen.findByRole('heading', { name: 'Sign-in declined' })).toBeInTheDocument();
   });
 
@@ -112,7 +112,7 @@ describe('QrApprovalPage', () => {
       signedIn: false,
       availableSessions: [{ session: 'stored', user }],
     });
-    fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Approve sign-in' }));
     expect(await screen.findByRole('heading', { name: 'Sign-in approved' })).toBeInTheDocument();
     expect(requestHeaders(approvalCall(fetchMock)!).get('X-Session-Id')).toBe('stored');
   });
@@ -123,7 +123,7 @@ describe('QrApprovalPage', () => {
     act(() => {
       store.dispatch(addSession({ session: 'new', user: user as never }));
     });
-    expect(await screen.findByRole('button', { name: 'Approve' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Approve sign-in' })).toBeInTheDocument();
   });
 
   it('asks which profile approves when several are signed in', async () => {
@@ -136,7 +136,7 @@ describe('QrApprovalPage', () => {
       ],
     });
     fireEvent.click(await screen.findByRole('button', { name: 'Other' }));
-    fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Approve sign-in' }));
     expect(await screen.findByRole('heading', { name: 'Sign-in approved' })).toBeInTheDocument();
     expect(requestHeaders(approvalCall(fetchMock)!).get('X-Session-Id')).toBe('second');
   });
@@ -150,7 +150,7 @@ describe('QrApprovalPage', () => {
 
   it('shows the current state when the request changed meanwhile', async () => {
     const { fetchMock } = setupTest({ approve: json({ error: 'no longer pending' }, 409) });
-    fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Approve sign-in' }));
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(3));
   });
 });

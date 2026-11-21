@@ -19,6 +19,6 @@ export const integrations: Translation<typeof english> = {
   'integrations.close': 'Užverti „Trakt“ langą',
   'integrations.openTrakt': 'Atverti „Trakt“',
   'integrations.copyCode': 'Kopijuoti kodą',
-  'integrations.letsGo': 'Pradėti',
+  'integrations.letsGo': 'Susieti su „Trakt“',
   'integrations.neverAsk': 'Daugiau nebeklausti',
 };

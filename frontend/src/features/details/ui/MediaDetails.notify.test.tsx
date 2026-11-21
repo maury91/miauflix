@@ -76,10 +76,10 @@ beforeEach(() => {
 });
 
 describe('Details Watch action without a source', () => {
-  it('offers Notify Me instead of Watch Now and requests a notification', () => {
+  it('offers Notify me instead of Watch now and requests a notification', () => {
     const { onWatch } = setupTest();
-    expect(screen.queryByRole('button', { name: /Watch Now/ })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /Notify Me/ }));
+    expect(screen.queryByRole('button', { name: /Watch now/ })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Notify me/ }));
     expect(requestAvailability).toHaveBeenCalledWith(playable);
     expect(onWatch).not.toHaveBeenCalled();
   }, 15_000);
@@ -87,7 +87,7 @@ describe('Details Watch action without a source', () => {
   it('confirms a saved request and does not send it again', () => {
     Object.assign(notify, { isSuccess: true, originalArgs: playable });
     setupTest();
-    const button = screen.getByRole('button', { name: /Notification Set/ });
+    const button = screen.getByRole('button', { name: /Notification set/ });
     expect(button).toHaveAttribute('aria-disabled', 'true');
     fireEvent.click(button);
     expect(requestAvailability).not.toHaveBeenCalled();
@@ -97,19 +97,19 @@ describe('Details Watch action without a source', () => {
     Object.assign(notify, { isError: true, originalArgs: playable });
     setupTest();
     expect(screen.getByRole('alert')).toHaveTextContent("Couldn't set up the alert");
-    expect(screen.getByRole('button', { name: /Notify Me/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Notify me/ })).toBeInTheDocument();
   });
 
-  it('keeps Watch Now while sources are still being checked', () => {
+  it('keeps Watch now while sources are still being checked', () => {
     movie.sourceAvailability = 'pending';
     const { onWatch } = setupTest();
-    fireEvent.click(screen.getByRole('button', { name: /Watch Now/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Watch now/ }));
     expect(onWatch).toHaveBeenCalledWith(playable);
   });
 
-  it('switches back to Watch Now once a real source is pushed', () => {
+  it('switches back to Watch now once a real source is pushed', () => {
     const { store } = setupTest();
-    expect(screen.getByRole('button', { name: /Notify Me/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Notify me/ })).toBeInTheDocument();
     act(() => {
       store.dispatch(
         realtimeActions.sourceReceived({
@@ -119,6 +119,6 @@ describe('Details Watch action without a source', () => {
         } as never)
       );
     });
-    expect(screen.getByRole('button', { name: /Watch Now/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Watch now/ })).toBeInTheDocument();
   });
 });

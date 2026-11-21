@@ -36,7 +36,7 @@ export const Landing: Story = {
   play: async () => {
     // The dialog is in a portal, outside the canvas
     await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
-    await waitFor(() => expect(focusedName()).toBe("Let's go"));
+    await waitFor(() => expect(focusedName()).toBe('Connect Trakt'));
     await userEvent.keyboard('{ArrowRight}{ArrowRight}');
     await expect(focusedName()).toBe('Don’t ask again');
     await userEvent.keyboard('{ArrowUp}');
@@ -44,6 +44,6 @@ export const Landing: Story = {
     await userEvent.keyboard('{ArrowUp}{ArrowDown}');
     await expect(focusedName()).toBe('Don’t ask again');
     await userEvent.keyboard('{ArrowLeft}');
-    await expect(focusedName()).toBe("Let's go");
+    await expect(focusedName()).toBe('Connect Trakt');
   },
 };

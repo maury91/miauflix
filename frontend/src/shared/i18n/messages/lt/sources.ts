@@ -24,7 +24,7 @@ export const sources: Translation<typeof english> = {
   'sources.removedName': '„{name}“ pašalinta.',
   'sources.removeFailed': 'Nepavyko pašalinti: {name}.',
   'sources.order':
-    '„Miauflix“ tikrina šaltinius nuo viršaus žemyn. Perkelkite šaltinį aukščiau, jei norite, kad jis būtų tikrinamas anksčiau.',
+    '„Miauflix“ tikrina šaltinius nuo viršaus žemyn. Perkelkite šaltinį aukščiau, kad jis būtų tikrinamas anksčiau.',
   'sources.advanced': 'Išplėstiniai nustatymai',
   'sources.advancedDescription': '„Jackett“, „Torznab“ API adresai ir šaltinių saugyklos.',
   'sources.repositories': 'Šaltinių saugyklos',

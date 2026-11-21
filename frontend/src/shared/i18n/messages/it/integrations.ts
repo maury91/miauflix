@@ -19,6 +19,6 @@ export const integrations: Translation<typeof english> = {
   'integrations.close': 'Chiudi la finestra di Trakt',
   'integrations.openTrakt': 'Apri Trakt',
   'integrations.copyCode': 'Copia codice',
-  'integrations.letsGo': 'Iniziamo',
+  'integrations.letsGo': 'Collega Trakt',
   'integrations.neverAsk': 'Non chiedere più',
 };

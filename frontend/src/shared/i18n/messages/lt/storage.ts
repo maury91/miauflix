@@ -33,7 +33,7 @@ export const storage: Translation<typeof english> = {
   'storage.description':
     'Čia matote, ką „Miauflix“ saugo serveryje. Norėdami atlaisvinti vietos, ištrinkite atsisiuntimus.',
   'storage.back': 'Grįžti į pradžią',
-  'storage.confirmTitle': 'Atlaisvinti vietą, kurią užima „{name}“?',
+  'storage.confirmTitle': 'Ištrinti „{name}“ atsisiuntimą?',
   'storage.confirmDescription':
     'Serveryje atsilaisvins {size}. Norėdami vėl žiūrėti, turėsite atsisiųsti iš naujo.',
   'storage.deleteDownload': 'Ištrinti atsisiuntimą',
@@ -47,11 +47,11 @@ export const storage: Translation<typeof english> = {
   'storage.sortBy': 'Rikiuoti pagal',
   'storage.empty': 'Šiame serveryje nėra išsaugotų atsisiuntimų.',
   'storage.list': 'Atsisiųstas turinys',
-  'storage.freeLabel': 'Atlaisvinti vietą, kurią užima „{name}“',
+  'storage.freeLabel': 'Ištrinti „{name}“ atsisiuntimą',
   'storage.beingWatched': 'Žiūrima',
-  'storage.freeSpace': 'Atlaisvinti vietos',
+  'storage.freeSpace': 'Ištrinti atsisiuntimą',
   'storage.legend':
-    '„Neaktyvus“ reiškia, kad atsisiuntimas nebaigtas ir „torrent“ šaltinis neįkeltas. „Aktyvus“ reiškia, kad atsisiuntimas nebaigtas, o šaltinis įkeltas. „Galima žiūrėti neprisijungus“ reiškia, kad vaizdo įrašas atsiųstas ir „Miauflix“ dar gali įkelti jo „torrent“ šaltinį. „Tik serveryje“ reiškia, kad vaizdo įrašas atsiųstas ir jo „torrent“ šaltinis nebebus įkeliamas. {seeding} Atlaisvinus vietą atsisiuntimas ištrinamas. Norėdami žiūrėti, turėsite atsisiųsti iš naujo.',
+    'Aktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis įkeltas. Neaktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis neįkeltas. Galima žiūrėti neprisijungus. Vaizdo įrašas atsisiųstas ir „Miauflix“ dar gali įkelti jo „torrent“ šaltinį. Tik serveryje. Vaizdo įrašas lieka serveryje ir „Miauflix“ jo „torrent“ šaltinio nebeįkels. {seeding}',
   'storage.videoComplete': 'Vaizdo įrašas atsiųstas',
   'storage.percentDownloaded': 'Atsiųsta {percent} %',
   'storage.currentlyWatched': 'Dabar žiūrima',
@@ -90,7 +90,7 @@ export const storage: Translation<typeof english> = {
   'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'Atsisiuntimų aplankas skirtas tik „Miauflix“',
   'storage.field.STORAGE_PAD_FILE_SIZES': 'Iš anksto skirti vietos failams',
   'storage.seedDescription':
-    'Kiek laiko „Miauflix“ dalijasi visu atsisiųstu vaizdo įrašu. Nustatykite 0, jei norite baigti dalytis iškart.',
+    'Pasirinkite, kiek laiko dalytis failu, kai jis atsisiųstas. Įveskite 0, kad dalijimasis baigtųsi iškart.',
   'storage.zeroLimit': 'Nustačius 0 limitą, „Miauflix“ negalės išsaugoti atsisiuntimų.',
   'storage.limitOverDisk':
     'Limitas viršija „Miauflix“ prieinamą vietą diske ({capacity}). Kai diskas prisipildys, atsisiuntimai sustos.',

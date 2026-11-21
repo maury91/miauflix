@@ -22,7 +22,7 @@ export const sources = {
   'sources.removedName': 'Removed {name}.',
   'sources.removeFailed': 'Could not remove {name}.',
   'sources.order':
-    'Miauflix checks sources from top to bottom. Move a source up to check it sooner.',
+    'Miauflix checks sources from top to bottom. Move a source up to check it earlier.',
   'sources.advanced': 'Advanced setup',
   'sources.advancedDescription': 'Jackett, Torznab endpoints, and repositories.',
   'sources.repositories': 'Repositories',

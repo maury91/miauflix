@@ -14,11 +14,10 @@ export const player: Translation<typeof english> = {
   'player.failure.unavailable':
     '„{title}“ dar negalima žiūrėti. Bandykite vėliau arba pasirinkite ką nors kita.',
   'player.failure.session': 'Prisijunkite dar kartą, kad galėtumėte žiūrėti „{title}“.',
-  'player.failure.rateLimited':
-    'Per daug „{title}“ atkūrimo patikrų. Šiek tiek palaukite ir bandykite dar kartą.',
+  'player.failure.rateLimited': 'Šiek tiek palaukite prieš bandydami paleisti „{title}“ dar kartą.',
   'player.failure.detail': 'Nepavyko paleisti „{title}“. {detail}',
   'player.failure.offline':
-    '„Miauflix“ nepavyko susisiekti su „{title}“ atkūrimo paslauga. Patikrinkite ryšį ir bandykite dar kartą.',
+    'Nepavyko prisijungti, kad būtų galima paleisti „{title}“. Patikrinkite ryšį ir bandykite dar kartą.',
   'player.failure.server':
     'Nepavyko paruošti „{title}“ šaltinio. Bandykite dar kartą arba pasirinkite ką nors kita.',
   'player.failure.generic': 'Nepavyko paleisti „{title}“. Bandykite dar kartą.',
@@ -53,7 +52,7 @@ export const player: Translation<typeof english> = {
   'player.watchCredits': 'Žiūrėti titrus',
   'player.nextEpisode': 'Kita serija',
   'player.playNext': 'Žiūrėti kitą seriją ({seconds} sek.)',
-  'player.stay': 'Likti čia',
+  'player.stay': 'Likti prie šios serijos',
   'player.notifyPromised': 'Pranešime, kai „{title}“ bus galima žiūrėti.',
   'player.notifyMe': 'Pranešti man',
   'player.notifyFailed': 'Nepavyko įjungti pranešimo. Pabandykite dar kartą.',

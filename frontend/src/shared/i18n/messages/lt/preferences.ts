@@ -19,8 +19,7 @@ export const preferences: Translation<typeof english> = {
   'preferences.subtitles': 'Subtitrai',
   'preferences.moviesAndShows': 'Filmai ir serialai',
   'preferences.anime': 'Anime',
-  'preferences.audioDescription':
-    'Jei yra šios kalbos garso takelis, „Miauflix“ jį parenka įjungus kūrinį.',
+  'preferences.audioDescription': 'Jei yra garso takelis šia kalba, atkūrimas pradedamas su juo.',
   'preferences.animeAudioDescription': 'Anime kūriniams galite pasirinkti kitą garso kalbą.',
   'preferences.subtitlesDescription':
     '„Miauflix“ pirmiausia ieško subtitrų šia kalba ir siūlo juos po atkūrimo juosta.',
@@ -29,6 +28,6 @@ export const preferences: Translation<typeof english> = {
   'preferences.sameAsMovies': 'Kaip filmams ir serialams',
   'preferences.original': 'Originalo kalba',
   'preferences.saving': 'Saugoma…',
-  'preferences.saved': 'Išsaugota',
+  'preferences.saved': 'Nuostatos išsaugotos',
   'preferences.saveFailed': 'Nepavyko išsaugoti nuostatų. Pabandykite dar kartą.',
 };

@@ -11,7 +11,7 @@ export const home: Translation<typeof english> = {
   'home.previousItems': '{category}: precedenti',
   'home.nextItems': '{category}: successivi',
   'home.loadFailed': 'Impossibile caricare i contenuti.',
-  'home.nothingHere': 'Ancora niente qui.',
+  'home.nothingHere': 'Non ci sono ancora titoli.',
   'home.navigation': 'Navigazione della Home',
   'home.profile': 'Profilo',
   'home.profileWatching': 'Profilo di {name}',

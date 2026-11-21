@@ -13,7 +13,7 @@ export const common: Translation<typeof english> = {
   'common.save': 'Salva',
   'common.warning': 'Attenzione',
   'common.tryAgain': 'Riprova',
-  'common.saving': 'Salvataggio',
+  'common.saving': 'Salvataggio…',
   'common.somethingWrong': 'Qualcosa è andato storto',
   'common.unexpected': 'Ricarica la pagina. Se il problema si ripresenta, contatta l’assistenza.',
   'common.technicalDetails': 'Dettagli tecnici',

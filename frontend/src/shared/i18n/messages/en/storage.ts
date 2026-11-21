@@ -33,9 +33,8 @@ export const storage = {
   'storage.description':
     'See what Miauflix stores on this server. Delete downloads to free up space.',
   'storage.back': 'Back to Home',
-  'storage.confirmTitle': 'Free space used by {name}?',
-  'storage.confirmDescription':
-    "This frees up {size} on the server. You'll need to download it again before you can watch it.",
+  'storage.confirmTitle': 'Delete download for {name}?',
+  'storage.confirmDescription': 'This frees up {size} on the server. Download it again to watch.',
   'storage.deleteDownload': 'Delete download',
   'storage.updating': 'Updating storage…',
   'storage.loading': 'Loading storage…',
@@ -45,11 +44,11 @@ export const storage = {
   'storage.sortBy': 'Sort by',
   'storage.empty': 'No downloads stored on this server.',
   'storage.list': 'Downloaded content',
-  'storage.freeLabel': 'Free space used by {name}',
+  'storage.freeLabel': 'Delete download for {name}',
   'storage.beingWatched': 'Being watched',
-  'storage.freeSpace': 'Free space',
+  'storage.freeSpace': 'Delete download',
   'storage.legend':
-    "Inactive means the download is incomplete and its torrent isn’t loaded. Active means the download is incomplete and its torrent is loaded. Available offline means the video is complete and Miauflix can still load its torrent. Local only means the video is complete and Miauflix will no longer load its torrent. {seeding} Free space deletes the download. You'll need to download it again to watch it.",
+    'Active. The download is incomplete and its torrent is loaded. Inactive. The download is incomplete and its torrent is unloaded. Available offline. The video is complete and Miauflix can still load its torrent. Local only. The video is complete and Miauflix will keep it on this server without reloading its torrent. {seeding}',
   'storage.videoComplete': 'Video complete',
   'storage.percentDownloaded': '{percent}% downloaded',
   'storage.currentlyWatched': 'Playing now',
@@ -68,7 +67,7 @@ export const storage = {
   'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'Download folder is exclusive to Miauflix',
   'storage.field.STORAGE_PAD_FILE_SIZES': 'Pad file sizes',
   'storage.seedDescription':
-    'How long Miauflix keeps sharing a download after the video finishes downloading. Set it to 0 to stop sharing right away.',
+    'Choose how long to share each download after it finishes. Set it to 0 to stop sharing right away.',
   'storage.zeroLimit': 'A storage limit of 0 prevents Miauflix from saving downloads.',
   'storage.limitOverDisk':
     'The limit exceeds the space Miauflix can use on this disk ({capacity}). Downloads will stop when the disk fills up.',
@@ -84,7 +83,7 @@ export const storage = {
   'storage.advancedDescription': 'Choose the download folder and how Miauflix writes files to it.',
   'storage.settingsActions': 'Storage settings actions',
   'storage.saved': 'Storage settings saved.',
-  'storage.saveFailed': 'Could not save the storage settings. Please try again.',
+  'storage.saveFailed': "Couldn't save storage settings. Try again.",
   'storage.diskUsage': 'Disk usage',
   'storage.storageUsage': 'Storage usage',
   'storage.usageUnavailable': 'Usage unavailable',

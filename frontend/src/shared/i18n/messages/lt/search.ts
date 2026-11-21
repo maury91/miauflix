@@ -3,7 +3,7 @@ import type { Translation } from '../types';
 
 export const search: Translation<typeof english> = {
   'search.key.space': 'Tarpas',
-  'search.key.delete': 'Ištrinti',
+  'search.key.delete': 'Ištrinti paskutinį simbolį',
   'search.key.clear': 'Išvalyti',
   'search.search': 'Ieškoti',
   'search.popularIn': 'Populiariausi žanre „{genre}“',
@@ -18,8 +18,8 @@ export const search: Translation<typeof english> = {
   'search.noResults': 'Pagal „{query}“ nieko nerasta',
   'search.clearSearch': 'Išvalyti paiešką',
   'search.tryGenre': 'Išbandykite kitą žanrą.',
-  'search.tryShorter': 'Įveskite trumpesnį pavadinimą arba patikrinkite rašybą.',
-  'search.needsSetup': 'Pirmiausia sukonfigūruokite paiešką',
+  'search.tryShorter': 'Įveskite trumpesnę užklausą arba patikrinkite rašybą.',
+  'search.needsSetup': 'Paiešką reikia sukonfigūruoti',
   'search.unavailable': 'Paieška laikinai nepasiekiama',
   'search.tryLater': 'Netrukus pabandykite dar kartą.',
   'search.technicalDetails': 'Techninė informacija',
@@ -33,5 +33,5 @@ export const search: Translation<typeof english> = {
   },
   'search.popular': 'Populiarios paieškos',
   'search.recent': 'Naujausios paieškos',
-  'search.remove': 'Pašalinti „{label}“',
+  'search.remove': 'Pašalinti „{label}“ iš naujausių paieškų',
 };

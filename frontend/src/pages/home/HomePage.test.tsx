@@ -730,7 +730,7 @@ describe('HomePage focus transitions', () => {
         const background = screen.getByTestId('card-0');
         background.focus();
         await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 });
-        const first = screen.getByRole('button', { name: "Let's go" });
+        const first = screen.getByRole('button', { name: 'Connect Trakt' });
         const never = screen.getByRole('button', { name: 'Don’t ask again' });
         await waitFor(() => expect(first).toHaveFocus());
         press('ArrowRight');

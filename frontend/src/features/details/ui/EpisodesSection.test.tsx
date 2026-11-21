@@ -78,7 +78,7 @@ describe('EpisodesSection', () => {
   it('offers a retry for a season that failed to load', () => {
     const props = renderSection({ failedSeasons: [3] });
     expect(screen.getByText(/Failed to load Season 3/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
     expect(props.onRetrySeason).toHaveBeenCalledWith(3);
   });
 

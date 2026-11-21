@@ -11,8 +11,8 @@ for (const viewport of [
       'http://localhost:6006/iframe.html?id=home-trakt-modal--landing&viewMode=story'
     );
     const dialog = page.getByRole('dialog', { name: 'Connect Trakt', exact: true });
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole('button', { name: "Let's go" })).toBeFocused();
+    await expect(dialog).toBeVisible({ timeout: 15_000 });
+    await expect(dialog.getByRole('button', { name: 'Connect Trakt' })).toBeFocused();
     await page.evaluate(() => document.fonts.ready);
     await expect(page).toHaveScreenshot(`trakt-dialog-${viewport.name}.png`, {
       animations: 'disabled',

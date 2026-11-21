@@ -346,8 +346,8 @@ describe('ServiceConfigGroup', () => {
   });
 
   it.each([
-    ['testing', 'Testing'],
-    ['saving', 'Saving'],
+    ['testing', 'Testing…'],
+    ['saving', 'Saving…'],
     ['saved', 'Saved'],
   ] as const)('renders the %s action state accurately', (activeAction, label) => {
     render(
