@@ -1,12 +1,19 @@
 import type { PreloadPreparationSnapshot } from '@miauflix/backend';
-import { builtForTizen, PALETTE } from '@shared/config/constants';
-import { LoadingIndicator } from '@shared/ui/loading-indicator/LoadingIndicator';
-import { qualityLabel } from '@shared/ui/quality-badge/quality';
-import { QualityBadge } from '@shared/ui/quality-badge/QualityBadge';
+import { Badge, ProgressSpinner } from '@shared/design-system';
+import { visuallyHidden } from '@shared/design-system/a11y.css';
+import {
+  qualityDescription,
+  qualityLabel,
+  sourceLabel,
+  sourceQualityState,
+  type SourceReleaseType,
+} from '@shared/lib/source-quality';
 import { type FC } from 'react';
-import styled from 'styled-components';
 
-import LoadingIcon from '~icons/mdi/loading';
+import * as styles from './sourcePreparationStatus.css';
+
+import SparklesIcon from '~icons/ion/sparkles';
+import AlertIcon from '~icons/line-md/alert';
 import NoSourceIcon from '~icons/mdi/video-off-outline';
 
 type MediaKind = 'movie' | 'tvshow';
@@ -20,78 +27,43 @@ export interface SourcePreparationStatusProps {
   availability?: 'available' | 'pending' | 'unavailable' | null;
 }
 
-const Status = styled.div`
-  display: flex;
-  flex: 0 1 auto;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8.8px 12px;
-  min-width: max-content;
-  min-height: 28.8px;
-  margin: 0;
-  color: ${PALETTE.text.secondary};
-  font-size: clamp(12.16px, 1.8vh, 16px);
-
-  @media (max-width: 860px) {
-    width: 100%;
-    min-width: 0;
-    align-items: flex-start;
-  }
-`;
-
-const NoSourceBadge = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 6.08px;
-  min-height: 26.4px;
-  padding: 2.4px 9.28px;
-  border: 1px solid ${PALETTE.background.border};
-  border-radius: 5.6px;
-  background: rgba(17, 23, 25, 0.86);
-  color: ${PALETTE.text.disabled};
-  font-size: 1em;
-  font-weight: 650;
-  letter-spacing: 0.025em;
-  white-space: nowrap;
-
-  svg {
-    width: 1.15em;
-    height: 1.15em;
-  }
-`;
-
-const VisuallyHidden = styled.span`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-`;
-
-const Discovery = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 6.4px;
-`;
-
-const Loading = styled(LoadingIcon)`
-  flex: 0 0 auto;
-  animation: status-spin 1s linear infinite;
-
-  @keyframes status-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-`;
+/**
+ * The resolution (sparkles for a clean release) and, for CAM/TS releases, a warning badge naming
+ * the release.
+ */
+function QualityBadges({
+  label,
+  sourceType,
+}: {
+  label: string | null;
+  sourceType: SourceReleaseType | null;
+}) {
+  const release = sourceLabel(sourceType);
+  const state = sourceQualityState(sourceType);
+  const warning = state === 'warning';
+  if (!label && !warning) return null;
+  const warningText = `${release} release may have lower audio and video quality.`;
+  return (
+    <span className={styles.badges}>
+      {label && (
+        <Badge
+          tone={state === 'clean' ? 'premium' : 'neutral'}
+          icon={state === 'clean' ? <SparklesIcon /> : undefined}
+          accessibleLabel={qualityDescription(label, sourceType) ?? undefined}
+        >
+          {label}
+        </Badge>
+      )}
+      {warning && release && (
+        <span role="img" aria-label={warningText} title={warningText}>
+          <Badge tone="warning" icon={<AlertIcon />}>
+            {release}
+          </Badge>
+        </span>
+      )}
+    </span>
+  );
+}
 
 function matchesMedia(snapshot: PreloadPreparationSnapshot | null, mediaKind: MediaKind): boolean {
   if (!snapshot) return true;
@@ -112,12 +84,11 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
     (availability !== 'available' && preparation?.state === 'unavailable');
   if (unavailable) {
     return (
-      <Status aria-live="polite">
-        <NoSourceBadge role="img" aria-label="No source available" title="No source available">
-          <NoSourceIcon aria-hidden="true" />
-          No source
-        </NoSourceBadge>
-      </Status>
+      <div className={styles.status} aria-live="polite">
+        <span role="img" aria-label="No source available" title="No source available">
+          <Badge icon={<NoSourceIcon />}>No source</Badge>
+        </span>
+      </div>
     );
   }
 
@@ -131,26 +102,19 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
     (preparation?.state === 'source_found' && !quality && !source?.sourceType);
 
   return (
-    <Status aria-live="polite">
+    <div className={styles.status} aria-live="polite">
       {showDiscovery && (
-        <Discovery>
-          {loading &&
-            (builtForTizen ? (
-              // The SVG spin would run on the TV's main thread (see Spinner).
-              <LoadingIndicator style={{ fontSize: '1.1em' }} />
-            ) : (
-              <Loading width="1.1em" height="1.1em" aria-hidden="true" />
-            ))}
-          {loading && <VisuallyHidden>Checking sources</VisuallyHidden>}
+        <span className={styles.discovery}>
+          {loading && <ProgressSpinner size="sm" label="Checking sources" />}
           {preparation?.state === 'error' && (
-            <VisuallyHidden>Could not check sources.</VisuallyHidden>
+            <span className={visuallyHidden}>Could not check sources.</span>
           )}
           {preparation?.state === 'no_source' && (
-            <VisuallyHidden>No compatible source found yet</VisuallyHidden>
+            <span className={visuallyHidden}>No compatible source found yet</span>
           )}
-        </Discovery>
+        </span>
       )}
-      <QualityBadge label={quality} sourceType={source?.sourceType ?? null} />
-    </Status>
+      <QualityBadges label={quality} sourceType={source?.sourceType ?? null} />
+    </div>
   );
 };

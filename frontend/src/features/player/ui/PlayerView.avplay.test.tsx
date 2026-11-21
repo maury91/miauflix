@@ -241,7 +241,7 @@ describe('PlayerView on a Samsung TV', () => {
     const search = await screen.findByRole('button', { name: /Find subtitles/ });
     await waitFor(() => expect(search).not.toBeDisabled());
     fireEvent.click(search);
-    fireEvent.click(await screen.findByRole('button', { name: /A long release/ }));
+    fireEvent.click(await screen.findByRole('radio', { description: /A long release/ }));
 
     await waitFor(() =>
       expect(fetchMock).toHaveBeenCalledWith(

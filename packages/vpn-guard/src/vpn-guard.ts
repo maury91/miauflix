@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+
 import type { ConfigVariable } from '@miauflix/contract';
 
 /**
@@ -13,6 +15,12 @@ export interface VpnGuardSettings {
   knownVpnIps: string;
 }
 
+/**
+ * Whether gluetun owns this process's network: `healthy` (its tunnel is up), `unhealthy` (down: its
+ * firewall blocks everything) or `absent`.
+ */
+export type GluetunState = 'healthy' | 'unhealthy' | 'absent';
+
 export interface VpnGuardOptions {
   /** Read on every check, so configuration changes apply without a new guard. */
   settings: () => VpnGuardSettings;
@@ -21,6 +29,8 @@ export interface VpnGuardOptions {
   now?: () => number;
   /** How long the default `fetchJson` waits for NordVPN before the check counts as failed. */
   timeoutMs?: number;
+  /** Detects gluetun in front of this process. Defaults to `detectGluetun`. */
+  gluetun?: (signal?: AbortSignal) => Promise<GluetunState>;
 }
 
 export const NORDVPN_INSIGHTS_URL = 'https://api.nordvpn.com/v1/helpers/ips/insights';
@@ -30,6 +40,45 @@ const PROTECTED_TTL_MS = 300_000;
 const UNPROTECTED_TTL_MS = 30_000;
 
 const DEFAULT_TIMEOUT_MS = 10_000;
+
+/**
+ * Gluetun's health server, on its loopback address by default (`HEALTH_SERVER_ADDRESS`): only a
+ * process sharing gluetun's network (`network_mode: service:<gluetun>`) can reach it.
+ */
+export const GLUETUN_HEALTH_URL = 'http://127.0.0.1:9999/';
+const GLUETUN_TIMEOUT_MS = 2_000;
+
+/** The files Docker and Podman create at a container's root. */
+const CONTAINER_MARKERS = ['/.dockerenv', '/run/.containerenv'];
+
+/**
+ * Asks gluetun's health server whether its tunnel is up: 200 healthy, 500 unhealthy, anything else
+ * (nothing listening, a timeout) absent. Only inside a container, where the loopback address is the
+ * container's own (or gluetun's, when shared): on a bare host another program listening on 9999
+ * could pass for gluetun and turn the check off.
+ */
+export async function detectGluetun(
+  signal?: AbortSignal,
+  {
+    url = GLUETUN_HEALTH_URL,
+    inContainer = () => CONTAINER_MARKERS.some(marker => existsSync(marker)),
+  }: { url?: string; inContainer?: () => boolean } = {}
+): Promise<GluetunState> {
+  if (!inContainer()) return 'absent';
+  const timeout = AbortSignal.timeout(GLUETUN_TIMEOUT_MS);
+  try {
+    const response = await fetch(url, {
+      signal: signal ? AbortSignal.any([timeout, signal]) : timeout,
+    });
+    await response.body?.cancel();
+    if (response.status === 200) return 'healthy';
+    if (response.status === 500) return 'unhealthy';
+    return 'absent';
+  } catch {
+    signal?.throwIfAborted();
+    return 'absent';
+  }
+}
 
 /**
  * Plain `fetch`, bounded: a server that accepts the connection but never answers would otherwise
@@ -56,9 +105,12 @@ const abortable = <T>(promise: Promise<T>, signal: AbortSignal): Promise<T> => {
 };
 
 /**
- * Whether this process's outbound connection goes through a VPN, asked to NordVPN's IP insights.
- * Every service that reaches indexers, trackers or peers runs its own guard, so the check follows
- * the network the service actually uses, wherever it is deployed.
+ * Whether this process's outbound connection goes through a VPN. Behind gluetun (its network
+ * shared, as docker-compose.vpn.yml does) its health decides: gluetun's firewall drops everything
+ * outside the tunnel, so a healthy gluetun is protected with any VPN provider, and NordVPN isn't
+ * asked. Otherwise NordVPN's IP insights decide. Every service that reaches indexers, trackers or
+ * peers runs its own guard, so the check follows the network the service actually uses, wherever
+ * it is deployed.
  *
  * Fails closed: an error counts as unprotected, but a caller's cancellation is not cached.
  */
@@ -68,10 +120,12 @@ export class VpnGuard {
   private inflight: { knownVpnIps: string; run: Promise<boolean> } | null = null;
   private readonly fetchJson: NonNullable<VpnGuardOptions['fetchJson']>;
   private readonly now: () => number;
+  private readonly gluetun: NonNullable<VpnGuardOptions['gluetun']>;
 
   constructor(private readonly options: VpnGuardOptions) {
     this.fetchJson = options.fetchJson ?? boundedFetchJson(options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
     this.now = options.now ?? Date.now;
+    this.gluetun = options.gluetun ?? detectGluetun;
   }
 
   /** The last known state; `unprotected` until the first check completes. */
@@ -109,8 +163,18 @@ export class VpnGuard {
     return signal ? abortable(this.inflight.run, signal) : this.inflight.run;
   }
 
-  /** Asks NordVPN; an error counts as unprotected, the caller's cancellation rejects. */
+  /**
+   * Asks gluetun, then NordVPN when gluetun isn't there; an error counts as unprotected, the
+   * caller's cancellation rejects.
+   */
   private async check(knownVpnIps: string, signal?: AbortSignal): Promise<boolean> {
+    let gluetun: GluetunState = 'absent';
+    try {
+      gluetun = await this.gluetun(signal);
+    } catch {
+      signal?.throwIfAborted();
+    }
+    if (gluetun !== 'absent') return gluetun === 'healthy';
     try {
       const data = (await this.fetchJson(NORDVPN_INSIGHTS_URL, { signal })) as {
         protected?: boolean;
@@ -157,7 +221,8 @@ export class VpnGuard {
 export const vpnConfigVariables = (prefix: string): ConfigVariable[] => [
   {
     key: `${prefix}_DISABLE_VPN_CHECK`,
-    description: 'Allow running without a VPN: peers and sites see your real IP',
+    description:
+      'Allow running without a VPN: peers and sites see your real IP. Not needed behind gluetun, which is detected',
     defaultValue: 'false',
     required: false,
     inputType: 'boolean',

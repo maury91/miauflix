@@ -70,10 +70,9 @@ const preview: Preview = {
       ],
     },
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
-      test: 'todo',
+      // A story with an accessibility violation fails its test (style guide, phase 7). A story
+      // that shows a deliberately broken state opts out with `parameters: { a11y: { test: 'todo' } }`.
+      test: 'error',
     },
   },
 };

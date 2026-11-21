@@ -34,16 +34,9 @@ export function paintBadge(
   // As the DOM badge: the padding inside the borders
   const width = label.width + remPx(badgeLabel.paddingX) * 2 + border * 2;
   painter.rect(x, y, width, height, hex(colors.border), { radius: corner });
-  painter.rect(
-    x + border,
-    y + border,
-    width - border * 2,
-    height - border * 2,
-    hex(badgeLabel.fill),
-    {
-      radius: Math.max(0, corner - border),
-    }
-  );
+  painter.rect(x + border, y + border, width - border * 2, height - border * 2, hex(colors.fill), {
+    radius: Math.max(0, corner - border),
+  });
   painter.text(spec, x + width / 2, y + height / 2, { anchorX: 0.5, anchorY: 0.5 });
   return { width, height };
 }

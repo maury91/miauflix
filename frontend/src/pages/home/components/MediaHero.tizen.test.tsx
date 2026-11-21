@@ -47,10 +47,11 @@ const movie = (mediaId: number, backdrop: string) =>
     genres: [],
   }) as unknown as MediaDto;
 
+/** The backdrop layers' images (the shade's gradients are inline too). */
 const backdrops = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLElement>('div'))
     .map(element => element.style.backgroundImage)
-    .filter(Boolean);
+    .filter(image => image.startsWith('url('));
 
 describe('MediaHero on the Samsung TV', () => {
   beforeEach(() => {

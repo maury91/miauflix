@@ -29,9 +29,10 @@ into `dist/frontend-tizen` (one classic script with relative paths, hash routing
 Chromium 69), adds `frontend/tizen/config.xml` with the version from the root `package.json`
 and the 512x423 launcher icon, and zips it into `dist/miauflix.wgt`.
 Chromium 69 ignores newer CSS (flex `gap`, `inset`, `aspect-ratio`, `clamp()`, `:focus-visible`
-and more), so in this build a styled-components plugin
-(`frontend/src/shared/styles/legacy-chromium.ts`) rewrites those styles as they are generated.
-Plain CSS files don't go through it: keep them to what Chromium 69 supports. The package is
+and more), so this build rewrites the extracted stylesheet with a PostCSS pass
+(`frontend/src/shared/styles/legacy-chromium-postcss.ts`). It fails the build on `clamp()`,
+`min()` and `max()`, which need the TV's viewport. Inline styles don't go through it: keep them
+to what Chromium 69 supports. The package is
 unsigned. The launcher icon is generated on every build from `assets/tv-logo.png`, the only
 copy of the TV icons, by `scripts/generate-tv-icons.mjs`: replace that image to change it.
 

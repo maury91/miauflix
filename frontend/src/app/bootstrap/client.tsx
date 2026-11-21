@@ -9,13 +9,11 @@ import { probeServer } from '@features/server-discovery/lib/probe';
 import { ServerPicker } from '@features/server-discovery/ui/ServerPicker';
 import { API_URL, builtForTizen, glRowsEnabled, IS_SLOW_DEVICE } from '@shared/config/constants';
 import { glSurfaceSupported, preloadGlBackend } from '@shared/design-system/gl';
-import { legacyChromiumPlugin } from '@shared/styles/legacy-chromium';
 import { store } from '@store';
 import { gsap } from 'gsap';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { StyleSheetManager } from 'styled-components';
 
 // Home's WebGL rows: the renderer's chunk loads while the app starts, so Home renders with it
 if (glRowsEnabled && glSurfaceSupported()) void preloadGlBackend();
@@ -27,18 +25,13 @@ if (IS_SLOW_DEVICE) {
 // Measure before the first render so layout starts at the real window size.
 installBrowserMeasurements(store.dispatch);
 
-// 2020 Samsung TVs run Chromium 69: rewrite the CSS it lacks (see legacy-chromium.ts)
-const stylisPlugins = builtForTizen ? [legacyChromiumPlugin] : undefined;
-
 // Client-side hydration component
 export function ClientApp() {
   return (
     <StrictMode>
-      <StyleSheetManager stylisPlugins={stylisPlugins}>
-        <Provider store={store}>
-          <AppShell />
-        </Provider>
-      </StyleSheetManager>
+      <Provider store={store}>
+        <AppShell />
+      </Provider>
     </StrictMode>
   );
 }
@@ -47,9 +40,7 @@ export function ClientApp() {
 function ServerPickerApp({ lastServer }: { lastServer?: string }) {
   return (
     <StrictMode>
-      <StyleSheetManager stylisPlugins={stylisPlugins}>
-        <ServerPicker lastServer={lastServer} />
-      </StyleSheetManager>
+      <ServerPicker lastServer={lastServer} />
     </StrictMode>
   );
 }

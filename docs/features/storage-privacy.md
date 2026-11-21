@@ -67,9 +67,9 @@ The server has configurable limits for torrent connections, download speed, uplo
 
 ## VPN checks and NordVPN deployment
 
-A VPN routes traffic through another server. Miauflix checks VPN status and uses it to gate source and download activity unless checks are explicitly disabled. The implemented detector recognizes NordVPN-protected connections; it is not a general detector for every VPN brand.
+A VPN routes traffic through another server. Miauflix checks VPN status and uses it to gate source and download activity unless checks are explicitly disabled. The detector recognizes NordVPN-protected connections, and trusts gluetun when a service runs behind it: gluetun's firewall drops everything outside the tunnel, so its health stands for the check with any provider gluetun supports. Other VPNs need their exit IPs in the known VPN IPs setting.
 
-The optional Docker VPN setup runs Miauflix and its services through Gluetun with NordVPN. That setup provides the network tunnel and firewall, while Miauflix's own checks monitor whether the connection is recognized as protected.
+The optional Docker VPN setup runs Miauflix and its services through Gluetun with NordVPN. That setup provides the network tunnel and firewall, and Miauflix's own checks follow gluetun's health there.
 
 ## Planned improvements
 

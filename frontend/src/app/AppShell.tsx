@@ -24,10 +24,12 @@ import SearchPage from '@pages/search/SearchPage';
 import SourcesPage from '@pages/settings/SourcesPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
+import { Logo } from '@shared/brand/logo/Logo';
 import { ErrorBoundary } from '@shared/components';
 import { builtForTizen } from '@shared/config/constants';
+import { Button, EmptyState, SurfaceContextProvider } from '@shared/design-system';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
-import { Logo } from '@shared/ui/logo/Logo';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { useAppDispatch, useAppSelector } from '@store';
 import { dismissConfigWizard } from '@store/slices/appState';
 import {
@@ -38,7 +40,8 @@ import {
 } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+
+import * as styles from './appShell.css';
 
 /** Replace a route that is not allowed, without mounting its page. */
 function Redirect({ to }: { to: AppRoute }) {
@@ -51,12 +54,9 @@ function Redirect({ to }: { to: AppRoute }) {
 const HOME: AppRoute = { type: 'home' };
 const PROFILES: AppRoute = { type: 'profiles' };
 
-const LoadingContainer = styled.div`
-  position: fixed;
-  inset: 0;
-  background-color: #0a0d0f;
-  z-index: 999;
-`;
+function LoadingContainer() {
+  return <div className={styles.loading} />;
+}
 
 export function AppShell() {
   const dispatch = useAppDispatch();
@@ -217,11 +217,22 @@ export function AppShell() {
         return <Redirect key="redirect" to={screen.to} />;
       case 'notFound':
         return (
-          <main key="not-found">
-            <h1>Page not found</h1>
-            <button type="button" onClick={() => navigate({ type: 'home' })}>
-              Home
-            </button>
+          <main key="not-found" className={styles.notFound}>
+            <NavigationProvider>
+              <SurfaceContextProvider value="solid">
+                <FocusScope autoFocus>
+                  <EmptyState
+                    heading="Page not found"
+                    headingLevel={2}
+                    actions={
+                      <Button navId="not-found-home" onClick={() => navigate({ type: 'home' })}>
+                        Home
+                      </Button>
+                    }
+                  />
+                </FocusScope>
+              </SurfaceContextProvider>
+            </NavigationProvider>
           </main>
         );
       case 'media': {

@@ -22,7 +22,7 @@ body {
   box-sizing: border-box;
 }
 
-/* Ensure styled-components styles don't override our background */
+/* A canvas-coloured layer under every page, so nothing flashes white while it loads */
 body::before {
   content: '';
   position: fixed;

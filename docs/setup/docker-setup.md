@@ -124,7 +124,7 @@ To test a branch before merging, open **Actions → CI Pipeline → Run workflow
 
 ### Using a VPN
 
-Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default source search and media load refuse to work until each detects a NordVPN connection.
+Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default source search and media load refuse to work until each detects a NordVPN connection, or finds itself behind a healthy gluetun (the setup below): gluetun's firewall is the kill switch, so with it the check needs no NordVPN and no configuration.
 
 [`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes everything that reaches indexers, trackers and peers through NordVPN with [gluetun](https://github.com/qdm12/gluetun): the `miauflix-sources` and `miauflix-media-load` containers and FlareSolverr. Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP. The backend and `miauflix-catalog-services` only talk to your browser, TMDB and Trakt, so they stay on the normal network.
 

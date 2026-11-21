@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -20,6 +21,30 @@ import * as styles from './dialog.css';
 import { isTopDialog, pushDialog, topDialogRoot } from './dialogStack';
 
 import CloseIcon from '~icons/mdi/close';
+
+/**
+ * A body taller than the dialog scrolls: then it joins Tab order, so a keyboard can scroll it
+ * (a remote moves through the actions instead). Measured as it mounts (a dialog mounted closed
+ * renders its body only once it opens) and as it resizes.
+ */
+function useScrollable<E extends HTMLElement>() {
+  const [element, ref] = useState<E | null>(null);
+  const [scrollable, setScrollable] = useState(false);
+  useLayoutEffect(() => {
+    if (!element) {
+      setScrollable(false);
+      return undefined;
+    }
+    const measure = () => setScrollable(element.scrollHeight > element.clientHeight);
+    measure();
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    for (const child of Array.from(element.children)) observer.observe(child);
+    return () => observer.disconnect();
+  }, [element]);
+  return { ref, scrollable };
+}
 
 export interface DialogProps {
   /** Rendered while true. */
@@ -89,6 +114,7 @@ export function Dialog({
   const navBase = useId();
   const actionsNavId = `${navBase}-actions`;
   const panelRef = useRef<HTMLDivElement>(null);
+  const body = useScrollable<HTMLDivElement>();
   const [id] = useState(() => Symbol('dialog'));
   const parent = useContext(ParentDialogContext);
   const onDismissRef = useRef(onDismiss);
@@ -189,7 +215,11 @@ export function Dialog({
                 )}
               </div>
               {(description || children) && (
-                <div className={styles.body}>
+                <div
+                  ref={body.ref}
+                  className={styles.body}
+                  tabIndex={body.scrollable ? 0 : undefined}
+                >
                   {description && (
                     <p id={descriptionId} className={styles.description}>
                       {description}

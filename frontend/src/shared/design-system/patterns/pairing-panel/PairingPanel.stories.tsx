@@ -61,6 +61,8 @@ const shared = {
 };
 
 export const States: Story = {
+  // Several panels side by side share a name; on a page there is one
+  parameters: { a11y: { config: { rules: [{ id: 'landmark-unique', enabled: false }] } } },
   render: () => (
     <div>
       <StateCell name="Loading">

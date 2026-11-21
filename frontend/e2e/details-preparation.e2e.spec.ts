@@ -22,7 +22,7 @@ test.describe('details page preparation contract', () => {
     const watch = page.getByRole('button', { name: 'Watch now' });
     await expect(watch).toBeVisible();
     await expect(page.getByRole('button', { name: 'Back to browse' })).toBeVisible();
-    await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
+    await expect(page.getByText(/1080p, WEB source/)).toBeVisible();
     const warmupProgress = page.locator('[data-warmup-state="warming"]');
     await expect(warmupProgress).toBeVisible();
     await expect(watch).toHaveAccessibleDescription('Warming up torrent, 50% ready');
@@ -32,7 +32,7 @@ test.describe('details page preparation contract', () => {
       .toBe(true);
     await expect(watch).toHaveAccessibleDescription('Torrent warmup ready');
     await expect(warmupProgress).toBeHidden();
-    await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
+    await expect(page.getByText(/1080p, WEB source/)).toBeVisible();
 
     const screenshot = await page.screenshot({ animations: 'disabled', fullPage: true });
     await testInfo.attach('details-page-source-ready.png', {

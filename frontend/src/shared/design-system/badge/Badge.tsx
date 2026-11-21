@@ -13,8 +13,11 @@ export type BadgeProps = {
   | {
       /** A short label (quality, availability), uppercase. */
       kind?: 'label';
-      /** Neutral by default; a feedback tone colours the border and text. */
-      tone?: 'neutral' | MessageTone;
+      /**
+       * Neutral by default; a feedback tone colours the border and text. Premium is gold on a gold
+       * fill, for a clean release's quality only.
+       */
+      tone?: 'neutral' | 'premium' | MessageTone;
       /** Decorative icon before the text. */
       icon?: ReactNode;
     }

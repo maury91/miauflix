@@ -1,5 +1,5 @@
+import { NARROW_MAX_WIDTH_PX } from '@shared/brand/logo/logoGeometry';
 import { color, fontFamily, layer, radius, space } from '@shared/design-system/tokens';
-import { NARROW_MAX_WIDTH_PX } from '@shared/ui/logo/logoGeometry';
 import { style } from '@vanilla-extract/css';
 
 /**

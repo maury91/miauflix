@@ -1,3 +1,4 @@
+import { Button, EmptyState } from '@shared/design-system';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ErrorBoundary } from './ErrorBoundary';
@@ -34,11 +35,12 @@ export const WithCustomFallback: Story = {
   render: () => (
     <ErrorBoundary
       fallback={({ error, resetError }) => (
-        <div style={{ padding: '2rem', textAlign: 'center', backgroundColor: '#f0f0f0' }}>
-          <h2>Custom Error Fallback</h2>
-          <p>Error: {error?.message}</p>
-          <button onClick={resetError}>Reset</button>
-        </div>
+        <EmptyState
+          heading="Custom Error Fallback"
+          actions={<Button onClick={resetError}>Reset</Button>}
+        >
+          Error: {error?.message}
+        </EmptyState>
       )}
     >
       <ThrowError shouldThrow={true} />

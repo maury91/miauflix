@@ -52,6 +52,8 @@ const synopsis =
 
 /** Headings keep their level and pick a look; tones and truncation. */
 export const HeadingsTonesAndTruncation: Story = {
+  // The disabled tone is for unavailable items, exempt from contrast (WCAG 1.4.3)
+  parameters: { a11y: { context: { exclude: ['[data-tone="disabled"]'] } } },
   render: () => (
     <div style={{ maxWidth: '24rem' }}>
       <Stack gap="md">

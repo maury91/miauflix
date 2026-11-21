@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import * as actionStyles from '../action/action.css';
 import { color, fontFamily, radius, space } from '../tokens';
-import { badgeLabel } from './badge.metrics';
+import { badgeLabel, badgePremium } from './badge.metrics';
 
 /**
  * Badge (docs/plans/style-guide.md, sections 5 and 8.4): a passive, compact label. Every badge has
@@ -10,7 +10,8 @@ import { badgeLabel } from './badge.metrics';
  * border and text, never an action. Uppercase lives only here. States are attributes:
  *
  * - `data-kind="label" | "count"`: a short uppercase label (quality, availability) or a pill count
- * - `data-tone`: neutral, info, success, warning or danger (labels only)
+ * - `data-tone`: neutral, premium (gold, a clean release's quality), info, success, warning or
+ *   danger (labels only)
  *
  * Each selector is its own rule: Chromium 69 drops a whole selector list over one it doesn't know.
  */
@@ -46,6 +47,11 @@ export const badge = style({
       textTransform: 'uppercase',
     },
     ...toneSelectors,
+    '&[data-tone="premium"]': {
+      color: badgePremium.textColor,
+      borderColor: badgePremium.borderColor,
+      backgroundColor: badgePremium.fill,
+    },
     '&[data-kind="count"]': {
       justifyContent: 'center',
       minWidth: '1.25rem',

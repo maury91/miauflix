@@ -35,6 +35,11 @@
 //                                                    (put it before a reload): "serve" never sees
 //                                                    requests the cache answers, so compare a served
 //                                                    condition against one with the cache off too
+//   {"viewport": [1920, 1080, 1]}                   emulate a viewport (width, height, pixel ratio)
+//                                                    for the rest of the run (desktop Chrome, to lay
+//                                                    out as the TV does; put it before a reload)
+//   {"throttle": 4}                                  slow the CPU down this many times for the rest
+//                                                    of the run (desktop Chrome)
 //   {"profile": "start"} / {"profile": "stop", "out": "file.cpuprofile"}
 //                                                    record a CPU profile (open it in Chrome DevTools)
 // Keys: ArrowUp/Down/Left/Right, Enter, Back (the remote's Return, as Tizen reports it).
@@ -325,6 +330,18 @@ ws.onopen = async () => {
         await send('Network.enable');
         await send('Network.setCacheDisabled', { cacheDisabled: true });
         console.log('cache disabled for the rest of the run');
+      } else if (step.viewport) {
+        const [width, height, dpr = 1] = step.viewport;
+        await send('Emulation.setDeviceMetricsOverride', {
+          width,
+          height,
+          deviceScaleFactor: dpr,
+          mobile: false,
+        });
+        console.log(`viewport ${width}×${height} @${dpr}x for the rest of the run`);
+      } else if (step.throttle) {
+        await send('Emulation.setCPUThrottlingRate', { rate: step.throttle });
+        console.log(`CPU throttled ${step.throttle}× for the rest of the run`);
       } else if (step.served) {
         console.log(`served: ${served.hits} files, ${served.misses} not found`);
       } else if (step.profile === 'start') {

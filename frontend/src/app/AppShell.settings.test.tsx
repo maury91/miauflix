@@ -13,7 +13,7 @@ const state = vi.hoisted(() => ({
 
 vi.mock('@app/hooks/useAppState', () => ({ useAppState: () => state.page }));
 vi.mock('@app/shell/IntroAnimation', () => ({ IntroAnimation: () => null }));
-vi.mock('@shared/ui/logo/Logo', () => ({ Logo: () => null }));
+vi.mock('@shared/brand/logo/Logo', () => ({ Logo: () => null }));
 vi.mock('@shared/components', () => ({
   ErrorBoundary: ({ children }: { children: ReactNode }) => children,
 }));

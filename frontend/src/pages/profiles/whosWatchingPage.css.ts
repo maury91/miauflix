@@ -1,5 +1,5 @@
+import { LOGO_BACKDROP_HEIGHT } from '@shared/brand/logo/logoBackdrop.css';
 import { color, controlSize, fontFamily, space } from '@shared/design-system/tokens';
-import { LOGO_BACKDROP_HEIGHT } from '@shared/ui/logo/logoBackdrop.css';
 import { style } from '@vanilla-extract/css';
 
 /**

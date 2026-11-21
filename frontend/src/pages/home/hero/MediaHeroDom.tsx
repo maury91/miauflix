@@ -1,10 +1,8 @@
 import { SourcePreparationStatus } from '@features/preload/ui/SourcePreparationStatus';
 import type { MediaDto } from '@miauflix/backend';
 import { builtForTizen } from '@shared/config/constants';
-import { PALETTE } from '@shared/config/constants';
 import { type BackdropPositionContext, getBackdropPlacement } from '@shared/lib/backdrop-focus';
 import { artworkUrl } from '@shared/lib/media.utils';
-import { MetadataDot, MetadataRating } from '@shared/ui/metadata/metadata.styles';
 import {
   type ComponentProps,
   type FC,
@@ -15,197 +13,80 @@ import {
   useRef,
   useState,
 } from 'react';
-import styled from 'styled-components';
 
 import {
   BACKDROP_OVERLAP_RATIO,
   getHeroBackdropLayout,
   getHeroTextGeometry,
-  HERO_BACKDROP_LEFT_CSS,
-  HERO_DETAILS_LEFT_CSS,
-  HERO_DETAILS_WIDTH_CSS,
 } from '../hero-backdrop-layout';
-import { HOME_VH } from '../homeLayout';
 import { heroDetailsModel } from './heroDetailsModel';
-import { BACKDROP_FADE_MS, DETAILS_FADE_MS } from './heroMotion';
 import { HERO_SHADE } from './heroShade.metrics';
-import { HERO_DETAILS, HERO_TYPE, heroTypeCss } from './heroType';
+import { HERO_DETAILS, heroTypeScale } from './heroType';
+import * as styles from './mediaHeroDom.css';
 import { type BackdropLayerState, type MediaHeroProps, useMediaHero } from './useMediaHero';
 
 import StarIcon from '~icons/mdi/star';
 
-// The TV rasterizes in software: on their own layers the gradients and backdrops are painted once,
-// instead of with every title change and every frame of a crossfade.
-const tvLayer = (property: 'opacity' | 'transform') =>
-  builtForTizen ? `will-change: ${property};` : '';
-
 /**
- * The shade's geometry in pixels, on the TV. Chromium 69 resolves `var()` and `calc()` in a
- * gradient into new values on every restyle, and every rule styled-components inserts restyles
- * the page, so it repainted the whole shade (about 480 ms) each time; fixed values compare equal.
+ * The hero's geometry in pixels, for the window it is in: the details' width, the backdrop's left
+ * edge, the logo's box, the type sizes and the shade's gradients. Inline, in final values: the TV
+ * build cannot resolve `clamp()`/`min()`, and Chromium 69 re-resolves `var()`/`calc()` in a
+ * gradient on every restyle (it repainted the whole shade, about 480 ms, each time).
  */
-type HeroShade = ReturnType<typeof getHeroTextGeometry>;
+type HeroGeometry = ReturnType<typeof getHeroTextGeometry>;
 const px = (value: number) => `${Math.round(value * 100) / 100}px`;
 const percent = (share: number) => `${Math.round(share * 1e4) / 100}%`;
-/** "text right + `fromFree` of the free width", in px on the TV, as CSS elsewhere. */
-const shadeAt = (shade: HeroShade | null, fromFree: number) =>
-  shade
-    ? px(shade.textRight + fromFree * shade.freeWidth)
-    : `calc(var(--hero-text-right) + var(--hero-free-width) * ${fromFree})`;
+/** "text right + `fromFree` of the free width", in px. */
+const shadeAt = (geometry: HeroGeometry, fromFree: number) =>
+  px(geometry.textRight + fromFree * geometry.freeWidth);
 const stops = (list: ReadonlyArray<readonly [number, string]>) =>
   list.map(([at, fill]) => `${fill} ${percent(at)}`).join(', ');
 const { radial, side, band } = HERO_SHADE;
 
-const Hero = styled.header<{ $shade: HeroShade | null }>`
-  --hero-details-width: ${HERO_DETAILS_WIDTH_CSS};
-  --hero-text-right: calc(${HERO_DETAILS_LEFT_CSS} + var(--hero-details-width));
-  --hero-free-width: calc(100vw - var(--hero-text-right));
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 1;
-  height: ${HOME_VH.heroHeight}vh;
-  padding: ${HOME_VH.heroPaddingTop}vh 5vw ${HOME_VH.heroPaddingBottom}vh ${HERO_DETAILS_LEFT_CSS};
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  background: #000;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    ${tvLayer('transform')}
-    background:
-      radial-gradient(
-        ellipse ${percent(radial.radiusX)} ${percent(radial.radiusY)} at
-          ${({ $shade }) => shadeAt($shade, radial.centerFree)} 0%,
-        ${stops(radial.stops)}
+function heroStyles(windowWidth: number, windowHeight: number, margin: number) {
+  const geometry = getHeroTextGeometry(windowWidth, margin);
+  const backdropLeft = geometry.detailsLeft + geometry.detailsWidth * BACKDROP_OVERLAP_RATIO;
+  const type = heroTypeScale(windowHeight);
+  return {
+    shade: {
+      backgroundImage: [
+        `radial-gradient(ellipse ${percent(radial.radiusX)} ${percent(radial.radiusY)} at ${shadeAt(geometry, radial.centerFree)} 0%, ${stops(radial.stops)})`,
+        `linear-gradient(90deg, ${side.color} 0%, ${side.color} ${px(backdropLeft)}, ${side.edgeFadeColor} ${px(geometry.detailsLeft + geometry.detailsWidth * (BACKDROP_OVERLAP_RATIO + side.edgeFade))}, ${side.midColor} ${shadeAt(geometry, side.midFree)}, transparent ${shadeAt(geometry, side.endFree)})`,
+        `linear-gradient(0deg, ${stops(HERO_SHADE.bottom)})`,
+      ].join(', '),
+    },
+    band: {
+      left: shadeAt(geometry, band.leftFree),
+      backgroundImage: `linear-gradient(181deg, ${stops(band.stops)})`,
+    },
+    backdropLeft: px(backdropLeft),
+    details: { width: px(geometry.detailsWidth) },
+    logo: {
+      maxWidth: px(
+        Math.min((windowWidth * HERO_DETAILS.logoWidthVw) / 100, HERO_DETAILS.logoMaxWidth)
       ),
-      linear-gradient(
-        90deg,
-        ${side.color} 0%,
-        /* Opaque up to the backdrop left edge, so its edge never shows */
-        ${side.color}
-          ${({ $shade }) =>
-      $shade
-        ? px($shade.detailsLeft + $shade.detailsWidth * BACKDROP_OVERLAP_RATIO)
-        : HERO_BACKDROP_LEFT_CSS},
-        ${side.edgeFadeColor}
-          ${({ $shade }) =>
-      $shade
-        ? px($shade.detailsLeft + $shade.detailsWidth * (BACKDROP_OVERLAP_RATIO + side.edgeFade))
-        : `calc(${HERO_BACKDROP_LEFT_CSS} + var(--hero-details-width) * ${side.edgeFade})`},
-        ${side.midColor} ${({ $shade }) => shadeAt($shade, side.midFree)},
-        transparent ${({ $shade }) => shadeAt($shade, side.endFree)}
-      ),
-      linear-gradient(0deg, ${stops(HERO_SHADE.bottom)});
-  }
+    },
+    title: { fontSize: px(type.title) },
+    metadata: { fontSize: px(type.metadata) },
+    overview: { fontSize: px(type.overview) },
+  };
+}
+type HeroStyles = ReturnType<typeof heroStyles>;
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: ${band.topVh}vh;
-    left: ${({ $shade }) => shadeAt($shade, band.leftFree)};
-    right: 0;
-    height: ${band.heightVh}vh;
-    z-index: 3;
-    pointer-events: none;
-    ${tvLayer('transform')}
-    background: linear-gradient(181deg, ${stops(band.stops)});
-  }
-`;
+/** The window's size, following resizes. */
+function useWindowSize() {
+  const read = () => ({ width: window.innerWidth, height: window.innerHeight });
+  const [size, setSize] = useState(read);
+  useEffect(() => {
+    const onResize = () => setSize(read());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return size;
+}
 
-/**
- * Stacked in DOM order: a later layer fades in over the earlier ones. The image and opacity are
- * inline: as styled-components props every backdrop added a CSS class, and each inserted rule
- * restyles the whole page (about 60 ms a title on the TV).
- */
-const BackdropLayer = styled.div`
-  position: absolute;
-  top: 0;
-  left: ${HERO_BACKDROP_LEFT_CSS};
-  right: 0;
-  height: ${HOME_VH.heroHeight}vh;
-  z-index: 1;
-  pointer-events: none;
-  background-color: #000;
-  background-repeat: no-repeat;
-  transition: opacity ${BACKDROP_FADE_MS}ms ease;
-  ${tvLayer('opacity')}
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
-
-const Details = styled.div`
-  width: var(--hero-details-width);
-  position: relative;
-  z-index: 4;
-  transition: opacity ${DETAILS_FADE_MS}ms ease;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-`;
-
-const Logo = styled.img`
-  max-width: min(${HERO_DETAILS.logoWidthVw}vw, ${HERO_DETAILS.logoMaxWidth}px);
-  max-height: ${HERO_DETAILS.logoHeightVh}vh;
-  object-fit: contain;
-  object-position: left bottom;
-  margin-bottom: ${HERO_DETAILS.logoGapVh}vh;
-`;
-
-const Title = styled.h1`
-  margin: 0 0 ${HERO_DETAILS.lineGapVh}vh;
-  font-size: ${heroTypeCss('title')};
-  line-height: ${HERO_TYPE.title.lineHeight};
-  font-weight: ${HERO_TYPE.title.weight};
-  text-transform: none;
-`;
-
-const Metadata = styled.div`
-  margin: 0 0 ${HERO_DETAILS.lineGapVh}vh;
-  color: ${PALETTE.text.primary};
-  font-size: ${heroTypeCss('metadata')};
-  font-weight: ${HERO_TYPE.metadata.weight};
-  display: flex;
-  align-items: center;
-`;
-
-const BadgeGap = styled.span`
-  width: 0.9em;
-`;
-
-const MetadataRow = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-
-  @media (max-width: 860px) {
-    flex-wrap: wrap;
-    gap: 5.6px;
-  }
-`;
-
-const MetadataBlock = styled.div`
-  min-width: 0;
-`;
-
-const Overview = styled.p`
-  max-width: ${HERO_DETAILS.overviewCh}ch;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: ${HERO_DETAILS.overviewLines};
-  overflow: hidden;
-  font-size: ${heroTypeCss('overview')};
-  line-height: ${HERO_TYPE.overview.lineHeight};
-`;
+/** On their own layers the TV paints the gradients and backdrops once, not every frame. */
+const layerClass = (base: string, tv: string) => (builtForTizen ? `${base} ${tv}` : base);
 
 /**
  * MediaHero as DOM: the details over stacked backdrop layers that crossfade (CSS transitions),
@@ -234,10 +115,11 @@ export const MediaHeroDom: FC<MediaHeroProps> = props => {
   }, []);
 
   const layout = getHeroBackdropLayout(heroSize.width, margin);
-  // The hero spans the viewport (`100vw` in the CSS version)
-  const shade = useMemo(
-    () => (builtForTizen ? getHeroTextGeometry(window.innerWidth, margin) : null),
-    [margin]
+  // The hero spans the window
+  const windowSize = useWindowSize();
+  const inline = useMemo(
+    () => heroStyles(windowSize.width, windowSize.height, margin),
+    [windowSize.width, windowSize.height, margin]
   );
   const placementFor = (layer: BackdropLayerState) => {
     const context: BackdropPositionContext = {
@@ -253,13 +135,35 @@ export const MediaHeroDom: FC<MediaHeroProps> = props => {
     return { backgroundPosition: placement.position, backgroundSize: placement.size };
   };
 
-  if (!props.media) return <Hero ref={heroRef} $shade={shade} aria-hidden="true" />;
+  const shading = (
+    <>
+      <div
+        className={layerClass(styles.shade, styles.tvLayer)}
+        style={inline.shade}
+        aria-hidden="true"
+      />
+      <div
+        className={layerClass(styles.band, styles.tvLayer)}
+        style={inline.band}
+        aria-hidden="true"
+      />
+    </>
+  );
+  if (!props.media)
+    return (
+      <header ref={heroRef} className={styles.hero} aria-hidden="true">
+        {shading}
+      </header>
+    );
   return (
-    <Hero ref={heroRef} $shade={shade} aria-live="polite">
+    <header ref={heroRef} className={styles.hero} aria-live="polite">
+      {shading}
       {layers.map(layer => (
-        <BackdropLayer
+        <div
           key={layer.id}
+          className={layerClass(styles.backdropLayer, styles.tvOpacityLayer)}
           style={{
+            left: inline.backdropLeft,
             ...placementFor(layer.backdrop),
             backgroundImage: layer.backdrop.url
               ? `url(${JSON.stringify(layer.backdrop.url)})`
@@ -277,11 +181,14 @@ export const MediaHeroDom: FC<MediaHeroProps> = props => {
           preparation={preparation}
           availability={availability}
           hidden={moving}
+          inline={inline}
         />
       )}
-    </Hero>
+    </header>
   );
 };
+
+const MetadataDot = () => <span className={styles.metadataDot} aria-hidden="true" />;
 
 /**
  * The title, metadata and overview (heroDetailsModel). Memoized: each move swaps the backdrop
@@ -293,8 +200,10 @@ const HeroDetails = memo(function HeroDetails({
   preparation,
   availability,
   hidden,
+  inline,
 }: {
   hidden: boolean;
+  inline: HeroStyles;
   media: MediaDto;
   heroLogo: string | null | undefined;
   preparation: ComponentProps<typeof SourcePreparationStatus>['preparation'];
@@ -302,15 +211,23 @@ const HeroDetails = memo(function HeroDetails({
 }) {
   const details = heroDetailsModel(media);
   return (
-    <Details style={{ opacity: hidden ? 0 : 1 }}>
+    <div className={styles.details} style={{ ...inline.details, opacity: hidden ? 0 : 1 }}>
       {heroLogo ? (
-        <Logo decoding="async" src={artworkUrl(heroLogo, 'logo', 500)} alt={details.title} />
+        <img
+          className={styles.logo}
+          style={inline.logo}
+          decoding="async"
+          src={artworkUrl(heroLogo, 'logo', 500)}
+          alt={details.title}
+        />
       ) : (
-        <Title>{details.title}</Title>
+        <h1 className={styles.title} style={inline.title}>
+          {details.title}
+        </h1>
       )}
-      <MetadataRow>
-        <MetadataBlock>
-          <Metadata>
+      <div className={styles.metadataRow}>
+        <div className={styles.metadataBlock}>
+          <div className={styles.metadata} style={inline.metadata}>
             {details.metadata.map((text, index) => (
               <Fragment key={index}>
                 {index > 0 && <MetadataDot />}
@@ -320,24 +237,30 @@ const HeroDetails = memo(function HeroDetails({
             {details.rating && (
               <>
                 {details.metadata.length > 0 && <MetadataDot />}
-                <MetadataRating>
+                <span className={styles.rating}>
                   <StarIcon aria-hidden="true" />
                   {details.rating}
-                </MetadataRating>
+                </span>
               </>
             )}
-            <BadgeGap />
+            <span className={styles.badgeGap} />
             <SourcePreparationStatus
               mediaKind={media._type}
               mode="browse"
               preparation={preparation}
               availability={availability}
             />
-          </Metadata>
-          {details.genres && <Metadata>{details.genres}</Metadata>}
-        </MetadataBlock>
-      </MetadataRow>
-      <Overview>{details.overview}</Overview>
-    </Details>
+          </div>
+          {details.genres && (
+            <div className={styles.metadata} style={inline.metadata}>
+              {details.genres}
+            </div>
+          )}
+        </div>
+      </div>
+      <p className={styles.overview} style={inline.overview}>
+        {details.overview}
+      </p>
+    </div>
   );
 });

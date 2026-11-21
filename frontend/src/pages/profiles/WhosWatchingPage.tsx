@@ -1,5 +1,6 @@
 import { liveAvatarsSupported } from '@features/profiles/avatar/runtime';
 import { AddProfileCard, ProfileCard } from '@features/profiles/ui/ProfileCard';
+import { LogoBackdrop } from '@shared/brand/logo/LogoBackdrop';
 import {
   Heading,
   IconButton,
@@ -10,7 +11,6 @@ import {
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { useTouchScreen } from '@shared/hooks/useTouchScreen';
 import { FocusGroup, FocusScope, NavigationProvider, useActiveIdWithin } from '@shared/navigation';
-import { LogoBackdrop } from '@shared/ui/logo/LogoBackdrop';
 import { useAppSelector } from '@store/hooks';
 import {
   selectAdminSession,

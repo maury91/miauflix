@@ -1045,8 +1045,8 @@ describe('PlayerView', () => {
     act(() => startAudioPlayback.mock.lastCall?.[0].onReady());
     fireEvent.timeUpdate(video);
     fireEvent.click(screen.getByRole('button', { name: 'Audio and subtitles' }));
-    expect(screen.getByRole('button', { name: /French.*AC3/ })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /English.*AC3/ }));
+    expect(screen.getByRole('radio', { name: /French.*AC3/ })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('radio', { name: /English.*AC3/ }));
     expect(startAudioPlayback.mock.lastCall?.[0]).toMatchObject({
       startSeconds: 45,
       audioTrackIndex: 1,
@@ -1099,7 +1099,7 @@ describe('PlayerView', () => {
           )
         );
         fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
-        fireEvent.click(await screen.findByRole('button', { name: /Local English/ }));
+        fireEvent.click(await screen.findByRole('radio', { description: /Local English/ }));
         expect(view.container.querySelector('track')?.getAttribute('src')).toContain(
           'local-candidate'
         );
@@ -1149,7 +1149,7 @@ describe('PlayerView', () => {
     const search = await screen.findByRole('button', { name: /Find subtitles/ });
     await waitFor(() => expect(search).not.toBeDisabled());
     fireEvent.click(search);
-    const select = await screen.findByRole('button', { name: /A long release/ });
+    const select = await screen.findByRole('radio', { description: /A long release/ });
     expect(screen.queryByText(/Filename match/)).not.toBeInTheDocument();
     const prototype = window.HTMLTrackElement.prototype;
     const descriptor = Object.getOwnPropertyDescriptor(prototype, 'track');

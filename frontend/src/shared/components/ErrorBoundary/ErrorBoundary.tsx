@@ -1,7 +1,9 @@
-import { Button } from '@shared/ui/button/Button';
+import { Button, Disclosure, EmptyState, SurfaceContextProvider } from '@shared/design-system';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
 import type { ComponentType, ReactNode } from 'react';
 import { Component } from 'react';
-import styled from 'styled-components';
+
+import * as styles from './errorBoundary.css';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -15,79 +17,37 @@ interface ErrorBoundaryProps {
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
-const ErrorContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  padding: 32px;
-  text-align: center;
-  background-color: #1a1a1a;
-  color: #ffffff;
-  border-radius: 8px;
-  margin: 16px;
-`;
-
-const ErrorTitle = styled.h2`
-  color: #ff4444;
-  margin-bottom: 16px;
-  font-size: 24px;
-`;
-
-const ErrorMessage = styled.p`
-  color: #cccccc;
-  margin-bottom: 16px;
-  max-width: 600px;
-  line-height: 1.5;
-`;
-
-const ErrorDetails = styled.details`
-  margin-top: 16px;
-  text-align: left;
-  max-width: 600px;
-  width: 100%;
-`;
-
-const ErrorSummary = styled.summary`
-  cursor: pointer;
-  color: #888888;
-  margin-bottom: 8px;
-`;
-
-const ErrorStack = styled.pre`
-  background-color: #2a2a2a;
-  padding: 16px;
-  border-radius: 4px;
-  overflow-x: auto;
-  font-size: 14px;
-  color: #ff6666;
-`;
-
-const RetryArea = styled.div`
-  margin-top: 16px;
-`;
-
 const DefaultErrorFallback: ComponentType<{ error?: Error; resetError: () => void }> = ({
   error,
   resetError,
 }) => (
-  <ErrorContainer>
-    <ErrorTitle>Something went wrong</ErrorTitle>
-    <ErrorMessage>
-      We're sorry, but something unexpected happened. Please try refreshing the page or contact
-      support if the problem persists.
-    </ErrorMessage>
-    {error && (
-      <ErrorDetails>
-        <ErrorSummary>Technical Details</ErrorSummary>
-        <ErrorStack>{error.stack}</ErrorStack>
-      </ErrorDetails>
-    )}
-    <RetryArea>
-      <Button onClick={resetError}>Try Again</Button>
-    </RetryArea>
-  </ErrorContainer>
+  // Its own navigation layer: it replaces whatever owned the keys before the error
+  <NavigationProvider>
+    <SurfaceContextProvider value="solid">
+      <FocusScope autoFocus>
+        <div className={styles.fallback} role="alert">
+          <EmptyState
+            heading="Something went wrong"
+            actions={
+              <Button navId="error-boundary-retry" onClick={resetError}>
+                Try Again
+              </Button>
+            }
+          >
+            We're sorry, but something unexpected happened. Please try refreshing the page or
+            contact support if the problem persists.
+          </EmptyState>
+          {error && (
+            <div className={styles.details}>
+              <Disclosure navId="error-boundary-details" title="Technical Details">
+                <pre className={styles.stack}>{error.stack}</pre>
+              </Disclosure>
+            </div>
+          )}
+        </div>
+      </FocusScope>
+    </SurfaceContextProvider>
+  </NavigationProvider>
 );
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
