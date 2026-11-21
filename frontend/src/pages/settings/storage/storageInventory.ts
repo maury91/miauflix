@@ -1,11 +1,11 @@
 import type { StorageInventoryResponse, StorageItemView } from '@miauflix/backend';
-import { t } from '@shared/i18n';
+import { t, type Translate } from '@shared/i18n';
 
 export type UsageCategory = 'movie' | 'episode' | 'anime' | 'unknown' | 'remux' | 'other';
 
+/** One kind of used space; its label is translated where it is shown (`categoryLabel`). */
 export interface UsageSegment {
   category: UsageCategory;
-  label: string;
   bytes: number;
 }
 
@@ -34,7 +34,9 @@ export interface StorageUsage {
   chargedBytes: number;
 }
 
-const categoryLabel = (category: UsageCategory) => t(`storage.category.${category}`);
+/** A usage category's name in the interface language. */
+export const categoryLabel = (category: UsageCategory, translate: Translate = t): string =>
+  translate(`storage.category.${category}`);
 
 export function formatBytes(bytes: number | null | undefined): string {
   if (bytes === null || bytes === undefined || !Number.isFinite(bytes) || bytes < 0) {
@@ -94,7 +96,6 @@ export function computeUsage(
   const segments = order
     .map(category => ({
       category,
-      label: categoryLabel(category),
       bytes: byCategory.get(category) ?? 0,
     }))
     .filter(segment => segment.bytes > 0);

@@ -75,7 +75,7 @@ describe('QrApprovalPage', () => {
     expect(screen.getByText(/Code expires in \d:\d\d/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Approve' }));
-    expect(await screen.findByRole('heading', { name: 'Approved' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Sign-in approved' })).toBeInTheDocument();
     const approval = fetchMock.mock.calls.find((call: unknown[]) =>
       String(call[0] instanceof Request ? call[0].url : call[0]).endsWith('/approve')
     );
@@ -113,7 +113,7 @@ describe('QrApprovalPage', () => {
       availableSessions: [{ session: 'stored', user }],
     });
     fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
-    expect(await screen.findByRole('heading', { name: 'Approved' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Sign-in approved' })).toBeInTheDocument();
     expect(requestHeaders(approvalCall(fetchMock)!).get('X-Session-Id')).toBe('stored');
   });
 
@@ -137,7 +137,7 @@ describe('QrApprovalPage', () => {
     });
     fireEvent.click(await screen.findByRole('button', { name: 'Other' }));
     fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
-    expect(await screen.findByRole('heading', { name: 'Approved' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Sign-in approved' })).toBeInTheDocument();
     expect(requestHeaders(approvalCall(fetchMock)!).get('X-Session-Id')).toBe('second');
   });
 

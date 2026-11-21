@@ -41,9 +41,8 @@ export function notificationCopy(notification: NotificationItem): NotificationCo
       .join(' ');
     return {
       heading: t('notifications.betterQuality'),
-      text: label
-        ? t('notifications.availableIn', { title: notification.title })
-        : t('notifications.availableAs', { title: notification.title }),
+      // The row puts the title before the sentence: the sentence doesn't repeat it
+      text: label ? t('notifications.availableIn') : t('notifications.availableAs'),
       qualityLabel: label,
       release: upgrade || null,
     };
@@ -62,7 +61,7 @@ export function notificationCopy(notification: NotificationItem): NotificationCo
 
   return {
     heading: t('notifications.justAdded'),
-    text: withQuality(t('notifications.titleAvailable', { title: notification.title })),
+    text: withQuality(t('notifications.nowAvailable')),
     qualityLabel: label,
     release: label ? release : null,
   };

@@ -222,9 +222,7 @@ describe('ServiceConfigGroup', () => {
     );
 
     expect(screen.getByText('save required')).toBeInTheDocument();
-    expect(
-      screen.getByText(/redirect URI is suggested from this browser.*still unsaved/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/used this browser to suggest a redirect URI/i)).toBeInTheDocument();
   });
 
   it('provides per-service Test and Save actions', () => {

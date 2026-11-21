@@ -527,7 +527,7 @@ export const CategoryRow = memo(
       return (
         <div className={styles.row}>
           {title}
-          <div className={styles.state}>Nothing here yet.</div>
+          <div className={styles.state}>{t('home.nothingHere')}</div>
         </div>
       );
     }

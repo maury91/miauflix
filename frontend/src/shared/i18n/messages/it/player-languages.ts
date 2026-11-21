@@ -4,6 +4,6 @@ import type { Translation } from '../types';
 export const playerLanguages: Translation<typeof english> = {
   'playerLanguages.label': 'Audio e sottotitoli',
   'playerLanguages.audio': '{language}',
-  'playerLanguages.original': '{language} [Originale] con sottotitoli',
+  'playerLanguages.original': '{language} (originale) con sottotitoli',
   'playerLanguages.withSubtitles': '{language} con sottotitoli',
 };

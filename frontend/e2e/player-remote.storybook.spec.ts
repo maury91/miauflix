@@ -29,7 +29,9 @@ test('selects subtitles and shifts cues with remote keys only', async ({ page })
   await expect(language.locator('xpath=..')).toHaveAttribute('data-focused', 'true');
 
   await page.keyboard.press('ArrowDown');
-  await expect(settings.getByRole('switch', { name: 'Hearing impaired' })).toBeFocused();
+  await expect(
+    settings.getByRole('switch', { name: 'Subtitles for deaf and hard of hearing' })
+  ).toBeFocused();
   await page.keyboard.press('ArrowDown');
   await expect(settings.getByRole('button', { name: 'Find subtitles' })).toBeFocused();
   await page.keyboard.press('ArrowDown');

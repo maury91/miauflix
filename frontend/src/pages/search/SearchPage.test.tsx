@@ -148,7 +148,7 @@ describe('SearchPage', () => {
       );
     });
 
-    expect(screen.getByRole('heading', { name: 'Search needs to be set up' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Set up search to use it' })).toBeInTheDocument();
     expect(screen.getByText('Media Catalog is not configured.')).toBeInTheDocument();
     expect(screen.getByText('An admin needs to configure TMDB.')).toBeInTheDocument();
     const retry = screen.getByRole('button', { name: 'Try again' });
@@ -202,7 +202,7 @@ describe('SearchPage', () => {
       );
     });
 
-    expect(screen.getByRole('heading', { name: 'No results for ‘zzzz’' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'No results for “zzzz”' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Clear search' })).toHaveFocus();
     press('Enter');
     expect(store.getState().search.query).toBe('');

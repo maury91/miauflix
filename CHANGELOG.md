@@ -8,6 +8,7 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 
 - Miauflix is now available in Italian. A new Preferences page in the profile menu sets each profile's interface language, its preferred audio and subtitle languages, and separate audio and subtitle choices for anime. Audio can also be set to the title's original language. Titles, descriptions and genres on Home and in details follow the interface language.
 - Under the player's seek bar, up to three buttons switch between your audio language, the original language with subtitles, and your audio language with subtitles.
+- Notifications about a movie no longer repeat its title.
 
 ### App and navigation
 

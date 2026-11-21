@@ -52,9 +52,9 @@ describe('SetupPage', () => {
     );
     expect(confirmation).toHaveAttribute('type', 'password');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Show confirmation password' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Show the repeated password' }));
     expect(confirmation).toHaveAttribute('type', 'text');
-    expect(screen.getByRole('button', { name: 'Hide confirmation password' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Hide the repeated password' })).toHaveAttribute(
       'aria-pressed',
       'true'
     );

@@ -63,12 +63,23 @@ function renderSource(handlers: PlaybackSessionHandlers) {
       title,
       subtitleKey,
       target = playable,
+      audioLanguage,
+      audioLanguageKnown,
     }: {
       title: string;
       subtitleKey: string;
       target?: typeof playable;
+      audioLanguage?: string;
+      audioLanguageKnown?: boolean;
     }) => {
-      const source = usePlaybackSource({ playable: target, title, avplay: false, subtitleKey });
+      const source = usePlaybackSource({
+        playable: target,
+        title,
+        avplay: false,
+        subtitleKey,
+        audioLanguage,
+        audioLanguageKnown,
+      });
       source.handlers.current = handlers;
       return source;
     },
@@ -78,6 +89,8 @@ function renderSource(handlers: PlaybackSessionHandlers) {
         title: string;
         subtitleKey: string;
         target?: typeof playable;
+        audioLanguage?: string;
+        audioLanguageKnown?: boolean;
       },
     }
   );
@@ -95,6 +108,45 @@ describe('usePlaybackSource', () => {
     handlers.onRequestStart.mockClear();
     handlers.onSessionCreated.mockClear();
     handlers.onTargetLeave.mockClear();
+  });
+
+  it('waits for the audio language once, and keeps the session when details change after', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(sessionFor(1)) });
+    const other = { kind: 'movie' as const, mediaId: 8 };
+    const { result, rerender } = renderSource(handlers);
+    rerender({ title: 'Film', subtitleKey: 'subtitles', audioLanguageKnown: false });
+    // The first render already asked; a target that starts unknown is what the player sees
+    createSession.mockClear();
+    handlers.onRequestStart.mockClear();
+    rerender({
+      title: 'Film',
+      subtitleKey: 'subtitles',
+      target: other,
+      audioLanguageKnown: false,
+    });
+    expect(createSession).not.toHaveBeenCalled();
+    expect(result.current.status).toBe('checking');
+
+    rerender({
+      title: 'Film',
+      subtitleKey: 'subtitles',
+      target: other,
+      audioLanguage: 'ja',
+      audioLanguageKnown: true,
+    });
+    await waitFor(() => expect(result.current.status).toBe('ready'));
+    expect(createSession).toHaveBeenCalledTimes(1);
+    expect(createSession).toHaveBeenCalledWith(expect.objectContaining({ playable: other }));
+
+    rerender({
+      title: 'Film',
+      subtitleKey: 'subtitles',
+      target: other,
+      audioLanguageKnown: false,
+    });
+    expect(createSession).toHaveBeenCalledTimes(1);
+    expect(handlers.onRequestStart).toHaveBeenCalledTimes(1);
+    expect(result.current.status).toBe('ready');
   });
 
   it('creates a session, reports it to the handlers, and marks the subtitle key', async () => {
@@ -170,7 +222,7 @@ describe('usePlaybackSource', () => {
     expect(createSession).toHaveBeenLastCalledWith(
       expect.objectContaining({ avoidSourceIds: [1, 2] })
     );
-    expect(result.current.error).toContain('could not load any of its sources');
+    expect(result.current.error).toContain('None of the sources for “Film” could be played');
     expect(result.current.session).toBeNull();
   });
 

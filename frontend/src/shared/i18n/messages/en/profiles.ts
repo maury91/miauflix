@@ -23,7 +23,7 @@ export const profiles = {
   'profiles.adminOnly': 'Only an administrator can add profiles.',
   'profiles.invalidEmail': 'Enter a valid email address.',
   'profiles.shortPassword': 'The password needs at least {count} characters.',
-  'profiles.saveFailed': 'Saving the profile failed.',
+  'profiles.saveFailed': "Couldn't save the profile.",
   'look.option.circle': 'Circle',
   'look.option.square': 'Square',
   'look.option.triangle': 'Triangle',

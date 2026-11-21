@@ -10,8 +10,7 @@ export const preferences: Translation<typeof english> = {
   'profileMenu.preferences': 'Preferenze',
   'profileMenu.logout': 'Esci',
   'preferences.title': 'Preferenze',
-  'preferences.description':
-    'Le lingue di {name}, su ogni dispositivo in cui guarda questo profilo.',
+  'preferences.description': 'Preferenze di lingua di {name} su tutti i dispositivi.',
   'preferences.back': 'Torna alla Home',
   'preferences.interface': 'Interfaccia',
   'preferences.interfaceLanguage': "Lingua dell'interfaccia",
@@ -21,15 +20,16 @@ export const preferences: Translation<typeof english> = {
   'preferences.moviesAndShows': 'Film e serie TV',
   'preferences.anime': 'Anime',
   'preferences.audioDescription':
-    'La lingua in cui inizia la riproduzione, quando la release la include.',
-  'preferences.animeAudioDescription': "Gli anime possono usare un'altra lingua dell'audio.",
-  'preferences.subtitlesDescription': 'Cercati per primi e proposti sotto la barra di avanzamento.',
+    'Miauflix avvia la riproduzione in questa lingua quando la traccia audio è disponibile.',
+  'preferences.animeAudioDescription': 'Puoi scegliere una lingua audio diversa per gli anime.',
+  'preferences.subtitlesDescription':
+    'Miauflix cerca prima i sottotitoli in questa lingua e li propone sotto la barra di avanzamento.',
   'preferences.animeSubtitlesDescription':
-    "Gli anime possono usare un'altra lingua dei sottotitoli.",
+    'Puoi scegliere una lingua diversa per i sottotitoli degli anime.',
   'preferences.deviceLanguage': 'Lingua del dispositivo ({language})',
   'preferences.sameAsMovies': 'Come film e serie TV',
   'preferences.original': 'Lingua originale',
   'preferences.saving': 'Salvataggio…',
   'preferences.saved': 'Salvate',
-  'preferences.saveFailed': 'Non è stato possibile salvare le preferenze. Riprova.',
+  'preferences.saveFailed': 'Impossibile salvare le preferenze. Riprova.',
 };

@@ -127,7 +127,7 @@ describe('Trakt dialog dismissal', () => {
       expect(screen.getByText('ABCD')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Open Trakt' })).toHaveAttribute('data-focused');
       expect(screen.getByText('Scan the QR code')).toBeInTheDocument();
-      expect(screen.getByLabelText('Scan to connect your Trakt account')).toHaveAttribute(
+      expect(screen.getByLabelText('QR code to connect your Trakt account')).toHaveAttribute(
         'data-value',
         'https://trakt.tv/activate/ABCD'
       );

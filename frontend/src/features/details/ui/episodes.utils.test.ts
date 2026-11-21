@@ -11,10 +11,10 @@ describe('episodeProgressLabel', () => {
   it.each([
     [undefined, null],
     [{ state: 'completed', positionSeconds: 10, durationSeconds: 100 }, 'Watched'],
-    [{ state: 'paused', positionSeconds: 25, durationSeconds: 100 }, 'Resume 25%'],
-    [{ state: 'playing', positionSeconds: 2, durationSeconds: 3 }, 'Resume 67%'],
-    [{ state: 'paused', positionSeconds: 200, durationSeconds: 100 }, 'Resume 100%'],
-    [{ state: 'paused', positionSeconds: 50, durationSeconds: 0 }, 'Resume 0%'],
+    [{ state: 'paused', positionSeconds: 25, durationSeconds: 100 }, 'Resume from 25%'],
+    [{ state: 'playing', positionSeconds: 2, durationSeconds: 3 }, 'Resume from 67%'],
+    [{ state: 'paused', positionSeconds: 200, durationSeconds: 100 }, 'Resume from 100%'],
+    [{ state: 'paused', positionSeconds: 50, durationSeconds: 0 }, 'Resume from 0%'],
   ] as const)('%j → %s', (entry, expected) => {
     expect(episodeProgressLabel(entry)).toBe(expected);
   });

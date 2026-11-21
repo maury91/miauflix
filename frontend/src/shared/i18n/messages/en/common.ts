@@ -15,9 +15,8 @@ export const common = {
   'common.tryAgain': 'Try again',
   'common.saving': 'Saving',
   'common.somethingWrong': 'Something went wrong',
-  'common.unexpected':
-    "We're sorry, but something unexpected happened. Please try refreshing the page or contact support if the problem persists.",
-  'common.technicalDetails': 'Technical Details',
+  'common.unexpected': 'Refresh the page. If the problem keeps happening, contact support.',
+  'common.technicalDetails': 'Technical details',
   'common.pageNotFound': 'Page not found',
   'common.logo': 'Miauflix logo',
 } satisfies MessageSection;

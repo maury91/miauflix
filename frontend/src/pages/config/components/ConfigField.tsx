@@ -31,9 +31,9 @@ function booleanStateLabel(
   if (!key.startsWith('DISABLE_')) return translate(value ? 'config.enabled' : 'config.disabled');
 
   const featureName = key.slice('DISABLE_'.length).toLowerCase().replace(/_/g, ' ');
-  return `${featureName.charAt(0).toUpperCase()}${featureName.slice(1)} ${
-    value ? 'disabled' : 'enabled'
-  }`;
+  const feature = `${featureName.charAt(0).toUpperCase()}${featureName.slice(1)}`;
+  // A `DISABLE_` flag that is on means the feature is off
+  return translate(value ? 'config.featureDisabled' : 'config.featureEnabled', { feature });
 }
 
 function timeUnitLabel(unit: string): string {

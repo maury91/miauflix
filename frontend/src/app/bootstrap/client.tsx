@@ -10,6 +10,8 @@ import { probeServer } from '@features/server-discovery/lib/probe';
 import { ServerPicker } from '@features/server-discovery/ui/ServerPicker';
 import { API_URL, builtForTizen, glRowsEnabled, IS_SLOW_DEVICE } from '@shared/config/constants';
 import { glSurfaceSupported, preloadGlBackend } from '@shared/design-system/gl';
+import { I18nProvider, resolveInterfaceLanguage } from '@shared/i18n';
+import { setActiveLanguage } from '@shared/i18n/translate';
 import { store } from '@store';
 import { gsap } from 'gsap';
 import { StrictMode } from 'react';
@@ -39,11 +41,16 @@ export function ClientApp() {
   );
 }
 
-/** The TV app's server picker, until the TV has a server that answers. */
+/**
+ * The TV app's server picker, until the TV has a server that answers. No profile is signed in
+ * without a server: the picker speaks the device's language.
+ */
 function ServerPickerApp({ lastServer }: { lastServer?: string }) {
   return (
     <StrictMode>
-      <ServerPicker lastServer={lastServer} />
+      <I18nProvider>
+        <ServerPicker lastServer={lastServer} />
+      </I18nProvider>
     </StrictMode>
   );
 }
@@ -51,6 +58,8 @@ function ServerPickerApp({ lastServer }: { lastServer?: string }) {
 async function start(appElement: HTMLElement) {
   // The TV app checks its server first: it may have none yet, or the server may be off
   if (builtForTizen && !(API_URL && (await probeServer(API_URL)))) {
+    // Copy built outside the tree (the picker's messages) is in the device's language from the start
+    setActiveLanguage(resolveInterfaceLanguage(null, navigator.languages ?? []));
     ReactDOM.createRoot(appElement).render(<ServerPickerApp lastServer={API_URL || undefined} />);
     return;
   }

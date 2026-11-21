@@ -96,7 +96,7 @@ describe('Details Watch action without a source', () => {
   it('reports a request that could not be saved', () => {
     Object.assign(notify, { isError: true, originalArgs: playable });
     setupTest();
-    expect(screen.getByRole('alert')).toHaveTextContent('The notification could not be saved');
+    expect(screen.getByRole('alert')).toHaveTextContent("Couldn't set up the alert");
     expect(screen.getByRole('button', { name: /Notify Me/ })).toBeInTheDocument();
   });
 

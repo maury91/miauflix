@@ -164,7 +164,7 @@ describe('ConfigField', () => {
     expect(screen.queryByText('✓ value saved')).not.toBeInTheDocument();
     expect(screen.getByLabelText('Config Key')).toHaveAttribute(
       'placeholder',
-      'A value is saved — enter a new value to replace it'
+      'Enter a new value to replace the saved one'
     );
   });
 

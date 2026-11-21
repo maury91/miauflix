@@ -55,6 +55,11 @@ interface PlaybackSourceOptions {
   subtitleKey: string;
   /** The profile's audio language for this title (ISO 639-1); the device's when absent. */
   audioLanguage?: string;
+  /**
+   * False while `audioLanguage` can't be known yet (the title's details, which say its original
+   * language, are loading): the first session waits rather than ask for the wrong audio.
+   */
+  audioLanguageKnown?: boolean;
 }
 
 /**
@@ -68,6 +73,7 @@ export function usePlaybackSource({
   avplay,
   subtitleKey,
   audioLanguage,
+  audioLanguageKnown = true,
 }: PlaybackSourceOptions) {
   const dispatch = useDispatch<AppDispatch>();
   const [createSession, sessionRequest] = useCreateSessionMutation();
@@ -144,6 +150,13 @@ export function usePlaybackSource({
   const [heldFor, setHeldFor] = useState<string | null>(null);
   const playableKey = JSON.stringify(playable);
   const holdsThisTitle = heldFor === playableKey;
+  /**
+   * The target whose audio language was known once: from then on its sessions don't wait, so
+   * details reloading (or failing) later never restarts a session that is playing.
+   */
+  const [knownFor, setKnownFor] = useState<string | null>(null);
+  if (audioLanguageKnown && knownFor !== playableKey) setKnownFor(playableKey);
+  const canRequest = audioLanguageKnown || knownFor === playableKey;
   const sessionRef = useRef(session);
   sessionRef.current = session;
   const heldSessionRef = useRef(heldSession);
@@ -255,6 +268,14 @@ export function usePlaybackSource({
   }, []);
 
   useEffect(() => {
+    if (!canRequest) {
+      // Another target's session (or its request) doesn't stay on while this one waits
+      requestId.current += 1;
+      sessionInFlight.current = null;
+      resetSessionRequest();
+      setStatus('checking');
+      return;
+    }
     const currentRequest = ++requestId.current;
     const { onRequestStart, onSessionCreated, onTargetLeave } = handlers.current;
     directFailedWhilePending.current = false;
@@ -330,7 +351,7 @@ export function usePlaybackSource({
         }
       });
     };
-  }, [attempt, avplay, createSession, playable, resetSessionRequest, dispatch]);
+  }, [attempt, avplay, canRequest, createSession, playable, resetSessionRequest, dispatch]);
 
   return {
     session: session ?? (holdsThisTitle ? heldSession : null),

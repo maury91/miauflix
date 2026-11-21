@@ -627,6 +627,7 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
             playable={playable}
             title={selectedMedia ? getMediaTitle(selectedMedia) : t('player.selectedTitle')}
             titleLanguage={titleLanguage}
+            titleLanguageLoading={!routeQuery.isError}
             onBack={navigation.returnToDetails}
             nextEpisode={nextEpisode}
             onPlayNext={() => {

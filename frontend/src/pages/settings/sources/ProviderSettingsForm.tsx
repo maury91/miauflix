@@ -116,7 +116,10 @@ export function ProviderSettingsForm({
                 items={[
                   {
                     value: '',
-                    label: `Default${placeholder === undefined ? '' : ` (${placeholder})`}`,
+                    label:
+                      placeholder === undefined
+                        ? t('sources.defaultOption')
+                        : t('sources.defaultOptionWith', { value: placeholder }),
                   },
                   ...Object.entries(setting.options).map(([optionValue, label]) => ({
                     value: optionValue,

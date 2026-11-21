@@ -207,7 +207,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
               .map(item => `${item.service}: ${item.message}`)
               .concat(
                 response.data.restarted.length
-                  ? [`Reactivated: ${response.data.restarted.join(', ')}`]
+                  ? [t('config.reactivated', { services: response.data.restarted.join(', ') })]
                   : []
               )
               .join(' · '),
@@ -216,7 +216,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             response.data.success && !response.data.changed.includes(service)
               ? {
                   ...savedResult,
-                  message: `${service} configuration is valid. No changes to save.`,
+                  message: t('config.validNoChanges', { service }),
                 }
               : savedResult;
           setServiceResults(current => ({ ...current, [service]: finalResult }));

@@ -1,5 +1,5 @@
 import { Button, Disclosure, EmptyState, SurfaceContextProvider } from '@shared/design-system';
-import { t } from '@shared/i18n';
+import { useT } from '@shared/i18n';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import type { ComponentType, ReactNode } from 'react';
 import { Component } from 'react';
@@ -21,34 +21,37 @@ interface ErrorBoundaryProps {
 const DefaultErrorFallback: ComponentType<{ error?: Error; resetError: () => void }> = ({
   error,
   resetError,
-}) => (
-  // Its own navigation layer: it replaces whatever owned the keys before the error
-  <NavigationProvider>
-    <SurfaceContextProvider value="solid">
-      <FocusScope autoFocus>
-        <div className={styles.fallback} role="alert">
-          <EmptyState
-            heading={t('common.somethingWrong')}
-            actions={
-              <Button navId="error-boundary-retry" onClick={resetError}>
-                {t('common.tryAgain')}
-              </Button>
-            }
-          >
-            {t('common.unexpected')}
-          </EmptyState>
-          {error && (
-            <div className={styles.details}>
-              <Disclosure navId="error-boundary-details" title={t('common.technicalDetails')}>
-                <pre className={styles.stack}>{error.stack}</pre>
-              </Disclosure>
-            </div>
-          )}
-        </div>
-      </FocusScope>
-    </SurfaceContextProvider>
-  </NavigationProvider>
-);
+}) => {
+  const t = useT();
+  return (
+    // Its own navigation layer: it replaces whatever owned the keys before the error
+    <NavigationProvider>
+      <SurfaceContextProvider value="solid">
+        <FocusScope autoFocus>
+          <div className={styles.fallback} role="alert">
+            <EmptyState
+              heading={t('common.somethingWrong')}
+              actions={
+                <Button navId="error-boundary-retry" onClick={resetError}>
+                  {t('common.tryAgain')}
+                </Button>
+              }
+            >
+              {t('common.unexpected')}
+            </EmptyState>
+            {error && (
+              <div className={styles.details}>
+                <Disclosure navId="error-boundary-details" title={t('common.technicalDetails')}>
+                  <pre className={styles.stack}>{error.stack}</pre>
+                </Disclosure>
+              </div>
+            )}
+          </div>
+        </FocusScope>
+      </SurfaceContextProvider>
+    </NavigationProvider>
+  );
+};
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {

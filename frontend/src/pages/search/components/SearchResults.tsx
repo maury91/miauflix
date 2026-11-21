@@ -88,7 +88,7 @@ export function SearchResults({
           {status === 'ready' && totalResults > 0 && (
             <div className={styles.count}>
               <Text as="span" tone="secondary">
-                {totalResults} {totalResults === 1 ? 'result' : 'results'}
+                {t('search.resultCount', { count: totalResults })}
               </Text>
             </div>
           )}

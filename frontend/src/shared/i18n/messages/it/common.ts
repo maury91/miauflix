@@ -15,8 +15,7 @@ export const common: Translation<typeof english> = {
   'common.tryAgain': 'Riprova',
   'common.saving': 'Salvataggio',
   'common.somethingWrong': 'Qualcosa è andato storto',
-  'common.unexpected':
-    'Ci dispiace, è successo qualcosa di imprevisto. Prova a ricaricare la pagina o contatta l’assistenza se il problema persiste.',
+  'common.unexpected': 'Ricarica la pagina. Se il problema si ripresenta, contatta l’assistenza.',
   'common.technicalDetails': 'Dettagli tecnici',
   'common.pageNotFound': 'Pagina non trovata',
   'common.logo': 'Logo di Miauflix',

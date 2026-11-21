@@ -25,12 +25,12 @@ test.describe('details page preparation contract', () => {
     await expect(page.getByText(/1080p, WEB source/)).toBeVisible();
     const warmupProgress = page.locator('[data-warmup-state="warming"]');
     await expect(warmupProgress).toBeVisible();
-    await expect(watch).toHaveAccessibleDescription('Warming up torrent, 50% ready');
+    await expect(watch).toHaveAccessibleDescription('Preparing torrent (50%)');
 
     await expect
       .poll(() => harness.torrentEvents.includes('warmup:ready'), { timeout: 12_000 })
       .toBe(true);
-    await expect(watch).toHaveAccessibleDescription('Torrent warmup ready');
+    await expect(watch).toHaveAccessibleDescription('Torrent ready');
     await expect(warmupProgress).toBeHidden();
     await expect(page.getByText(/1080p, WEB source/)).toBeVisible();
 

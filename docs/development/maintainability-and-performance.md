@@ -171,32 +171,39 @@ there is fast everywhere.
 
 Rules to add to `eslint.config.mjs` and CI, in order:
 
-| #   | Rule                                                                                                                                                                                   | Notes                                                                    |
-| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| 1   | `max-lines` (400 / 300 for `*.tsx` / 600 for tests), `max-lines-per-function` (80), `complexity` (15), `max-depth` (3), `max-params` (4), all with `skipBlankLines` and `skipComments` | Errors for new code; existing offenders listed in a baseline (see below) |
-| 2   | Full `eslint-plugin-react-hooks` recommended preset (v7, installed), and no `eslint-disable` for its rules                                                                             | Compiler-backed rules: purity, refs, setState in effects                 |
-| 3   | `no-console` in `frontend/src`, with a shared logger                                                                                                                                   | Matches the backend rule                                                 |
-| 4   | Frontend import boundaries with `no-restricted-imports`                                                                                                                                | `shared/` → nothing above it; features only via `index.ts`               |
-| 5   | `no-restricted-syntax` against `new Error(` and `throw` of non-`AppError` in `backend/src` and `services/*/src`                                                                        |                                                                          |
-| 6   | `@typescript-eslint/no-explicit-any` and `no-non-null-assertion` as errors                                                                                                             | Currently warnings / off                                                 |
-| 7   | Type-aware linting (`projectService: true`): `no-floating-promises`, `no-misused-promises`, `switch-exhaustiveness-check`, `explicit-module-boundary-types`                            | Slower; can run in CI and pre-push only                                  |
-| 8   | `knip` in CI                                                                                                                                                                           | Unused files, exports and dependencies                                   |
-| 9   | TV bundle size budget in CI                                                                                                                                                            |                                                                          |
-| 10  | `noUncheckedIndexedAccess`, `noImplicitOverride` in every `tsconfig`                                                                                                                   | Per package, parsers first                                               |
-| 11  | React Compiler, rolled out per directory with TV benchmarks                                                                                                                            |                                                                          |
+| #   | Rule                                                                                                                                                                                       | Notes                                                                    |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| 1   | `max-lines` (400 / 300 for `*.tsx` / 600 for tests) and `max-lines-per-function` (80), both with `skipBlankLines` and `skipComments`; `complexity` (15), `max-depth` (3), `max-params` (4) | Errors for new code; existing offenders listed in a baseline (see below) |
+| 2   | Full `eslint-plugin-react-hooks` recommended preset (v7, installed), and no `eslint-disable` for its rules                                                                                 | Compiler-backed rules: purity, refs, setState in effects                 |
+| 3   | `no-console` in `frontend/src`, with a shared logger                                                                                                                                       | Matches the backend rule                                                 |
+| 4   | Frontend import boundaries with `no-restricted-imports`                                                                                                                                    | `shared/` → nothing above it; features only via `index.ts`               |
+| 5   | `no-restricted-syntax` against `new Error(` and `throw` of non-`AppError` in `backend/src` and `services/*/src`                                                                            |                                                                          |
+| 6   | `@typescript-eslint/no-explicit-any` and `no-non-null-assertion` as errors                                                                                                                 | Currently warnings / off                                                 |
+| 7   | Type-aware linting (`projectService: true`): `no-floating-promises`, `no-misused-promises`, `switch-exhaustiveness-check`, `explicit-module-boundary-types`                                | Slower; can run in CI and pre-push only                                  |
+| 8   | `knip` in CI                                                                                                                                                                               | Unused files, exports and dependencies                                   |
+| 9   | TV bundle size budget in CI                                                                                                                                                                |                                                                          |
+| 10  | `noUncheckedIndexedAccess`, `noImplicitOverride` in every `tsconfig`                                                                                                                       | Per package, parsers first                                               |
+| 11  | React Compiler, rolled out per directory with TV benchmarks                                                                                                                                |                                                                          |
 
 ### Baseline and ratchet
 
 Turning a limit on can't wait for every existing file to comply, and it can't be a warning either:
 warnings are ignored. So each limit is an error, and the files that break it today are listed in a
-baseline (an `ignores` list per rule in `eslint.config.mjs`, generated by a script). The baseline
-only shrinks:
+baseline, generated by a script: an `ignores` list per rule in `eslint.config.mjs`, and beside it a
+JSON file that records, for each baselined file and rule, how many violations it had when it was
+recorded: for `max-lines`, the file's line count as the rule measures it (no blanks or comments); for
+the other rules, the number of functions that break them.
+
+In CI the script lints the baselined files with the rules switched on, counts the violations per file
+and rule, and compares the counts with the recorded ones. The baseline only shrinks:
 
 - New files never enter it.
-- A change that touches a baselined file doesn't make it bigger, and splits it when the change is
-  substantial.
-- A file that comes under the limit is removed from the baseline in the same change (CI checks that
-  the baseline has no compliant files in it).
+- A count that goes up fails CI: a change that touches a baselined file doesn't make it longer or
+  add offending functions, and splits the file when the change is substantial.
+- A count that goes down is written back to the baseline in the same change, so the lower count is
+  the new ceiling.
+- A file that reaches zero for a rule is removed from that rule's baseline in the same change (CI
+  fails while a baselined file has no violations left).
 
 ## Current debt
 

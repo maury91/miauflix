@@ -4,6 +4,6 @@ import type { MessageSection } from '../types';
 export const playerLanguages = {
   'playerLanguages.label': 'Audio and subtitles',
   'playerLanguages.audio': '{language}',
-  'playerLanguages.original': '{language} [Original] with subtitles',
+  'playerLanguages.original': '{language} (original) with subtitles',
   'playerLanguages.withSubtitles': '{language} with subtitles',
 } satisfies MessageSection;

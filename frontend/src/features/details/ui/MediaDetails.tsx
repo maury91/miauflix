@@ -366,11 +366,9 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
     }
     return [
       formatYear(current.firstAirDate),
-      current.seasons.length
-        ? `${current.seasons.length} season${current.seasons.length === 1 ? '' : 's'}`
-        : '',
+      current.seasons.length ? t('details.seasonCount', { count: current.seasons.length }) : '',
     ].filter(Boolean);
-  }, [current]);
+  }, [current, t]);
   const rating = current?.rating ? current.rating.toFixed(1) : null;
 
   const targetEpisodeForSeason = useCallback(
@@ -589,7 +587,7 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
             {rating && (
               <span className={styles.fact}>
                 <StarIcon className={styles.star} aria-hidden="true" />
-                <span className={visuallyHidden}>Rating </span>
+                <span className={visuallyHidden}>{`${t('details.ratingLabel')} `}</span>
                 {rating}
               </span>
             )}

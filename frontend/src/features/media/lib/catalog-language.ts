@@ -14,11 +14,12 @@ export function catalogLanguage(): string {
 }
 
 /**
- * Whether some cached catalog data was loaded in a language other than `language`. Forgets the
- * languages asked for so far: the caller reloads that data in `language`.
+ * Whether some cached catalog data was loaded in a language other than `language`. When it was,
+ * forgets the languages asked for so far: the caller reloads that data in `language`. When not,
+ * they are kept, so a later change away from `language` still finds the data stale.
  */
 export function takeStaleCatalogLanguage(language: string): boolean {
   const stale = [...requested].some(other => other !== language);
-  requested.clear();
+  if (stale) requested.clear();
   return stale;
 }

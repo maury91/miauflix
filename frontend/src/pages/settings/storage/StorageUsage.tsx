@@ -2,7 +2,12 @@ import { Heading, Surface, Text } from '@shared/design-system';
 import { useT } from '@shared/i18n';
 import type { ReactNode } from 'react';
 
-import { formatBytes, type StorageUsage as Usage, type UsageSegment } from './storageInventory';
+import {
+  categoryLabel,
+  formatBytes,
+  type StorageUsage as Usage,
+  type UsageSegment,
+} from './storageInventory';
 import * as styles from './storageUsage.css';
 
 const percent = (share: number) => `${Math.min(100, Math.max(0, share * 100))}%`;
@@ -34,7 +39,7 @@ export function StorageUsage({ usage }: { usage: Usage }) {
     <LegendItem
       key={segment.category}
       swatch={styles.swatch[segment.category]}
-      label={segment.label}
+      label={categoryLabel(segment.category, t)}
       bytes={segment.bytes}
     />
   );

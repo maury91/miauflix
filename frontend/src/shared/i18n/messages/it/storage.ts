@@ -22,35 +22,35 @@ export const storage: Translation<typeof english> = {
   'storage.status.local_only': 'Solo locale',
   'storage.status.inactive': 'Inattivo',
   'storage.status.unknown': 'Sconosciuto',
-  'storage.freeFailed': 'Impossibile liberare questo download. Riprova.',
+  'storage.freeFailed': 'Impossibile eliminare il download. Riprova.',
   'storage.seedingConfigured':
-    'I download completati restano in condivisione per il tempo configurato prima di diventare solo locali.',
-  'storage.seedingNone': 'I download completati diventano subito solo locali.',
+    'Miauflix condivide i download completati per il tempo indicato nelle impostazioni di archiviazione, poi li conserva solo sul server.',
+  'storage.seedingNone': 'Miauflix interrompe la condivisione appena il download termina.',
   'storage.seedingFor':
-    'I download completati restano in condivisione per {duration} prima di diventare solo locali.',
+    'Miauflix condivide i download completati per {duration}, poi li conserva solo sul server.',
   'storage.freed': 'Liberati {size} occupati da {name}.',
   'storage.title': 'Archiviazione',
   'storage.description':
-    'Cosa Miauflix conserva sul disco di questo server. Libera spazio per rimuovere un download.',
+    'Qui trovi i file che Miauflix conserva sul server. Elimina i download per liberare spazio.',
   'storage.back': 'Torna alla Home',
   'storage.confirmTitle': 'Liberare lo spazio occupato da {name}?',
   'storage.confirmDescription':
-    'Verranno eliminati {size} da questo server. Per riprodurlo di nuovo dovrà essere scaricato ancora.',
+    'Libererai {size} sul server. Per riguardarlo dovrai scaricarlo di nuovo.',
   'storage.deleteDownload': 'Elimina download',
   'storage.updating': 'Aggiornamento dell’archiviazione…',
   'storage.loading': 'Caricamento dell’archiviazione…',
   'storage.refreshFailed':
-    'Impossibile aggiornare l’archiviazione. Vengono mostrati gli ultimi risultati caricati.',
+    'Impossibile aggiornare i dati di archiviazione. Vedi gli ultimi dati disponibili.',
   'storage.loadFailed': 'Impossibile caricare l’archiviazione. Controlla la connessione e riprova.',
   'storage.downloads': 'Download',
   'storage.sortBy': 'Ordina per',
-  'storage.empty': 'Nessun contenuto scaricato occupa spazio.',
+  'storage.empty': 'Nessun download salvato sul server.',
   'storage.list': 'Contenuti scaricati',
   'storage.freeLabel': 'Libera lo spazio occupato da {name}',
   'storage.beingWatched': 'In riproduzione',
   'storage.freeSpace': 'Libera spazio',
   'storage.legend':
-    'Inattivo significa incompleto e non caricato; Attivo significa incompleto e caricato dal torrent. Disponibile offline significa che il video è completo ma il torrent può ancora caricarsi. Solo locale significa che è completo e il torrent non lo caricherà più. {seeding} Libera spazio elimina un download: dovrai scaricarlo di nuovo per riprodurlo.',
+    'Inattivo indica un download incompleto con il torrent non caricato. Attivo indica un download incompleto con il torrent caricato. Disponibile offline indica che il video è completo e Miauflix può ancora caricarne il torrent. Solo locale indica che il video è completo e Miauflix non caricherà più il torrent. {seeding} Libera spazio elimina il download. Per rivederlo dovrai scaricarlo di nuovo.',
   'storage.videoComplete': 'Video completo',
   'storage.percentDownloaded': '{percent}% scaricato',
   'storage.currentlyWatched': 'In riproduzione ora',
@@ -67,23 +67,23 @@ export const storage: Translation<typeof english> = {
   'storage.field.CONTENT_SEED_DURATION_SECONDS': 'Condivisione dopo il download',
   'storage.field.DOWNLOAD_PATH': 'Cartella dei download',
   'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'La cartella dei download è riservata a Miauflix',
-  'storage.field.STORAGE_PAD_FILE_SIZES': 'Prealloca le dimensioni dei file',
+  'storage.field.STORAGE_PAD_FILE_SIZES': 'Prealloca spazio per i file',
   'storage.seedDescription':
-    'Per quanto continuare a condividere un download dopo che il video è completo. Imposta 0 per smettere subito.',
-  'storage.zeroLimit':
-    'Un limite di 0 non conserva nulla: Miauflix non può salvare alcun download.',
+    'Per quanto tempo Miauflix continua a condividere un video dopo averlo scaricato. Imposta 0 per interrompere subito la condivisione.',
+  'storage.zeroLimit': 'Con un limite di 0, Miauflix non può salvare i download.',
   'storage.limitOverDisk':
-    'Il limite supera lo spazio che questo disco può dare a Miauflix ({capacity}): i download si fermeranno quando il disco sarà pieno, prima di raggiungere il limite.',
+    'Il limite supera lo spazio che Miauflix può usare su questo disco ({capacity}). I download si fermeranno quando il disco sarà pieno.',
   'storage.reserveTakesAll':
-    'La riserva per la riproduzione occupa tutto il limite, quindi nulla viene scaricato in anticipo.',
+    'Tutto lo spazio è riservato alla riproduzione. Miauflix non scaricherà nulla in anticipo.',
   'storage.settingsTitle': 'Impostazioni di archiviazione',
   'storage.settingsDescription':
-    'Quanto può conservare Miauflix, quanto resta libero per la riproduzione e per quanto i download finiti continuano a essere condivisi. Le modifiche si applicano senza riavvio.',
+    'Scegli quanto spazio può usare Miauflix, quanto riservarne alla riproduzione e per quanto tempo condividere i download completati. Le modifiche si applicano senza riavvio.',
   'storage.settingsLoading': 'Caricamento delle impostazioni di archiviazione…',
   'storage.settingsLoadFailed':
     'Impossibile caricare le impostazioni di archiviazione. Puoi comunque modificarle nella pagina Configurazione.',
   'storage.advanced': 'Avanzate',
-  'storage.advancedDescription': 'La cartella dei download e come vi vengono scritti i file.',
+  'storage.advancedDescription':
+    'Scegli la cartella dei download e come Miauflix salva i file al suo interno.',
   'storage.settingsActions': 'Azioni delle impostazioni di archiviazione',
   'storage.saved': 'Impostazioni di archiviazione salvate.',
   'storage.saveFailed': 'Impossibile salvare le impostazioni di archiviazione. Riprova.',
@@ -92,11 +92,11 @@ export const storage: Translation<typeof english> = {
   'storage.usageUnavailable': 'Utilizzo non disponibile',
   'storage.limit': 'Limite {size}',
   'storage.notSaved': '(non salvato)',
-  'storage.spaceByKind': 'Spazio per tipo',
+  'storage.spaceByKind': 'Spazio occupato per tipo di file',
   'storage.free': 'Libero',
   'storage.counts':
-    'Miauflix conta {charged} sul suo limite di {limit}, incluso lo spazio riservato ai download in corso.',
+    'Miauflix usa o ha già riservato {charged} su un limite di {limit}, compreso lo spazio per i download in corso.',
   'storage.aheadStop':
-    'I download anticipati si fermano a {size}, lasciando il resto alla riproduzione.',
+    'Miauflix scarica in anticipo fino a {size} e riserva lo spazio restante alla riproduzione.',
   'storage.checkValues': 'Controlla questi valori: {keys}.',
 };

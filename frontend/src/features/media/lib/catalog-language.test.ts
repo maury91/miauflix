@@ -25,4 +25,11 @@ describe('catalog language', () => {
     catalogLanguage();
     expect(takeStaleCatalogLanguage('it')).toBe(false);
   });
+
+  it('keeps the language data was loaded in while nothing is stale', () => {
+    setActiveLanguage('it');
+    catalogLanguage();
+    expect(takeStaleCatalogLanguage('it')).toBe(false);
+    expect(takeStaleCatalogLanguage('en')).toBe(true);
+  });
 });

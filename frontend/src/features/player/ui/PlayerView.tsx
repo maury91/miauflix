@@ -51,6 +51,12 @@ interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
   titleLanguage: PlayerTitleLanguage | null;
+  /**
+   * The title's details are still loading (`titleLanguage` is null for now): the first session
+   * waits for them, so it asks for the audio the profile wants for this title. False once they
+   * failed to load: playback starts with the profile's languages alone.
+   */
+  titleLanguageLoading?: boolean;
   onBack: () => void;
   nextEpisode: NextEpisode | null;
   onPlayNext: () => void;
@@ -76,6 +82,7 @@ function PlayerScreen({
   playable,
   title,
   titleLanguage,
+  titleLanguageLoading = false,
   onBack,
   nextEpisode,
   onPlayNext,
@@ -131,6 +138,7 @@ function PlayerScreen({
     avplay: !!avplay,
     subtitleKey: subtitleStorageKey,
     audioLanguage: preferredAudioLanguage(languages, originalLanguage),
+    audioLanguageKnown: titleLanguage !== null || !titleLanguageLoading,
   });
   const { session, status, error } = source;
   const [requestAvailability, availabilityRequest] = useRequestAvailabilityMutation();

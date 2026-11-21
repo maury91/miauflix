@@ -116,7 +116,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(screen.getByText('Technical Details')).toBeInTheDocument();
+    expect(screen.getByText('Technical details')).toBeInTheDocument();
 
     process.env['NODE_ENV'] = originalEnv;
   });

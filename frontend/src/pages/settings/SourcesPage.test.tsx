@@ -200,7 +200,7 @@ describe('SourcesPage', () => {
   it('explains what sources are and lists them by priority with usage and status', () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     expect(screen.getByRole('heading', { name: 'Sources', level: 1 })).toBeInTheDocument();
-    expect(screen.getByText(/uses sources to find available files/)).toBeInTheDocument();
+    expect(screen.getByText(/Sources help Miauflix find files/)).toBeInTheDocument();
     expect(screen.getByText('How it works')).toBeInTheDocument();
     for (const step of ['Search', 'Find', 'Watch'])
       expect(screen.getByRole('heading', { name: step })).toBeInTheDocument();
@@ -214,7 +214,7 @@ describe('SourcesPage', () => {
       within(items[0]).getByText('Public source from the Prowlarr/Jackett list')
     ).toBeInTheDocument();
     expect(within(items[0]).getByRole('switch', { name: 'INDEXER-B' })).toBeChecked();
-    expect(screen.getByText(/searched from top to bottom/)).toBeInTheDocument();
+    expect(screen.getByText(/checks sources from top to bottom/)).toBeInTheDocument();
   });
 
   it('starts on the back rail and moves between it and the page with the arrows', () => {
@@ -537,7 +537,7 @@ describe('SourcesPage', () => {
     });
     expect(add).toHaveTextContent('Added');
     expect(
-      screen.getByText('Added Anime Index. Turn it on when you are ready.')
+      screen.getByText("Added Anime Index. You can enable it whenever you're ready.")
     ).toBeInTheDocument();
     expect(add).toBeDisabled();
   });
@@ -560,17 +560,13 @@ describe('SourcesPage', () => {
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Browse indexers' }));
     });
-    expect(
-      screen.getByText('Showing 40 of 100 matching indexers (586 in total)')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Showing 40 of 100 matches (586 in total)')).toBeInTheDocument();
     expect(lastArgs()).toMatchObject({ offset: 0, limit: 40 });
     // Exercise the explicit pagination control without computing every row's accessible name.
     await act(async () => {
       fireEvent.click(screen.getByText('Show more').closest('button')!);
     });
-    expect(
-      screen.getByText('Showing 80 of 100 matching indexers (586 in total)')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Showing 80 of 100 matches (586 in total)')).toBeInTheDocument();
     expect(lastArgs()).toMatchObject({ offset: 40, limit: 40 });
     const list = within(screen.getByLabelText('Available indexers'));
     expect(list.getAllByLabelText(/^Add site-/)).toHaveLength(80);
@@ -654,7 +650,7 @@ describe('SourcesPage', () => {
   it('reports when the list was last updated and what changed', async () => {
     await browse();
     expect(
-      await screen.findByText('Updated 5 min ago (2 added, 1 updated). Refreshes every hour.')
+      await screen.findByText('Last updated 5 min ago (2 added, 1 updated). Updates every hour.')
     ).toBeInTheDocument();
   });
 
@@ -662,10 +658,10 @@ describe('SourcesPage', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     try {
       await browse();
-      await screen.findByText(/Updated 5 min ago/);
+      await screen.findByText(/Last updated 5 min ago/);
       fireEvent.click(screen.getByRole('button', { name: 'Check for updates' }));
       expect(api.syncDefinitions).toHaveBeenCalled();
-      expect(await screen.findByText('Updating indexers… 3 of 3 read')).toBeInTheDocument();
+      expect(await screen.findByText('Updating indexers… 3 of 3 checked')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Check for updates' })).toBeDisabled();
       // The poll sees the sync has finished and reloads the list.
       api.sync = sync({ lastChange: { added: 0, updated: 2, removed: 1, failed: 0 } });
@@ -673,7 +669,7 @@ describe('SourcesPage', () => {
       await act(async () => {
         await vi.advanceTimersByTimeAsync(4500);
       });
-      await screen.findByText('Updated 5 min ago (2 updated, 1 removed). Refreshes every hour.');
+      await screen.findByText('Last updated 5 min ago (2 updated, 1 removed). Updates every hour.');
       expect(api.loadDefinitions.mock.calls.length).toBeGreaterThan(callsBefore);
       expect(api.loadDefinitions.mock.calls.some(([args]) => args.limit === 0)).toBe(true);
     } finally {
@@ -697,7 +693,7 @@ describe('SourcesPage', () => {
       ],
     });
     await browse();
-    expect(await screen.findByText(/No indexers yet/)).toBeInTheDocument();
+    expect(await screen.findByText(/Indexers will appear here/)).toBeInTheDocument();
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Last update of Prowlarr/Indexers failed: Definition source returned HTTP 503'
     );

@@ -192,11 +192,14 @@ export function useSubtitles({
               : result.candidates.find(
                   candidate => candidate.fileId === remembered.selectedFileId
                 )) ?? (autoSelect ? result.candidates[0] : undefined);
+          // The offset was tuned for the remembered file: another one (auto-selected) starts at 0
+          const keepsOffset =
+            selected !== undefined && selected.fileId === remembered?.selectedFileId;
           const preferences: MediaSubtitles = {
             language,
             hearingImpaired,
             selectedFileId: selected?.fileId ?? null,
-            offset: selected ? (remembered?.offset ?? 0) : 0,
+            offset: keepsOffset ? remembered.offset : 0,
           };
           rememberedSubtitles.current = preferences;
           if (!localOnly) saveMediaSubtitles(storageKey, preferences);
@@ -236,8 +239,15 @@ export function useSubtitles({
     else void search(preferredLanguageRef.current, false, { restoring: true, localOnly: true });
   }, [session, storageKey, search, sessionStorageKey, sessionKeyVersion, resumeRef]);
 
+  /** A search still running won't apply its result: a later choice of the viewer's replaced it. */
+  const cancelSearch = useCallback(() => {
+    requestId.current += 1;
+    setLoading(false);
+  }, []);
+
   const select = useCallback(
     (id: string | null) => {
+      cancelSearch();
       setSubtitleWindow(Math.floor((videoRef.current?.currentTime ?? 0) / 60) * 60);
       setSelectedId(id);
       setCues([]);
@@ -255,7 +265,7 @@ export function useSubtitles({
         saveMediaSubtitles(storageKey, next);
       }
     },
-    [candidates, storageKey, videoRef]
+    [cancelSearch, candidates, storageKey, videoRef]
   );
 
   const changeOffset = useCallback(
@@ -390,6 +400,7 @@ export function useSubtitles({
     setHeaderInset,
     trackRef,
     search,
+    cancelSearch,
     select,
     changeOffset,
     followPlayhead,
