@@ -121,6 +121,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   };
 
   const commit = (text: string) => {
+    // Text left as shown is no edit: committing it would round a stored value to the step
+    if (text === formatted) return;
     const trimmed = text.trim();
     if (trimmed === '') {
       if (value !== null) onChange(null);

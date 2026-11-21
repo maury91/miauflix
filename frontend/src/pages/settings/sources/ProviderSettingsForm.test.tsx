@@ -1,4 +1,5 @@
 import type { ProviderView } from '@miauflix/backend';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -56,23 +57,25 @@ describe('ProviderSettingsForm', () => {
     );
   });
 
-  it('shows the control holding DOM focus as focused', () => {
-    render(<ProviderSettingsForm provider={provider} onSaved={vi.fn()} />);
-    expect(focusedField('Username')).toBe(false);
-
-    act(() => screen.getByLabelText('Username').focus());
-    expect(focusedField('Username')).toBe(true);
-
-    act(() => screen.getByRole('button', { name: 'Show Password' }).focus());
-    expect(focusedField('Username')).toBe(false);
-    expect(screen.getByRole('button', { name: 'Show Password' })).toHaveAttribute('data-focused');
-
-    act(() => screen.getByRole('button', { name: 'Save settings' }).focus());
-    expect(screen.getByRole('button', { name: 'Save settings' })).toHaveAttribute('data-focused');
-
-    act(() => screen.getByRole('button', { name: 'Save settings' }).blur());
-    expect(screen.getByRole('button', { name: 'Save settings' })).not.toHaveAttribute(
-      'data-focused'
-    );
+  it('takes the remote to its first field, and follows a tap into another one', () => {
+    // jsdom lays nothing out: give every element a box, so the navigation layer can focus it
+    const rects = vi
+      .spyOn(Element.prototype, 'getClientRects')
+      .mockImplementation(() => [{}] as unknown as DOMRectList);
+    try {
+      render(
+        <NavigationProvider>
+          <FocusScope>
+            <ProviderSettingsForm provider={provider} onSaved={vi.fn()} />
+          </FocusScope>
+        </NavigationProvider>
+      );
+      expect(focusedField('Username')).toBe(true);
+      act(() => screen.getByRole('switch', { name: 'Freeleech only' }).focus());
+      expect(focusedField('Username')).toBe(false);
+      expect(focusedField('Freeleech only')).toBe(true);
+    } finally {
+      rects.mockRestore();
+    }
   });
 });

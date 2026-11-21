@@ -131,14 +131,14 @@ export function AppShell() {
         ? 'login'
         : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
           ? 'intro'
-          : // Profile pages carry the logo in the corner, as Home does
-            profileScreen
+          : // Profile and settings pages carry the logo in the corner, as Home does
+            profileScreen ||
+              configurationWizardActive ||
+              appState === 'config' ||
+              route.type === 'configuration' ||
+              route.type === 'storage'
             ? 'home'
-            : configurationWizardActive ||
-                route.type === 'configuration' ||
-                route.type === 'storage'
-              ? 'config_wizard'
-              : appState;
+            : appState;
   const logoMotionDisabled =
     (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);

@@ -10,7 +10,7 @@ import { ImagePipeline, type ImagePriority } from '../resources/imagePipeline';
 import type { FrameInfo, NodeState } from './nodeState';
 
 /** Image uploads (texImage2D) per frame, within the frame's budget. */
-const UPLOADS_PER_FRAME = 2;
+export const UPLOADS_PER_FRAME = 2;
 const FETCHES_AT_ONCE = 6;
 /** Wider decodes of a ready image that may fail before it keeps the pixels it has. */
 const UPGRADE_ATTEMPTS = 2;
@@ -53,6 +53,8 @@ interface QueuedRender {
 export interface TextureStoreOptions {
   pixi: () => WebGLRenderer;
   frame: FrameInfo;
+  /** Image uploads per frame, at most (UPLOADS_PER_FRAME unless tuned). */
+  uploadsPerFrame?: number;
   invalidate: () => void;
   /** An entry became ready or failed: its users paint again. */
   onSettled: (entry: TextureEntry) => void;
@@ -251,7 +253,11 @@ export class TextureStore {
   /** Decoded images to the GPU, visible first, within the frame's budget. */
   upload(budget: FrameBudget) {
     this.uploads.sort((a, b) => Number(b.visible) - Number(a.visible));
-    for (let n = 0; n < UPLOADS_PER_FRAME && this.uploads.length && budget.allows(n); n++) {
+    // Tuned through localStorage: anything but a positive integer keeps the default
+    const tuned = this.options.uploadsPerFrame;
+    const max =
+      tuned !== undefined && Number.isInteger(tuned) && tuned > 0 ? tuned : UPLOADS_PER_FRAME;
+    for (let n = 0; n < max && this.uploads.length && budget.allows(n); n++) {
       const entry = this.uploads.shift()!;
       if (this.entries.get(entry.key) !== entry || !entry.bitmap) continue;
       // A wider decode of a ready image: swapped in without a fade, the old texture freed

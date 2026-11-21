@@ -16,7 +16,6 @@ const setupTest = (lifetime: number) =>
       activationUrl="https://trakt.tv/activate/ABCD"
       error={null}
       copied={false}
-      onCopyCode={vi.fn()}
     />
   );
 
@@ -31,11 +30,11 @@ describe('Trakt authorization expiry', () => {
 
   it('shows remaining time and stops at expiration', () => {
     setupTest(62000);
-    expect(screen.getByRole('timer')).toHaveTextContent('Code expires in 1:02');
+    expect(screen.getByText(/Code expire/)).toHaveTextContent('Code expires in 1:02');
     act(() => vi.advanceTimersByTime(2000));
-    expect(screen.getByRole('timer')).toHaveTextContent('Code expires in 1:00');
+    expect(screen.getByText(/Code expire/)).toHaveTextContent('Code expires in 1:00');
     act(() => vi.advanceTimersByTime(60000));
-    expect(screen.getByRole('timer')).toHaveTextContent('Code expired');
+    expect(screen.getByText(/Code expire/)).toHaveTextContent('Code expired');
     expect(vi.getTimerCount()).toBe(0);
   });
 
@@ -43,14 +42,14 @@ describe('Trakt authorization expiry', () => {
     const { unmount } = setupTest(62000);
     vi.setSystemTime(new Date('2026-10-04T12:01:00Z'));
     act(() => vi.advanceTimersByTime(1000));
-    expect(screen.getByRole('timer')).toHaveTextContent('Code expires in 0:01');
+    expect(screen.getByText(/Code expire/)).toHaveTextContent('Code expires in 0:01');
     unmount();
     expect(vi.getTimerCount()).toBe(0);
   });
 
   it('shows an already expired code without starting a timer', () => {
     setupTest(-1000);
-    expect(screen.getByRole('timer')).toHaveTextContent('Code expired');
+    expect(screen.getByText(/Code expire/)).toHaveTextContent('Code expired');
     expect(vi.getTimerCount()).toBe(0);
   });
 });

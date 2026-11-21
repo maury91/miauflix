@@ -6,157 +6,71 @@ import {
   useUpdateProviderMutation,
 } from '@features/sources/api/sources.api';
 import type { ProviderView } from '@miauflix/backend';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { Button } from '@shared/ui';
-import { BackRail } from '@shared/ui/rail/BackRail';
-import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
-import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import {
+  ActionGroup,
+  Badge,
+  Button,
+  Heading,
+  Message,
+  ProgressSpinner,
+  Text,
+} from '@shared/design-system';
+import { useOptionalNavigation } from '@shared/navigation';
+import { useEffect, useState } from 'react';
 
 import { AdvancedSetup } from './sources/AdvancedSetup';
 import { errorMessage } from './sources/errors';
 import { HowItWorks } from './sources/HowItWorks';
+import { ADVANCED_NAV } from './sources/navIds';
 import { ProviderRow } from './sources/ProviderRow';
 import { ProviderSettingsForm } from './sources/ProviderSettingsForm';
-import { Content, IconBox, Message, Muted, Page, Panel, Pill, TopBackdrop } from './sources/styles';
+import * as styles from './sources/sources.css';
+import { SettingsLayout } from './SettingsLayout';
 
 import InfoIcon from '~icons/mdi/information-outline';
-import LayersIcon from '~icons/mdi/layers-outline';
 import AddIcon from '~icons/mdi/plus';
 
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-`;
-
-const Title = styled.h1`
-  margin: 0;
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 1.15;
-  text-transform: none;
-`;
-
-const Subtitle = styled.p`
-  margin: 2px 0 0;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 15px;
-`;
-
-const SectionBar = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-`;
-
-const SectionTitle = styled.h2`
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
-  text-transform: none;
-`;
-
-const AddButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-  padding: 10px 20px;
-  border: 0;
-  border-radius: 8px;
-  background: ${SETTINGS_PALETTE.color.danger};
-  color: #fff;
-  font:
-    600 15px 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  &:hover {
-    background: #ef2a33;
-  }
-  &:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 3px;
-  }
-`;
-
-const List = styled.ul`
-  margin: 0;
-  padding: 0;
-`;
-
-const Hint = styled(Muted)`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 14px 4px 28px;
-  font-size: 14px;
-`;
-
-const Gap = styled.div`
-  height: 8px;
-`;
+const SOURCES_NAV = {
+  add: 'sources-add',
+  retry: 'sources-retry',
+} as const;
 
 interface SourcesPageProps {
   onDismiss: () => void;
 }
 
+/** Brings Advanced setup into focus and view once Add source opened it. */
+function RevealAdvanced({ request }: { request: number }) {
+  const navigation = useOptionalNavigation();
+  useEffect(() => {
+    if (!request) return;
+    navigation?.focus(ADVANCED_NAV.toggle);
+    document.getElementById('advanced-setup')?.scrollIntoView?.({ behavior: 'smooth' });
+    // Each request once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [request]);
+  return null;
+}
+
+/**
+ * Which sources Miauflix searches, in which order, and how to add more. On the navigation layer:
+ * each source is a row (switch, Test, options), and Advanced setup holds the catalog and forms.
+ */
 export default function SourcesPage({ onDismiss }: SourcesPageProps) {
-  useRailContentLeft();
   const providers = useGetProvidersQuery(undefined, { pollingInterval: 10_000 });
   const [updateProvider, updating] = useUpdateProviderMutation();
   const [reorder, reordering] = useReorderProvidersMutation();
   const [testProvider] = useTestProviderMutation();
   const [removeProvider] = useRemoveProviderMutation();
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [menu, setMenu] = useState<string | null>(null);
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [revealRequest, setRevealRequest] = useState(0);
   const [notice, setNotice] = useState('');
   const [error, setError] = useState('');
+  const [testing, setTesting] = useState<string | null>(null);
   const [armed, setArmed] = useState<string | null>(null);
   const [dragging, setDragging] = useState<string | null>(null);
   const [over, setOver] = useState<string | null>(null);
-  const backRef = useRef<HTMLButtonElement>(null);
-  const pageRef = useRef<HTMLElement | null>(null);
-
-  useEffect(() => {
-    backRef.current?.focus({ preventScroll: true });
-  }, []);
-
-  const focusables = () =>
-    Array.from(
-      pageRef.current?.querySelectorAll<HTMLElement>(
-        'button:not(:disabled), input:not(:disabled), select:not(:disabled)'
-      ) ?? []
-    ).filter(item => item !== backRef.current);
-  const cycle = (direction: -1 | 1) => {
-    const items = [backRef.current, ...focusables()].filter((item): item is HTMLElement => !!item);
-    const index = items.indexOf(document.activeElement as HTMLElement);
-    items[(index + direction + items.length) % items.length]?.focus({ preventScroll: true });
-    return true;
-  };
-  const navigationRef = useKeyboardNavigation({
-    onUp: () => cycle(-1),
-    onDown: () => cycle(1),
-    onLeft: () => {
-      backRef.current?.focus({ preventScroll: true });
-      return true;
-    },
-    onRight: () => {
-      if (document.activeElement === backRef.current)
-        focusables()[0]?.focus({ preventScroll: true });
-      return true;
-    },
-    onBack: () => {
-      if (menu) setMenu(null);
-      else onDismiss();
-      return true;
-    },
-  });
 
   const run = async (task: () => Promise<unknown>, success: string, failure: string) => {
     setNotice('');
@@ -202,145 +116,147 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
   const test = async (provider: ProviderView) => {
     setNotice('');
     setError('');
+    setTesting(provider.id);
     try {
       const result = await testProvider(provider.id).unwrap();
       if (result.success) setNotice(`${provider.name}: ${result.message}`);
       else setError(`${provider.name}: ${result.message}`);
     } catch (requestError) {
       setError(errorMessage(requestError, `Could not test ${provider.name}.`));
+    } finally {
+      setTesting(null);
     }
   };
   const openAdvanced = () => {
     setAdvancedOpen(true);
-    requestAnimationFrame(() =>
-      document.getElementById('advanced-setup')?.scrollIntoView?.({ behavior: 'smooth' })
-    );
+    setRevealRequest(request => request + 1);
   };
 
   return (
-    <Page
-      ref={node => {
-        pageRef.current = node;
-        navigationRef(node);
-      }}
-      aria-labelledby="sources-title"
+    <SettingsLayout
+      title="Sources"
+      description="Miauflix uses sources to find available files for movies and TV shows."
+      onBack={onDismiss}
+      backLabel="Back to Home"
+      width="full"
     >
-      <TopBackdrop />
-      <Content>
-        <Header>
-          <IconBox $size={56} aria-hidden="true">
-            <LayersIcon />
-          </IconBox>
-          <div>
-            <Title id="sources-title">Sources</Title>
-            <Subtitle>
-              Miauflix uses sources to find available files for movies and TV shows.
-            </Subtitle>
-          </div>
-        </Header>
+      <RevealAdvanced request={revealRequest} />
+      <HowItWorks />
 
-        <HowItWorks />
-
-        <SectionBar>
-          <SectionTitle>Sources</SectionTitle>
+      <section className={styles.block} aria-labelledby="sources-list-title">
+        <div className={styles.sectionBar}>
+          <Heading level={2} id="sources-list-title">
+            Sources
+          </Heading>
           {providers.data && (
-            <Pill>
-              {ordered.length} provider{ordered.length === 1 ? '' : 's'} · {enabledCount} enabled
-            </Pill>
+            <Badge>
+              {`${ordered.length} provider${ordered.length === 1 ? '' : 's'} · ${enabledCount} enabled`}
+            </Badge>
           )}
-          <AddButton type="button" onClick={openAdvanced}>
-            <AddIcon aria-hidden="true" /> Add source
-          </AddButton>
-        </SectionBar>
+          <ActionGroup>
+            <Button navId={SOURCES_NAV.add} icon={<AddIcon />} onClick={openAdvanced}>
+              Add source
+            </Button>
+          </ActionGroup>
+        </div>
 
         <div role="status" aria-live="polite">
-          {notice && <Message>{notice}</Message>}
+          {notice && <Message tone="success">{notice}</Message>}
         </div>
-        {error && <Message role="alert">{error}</Message>}
-        {providers.isLoading && <Message role="status">Loading sources…</Message>}
+        {error && (
+          <Message tone="danger" toneLabel="Error" live="assertive">
+            {error}
+          </Message>
+        )}
+        {providers.isLoading && <ProgressSpinner label="Loading sources…" />}
         {!providers.isLoading && providers.error && !providers.data && (
-          <>
-            <Message role="alert">Could not load sources.</Message>
-            <Button
-              appearance="settings"
-              color="secondary"
-              onClick={() => void providers.refetch()}
-            >
-              Try again
-            </Button>
-          </>
+          <Message
+            tone="danger"
+            toneLabel="Error"
+            live="assertive"
+            actions={
+              <ActionGroup>
+                <Button navId={SOURCES_NAV.retry} onClick={() => void providers.refetch()}>
+                  Try again
+                </Button>
+              </ActionGroup>
+            }
+          >
+            Could not load sources.
+          </Message>
         )}
 
         {ordered.length > 0 && (
-          <Panel as="div">
-            <List aria-label="Sources">
-              {ordered.map((provider, index) => (
-                <ProviderRow
-                  key={provider.id}
-                  provider={provider}
-                  index={index}
-                  count={ordered.length}
-                  busy={busy}
-                  menuOpen={menu === provider.id}
-                  armed={armed === provider.id}
-                  dragging={dragging === provider.id}
-                  dragOver={over === provider.id && dragging !== provider.id}
-                  onArm={isArmed => setArmed(isArmed ? provider.id : null)}
-                  onDragStart={event => {
-                    event.dataTransfer?.setData('text/plain', provider.id);
-                    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
-                    setDragging(provider.id);
-                  }}
-                  onDragEnter={() => setOver(provider.id)}
-                  onDrop={() => drop(provider.id)}
-                  onDragEnd={() => {
-                    setDragging(null);
-                    setOver(null);
-                    setArmed(null);
-                  }}
-                  onToggle={enabled =>
-                    void run(
-                      () => updateProvider({ id: provider.id, enabled }).unwrap(),
-                      `${provider.name} ${enabled ? 'enabled' : 'disabled'}.`,
-                      `Could not update ${provider.name}.`
-                    )
-                  }
-                  onTest={() => void test(provider)}
-                  onMenu={open => setMenu(open ? provider.id : null)}
-                  onSettings={() => setExpanded(expanded === provider.id ? null : provider.id)}
-                  onMove={offset => move(provider, offset)}
-                  onRemove={
-                    provider.repositoryId === 'local:user'
-                      ? () =>
-                          void run(
-                            () => removeProvider(provider.id).unwrap(),
-                            `Removed ${provider.name}.`,
-                            `Could not remove ${provider.name}.`
-                          )
-                      : undefined
-                  }
-                  detail={
-                    expanded === provider.id && (
-                      <ProviderSettingsForm
-                        provider={provider}
-                        onSaved={message => {
-                          setNotice(message);
-                          setExpanded(null);
-                        }}
-                      />
-                    )
-                  }
-                />
-              ))}
-            </List>
-          </Panel>
+          <ul className={styles.providers} aria-label="Sources">
+            {ordered.map((provider, index) => (
+              <ProviderRow
+                key={provider.id}
+                provider={provider}
+                index={index}
+                count={ordered.length}
+                busy={busy}
+                testing={testing === provider.id}
+                armed={armed === provider.id}
+                dragging={dragging === provider.id}
+                dragOver={over === provider.id && dragging !== provider.id}
+                onArm={isArmed => setArmed(isArmed ? provider.id : null)}
+                onDragStart={event => {
+                  event.dataTransfer?.setData('text/plain', provider.id);
+                  if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+                  setDragging(provider.id);
+                }}
+                onDragEnter={() => setOver(provider.id)}
+                onDrop={() => drop(provider.id)}
+                onDragEnd={() => {
+                  setDragging(null);
+                  setOver(null);
+                  setArmed(null);
+                }}
+                onToggle={enabled =>
+                  void run(
+                    () => updateProvider({ id: provider.id, enabled }).unwrap(),
+                    `${provider.name} ${enabled ? 'enabled' : 'disabled'}.`,
+                    `Could not update ${provider.name}.`
+                  )
+                }
+                onTest={() => void test(provider)}
+                onSettings={() => setExpanded(expanded === provider.id ? null : provider.id)}
+                onMove={offset => move(provider, offset)}
+                onRemove={
+                  provider.repositoryId === 'local:user'
+                    ? () =>
+                        void run(
+                          () => removeProvider(provider.id).unwrap(),
+                          `Removed ${provider.name}.`,
+                          `Could not remove ${provider.name}.`
+                        )
+                    : undefined
+                }
+                detail={
+                  expanded === provider.id && (
+                    <ProviderSettingsForm
+                      provider={provider}
+                      onSaved={message => {
+                        setNotice(message);
+                        setExpanded(null);
+                      }}
+                    />
+                  )
+                }
+              />
+            ))}
+          </ul>
         )}
-        <Hint>
+        <p className={styles.hint}>
           <InfoIcon aria-hidden="true" />
-          Sources are searched from top to bottom. Change their order to set which sources Miauflix
-          checks first.
-        </Hint>
+          <Text as="span" variant="caption" tone="secondary">
+            Sources are searched from top to bottom. Change their order to set which sources
+            Miauflix checks first.
+          </Text>
+        </p>
+      </section>
 
+      <div className={styles.block}>
         <AdvancedSetup
           open={advancedOpen}
           onOpenChange={setAdvancedOpen}
@@ -353,9 +269,7 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
             setError(message);
           }}
         />
-        <Gap />
-      </Content>
-      <BackRail ref={backRef} label="Back to Home" onBack={onDismiss} />
-    </Page>
+      </div>
+    </SettingsLayout>
   );
 }

@@ -1,4 +1,5 @@
 import { color, controlSize, fontFamily, space } from '@shared/design-system/tokens';
+import { LOGO_BACKDROP_HEIGHT } from '@shared/ui/logo/logoBackdrop.css';
 import { style } from '@vanilla-extract/css';
 
 /**
@@ -22,6 +23,8 @@ export const page = style({
 
 export const rail = style({
   position: 'relative',
+  // Over the logo's backdrop: the back item sits beside the logo
+  zIndex: 2,
   flex: 'none',
   height: '100%',
 });
@@ -37,7 +40,9 @@ export const body = style({
   // Centred by growing spacers rather than justify-content: a list taller than the screen then
   // starts at the top, where scrolling can reach it (centred overflow is cut off above)
   justifyContent: 'flex-start',
-  padding: `${space['2xl']} ${space.xl}`,
+  // Clear of the logo's backdrop when the list is taller than the screen. Not max() with the old
+  // 2xl: the TV build can't resolve a viewport-dependent max(), and the backdrop is the taller
+  padding: `${LOGO_BACKDROP_HEIGHT} ${space.xl} ${space['2xl']}`,
   overflowY: 'auto',
   selectors: {
     '&::before, &::after': { content: '""', flex: '1 0 0px' },

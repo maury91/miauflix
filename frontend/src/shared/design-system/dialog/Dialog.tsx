@@ -1,4 +1,5 @@
 import { getKeyboardAction } from '@shared/hooks/useKeyboard';
+import { useOptionalNavigation } from '@shared/navigation/hooks';
 import { FocusScope } from '@shared/navigation/NavigationProvider';
 import {
   createContext,
@@ -92,6 +93,9 @@ export function Dialog({
   const parent = useContext(ParentDialogContext);
   const onDismissRef = useRef(onDismiss);
   onDismissRef.current = onDismiss;
+  const navigation = useOptionalNavigation();
+  const navigationRef = useRef(navigation);
+  navigationRef.current = navigation;
 
   useEffect(() => {
     if (!open) return;
@@ -136,6 +140,12 @@ export function Dialog({
         element.focus({ preventScroll: true });
         if (document.activeElement === element) break;
       }
+      // Under a navigation layer, focus belongs to what it restored (the opener, or what it picked
+      // in its place). It restored that while the page was still `inert`, which the browser
+      // ignores: now that the page is live, give the element DOM focus. A microtask, so the
+      // layer's own restoration (also a microtask, queued as the dialog's scope closed) runs first.
+      const restore = navigationRef.current?.restoreDomFocus;
+      if (restore) queueMicrotask(restore);
     };
   }, [open, id, parent]);
 

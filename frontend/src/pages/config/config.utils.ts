@@ -108,3 +108,19 @@ export function attributeMissingVars(
     ...(status.details !== undefined ? { details: message } : {}),
   };
 }
+
+/** A service group's name for people: "Trakt lists" for LIST, "Media load" for MEDIA_LOAD. */
+export const formatServiceName = (name: string) =>
+  name === 'LIST'
+    ? 'Trakt lists'
+    : name === 'CATALOG'
+      ? 'Media catalog'
+      : name === 'CATALOG_RUNTIME'
+        ? 'Catalog runtime'
+        : name === name.toUpperCase() && name.length > 4
+          ? name
+              .toLowerCase()
+              .split('_')
+              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+              .join(' ')
+          : name;

@@ -6,87 +6,26 @@ import {
   useUpdateConfigMutation,
 } from '@features/config/api/config.api';
 import type { ConfigServiceActionResult } from '@miauflix/backend';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { ActionRow, Alert, Button } from '@shared/ui';
-import { motion } from 'framer-motion';
+import { SettingsLayout } from '@pages/settings/SettingsLayout';
+import { ActionGroup, Button, Message, ProgressSpinner, Stack } from '@shared/design-system';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
 
 import { ServiceConfigGroup } from './components/ServiceConfigGroup';
 import { useConfigForm } from './hooks/useConfigForm';
 import {
   attributeMissingVars,
+  formatServiceName,
   preserveInitialServiceOrder,
   sortServiceGroups,
 } from './config.utils';
+import { serviceGroupNav } from './navIds';
 
-import AlertIcon from '~icons/line-md/alert';
-
-const PageContainer = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: ${SETTINGS_PALETTE.background.primary};
-  color: ${SETTINGS_PALETTE.text.primary};
-  font-family: 'Poppins', sans-serif;
-  overflow-y: auto;
-  z-index: 1000;
-`;
-
-const ContentWrapper = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 132px 24px 40px;
-
-  @media (max-width: 720px) {
-    padding-top: 96px;
-  }
-`;
-
-const PageHeader = styled.div`
-  margin-bottom: 32px;
-`;
-
-const PageTitle = styled.h1`
-  font-size: 28px;
-  font-weight: 400;
-  margin: 0 0 8px 0;
-  color: ${SETTINGS_PALETTE.text.primary};
-`;
-
-const PageSubtitle = styled.p`
-  font-size: 14px;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  margin: 0;
-  line-height: 1.5;
-`;
-
-const MissingConfigBanner = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: ${SETTINGS_PALETTE.color.dangerSubtle};
-  border: 1px solid ${SETTINGS_PALETTE.color.dangerBorder};
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 24px;
-  font-size: 13px;
-  color: #eee;
-`;
-
-const MissingConfigIcon = styled(AlertIcon)`
-  flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
-  color: ${SETTINGS_PALETTE.color.danger};
-`;
-
-const FeedbackArea = styled.div`
-  margin-top: 16px;
-`;
+const NAV = {
+  save: 'config-save',
+  home: 'config-home',
+  actions: 'config-actions',
+} as const;
 
 interface ConfigWizardPageProps {
   onDismiss: () => void;
@@ -346,49 +285,42 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             : 'Configuration saved successfully.'
           : 'No changes were saved because one or more services failed testing.',
       });
-      if (result.data.success) servicesBeingSaved.forEach(markServiceSaved);
+      if (result.data.success) servicesBeingSaved.forEach(service => markServiceSaved(service));
     }
   }, [dirtyServices, getSubmittableEntries, markServiceSaved, updateConfig]);
 
+  const description =
+    'Configure your Miauflix instance. Required fields must be filled before services can start.';
+
   if (isConfigLoading) {
     return (
-      <PageContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-        <ContentWrapper>
-          <PageHeader>
-            <PageTitle>Loading configuration...</PageTitle>
-          </PageHeader>
-        </ContentWrapper>
-      </PageContainer>
+      <SettingsLayout title="Configuration" onBack={onDismiss} backLabel="Back to Home">
+        <ProgressSpinner label="Loading configuration…" />
+      </SettingsLayout>
     );
   }
 
+  const firstGroup = sortedGroups[0]?.[0];
   return (
-    <PageContainer
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
+    <SettingsLayout
+      title="Configuration"
+      description={description}
+      onBack={onDismiss}
+      backLabel="Back to Home"
+      initialNavId={firstGroup ? serviceGroupNav(formatServiceName(firstGroup)).group : NAV.home}
     >
-      <ContentWrapper>
-        <PageHeader>
-          <PageTitle>Configuration</PageTitle>
-          <PageSubtitle>
-            Configure your Miauflix instance. Required fields must be filled before services can
-            start.
-          </PageSubtitle>
-        </PageHeader>
-
+      <Stack gap="lg">
         {missingGroups.length > 0 && (
-          <MissingConfigBanner>
-            <MissingConfigIcon aria-hidden="true" />
-            <span>The following services need configuration: {missingGroups.join(', ')}</span>
-          </MissingConfigBanner>
+          <Message tone="warning" variant="banner">
+            The following services need configuration:{' '}
+            {missingGroups.map(formatServiceName).join(', ')}
+          </Message>
         )}
 
         {sortedGroups.map(([groupName, entries]) => (
           <ServiceConfigGroup
             key={groupName}
-            groupName={groupName}
+            groupName={formatServiceName(groupName)}
             entries={entries}
             values={values}
             onChange={handleFieldChange}
@@ -409,30 +341,28 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
         ))}
 
         {globalResult && (
-          <FeedbackArea>
-            <Alert severity={globalResult.success ? 'success' : 'error'}>
-              {globalResult.message}
-            </Alert>
-          </FeedbackArea>
+          <Message tone={globalResult.success ? 'success' : 'danger'} live="polite">
+            {globalResult.message}
+          </Message>
         )}
 
-        <ActionRow>
+        <ActionGroup navId={NAV.actions}>
           <Button
-            appearance="settings"
-            size="medium"
+            navId={NAV.save}
             onClick={handleSave}
+            loading={isSaving}
             disabled={
-              isSaving || dirtyServices.size === 0 || Object.keys(serviceActions).length > 0
+              !isSaving && (dirtyServices.size === 0 || Object.keys(serviceActions).length > 0)
             }
           >
-            {isSaving ? 'Saving...' : 'Save Configuration'}
+            Save configuration
           </Button>
-          <Button appearance="settings" size="medium" color="secondary" onClick={onDismiss}>
+          <Button navId={NAV.home} onClick={onDismiss}>
             Go to Home
           </Button>
-        </ActionRow>
-      </ContentWrapper>
-    </PageContainer>
+        </ActionGroup>
+      </Stack>
+    </SettingsLayout>
   );
 };
 

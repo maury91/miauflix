@@ -1,4 +1,10 @@
-import type { StorageInventoryResponse, StorageItemView } from '@mytypes/storage.types';
+import type { ContentSource } from '@entities/content-source.entity';
+import type { Episode } from '@entities/episode.entity';
+import type {
+  StorageInventoryResponse,
+  StorageItemView,
+  StorageMediaKind,
+} from '@mytypes/storage.types';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import { isVideoFile } from '@services/source/video-files';
@@ -8,8 +14,56 @@ export type StorageRemovalStatus = Awaited<
 >['status'];
 
 export interface StorageInventoryServiceOptions {
-  contentSources: Pick<ContentSourceRepository, 'findWithMovies'>;
+  contentSources: Pick<ContentSourceRepository, 'findWithMedia'>;
   mediaLoadClient: Pick<MediaLoadClientService, 'getInventory' | 'removeStorageWithResult'>;
+}
+
+const pad = (value: number) => String(value).padStart(2, '0');
+
+/** Which episodes a source holds, in a few words. */
+function describeEpisodes(episodes: Episode[]): string {
+  if (episodes.length === 1) {
+    const [episode] = episodes as [Episode];
+    const code = `S${pad(episode.season.seasonNumber)}E${pad(episode.episodeNumber)}`;
+    return episode.name ? `${code} · ${episode.name}` : code;
+  }
+  const seasons = new Set(episodes.map(episode => episode.season.seasonNumber));
+  return seasons.size === 1
+    ? `Season ${[...seasons][0]} · ${episodes.length} episodes`
+    : `${seasons.size} seasons · ${episodes.length} episodes`;
+}
+
+/** What a source holds, from the catalog: a movie first, else a show's episodes. */
+function describeMedia(
+  source: ContentSource | undefined,
+  sourceId: number
+): Pick<StorageItemView, 'image' | 'kind' | 'subtitle' | 'title'> {
+  const movie = source?.movies?.[0]?.movie;
+  if (movie)
+    return {
+      kind: 'movie',
+      title: movie.title,
+      subtitle: movie.releaseDate?.slice(0, 4) || null,
+      image: movie.backdrop || movie.poster || null,
+    };
+  const episodes = (source?.episodes ?? [])
+    .map(link => link.episode)
+    .filter(episode => episode?.season?.tvShow)
+    .sort(
+      (a, b) => a.season.seasonNumber - b.season.seasonNumber || a.episodeNumber - b.episodeNumber
+    );
+  const show = episodes[0]?.season.tvShow;
+  if (show) {
+    // A show numbered by AniList entry is an anime (the catalog's season layout)
+    const kind: StorageMediaKind = show.seasonLayoutVersion ? 'anime' : 'episode';
+    return {
+      kind,
+      title: show.name,
+      subtitle: describeEpisodes(episodes),
+      image: show.backdrop || episodes[0]!.stillPath || show.poster || null,
+    };
+  }
+  return { kind: 'unknown', title: `Download ${sourceId}`, subtitle: null, image: null };
 }
 
 /**
@@ -28,7 +82,7 @@ export class StorageInventoryService {
   async getInventory(): Promise<StorageInventoryResponse> {
     const inventory = await this.mediaLoadClient.getInventory();
     const sources = new Map(
-      (await this.contentSources.findWithMovies(inventory.items.map(item => item.sourceId))).map(
+      (await this.contentSources.findWithMedia(inventory.items.map(item => item.sourceId))).map(
         source => [source.id, source]
       )
     );
@@ -36,10 +90,11 @@ export class StorageInventoryService {
       const source = sources.get(storage.sourceId);
       return {
         sourceId: storage.sourceId,
-        title: source?.movies?.[0]?.movie?.title ?? `Download ${storage.sourceId}`,
+        ...describeMedia(source, storage.sourceId),
         fileName: storage.requestedFiles.find(isVideoFile)?.split('/').pop() ?? null,
         quality: source?.quality ?? null,
         physicalBytes: storage.allocatedBytes,
+        remuxBytes: storage.remuxBytes ?? 0,
         reservedBytes: storage.reservedBytes,
         progressPercent: storage.downloaded / 100,
         videoComplete: storage.videoComplete,

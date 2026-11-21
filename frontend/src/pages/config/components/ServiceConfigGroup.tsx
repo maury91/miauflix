@@ -1,110 +1,23 @@
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { ActionRow, Alert, Button, LoadingIndicator } from '@shared/ui';
+import {
+  ActionGroup,
+  Badge,
+  type BadgeProps,
+  Button,
+  Disclosure,
+  Heading,
+  Message,
+  Stack,
+  Surface,
+  Text,
+} from '@shared/design-system';
+import { FocusGroup } from '@shared/navigation';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useId, useState } from 'react';
 
+import { serviceGroupNav } from '../navIds';
 import { ConfigField } from './ConfigField';
-
-import ChevronDownIcon from '~icons/line-md/chevron-down';
-import ChevronRightIcon from '~icons/line-md/chevron-right';
-
-const GroupContainer = styled.div`
-  background-color: ${SETTINGS_PALETTE.background.surface};
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
-`;
-
-const GroupHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid ${SETTINGS_PALETTE.background.border};
-`;
-
-const GroupName = styled.h3`
-  font-size: 16px;
-  font-weight: 600;
-  color: ${SETTINGS_PALETTE.text.primary};
-  margin: 0;
-`;
-
-const GroupDescription = styled.p`
-  margin: 4px 0 0;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 12px;
-  line-height: 1.4;
-`;
-
-const GroupTitle = styled.div`
-  flex: 1;
-`;
-
-const MissingBadge = styled.span`
-  font-size: 11px;
-  padding: 2px 8px;
-  background-color: ${SETTINGS_PALETTE.background.input};
-  color: ${SETTINGS_PALETTE.color.danger};
-  border-radius: 20px;
-  border: 1px solid ${SETTINGS_PALETTE.color.dangerBorder};
-`;
-
-const ConfiguredBadge = styled(MissingBadge)`
-  color: ${SETTINGS_PALETTE.color.success};
-  border-color: rgba(66, 184, 131, 0.42);
-`;
-
-const PendingBadge = styled(MissingBadge)`
-  color: ${SETTINGS_PALETTE.color.warning};
-  border-color: rgba(255, 193, 7, 0.42);
-`;
-
-const DegradedBadge = styled(MissingBadge)`
-  color: ${SETTINGS_PALETTE.color.warning};
-  border-color: rgba(255, 193, 7, 0.42);
-`;
-
-const OptionalFields = styled.div`
-  padding-top: 18px;
-`;
-
-const ConfigurationNote = styled.p`
-  margin: 12px 0 0;
-  color: ${SETTINGS_PALETTE.color.warning};
-  font-size: 12px;
-  line-height: 1.45;
-`;
-
-const ActionLabel = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-`;
-
-const ResultArea = styled.div`
-  margin-top: 12px;
-`;
-
-const FailureTitle = styled.strong`
-  display: block;
-  margin-bottom: 4px;
-`;
-
-const FailureCauses = styled.ul`
-  margin: 8px 0 0;
-  padding-left: 18px;
-`;
-
-const RestartMessage = styled.div`
-  margin-top: 8px;
-  color: ${SETTINGS_PALETTE.color.warning};
-  font-size: 12px;
-`;
+import * as styles from './serviceConfigGroup.css';
 
 interface ServiceConfigGroupProps {
   groupName: string;
@@ -145,6 +58,8 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
   showAllOptionalFields = false,
   serviceStatus,
 }) => {
+  const titleId = useId();
+  const nav = serviceGroupNav(groupName);
   const missingCount = entries.filter(
     entry => entry.required && !entry.hasValue && !values[entry.key]?.trim()
   ).length;
@@ -173,7 +88,6 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
     entry => entry.required && !entry.hasValue && !values[entry.key]?.trim()
   );
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(hasMissingAdvancedRequiredValue);
-  const showOptionalFields = showAllOptionalFields || showOptionalSettings;
   const serviceIssue = ['degraded', 'error'].includes(serviceStatus?.status ?? '');
   const serviceIssueText =
     serviceStatus?.reason ?? serviceStatus?.errorMessage ?? serviceStatus?.details;
@@ -186,220 +100,151 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
     if (hasMissingAdvancedRequiredValue || hasAdvancedTestFailure) setShowAdvancedSettings(true);
   }, [hasAdvancedTestFailure, hasMissingAdvancedRequiredValue]);
 
+  const status: { text: string; tone: NonNullable<BadgeProps['tone']> } = hasMissingRequiredValues
+    ? { text: `${missingCount} missing`, tone: 'danger' }
+    : serviceIssue
+      ? serviceStatus?.status === 'error'
+        ? { text: 'error', tone: 'danger' }
+        : { text: 'degraded', tone: 'warning' }
+      : hasFailedTest
+        ? { text: 'test failed', tone: 'danger' }
+        : hasChanges
+          ? { text: 'save required', tone: 'warning' }
+          : result?.success && result.testMode === 'live'
+            ? { text: 'connection checked', tone: 'success' }
+            : result?.success
+              ? { text: 'validated', tone: 'success' }
+              : { text: 'configured', tone: 'success' };
+
+  const fields = (list: ConfigEntryView[]) =>
+    list.map(entry => (
+      <ConfigField
+        key={entry.key}
+        entry={entry}
+        value={values[entry.key] ?? ''}
+        onChange={onChange}
+        hasTestFailure={hasTestFailure(entry)}
+      />
+    ));
+  const optionalInline = optionalEntries.length === 1 || showAllOptionalFields;
+  const busy = Boolean(activeAction);
+
   return (
-    <GroupContainer>
-      <GroupHeader>
-        <GroupTitle>
-          <GroupName>{groupName}</GroupName>
-          {serviceDescription && <GroupDescription>{serviceDescription}</GroupDescription>}
-        </GroupTitle>
-        {hasMissingRequiredValues ? (
-          <MissingBadge>{missingCount} missing</MissingBadge>
-        ) : serviceIssue ? (
-          serviceStatus?.status === 'error' ? (
-            <MissingBadge>error</MissingBadge>
-          ) : (
-            <DegradedBadge>degraded</DegradedBadge>
-          )
-        ) : hasFailedTest ? (
-          <MissingBadge>test failed</MissingBadge>
-        ) : hasChanges ? (
-          <PendingBadge>save required</PendingBadge>
-        ) : result?.success && result.testMode === 'live' ? (
-          <ConfiguredBadge>connection checked</ConfiguredBadge>
-        ) : result?.success ? (
-          <ConfiguredBadge>validated</ConfiguredBadge>
-        ) : (
-          <ConfiguredBadge>configured</ConfiguredBadge>
-        )}
-      </GroupHeader>
-
-      {serviceIssue && serviceIssueText && (
-        <ConfigurationNote role="status">
-          {serviceStatus?.status === 'error' ? 'Service error: ' : 'Service degraded: '}
-          {serviceIssueText}
-        </ConfigurationNote>
-      )}
-
-      {requiredEntries.map(entry => (
-        <ConfigField
-          key={entry.key}
-          entry={entry}
-          value={values[entry.key] ?? ''}
-          onChange={onChange}
-          hasTestFailure={hasTestFailure(entry)}
-        />
-      ))}
-
-      {optionalEntries.length === 1 && (
-        <OptionalFields>
-          <ConfigField
-            entry={optionalEntries[0]}
-            value={values[optionalEntries[0].key] ?? ''}
-            onChange={onChange}
-            hasTestFailure={hasTestFailure(optionalEntries[0])}
-          />
-        </OptionalFields>
-      )}
-
-      {optionalEntries.length > 1 && showAllOptionalFields && (
-        <OptionalFields>
-          {optionalEntries.map(entry => (
-            <ConfigField
-              key={entry.key}
-              entry={entry}
-              value={values[entry.key] ?? ''}
-              onChange={onChange}
-              hasTestFailure={hasTestFailure(entry)}
-            />
-          ))}
-        </OptionalFields>
-      )}
-
-      {optionalEntries.length > 1 && !showAllOptionalFields && (
-        <>
-          <Button
-            appearance="settings"
-            size="small"
-            color="secondary"
-            variant="text"
-            type="button"
-            onClick={() => setShowOptionalSettings(isOpen => !isOpen)}
-            aria-expanded={showOptionalSettings}
-          >
-            {showOptionalSettings ? (
-              <ChevronDownIcon aria-hidden="true" />
-            ) : (
-              <ChevronRightIcon aria-hidden="true" />
+    <FocusGroup id={nav.group} layout="vertical">
+      <Surface as="section" aria-labelledby={titleId} border radius="lg" padding="lg">
+        <Stack gap="lg">
+          <div>
+            <div className={styles.header}>
+              <Heading level={2} id={titleId} variant="heading">
+                {groupName}
+              </Heading>
+              <span className={styles.status}>
+                <Badge tone={status.tone}>{status.text}</Badge>
+              </span>
+            </div>
+            {serviceDescription && (
+              <div className={styles.description}>
+                <Text tone="secondary">{serviceDescription}</Text>
+              </div>
             )}
-            Optional settings ({optionalEntries.length})
-          </Button>
-          {showOptionalFields && (
-            <OptionalFields>
-              {optionalEntries.map(entry => (
-                <ConfigField
-                  key={entry.key}
-                  entry={entry}
-                  value={values[entry.key] ?? ''}
-                  onChange={onChange}
-                  hasTestFailure={hasTestFailure(entry)}
-                />
-              ))}
-            </OptionalFields>
+          </div>
+
+          {serviceIssue && serviceIssueText && (
+            <Message tone={serviceStatus?.status === 'error' ? 'danger' : 'warning'} live="polite">
+              {serviceStatus?.status === 'error' ? 'Service error: ' : 'Service degraded: '}
+              {serviceIssueText}
+            </Message>
           )}
-        </>
-      )}
 
-      {advancedEntries.length > 0 && (
-        <>
-          <Button
-            appearance="settings"
-            size="small"
-            color="secondary"
-            variant="text"
-            type="button"
-            onClick={() => setShowAdvancedSettings(isOpen => !isOpen)}
-            aria-expanded={showAdvancedSettings}
-          >
-            {showAdvancedSettings ? (
-              <ChevronDownIcon aria-hidden="true" />
-            ) : (
-              <ChevronRightIcon aria-hidden="true" />
-            )}
-            Advanced settings ({advancedEntries.length})
-          </Button>
-          {showAdvancedSettings && (
-            <OptionalFields>
-              {advancedEntries.map(entry => (
-                <ConfigField
-                  key={entry.key}
-                  entry={entry}
-                  value={values[entry.key] ?? ''}
-                  onChange={onChange}
-                  hasTestFailure={hasTestFailure(entry)}
-                />
-              ))}
-            </OptionalFields>
+          {fields(requiredEntries)}
+          {optionalInline && fields(optionalEntries)}
+
+          {!optionalInline && optionalEntries.length > 1 && (
+            <Disclosure
+              navId={nav.optional}
+              title={`Optional settings (${optionalEntries.length})`}
+              headingLevel={3}
+              expanded={showOptionalSettings}
+              onExpandedChange={setShowOptionalSettings}
+            >
+              <Stack gap="lg">{fields(optionalEntries)}</Stack>
+            </Disclosure>
           )}
-        </>
-      )}
 
-      <ActionRow density="compact">
-        <Button
-          appearance="settings"
-          size="small"
-          color="secondary"
-          type="button"
-          onClick={onTest}
-          disabled={disabled || Boolean(activeAction)}
-        >
-          {activeAction === 'testing' ? 'Testing...' : 'Test'}
-        </Button>
-        <Button
-          appearance="settings"
-          size="small"
-          type="button"
-          color="primary"
-          onClick={onSave}
-          disabled={disabled || Boolean(activeAction) || !hasChanges}
-        >
-          {activeAction === 'saving' ? (
-            <ActionLabel>
-              <LoadingIndicator aria-hidden="true" /> Saving
-            </ActionLabel>
-          ) : activeAction === 'testing' ? (
-            <ActionLabel>
-              <LoadingIndicator aria-hidden="true" /> Testing
-            </ActionLabel>
-          ) : activeAction === 'saved' ? (
-            'Saved'
-          ) : (
-            'Save'
+          {advancedEntries.length > 0 && (
+            <Disclosure
+              navId={nav.advanced}
+              title={`Advanced settings (${advancedEntries.length})`}
+              headingLevel={3}
+              expanded={showAdvancedSettings}
+              onExpandedChange={setShowAdvancedSettings}
+            >
+              <Stack gap="lg">{fields(advancedEntries)}</Stack>
+            </Disclosure>
           )}
-        </Button>
-      </ActionRow>
 
-      {hasChanges && !hasMissingRequiredValues && (
-        <ConfigurationNote role="note">
-          {hasSuggestedRequiredValue
-            ? 'The redirect URI is suggested from this browser, but it is required and still unsaved. Save these settings to continue.'
-            : hasUnsavedRequiredValues
-              ? 'Required settings are filled in but not saved yet. Save these settings to continue.'
-              : 'Save these settings to continue.'}
-        </ConfigurationNote>
-      )}
+          <ActionGroup navId={nav.actions} label={`${groupName} actions`}>
+            <Button
+              navId={nav.save}
+              onClick={onSave}
+              loading={activeAction === 'saving'}
+              disabled={
+                disabled ||
+                (busy ? activeAction === 'testing' || activeAction === 'saved' : !hasChanges)
+              }
+            >
+              {activeAction === 'saving' ? 'Saving' : activeAction === 'saved' ? 'Saved' : 'Save'}
+            </Button>
+            <Button
+              navId={nav.test}
+              onClick={onTest}
+              loading={activeAction === 'testing'}
+              disabled={disabled || (busy && activeAction !== 'testing')}
+            >
+              {activeAction === 'testing' ? 'Testing' : 'Test'}
+            </Button>
+          </ActionGroup>
 
-      {result && !hasMissingRequiredValues && (
-        <ResultArea>
-          <Alert
-            severity={
-              !result.success ? 'error' : result.testMode === 'validation' ? 'info' : 'success'
-            }
-          >
-            {result.success ? (
-              result.message
-            ) : (
-              <>
-                <FailureTitle>Failed to test {groupName}</FailureTitle>
-                {result.message}
-                {failedTestEntries.length > 0 && (
-                  <FailureCauses>
-                    {failedTestEntries.map(entry => (
-                      <li key={entry.key}>
-                        {entry.testFailureHelp ?? `Check ${entry.key}: ${entry.description}`}
-                      </li>
-                    ))}
-                  </FailureCauses>
-                )}
-              </>
-            )}
-          </Alert>
-        </ResultArea>
-      )}
-      {restarted && <RestartMessage>Service reloaded with the saved configuration.</RestartMessage>}
-      {needsProcessRestart && (
-        <RestartMessage>A full process restart is required to apply these changes.</RestartMessage>
-      )}
-    </GroupContainer>
+          {hasChanges && !hasMissingRequiredValues && (
+            <Message tone="info">
+              {hasSuggestedRequiredValue
+                ? 'The redirect URI is suggested from this browser, but it is required and still unsaved. Save these settings to continue.'
+                : hasUnsavedRequiredValues
+                  ? 'Required settings are filled in but not saved yet. Save these settings to continue.'
+                  : 'Save these settings to continue.'}
+            </Message>
+          )}
+
+          {result && !hasMissingRequiredValues && (
+            <Message
+              tone={
+                !result.success ? 'danger' : result.testMode === 'validation' ? 'info' : 'success'
+              }
+              title={result.success ? undefined : `Failed to test ${groupName}`}
+              live={result.success ? 'polite' : 'assertive'}
+            >
+              {result.message}
+              {failedTestEntries.length > 0 && (
+                <ul className={styles.causes}>
+                  {failedTestEntries.map(entry => (
+                    <li key={entry.key}>
+                      {entry.testFailureHelp ?? `Check ${entry.key}: ${entry.description}`}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Message>
+          )}
+          {restarted && (
+            <Message tone="success">Service reloaded with the saved configuration.</Message>
+          )}
+          {needsProcessRestart && (
+            <Message tone="warning">
+              A full process restart is required to apply these changes.
+            </Message>
+          )}
+        </Stack>
+      </Surface>
+    </FocusGroup>
   );
 };

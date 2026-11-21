@@ -23,6 +23,11 @@ const api = vi.hoisted(() => {
   };
 });
 
+vi.mock('framer-motion', async () => {
+  const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion');
+  return { ...actual, motion: { ...actual.motion, main: 'main' } };
+});
+
 vi.mock('@features/sources/api/sources.api', () => ({
   useGetProvidersQuery: () => ({
     data: api.providers,
@@ -114,8 +119,18 @@ beforeEach(() => {
     api.addTorznab,
   ])
     mock.mockReset().mockReturnValue(api.unwrap({}));
+  // jsdom lays nothing out: give every element a box, so the navigation layer can focus it
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+    () => [{}] as unknown as DOMRectList
+  );
 });
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.mocked(Element.prototype.getClientRects).mockRestore();
+});
+
+const focused = () => document.querySelector('[data-focused]');
+const press = (key: string) => fireEvent.keyDown(document.activeElement ?? document.body, { key });
 
 const entry = (
   id: string,
@@ -198,28 +213,26 @@ describe('SourcesPage', () => {
     expect(
       within(items[0]).getByText('Public source from the Prowlarr/Jackett list')
     ).toBeInTheDocument();
-    expect(within(items[0]).getByRole('img', { name: 'Enabled' })).toBeInTheDocument();
+    expect(within(items[0]).getByRole('switch', { name: 'INDEXER-B' })).toBeChecked();
     expect(screen.getByText(/searched from top to bottom/)).toBeInTheDocument();
   });
 
-  it('cycles from Back to the last control and wraps back exactly once', () => {
+  it('starts on the back rail and moves between it and the page with the arrows', () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     const back = screen.getByRole('button', { name: 'Back to Home' });
-    const controls = screen
-      .getAllByRole('button')
-      .filter(button => button !== back && !button.hasAttribute('disabled'));
-    expect(back).toHaveFocus();
-    fireEvent.keyDown(back, { key: 'ArrowUp' });
-    expect(controls.at(-1)).toHaveFocus();
-    fireEvent.keyDown(controls.at(-1)!, { key: 'ArrowDown' });
-    expect(back).toHaveFocus();
-    fireEvent.keyDown(back, { key: 'ArrowRight' });
-    expect(controls[0]).toHaveFocus();
-    fireEvent.keyDown(controls[0], { key: 'ArrowUp' });
-    expect(back).toHaveFocus();
+    expect(focused()).toBe(back);
+    press('ArrowRight');
+    expect(focused()).toBe(screen.getByRole('button', { name: 'Add source' }));
+    press('ArrowDown');
+    // A switch shows focus around its whole row
+    expect(focused()).toContainElement(screen.getByRole('switch', { name: 'INDEXER-B' }));
+    press('ArrowDown');
+    expect(focused()).toContainElement(screen.getByRole('switch', { name: 'INDEXER-A' }));
+    press('ArrowLeft');
+    expect(focused()).toBe(back);
   });
 
-  it('includes provider setting selects in remote navigation', () => {
+  it("takes the remote into a source's settings when they open", () => {
     api.providers = [
       provider('indexer-a', 10, {
         settingsSchema: [
@@ -236,18 +249,9 @@ describe('SourcesPage', () => {
     openMenu('INDEXER-A');
     fireEvent.click(screen.getByRole('menuitem', { name: 'Settings' }));
     const select = screen.getByRole('combobox', { name: 'Sort by' });
-    const back = screen.getByRole('button', { name: 'Back to Home' });
-    const controls = Array.from(
-      screen
-        .getByRole('main')
-        .querySelectorAll<HTMLElement>(
-          'button:not(:disabled), input:not(:disabled), select:not(:disabled)'
-        )
-    ).filter(control => control !== back);
-    const next = controls[controls.indexOf(select) + 1] ?? back;
-    act(() => next.focus());
-    fireEvent.keyDown(next, { key: 'ArrowUp' });
-    expect(select).toHaveFocus();
+    expect(select.closest('[data-focused]')).not.toBeNull();
+    press('ArrowDown');
+    expect(focused()).toBe(screen.getByRole('button', { name: 'Save settings' }));
   });
 
   it('shows what each source says about itself, or what kind of source it is', () => {
@@ -270,14 +274,17 @@ describe('SourcesPage', () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     expect(screen.getByText('2 providers · 1 enabled')).toBeInTheDocument();
     const tvIndex = rows()[1];
-    expect(within(tvIndex).getByText('Disabled', { selector: 'p' })).toBeInTheDocument();
-    expect(within(tvIndex).getByRole('img', { name: 'Disabled' })).toBeInTheDocument();
+    expect(within(tvIndex).getByText('Disabled')).toBeInTheDocument();
+    expect(within(tvIndex).getByRole('switch', { name: 'TV-INDEX' })).not.toBeChecked();
   });
 
   it('moves providers from the options menu', async () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     openMenu('INDEXER-B');
-    expect(screen.getByRole('menuitem', { name: 'Move up' })).toBeDisabled();
+    expect(screen.getByRole('menuitem', { name: 'Move up' })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
     fireEvent.keyDown(screen.getByRole('menu'), { key: 'Escape' });
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     openMenu('INDEXER-A');
@@ -285,7 +292,10 @@ describe('SourcesPage', () => {
     expect(api.reorder).toHaveBeenCalledWith(['indexer-a', 'indexer-b', 'tv-index']);
     await waitFor(() => expect(screen.getByText('Moved INDEXER-A.')).toBeInTheDocument());
     openMenu('TV-INDEX');
-    expect(screen.getByRole('menuitem', { name: 'Move down' })).toBeDisabled();
+    expect(screen.getByRole('menuitem', { name: 'Move down' })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
   });
 
   it('reorders by dragging a row onto another', () => {
@@ -315,7 +325,7 @@ describe('SourcesPage', () => {
 
   it('toggles a provider', () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
-    fireEvent.click(screen.getByRole('switch', { name: 'Disable INDEXER-A' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'INDEXER-A' }));
     expect(api.updateProvider).toHaveBeenCalledWith({ id: 'indexer-a', enabled: false });
   });
 
@@ -386,7 +396,7 @@ describe('SourcesPage', () => {
       unwrap: () => Promise.reject({ status: 400, data: 'Priority must be an integer' }),
     });
     render(<SourcesPage onDismiss={vi.fn()} />);
-    fireEvent.click(screen.getByRole('switch', { name: 'Disable INDEXER-A' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'INDEXER-A' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('Priority must be an integer');
   });
 
@@ -428,7 +438,7 @@ describe('SourcesPage', () => {
     openAdvanced();
     // Flush the mocked catalog request before querying its results.
     await act(async () => {
-      fireEvent.click(screen.getByText('Browse indexers', { selector: 'button' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Browse indexers' }));
     });
     return screen.getByLabelText('Available indexers');
   };
@@ -442,19 +452,14 @@ describe('SourcesPage', () => {
       ],
     });
     await browse();
-    const select = screen.getByRole('combobox', { name: 'Source' });
-    const back = screen.getByRole('button', { name: 'Back to Home' });
-    const controls = Array.from(
-      screen
-        .getByRole('main')
-        .querySelectorAll<HTMLElement>(
-          'button:not(:disabled), input:not(:disabled), select:not(:disabled)'
-        )
-    ).filter(control => control !== back);
-    const next = controls[controls.indexOf(select) + 1] ?? back;
-    act(() => next.focus());
-    fireEvent.keyDown(next, { key: 'ArrowUp' });
-    expect(select).toHaveFocus();
+    const search = screen.getByRole('textbox', { name: 'Search indexers' });
+    act(() => search.focus());
+    act(() => search.blur());
+    expect(search.closest('[data-focused]')).not.toBeNull();
+    press('ArrowDown');
+    expect(
+      screen.getByRole('combobox', { name: 'Source' }).closest('[data-focused]')
+    ).not.toBeNull();
   });
 
   it('starts with public indexers that support IMDb search', async () => {
@@ -553,7 +558,7 @@ describe('SourcesPage', () => {
     api.sync = sync({ total: 586 });
     render(<SourcesAddProviders onNotice={vi.fn()} />);
     await act(async () => {
-      fireEvent.click(screen.getByText('Browse indexers', { selector: 'button' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Browse indexers' }));
     });
     expect(
       screen.getByText('Showing 40 of 100 matching indexers (586 in total)')
@@ -561,7 +566,7 @@ describe('SourcesPage', () => {
     expect(lastArgs()).toMatchObject({ offset: 0, limit: 40 });
     // Exercise the explicit pagination control without computing every row's accessible name.
     await act(async () => {
-      fireEvent.click(screen.getByText('Show more', { selector: 'button' }));
+      fireEvent.click(screen.getByText('Show more').closest('button')!);
     });
     expect(
       screen.getByText('Showing 80 of 100 matching indexers (586 in total)')
@@ -591,7 +596,7 @@ describe('SourcesPage', () => {
       expect(screen.getByText(/Showing 40 of 60/)).toBeInTheDocument();
       expect(indexers.getAllByLabelText(/^Add site-/)).toHaveLength(40);
       // Avoid computing accessible names and visibility for every button in the long list.
-      expect(screen.queryByText('Show more', { selector: 'button' })).not.toBeInTheDocument();
+      expect(screen.queryByText('Show more')).not.toBeInTheDocument();
       await act(async () => notify([{ isIntersecting: true }]));
       expect(screen.getByText(/Showing 60 of 60/)).toBeInTheDocument();
       expect(indexers.getAllByLabelText(/^Add site-/)).toHaveLength(60);
@@ -627,7 +632,7 @@ describe('SourcesPage', () => {
         .mockReturnValue({ unwrap: () => new Promise(() => {}) });
       await browse();
       expect(await screen.findByRole('alert')).toHaveTextContent('Page unavailable');
-      const retry = screen.getByText('Show more', { selector: 'button' });
+      const retry = screen.getByText('Show more').closest('button')!;
       await act(async () => {});
       expect(api.loadDefinitions).toHaveBeenCalledTimes(2);
       api.loadDefinitions.mockReturnValueOnce(

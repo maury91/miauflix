@@ -826,3 +826,77 @@ past each side), GL rows, cold, alternating, three rounds:
 No difference beyond the noise in any scenario: the text kept for assistive technology costs
 nothing measurable on the TV. The hidden DOM is about 330 elements in GL (against 800 with the DOM
 rows), and what limits the GL rows lies elsewhere.
+
+## 2026-11-21: Image decoding and texture uploads
+
+Two suggestions (from a Reddit thread on the GL Home): check whether card images are decoded on the
+main thread during a move, and decode them ahead of time with `createImageBitmap`. Build
+`df658667` plus a tuning knob, `GlTuning.uploadsPerFrame` (default 2, set through
+`localStorage['miauflix:gl-tuning']`), same TV (TU8072), cold, row 3.
+
+### Where the time goes
+
+[`scripts/image-cost-probe.js`](../../scripts/image-cost-probe.js), injected with
+`{"inject": ...}`, wraps `createImageBitmap` and `texImage2D`/`texSubImage2D` and times the main
+thread's part of each call, and how long each decode takes to resolve. One first pass and one held
+Right:
+
+| Call                                   | First pass (2.9 s)        | Held Right (2.6 s)        |
+| -------------------------------------- | ------------------------- | ------------------------- |
+| `createImageBitmap(blob)`, main thread | 11 × 1.0 ms mean (11 ms)  | 28 × 1.0 ms mean (29 ms)  |
+| `createImageBitmap(blob)`, resolved    | 61 ms p50, 113 max        | 138 ms p50, 280 max       |
+| `texImage2D(ImageBitmap)`, main thread | 11 × 2.8 ms mean, 5.9 max | 27 × 2.0 ms mean, 6.5 max |
+
+No `createImageBitmap(ImageBitmap, {resize…})` calls: the server's card sizes are never more than
+1.25× what's drawn, so `fetchBitmap`'s second (main-thread) resize never runs. Decoding already
+happens off the main thread and ahead of view (the prefetch margin and the warmed rows); what's
+left on the main thread is about 1 ms to start each decode and 1–3 ms per upload, 1–3% of a
+move's time.
+
+### Uploads per frame
+
+Whether uploads cost GPU time the main thread doesn't see: three rounds, alternating, first pass,
+back, then Right held 2.5 s from there (the probe on, about 31 uploads per run in every condition,
+0 errors):
+
+| Scenario         | 2 per frame (default) | 1 per frame | 4 per frame |
+| ---------------- | --------------------- | ----------- | ----------- |
+| Row 3 first pass | 50, 47, 40            | 48, 52, 49  | 51, 51, 50  |
+| Row 3 back       | 54, 53, 53            | 51, 50, 53  | 52, 53, 53  |
+| Held Right 2.5 s | 37, 40, 42            | 46, 43, 38  | 39, 31, 40  |
+
+### What it means
+
+Within the noise in every scenario: neither decoding nor uploading limits the GL rows on this TV,
+and the default stays at 2. The long frames left on a first pass and while holding Right come from
+elsewhere (Phase 6: mostly GPU and compositor time, not the frame's own draw).
+
+## 2026-11-21: Home in desktop Chrome, GL against DOM
+
+The Tizen bundle of the section above (`df658667` plus `uploadsPerFrame`), served from localhost
+by a small static server that forwards every other request to the server (it only allows CORS
+from known origins), with `localStorage['miauflix.tv.server']` pointing at it. Chrome 157.0.8103.79 on an
+Apple Silicon Mac, a separate profile started with `--remote-debugging-port=9223
+--disable-backgrounding-occluded-windows --disable-renderer-backgrounding
+--disable-background-timer-throttling` (a window behind others reports `visibilityState`
+`hidden` and its frames are throttled). Each run emulates the TV's viewport
+(`{"viewport": [1920, 1080, 1]}`) and may slow the CPU (`{"throttle": n}`, the main thread
+only: raster, GPU and compositor run at full speed). The display refreshes at 60 Hz. Cold, Project
+Hail Mary focused on row 3, GL and DOM alternating; fps, then frames over 50 ms in brackets:
+
+| Scenario                   | 1×, GL | 1×, DOM | 4×, GL                 | 4×, DOM    | 6×, GL         | 6×, DOM |
+| -------------------------- | ------ | ------- | ---------------------- | ---------- | -------------- | ------- |
+| Row 3 first pass           | 59, 60 | 60, 59  | 60, 60, 60             | 60, 60, 60 | 59, 59         | 59, 60  |
+| Row 3 back                 | 59, 60 | 60, 59  | 58 (1), 58 (1), 58 (1) | 59, 60, 60 | 56 (1), 57 (1) | 60, 60  |
+| Held Right 2.5 s           | 60, 60 | 60, 60  | 59, 60, 60             | 60, 60, 60 | 60, 60         | 60, 60  |
+| 3 × Down (`"settle": 800`) | 60, 60 | 60, 59  | 56 (2), 56 (2), 56 (2) | 60, 60, 60 | 54 (2), 54 (2) | 60, 60  |
+
+### What it means
+
+A desktop doesn't reproduce the TV: both renderers hold the refresh rate, the DOM rows even at 6×
+(on the TV they're limited by the layer update and raster, which throttling doesn't slow). The
+one difference is in GL: the same long frames in every throttled run, one going back along the
+row and two moving down, about 83 ms at 4× and 135–150 ms at 6×, so about 20–25 ms of
+main-thread work in a single frame at full speed. They scale with the CPU, so they're
+JavaScript (rows brought into view mounting, syncing or baking their pictures at once), not GPU
+time; on the TV the same work would be several times longer.

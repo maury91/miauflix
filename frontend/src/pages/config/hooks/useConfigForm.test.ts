@@ -85,4 +85,25 @@ describe('useConfigForm', () => {
     expect(result.current.dirtyServices.has('SERVICE')).toBe(false);
     expect(result.current.values.TOKEN).toBe('');
   });
+
+  it('keeps an edit made while a save was under way, clearing only what the save sent', () => {
+    const entries = [
+      entry({ key: 'URL', value: 'https://old.example.com' }),
+      entry({ key: 'NAME', value: 'old' }),
+    ];
+    const { result } = renderHook(() => useConfigForm(entries));
+    act(() => result.current.handleChange('URL', 'https://new.example.com'));
+    act(() => result.current.handleChange('NAME', 'sent'));
+    const submitted = result.current.getServiceEntries('SERVICE');
+    // Typed again before the save came back
+    act(() => result.current.handleChange('NAME', 'typed after'));
+
+    act(() => result.current.markServiceSaved('SERVICE', submitted));
+    expect(result.current.dirtyServices.has('SERVICE')).toBe(true);
+    expect(result.current.values['NAME']).toBe('typed after');
+    expect(result.current.getServiceEntries('SERVICE')).toContainEqual({
+      key: 'NAME',
+      value: 'typed after',
+    });
+  });
 });

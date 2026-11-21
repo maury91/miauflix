@@ -1,140 +1,37 @@
 import type { ProviderView } from '@miauflix/backend';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { Button, Switch } from '@shared/ui';
-import { type DragEvent, type ReactNode, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import { Badge, IconButton, Menu, type MenuEntry, Switch } from '@shared/design-system';
+import { FocusGroup } from '@shared/navigation';
+import type { DragEvent, ReactNode } from 'react';
 
 import { describeProvider, usageLabel } from './descriptions';
-import { Badge, BORDER, Muted } from './styles';
+import * as styles from './sources.css';
 
 import MoreIcon from '~icons/mdi/dots-horizontal';
 import DragIcon from '~icons/mdi/drag';
 import PlayIcon from '~icons/mdi/play-outline';
 
-const Row = styled.li<{ $over: boolean; $dragging: boolean }>`
-  display: grid;
-  grid-template-columns:
-    28px minmax(300px, 1.3fr) minmax(0, 1.1fr) minmax(170px, 0.9fr)
-    auto auto auto;
-  align-items: center;
-  gap: 12px 16px;
-  min-height: 52px;
-  padding: 8px 14px 8px 8px;
-  border-top: 1px solid ${BORDER};
-  opacity: ${({ $dragging }) => ($dragging ? 0.45 : 1)};
-  box-shadow: ${({ $over }) =>
-    $over ? `inset 0 2px 0 ${SETTINGS_PALETTE.color.interactive}` : 'none'};
-  list-style: none;
+/** The navigation IDs of a source's row: its switch, Test and the options menu's trigger. */
+const providerNav = (id: string) => ({
+  row: `source:${id}`,
+  enabled: `source:${id}:enabled`,
+  test: `source:${id}:test`,
+  more: `source:${id}:more`,
+  settings: `source:${id}:settings`,
+});
 
-  &:first-child {
-    border-top: 0;
-  }
-
-  @media (max-width: 1100px) {
-    grid-template-columns: 28px minmax(0, 1fr) auto auto auto;
-    > [data-cell='description'],
-    > [data-cell='usage'] {
-      grid-column: 2 / -1;
-    }
-  }
-`;
-
-const Handle = styled.span`
-  display: grid;
-  place-items: center;
-  color: #6c7479;
-  font-size: 22px;
-  cursor: grab;
-  touch-action: none;
-`;
-
-const Identity = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  flex-wrap: wrap;
-`;
-
-const Dot = styled.span<{ $on: boolean }>`
-  width: 10px;
-  height: 10px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: ${({ $on }) => ($on ? SETTINGS_PALETTE.color.success : '#6b7280')};
-`;
-
-const Name = styled.strong`
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  overflow-wrap: anywhere;
-`;
-
-const Usage = styled(Muted)`
-  padding-left: 16px;
-  border-left: 1px solid ${BORDER};
-`;
-
-const MenuWrap = styled.div`
-  position: relative;
-`;
-
-const Menu = styled.div`
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  z-index: 5;
-  display: grid;
-  min-width: 190px;
-  padding: 6px;
-  border: 1px solid #343b3f;
-  border-radius: 10px;
-  background: #171c1f;
-`;
-
-export const MenuItem = styled.button`
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: ${SETTINGS_PALETTE.text.primary};
-  font:
-    14px 'Poppins',
-    sans-serif;
-  text-align: left;
-  cursor: pointer;
-
-  &:hover:not(:disabled),
-  &:focus-visible {
-    outline: none;
-    background: #232a2e;
-  }
-  &:disabled {
-    color: #5d656a;
-    cursor: not-allowed;
-  }
-`;
-
-const Detail = styled.li`
-  padding: 16px 16px 20px 52px;
-  border-top: 1px solid ${BORDER};
-  list-style: none;
-  background: #0e1214;
-`;
+type MenuChoice = 'settings' | 'up' | 'down' | 'remove';
 
 interface ProviderRowProps {
   provider: ProviderView;
   index: number;
   count: number;
   busy: boolean;
-  menuOpen: boolean;
+  testing: boolean;
   dragging: boolean;
   dragOver: boolean;
   armed: boolean;
   onToggle: (enabled: boolean) => void;
   onTest: () => void;
-  onMenu: (open: boolean) => void;
   onSettings: () => void;
   onMove: (offset: -1 | 1) => void;
   onRemove?: () => void;
@@ -143,37 +40,38 @@ interface ProviderRowProps {
   onDragEnter: () => void;
   onDrop: () => void;
   onDragEnd: () => void;
+  /** The source's settings form, open under the row. */
   detail: ReactNode;
 }
 
+/**
+ * One source: the switch that turns it on, named by the source and describing it, then Test and
+ * its options (settings, order, removal). The pointer can also drag the row by its handle.
+ */
 export function ProviderRow(props: ProviderRowProps) {
-  const { provider, index, count, busy, menuOpen } = props;
-  const menuRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    menuRef.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus();
-    const close = (event: MouseEvent) => {
-      if (!menuRef.current?.parentElement?.contains(event.target as Node)) props.onMenu(false);
-    };
-    document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuOpen]);
-
-  const choose = (action: () => void) => () => {
-    props.onMenu(false);
-    triggerRef.current?.focus();
-    action();
+  const { provider, index, count, busy } = props;
+  const nav = providerNav(provider.id);
+  const items: MenuEntry[] = [
+    { id: 'settings', label: 'Settings' },
+    { id: 'up', label: 'Move up', disabled: busy || index === 0 },
+    { id: 'down', label: 'Move down', disabled: busy || index === count - 1 },
+    ...(props.onRemove ? [{ id: 'remove', label: 'Remove' }] : []),
+  ];
+  const choose = (id: string) => {
+    const choice = id as MenuChoice;
+    if (choice === 'settings') props.onSettings();
+    else if (choice === 'up') props.onMove(-1);
+    else if (choice === 'down') props.onMove(1);
+    else props.onRemove?.();
   };
 
   return (
     <>
-      <Row
+      <li
+        className={styles.row}
         draggable={props.armed}
-        $over={props.dragOver}
-        $dragging={props.dragging}
+        data-dragging={props.dragging || undefined}
+        data-drag-over={props.dragOver || undefined}
         onDragStart={props.onDragStart}
         onDragOver={event => {
           event.preventDefault();
@@ -185,100 +83,71 @@ export function ProviderRow(props: ProviderRowProps) {
         }}
         onDragEnd={props.onDragEnd}
       >
-        <Handle
+        <span
+          className={styles.handle}
           aria-hidden="true"
           title="Drag to reorder"
           onMouseDown={() => props.onArm(true)}
           onMouseUp={() => props.onArm(false)}
         >
           <DragIcon />
-        </Handle>
-        <Identity>
-          <Dot
-            $on={provider.enabled}
-            role="img"
-            aria-label={provider.enabled ? 'Enabled' : 'Disabled'}
-          />
-          <Name>{provider.name}</Name>
-          <Badge>{provider.kind}</Badge>
-          {provider.requiresFlareSolverr && <Badge>needs FlareSolverr</Badge>}
-        </Identity>
-        <div data-cell="description">
-          <Muted>{describeProvider(provider)}</Muted>
-          {provider.health.lastError && <Muted>Last error: {provider.health.lastError}</Muted>}
-          {provider.health.cooldownUntil && (
-            <Muted>Paused until {new Date(provider.health.cooldownUntil).toLocaleString()}</Muted>
-          )}
-        </div>
-        <Usage data-cell="usage">{usageLabel(provider)}</Usage>
-        <Switch
-          aria-label={`${provider.enabled ? 'Disable' : 'Enable'} ${provider.name}`}
-          checked={provider.enabled}
-          disabled={busy}
-          onCheckedChange={props.onToggle}
-        />
-        <Button
-          size="small"
-          appearance="settings"
-          color="secondary"
-          aria-label={`Test ${provider.name}`}
-          onClick={props.onTest}
-        >
-          <PlayIcon aria-hidden="true" /> Test
-        </Button>
-        <MenuWrap>
-          <Button
-            ref={triggerRef}
-            size="small"
-            appearance="settings"
-            color="secondary"
-            aria-label={`More options for ${provider.name}`}
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-            onClick={() => props.onMenu(!menuOpen)}
-          >
-            <MoreIcon aria-hidden="true" />
-          </Button>
-          {menuOpen && (
+        </span>
+        <FocusGroup id={nav.row} layout="horizontal" entry="first">
+          <div className={styles.rowMain}>
+            <Switch
+              navId={nav.enabled}
+              label={provider.name}
+              description={<ProviderFacts provider={provider} />}
+              checked={provider.enabled}
+              disabled={busy}
+              onCheckedChange={props.onToggle}
+            />
+          </div>
+          <div className={styles.rowActions}>
+            <IconButton
+              navId={nav.test}
+              label={`Test ${provider.name}`}
+              tooltip="Test"
+              icon={<PlayIcon />}
+              loading={props.testing}
+              onClick={props.onTest}
+            />
             <Menu
-              ref={menuRef}
-              role="menu"
-              aria-label={`${provider.name} options`}
-              onKeyDown={event => {
-                if (event.key === 'Escape') {
-                  event.stopPropagation();
-                  props.onMenu(false);
-                  triggerRef.current?.focus();
-                }
-              }}
-            >
-              <MenuItem role="menuitem" onClick={choose(props.onSettings)}>
-                Settings
-              </MenuItem>
-              <MenuItem
-                role="menuitem"
-                disabled={busy || index === 0}
-                onClick={choose(() => props.onMove(-1))}
-              >
-                Move up
-              </MenuItem>
-              <MenuItem
-                role="menuitem"
-                disabled={busy || index === count - 1}
-                onClick={choose(() => props.onMove(1))}
-              >
-                Move down
-              </MenuItem>
-              {props.onRemove && (
-                <MenuItem role="menuitem" onClick={choose(props.onRemove)}>
-                  Remove
-                </MenuItem>
+              label={`${provider.name} options`}
+              items={items}
+              align="end"
+              onAction={choose}
+              trigger={trigger => (
+                <IconButton
+                  {...trigger}
+                  navId={nav.more}
+                  label={`More options for ${provider.name}`}
+                  icon={<MoreIcon />}
+                />
               )}
-            </Menu>
-          )}
-        </MenuWrap>
-      </Row>
-      {props.detail && <Detail>{props.detail}</Detail>}
+            />
+          </div>
+        </FocusGroup>
+      </li>
+      {props.detail && <li className={styles.detail}>{props.detail}</li>}
     </>
+  );
+}
+
+/** What the source is, its kind, how much it was used today and what went wrong lately. */
+function ProviderFacts({ provider }: { provider: ProviderView }) {
+  return (
+    <span className={styles.facts}>
+      <span>{describeProvider(provider)}</span>
+      <span>{usageLabel(provider)}</span>
+      {provider.health.lastError && <span>Last error: {provider.health.lastError}</span>}
+      {provider.health.cooldownUntil && (
+        <span>Paused until {new Date(provider.health.cooldownUntil).toLocaleString()}</span>
+      )}
+      <span className={styles.badges}>
+        <Badge>{provider.kind}</Badge>
+        {provider.requiresFlareSolverr && <Badge tone="warning">needs FlareSolverr</Badge>}
+      </span>
+    </span>
   );
 }

@@ -64,6 +64,7 @@ describe('ConfigField', () => {
   });
 
   it('renders numeric controls with supplied constraints', () => {
+    const onChange = vi.fn();
     render(
       <ConfigField
         entry={makeEntry({
@@ -71,18 +72,23 @@ describe('ConfigField', () => {
           numberOptions: { min: 1, max: 10, integer: true },
         })}
         value="5"
-        onChange={vi.fn()}
+        onChange={onChange}
       />
     );
 
     const input = screen.getByLabelText('Config Key');
-    expect(input).toHaveAttribute('type', 'number');
-    expect(input).toHaveAttribute('min', '1');
-    expect(input).toHaveAttribute('max', '10');
-    expect(input).toHaveAttribute('step', '1');
+    expect(input).toHaveAttribute('inputmode', 'numeric');
+    expect(input).toHaveValue('5');
+    // The value is committed when editing ends, clamped to the limits
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: '42' } });
+    fireEvent.blur(input);
+    expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '10');
+    fireEvent.click(screen.getByRole('button', { name: 'Decrease Config Key' }));
+    expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '4');
   });
 
-  it('shows a question-circle tooltip for fields without an external link', () => {
+  it('describes the field with its help text', () => {
     render(
       <ConfigField
         entry={makeEntry({ description: 'Numeric setting help' })}
@@ -91,9 +97,8 @@ describe('ConfigField', () => {
       />
     );
 
-    expect(screen.getByRole('img', { name: 'Numeric setting help' })).toHaveAttribute(
-      'data-tooltip',
-      'Numeric setting help'
+    expect(screen.getByRole('textbox', { name: 'Config Key' })).toHaveAccessibleDescription(
+      /Numeric setting help/
     );
   });
 
@@ -177,7 +182,7 @@ describe('ConfigField', () => {
     );
 
     expect(
-      screen.getByText('Create an API token in the provider settings, then paste it here.')
+      screen.getByText(/Create an API token in the provider settings, then paste it here\./)
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('img', {
@@ -190,15 +195,13 @@ describe('ConfigField', () => {
     );
   });
 
-  it('shows a friendly label and keeps the raw key in a tooltip', () => {
+  it('shows a friendly label and keeps the raw key in its help text', () => {
     render(
       <ConfigField entry={makeEntry({ key: 'CATALOG_SERVICE_URL' })} value="" onChange={vi.fn()} />
     );
 
-    expect(screen.getByText('Catalog Service URL')).toHaveAttribute(
-      'title',
-      'Configuration key: CATALOG_SERVICE_URL'
-    );
+    const input = screen.getByRole('textbox', { name: 'Catalog Service URL' });
+    expect(input).toHaveAccessibleDescription(/CATALOG_SERVICE_URL/);
   });
 
   it('uses an explicit label when one is provided', () => {
@@ -223,7 +226,10 @@ describe('ConfigField', () => {
       />
     );
 
-    fireEvent.change(screen.getByLabelText('Config Key'), { target: { value: '30' } });
+    const amount = screen.getByLabelText('Config Key');
+    fireEvent.focus(amount);
+    fireEvent.change(amount, { target: { value: '30' } });
+    fireEvent.blur(amount);
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '30MB');
     fireEvent.change(screen.getByLabelText('Config Key unit'), { target: { value: 'GB' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '20GB');
@@ -240,7 +246,10 @@ describe('ConfigField', () => {
       />
     );
 
-    fireEvent.change(screen.getByLabelText('Config Key'), { target: { value: '30' } });
+    const amount = screen.getByLabelText('Config Key');
+    fireEvent.focus(amount);
+    fireEvent.change(amount, { target: { value: '30' } });
+    fireEvent.blur(amount);
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '30m');
     expect(screen.getByRole('option', { name: 'Minutes' })).toHaveValue('m');
     expect(screen.getByRole('option', { name: 'Hours' })).toHaveValue('h');

@@ -10,6 +10,7 @@ import {
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { useTouchScreen } from '@shared/hooks/useTouchScreen';
 import { FocusGroup, FocusScope, NavigationProvider, useActiveIdWithin } from '@shared/navigation';
+import { LogoBackdrop } from '@shared/ui/logo/LogoBackdrop';
 import { useAppSelector } from '@store/hooks';
 import {
   selectAdminSession,
@@ -115,6 +116,7 @@ function WhosWatchingScreen({
 
   return (
     <FocusScope id={NAV.scope} layout="horizontal" initialId={initialId}>
+      <LogoBackdrop />
       {onBack && (
         <div className={styles.rail}>
           <NavRail label="Profiles" navId={NAV.rail}>

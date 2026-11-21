@@ -120,11 +120,13 @@ test('completes first-run admin and required configuration through the UI', asyn
     ])
   );
 
-  await expect(page.getByRole('heading', { name: 'TMDB' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'TMDB', exact: true })).toBeVisible();
   await expect(
     page.getByRole('list', { name: 'Required configuration steps' }).getByText('Trakt')
   ).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Optional settings' })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Optional settings', exact: true })).toHaveCount(
+    0
+  );
 
   const tokenInput = page.locator('#TMDB_API_ACCESS_TOKEN');
   const nextButton = page.getByRole('button', { name: 'Next step' });
@@ -139,7 +141,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(page).toHaveScreenshot('catalog-required-desktop.png', screenshotOptions);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.getByRole('heading', { name: 'TMDB' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'TMDB', exact: true })).toBeVisible();
   await expect(page).toHaveScreenshot('catalog-required-mobile.png', screenshotOptions);
   await page.setViewportSize({ width: 1920, height: 1080 });
 
@@ -179,7 +181,10 @@ test('completes first-run admin and required configuration through the UI', asyn
   });
 
   await expect(page.getByText('Failed to test TMDB')).toBeVisible();
-  await expect(catalogUrlInput.locator('xpath=..')).toHaveAttribute('data-test-failure', 'true');
+  await expect(page.locator('[data-config-field="TMDB_API_URL"]')).toHaveAttribute(
+    'data-test-failure',
+    'true'
+  );
   await expect(nextButton).toBeDisabled();
   await expect(page).toHaveScreenshot('catalog-test-failure.png', screenshotOptions);
 
@@ -204,7 +209,7 @@ test('completes first-run admin and required configuration through the UI', asyn
     services: [expect.objectContaining({ service: 'CATALOG', success: true })],
   });
 
-  await expect(page.getByRole('heading', { name: 'Trakt' })).toBeVisible({
+  await expect(page.getByRole('heading', { name: 'Trakt', exact: true })).toBeVisible({
     timeout: 5_000,
   });
   await expect(page.getByText('1 missing')).toBeVisible();
@@ -215,9 +220,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   const traktSaveResponsePromise = page.waitForResponse(response => {
     return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
   });
-  const traktGroup = page
-    .getByRole('heading', { name: 'TRAKT', exact: true })
-    .locator('xpath=../../..');
+  const traktGroup = page.getByRole('region', { name: 'Trakt', exact: true });
   await traktGroup.getByRole('button', { name: 'Save', exact: true }).click();
   const traktSaveResponse = await traktSaveResponsePromise;
   expect(traktSaveResponse.ok()).toBeTruthy();
@@ -226,10 +229,15 @@ test('completes first-run admin and required configuration through the UI', asyn
     services: [expect.objectContaining({ service: 'LIST', success: true })],
   });
 
-  await expect(page.getByRole('heading', { name: 'Optional settings' })).toBeVisible({
+  await expect(page.getByRole('heading', { name: 'Optional settings', exact: true })).toBeVisible({
     timeout: 5_000,
   });
-  await expect(page.getByAltText('Miauflix logo')).toHaveCSS('height', '56px');
+  // The wizard carries the logo in the corner, as Home does: 3vh from the top, 4vh tall
+  const logo = page.getByAltText('Miauflix logo');
+  const logoBox = await logo.boundingBox();
+  const viewport = page.viewportSize()!;
+  expect(logoBox?.y).toBeCloseTo(viewport.height * 0.03, 0);
+  expect(logoBox?.height).toBeCloseTo(viewport.height * 0.04, 0);
   await page.mouse.move(0, 0);
   await expect(page).toHaveScreenshot('configuration-optional-settings.png', screenshotOptions);
 
@@ -246,12 +254,16 @@ test('completes first-run admin and required configuration through the UI', asyn
   expect(statusAfterSave.services.CATALOG.status).toBe('ready');
 
   await page.getByRole('button', { name: 'Finish and start using Miauflix' }).click();
-  await expect(page.getByRole('heading', { name: 'Optional settings' })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Optional settings', exact: true })).toHaveCount(
+    0
+  );
   await expect(page.locator('main')).toBeVisible();
 
   await page.reload();
   await waitForIntro(page);
-  await expect(page.getByRole('heading', { name: 'Optional settings' })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Optional settings', exact: true })).toHaveCount(
+    0
+  );
   await expect(page.locator('main')).toBeVisible();
 
   const finalStatus = await api.get('/api/auth/setup');

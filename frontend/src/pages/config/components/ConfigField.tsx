@@ -1,134 +1,18 @@
 import type { ConfigEntryView } from '@miauflix/backend';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { Input as FieldInput, Select as FieldSelect, Switch } from '@shared/ui';
+import {
+  Link,
+  Message,
+  NumberField,
+  PasswordField,
+  Select,
+  Switch,
+  Text,
+  TextField,
+} from '@shared/design-system';
 import type { FC } from 'react';
-import styled from 'styled-components';
 
-import LinkIcon from '~icons/line-md/link';
-import HelpIcon from '~icons/mdi/help-circle-outline';
-
-const FieldWrapper = styled.div<{ $hasError?: boolean }>`
-  margin-bottom: 20px;
-  ${props =>
-    props.$hasError &&
-    `
-      margin-inline: -10px;
-      padding: 10px;
-      border: 1px solid ${SETTINGS_PALETTE.color.danger};
-      border-radius: 8px;
-      background: ${SETTINGS_PALETTE.color.dangerSubtle};
-    `}
-`;
-
-const FieldHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-`;
-
-const FieldKey = styled.label`
-  font-size: 13px;
-  font-weight: 600;
-  color: ${SETTINGS_PALETTE.text.primary};
-  font-family: 'Poppins', sans-serif;
-`;
-
-const FieldKeyAbbr = styled.abbr`
-  text-decoration: none;
-  cursor: help;
-`;
-
-const FieldHelp = styled.span`
-  position: relative;
-  display: inline-flex;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  cursor: help;
-
-  &:focus-visible {
-    outline: none;
-    color: ${SETTINGS_PALETTE.color.interactive};
-  }
-
-  &::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    z-index: 1;
-    top: calc(100% + 8px);
-    left: 50%;
-    width: max-content;
-    max-width: 280px;
-    padding: 8px 10px;
-    border: 1px solid ${SETTINGS_PALETTE.background.border};
-    border-radius: 6px;
-    background: ${SETTINGS_PALETTE.background.input};
-    color: ${SETTINGS_PALETTE.text.primary};
-    font:
-      12px/1.4 'Poppins',
-      sans-serif;
-    transform: translateX(-50%);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s ease;
-  }
-
-  &:hover::after,
-  &:focus-visible::after {
-    opacity: 1;
-  }
-`;
-
-const RequiredBadge = styled.span`
-  font-size: 10px;
-  font-weight: 600;
-  color: ${SETTINGS_PALETTE.color.danger};
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-`;
-
-const FieldDescription = styled.p`
-  font-size: 12px;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  margin: 0 0 6px 0;
-  line-height: 1.4;
-`;
-
-const FieldWarning = styled.p`
-  font-size: 12px;
-  color: ${SETTINGS_PALETTE.color.warning};
-  margin: 0 0 6px;
-  line-height: 1.4;
-`;
-
-const FieldLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: ${SETTINGS_PALETTE.color.interactive};
-  text-decoration: none;
-  margin-bottom: 6px;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const InputRow = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-const ToggleValue = styled.span`
-  color: #aaa;
-  font-size: 12px;
-`;
-
-const ToggleRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
+import { configFieldNavId } from '../navIds';
+import * as styles from './configField.css';
 
 interface ConfigFieldProps {
   entry: ConfigEntryView;
@@ -198,6 +82,18 @@ function humanizeConfigKey(key: string): string {
   return tokens.join(' ');
 }
 
+const toNumber = (text: string): number | null => {
+  if (text.trim() === '') return null;
+  const parsed = Number(text);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+/**
+ * One configuration value, as the design system control for its kind: a Switch for flags, a
+ * Select for a fixed set, a NumberField (with its unit's Select for sizes and durations), a
+ * PasswordField for secrets and a TextField otherwise. The raw environment key stays in the help
+ * text, for administrators who know their `.env`.
+ */
 export const ConfigField: FC<ConfigFieldProps> = ({
   entry,
   value,
@@ -205,142 +101,184 @@ export const ConfigField: FC<ConfigFieldProps> = ({
   hasTestFailure = false,
 }) => {
   const fieldLabel = entry.label ?? humanizeConfigKey(entry.key);
-  const isMissingRequired = (entry.required && !entry.hasValue && !value.trim()) || hasTestFailure;
-  const isBoolean = entry.inputType === 'boolean';
+  const navId = configFieldNavId(entry.key);
+  const isMissingRequired = entry.required && !entry.hasValue;
+  const indicator = isMissingRequired ? 'Required' : undefined;
+  const error = hasTestFailure ? 'The last test failed: check this value.' : undefined;
   const isSize = entry.inputType === 'size';
   const isTime = entry.inputType === 'time';
-  const isNumber = entry.inputType === 'number';
-  const isSelect = entry.inputType === 'select';
-  const isUnitValue = isSize || isTime;
-  const unitMatch = isUnitValue ? value.match(/^(\d+)\s*([A-Za-z]+)$/) : null;
-  const units = isSize ? (entry.sizeUnits ?? []) : (entry.timeUnits ?? []);
-  const unit = isSize
-    ? (unitMatch?.[2].toUpperCase() ?? units[0] ?? '')
-    : (unitMatch?.[2].toLowerCase() ?? units[0] ?? '');
-  const unitNumber = unitMatch?.[1] ?? '';
-  const isEnabled = ['true', '1', 'yes'].includes(value.trim().toLowerCase());
+  const integer = entry.numberOptions?.integer ?? false;
+  const numberSteps = {
+    decrementLabel: `Decrease ${fieldLabel}`,
+    incrementLabel: `Increase ${fieldLabel}`,
+  };
+  const help = `${entry.description} (${entry.key})`;
 
-  const renderInput = () => {
-    if (isBoolean) {
+  const renderControl = () => {
+    if (entry.inputType === 'boolean') {
+      const enabled = ['true', '1', 'yes'].includes(value.trim().toLowerCase());
       return (
-        <ToggleRow>
-          <Switch
-            id={entry.key}
-            aria-label={fieldLabel}
-            checked={isEnabled}
-            invalid={isMissingRequired}
-            onCheckedChange={checked => onChange(entry.key, checked ? 'true' : 'false')}
-          />
-          <ToggleValue>
-            {booleanStateLabel(entry.key, isEnabled, entry.booleanStateDescriptions)}
-          </ToggleValue>
-        </ToggleRow>
-      );
-    }
-
-    if (isSelect) {
-      return (
-        <FieldSelect
-          invalid={isMissingRequired}
+        <Switch
+          navId={navId}
           id={entry.key}
-          value={value}
-          onChange={event => onChange(entry.key, event.target.value)}
-        >
-          {Object.entries(entry.options ?? {}).map(([optionValue, optionDescription]) => (
-            <option key={optionValue} value={optionValue}>
-              {optionValue} — {optionDescription}
-            </option>
-          ))}
-        </FieldSelect>
+          label={fieldLabel}
+          description={
+            <>
+              <span>{booleanStateLabel(entry.key, enabled, entry.booleanStateDescriptions)}</span>
+              {`. ${help}`}
+            </>
+          }
+          checked={enabled}
+          onCheckedChange={checked => onChange(entry.key, checked ? 'true' : 'false')}
+        />
       );
     }
 
-    if (isUnitValue) {
+    if (entry.inputType === 'select') {
       return (
-        <InputRow>
-          <FieldInput
-            id={entry.key}
-            type="number"
-            min="0"
-            step="1"
-            inputMode="numeric"
-            value={unitNumber}
-            onChange={event =>
-              onChange(entry.key, event.target.value ? `${event.target.value}${unit}` : '')
-            }
-            placeholder="0"
-            invalid={isMissingRequired}
-          />
-          <FieldSelect
-            aria-label={`${fieldLabel} unit`}
-            value={unit}
-            onChange={event =>
-              onChange(entry.key, unitNumber ? `${unitNumber}${event.target.value}` : '')
-            }
-          >
-            {units.map(unit => (
-              <option key={unit} value={unit}>
-                {isTime ? timeUnitLabel(unit) : unit}
-              </option>
-            ))}
-          </FieldSelect>
-        </InputRow>
+        <Select
+          navId={navId}
+          id={entry.key}
+          label={fieldLabel}
+          indicator={indicator}
+          description={help}
+          error={error}
+          fullWidth
+          items={Object.entries(entry.options ?? {}).map(([optionValue, optionDescription]) => ({
+            value: optionValue,
+            label: `${optionValue} — ${optionDescription}`,
+          }))}
+          value={value || null}
+          onChange={next => onChange(entry.key, next)}
+        />
       );
     }
 
+    if (isSize || isTime) {
+      const match = value.match(/^(\d+)\s*([A-Za-z]+)$/);
+      const units = isSize ? (entry.sizeUnits ?? []) : (entry.timeUnits ?? []);
+      const unit = isSize
+        ? (match?.[2].toUpperCase() ?? units[0] ?? '')
+        : (match?.[2].toLowerCase() ?? units[0] ?? '');
+      const amount = match?.[1] ?? '';
+      return (
+        <div>
+          <div className={styles.unitRow}>
+            <div className={styles.unitNumber}>
+              <NumberField
+                navId={navId}
+                id={entry.key}
+                label={fieldLabel}
+                indicator={indicator}
+                // Under the number and its unit both, so the unit lines up with the input
+                aria-describedby={`${entry.key}-help`}
+                error={error}
+                min={0}
+                step={1}
+                {...numberSteps}
+                value={toNumber(amount)}
+                onChange={next => onChange(entry.key, next === null ? '' : `${next}${unit}`)}
+                placeholder="0"
+              />
+            </div>
+            <div className={styles.unitSelect}>
+              <Select
+                navId={`${navId}:unit`}
+                label={`${fieldLabel} unit`}
+                labelHidden
+                items={units.map(option => ({
+                  value: option,
+                  label: isTime ? timeUnitLabel(option) : option,
+                }))}
+                value={unit || null}
+                onChange={next => onChange(entry.key, amount ? `${amount}${next}` : '')}
+              />
+            </div>
+          </div>
+          <div id={`${entry.key}-help`} className={styles.unitHelp}>
+            <Text variant="caption" tone="secondary">
+              {help}
+            </Text>
+          </div>
+        </div>
+      );
+    }
+
+    if (entry.inputType === 'number') {
+      return (
+        <NumberField
+          navId={navId}
+          id={entry.key}
+          label={fieldLabel}
+          indicator={indicator}
+          description={help}
+          error={error}
+          min={entry.numberOptions?.min}
+          max={entry.numberOptions?.max}
+          step={integer ? 1 : 0.01}
+          {...numberSteps}
+          inputMode={integer ? 'numeric' : 'decimal'}
+          value={toNumber(value)}
+          onChange={next => onChange(entry.key, next === null ? '' : String(next))}
+        />
+      );
+    }
+
+    const placeholder =
+      entry.isSecret && entry.hasValue
+        ? 'A value is saved — enter a new value to replace it'
+        : entry.example
+          ? `e.g. ${entry.example}`
+          : undefined;
+    if (entry.isSecret) {
+      return (
+        <PasswordField
+          navId={navId}
+          id={entry.key}
+          label={fieldLabel}
+          indicator={indicator}
+          description={help}
+          error={error}
+          showLabel={`Show ${fieldLabel}`}
+          hideLabel={`Hide ${fieldLabel}`}
+          value={value}
+          placeholder={placeholder}
+          autoComplete="new-password"
+          onChange={event => onChange(entry.key, event.target.value)}
+        />
+      );
+    }
     return (
-      <FieldInput
+      <TextField
+        navId={navId}
         id={entry.key}
-        type={entry.isSecret ? 'password' : isNumber ? 'number' : 'text'}
-        min={isNumber ? entry.numberOptions?.min : undefined}
-        max={isNumber ? entry.numberOptions?.max : undefined}
-        step={isNumber ? (entry.numberOptions?.integer ? '1' : 'any') : undefined}
-        inputMode={isNumber ? (entry.numberOptions?.integer ? 'numeric' : 'decimal') : undefined}
+        label={fieldLabel}
+        indicator={indicator}
+        description={help}
+        error={error}
         value={value}
+        placeholder={placeholder}
+        autoComplete="off"
         onChange={event => onChange(entry.key, event.target.value)}
-        placeholder={
-          entry.isSecret && entry.hasValue
-            ? 'A value is saved — enter a new value to replace it'
-            : entry.example
-              ? `e.g. ${entry.example}`
-              : ''
-        }
-        invalid={isMissingRequired}
-        autoComplete={entry.isSecret ? 'new-password' : 'off'}
       />
     );
   };
 
   return (
-    <FieldWrapper $hasError={hasTestFailure} data-test-failure={hasTestFailure || undefined}>
-      <FieldHeader>
-        <FieldKey htmlFor={entry.key}>
-          <FieldKeyAbbr title={`Configuration key: ${entry.key}`}>{fieldLabel}</FieldKeyAbbr>
-        </FieldKey>
-        {!entry.link && (
-          <FieldHelp
-            role="img"
-            tabIndex={0}
-            aria-label={entry.description}
-            data-tooltip={entry.description}
-          >
-            <HelpIcon aria-hidden="true" />
-          </FieldHelp>
-        )}
-        {entry.required && !entry.hasValue && <RequiredBadge>required</RequiredBadge>}
-      </FieldHeader>
-
-      {entry.link && <FieldDescription>{entry.description}</FieldDescription>}
-
-      {entry.warning && <FieldWarning role="note">Warning: {entry.warning}</FieldWarning>}
-
-      {entry.link && (
-        <FieldLink href={entry.link} target="_blank" rel="noopener noreferrer">
-          <LinkIcon /> {entry.linkLabel ?? 'Open setup page'}
-        </FieldLink>
+    <div data-config-field={entry.key} data-test-failure={hasTestFailure || undefined}>
+      {renderControl()}
+      {entry.warning && (
+        <div className={styles.extra}>
+          <Message tone="warning">Warning: {entry.warning}</Message>
+        </div>
       )}
-
-      {renderInput()}
-    </FieldWrapper>
+      {entry.link && (
+        <div className={styles.extra}>
+          <Link navId={`${navId}:link`} href={entry.link} variant="standalone" external>
+            {entry.linkLabel ?? 'Open setup page'}
+          </Link>
+        </div>
+      )}
+    </div>
   );
 };

@@ -6,115 +6,43 @@ import {
   useSyncDefinitionsMutation,
 } from '@features/sources/api/sources.api';
 import type { CardigannDefinitionEntry, CardigannSyncStatus } from '@miauflix/backend';
-import { ActionRow, Button, FieldLabel, Input, Select } from '@shared/ui';
-import { type FormEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import {
+  ActionGroup,
+  Badge,
+  Button,
+  FilterChip,
+  FormSection,
+  Heading,
+  Message,
+  PasswordField,
+  ProgressSpinner,
+  Section,
+  Select,
+  Text,
+  TextField,
+} from '@shared/design-system';
+import { FocusGroup } from '@shared/navigation';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { errorMessage } from './sources/errors';
+import * as styles from './sources/sources.css';
 
-const Section = styled.section`
-  display: grid;
-  gap: 12px;
-  padding: 18px 0 4px;
-  border-top: 1px solid #252b2e;
-`;
-
-const Heading = styled.h3`
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: none;
-`;
-
-const Form = styled.form`
-  display: grid;
-  gap: 12px;
-`;
-
-const Field = styled.div`
-  display: grid;
-  gap: 6px;
-`;
-
-const Filters = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-`;
-
-const Chip = styled.button<{ $on: boolean }>`
-  padding: 5px 12px;
-  border: 1px solid ${({ $on }) => ($on ? '#5c7cfa' : '#3a4246')};
-  border-radius: 999px;
-  background: ${({ $on }) => ($on ? 'rgba(92, 124, 250, 0.18)' : 'transparent')};
-  color: ${({ $on }) => ($on ? '#f5f5f5' : '#a6adaf')};
-  font:
-    13px 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid #5c7cfa;
-    outline-offset: 2px;
-  }
-`;
-
-const Results = styled.div`
-  display: grid;
-  max-height: 420px;
-  overflow-y: auto;
-  border: 1px solid #252b2e;
-  border-radius: 10px;
-`;
-
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-top: 1px solid #252b2e;
-  overflow-wrap: anywhere;
-
-  &:first-child {
-    border-top: 0;
-  }
-`;
-
-const Tags = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
-`;
-
-const Tag = styled.span<{ $tone?: 'good' | 'warn' }>`
-  padding: 1px 8px;
-  border: 1px solid
-    ${({ $tone }) => ($tone === 'good' ? '#2e6b53' : $tone === 'warn' ? '#6b5a2e' : '#3a4246')};
-  border-radius: 999px;
-  color: ${({ $tone }) =>
-    $tone === 'good' ? '#6fd3a8' : $tone === 'warn' ? '#e5b95c' : '#a6adaf'};
-  font-size: 11px;
-`;
-
-const Sentinel = styled.div`
-  height: 1px;
-`;
-
-const Message = styled.p`
-  margin: 0;
-  color: #a6adaf;
-  font-size: 13px;
-  line-height: 1.5;
-`;
-
-const StatusLine = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
-`;
+/** Navigation IDs of the indexer catalog and the Torznab form. */
+const NAV = {
+  browse: 'indexers-browse',
+  search: 'indexers-search',
+  source: 'indexers-source',
+  filters: 'indexers-filters',
+  filter: (flag: string) => `indexers-filter:${flag}`,
+  check: 'indexers-check',
+  results: 'indexers-results',
+  add: (entry: { source: string; id: string }) => `indexer-add:${entry.source}|${entry.id}`,
+  more: 'indexers-more',
+  torznabName: 'torznab-name',
+  torznabUrl: 'torznab-url',
+  torznabKey: 'torznab-key',
+  torznabSubmit: 'torznab-submit',
+} as const;
 
 const PAGE_SIZE = 40;
 const POLL_MS = 4000;
@@ -176,25 +104,31 @@ function Supports({ entry, showSource }: { entry: CardigannDefinitionEntry; show
   const name = entry.name ?? entry.id;
   if (entry.status !== 'ready')
     return (
-      <Message>{entry.status === 'failed' ? 'Could not be read yet.' : 'Not read yet.'}</Message>
+      <Text variant="caption" tone="secondary">
+        {entry.status === 'failed' ? 'Could not be read yet.' : 'Not read yet.'}
+      </Text>
     );
   const { supports } = entry;
   return (
     <>
-      {!entry.supported && <Message>{entry.reason ?? 'Not supported'}</Message>}
-      <Tags aria-label={`${name} supports`}>
-        {supports.imdb && <Tag $tone="good">IMDb search</Tag>}
-        {supports.tmdb && <Tag $tone="good">TMDB search</Tag>}
-        {supports.tvdb && <Tag $tone="good">TVDB search</Tag>}
-        {supports.movies && <Tag>Movies</Tag>}
-        {supports.tv && <Tag>TV</Tag>}
-        {supports.anime && <Tag>Anime</Tag>}
-        {!supports.imdb && <Tag>Title search only</Tag>}
-        {entry.type && <Tag>{entry.type === 'public' ? 'Public' : entry.type}</Tag>}
-        {entry.language && <Tag>{entry.language}</Tag>}
-        {entry.requiresFlareSolverr && <Tag $tone="warn">Needs FlareSolverr</Tag>}
-        {showSource && <Tag>{entry.sourceLabel}</Tag>}
-      </Tags>
+      {!entry.supported && (
+        <Text variant="caption" tone="secondary">
+          {entry.reason ?? 'Not supported'}
+        </Text>
+      )}
+      <span className={styles.badges} aria-label={`${name} supports`} role="group">
+        {supports.imdb && <Badge tone="success">IMDb search</Badge>}
+        {supports.tmdb && <Badge tone="success">TMDB search</Badge>}
+        {supports.tvdb && <Badge tone="success">TVDB search</Badge>}
+        {supports.movies && <Badge>Movies</Badge>}
+        {supports.tv && <Badge>TV</Badge>}
+        {supports.anime && <Badge>Anime</Badge>}
+        {!supports.imdb && <Badge>Title search only</Badge>}
+        {entry.type && <Badge>{entry.type === 'public' ? 'Public' : entry.type}</Badge>}
+        {entry.language && <Badge>{entry.language}</Badge>}
+        {entry.requiresFlareSolverr && <Badge tone="warning">Needs FlareSolverr</Badge>}
+        {showSource && <Badge>{entry.sourceLabel}</Badge>}
+      </span>
     </>
   );
 }
@@ -319,8 +253,8 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
     }
   };
 
-  const submitTorznab = async (event: FormEvent) => {
-    event.preventDefault();
+  const submitTorznab = async () => {
+    if (torznab.isLoading || !form.name.trim() || !form.baseUrl.trim()) return;
     setError('');
     try {
       const view = await addTorznab({
@@ -337,199 +271,230 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
 
   return (
     <>
-      {error && <Message role="alert">{error}</Message>}
-      <Section aria-label="Add Jackett indexer">
-        <Heading>Add Jackett indexer</Heading>
-        <Message>
-          Public indexers from the Jackett definition list, kept up to date automatically. Some need
-          FlareSolverr, and tracker definitions that need an account are not supported.
+      {error && (
+        <Message tone="danger" toneLabel="Error" live="assertive">
+          {error}
         </Message>
-        {!browsing ? (
-          <ActionRow>
-            <Button
-              size="small"
-              appearance="settings"
-              color="secondary"
-              onClick={() => setBrowsing(true)}
-            >
-              Browse indexers
-            </Button>
-          </ActionRow>
-        ) : (
-          <>
-            <Field>
-              <FieldLabel htmlFor="definition-search">Search indexers</FieldLabel>
-              <Input
-                id="definition-search"
-                value={search}
-                onChange={event => setSearch(event.target.value)}
-                placeholder="nyaa"
-              />
-            </Field>
-            {sync && manySources && (
-              <Field>
-                <FieldLabel htmlFor="definition-source">Source</FieldLabel>
-                <Select
-                  id="definition-source"
-                  value={source}
-                  onChange={event => setSource(event.target.value)}
-                >
-                  <option value="">All sources</option>
-                  {sync.sources.map(item => (
-                    <option key={item.key} value={item.key}>
-                      {item.label}
-                      {item.total ? ` (${item.total})` : ''}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            )}
-            <Filters role="group" aria-label="Filter indexers">
-              {FILTERS.map(({ flag, label }) => (
-                <Chip
-                  key={flag}
-                  type="button"
-                  $on={filters[flag]}
-                  aria-pressed={filters[flag]}
-                  onClick={() => setFilters(current => ({ ...current, [flag]: !current[flag] }))}
-                >
-                  {label}
-                </Chip>
-              ))}
-            </Filters>
-            {sync && (
-              <StatusLine>
-                <Message role="status">{updatedText(sync)}</Message>
-                <Button
-                  size="small"
-                  appearance="settings"
-                  color="secondary"
-                  disabled={sync.syncing || syncing.isLoading}
-                  onClick={() => void checkNow()}
-                >
-                  Check for updates
-                </Button>
-              </StatusLine>
-            )}
-            {sync?.sources
-              .filter(item => item.lastError)
-              .map(item => (
-                <Message key={item.key} role="alert">
-                  Last update of {item.label} failed: {item.lastError}
-                </Message>
-              ))}
-            {sync && sync.failed > 0 && !sync.syncing && (
-              <Message>{sync.failed} indexers could not be read and will be retried.</Message>
-            )}
-            <Results ref={resultsRef} role="list" aria-label="Available indexers">
-              {entries.map(entry => {
-                const unusable = entry.status === 'ready' && !entry.supported;
-                return (
-                  <Row key={`${entry.source}|${entry.id}`} role="listitem">
-                    <div>
-                      <strong>{entry.name ?? entry.id}</strong>
-                      {entry.name && entry.name.toLowerCase() !== entry.id && (
-                        <Message as="span"> {entry.id}</Message>
-                      )}
-                      <Supports entry={entry} showSource={manySources} />
-                    </div>
+      )}
+      <div className={styles.setupPart}>
+        <Section
+          title="Add Jackett indexer"
+          headingLevel={3}
+          description="Public indexers from the Jackett definition list, kept up to date automatically. Some need FlareSolverr, and tracker definitions that need an account are not supported."
+        >
+          {!browsing ? (
+            <ActionGroup>
+              <Button navId={NAV.browse} onClick={() => setBrowsing(true)}>
+                Browse indexers
+              </Button>
+            </ActionGroup>
+          ) : (
+            <FocusGroup layout="vertical">
+              <div className={styles.setupFields}>
+                <TextField
+                  navId={NAV.search}
+                  id="definition-search"
+                  label="Search indexers"
+                  value={search}
+                  onChange={event => setSearch(event.target.value)}
+                  placeholder="nyaa"
+                />
+                {sync && manySources && (
+                  <Select
+                    navId={NAV.source}
+                    id="definition-source"
+                    label="Source"
+                    fullWidth
+                    value={source}
+                    onChange={setSource}
+                    items={[
+                      { value: '', label: 'All sources' },
+                      ...sync.sources.map(item => ({
+                        value: item.key,
+                        label: `${item.label}${item.total ? ` (${item.total})` : ''}`,
+                      })),
+                    ]}
+                  />
+                )}
+                <FocusGroup id={NAV.filters} layout="horizontal">
+                  <div className={styles.filters} role="group" aria-label="Filter indexers">
+                    {FILTERS.map(({ flag, label }) => (
+                      <FilterChip
+                        key={flag}
+                        navId={NAV.filter(flag)}
+                        selected={filters[flag]}
+                        onSelectedChange={selected =>
+                          setFilters(current => ({ ...current, [flag]: selected }))
+                        }
+                      >
+                        {label}
+                      </FilterChip>
+                    ))}
+                  </div>
+                </FocusGroup>
+                {sync && (
+                  <div className={styles.statusLine}>
+                    <span role="status">
+                      <Text variant="caption" tone="secondary">
+                        {updatedText(sync)}
+                      </Text>
+                    </span>
                     <Button
-                      size="small"
-                      appearance="settings"
-                      color="secondary"
-                      disabled={entry.installed || unusable || cardigann.isLoading}
-                      aria-label={
-                        manySources
-                          ? `Add ${entry.id} from ${entry.sourceLabel}`
-                          : `Add ${entry.id}`
-                      }
-                      onClick={() => void install(entry)}
+                      navId={NAV.check}
+                      size="sm"
+                      disabled={sync.syncing || syncing.isLoading}
+                      onClick={() => void checkNow()}
                     >
-                      {entry.installed ? 'Added' : 'Add'}
+                      Check for updates
                     </Button>
-                  </Row>
-                );
-              })}
-              {loading && entries.length === 0 && (
-                <Message role="status">Loading indexers…</Message>
-              )}
-              {more && hasObserver && <Sentinel ref={sentinelRef} aria-hidden="true" />}
-              {more && (!hasObserver || error) && (
-                <Row role="listitem">
-                  <Button
-                    size="small"
-                    appearance="settings"
-                    color="secondary"
-                    disabled={loading}
-                    onClick={() => void load(entries.length)}
+                  </div>
+                )}
+                {sync?.sources
+                  .filter(item => item.lastError)
+                  .map(item => (
+                    <Message key={item.key} tone="danger" toneLabel="Error" live="assertive">
+                      Last update of {item.label} failed: {item.lastError}
+                    </Message>
+                  ))}
+                {sync && sync.failed > 0 && !sync.syncing && (
+                  <Message tone="warning" toneLabel="Warning">
+                    {sync.failed} indexers could not be read and will be retried.
+                  </Message>
+                )}
+                <FocusGroup id={NAV.results} layout="vertical">
+                  <div
+                    ref={resultsRef}
+                    className={styles.results}
+                    role="list"
+                    aria-label="Available indexers"
                   >
-                    Show more
-                  </Button>
-                </Row>
-              )}
-              {!loading && entries.length === 0 && !error && (
-                <Message>
-                  {sync && sync.total === 0
-                    ? 'No indexers yet. They appear here once the list has been downloaded.'
-                    : 'No indexers match these filters.'}
-                </Message>
-              )}
-            </Results>
-            {sync && (
-              <Message role="status">
-                Showing {entries.length} of {total} matching indexers
-                {sync.total ? ` (${sync.total} in total)` : ''}
-              </Message>
-            )}
-          </>
-        )}
-      </Section>
+                    {entries.map(entry => {
+                      const unusable = entry.status === 'ready' && !entry.supported;
+                      return (
+                        <div
+                          key={`${entry.source}|${entry.id}`}
+                          role="listitem"
+                          className={styles.entry}
+                        >
+                          <div className={styles.entryText}>
+                            <Heading level={4} variant="label">
+                              {entry.name ?? entry.id}
+                              {entry.name && entry.name.toLowerCase() !== entry.id && (
+                                <Text as="span" variant="caption" tone="secondary">
+                                  {' '}
+                                  {entry.id}
+                                </Text>
+                              )}
+                            </Heading>
+                            <Supports entry={entry} showSource={manySources} />
+                          </div>
+                          <Button
+                            navId={NAV.add(entry)}
+                            size="sm"
+                            disabled={entry.installed || unusable || cardigann.isLoading}
+                            aria-label={
+                              manySources
+                                ? `Add ${entry.id} from ${entry.sourceLabel}`
+                                : `Add ${entry.id}`
+                            }
+                            onClick={() => void install(entry)}
+                          >
+                            {entry.installed ? 'Added' : 'Add'}
+                          </Button>
+                        </div>
+                      );
+                    })}
+                    {loading && entries.length === 0 && (
+                      <div className={styles.empty}>
+                        <ProgressSpinner label="Loading indexers…" />
+                      </div>
+                    )}
+                    {more && hasObserver && (
+                      <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+                    )}
+                    {more && (!hasObserver || error) && (
+                      <div role="listitem" className={styles.entry}>
+                        <Button
+                          navId={NAV.more}
+                          size="sm"
+                          disabled={loading}
+                          onClick={() => void load(entries.length)}
+                        >
+                          Show more
+                        </Button>
+                      </div>
+                    )}
+                    {!loading && entries.length === 0 && !error && (
+                      <div className={styles.empty}>
+                        <Text tone="secondary">
+                          {sync && sync.total === 0
+                            ? 'No indexers yet. They appear here once the list has been downloaded.'
+                            : 'No indexers match these filters.'}
+                        </Text>
+                      </div>
+                    )}
+                  </div>
+                </FocusGroup>
+                {sync && (
+                  <span role="status">
+                    <Text variant="caption" tone="secondary">
+                      Showing {entries.length} of {total} matching indexers
+                      {sync.total ? ` (${sync.total} in total)` : ''}
+                    </Text>
+                  </span>
+                )}
+              </div>
+            </FocusGroup>
+          )}
+        </Section>
+      </div>
 
-      <Section aria-label="Add Torznab endpoint">
-        <Heading>Add Torznab endpoint</Heading>
-        <Message>Use an indexer from your own Jackett or Prowlarr.</Message>
-        <Form onSubmit={event => void submitTorznab(event)}>
-          <Field>
-            <FieldLabel htmlFor="torznab-name">Name</FieldLabel>
-            <Input
-              id="torznab-name"
-              value={form.name}
-              onChange={event => setForm({ ...form, name: event.target.value })}
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="torznab-url">Torznab URL</FieldLabel>
-            <Input
-              id="torznab-url"
-              type="url"
-              placeholder="http://jackett:9117/api/v2.0/indexers/all/results/torznab/"
-              value={form.baseUrl}
-              onChange={event => setForm({ ...form, baseUrl: event.target.value })}
-            />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="torznab-key">API key</FieldLabel>
-            <Input
-              id="torznab-key"
-              type="password"
-              autoComplete="off"
-              value={form.apiKey}
-              onChange={event => setForm({ ...form, apiKey: event.target.value })}
-            />
-          </Field>
-          <ActionRow>
+      <div className={styles.setupPart}>
+        <FormSection
+          title="Add Torznab endpoint"
+          description="Use an indexer from your own Jackett or Prowlarr."
+          headingLevel={3}
+          onSubmit={() => void submitTorznab()}
+          busy={torznab.isLoading}
+          actions={
             <Button
               type="submit"
-              size="small"
-              appearance="settings"
-              color="primary"
-              disabled={torznab.isLoading || !form.name.trim() || !form.baseUrl.trim()}
+              navId={NAV.torznabSubmit}
+              loading={torznab.isLoading}
+              disabled={!form.name.trim() || !form.baseUrl.trim()}
             >
-              {torznab.isLoading ? 'Adding…' : 'Add endpoint'}
+              Add endpoint
             </Button>
-          </ActionRow>
-        </Form>
-      </Section>
+          }
+        >
+          <TextField
+            navId={NAV.torznabName}
+            id="torznab-name"
+            label="Name"
+            value={form.name}
+            onChange={event => setForm({ ...form, name: event.target.value })}
+          />
+          <TextField
+            navId={NAV.torznabUrl}
+            id="torznab-url"
+            label="Torznab URL"
+            type="url"
+            placeholder="http://jackett:9117/api/v2.0/indexers/all/results/torznab/"
+            value={form.baseUrl}
+            onChange={event => setForm({ ...form, baseUrl: event.target.value })}
+          />
+          <PasswordField
+            navId={NAV.torznabKey}
+            id="torznab-key"
+            label="API key"
+            showLabel="Show API key"
+            hideLabel="Hide API key"
+            autoComplete="off"
+            value={form.apiKey}
+            onChange={event => setForm({ ...form, apiKey: event.target.value })}
+          />
+        </FormSection>
+      </div>
     </>
   );
 }

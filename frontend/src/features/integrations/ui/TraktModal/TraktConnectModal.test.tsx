@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { beginAuthorization, pollAuthorization } = vi.hoisted(() => ({
   beginAuthorization: vi.fn(),
@@ -15,55 +15,58 @@ vi.mock('react-qr-code', () => ({
   default: ({ value, ...props }: { value: string }) => <svg data-value={value} {...props} />,
 }));
 
+import { FocusScope, NavigationProvider } from '@shared/navigation';
+
 import { TraktModal } from './TraktModal';
+
+const cleanups: (() => void)[] = [];
 
 const setupTest = () => {
   const onDismiss = vi.fn();
   const onConnected = vi.fn();
+  // Home's own keys listen on the window, after the dialog's
   const backgroundKeyDown = vi.fn();
+  window.addEventListener('keydown', backgroundKeyDown);
+  // As on Home: the dialog sits under the page's navigation layer
   const view = render(
-    <div onKeyDown={backgroundKeyDown}>
-      <TraktModal sessionId="test-session" onConnected={onConnected} onDismiss={onDismiss} />
-    </div>
+    <NavigationProvider>
+      <FocusScope>
+        <TraktModal sessionId="test-session" onConnected={onConnected} onDismiss={onDismiss} />
+      </FocusScope>
+    </NavigationProvider>
   );
+  cleanups.push(() => window.removeEventListener('keydown', backgroundKeyDown));
   return { ...view, onDismiss, backgroundKeyDown };
 };
 
+const press = (key: string) => fireEvent.keyDown(document.activeElement ?? document, { key });
+
 describe('Trakt dialog dismissal', () => {
   beforeEach(() => {
-    vi.resetAllMocks();
+    // Not resetAllMocks: that would also reset the test setup's matchMedia
+    beginAuthorization.mockReset();
+    pollAuthorization.mockReset();
+    // jsdom lays nothing out: give every element a box, so the navigation layer can focus it
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
+  });
+  afterEach(() => {
+    vi.mocked(Element.prototype.getClientRects).mockRestore();
+    cleanups.splice(0).forEach(cleanup => cleanup());
   });
 
-  it('moves arrows between columns and rows without cycling through X', () => {
-    const { backgroundKeyDown } = setupTest();
+  // The dialog's edges and the move up to the close button depend on layout, which jsdom lacks:
+  // the story covers them
+  it('starts on the first action and moves between the actions', () => {
+    setupTest();
     const first = screen.getByRole('button', { name: "Let's go" });
     const never = screen.getByRole('button', { name: 'Don’t ask again' });
-    const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
-    for (const key of ['ArrowLeft', 'ArrowRight']) {
-      first.focus();
-      fireEvent.keyDown(first, { key });
-      expect(never).toHaveFocus();
-      fireEvent.keyDown(never, { key });
-      expect(first).toHaveFocus();
-    }
-    fireEvent.keyDown(first, { key: 'ArrowDown' });
-    expect(first).toHaveFocus();
-    fireEvent.keyDown(first, { key: 'ArrowUp' });
-    expect(close).toHaveFocus();
-    for (const key of ['ArrowLeft', 'ArrowRight', 'ArrowUp']) {
-      fireEvent.keyDown(close, { key });
-      expect(close).toHaveFocus();
-    }
-    fireEvent.keyDown(close, { key: 'ArrowDown' });
-    expect(first).toHaveFocus();
-    never.focus();
-    fireEvent.keyDown(never, { key: 'ArrowDown' });
-    expect(never).toHaveFocus();
-    fireEvent.keyDown(never, { key: 'ArrowUp' });
-    expect(close).toHaveFocus();
-    fireEvent.keyDown(close, { key: 'ArrowDown' });
-    expect(never).toHaveFocus();
-    expect(backgroundKeyDown).not.toHaveBeenCalled();
+    expect(first).toHaveAttribute('data-focused');
+    press('ArrowRight');
+    expect(never).toHaveAttribute('data-focused');
+    press('ArrowLeft');
+    expect(first).toHaveAttribute('data-focused');
   });
 
   it('replaces Not now with an accessible X button', () => {
@@ -73,19 +76,18 @@ describe('Trakt dialog dismissal', () => {
     expect(onDismiss).toHaveBeenCalledExactlyOnceWith(false);
   });
 
-  it('closes only when the overlay itself is clicked', () => {
+  it('closes only when the scrim itself is pressed', () => {
     const { onDismiss } = setupTest();
     const dialog = screen.getByRole('dialog');
-    fireEvent.click(screen.getByRole('heading', { name: 'Connect Trakt' }));
-    fireEvent.click(dialog);
+    fireEvent.mouseDown(screen.getByRole('heading', { name: 'Connect Trakt' }));
+    fireEvent.mouseDown(dialog);
     expect(onDismiss).not.toHaveBeenCalled();
-    fireEvent.click(dialog.parentElement!);
+    fireEvent.mouseDown(dialog.parentElement!);
     expect(onDismiss).toHaveBeenCalledExactlyOnceWith(false);
   });
 
   it.each([
     { key: 'Escape' },
-    { key: 'Backspace' },
     { key: 'Back' },
     { key: 'BrowserBack' },
     { key: 'GoBack' },
@@ -123,6 +125,7 @@ describe('Trakt dialog dismissal', () => {
       const openButton = await screen.findByRole('button', { name: 'Open Trakt' });
       expect(open).not.toHaveBeenCalled();
       expect(screen.getByText('ABCD')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Open Trakt' })).toHaveAttribute('data-focused');
       expect(screen.getByText('Scan the QR code')).toBeInTheDocument();
       expect(screen.getByLabelText('Scan to connect your Trakt account')).toHaveAttribute(
         'data-value',
@@ -134,13 +137,10 @@ describe('Trakt dialog dismissal', () => {
         '_blank',
         'noopener,noreferrer'
       );
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Open Trakt' })).toHaveFocus());
-      fireEvent.keyDown(document.activeElement!, { key: 'Tab' });
-      expect(screen.getByRole('button', { name: 'Copy Trakt code' })).toHaveFocus();
-      fireEvent.keyDown(document.activeElement!, { key: 'Tab' });
-      expect(screen.getByRole('button', { name: 'Close Trakt dialog' })).toHaveFocus();
+      press('ArrowRight');
+      expect(screen.getByRole('button', { name: 'Copy code' })).toHaveAttribute('data-focused');
       fireEvent.click(screen.getByRole('button', { name: 'Close Trakt dialog' }));
-      fireEvent.click(screen.getByRole('dialog').parentElement!);
+      fireEvent.mouseDown(screen.getByRole('dialog').parentElement!);
       fireEvent.keyDown(document, { keyCode: 10009 });
       expect(onDismiss).toHaveBeenCalledTimes(3);
       expect(onDismiss.mock.calls).toEqual([[false], [false], [false]]);
@@ -161,9 +161,15 @@ describe('Trakt dialog dismissal', () => {
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
     setupTest();
     fireEvent.click(screen.getByRole('button', { name: "Let's go" }));
-    fireEvent.click(await screen.findByRole('button', { name: 'Copy Trakt code' }));
+    await screen.findByRole('button', { name: 'Copy code' });
+    press('ArrowRight');
+    fireEvent.click(screen.getByRole('button', { name: 'Copy code' }));
     expect(writeText).toHaveBeenCalledExactlyOnceWith('ABCD');
     expect(await screen.findByText('Code copied')).toBeInTheDocument();
+    // Copying re-renders the dialog: focus stays on Copy code
+    expect(screen.getByRole('button', { name: /Copy code|Code copied/ })).toHaveAttribute(
+      'data-focused'
+    );
     expect(screen.queryByText('Waiting for authorization...')).not.toBeInTheDocument();
   });
 

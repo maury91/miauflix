@@ -562,6 +562,14 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                 </>
               )}
             </HomeBrowse>
+            {/* A Dialog: it contains Home's navigation while open and gives focus back after */}
+            {interactive && trakt.open && sessionId && (
+              <TraktModal
+                sessionId={sessionId}
+                onConnected={trakt.connected}
+                onDismiss={trakt.dismiss}
+              />
+            )}
           </NavigationProvider>
         ) : view === 'details' && selectedMedia ? (
           <PreparedMediaDetails
@@ -600,9 +608,6 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
           />
         ) : null}
       </div>
-      {interactive && trakt.open && sessionId && (
-        <TraktModal sessionId={sessionId} onConnected={trakt.connected} onDismiss={trakt.dismiss} />
-      )}
     </main>
   );
 };

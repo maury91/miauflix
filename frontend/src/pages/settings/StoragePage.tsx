@@ -3,166 +3,59 @@ import {
   useRemoveStorageMutation,
 } from '@features/storage/api/storage.api';
 import type { StorageItemView } from '@miauflix/backend';
-import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { ActionRow, Button } from '@shared/ui';
-import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import {
+  ActionGroup,
+  Artwork,
+  Badge,
+  Button,
+  Dialog,
+  IconButton,
+  List,
+  ListItem,
+  Message,
+  ProgressSpinner,
+  Section,
+  Select,
+  Text,
+} from '@shared/design-system';
+import { getImageUrl } from '@shared/lib/media.utils';
+import { useMemo, useState } from 'react';
 
-const Page = styled.main`
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  overflow-y: auto;
-  background: ${SETTINGS_PALETTE.background.primary};
-  color: ${SETTINGS_PALETTE.text.primary};
-  font-family: 'Poppins', sans-serif;
-`;
+import {
+  computeUsage,
+  formatBytes,
+  SORT_OPTIONS,
+  sortItems,
+  type StorageSort,
+} from './storage/storageInventory';
+import { StorageSettings } from './storage/StorageSettings';
+import { describeDuration } from './storage/storageSettingsFields';
+import { StorageUsage } from './storage/StorageUsage';
+import { useStorageSettings } from './storage/useStorageSettings';
+import { SettingsLayout } from './SettingsLayout';
+import * as styles from './storagePage.css';
 
-const Content = styled.div`
-  max-width: 920px;
-  margin: 0 auto;
-  padding: 132px 24px 40px;
+import DeleteIcon from '~icons/mdi/delete-outline';
+import MovieIcon from '~icons/mdi/movie-open-outline';
+import ShowIcon from '~icons/mdi/television-classic';
 
-  @media (max-width: 720px) {
-    padding: 96px 16px 32px;
-  }
-`;
+const STORAGE_NAV = {
+  retry: 'storage-retry',
+  sort: 'storage-sort',
+  free: (sourceId: number) => `storage-free:${sourceId}`,
+  cancel: 'storage-cancel',
+  confirm: 'storage-confirm',
+} as const;
 
-const Title = styled.h1`
-  margin: 0 0 8px;
-  font-size: 28px;
-  font-weight: 400;
-`;
-
-const Description = styled.p`
-  margin: 0 0 24px;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 14px;
-  line-height: 1.5;
-`;
-
-const Summary = styled.section`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  margin-bottom: 28px;
-`;
-
-const Metric = styled.div`
-  min-width: 0;
-  padding: 14px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 10px;
-  background: ${SETTINGS_PALETTE.background.surface};
-`;
-
-const MetricLabel = styled.div`
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 12px;
-`;
-
-const MetricValue = styled.div`
-  margin-top: 5px;
-  font-size: 18px;
-  overflow-wrap: anywhere;
-`;
-
-const List = styled.div`
-  display: grid;
-  gap: 12px;
-`;
-
-const Item = styled.article`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 10px;
-  background: ${SETTINGS_PALETTE.background.surface};
-
-  @media (max-width: 560px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const ItemTitle = styled.h2`
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  overflow-wrap: anywhere;
-`;
-
-const Details = styled.p`
-  margin: 5px 0 0;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 13px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-`;
-
-const Message = styled.p`
-  margin: 16px 0;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  line-height: 1.5;
-`;
-
-const StatusMessage = styled.p`
-  min-height: 1.5em;
-  margin: 12px 0;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font-size: 13px;
-`;
-
-const DialogBackdrop = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 1001;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: rgb(0 0 0 / 72%);
-`;
-
-const Dialog = styled.div`
-  width: min(100%, 440px);
-  padding: 24px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 12px;
-  background: ${SETTINGS_PALETTE.background.surface};
-`;
-
-const DialogTitle = styled.h2`
-  margin: 0;
-  font-size: 20px;
-  font-weight: 500;
-`;
-
-const DialogActions = styled(ActionRow)`
-  justify-content: flex-end;
-  margin-top: 20px;
-`;
+const KIND_LABELS: Record<StorageItemView['kind'], string | null> = {
+  movie: 'Movie',
+  episode: 'Episode',
+  anime: 'Anime',
+  unknown: null,
+};
 
 interface StoragePageProps {
   onDismiss: () => void;
-}
-
-function formatBytes(bytes: number | null | undefined): string {
-  if (bytes === null || bytes === undefined || !Number.isFinite(bytes) || bytes < 0) {
-    return 'Unavailable';
-  }
-  if (bytes === 0) return '0 B';
-
-  const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-  const unitIndex = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
-  const value = bytes / 1024 ** unitIndex;
-  const formattedValue = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 }).format(
-    value
-  );
-
-  return `${formattedValue} ${units[unitIndex]}`;
 }
 
 function storageErrorMessage(error: unknown): string {
@@ -196,48 +89,24 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
   const [confirmingId, setConfirmingId] = useState<number | null>(null);
   const [notice, setNotice] = useState('');
   const [dialogError, setDialogError] = useState('');
-  const buttonRefs = useRef(new Map<number, HTMLButtonElement>());
-  const cancelRef = useRef<HTMLButtonElement>(null);
-  const previousConfirmingId = useRef<number | null>(null);
-  const backRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (confirmingId !== null) cancelRef.current?.focus({ preventScroll: true });
-    else if (previousConfirmingId.current !== null) {
-      buttonRefs.current.get(previousConfirmingId.current)?.focus({ preventScroll: true });
-    } else backRef.current?.focus({ preventScroll: true });
-    previousConfirmingId.current = confirmingId;
-  }, [confirmingId]);
-
-  const cycleButtons = (direction: -1 | 1) => {
-    const selector =
-      confirmingId === null
-        ? '[data-storage-page] button:not(:disabled)'
-        : '[role="alertdialog"] button:not(:disabled)';
-    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>(selector));
-    if (!buttons.length) return true;
-    const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
-    const next = (index + direction + buttons.length) % buttons.length;
-    buttons[next]?.focus({ preventScroll: true });
-    return true;
-  };
-
-  const navigationRef = useKeyboardNavigation({
-    onRestoreFocus: () => {
-      const target = confirmingId === null ? backRef.current : cancelRef.current;
-      target?.focus({ preventScroll: true });
-      return !!target;
-    },
-    onUp: () => cycleButtons(-1),
-    onDown: () => cycleButtons(1),
-    onBack: () => {
-      if (confirmingId !== null) {
-        setConfirmingId(null);
-        setDialogError('');
-      } else onDismiss();
-      return true;
-    },
-  });
+  const [sort, setSort] = useState<StorageSort>('size');
+  const settings = useStorageSettings({ onSaved: () => void refetch() });
+  const { limitBytes: draftLimit, reserveBytes: draftReserve } = settings.draft;
+  const usage = useMemo(
+    () =>
+      data ? computeUsage(data, { limitBytes: draftLimit, reserveBytes: draftReserve }) : null,
+    [data, draftLimit, draftReserve]
+  );
+  const savedSeeding = settings.entries.find(
+    entry => entry.key === 'CONTENT_SEED_DURATION_SECONDS'
+  )?.value;
+  const seeding =
+    savedSeeding === undefined
+      ? 'Completed downloads seed for the configured time before becoming local only.'
+      : describeDuration(savedSeeding) === null
+        ? 'Completed downloads become local only right away.'
+        : `Completed downloads seed for ${describeDuration(savedSeeding)} before becoming local only.`;
+  const items = useMemo(() => (data ? sortItems(data.items, sort) : []), [data, sort]);
 
   const openConfirmation = (item: StorageItemView) => {
     setNotice('');
@@ -245,194 +114,213 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
     setConfirmingId(item.sourceId);
   };
 
+  const closeConfirmation = () => {
+    if (removal.isLoading) return;
+    setConfirmingId(null);
+    setDialogError('');
+  };
+
   const confirmRemoval = async (item: StorageItemView) => {
     setDialogError('');
     try {
       await removeStorage(item.sourceId).unwrap();
       setConfirmingId(null);
-      setNotice(`Freed ${formatBytes(item.physicalBytes)} used by ${item.title}.`);
+      setNotice(`Freed ${formatBytes(item.physicalBytes)} used by ${itemName(item)}.`);
     } catch (requestError) {
       setDialogError(storageErrorMessage(requestError));
     }
   };
 
   const confirmedItem = data?.items.find(item => item.sourceId === confirmingId);
-  const summary = data?.summary;
+  const retry = (
+    <ActionGroup>
+      <Button navId={STORAGE_NAV.retry} onClick={() => void refetch()}>
+        Try again
+      </Button>
+    </ActionGroup>
+  );
 
   return (
-    <Page ref={navigationRef} data-storage-page aria-labelledby="storage-title">
-      <Content>
-        <Title id="storage-title">Storage</Title>
-        <Description>
-          Inactive is incomplete and not loaded; Active is incomplete and loaded by the torrent.
-          Available offline means the video is complete but its torrent may still load. Local only
-          means it is complete and will never be loaded by its torrent again. Completed downloads
-          seed for the configured duration before becoming local only. Free space deletes a
-          download; you’ll need to download it again before future playback.
-        </Description>
-
-        {summary && (
-          <Summary aria-label="Storage usage">
-            <Metric>
-              <MetricLabel>Physical disk usage</MetricLabel>
-              <MetricValue>{formatBytes(summary.physicalBytes)}</MetricValue>
-            </Metric>
-            <Metric>
-              <MetricLabel>Storage budget</MetricLabel>
-              <MetricValue>{formatBytes(summary.storageBudgetBytes)}</MetricValue>
-            </Metric>
-            <Metric>
-              <MetricLabel>Reserved capacity</MetricLabel>
-              <MetricValue>{formatBytes(summary.reservedBytes)}</MetricValue>
-            </Metric>
-            <Metric>
-              <MetricLabel>Charged to budget</MetricLabel>
-              <MetricValue>{formatBytes(summary.chargedBytes)}</MetricValue>
-            </Metric>
-            <Metric>
-              <MetricLabel>Filesystem free space</MetricLabel>
-              <MetricValue>{formatBytes(summary.filesystem?.freeBytes)}</MetricValue>
-              {summary.filesystem && (
-                <Details>of {formatBytes(summary.filesystem.totalBytes)} total</Details>
-              )}
-            </Metric>
-          </Summary>
-        )}
-
-        <StatusMessage role="status" aria-live="polite">
-          {notice || (isFetching && !isLoading ? 'Updating storage…' : '')}
-        </StatusMessage>
-
-        {isLoading && <Message role="status">Loading storage…</Message>}
-        {!isLoading && error && !data && (
-          <>
-            <Message role="alert">
-              Could not load storage. Check your connection and try again.
-            </Message>
-            <Button appearance="settings" color="secondary" onClick={() => void refetch()}>
-              Try again
-            </Button>
-          </>
-        )}
-        {!isLoading && error && data && (
-          <>
-            <Message role="alert">
-              Could not refresh storage. Showing the last loaded results.
-            </Message>
-            <Button appearance="settings" color="secondary" onClick={() => void refetch()}>
-              Try again
-            </Button>
-          </>
-        )}
-        {!isLoading && data?.items.length === 0 && (
-          <Message>No downloaded content is using storage.</Message>
-        )}
-        {data && data.items.length > 0 && (
-          <List aria-label="Downloaded content">
-            {data.items.map(item => (
-              <Item key={item.sourceId}>
-                <div>
-                  <ItemTitle>{item.title}</ItemTitle>
-                  <Details>
-                    {item.fileName ? `${item.fileName} · ` : ''}
-                    {item.quality ? `${item.quality} · ` : ''}
-                    {formatBytes(item.physicalBytes)} on disk · {formatBytes(item.reservedBytes)}{' '}
-                    reserved
-                  </Details>
-                  <Details>
-                    {statusLabel(item.activity)} ·{' '}
-                    {item.videoComplete
-                      ? 'Video complete'
-                      : `${Math.round(item.progressPercent)}% downloaded`}
-                    {item.activity === 'available_offline' && item.seedEndsAt
-                      ? ` · Torrent ${item.torrentLoaded ? 'loaded' : 'may reload'} until ${new Date(item.seedEndsAt).toLocaleString()}`
-                      : ''}
-                    {item.activeStreams > 0 ? ' · Currently being watched' : ''}
-                  </Details>
-                </div>
-                <Button
-                  ref={node => {
-                    if (node) buttonRefs.current.set(item.sourceId, node);
-                    else buttonRefs.current.delete(item.sourceId);
-                  }}
-                  appearance="settings"
-                  color="secondary"
-                  disabled={item.activeStreams > 0 || removal.isLoading}
-                  onClick={() => openConfirmation(item)}
-                  aria-label={`Free space used by ${item.title}`}
-                >
-                  Free space
-                </Button>
-              </Item>
-            ))}
-          </List>
-        )}
-
-        <ActionRow>
-          <Button ref={backRef} appearance="settings" color="secondary" onClick={onDismiss}>
-            Back to Home
-          </Button>
-        </ActionRow>
-      </Content>
-
-      {confirmedItem && (
-        <DialogBackdrop>
-          <Dialog
-            role="alertdialog"
-            aria-modal="true"
-            aria-labelledby="free-storage-title"
-            aria-describedby="free-storage-description"
-            onKeyDown={event => {
-              if (event.key !== 'Tab') return;
-              const buttons = Array.from(
-                event.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')
-              );
-              if (buttons.length === 0) return;
-              const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
-              const next = event.shiftKey
-                ? index <= 0
-                  ? buttons.length - 1
-                  : index - 1
-                : index < 0 || index === buttons.length - 1
-                  ? 0
-                  : index + 1;
-              event.preventDefault();
-              buttons[next]?.focus({ preventScroll: true });
-            }}
-          >
-            <DialogTitle id="free-storage-title">
-              Free space used by {confirmedItem.title}?
-            </DialogTitle>
-            <Description id="free-storage-description">
-              This deletes {formatBytes(confirmedItem.physicalBytes)} from this server. Future
-              playback will require downloading it again.
-            </Description>
-            {dialogError && <Message role="alert">{dialogError}</Message>}
-            <DialogActions>
+    <SettingsLayout
+      title="Storage"
+      description="What Miauflix keeps on this server’s disk. Free space to remove a download."
+      onBack={onDismiss}
+      backLabel="Back to Home"
+      width="full"
+      overlay={
+        <Dialog
+          open={confirmedItem !== undefined}
+          title={confirmedItem ? `Free space used by ${itemName(confirmedItem)}?` : ''}
+          description={
+            confirmedItem
+              ? `This deletes ${formatBytes(confirmedItem.physicalBytes)} from this server. Future playback will require downloading it again.`
+              : undefined
+          }
+          size="sm"
+          onDismiss={closeConfirmation}
+          actions={
+            <>
               <Button
-                ref={cancelRef}
-                appearance="settings"
-                color="secondary"
+                navId={STORAGE_NAV.cancel}
                 disabled={removal.isLoading}
-                onClick={() => {
-                  setConfirmingId(null);
-                  setDialogError('');
-                }}
+                onClick={closeConfirmation}
               >
                 Cancel
               </Button>
               <Button
-                appearance="settings"
-                color="primary"
-                disabled={removal.isLoading}
-                onClick={() => void confirmRemoval(confirmedItem)}
+                navId={STORAGE_NAV.confirm}
+                loading={removal.isLoading}
+                onClick={() => confirmedItem && void confirmRemoval(confirmedItem)}
               >
-                {removal.isLoading ? 'Freeing space…' : 'Delete download'}
+                Delete download
               </Button>
-            </DialogActions>
-          </Dialog>
-        </DialogBackdrop>
+            </>
+          }
+        >
+          {dialogError && (
+            <Message tone="danger" toneLabel="Error" live="assertive">
+              {dialogError}
+            </Message>
+          )}
+        </Dialog>
+      }
+    >
+      {usage && <StorageUsage usage={usage} />}
+
+      <div className={styles.settings}>
+        <StorageSettings form={settings} capacityBytes={usage?.capacityBytes ?? null} />
+      </div>
+
+      <div className={styles.status} role="status" aria-live="polite">
+        <Text variant="caption" tone="secondary">
+          {notice || (isFetching && !isLoading ? 'Updating storage…' : '')}
+        </Text>
+      </div>
+
+      {(isLoading || error) && (
+        <div className={styles.section}>
+          {isLoading && <ProgressSpinner label="Loading storage…" />}
+          {!isLoading && error && (
+            <Message tone="danger" toneLabel="Error" live="assertive" actions={retry}>
+              {data
+                ? 'Could not refresh storage. Showing the last loaded results.'
+                : 'Could not load storage. Check your connection and try again.'}
+            </Message>
+          )}
+        </div>
       )}
-    </Page>
+
+      {data && (
+        <Section
+          title="Downloads"
+          actions={
+            data.items.length > 1 ? (
+              <div className={styles.sort}>
+                <span aria-hidden="true">
+                  <Text tone="secondary">Sort by</Text>
+                </span>
+                <Select
+                  navId={STORAGE_NAV.sort}
+                  label="Sort by"
+                  labelHidden
+                  items={SORT_OPTIONS}
+                  value={sort}
+                  onChange={value => setSort(value as StorageSort)}
+                />
+              </div>
+            ) : undefined
+          }
+        >
+          {data.items.length === 0 ? (
+            <Text tone="secondary">No downloaded content is using storage.</Text>
+          ) : (
+            <List label="Downloaded content" divided>
+              {items.map(item => (
+                <ListItem
+                  key={item.sourceId}
+                  navId={`storage-item:${item.sourceId}`}
+                  leading={<Thumbnail item={item} />}
+                  title={item.title}
+                  metadata={
+                    KIND_LABELS[item.kind] ? <Badge>{KIND_LABELS[item.kind]!}</Badge> : undefined
+                  }
+                  description={<ItemDetails item={item} />}
+                  trailing={
+                    <IconButton
+                      navId={STORAGE_NAV.free(item.sourceId)}
+                      label={`Free space used by ${itemName(item)}`}
+                      tooltip={item.activeStreams > 0 ? 'Being watched' : 'Free space'}
+                      icon={<DeleteIcon />}
+                      disabled={item.activeStreams > 0 || removal.isLoading}
+                      onClick={() => openConfirmation(item)}
+                    />
+                  }
+                />
+              ))}
+            </List>
+          )}
+          <div className={styles.legend}>
+            <Text variant="caption" tone="secondary">
+              Inactive is incomplete and not loaded; Active is incomplete and loaded by the torrent.
+              Available offline means the video is complete but its torrent may still load. Local
+              only means it is complete and will never be loaded by its torrent again. {seeding}{' '}
+              Free space deletes a download; you’ll need to download it again before future
+              playback.
+            </Text>
+          </div>
+        </Section>
+      )}
+    </SettingsLayout>
+  );
+}
+
+/** The title and, for a show, which episodes: names the download in labels and messages. */
+function itemName(item: StorageItemView): string {
+  return item.kind !== 'movie' && item.subtitle ? `${item.title} (${item.subtitle})` : item.title;
+}
+
+function Thumbnail({ item }: { item: StorageItemView }) {
+  return (
+    <span className={styles.thumbnail}>
+      <Artwork
+        src={item.image ? getImageUrl(item.image, 'w300') : null}
+        ratio="landscape"
+        fallback={item.kind === 'movie' ? <MovieIcon /> : <ShowIcon />}
+      />
+    </span>
+  );
+}
+
+function ItemDetails({ item }: { item: StorageItemView }) {
+  const facts = [
+    item.quality,
+    formatBytes(item.physicalBytes),
+    statusLabel(item.activity),
+    item.videoComplete ? 'Video complete' : `${Math.round(item.progressPercent)}% downloaded`,
+  ].filter(Boolean);
+  return (
+    <span className={styles.details}>
+      {item.subtitle && <span>{item.subtitle}</span>}
+      <span>
+        {facts.join(' · ')}
+        {item.activeStreams > 0 ? ' · Currently being watched' : ''}
+      </span>
+      {!item.videoComplete && (
+        <span className={styles.progress} aria-hidden="true">
+          <span
+            className={styles.progressFill}
+            style={{ transform: `scaleX(${Math.min(1, Math.max(0, item.progressPercent / 100))})` }}
+          />
+        </span>
+      )}
+      <span>
+        {item.fileName ? `${item.fileName} · ` : ''}
+        {formatBytes(item.reservedBytes)} reserved
+        {item.remuxBytes > 0 ? ` · TV remux ${formatBytes(item.remuxBytes)}` : ''}
+        {item.activity === 'available_offline' && item.seedEndsAt
+          ? ` · Torrent ${item.torrentLoaded ? 'loaded' : 'may reload'} until ${new Date(item.seedEndsAt).toLocaleString()}`
+          : ''}
+      </span>
+    </span>
   );
 }

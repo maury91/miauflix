@@ -1,6 +1,6 @@
 # Miauflix design system and adoption plan
 
-Status: phases 0–4 built, phase 5 built (Home browse and its panels, Search, Who's watching and the profile editor moved; only the Tizen hardware pass is left). Progress is tracked in the checklist in section 13: update it with every change. Last updated 2026-11-16. Repository findings refer to `maury91/miauflix` main at `c84c4fcd112939ef140c36baf317c2abfe3dc2d3` unless stated otherwise.
+Status: phases 0–4 built, phase 5 built (Home browse and its panels, Search, Who's watching and the profile editor moved; only the Tizen hardware pass is left), phase 6 built (configuration, QR approval, Trakt, Sources and Storage moved; screenshots and a phone/touch pass are left). Progress is tracked in the checklist in section 13: update it with every change. Last updated 2026-11-20. Repository findings refer to `maury91/miauflix` main at `c84c4fcd112939ef140c36baf317c2abfe3dc2d3` unless stated otherwise.
 
 The target architecture is designed independently of today's component extractions. Existing code supplies product requirements, platform constraints, tuned behavior and migration locations; its component boundaries and names are not constraints. Decisions already taken are listed in section 15; open questions in section 16.
 
@@ -271,12 +271,13 @@ Tile focus scale keeps its tuned 150 ms (on TV it applies at once: an animated s
 | content                                     | 0       |
 | sticky chrome (rail, header, player chrome) | 100     |
 | popover / menu                              | 200     |
-| modal backdrop                              | 300     |
-| modal                                       | 310     |
-| tooltip                                     | 400     |
-| notification                                | 500     |
+| full-screen page (settings, search)         | 1000    |
+| modal backdrop                              | 1100    |
+| modal                                       | 1110    |
+| tooltip                                     | 1200    |
+| notification                                | 1300    |
 
-Spaced like MUI's scale, so a layer can be inserted without renumbering. Nothing outside the library sets `z-index` except 0/1 for local stacking. A notification never covers the focused control or takes focus.
+Spaced like MUI's scale, so a layer can be inserted without renumbering. Full-screen pages cover the app shell, whose legacy chrome (logo, rail) still sits at 999–1002; the dialog (portalled to the body), tooltip and notification layers sit above both. Nothing outside the library sets `z-index` except 0/1 for local stacking. A notification never covers the focused control or takes focus.
 
 ### Breakpoints (web)
 
@@ -747,7 +748,16 @@ The source of truth for where the work stands. Tick an item in the same change t
     - [x] Home's panels: Right enters, Left/Back return to the rail item, 60 fps; notifications move row by row and stay in view; a Settings area and the profile editor return to their rail item. Fixed: Storage and Sources still said "Back to Settings" (now "Back to Home")
     - [x] Search: the TV keyboard at 60 fps, typing searches, Back returns Home
     - [ ] Reinstall and recheck the profile editor's Back on the name
-- [ ] Phase 6, web flows: setup/configuration, pairing approval, integrations, service settings (Sources still maps DOM focus onto its fields)
+- [ ] Phase 6, web flows: setup/configuration, pairing approval, integrations, service settings
+  - [x] `SettingsLayout` (back rail, scroll area, one scope) and `usePageBack`, shared with the profile editor
+  - [x] Configuration and the first-run wizard: `ConfigField` and `ServiceConfigGroup` on design-system controls with navigation IDs
+  - [x] QR approval on its own navigation layer
+  - [x] Trakt dialog: `Dialog` and `PairingPanel`, under Home's navigation layer
+  - [x] Sources: rows as `Switch` + Test + `Menu`, provider settings on the navigation layer (`useDomFocus` deleted), Advanced setup as a `Disclosure`, the indexer catalog and forms on design-system fields
+  - [x] Storage: `ListItem`s and a `Dialog` confirmation
+  - [x] ESLint bans `styled-components` in the migrated folders; Settings stories with mocked APIs
+  - [ ] Gate: regenerate the end-to-end and Storybook screenshots (`initial-user-setup`, the Trakt dialog, the new Settings stories)
+  - [ ] Gate: native editing, touch targets and validation on a phone and a tablet (Sources and Storage checked at 375 px in Storybook only)
 - [ ] Phase 7, remove and enforce: old `shared/ui` families, local CSS controls, old resolvers and adapters, ESLint bans, failing accessibility stories, styled-components
 
 Phase 4 status (2026-11-15, done for the migrated screens). Sign-in, QR approval, first-time setup, Home and Search tiles, title details, Settings, the provider credential form and the player's actions use design-system components. Sign-in, QR approval, setup, title details, Settings and the player each have their own `NavigationProvider`. Settings uses `ListItem` rows in a `List` beside the `NavRail`. Sources maps DOM focus onto the provider fields' `focused` state until Sources moves in phase 6. Home renders `MediaTile` through a DTO adapter. Each tile owns its focus outline and scale, which still need a Tizen performance pass.
@@ -771,6 +781,14 @@ Phase 5 status (2026-11-16, built; the Tizen hardware pass is left): Home browse
 - Virtual focus on a text field never moves DOM focus (section 10): on Search, Up from the keyboard reaches the field, OK starts typing and a second OK submits.
 - `Avatar` takes `picture`, a picture the feature draws (the live Plushie), in place of `src`, and `src` may be absent while it is fetched; the colour shows only until the picture has loaded. `ProfileTile` passes `picture` and `fit` through.
 - New `ChoiceTileGroup` for choices shown as pictures or colours (the profile editor's parts): a radio group on a spatial group, entered at the chosen option, chosen by Confirm only.
+
+Phase 6 status (2026-11-20, built; screenshots and the phone pass are left): the web flows run on the design system and the navigation layer. `pages/settings/SettingsLayout` is the frame of Configuration, the wizard, Sources and Storage: a horizontal scope of a back `NavRail` (only with `onBack`) and a vertical content group in a `ScrollArea`, with an `overlay` slot for the page's `Dialog`. `shared/hooks/usePageBack` holds DOM focus on the page while a field has virtual focus, so Back ends editing, then leaves. Configuration fields get `config:<KEY>` IDs, groups `config-group:<name>` with optional/advanced `Disclosure`s and Save/Test. The Trakt dialog moved inside Home's `NavigationProvider` and focuses Open Trakt once the code arrives. Sources rows are horizontal groups (`source:<id>`: `Switch`, Test, `Menu`); choosing Settings focuses the form's first field. Storage confirms freeing space with a `Dialog`. Adjustments it took:
+
+- `layer.page` (1000) for full-screen pages; the modal, tooltip and notification layers moved above it and the legacy app chrome (see Layers). A `Dialog` is portalled to the body, so at 300 it was drawn behind any settings page.
+- `Select` forwards `labelHidden` to its `Field` (a size's unit picker beside its number).
+- Storybook mocks API modules with `__mocks__` files and `sb.mock` (automock and spy mode can't see RTK Query's destructured hooks), and stories import `@store/hooks`, not `@store`. Storybook resets module mocks before each story, so a story sets every hook it renders in `beforeEach`.
+- Unit tests that check `data-focused` stub `Element.prototype.getClientRects` (jsdom lays nothing out). Moves that depend on geometry (a dialog's edges, Up to its close button) are covered by the stories' play functions instead.
+- On a phone, a source's Test and options go under its description and the drag handle hides (touch can't drag; the menu moves the row).
 
 Do not rewrite fetching, playback engines or backend contracts as part of this work. Keep useful Redux media/route selection state; remove only duplicated transient focus ownership once an adapter proves parity.
 
