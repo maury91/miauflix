@@ -1,6 +1,7 @@
 import { mediaBoxSizes } from '@pages/home/home-layout';
+import { FocusScope, NavigationProvider } from '@shared/navigation/NavigationProvider';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { act, createRef } from 'react';
+import { act, createRef, useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { ActionGroup } from './action-group/ActionGroup';
@@ -648,6 +649,59 @@ describe('Dialog', () => {
     expect(opener).toHaveFocus();
     expect(document.body.style.overflow).toBe('');
     opener.remove();
+  });
+
+  it('under a navigation layer, gives DOM focus to what the layer restored once the page is live', async () => {
+    // jsdom lays nothing out: give every element a box, so the navigation layer can focus it
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
+    // jsdom ignores `inert`: refuse focus inside it, as browsers do
+    const focus = HTMLElement.prototype.focus;
+    const refuseInert = vi.spyOn(HTMLElement.prototype, 'focus').mockImplementation(function (
+      this: HTMLElement,
+      options?: FocusOptions
+    ) {
+      if (!this.closest('[inert]')) focus.call(this, options);
+    });
+    // As Home opens the Trakt dialog: inside the page's navigation, over a card that has focus
+    function Page() {
+      const [open, setOpen] = useState(false);
+      return (
+        <NavigationProvider>
+          <FocusScope>
+            <main>
+              <Button navId="card" onClick={() => setOpen(true)}>
+                Card
+              </Button>
+            </main>
+            <Dialog
+              open={open}
+              title="Connect"
+              actions={<Button navId="begin">Begin</Button>}
+              onDismiss={() => setOpen(false)}
+            />
+          </FocusScope>
+        </NavigationProvider>
+      );
+    }
+    try {
+      render(<Page />);
+      const card = screen.getByRole('button', { name: 'Card' });
+      expect(card).toHaveFocus();
+      act(() => card.click());
+      expect(screen.getByRole('button', { name: 'Begin' })).toHaveFocus();
+      await act(async () => {
+        fireEvent.keyDown(document, { key: 'Escape' });
+        await Promise.resolve();
+      });
+      expect(screen.queryByRole('dialog')).toBeNull();
+      expect(card).toHaveAttribute('data-focused');
+      expect(card).toHaveFocus();
+    } finally {
+      vi.mocked(Element.prototype.getClientRects).mockRestore();
+      refuseInert.mockRestore();
+    }
   });
 
   it('dismisses on Back, the scrim and the close button only when dismissible', () => {

@@ -253,7 +253,10 @@ export class TextureStore {
   /** Decoded images to the GPU, visible first, within the frame's budget. */
   upload(budget: FrameBudget) {
     this.uploads.sort((a, b) => Number(b.visible) - Number(a.visible));
-    const max = this.options.uploadsPerFrame ?? UPLOADS_PER_FRAME;
+    // Tuned through localStorage: anything but a positive integer keeps the default
+    const tuned = this.options.uploadsPerFrame;
+    const max =
+      tuned !== undefined && Number.isInteger(tuned) && tuned > 0 ? tuned : UPLOADS_PER_FRAME;
     for (let n = 0; n < max && this.uploads.length && budget.allows(n); n++) {
       const entry = this.uploads.shift()!;
       if (this.entries.get(entry.key) !== entry || !entry.bitmap) continue;

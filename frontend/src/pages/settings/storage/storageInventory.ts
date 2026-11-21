@@ -109,7 +109,8 @@ export function computeUsage(
   const measured = filesystem !== null || items.every(item => item.physicalBytes !== null);
   const usedBytes = measured ? shownBytes : null;
   const savedLimit = summary.storageBudgetBytes > 0 ? summary.storageBudgetBytes : null;
-  const draftLimit = draft?.limitBytes && draft.limitBytes > 0 ? draft.limitBytes : null;
+  // A typed 0 is a limit (media-load then keeps nothing); only an unreadable draft falls back
+  const draftLimit = draft?.limitBytes ?? null;
   const limitBytes = draftLimit ?? savedLimit;
   const reserveBytes =
     limitBytes !== null && draft?.reserveBytes ? Math.min(draft.reserveBytes, limitBytes) : null;

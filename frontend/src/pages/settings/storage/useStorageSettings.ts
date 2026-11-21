@@ -32,13 +32,15 @@ export function useStorageSettings({ onSaved }: { onSaved?: () => void } = {}) {
 
   const save = useCallback(async () => {
     setOutcome(null);
+    const submitted = getServiceEntries(STORAGE_SETTINGS_GROUP);
     const response = await saveServiceConfig({
       service: STORAGE_SETTINGS_GROUP,
-      entries: getServiceEntries(STORAGE_SETTINGS_GROUP),
+      entries: submitted,
     });
     const result = 'data' in response ? response.data : undefined;
     if (result?.success) {
-      markServiceSaved(STORAGE_SETTINGS_GROUP);
+      // Edits made while it was saving stay to be saved
+      markServiceSaved(STORAGE_SETTINGS_GROUP, submitted);
       setOutcome({ tone: 'success', message: 'Storage settings saved.' });
       onSaved?.();
       return;

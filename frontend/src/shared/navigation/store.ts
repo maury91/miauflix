@@ -952,6 +952,18 @@ export function createNavigationStore({ mirrorDomFocus = true }: NavigationStore
     },
     activePartOf: (id: string) => (activeId === id ? activePart : undefined),
     getActiveId: () => activeId,
+    /**
+     * Give DOM focus back to the virtually focused element, without moving virtual focus: after an
+     * overlay closes, the page behind may have been `inert` when focus was restored onto it.
+     */
+    restoreDomFocus() {
+      if (!mirrorDomFocus || activeId === null) return;
+      const element = elementOf(activeId);
+      const target = element && mirrorTarget(element, activePart);
+      if (!target || document.activeElement === target) return;
+      target.focus({ preventScroll: true });
+      if (document.activeElement === target) mirrored = target;
+    },
     /** What set the current focus: a key, the pointer, or the program. */
     lastInput: () => lastInput,
     subscribe(id: string, listener: () => void) {

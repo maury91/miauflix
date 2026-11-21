@@ -62,6 +62,7 @@ export function StorageSettings({ form, capacityBytes }: StorageSettingsProps) {
   );
 
   const warnings = [
+    limitBytes === 0 ? 'A limit of 0 keeps nothing: Miauflix can’t store any download.' : null,
     capacityBytes !== null && limitBytes !== null && limitBytes > capacityBytes
       ? `The limit is more than this disk can give Miauflix (${formatBytes(capacityBytes)}): downloads will stop when the disk fills before the limit is reached.`
       : null,

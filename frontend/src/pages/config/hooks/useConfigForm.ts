@@ -1,6 +1,6 @@
 import type { ConfigEntryView } from '@miauflix/backend';
 import { webAppOrigin } from '@shared/config/constants';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface FormValues {
   [key: string]: string;
@@ -34,6 +34,9 @@ export function useConfigForm(entries: ConfigEntryView[]) {
   );
 
   const [values, setValues] = useState<FormValues>(initialValues);
+  // The latest values, for saves that finish after more typing
+  const valuesRef = useRef(values);
+  valuesRef.current = values;
   const [dirtyFields, setDirtyFields] = useState<Set<string>>(initialDirtyFields);
 
   useEffect(() => {
@@ -102,9 +105,17 @@ export function useConfigForm(entries: ConfigEntryView[]) {
     [dirtyFields, entries]
   );
 
+  /**
+   * The group's values were saved. With `submitted` (what the save sent), a value edited again
+   * while the save was under way stays dirty: only keys still holding what was sent are cleared.
+   */
   const markServiceSaved = useCallback(
-    (serviceGroup: string) => {
-      const serviceEntries = entries.filter(entry => entry.serviceGroup === serviceGroup);
+    (serviceGroup: string, submitted?: { key: string; value: string }[]) => {
+      const sent = submitted && new Map(submitted.map(entry => [entry.key, entry.value]));
+      const saved = (key: string) => !sent || sent.get(key) === (valuesRef.current[key] ?? '');
+      const serviceEntries = entries.filter(
+        entry => entry.serviceGroup === serviceGroup && saved(entry.key)
+      );
       const serviceKeys = new Set(serviceEntries.map(entry => entry.key));
       setDirtyFields(current => new Set([...current].filter(key => !serviceKeys.has(key))));
       setValues(current => {

@@ -18,7 +18,7 @@ export const ADVANCED_STORAGE_KEYS = [
 const STORAGE_KEYS = new Set<string>([...MAIN_STORAGE_KEYS, ...ADVANCED_STORAGE_KEYS]);
 
 const SIZE_UNITS = ['MB', 'GB', 'TB'];
-const TIME_UNITS = ['m', 'h', 'd'];
+const TIME_UNITS = ['s', 'm', 'h', 'd'];
 const SECONDS_PER: Record<string, number> = { s: 1, m: 60, h: 3600, d: 86_400 };
 
 /** Labels for people; the Configuration page keeps the keys' own names. */
@@ -69,9 +69,9 @@ export function toFieldValue(key: string, stored: string): string {
   if (key === 'CONTENT_SEED_DURATION_SECONDS') {
     if (!/^\d+$/.test(value)) return value;
     const seconds = Number(value);
-    const unit = [...TIME_UNITS].reverse().find(option => seconds % SECONDS_PER[option]! === 0);
-    // Not a whole number of minutes: the control can't show it, so it starts empty
-    return unit ? `${seconds / SECONDS_PER[unit]!}${unit}` : '';
+    // The largest unit it's a whole number of; seconds always are
+    const unit = [...TIME_UNITS].reverse().find(option => seconds % SECONDS_PER[option]! === 0)!;
+    return `${seconds / SECONDS_PER[unit]!}${unit}`;
   }
   if (key === 'STORAGE_THRESHOLD' || key === 'STORAGE_PLAYBACK_RESERVE') {
     return value.replace(/\s+/g, '').toUpperCase();

@@ -9,7 +9,7 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 - Configuration, Sources, Storage, the Trakt dialog and the page that approves a TV's QR sign-in now match the rest of the app and work with the remote. Back leaves a text field before it leaves the page. Opening a source's settings takes you to its first field, and on a phone each source's buttons sit under its description.
 - Storage shows a bar of the server's disk split into movies, episodes, anime, TV copies, free space and, last, other files, with Miauflix's limit marked. Downloads show their artwork, size, progress and status, and you can sort them by size, name, type, progress or status. Admins can change the storage limit, the space kept free for playback, how long finished downloads keep sharing, and the download folder there; the bar previews a new limit before you save it.
 - On settings and profile pages, the page now scrolls under a solid strip behind the logo instead of running through it.
-- Moving through a number setting without changing it no longer rounds its saved value. On a TV, the approve-sign-in page selects Approve as soon as it appears, and copying the Trakt code no longer moves the selection.
+- Moving through a number setting without changing it no longer rounds its saved value. On a TV, the approve-sign-in page selects Approve as soon as it appears, and copying the Trakt code no longer moves the selection. Closing the Trakt dialog with the keyboard gives control straight back to Home.
 
 ## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
 

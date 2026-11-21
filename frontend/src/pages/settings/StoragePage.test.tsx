@@ -286,6 +286,27 @@ describe('Storage settings page', () => {
     ).toBeInTheDocument();
   });
 
+  it('previews and warns about a limit of 0, which keeps nothing', () => {
+    render(<StoragePage onDismiss={vi.fn()} />);
+    const limit = screen.getByLabelText('Storage limit');
+    fireEvent.focus(limit);
+    fireEvent.change(limit, { target: { value: '0' } });
+    fireEvent.blur(limit);
+    expect(screen.getByText('Limit 0 B (not saved)')).toBeInTheDocument();
+    expect(screen.getByText(/A limit of 0 keeps nothing/)).toBeInTheDocument();
+  });
+
+  it('shows a seeding time that is not a whole number of minutes in seconds', () => {
+    configApi.entries = configApi.entries.map(entry =>
+      entry['key'] === 'CONTENT_SEED_DURATION_SECONDS' ? { ...entry, value: '90' } : entry
+    );
+    render(<StoragePage onDismiss={vi.fn()} />);
+    expect((screen.getByLabelText('Seeding after download') as HTMLInputElement).value).toBe('90');
+    expect((screen.getByLabelText('Seeding after download unit') as HTMLSelectElement).value).toBe(
+      's'
+    );
+  });
+
   it('reports a rejected save', async () => {
     configApi.save.mockResolvedValue({
       data: { success: false, services: [], invalidKeys: ['STORAGE_THRESHOLD'] },

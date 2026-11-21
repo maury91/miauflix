@@ -285,7 +285,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             : 'Configuration saved successfully.'
           : 'No changes were saved because one or more services failed testing.',
       });
-      if (result.data.success) servicesBeingSaved.forEach(markServiceSaved);
+      if (result.data.success) servicesBeingSaved.forEach(service => markServiceSaved(service));
     }
   }, [dirtyServices, getSubmittableEntries, markServiceSaved, updateConfig]);
 

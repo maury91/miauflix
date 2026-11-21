@@ -159,6 +159,7 @@ export function useNavigation() {
     lockPointer: store.lockPointer,
     getActiveId: store.getActiveId,
     lastInput: store.lastInput,
+    restoreDomFocus: store.restoreDomFocus,
   };
 }
 
@@ -171,6 +172,7 @@ export function useOptionalNavigation() {
     lockPointer: store.lockPointer,
     getActiveId: store.getActiveId,
     lastInput: store.lastInput,
+    restoreDomFocus: store.restoreDomFocus,
   };
 }
 
