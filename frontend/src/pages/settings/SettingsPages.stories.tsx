@@ -1,3 +1,4 @@
+import { useGetConfigQuery, useSaveServiceConfigMutation } from '@features/config/api/config.api';
 import * as sourcesApi from '@features/sources/api/sources.api';
 import {
   useGetProvidersQuery,
@@ -8,13 +9,15 @@ import {
   useGetStorageInventoryQuery,
   useRemoveStorageMutation,
 } from '@features/storage/api/storage.api';
-import type { ProviderView, StorageItemView } from '@miauflix/backend';
+import type { ConfigEntryView, ProviderView, StorageItemView } from '@miauflix/backend';
 import { storyImage } from '@shared/design-system/storyImage';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, mocked } from 'storybook/test';
 
 import SourcesPage from './SourcesPage';
 import StoragePage from './StoragePage';
+
+import { mutationTrigger } from '@/__test-utils__/mutationTrigger';
 
 const GiB = 1024 ** 3;
 
@@ -116,7 +119,12 @@ function mockSourceMutations() {
     sourcesApi.useRefreshRepositoryMutation,
     sourcesApi.useRemoveRepositoryMutation,
   ];
-  for (const hook of mutations) mocked(hook).mockReturnValue([fn(), { isLoading: false }] as never);
+  for (const hook of mutations)
+    mocked(hook).mockReturnValue([mutationTrigger(), { isLoading: false }] as never);
+  mocked(sourcesApi.useTestProviderMutation).mockReturnValue([
+    mutationTrigger({ success: true, message: 'Connected: the source answered a test search.' }),
+    { isLoading: false },
+  ] as never);
 }
 
 const meta = {
@@ -161,9 +169,86 @@ export const Sources: Story = {
 };
 
 /** Downloads using disk space, with what each one is doing and Free space. */
+const storageSetting = (
+  key: string,
+  value: string,
+  description: string,
+  extra: Partial<ConfigEntryView> = {}
+): ConfigEntryView => ({
+  key,
+  value,
+  description,
+  isSecret: false,
+  serviceGroup: 'MEDIA_LOAD',
+  serviceDescription: 'Torrent engine: downloads, encrypted storage and tracker scrapes.',
+  required: false,
+  hasValue: true,
+  inputType: 'text',
+  ...extra,
+});
+
+const STORAGE_SETTINGS: ConfigEntryView[] = [
+  storageSetting(
+    'STORAGE_THRESHOLD',
+    '50GB',
+    'Maximum disk space available to downloaded content. When reached, the oldest content is removed to stay within this limit.'
+  ),
+  storageSetting(
+    'STORAGE_PLAYBACK_RESERVE',
+    '10GB',
+    'Storage kept available for on-demand playback; background downloads must leave this amount free.'
+  ),
+  storageSetting(
+    'CONTENT_SEED_DURATION_SECONDS',
+    '3600',
+    'How many seconds to seed after the main video is fully downloaded. Set to 0 to stop seeding immediately.',
+    { inputType: 'number', required: true }
+  ),
+  storageSetting(
+    'DOWNLOAD_PATH',
+    '/data/downloads',
+    'Directory for storing downloaded and encrypted media files (must be writable)',
+    { advanced: true }
+  ),
+  storageSetting(
+    'DOWNLOAD_PATH_EXCLUSIVE',
+    'true',
+    'Miauflix owns the download directory: anything in it that is not one of its downloads is deleted when the service starts.',
+    {
+      advanced: true,
+      inputType: 'boolean',
+      booleanStateDescriptions: {
+        true: 'Unknown files in the download directory are deleted',
+        false: 'Unknown files in the download directory are kept',
+      },
+    }
+  ),
+  storageSetting(
+    'STORAGE_PAD_FILE_SIZES',
+    'true',
+    'Pad downloaded files on disk to a rounded size, so their exact sizes cannot be matched to known torrents.',
+    {
+      advanced: true,
+      inputType: 'boolean',
+      booleanStateDescriptions: { true: 'File sizes padded', false: 'Exact file sizes' },
+    }
+  ),
+];
+
 export const Storage: Story = {
   beforeEach: () => {
-    mocked(useRemoveStorageMutation).mockReturnValue([fn(), { isLoading: false }] as never);
+    mocked(useGetConfigQuery).mockReturnValue({
+      data: STORAGE_SETTINGS,
+      isLoading: false,
+    } as never);
+    mocked(useSaveServiceConfigMutation).mockReturnValue([
+      mutationTrigger({ success: true, services: [] }),
+      { isLoading: false },
+    ] as never);
+    mocked(useRemoveStorageMutation).mockReturnValue([
+      mutationTrigger(),
+      { isLoading: false },
+    ] as never);
     mocked(useGetStorageInventoryQuery).mockReturnValue({
       data: {
         summary: {

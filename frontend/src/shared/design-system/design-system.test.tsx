@@ -372,6 +372,21 @@ describe('NumberField', () => {
     expect(onChange).not.toHaveBeenCalled();
     expect(input).toHaveValue('5');
   });
+
+  it('leaves a value off its step alone when the field is left or Enter pressed without an edit', () => {
+    const onChange = vi.fn();
+    render(<NumberField label="Ratio" value={0.125} onChange={onChange} step={0.01} />);
+    const input = screen.getByLabelText('Ratio');
+    fireEvent.focus(input);
+    fireEvent.blur(input);
+    fireEvent.focus(input);
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(onChange).not.toHaveBeenCalled();
+    fireEvent.change(input, { target: { value: '0.125' } });
+    fireEvent.change(input, { target: { value: '0.126' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    expect(onChange).toHaveBeenLastCalledWith(0.13);
+  });
 });
 
 describe('Checkbox', () => {

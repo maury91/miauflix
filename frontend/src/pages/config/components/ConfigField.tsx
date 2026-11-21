@@ -6,6 +6,7 @@ import {
   PasswordField,
   Select,
   Switch,
+  Text,
   TextField,
 } from '@shared/design-system';
 import type { FC } from 'react';
@@ -161,35 +162,43 @@ export const ConfigField: FC<ConfigFieldProps> = ({
         : (match?.[2].toLowerCase() ?? units[0] ?? '');
       const amount = match?.[1] ?? '';
       return (
-        <div className={styles.unitRow}>
-          <div className={styles.unitNumber}>
-            <NumberField
-              navId={navId}
-              id={entry.key}
-              label={fieldLabel}
-              indicator={indicator}
-              description={help}
-              error={error}
-              min={0}
-              step={1}
-              {...numberSteps}
-              value={toNumber(amount)}
-              onChange={next => onChange(entry.key, next === null ? '' : `${next}${unit}`)}
-              placeholder="0"
-            />
+        <div>
+          <div className={styles.unitRow}>
+            <div className={styles.unitNumber}>
+              <NumberField
+                navId={navId}
+                id={entry.key}
+                label={fieldLabel}
+                indicator={indicator}
+                // Under the number and its unit both, so the unit lines up with the input
+                aria-describedby={`${entry.key}-help`}
+                error={error}
+                min={0}
+                step={1}
+                {...numberSteps}
+                value={toNumber(amount)}
+                onChange={next => onChange(entry.key, next === null ? '' : `${next}${unit}`)}
+                placeholder="0"
+              />
+            </div>
+            <div className={styles.unitSelect}>
+              <Select
+                navId={`${navId}:unit`}
+                label={`${fieldLabel} unit`}
+                labelHidden
+                items={units.map(option => ({
+                  value: option,
+                  label: isTime ? timeUnitLabel(option) : option,
+                }))}
+                value={unit || null}
+                onChange={next => onChange(entry.key, amount ? `${amount}${next}` : '')}
+              />
+            </div>
           </div>
-          <div className={styles.unitSelect}>
-            <Select
-              navId={`${navId}:unit`}
-              label={`${fieldLabel} unit`}
-              labelHidden
-              items={units.map(option => ({
-                value: option,
-                label: isTime ? timeUnitLabel(option) : option,
-              }))}
-              value={unit || null}
-              onChange={next => onChange(entry.key, amount ? `${amount}${next}` : '')}
-            />
+          <div id={`${entry.key}-help`} className={styles.unitHelp}>
+            <Text variant="caption" tone="secondary">
+              {help}
+            </Text>
           </div>
         </div>
       );

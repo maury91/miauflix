@@ -83,6 +83,17 @@ describe('QrApprovalPage', () => {
     expect(requestHeaders(approval!).get('X-Session-Id')).toBe('phone');
   });
 
+  it('focuses Approve once the request has been checked, so the remote can confirm at once', async () => {
+    // jsdom lays nothing out: give every element a box, so the navigation layer can focus it
+    vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+      () => [{}] as unknown as DOMRectList
+    );
+    setupTest();
+    const approve = await screen.findByRole('button', { name: 'Approve' });
+    await waitFor(() => expect(approve).toHaveAttribute('data-focused'));
+    vi.mocked(Element.prototype.getClientRects).mockRestore();
+  });
+
   it('declines the device', async () => {
     setupTest({ approve: json({ state: 'rejected' }) });
     fireEvent.click(await screen.findByRole('button', { name: 'Decline' }));

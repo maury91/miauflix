@@ -35,6 +35,29 @@ const storageApi = vi.hoisted(() => ({
   removalLoading: false,
 }));
 
+const configApi = vi.hoisted(() => ({
+  entries: [] as Array<Record<string, unknown>>,
+  save: vi.fn(),
+}));
+
+vi.mock('@features/config/api/config.api', () => ({
+  useGetConfigQuery: () => ({ data: configApi.entries, isLoading: false, error: undefined }),
+  useSaveServiceConfigMutation: () => [configApi.save, { isLoading: false }],
+}));
+
+const configEntry = (key: string, value: string, extra: Record<string, unknown> = {}) => ({
+  key,
+  value,
+  isSecret: false,
+  serviceGroup: 'MEDIA_LOAD',
+  serviceDescription: 'Torrent engine',
+  description: `About ${key}`,
+  required: false,
+  hasValue: true,
+  inputType: 'text',
+  ...extra,
+});
+
 vi.mock('framer-motion', async () => {
   const actual = await vi.importActual<typeof import('framer-motion')>('framer-motion');
   return { ...actual, motion: { ...actual.motion, main: 'main' } };
@@ -54,6 +77,7 @@ vi.mock('@features/storage/api/storage.api', () => ({
   ],
 }));
 
+import { computeUsage } from './storage/storageInventory';
 import StoragePage from './StoragePage';
 
 const baseItem = {
@@ -87,6 +111,17 @@ beforeEach(() => {
     items: [{ ...baseItem }],
   };
   storageApi.error = undefined;
+  configApi.entries = [
+    configEntry('CONTENT_DOWNLOAD_LIMIT', '20MB'),
+    configEntry('STORAGE_THRESHOLD', '50GB'),
+    configEntry('STORAGE_PLAYBACK_RESERVE', '10GB'),
+    configEntry('CONTENT_SEED_DURATION_SECONDS', '3600', { inputType: 'number' }),
+    configEntry('DOWNLOAD_PATH', '/downloads', { advanced: true }),
+    configEntry('DOWNLOAD_PATH_EXCLUSIVE', 'true', { inputType: 'boolean', advanced: true }),
+    configEntry('STORAGE_PAD_FILE_SIZES', 'true', { inputType: 'boolean', advanced: true }),
+  ];
+  configApi.save.mockReset();
+  configApi.save.mockResolvedValue({ data: { success: true, services: [] } });
   storageApi.refetch.mockReset();
   storageApi.removeStorage.mockReset();
   storageApi.removalLoading = false;
@@ -115,7 +150,10 @@ describe('Storage settings page', () => {
     expect(legend.getByText('Movies').parentElement).toHaveTextContent('Movies2 GiB');
     // The disk's 60 GiB in use, less Miauflix's 2 GiB
     expect(legend.getByText('Other data').parentElement).toHaveTextContent('Other data58 GiB');
-    expect(legend.getByText('Free').parentElement).toHaveTextContent('Free40 GiB');
+    // The disk's 40 GiB free, less the 10 GiB kept for playback
+    expect(legend.getByText('Free').parentElement).toHaveTextContent('Free30 GiB');
+    // What Miauflix doesn't control comes last
+    expect(legend.getAllByRole('listitem').at(-1)).toHaveTextContent('Other data58 GiB');
     expect(screen.getByText('Limit 50 GiB')).toBeInTheDocument();
     expect(screen.getByText(/counts 3 GiB against its 50 GiB limit/)).toBeInTheDocument();
     expect(
@@ -180,6 +218,87 @@ describe('Storage settings page', () => {
     expect(titles()[0]).toBe('Mid');
   });
 
+  it('still fills the bar when the server leaves out the kind and remux size', () => {
+    const olderItem: Partial<typeof baseItem> = { ...baseItem };
+    delete olderItem.kind;
+    delete olderItem.remuxBytes;
+    storageApi.data!.items = [olderItem as typeof baseItem];
+    render(<StoragePage onDismiss={vi.fn()} />);
+    const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
+    expect(legend.getByText('Unmatched downloads').parentElement).toHaveTextContent(
+      'Unmatched downloads2 GiB'
+    );
+    expect(legend.getByText('Other data').parentElement).toHaveTextContent('Other data58 GiB');
+    expect(screen.getByText('60 GiB / 100 GiB')).toBeInTheDocument();
+  });
+
+  it('shows the storage settings in friendly units, with the reserve on the bar', () => {
+    render(<StoragePage onDismiss={vi.fn()} />);
+    expect((screen.getByLabelText('Storage limit') as HTMLInputElement).value).toBe('50');
+    expect(screen.getByLabelText('Storage limit unit')).toHaveValue('GB');
+    expect((screen.getByLabelText('Seeding after download') as HTMLInputElement).value).toBe('1');
+    expect(screen.getByLabelText('Seeding after download unit')).toHaveValue('h');
+    // Only the storage settings, not the rest of media-load's
+    expect(screen.queryByText(/CONTENT_DOWNLOAD_LIMIT/)).not.toBeInTheDocument();
+    const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
+    expect(legend.getByText('Reserved for playback').parentElement).toHaveTextContent(
+      'Reserved for playback10 GiB'
+    );
+    expect(screen.getByText(/ahead of time stop at 40 GiB/)).toBeInTheDocument();
+    expect(screen.getByText(/seed for 1 hour before becoming local only/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
+  });
+
+  it('previews a new limit on the bar and saves the settings in their stored form', async () => {
+    render(<StoragePage onDismiss={vi.fn()} />);
+    const limit = screen.getByLabelText('Storage limit');
+    fireEvent.focus(limit);
+    fireEvent.change(limit, { target: { value: '30' } });
+    fireEvent.blur(limit);
+    expect(screen.getByText('Limit 30 GiB (not saved)')).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText('Seeding after download unit'), {
+      target: { value: 'd' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() => expect(screen.getByText('Storage settings saved.')).toBeInTheDocument());
+    expect(configApi.save).toHaveBeenCalledWith({
+      service: 'MEDIA_LOAD',
+      entries: expect.arrayContaining([
+        { key: 'STORAGE_THRESHOLD', value: '30GB' },
+        { key: 'CONTENT_SEED_DURATION_SECONDS', value: '86400' },
+      ]),
+    });
+    const sent = configApi.save.mock.calls[0]![0] as { entries: { key: string }[] };
+    expect(sent.entries.map(entry => entry.key)).not.toContain('CONTENT_DOWNLOAD_LIMIT');
+    expect(storageApi.refetch).toHaveBeenCalled();
+  });
+
+  it('warns when the limit is more than the disk can hold', () => {
+    render(<StoragePage onDismiss={vi.fn()} />);
+    const limit = screen.getByLabelText('Storage limit');
+    fireEvent.focus(limit);
+    fireEvent.change(limit, { target: { value: '500' } });
+    fireEvent.blur(limit);
+    // 40 GiB free plus the 2 GiB Miauflix holds
+    expect(
+      screen.getByText(/more than this disk can give Miauflix \(42 GiB\)/)
+    ).toBeInTheDocument();
+  });
+
+  it('reports a rejected save', async () => {
+    configApi.save.mockResolvedValue({
+      data: { success: false, services: [], invalidKeys: ['STORAGE_THRESHOLD'] },
+    });
+    render(<StoragePage onDismiss={vi.fn()} />);
+    const limit = screen.getByLabelText('Storage limit');
+    fireEvent.focus(limit);
+    fireEvent.change(limit, { target: { value: '30' } });
+    fireEvent.blur(limit);
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('Check these values: STORAGE_THRESHOLD.')).toBeInTheDocument();
+  });
+
   it('spans the limit when the disk size is unknown', () => {
     storageApi.data!.summary.filesystem = null;
     render(<StoragePage onDismiss={vi.fn()} />);
@@ -187,6 +306,22 @@ describe('Storage settings page', () => {
     const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
     expect(legend.queryByText('Other data')).not.toBeInTheDocument();
     expect(legend.queryByText('Free')).not.toBeInTheDocument();
+  });
+
+  it('says usage is unavailable, not zero, when neither the disk nor a download is measured', () => {
+    storageApi.data!.summary.filesystem = null;
+    storageApi.data!.items[0] = { ...storageApi.data!.items[0]!, physicalBytes: null };
+    render(<StoragePage onDismiss={vi.fn()} />);
+    expect(screen.getByText('Usage unavailable')).toBeInTheDocument();
+    expect(screen.queryByText(/%$/)).not.toBeInTheDocument();
+  });
+
+  it('shows a percentage, not NaN, for a disk that reports no size', () => {
+    storageApi.data!.summary.filesystem = { totalBytes: 0, freeBytes: 0 };
+    storageApi.data!.items = [];
+    const usage = computeUsage(storageApi.data!);
+    expect(usage.totalBytes).toBe(1);
+    expect(usage.usedBytes).toBe(0);
   });
 
   it('shows a complete video as available offline while it can still be loaded by torrent', () => {

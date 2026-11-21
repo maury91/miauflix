@@ -6,6 +6,11 @@ export const section = style({
   marginBottom: space.xl,
 });
 
+/** The settings card, under the disk bar it changes. */
+export const settings = style({
+  marginTop: space.lg,
+});
+
 /** Reserves its line so announcing a result doesn't push the list down. */
 export const status = style({
   minHeight: '1.5em',

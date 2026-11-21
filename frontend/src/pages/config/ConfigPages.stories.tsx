@@ -12,6 +12,8 @@ import { fn, mocked } from 'storybook/test';
 import ConfigurationWizardPage from './ConfigurationWizardPage';
 import ConfigWizardPage from './ConfigWizardPage';
 
+import { mutationTrigger, mutationTriggerFrom } from '@/__test-utils__/mutationTrigger';
+
 const entry = (overrides: Partial<ConfigEntryView> & Pick<ConfigEntryView, 'key'>) =>
   ({
     value: '',
@@ -95,9 +97,29 @@ const ENTRIES: ConfigEntryView[] = [
 function mockConfig(entries: ConfigEntryView[]) {
   mocked(useGetConfigQuery).mockReturnValue({ data: entries, isLoading: false } as never);
   mocked(useGetServiceStatusesQuery).mockReturnValue({ data: {}, isLoading: false } as never);
-  mocked(useUpdateConfigMutation).mockReturnValue([fn(), { isLoading: false }] as never);
-  mocked(useTestServiceConfigMutation).mockReturnValue([fn()] as never);
-  mocked(useSaveServiceConfigMutation).mockReturnValue([fn()] as never);
+  mocked(useUpdateConfigMutation).mockReturnValue([
+    mutationTrigger(),
+    { isLoading: false },
+  ] as never);
+  // Test and Save succeed for the service they're given, as the server reports it
+  const passed = (service: string, message: string) => ({
+    success: true,
+    services: [{ service, success: true, testMode: 'live', message }],
+  });
+  mocked(useTestServiceConfigMutation).mockReturnValue([
+    mutationTriggerFrom(({ service }: { service: string }) =>
+      passed(service, 'Connected with these settings.')
+    ),
+  ] as never);
+  mocked(useSaveServiceConfigMutation).mockReturnValue([
+    mutationTriggerFrom(({ service }: { service: string }) => ({
+      ...passed(service, 'Saved.'),
+      restarted: [],
+      needsProcessRestart: [],
+      changed: [],
+      recovered: [],
+    })),
+  ] as never);
 }
 
 const meta = {

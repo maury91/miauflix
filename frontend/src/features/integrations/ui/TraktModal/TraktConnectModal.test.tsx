@@ -161,9 +161,15 @@ describe('Trakt dialog dismissal', () => {
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
     setupTest();
     fireEvent.click(screen.getByRole('button', { name: "Let's go" }));
-    fireEvent.click(await screen.findByRole('button', { name: 'Copy code' }));
+    await screen.findByRole('button', { name: 'Copy code' });
+    press('ArrowRight');
+    fireEvent.click(screen.getByRole('button', { name: 'Copy code' }));
     expect(writeText).toHaveBeenCalledExactlyOnceWith('ABCD');
     expect(await screen.findByText('Code copied')).toBeInTheDocument();
+    // Copying re-renders the dialog: focus stays on Copy code
+    expect(screen.getByRole('button', { name: /Copy code|Code copied/ })).toHaveAttribute(
+      'data-focused'
+    );
     expect(screen.queryByText('Waiting for authorization...')).not.toBeInTheDocument();
   });
 

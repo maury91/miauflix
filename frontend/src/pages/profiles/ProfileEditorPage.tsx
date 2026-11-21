@@ -32,6 +32,7 @@ import {
 import { TIZEN_IME_DONE } from '@shared/hooks/useKeyboard';
 import { usePageBack } from '@shared/hooks/usePageBack';
 import { FocusGroup, FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
+import { LogoBackdrop } from '@shared/ui/logo/LogoBackdrop';
 import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
 import { useAppSelector } from '@store/hooks';
 import { selectAdminSession, type SessionInfo } from '@store/slices/auth';
@@ -179,6 +180,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
 
   return (
     <FocusScope id={NAV.scope} layout="horizontal" initialId={NAV.name}>
+      <LogoBackdrop />
       <div className={styles.rail}>
         <NavRail label="Profile" navId={NAV.rail}>
           <NavItem navId={NAV.back} icon={<ArrowLeftIcon />} label="Back" onClick={onCancel} />

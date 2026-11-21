@@ -24,6 +24,8 @@ export const page = style({
 
 export const rail = style({
   position: 'relative',
+  // Over the logo's backdrop: the back item sits beside the logo
+  zIndex: 2,
   flex: 'none',
   height: '100%',
 });

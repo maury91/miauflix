@@ -2,8 +2,8 @@ import { color, radius, space } from '@shared/design-system/tokens';
 import { globalStyle, style, styleVariants } from '@vanilla-extract/css';
 
 /**
- * The disk bar: one segment per kind of stored data, the free space as the track, and a mark
- * where Miauflix's limit falls. Margins instead of flex `gap` (Chromium 69).
+ * The disk bar: one segment per kind of data Miauflix stored from the start, the free space as the
+ * track, other data at the end, and a mark where Miauflix's limit falls. Margins instead of flex `gap` (Chromium 69).
  */
 export const header = style({
   display: 'flex',
@@ -28,6 +28,7 @@ export const meter = style({
 });
 
 export const track = style({
+  position: 'relative',
   display: 'flex',
   height: '0.875rem',
   overflow: 'hidden',
@@ -44,6 +45,11 @@ export const segment = style({
   },
 });
 
+/** The free space between Miauflix's data and everything else, which closes the bar. */
+export const freeSpace = style({
+  flex: '1 1 auto',
+});
+
 /** Categorical colours, told apart by the legend's labels as well. */
 export const swatch = styleVariants({
   movie: { backgroundColor: color.brand },
@@ -53,6 +59,18 @@ export const swatch = styleVariants({
   remux: { backgroundColor: color.success },
   other: { backgroundColor: color.borderControl },
   free: { backgroundColor: color.control, boxShadow: `inset 0 0 0 1px ${color.borderControl}` },
+});
+
+/** The playback reserve: free space held back, hatched, right after Miauflix's data. */
+const hatching = `repeating-linear-gradient(135deg, ${color.textSecondary} 0, ${color.textSecondary} 2px, transparent 2px, transparent 6px)`;
+
+export const reserve = style({
+  backgroundImage: hatching,
+});
+
+export const reserveSwatch = style({
+  backgroundColor: color.control,
+  backgroundImage: hatching,
 });
 
 /** The limit: a line across the track and its label above, from `left` (a share). */

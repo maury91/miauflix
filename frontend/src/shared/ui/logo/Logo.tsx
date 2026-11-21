@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import {
+  CORNER_LOGO_HEIGHT,
+  CORNER_LOGO_TOP,
   INTRO_LOGO_HEIGHT_NARROW_PX,
   INTRO_LOGO_HEIGHT_PX,
   NARROW_MAX_WIDTH_PX,
@@ -85,7 +87,7 @@ const LogoImage = styled.img<{
 
   /* Desktop */
   top: ${({ $home, $configuration, $intro }) =>
-    $home ? '3vh' : $intro ? '50%' : $configuration ? '24px' : 'calc(50% - 380px)'};
+    $home ? CORNER_LOGO_TOP : $intro ? '50%' : $configuration ? '24px' : 'calc(50% - 380px)'};
   height: ${({ $setup, $configuration }) =>
     $configuration ? '56px' : $setup ? `${130 * setupScale}px` : '130px'};
 
@@ -95,16 +97,16 @@ const LogoImage = styled.img<{
     $home &&
     `
       width: 14.5vh;
-      height: 4vh;
+      height: ${CORNER_LOGO_HEIGHT};
     `}
 
   /* Mobile */
   @media (max-width: ${NARROW_MAX_WIDTH_PX}px) {
     top: ${({ $home, $configuration, $intro }) =>
-      $home ? '3vh' : $intro ? '50%' : $configuration ? '16px' : '50px'};
+      $home ? CORNER_LOGO_TOP : $intro ? '50%' : $configuration ? '16px' : '50px'};
     height: ${({ $home, $setup, $configuration, $intro }) =>
       $home
-        ? '4vh'
+        ? CORNER_LOGO_HEIGHT
         : $intro
           ? `${INTRO_LOGO_HEIGHT_NARROW_PX}px`
           : $configuration

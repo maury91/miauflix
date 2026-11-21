@@ -249,7 +249,7 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
         )}
         <p className={styles.hint}>
           <InfoIcon aria-hidden="true" />
-          <Text variant="caption" tone="secondary">
+          <Text as="span" variant="caption" tone="secondary">
             Sources are searched from top to bottom. Change their order to set which sources
             Miauflix checks first.
           </Text>

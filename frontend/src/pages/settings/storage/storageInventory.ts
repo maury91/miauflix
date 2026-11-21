@@ -15,10 +15,20 @@ export interface StorageUsage {
   isDisk: boolean;
   /** Used space, in the bar's order; empty categories left out. */
   segments: UsageSegment[];
-  usedBytes: number;
+  /**
+   * Used space: the disk's, or what Miauflix holds when the disk's size is unknown. Null when
+   * neither is known (a download's size isn't measured and there are no disk stats).
+   */
+  usedBytes: number | null;
   freeBytes: number | null;
   /** Miauflix's storage limit, where the bar marks it (null without a limit). */
   limitBytes: number | null;
+  /** Whether `limitBytes` is an edit not saved yet. */
+  limitDraft: boolean;
+  /** The room kept for playback just under the limit (null without a limit or reserve). */
+  reserveBytes: number | null;
+  /** The most Miauflix could hold: free space plus what it holds now (null without disk stats). */
+  capacityBytes: number | null;
   /** What Miauflix counts against its limit (written plus reserved for downloads). */
   chargedBytes: number;
 }
@@ -48,21 +58,36 @@ export function formatBytes(bytes: number | null | undefined): string {
   return `${formattedValue} ${units[unitIndex]}`;
 }
 
+/** What a download's TV copies take; older backends leave it out. */
+export const remuxBytesOf = (item: StorageItemView): number => item.remuxBytes ?? 0;
+
+/** What kind of media a download holds; older backends leave it out. */
+export const kindOf = (item: StorageItemView): StorageItemView['kind'] => item.kind ?? 'unknown';
+
 /** The video files a download holds, apart from its TV copies. */
 const videoBytes = (item: StorageItemView) =>
-  Math.max(0, (item.physicalBytes ?? 0) - item.remuxBytes);
+  Math.max(0, (item.physicalBytes ?? 0) - remuxBytesOf(item));
 
 /**
  * The disk as the bar shows it: each kind of media Miauflix stored, its TV copies, then whatever
  * else is on the disk (other data) and the free space, with Miauflix's limit marked on it.
  */
-export function computeUsage({ summary, items }: StorageInventoryResponse): StorageUsage {
+/** Settings typed but not saved yet, which the bar shows in place of the saved ones. */
+export interface UsageDraft {
+  limitBytes: number | null;
+  reserveBytes: number | null;
+}
+
+export function computeUsage(
+  { summary, items }: StorageInventoryResponse,
+  draft?: UsageDraft
+): StorageUsage {
   const byCategory = new Map<UsageCategory, number>();
   const add = (category: UsageCategory, bytes: number) =>
     byCategory.set(category, (byCategory.get(category) ?? 0) + bytes);
   for (const item of items) {
-    add(item.kind, videoBytes(item));
-    add('remux', item.remuxBytes);
+    add(kindOf(item), videoBytes(item));
+    add('remux', remuxBytesOf(item));
   }
   const miauflixBytes = [...byCategory.values()].reduce((sum, bytes) => sum + bytes, 0);
   const { filesystem } = summary;
@@ -79,11 +104,19 @@ export function computeUsage({ summary, items }: StorageInventoryResponse): Stor
       bytes: byCategory.get(category) ?? 0,
     }))
     .filter(segment => segment.bytes > 0);
-  const usedBytes = segments.reduce((sum, segment) => sum + segment.bytes, 0);
-  const limitBytes = summary.storageBudgetBytes > 0 ? summary.storageBudgetBytes : null;
+  const shownBytes = segments.reduce((sum, segment) => sum + segment.bytes, 0);
+  // Without disk stats, a download whose size isn't measured leaves the total unknown, not zero
+  const measured = filesystem !== null || items.every(item => item.physicalBytes !== null);
+  const usedBytes = measured ? shownBytes : null;
+  const savedLimit = summary.storageBudgetBytes > 0 ? summary.storageBudgetBytes : null;
+  const draftLimit = draft?.limitBytes && draft.limitBytes > 0 ? draft.limitBytes : null;
+  const limitBytes = draftLimit ?? savedLimit;
+  const reserveBytes =
+    limitBytes !== null && draft?.reserveBytes ? Math.min(draft.reserveBytes, limitBytes) : null;
+  // Never 0: a disk reporting no size would otherwise make the shares NaN
   const totalBytes = filesystem
-    ? Math.max(filesystem.totalBytes, usedBytes)
-    : Math.max(limitBytes ?? 0, usedBytes, 1);
+    ? Math.max(filesystem.totalBytes, shownBytes, 1)
+    : Math.max(limitBytes ?? 0, shownBytes, 1);
   return {
     totalBytes,
     isDisk: filesystem !== null,
@@ -91,6 +124,9 @@ export function computeUsage({ summary, items }: StorageInventoryResponse): Stor
     usedBytes,
     freeBytes: filesystem ? filesystem.freeBytes : null,
     limitBytes,
+    limitDraft: draftLimit !== null && draftLimit !== savedLimit,
+    reserveBytes,
+    capacityBytes: filesystem ? filesystem.freeBytes + miauflixBytes : null,
     chargedBytes: summary.chargedBytes,
   };
 }
@@ -128,7 +164,7 @@ export function sortItems(items: readonly StorageItemView[], sort: StorageSort) 
   const compare: Record<StorageSort, (a: StorageItemView, b: StorageItemView) => number> = {
     size: (a, b) => bySize(a, b) || byName(a, b),
     name: (a, b) => byName(a, b) || bySize(a, b),
-    type: (a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind] || byName(a, b),
+    type: (a, b) => KIND_ORDER[kindOf(a)] - KIND_ORDER[kindOf(b)] || byName(a, b),
     // Least downloaded first: what is still coming
     progress: (a, b) => a.progressPercent - b.progressPercent || byName(a, b),
     status: (a, b) =>

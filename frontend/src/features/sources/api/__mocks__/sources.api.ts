@@ -1,11 +1,13 @@
 import { fn } from 'storybook/test';
 
+import { mutationTrigger } from '@/__test-utils__/mutationTrigger';
+
 // Settings stories replace these hooks with story-local data (`mocked(...)` in `beforeEach`).
 export const sourcesApi = {
   util: { resetApiState: fn().mockName('sourcesApi.util.resetApiState') },
 };
 
-const mutation = () => fn().mockReturnValue([fn(), { isLoading: false }]);
+const mutation = () => fn().mockReturnValue([mutationTrigger(), { isLoading: false }]);
 const query = (data: unknown) =>
   fn().mockReturnValue({ data, isLoading: false, error: undefined, refetch: fn() });
 

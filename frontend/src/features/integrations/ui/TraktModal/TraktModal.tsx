@@ -2,7 +2,7 @@ import { beginTraktAssociation } from '@features/integrations/api/trakt.api';
 import type { ProviderAuthorization } from '@miauflix/service-contracts';
 import { Button, Dialog, Stack } from '@shared/design-system';
 import { useOptionalNavigation } from '@shared/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { TraktAuthorization } from './TraktAuthorization';
 import { TraktLanding } from './TraktLanding';
@@ -45,9 +45,18 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
 
   // Once the code arrives, its first action replaces the ones that asked for it
   const navigation = useOptionalNavigation();
+  // Only when it first arrives: `navigation` changes on every render, and later renders (Copy
+  // code, polling errors) must leave focus where it is
+  const focusedAuthorization = useRef(false);
   const hasAuthorization = authorization !== null;
   useEffect(() => {
-    if (hasAuthorization) navigation?.focus(TRAKT_NAV.open);
+    if (!hasAuthorization) {
+      focusedAuthorization.current = false;
+      return;
+    }
+    if (focusedAuthorization.current || !navigation) return;
+    focusedAuthorization.current = true;
+    navigation.focus(TRAKT_NAV.open);
   }, [hasAuthorization, navigation]);
 
   const copyCode = async () => {

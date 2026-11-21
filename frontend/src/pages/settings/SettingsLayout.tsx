@@ -10,6 +10,7 @@ import {
 } from '@shared/design-system';
 import { usePageBack } from '@shared/hooks/usePageBack';
 import { FocusGroup, FocusScope, NavigationProvider } from '@shared/navigation';
+import { LogoBackdrop } from '@shared/ui/logo/LogoBackdrop';
 import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
@@ -91,6 +92,7 @@ function SettingsScreen({
 }: SettingsLayoutProps) {
   return (
     <FocusScope id={SETTINGS_NAV.scope} layout="horizontal" initialId={initialNavId}>
+      <LogoBackdrop />
       {onBack && (
         <div className={styles.rail}>
           <RailAlignment />

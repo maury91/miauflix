@@ -85,6 +85,8 @@ export interface GlTuning {
   antialias?: boolean;
   /** Background work per frame, ms. */
   frameBudgetMs?: number;
+  /** Decoded images uploaded to the GPU per frame, at most. */
+  uploadsPerFrame?: number;
   /**
    * Keep the canvas's buffer between frames (copied to the screen instead of swapped). On by
    * default: on the Tizen 5.5 TV a swapped buffer sometimes showed undrawn, every GL layer blank

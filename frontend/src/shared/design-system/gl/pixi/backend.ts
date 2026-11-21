@@ -16,7 +16,7 @@ import type { FrameInfo } from './nodeState';
 import { PictureBaker } from './pictures';
 import { createPixiPainter } from './pixiPainter';
 import { SceneSync } from './sync';
-import { TextureStore } from './textures';
+import { TextureStore, UPLOADS_PER_FRAME } from './textures';
 
 /**
  * Background work per frame (uploads, text, picture bakes share it), ms. The spike's separate
@@ -86,6 +86,7 @@ export class PixiBackend implements GlBackend {
       textureBudget: tuning?.textureBudget ?? TEXTURE_BUDGET,
       antialias: tuning?.antialias ?? true,
       frameBudgetMs: tuning?.frameBudgetMs ?? FRAME_BUDGET_MS,
+      uploadsPerFrame: tuning?.uploadsPerFrame ?? UPLOADS_PER_FRAME,
       preserveDrawingBuffer: tuning?.preserveDrawingBuffer ?? true,
       transparent: tuning?.transparent ?? false,
     };
@@ -105,6 +106,7 @@ export class PixiBackend implements GlBackend {
     const pixi = () => this.pixi!;
     this.store = new TextureStore({
       pixi,
+      uploadsPerFrame: this.tuning.uploadsPerFrame,
       fontReady: (font, text) => this.fonts.fontReady(font, text),
       frame: this.frame,
       invalidate: this.invalidate,

@@ -28,7 +28,10 @@ import {
   sortItems,
   type StorageSort,
 } from './storage/storageInventory';
+import { StorageSettings } from './storage/StorageSettings';
+import { describeDuration } from './storage/storageSettingsFields';
 import { StorageUsage } from './storage/StorageUsage';
+import { useStorageSettings } from './storage/useStorageSettings';
 import { SettingsLayout } from './SettingsLayout';
 import * as styles from './storagePage.css';
 
@@ -87,7 +90,22 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
   const [notice, setNotice] = useState('');
   const [dialogError, setDialogError] = useState('');
   const [sort, setSort] = useState<StorageSort>('size');
-  const usage = useMemo(() => (data ? computeUsage(data) : null), [data]);
+  const settings = useStorageSettings({ onSaved: () => void refetch() });
+  const { limitBytes: draftLimit, reserveBytes: draftReserve } = settings.draft;
+  const usage = useMemo(
+    () =>
+      data ? computeUsage(data, { limitBytes: draftLimit, reserveBytes: draftReserve }) : null,
+    [data, draftLimit, draftReserve]
+  );
+  const savedSeeding = settings.entries.find(
+    entry => entry.key === 'CONTENT_SEED_DURATION_SECONDS'
+  )?.value;
+  const seeding =
+    savedSeeding === undefined
+      ? 'Completed downloads seed for the configured time before becoming local only.'
+      : describeDuration(savedSeeding) === null
+        ? 'Completed downloads become local only right away.'
+        : `Completed downloads seed for ${describeDuration(savedSeeding)} before becoming local only.`;
   const items = useMemo(() => (data ? sortItems(data.items, sort) : []), [data, sort]);
 
   const openConfirmation = (item: StorageItemView) => {
@@ -169,6 +187,10 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
     >
       {usage && <StorageUsage usage={usage} />}
 
+      <div className={styles.settings}>
+        <StorageSettings form={settings} capacityBytes={usage?.capacityBytes ?? null} />
+      </div>
+
       <div className={styles.status} role="status" aria-live="polite">
         <Text variant="caption" tone="secondary">
           {notice || (isFetching && !isLoading ? 'Updating storage…' : '')}
@@ -241,9 +263,9 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
             <Text variant="caption" tone="secondary">
               Inactive is incomplete and not loaded; Active is incomplete and loaded by the torrent.
               Available offline means the video is complete but its torrent may still load. Local
-              only means it is complete and will never be loaded by its torrent again. Completed
-              downloads seed for the configured duration before becoming local only. Free space
-              deletes a download; you’ll need to download it again before future playback.
+              only means it is complete and will never be loaded by its torrent again. {seeding}{' '}
+              Free space deletes a download; you’ll need to download it again before future
+              playback.
             </Text>
           </div>
         </Section>

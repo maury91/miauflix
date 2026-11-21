@@ -229,6 +229,13 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
     }
   };
 
+  // Which screen shows: choosing a profile, signing in, then deciding are all one request
+  const screenKey = expired
+    ? 'expired'
+    : phase.kind !== 'request'
+      ? phase.kind
+      : `${phase.request.state}:${sessionId ? 'decide' : profiles.length > 1 ? 'choose' : 'sign-in'}`;
+
   const content = (() => {
     if (phase.kind === 'checking')
       return (
@@ -355,7 +362,9 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
     <main className={styles.screen} aria-label="Approve sign-in">
       <NavigationProvider>
         <SurfaceContextProvider value="solid">
-          <FocusScope>
+          {/* A new scope per screen: a scope focuses its first action when it mounts, and the
+              actions only appear once the request has been checked */}
+          <FocusScope key={screenKey} autoFocus>
             <div className={styles.column}>{content}</div>
           </FocusScope>
         </SurfaceContextProvider>
