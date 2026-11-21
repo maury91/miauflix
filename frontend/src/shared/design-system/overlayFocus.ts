@@ -31,11 +31,24 @@ export function containTab(event: KeyboardEvent, panel: HTMLElement) {
   }
 }
 
+/** Inputs that hold DOM focus without typing: Back still closes the overlay they are in. */
+const NOT_TYPED = new Set([
+  'checkbox',
+  'radio',
+  'range',
+  'button',
+  'submit',
+  'reset',
+  'color',
+  'file',
+  'image',
+]);
+
 /** A text field is in edit mode: Back leaves the edit layer before it closes anything. */
 export const isEditing = () => {
   const active = document.activeElement;
   return (
     active instanceof HTMLTextAreaElement ||
-    (active instanceof HTMLInputElement && active.type !== 'checkbox' && active.type !== 'radio')
+    (active instanceof HTMLInputElement && !NOT_TYPED.has(active.type))
   );
 };

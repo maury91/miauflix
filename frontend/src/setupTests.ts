@@ -28,15 +28,6 @@ vi.mock('gsap/EasePack', () => ({
   },
 }));
 
-vi.mock('styled-components', async () => {
-  const actual = await vi.importActual('styled-components');
-  return {
-    ...actual,
-    keyframes: vi.fn(() => 'mocked-keyframes'),
-    css: vi.fn(() => 'mocked-css'),
-  };
-});
-
 // A function, not an arrow: code under test constructs it with `new`
 global.ResizeObserver = vi.fn().mockImplementation(function () {
   return { observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() };

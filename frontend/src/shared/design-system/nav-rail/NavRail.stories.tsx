@@ -63,6 +63,8 @@ const destinations = [
 
 /** Compact and expanded; Home is current, Search holds focus, Notifications has a badge. */
 export const States: Story = {
+  // Several rails side by side share a name; on a page there is one
+  parameters: { a11y: { config: { rules: [{ id: 'landmark-unique', enabled: false }] } } },
   render: () => (
     <div style={{ display: 'flex' }}>
       {[false, true].map(expanded => (

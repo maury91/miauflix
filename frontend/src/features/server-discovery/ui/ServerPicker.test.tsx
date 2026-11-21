@@ -18,13 +18,22 @@ beforeEach(() => {
   vi.mocked(getTvIpAddress).mockResolvedValue('192.168.1.50');
   vi.mocked(scanSubnet).mockResolvedValue([]);
   vi.mocked(probeServer).mockResolvedValue(true);
+  // jsdom lays nothing out; the navigation layer only focuses elements on screen
+  vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(
+    () => [{}] as unknown as DOMRectList
+  );
 });
 
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  vi.restoreAllMocks();
   vi.useRealTimers();
 });
+
+const press = (key: string) => fireEvent.keyDown(document.activeElement ?? document.body, { key });
+/** Virtual focus: the element, or the field frame around it, shows it. */
+const focused = (element: HTMLElement) => element.closest('[data-focused]') !== null;
 
 describe('ServerPicker', () => {
   it('lists the announced servers of its network that answer', async () => {
@@ -51,7 +60,7 @@ describe('ServerPicker', () => {
     render(<ServerPicker />);
 
     const server = await screen.findByRole('button', { name: '192.168.1.10:3000' });
-    await waitFor(() => expect(document.activeElement).toBe(server));
+    await waitFor(() => expect(focused(server)).toBe(true));
     fireEvent.click(server);
     await act(() => vi.advanceTimersByTimeAsync(0));
 
@@ -89,39 +98,32 @@ describe('ServerPicker', () => {
     });
     render(<ServerPicker />);
     const server = await screen.findByRole('button', { name: '192.168.1.10:3000' });
-    await waitFor(() => expect(document.activeElement).toBe(server));
-    const search = screen.getByRole('button', { name: 'Search again' });
+    await waitFor(() => expect(focused(server)).toBe(true));
+    const search = screen.getByRole('button', { name: /Search again|Searching/ });
     const input = screen.getByLabelText('Or type its address');
     const connect = screen.getByRole('button', { name: 'Connect' });
 
-    const press = (key: string) => fireEvent.keyDown(document.activeElement!, { key });
     press('ArrowDown');
-    expect(document.activeElement).toBe(search);
+    expect(focused(search)).toBe(true);
     press('ArrowDown');
-    expect(document.activeElement).toBe(input);
+    expect(focused(input)).toBe(true);
     press('ArrowDown');
-    expect(document.activeElement).toBe(connect);
-    press('ArrowLeft');
-    expect(document.activeElement).toBe(input);
-    // Left and Right inside the field move the caret
-    press('ArrowRight');
-    expect(document.activeElement).toBe(input);
+    expect(focused(connect)).toBe(true);
+    press('ArrowUp');
+    expect(focused(input)).toBe(true);
     press('ArrowUp');
     press('ArrowUp');
-    expect(document.activeElement).toBe(server);
+    expect(focused(server)).toBe(true);
 
     // A new search keeps the focus on its button
     press('ArrowDown');
     fireEvent.click(search);
-    expect(document.activeElement).toBe(search);
+    expect(focused(search)).toBe(true);
   });
 
-  it('takes the focus back when a remote key finds nothing focused', async () => {
+  it('starts on the address when no server is found', async () => {
     render(<ServerPicker />);
     await act(() => vi.advanceTimersByTimeAsync(0));
-    (document.activeElement as HTMLElement).blur();
-
-    fireEvent.keyDown(document.body, { key: 'ArrowDown' });
-    expect(document.activeElement).toBe(screen.getByLabelText('Or type its address'));
+    expect(focused(screen.getByLabelText('Or type its address'))).toBe(true);
   });
 });

@@ -290,7 +290,8 @@ export const Fill: Story = {
         stackBelow="medium"
         start={<Placeholder>Preview</Placeholder>}
         end={
-          <div style={{ height: '100%', overflowY: 'auto' }}>
+          // Focusable, so a keyboard can scroll it (a real list's rows would be)
+          <div tabIndex={0} aria-label="Settings" style={{ height: '100%', overflowY: 'auto' }}>
             <Stack gap="xs">
               {Array.from({ length: 12 }, (_, index) => (
                 <Placeholder key={index}>Setting {index + 1}</Placeholder>

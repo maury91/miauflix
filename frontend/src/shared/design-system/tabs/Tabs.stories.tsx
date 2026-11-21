@@ -55,6 +55,10 @@ const panelText = {
 
 /** Selected is current state (translucent), focus is the white fill; a tab can be both. */
 export const States: Story = {
+  // Tab rows alone: their panels (which `aria-controls` names) are left out
+  parameters: {
+    a11y: { config: { rules: [{ id: 'aria-valid-attr-value', enabled: false }] } },
+  },
   render: () => (
     <div>
       <StateCell name="Text, focus on another tab">

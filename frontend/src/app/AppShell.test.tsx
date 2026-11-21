@@ -56,7 +56,7 @@ vi.mock('@app/shell/IntroAnimation', async () => {
   return { IntroAnimation };
 });
 
-vi.mock('@shared/ui/logo/Logo', async () => {
+vi.mock('@shared/brand/logo/Logo', async () => {
   const React = await import('react');
   return {
     Logo: ({

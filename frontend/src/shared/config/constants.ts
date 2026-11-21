@@ -75,5 +75,3 @@ export function webAppOrigin(): string {
 
 // Re-export computed environment properties
 export const { DEV, PROD } = computedEnv;
-
-export { PALETTE, SETTINGS_PALETTE } from '../ui/tokens';

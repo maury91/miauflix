@@ -8,10 +8,17 @@ import { notificationPlayable } from '@features/notifications/lib/notification-c
 import { subtitleLanguageForMedia } from '@features/player/lib/subtitle-language';
 import { PlayerView } from '@features/player/ui/PlayerView';
 import type { MediaDto } from '@miauflix/backend';
-import { Spinner } from '@shared/components';
+import { ErrorNotice } from '@shared/components';
 import { builtForTizen, glRowsEnabled, glTuningOverride } from '@shared/config/constants';
 import { getTvGlTextureBudget } from '@shared/config/tv-profile';
-import { GlFocusAnchor } from '@shared/design-system';
+import {
+  Button,
+  EmptyState,
+  GlFocusAnchor,
+  Message,
+  ProgressSpinner,
+  SurfaceContextProvider,
+} from '@shared/design-system';
 import { tileMetrics } from '@shared/design-system/collection-tile/collectionTile.metrics';
 import {
   easeRowSlide,
@@ -27,8 +34,7 @@ import {
 } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { getMediaTitle } from '@shared/lib/media.utils';
-import { FocusGroup, type InputKind, NavigationProvider } from '@shared/navigation';
-import { ErrorNotice } from '@shared/ui/error-notice/ErrorNotice';
+import { FocusGroup, FocusScope, type InputKind, NavigationProvider } from '@shared/navigation';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
@@ -484,7 +490,7 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
     return (
       <main className={styles.page}>
         <div className={styles.fullPageState}>
-          <Spinner text="Loading categories..." size={32} />
+          <ProgressSpinner size="lg" label="Loading categories…" showLabel />
         </div>
       </main>
     );
@@ -492,7 +498,11 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
   if (view === 'browse' && feed.failed) {
     return (
       <main className={styles.page}>
-        <div className={styles.fullPageState}>Failed to load categories.</div>
+        <div className={styles.fullPageState}>
+          <Message tone="danger" toneLabel="Error">
+            Failed to load categories.
+          </Message>
+        </div>
       </main>
     );
   }
@@ -579,21 +589,37 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
             preparationInputs={preparationInputs}
           />
         ) : view === 'details' ? (
-          <div className={styles.fullPageState} role="status">
+          <div className={styles.fullPageState}>
             {routeQuery.isError ? (
-              <div>
-                <p>
-                  <ErrorNotice error={routeQuery.error} fallback="Unable to load this title." />
-                </p>
-                <button type="button" onClick={() => void routeQuery.refetch()}>
-                  Retry
-                </button>
-                <button type="button" onClick={navigation.returnToBrowse}>
-                  Back to Home
-                </button>
-              </div>
+              <NavigationProvider>
+                <SurfaceContextProvider value="solid">
+                  <FocusScope autoFocus>
+                    <EmptyState
+                      heading="Unable to load this title"
+                      message={
+                        <Message tone="danger" toneLabel="Error" live="assertive">
+                          <ErrorNotice
+                            error={routeQuery.error}
+                            fallback="Unable to load this title."
+                          />
+                        </Message>
+                      }
+                      actions={
+                        <>
+                          <Button navId="title-retry" onClick={() => void routeQuery.refetch()}>
+                            Retry
+                          </Button>
+                          <Button navId="title-back" onClick={navigation.returnToBrowse}>
+                            Back to Home
+                          </Button>
+                        </>
+                      }
+                    />
+                  </FocusScope>
+                </SurfaceContextProvider>
+              </NavigationProvider>
             ) : (
-              <Spinner />
+              <ProgressSpinner size="lg" label="Loading the title…" />
             )}
           </div>
         ) : view === 'player' && playable ? (

@@ -1,32 +1,9 @@
 import type { UserDto } from '@miauflix/backend';
 import { memo } from 'react';
-import styled from 'styled-components';
 
+import * as styles from './avatar.css';
 import { PlushieLive } from './PlushieLive';
 import { useProfilePicture } from './useProfilePicture';
-
-const Frame = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-`;
-
-const Picture = styled.img`
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-`;
-
-/** Shown until (or instead of) a picture: a soft blob in the profile's colour. */
-const Placeholder = styled.div<{ $color: string }>`
-  position: absolute;
-  inset: 14% 18% 10%;
-  border-radius: 46% 46% 42% 42%;
-  background:
-    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.35), transparent 55%),
-    ${({ $color }) => $color};
-`;
 
 export interface ProfileAvatarProps {
   user: UserDto;
@@ -52,14 +29,21 @@ export const ProfileAvatar = memo(function ProfileAvatar({
   const { look, showLive, picture, onLiveError } = useProfilePicture(user, session, live);
 
   return (
-    <Frame className={className} data-avatar={showLive ? 'live' : picture ? 'picture' : 'color'}>
+    <div
+      className={className ? `${styles.frame} ${className}` : styles.frame}
+      data-avatar={showLive ? 'live' : picture ? 'picture' : 'color'}
+    >
       {showLive ? (
         <PlushieLive look={look} animated={animated} hopSignal={hopSignal} onError={onLiveError} />
       ) : picture ? (
-        <Picture src={picture} alt="" draggable={false} />
+        <img className={styles.picture} src={picture} alt="" draggable={false} />
       ) : (
-        <Placeholder $color={look.color} aria-hidden="true" />
+        <div
+          className={styles.placeholder}
+          style={{ backgroundColor: look.color }}
+          aria-hidden="true"
+        />
       )}
-    </Frame>
+    </div>
   );
 });

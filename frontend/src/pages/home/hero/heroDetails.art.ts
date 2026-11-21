@@ -1,4 +1,3 @@
-import { PALETTE } from '@shared/config/constants';
 import { hex, type Painter, type TextSpec } from '@shared/design-system/gl/art';
 import { color } from '@shared/design-system/tokens';
 
@@ -9,16 +8,17 @@ import { HERO_DETAILS, HERO_TYPE, heroTypeScale } from './heroType';
 const STATUS_LINE = 28.8;
 const BADGE = { padX: 9.28, height: 26.4, radius: 5.6 };
 const STAR_COLOR = '#f6b93b';
-const NEUTRAL = { border: PALETTE.background.border, fill: 'rgba(17, 23, 25, 0.86)' };
+const NEUTRAL = { border: '#253034', fill: 'rgba(17, 23, 25, 0.86)' };
+/** The old status badge's dim text (before the design system's Badge). */
+const TEXT_DIM = '#50585B';
 
-/** The status badge's text and colours (SourcePreparationStatus and QualityBadge). */
+/** The status badge's text and colours, as the hero has drawn them since before the Badge. */
 function statusLook(status: HeroStatus) {
-  if (status.kind === 'unavailable')
-    return { label: 'No source', color: PALETTE.text.disabled, ...NEUTRAL };
+  if (status.kind === 'unavailable') return { label: 'No source', color: TEXT_DIM, ...NEUTRAL };
   if (status.kind === 'checking')
     return {
       label: 'Checking…',
-      color: PALETTE.text.secondary,
+      color: color.textSecondary,
       border: 'rgba(0,0,0,0)',
       fill: 'rgba(0,0,0,0)',
     };
@@ -32,11 +32,11 @@ function statusLook(status: HeroStatus) {
   if (status.state === 'warning')
     return {
       label: status.label,
-      color: PALETTE.text.disabled,
+      color: TEXT_DIM,
       border: 'rgba(166, 173, 175, 0.32)',
       fill: 'rgba(46, 51, 53, 0.74)',
     };
-  return { label: status.label, color: PALETTE.text.secondary, ...NEUTRAL };
+  return { label: status.label, color: color.textSecondary, ...NEUTRAL };
 }
 
 export interface HeroDetailsArtOptions {
@@ -128,7 +128,7 @@ export function heroDetailsArt(
       const dot = () => {
         const size = metaSize * 0.28;
         x += metaSize * 0.55;
-        painter.rect(x, middle - size / 2, size, size, hex(PALETTE.text.secondary), {
+        painter.rect(x, middle - size / 2, size, size, hex(color.textSecondary), {
           radius: size / 2,
         });
         x += size + metaSize * 0.55;

@@ -11,14 +11,13 @@ import { useSubtitles } from '@features/player/hooks/useSubtitles';
 import { getAvplay, type PlayerMedia } from '@features/player/lib/avplay-media';
 import { mediaSubtitleKey } from '@features/player/lib/media-subtitles';
 import type { PlayableRef } from '@miauflix/backend';
-import { builtForTizen, PALETTE } from '@shared/config/constants';
+import { builtForTizen } from '@shared/config/constants';
 import { Button } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { selectCurrentUser } from '@store/slices/auth';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
 
 import {
   getNoSourceMessage,
@@ -28,71 +27,13 @@ import {
 } from '../lib/playback-copy';
 import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
 import { PlayerControls, PlayerHeader, PlayerPrompt } from './PlayerControls';
+import * as styles from './playerView.css';
 import { SubtitleCaption } from './SubtitleCaption';
 
 import BellIcon from '~icons/mdi/bell-ring-outline';
 
-const Page = styled.main`
-  position: absolute;
-  inset: 0;
-  z-index: 4;
-  display: grid;
-  place-items: center;
-  background: #000;
-  outline: none;
-`;
-
 /** How long a held picture waits for AVPlay to play before it goes anyway. */
 const PICTURE_HOLD_LIMIT_MS = 15_000;
-
-const Video = styled.video<{ $held?: boolean }>`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: #000;
-  ${({ $held }) =>
-    $held &&
-    `
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  `}
-`;
-
-const Message = styled.div`
-  display: grid;
-  gap: 16px;
-  width: min(90vw, 576px);
-  color: ${PALETTE.text.primary};
-  text-align: center;
-`;
-
-const Title = styled.h1`
-  margin: 0;
-  color: ${PALETTE.text.primary};
-  font-size: clamp(22.4px, 3vw, 35.2px);
-`;
-
-const VideoStatus = styled.p<{ $ready: boolean }>`
-  position: fixed;
-  right: 16px;
-  top: 80px;
-  left: 16px;
-  z-index: 1;
-  margin: 0 auto;
-  color: ${PALETTE.text.secondary};
-  text-align: center;
-  pointer-events: none;
-  ${({ $ready }) =>
-    $ready &&
-    `
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-  `}
-`;
 
 interface PlayerViewProps {
   playable: PlayableRef;
@@ -357,7 +298,7 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
   const selectedSubtitle = subtitles.selected;
 
   return (
-    <Page ref={pageRef} aria-label="Player">
+    <main ref={pageRef} className={styles.page} aria-label="Player">
       <FocusScope id={NAV.scope}>
         {!session && <PlayerHeader onBack={onBack} />}
         {session ? (
@@ -379,9 +320,10 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
               />
             )}
             {(!(avplay && playsInAvplay) || holdingPicture) && (
-              <Video
+              <video
                 ref={setVideoElement}
-                $held={holdingPicture}
+                className={styles.video}
+                data-held={holdingPicture || undefined}
                 src={audioDelivery || holdingPicture ? undefined : session.streamUrl}
                 // The TV app's backend is cross-origin, and subtitle tracks only load across origins with CORS
                 crossOrigin={builtForTizen ? 'anonymous' : undefined}
@@ -404,7 +346,7 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
                     default
                   />
                 )}
-              </Video>
+              </video>
             )}
             {!playsInAvplay && selectedSubtitle && subtitles.nativeCaption && (
               <SubtitleCaption
@@ -476,17 +418,22 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
               onSelectAudioTrack={audio.selectAudioTrack}
               onSeek={audioDelivery ? audio.seekConvertedAudio : undefined}
             />
-            <VideoStatus
-              $ready={status === 'ready' || pictureHeld}
+            <p
+              className={styles.videoStatus}
+              data-ready={status === 'ready' || pictureHeld || undefined}
               role="status"
               aria-live="polite"
             >
               {statusMessage}
-            </VideoStatus>
+            </p>
           </>
         ) : (
-          <Message role={error ? 'alert' : 'status'} aria-live={error ? 'assertive' : 'polite'}>
-            <Title>{title}</Title>
+          <div
+            className={styles.message}
+            role={error ? 'alert' : 'status'}
+            aria-live={error ? 'assertive' : 'polite'}
+          >
+            <h1 className={styles.title}>{title}</h1>
             {status === 'exhausted' ? (
               <>
                 <span>
@@ -516,9 +463,9 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
                 Retry
               </Button>
             )}
-          </Message>
+          </div>
         )}
       </FocusScope>
-    </Page>
+    </main>
   );
 }

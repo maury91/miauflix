@@ -3,7 +3,7 @@ import type { PlayableRef } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
-import type { SourceQuality, SourceReleaseType } from '@shared/ui/quality-badge/quality';
+import type { SourceQuality, SourceReleaseType } from '@shared/lib/source-quality';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 

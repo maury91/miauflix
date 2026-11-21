@@ -1,91 +1,27 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
-import { PALETTE } from '@shared/config/constants';
-import { Button as BaseButton } from '@shared/ui/button/Button';
-import { type RefObject, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { IconButton, Slider, Stack, Text } from '@shared/design-system';
+import { visuallyHidden } from '@shared/design-system/a11y.css';
+import { useOptionalNavigation } from '@shared/navigation';
+import { type RefObject, useEffect, useState } from 'react';
+
+import * as styles from './subtitleTiming.css';
 
 import ArrowRightIcon from '~icons/mdi/arrow-right';
+import MinusIcon from '~icons/mdi/minus';
+import PlusIcon from '~icons/mdi/plus';
+
+/** Navigation IDs inside the timing view. */
+const SUBTITLE_TIMING_NAV = {
+  earlier: 'subtitle-timing-earlier',
+  offset: 'subtitle-timing-offset',
+  later: 'subtitle-timing-later',
+} as const;
 
 export interface SubtitleTimingCue {
   start: number;
   end: number;
   text: string;
 }
-
-const Preview = styled.div`
-  position: relative;
-  height: 256px;
-  overflow: hidden;
-  border-radius: 5.6px;
-  background: ${PALETTE.background.surface1};
-`;
-const Now = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 8px;
-  right: 8px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transform: translateY(-50%);
-  color: ${PALETTE.color.brand};
-  font-size: 12.8px;
-  pointer-events: none;
-  svg {
-    width: 22.4px;
-    height: 22.4px;
-  }
-  &::after {
-    content: '';
-    flex: 1;
-    border-top: 1px solid ${PALETTE.background.border};
-  }
-`;
-const Line = styled.div<{ $distance: number; $active: boolean }>`
-  position: absolute;
-  top: 50%;
-  left: 64px;
-  right: 8px;
-  transform: translateY(calc(-50% + ${({ $distance }) => $distance}rem));
-  transition: transform 0.1s linear;
-  color: ${({ $active }) => ($active ? PALETTE.text.primary : PALETTE.text.secondary)};
-  font-weight: ${({ $active }) => ($active ? 600 : 400)};
-  font-size: 14.4px;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  white-space: pre-line;
-  background: ${PALETTE.background.surface1};
-`;
-const Adjustment = styled.div`
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 8px;
-  input {
-    width: 100%;
-    min-width: 0;
-    accent-color: ${PALETTE.color.brand};
-  }
-`;
-const Range = styled.div`
-  display: flex;
-  justify-content: space-between;
-  color: ${PALETTE.text.secondary};
-  font-size: 12.8px;
-`;
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player timing interaction; see shared/ui/README.md.
-const StepButton = styled(BaseButton)`
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-  background: ${PALETTE.background.input};
-  color: ${PALETTE.text.primary};
-  font-size: 24px;
-  box-shadow: none;
-`;
 
 function seconds(value: number) {
   return `${value > 0 ? '+' : ''}${Number(value.toFixed(2))}s`;
@@ -135,24 +71,29 @@ function timingLines(cues: SubtitleTimingCue[], now: number, offset: number) {
   return lines;
 }
 
+/**
+ * Moves the subtitles against the picture: a preview of the cues around now, a slider (Left/Right
+ * by half a second, held by a second) and ±5 s buttons that also widen its range. It takes the
+ * focus on the slider when it opens.
+ */
 export function SubtitleTiming({
   cues,
   videoRef,
   pendingPosition,
   offset,
   onOffsetChange,
-  onConfirm,
 }: {
   cues: SubtitleTimingCue[];
   videoRef?: RefObject<PlayerMedia | null>;
   pendingPosition?: number;
   offset: number;
   onOffsetChange: (offset: number) => void;
-  onConfirm?: () => void;
 }) {
-  const adjustment = useRef<HTMLInputElement>(null);
+  const navigation = useOptionalNavigation();
   useEffect(() => {
-    adjustment.current?.focus();
+    navigation?.focus(SUBTITLE_TIMING_NAV.offset);
+    // Once, on opening; the store's methods are stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [now, setNow] = useState(() => pendingPosition ?? videoRef?.current?.currentTime ?? 0);
   const [bounds, setBounds] = useState(() => ({
@@ -173,62 +114,65 @@ export function SubtitleTiming({
   };
   return (
     <section aria-label="Subtitle synchronization">
-      <Preview role="group" aria-label="Subtitle timing preview">
-        <Now aria-label="Now">
-          <span>Now</span>
-          <ArrowRightIcon aria-hidden="true" />
-        </Now>
-        {timingLines(cues, now, offset).map(({ cue, index, active, displacement }) => (
-          <Line key={index} $distance={displacement} $active={active} data-current={active}>
-            {cue.text}
-          </Line>
-        ))}
-        {!cues.length && (
-          <Line $distance={0} $active={false}>
-            No subtitle cues near this position.
-          </Line>
-        )}
-      </Preview>
-      <p id="subtitle-offset-label">Timing adjustment: {seconds(offset)}</p>
-      <Adjustment>
-        <StepButton
-          type="button"
-          aria-label="Subtitles 5 seconds earlier"
-          onClick={() => shift(-5)}
-        >
-          −
-        </StepButton>
-        <input
-          ref={adjustment}
-          onKeyDown={event => {
-            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-              event.preventDefault();
-              event.stopPropagation();
-              shift((event.key === 'ArrowLeft' ? -1 : 1) * (event.repeat ? 1 : 0.5));
-            } else if (event.key === 'Enter') {
-              event.preventDefault();
-              onConfirm?.();
-            } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-              event.preventDefault();
-            }
-          }}
-          type="range"
-          min={min}
-          max={max}
-          step={0.25}
-          value={offset}
-          aria-label="Subtitle timing adjustment"
-          aria-valuetext={`${offset > 0 ? 'later' : offset < 0 ? 'earlier' : 'no adjustment'}, ${Math.abs(offset).toFixed(2)} seconds`}
-          onChange={event => onOffsetChange(Number(event.target.value))}
-        />
-        <StepButton type="button" aria-label="Subtitles 5 seconds later" onClick={() => shift(5)}>
-          +
-        </StepButton>
-      </Adjustment>
-      <Range aria-label="Timing adjustment range">
-        <span>{seconds(min)}</span>
-        <span>{seconds(max)}</span>
-      </Range>
+      <Stack gap="sm">
+        <div className={styles.preview} role="group" aria-label="Subtitle timing preview">
+          <div className={styles.now} aria-label="Now">
+            <span>Now</span>
+            <ArrowRightIcon className={styles.nowIcon} aria-hidden="true" />
+          </div>
+          {timingLines(cues, now, offset).map(({ cue, index, active, displacement }) => (
+            <div
+              key={index}
+              className={styles.line}
+              style={{ transform: `translateY(calc(-50% + ${displacement}rem))` }}
+              data-current={active}
+            >
+              {cue.text}
+            </div>
+          ))}
+          {!cues.length && (
+            <div className={styles.line} style={{ transform: 'translateY(-50%)' }}>
+              No subtitle cues near this position.
+            </div>
+          )}
+        </div>
+        <Text id="subtitle-offset-label">Timing adjustment: {seconds(offset)}</Text>
+        <div className={styles.adjustment}>
+          <IconButton
+            navId={SUBTITLE_TIMING_NAV.earlier}
+            label="Subtitles 5 seconds earlier"
+            icon={<MinusIcon />}
+            onClick={() => shift(-5)}
+          />
+          <div className={styles.slider}>
+            <span id="subtitle-offset-name" className={visuallyHidden}>
+              Subtitle timing adjustment
+            </span>
+            <Slider
+              navId={SUBTITLE_TIMING_NAV.offset}
+              id="subtitle-offset"
+              aria-labelledby="subtitle-offset-name"
+              min={min}
+              max={max}
+              step={0.25}
+              keyStep={0.5}
+              value={offset}
+              valueText={`${offset > 0 ? 'later' : offset < 0 ? 'earlier' : 'no adjustment'}, ${Math.abs(offset).toFixed(2)} seconds`}
+              onChange={onOffsetChange}
+            />
+          </div>
+          <IconButton
+            navId={SUBTITLE_TIMING_NAV.later}
+            label="Subtitles 5 seconds later"
+            icon={<PlusIcon />}
+            onClick={() => shift(5)}
+          />
+        </div>
+        <div className={styles.range} aria-label="Timing adjustment range">
+          <span>{seconds(min)}</span>
+          <span>{seconds(max)}</span>
+        </div>
+      </Stack>
     </section>
   );
 }

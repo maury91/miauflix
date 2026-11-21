@@ -1,6 +1,6 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
 import type { PlayableRef } from '@miauflix/backend';
-import { qualityLabel, sourceLabel } from '@shared/ui/quality-badge/quality';
+import { qualityLabel, sourceLabel } from '@shared/lib/source-quality';
 
 export interface NotificationCopy {
   heading: string;

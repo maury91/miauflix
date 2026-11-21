@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A passive, compact label: never a focus target, never an action, never brand red. Labels are uppercase caption text (the only uppercase in the library) on an opaque dark fill, so they read the same on the canvas and over artwork; a feedback tone colours only the border and text. Counts are pills, light on dark surfaces and dark on a focused action. `accessibleLabel` replaces abbreviations and counts for assistive technology.',
+          'A passive, compact label: never a focus target, never an action, never brand red. Labels are uppercase caption text (the only uppercase in the library) on an opaque dark fill, so they read the same on the canvas and over artwork; a feedback tone colours only the border and text, and premium (the quality of a clean release) is gold on a gold fill. Counts are pills, light on dark surfaces and dark on a focused action. `accessibleLabel` replaces abbreviations and counts for assistive technology.',
       },
     },
   },
@@ -35,6 +35,11 @@ function Matrix() {
         <div style={row}>
           <span style={gap}>
             <Badge>1080p</Badge>
+          </span>
+          <span style={gap}>
+            <Badge tone="premium" icon={<SparklesIcon />}>
+              1080p
+            </Badge>
           </span>
           <span style={gap}>
             <Badge tone="info">New</Badge>

@@ -1,15 +1,8 @@
 import type { AppState } from '@app/hooks/useAppState';
 import { MotionConfig } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import styled from 'styled-components';
 
-import {
-  CORNER_LOGO_HEIGHT,
-  CORNER_LOGO_TOP,
-  INTRO_LOGO_HEIGHT_NARROW_PX,
-  INTRO_LOGO_HEIGHT_PX,
-  NARROW_MAX_WIDTH_PX,
-} from './logoGeometry';
+import * as styles from './logo.css';
 
 const logoSvgUrl = `${import.meta.env.BASE_URL}assets/images/logo.svg`;
 
@@ -53,85 +46,6 @@ const PULSE_SETTLE_MS = 150;
 const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/** Admin creation (`initial_setup`) uses a smaller mark */
-const setupScale = 1;
-
-const LogoImage = styled.img<{
-  $setup: boolean;
-  $configuration: boolean;
-  $home: boolean;
-  $intro: boolean;
-  $disableMotion: boolean;
-  $visible: boolean;
-  $aboveIntro: boolean;
-}>`
-  display: block;
-  position: fixed;
-  z-index: ${({ $aboveIntro }) => ($aboveIntro ? 1003 : 1002)};
-  pointer-events: none;
-  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
-  transition: ${({ $disableMotion }) => ($disableMotion ? 'none' : 'all 0.4s ease-in-out')};
-
-  transform: ${({ $home, $intro }) =>
-    $home ? 'none' : $intro ? 'translate(-50%, -50%)' : 'translate(-50%, 0%)'};
-  left: ${({ $home }) => ($home ? 'var(--home-content-left, 5vw)' : '50%')};
-
-  body[data-miauflix-details='true'] & {
-    left: 8vw;
-  }
-
-  body[data-miauflix-player='true'] & {
-    display: none;
-  }
-
-  /* Desktop */
-  top: ${({ $home, $configuration, $intro }) =>
-    $home ? CORNER_LOGO_TOP : $intro ? '50%' : $configuration ? '24px' : 'calc(50% - 380px)'};
-  height: ${({ $setup, $configuration }) =>
-    $configuration ? '56px' : $setup ? `${130 * setupScale}px` : '130px'};
-
-  ${({ $intro }) => $intro && `height: ${INTRO_LOGO_HEIGHT_PX}px;`}
-
-  ${({ $home }) =>
-    $home &&
-    `
-      width: 14.5vh;
-      height: ${CORNER_LOGO_HEIGHT};
-    `}
-
-  /* Mobile */
-  @media (max-width: ${NARROW_MAX_WIDTH_PX}px) {
-    top: ${({ $home, $configuration, $intro }) =>
-      $home ? CORNER_LOGO_TOP : $intro ? '50%' : $configuration ? '16px' : '50px'};
-    height: ${({ $home, $setup, $configuration, $intro }) =>
-      $home
-        ? CORNER_LOGO_HEIGHT
-        : $intro
-          ? `${INTRO_LOGO_HEIGHT_NARROW_PX}px`
-          : $configuration
-            ? '48px'
-            : $setup
-              ? `${70 * setupScale}px`
-              : '70px'};
-
-    body[data-miauflix-details='true'] & {
-      left: 30vw;
-    }
-  }
-`;
-
-const ConfigurationHeaderBackdrop = styled.div`
-  position: fixed;
-  inset: 0 0 auto;
-  height: 104px;
-  background-color: #0a0d0f;
-  z-index: 1001;
-
-  @media (max-width: ${NARROW_MAX_WIDTH_PX}px) {
-    height: 80px;
-  }
-`;
 
 export const Logo = ({
   page,
@@ -200,23 +114,26 @@ export const Logo = ({
     };
   }, [isPulsing]);
 
-  const isSetup = page === 'initial_setup';
   const isConfiguration = page === 'config' || page === 'config_wizard';
-  const isHome = page === 'home';
   const isIntro = page === 'intro';
+  const position = isIntro
+    ? 'intro'
+    : isConfiguration
+      ? 'configuration'
+      : page === 'home'
+        ? 'home'
+        : 'page';
 
   return (
     <MotionConfig transition={{ duration: 0.4 }}>
-      {isConfiguration && <ConfigurationHeaderBackdrop aria-hidden="true" />}
-      <LogoImage
+      {isConfiguration && <div className={styles.configurationBackdrop} aria-hidden="true" />}
+      <img
         ref={imageRef}
-        $setup={isSetup}
-        $configuration={isConfiguration}
-        $home={isHome}
-        $intro={isIntro}
-        $disableMotion={disableMotion}
-        $visible={visible}
-        $aboveIntro={aboveIntro}
+        className={styles.image}
+        data-position={position}
+        data-static={disableMotion || undefined}
+        data-hidden={!visible || undefined}
+        data-above-intro={aboveIntro || undefined}
         data-pulsing={isIntro && pulsing ? 'true' : undefined}
         src={logoSvgUrl}
         alt="Miauflix logo"

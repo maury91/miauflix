@@ -1,0 +1,47 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design System/Start Here" />
+
+# Miauflix design system
+
+The app's one UI library, in `frontend/src/shared/design-system`. The full specification is
+`docs/plans/style-guide.md`; the stories here are its living reference.
+
+```tsx
+import { Button, FormSection, Message, TextField } from '@shared/design-system';
+import { FocusScope, NavigationProvider } from '@shared/navigation';
+```
+
+## Rules
+
+- **Focus is virtual.** A screen has one `NavigationProvider`; components register with a `navId`
+  and show focus as `data-focused`. DOM focus follows only for text editing and assistive
+  technology. Group moves with `FocusGroup` and pages or overlays with `FocusScope`.
+- **Actions take their look from the surface and state only.** No tones or emphasis levels: a
+  group's main action is its first. Focus is the white fill; brand red is only the logo, progress
+  and the seek bar.
+- **Styles are build-time classes** (vanilla-extract `*.css.ts`), states are `data-` attributes,
+  and per-instance values are inline styles. There is no runtime CSS-in-JS: ESLint rejects
+  `styled-components`.
+- **Features own their data.** Components take copy, values and callbacks; no API hooks, Redux or
+  routing inside the library.
+
+## Choosing a component
+
+| Need                                       | Use                                                        |
+| ------------------------------------------ | ---------------------------------------------------------- |
+| An action                                  | `Button`, or `IconButton` when it has no visible label     |
+| Text, passwords, numbers, search           | `TextField`, `PasswordField`, `NumberField`, `SearchField` |
+| One choice among a few / many              | `RadioGroup` / `Select`                                    |
+| A setting that applies at once             | `Switch` (in a `SettingRow`)                               |
+| A form                                     | `FormSection`                                              |
+| A result, a failure or a notice            | `Message`                                                  |
+| Nothing to show                            | `EmptyState`                                               |
+| Loading                                    | `ProgressSpinner` or `ProgressBar`                         |
+| Rows / tiles                               | `List` + `ListItem` / `CollectionTile`, `MediaTile`        |
+| A panel beside its trigger / over the page | `Popover` / `Dialog`                                       |
+| A short passive label                      | `Badge`                                                    |
+
+Before adding a component or a variant, check the stories here: a repeated control has one
+implementation, and a new visual treatment is added to the library with a story, not styled in a
+feature.

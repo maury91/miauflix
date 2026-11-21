@@ -1,3 +1,5 @@
+import { LogoBackdrop } from '@shared/brand/logo/LogoBackdrop';
+import { useRailContentLeft } from '@shared/brand/logo/useRailContentLeft';
 import {
   Container,
   Heading,
@@ -10,8 +12,6 @@ import {
 } from '@shared/design-system';
 import { usePageBack } from '@shared/hooks/usePageBack';
 import { FocusGroup, FocusScope, NavigationProvider } from '@shared/navigation';
-import { LogoBackdrop } from '@shared/ui/logo/LogoBackdrop';
-import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
 import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 

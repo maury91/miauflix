@@ -18,31 +18,38 @@ test('selects subtitles and shifts cues with remote keys only', async ({ page })
   await page.keyboard.press('ArrowDown');
   const cc = page.getByRole('button', { name: 'Subtitles', exact: true });
   await expect(cc).toBeFocused();
+
+  // OK opens the subtitle settings popover, entered at the language (virtual focus: the
+  // design-system Select opens its native list only on OK).
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('button', { name: 'Subtitle language' })).toBeFocused();
-  await page.keyboard.press('ArrowRight');
-  await expect(page.getByRole('button', { name: 'Subtitle language' })).toContainText('Lithuanian');
-  await page.keyboard.press('ArrowLeft');
-  await expect(page.getByRole('button', { name: 'Subtitle language' })).toContainText('English');
+  const settings = page.getByRole('dialog', { name: 'Subtitle settings' });
+  await expect(settings).toBeVisible();
+  const language = settings.getByRole('combobox', { name: 'Subtitle language' });
+  await expect(language).toHaveValue('en');
+  await expect(language.locator('xpath=..')).toHaveAttribute('data-focused', 'true');
+
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('button', { name: 'Hearing impaired: Off' })).toBeFocused();
+  await expect(settings.getByRole('switch', { name: 'Hearing impaired' })).toBeFocused();
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('button', { name: 'Find subtitles' })).toBeFocused();
+  await expect(settings.getByRole('button', { name: 'Find subtitles' })).toBeFocused();
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('button', { name: 'Off', exact: true })).toBeFocused();
+  await expect(settings.getByRole('radio', { name: 'Off', exact: true })).toBeFocused();
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('button', { name: 'English · Torrent file' })).toBeFocused();
+  const english = settings.getByRole('radio', { name: 'English · Torrent file' });
+  await expect(english).toBeFocused();
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('button', { name: 'English · Torrent file' })).toHaveAttribute(
-    'aria-pressed',
-    'true'
-  );
+  await expect(english).toBeChecked();
+
+  // The timing entry appears once a track is chosen.
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('button', { name: /Adjust subtitle timing/ })).toBeFocused();
+  const timing = settings.getByRole('button', { name: /Adjust subtitle timing/ });
+  await expect(timing).toBeFocused();
   await page.keyboard.press('Enter');
+  await expect(page.getByRole('dialog', { name: 'Subtitle timing' })).toBeVisible();
   const adjustment = page.getByRole('slider', { name: 'Subtitle timing adjustment' });
   await expect(adjustment).toBeFocused();
   await expect(page.getByText('First subtitle')).toBeVisible();
+  // Each key moves the cues by half a second.
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowRight');
   await expect(adjustment).toHaveValue('1');
@@ -53,15 +60,15 @@ test('selects subtitles and shifts cues with remote keys only', async ({ page })
         .evaluate(video => (video as HTMLVideoElement).textTracks[0].cues?.[0].startTime)
     )
     .toBe(1);
-  await page.keyboard.press('Enter');
-  await expect(page.getByRole('button', { name: /Adjust subtitle timing/ })).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(adjustment).toBeFocused();
+
+  // Back leaves timing for the settings, on the timing entry, then closes the popover on CC.
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: /Adjust subtitle timing/ })).toBeFocused();
+  await expect(settings).toBeVisible();
+  await expect(timing).toBeFocused();
+  await expect(timing).toContainText('1');
   await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(cc).toBeFocused();
-  await expect(page.getByRole('group', { name: 'Subtitle settings', exact: true })).toHaveCount(0);
   await page.keyboard.press('ArrowUp');
   await expect(play).toBeFocused();
   await page.keyboard.press('ArrowUp');

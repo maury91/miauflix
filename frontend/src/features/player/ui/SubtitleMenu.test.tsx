@@ -48,14 +48,14 @@ describe('subtitle language grouping', () => {
     expect(tracks.textContent!.indexOf('local')).toBeLessThan(
       tracks.textContent!.indexOf('online')
     );
-    expect(screen.queryByRole('button', { name: /Italian · Torrent/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole('radio', { name: /Italian · Torrent/ })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Other languages (1)' }));
-    expect(screen.getByRole('button', { name: /Italian · Torrent/ })).toBeVisible();
+    expect(screen.getByRole('radio', { name: /Italian · Torrent/ })).toBeVisible();
   });
 });
 
 describe('subtitle search', () => {
-  it('keeps the focus on Find subtitles while it searches', () => {
+  it('keeps Find subtitles, busy, while it searches', () => {
     const onSearch = vi.fn();
     const menu = (loading: boolean) => (
       <SubtitleMenu
@@ -75,17 +75,15 @@ describe('subtitle search', () => {
     const { rerender } = render(menu(false));
     fireEvent.click(screen.getByRole('button', { name: 'Subtitles', exact: true }));
     const search = screen.getByRole('button', { name: 'Find subtitles' });
-    search.focus();
     fireEvent.click(search);
     expect(onSearch).toHaveBeenCalledTimes(1);
 
     rerender(menu(true));
     const searching = screen.getByRole('button', { name: 'Searching…' });
-    // A disabled button would drop the focus to the page, where the remote reaches nothing
+    // Busy, not disabled: it keeps the focus, and a second press is ignored
     expect(searching).toBe(search);
     expect(searching).toBeEnabled();
-    expect(searching).toHaveAttribute('aria-disabled', 'true');
-    expect(searching).toHaveFocus();
+    expect(searching).toHaveAttribute('aria-busy', 'true');
     fireEvent.click(searching);
     expect(onSearch).toHaveBeenCalledTimes(1);
   });
