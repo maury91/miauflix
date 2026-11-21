@@ -1,0 +1,37 @@
+import type { search as english } from '../en/search';
+import type { Translation } from '../types';
+
+export const search: Translation<typeof english> = {
+  'search.key.space': 'Tarpas',
+  'search.key.delete': 'Ištrinti',
+  'search.key.clear': 'Išvalyti',
+  'search.search': 'Ieškoti',
+  'search.popularIn': 'Populiariausi žanre „{genre}“',
+  'search.resultsFor': 'Paieškos „{query}“ rezultatai',
+  'search.keyboard': 'Ekrano klaviatūra',
+  'search.placeholder': 'Ieškokite filmų, serialų ir anime',
+  'search.detail.error': 'Klaida',
+  'search.detail.serverError': 'Serverio klaida',
+  'search.detail.code': 'Kodas',
+  'search.detail.errorId': 'Klaidos ID',
+  'search.nothingPopular': 'Žanre „{genre}“ kol kas nėra populiarių kūrinių',
+  'search.noResults': 'Pagal „{query}“ nieko nerasta',
+  'search.clearSearch': 'Išvalyti paiešką',
+  'search.tryGenre': 'Išbandykite kitą žanrą.',
+  'search.tryShorter': 'Įveskite trumpesnį pavadinimą arba patikrinkite rašybą.',
+  'search.needsSetup': 'Pirmiausia sukonfigūruokite paiešką',
+  'search.unavailable': 'Paieška laikinai nepasiekiama',
+  'search.tryLater': 'Netrukus pabandykite dar kartą.',
+  'search.technicalDetails': 'Techninė informacija',
+  'search.partFailed': 'Nepavyko įkelti dalies rezultatų. Netrukus pabandykite dar kartą.',
+  'search.searching': 'Ieškoma…',
+  'search.resultCount': {
+    one: '{count} rezultatas',
+    few: '{count} rezultatai',
+    many: '{count} rezultato',
+    other: '{count} rezultatų',
+  },
+  'search.popular': 'Populiarios paieškos',
+  'search.recent': 'Naujausios paieškos',
+  'search.remove': 'Pašalinti „{label}“',
+};

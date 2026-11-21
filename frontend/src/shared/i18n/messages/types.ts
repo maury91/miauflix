@@ -1,8 +1,6 @@
-/** A message whose wording depends on `count`: `one` for a single item, `other` otherwise. */
-export interface PluralMessage {
-  one: string;
-  other: string;
-}
+/** A message whose wording depends on the locale's plural category for `count`. */
+export type PluralMessage = Record<'one' | 'other', string> &
+  Partial<Record<Intl.LDMLPluralRule, string>>;
 
 /** One area's English messages; keys are `<area>.<name>`, `{name}` marks a placeholder. */
 export type MessageSection = Record<string, string | PluralMessage>;
