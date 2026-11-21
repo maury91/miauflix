@@ -1,6 +1,8 @@
 # CSS architecture: styles compiled once, values inline
 
-Status: proposal, piloted on `shared/ui/media-card/MediaCard` (see [Pilot](#pilot-mediacard)).
+Status: done (2026-11-21). Every component uses vanilla-extract; styled-components and stylis are
+uninstalled and ESLint rejects them across `frontend/`. The sections below on why and how remain
+the rules; the migration order is kept as a record.
 
 The frontend styles with styled-components, which generates CSS in the browser as components
 render. On the Samsung TV build (Tizen 5.5, Chromium 69, software rasterization) that is the
@@ -43,7 +45,7 @@ property.
 
 1. **No values computed in style definitions.** A style is a constant: no prop interpolation
    (`${({ $x }) => …}`), no `css` helper chosen by props, no class generated per value. Migrated
-   code has no `styled-components` import at all; ESLint enforces it per migrated folder (see
+   code has no `styled-components` import at all; ESLint rejects it across `frontend/` (see
    `eslint.config.mjs`).
 2. **Discrete variants are attributes.** A finite set of states maps to one static rule each,
    selected by an attribute. In order of preference:
@@ -128,10 +130,8 @@ the hash alone in builds.
 
 ### During the migration
 
-Both systems run side by side. The extracted stylesheet is a `<link>` in `<head>`, and
-styled-components appends its `<style>` after it, so on equal specificity styled-components wins.
-That doesn't matter as long as rule 1 of the principles holds: nothing restyles a base component
-from outside.
+Both systems ran side by side until 2026-11-21, when styled-components was removed: the
+extracted stylesheet is now the only one.
 
 ## The Tizen build
 
@@ -143,8 +143,8 @@ extracted CSS the Tizen build sets (in `vite.config.ts`):
   (the `tizen-html` plugin already drops `crossorigin`), and parsed before the script runs.
 - `cssTarget: 'chrome69'`: the CSS minifier otherwise targets what `es2019` implies and folds
   `top`/`right`/`bottom`/`left` back into `inset`, which Chromium 69 can't parse.
-- `css.postcss.plugins: [legacyChromiumPostcss()]`: the build-time counterpart of the stylis
-  plugin `legacy-chromium.ts`. Both share the declaration rewrites in `legacy-css.ts`:
+- `css.postcss.plugins: [legacyChromiumPostcss()]`, with the declaration rewrites in
+  `legacy-css.ts`:
   - `:focus-visible` becomes `:focus`
   - `inset` and the logical shorthands become physical sides
   - `dvh`/`svh`/`lvh` (and the `w` units) become `vh`/`vw`
@@ -267,7 +267,7 @@ the stories, unit tests and visual snapshots passing, and add a CHANGELOG line.
    3. `features/integrations/ui/TraktModal/` (`TraktModal.tsx`, `TraktModal.styles.ts`,
       `TraktLanding.tsx`, `TraktAuthorization.tsx`)
    4. `shared/components/ErrorBoundary/ErrorBoundary.tsx`
-8. **Remove the runtime**
+8. ~~**Remove the runtime**~~ (done 2026-11-21)
    1. In `app/bootstrap/client.tsx` and `server.tsx`, remove `StyleSheetManager` and the
       `ServerStyleSheet` collection, and stop the `ssr-inject` plugin injecting a style head.
    2. Remove the styled-components `ThemeProvider` from `__test-utils__/render.tsx`.

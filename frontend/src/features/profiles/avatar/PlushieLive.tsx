@@ -1,21 +1,9 @@
 import type { PlushieViewer } from 'plushies/viewer';
 import { memo, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 
+import * as styles from './avatar.css';
 import type { PlushieLook } from './look';
 import { loadPlushies } from './runtime';
-
-const Stage = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  canvas {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
-  }
-`;
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -121,5 +109,12 @@ export const PlushieLive = memo(function PlushieLive({
     void viewRef.current?.hop();
   }, [hopSignal]);
 
-  return <Stage ref={stageRef} className={className} aria-hidden="true" data-plushie="" />;
+  return (
+    <div
+      ref={stageRef}
+      className={className ? `${styles.stage} ${className}` : styles.stage}
+      aria-hidden="true"
+      data-plushie=""
+    />
+  );
 });

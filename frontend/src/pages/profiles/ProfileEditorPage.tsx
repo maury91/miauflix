@@ -14,6 +14,8 @@ import {
   ShapePicker,
 } from '@features/profiles/ui/LookControls';
 import * as lookStyles from '@features/profiles/ui/lookControls.css';
+import { LogoBackdrop } from '@shared/brand/logo/LogoBackdrop';
+import { useRailContentLeft } from '@shared/brand/logo/useRailContentLeft';
 import {
   Button,
   Disclosure,
@@ -32,8 +34,6 @@ import {
 import { TIZEN_IME_DONE } from '@shared/hooks/useKeyboard';
 import { usePageBack } from '@shared/hooks/usePageBack';
 import { FocusGroup, FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
-import { LogoBackdrop } from '@shared/ui/logo/LogoBackdrop';
-import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
 import { useAppSelector } from '@store/hooks';
 import { selectAdminSession, type SessionInfo } from '@store/slices/auth';
 import { motion } from 'framer-motion';

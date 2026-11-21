@@ -46,7 +46,7 @@ The optional VPN Compose file routes source search (`miauflix-sources`), the tor
 scripts/nordvpn-key.sh
 ```
 
-Source search and the torrent engine each run their own VPN check (currently NordVPN only): without a VPN, source search refuses to search and the torrent engine disconnects from peers and trackers, because they would see your real IP. Files already downloaded still play. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env` (the default of both checks; `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK` set one service), but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
+Source search and the torrent engine each run their own VPN check (NordVPN, or any VPN behind gluetun, which is detected automatically): without a VPN, source search refuses to search and the torrent engine disconnects from peers and trackers, because they would see your real IP. Files already downloaded still play. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env` (the default of both checks; `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK` set one service), but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
 
 #### 3. [Optional] Set up HTTPS and domain name
 

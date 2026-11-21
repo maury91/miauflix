@@ -1,2 +1,2 @@
 export { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
-export { Spinner } from './Spinner/Spinner';
+export { ErrorNotice, type ErrorNoticeProps } from './ErrorNotice/ErrorNotice';

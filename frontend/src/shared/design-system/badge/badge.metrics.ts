@@ -17,11 +17,27 @@ export const badgeLabel = {
   textColor: color.text,
 } as const;
 
-export type BadgeTone = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
+/**
+ * Premium: gold on a dark gold fill, for a clean release's quality. The colours of the old quality
+ * badge, made opaque over the canvas so it reads the same over artwork.
+ */
+export const badgePremium = {
+  fill: '#261F0C',
+  borderColor: '#AD8B22',
+  textColor: '#FFE17A',
+} as const;
 
-/** A tone's border and text colour. */
+export type BadgeTone = 'neutral' | 'premium' | 'info' | 'success' | 'warning' | 'danger';
+
+/** A tone's border, text and fill colour. */
 export function badgeToneColor(tone: BadgeTone) {
-  return tone === 'neutral'
-    ? { border: badgeLabel.borderColor, text: badgeLabel.textColor }
-    : { border: color[tone], text: color[tone] };
+  if (tone === 'neutral')
+    return { border: badgeLabel.borderColor, text: badgeLabel.textColor, fill: badgeLabel.fill };
+  if (tone === 'premium')
+    return {
+      border: badgePremium.borderColor,
+      text: badgePremium.textColor,
+      fill: badgePremium.fill,
+    };
+  return { border: color[tone], text: color[tone], fill: badgeLabel.fill };
 }

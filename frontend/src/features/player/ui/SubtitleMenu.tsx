@@ -1,14 +1,42 @@
 import { audioLanguage } from '@features/player/lib/audio-language';
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import type { CreatePlaybackSessionResponse, SubtitleCandidateDto } from '@miauflix/backend';
-import { PALETTE } from '@shared/config/constants';
-import { Button as TriggerButton } from '@shared/design-system';
-import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { Button as BaseButton } from '@shared/ui/button/Button';
+import {
+  ActionGroup,
+  Button,
+  Disclosure,
+  Popover,
+  RadioGroup,
+  type RadioOption,
+  ScrollArea,
+  Select,
+  Stack,
+  Switch,
+  Text,
+} from '@shared/design-system';
+import { useOptionalNavigation } from '@shared/navigation';
 import { type RefObject, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 
+import * as styles from './subtitleMenu.css';
 import { SubtitleTiming, type SubtitleTimingCue } from './SubtitleTiming';
+
+import ArrowLeftIcon from '~icons/mdi/arrow-left';
+
+/** Navigation IDs inside the panel. */
+const NAV = {
+  audio: 'subtitle-audio',
+  language: 'subtitle-language',
+  hearingImpaired: 'subtitle-hearing-impaired',
+  search: 'subtitle-search',
+  tracks: 'subtitle-tracks',
+  others: 'subtitle-other-languages',
+  otherTracks: 'subtitle-other-tracks',
+  timing: 'subtitle-timing',
+  timingBack: 'subtitle-timing-back',
+} as const;
+
+/** The "no subtitles" choice among the tracks (candidate IDs are never this). */
+const OFF = '__off__';
 
 const languages = [
   ['en', 'English'],
@@ -64,109 +92,6 @@ function savePreferences(key: string | null, preferences: Preferences): void {
   }
 }
 
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player controls; see shared/ui/README.md.
-const Button = styled(BaseButton)`
-  min-width: 44px;
-  min-height: 44px;
-  padding: 7.2px 11.2px;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font-size: 16px;
-  box-shadow: none;
-`;
-
-const Panel = styled.div`
-  position: absolute;
-  right: 5vw;
-  bottom: calc(100% + 8px);
-  z-index: 3;
-  display: grid;
-  gap: 11.2px;
-  box-sizing: border-box;
-  width: min(512px, 90vw);
-  min-width: 0;
-  max-height: min(70vh, 672px);
-  overflow: auto;
-  color-scheme: dark;
-  padding: 16px;
-  border: 1px solid ${PALETTE.background.border};
-  border-radius: 16px;
-  background: ${PALETTE.background.surface2};
-  color: ${PALETTE.text.primary};
-  box-shadow: 0 8px 32px #0009;
-  scrollbar-width: thin;
-  overscroll-behavior: contain;
-  button {
-    width: 100%;
-    justify-content: flex-start;
-    text-align: left;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    line-height: 1.5;
-    border-radius: 8px;
-    font-weight: 500;
-  }
-  button:hover {
-    background: #ffffff12;
-  }
-  button[aria-pressed='true'] {
-    background: #ffffff18;
-    box-shadow: inset 3px 0 ${PALETTE.color.brand};
-  }
-  button:focus-visible {
-    outline: 2px solid ${PALETTE.color.brand};
-    outline-offset: -2px;
-  }
-  small {
-    display: block;
-    width: 100%;
-    font-size: 12px;
-    font-weight: 400;
-  }
-  h3 {
-    margin: 9.6px 0 5.6px;
-    padding: 0 11.2px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    opacity: 0.65;
-  }
-  label {
-    display: grid;
-    min-width: 0;
-    gap: 5.6px;
-  }
-  select,
-  input[type='number'] {
-    box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
-    min-height: 40px;
-    padding: 6.4px 9.6px;
-    border: 1px solid ${PALETTE.background.border};
-    border-radius: 4px;
-    background: ${PALETTE.background.surface1};
-    color: ${PALETTE.text.primary};
-    font: inherit;
-    text-overflow: ellipsis;
-  }
-  option {
-    background: ${PALETTE.background.surface2};
-    color: ${PALETTE.text.primary};
-  }
-  select:focus-visible,
-  input:focus-visible {
-    outline: 2px solid ${PALETTE.color.brand};
-    outline-offset: 2px;
-  }
-  p {
-    margin: 0;
-    font-size: 14.4px;
-  }
-`;
-
 function candidateLabel(candidate: SubtitleCandidateDto): string {
   return [
     candidate.languageLabel,
@@ -208,9 +133,10 @@ function audioLabel(track: AudioTrack) {
 }
 
 /**
- * Audio and subtitle choices. The trigger is a design system Button in the player's controls row;
- * the panel is still the old one, moving DOM focus itself (its keys win while it holds focus, and
- * the navigation layer steps aside), until the player's menus move to Popover and OptionList.
+ * Audio and subtitle choices: a design system Button in the player's controls row opening a modal
+ * Popover above it. Inside, on the navigation layer: the audio track, the subtitle language,
+ * hearing impaired, Find subtitles, the tracks (other languages behind a Disclosure) and the
+ * timing. Back closes the panel, or the timing view first.
  */
 export function SubtitleMenu({
   searchPreferences,
@@ -257,6 +183,7 @@ export function SubtitleMenu({
   onOffsetChange: (offset: number) => void;
   preferencesKey: string | null;
 }) {
+  const navigation = useOptionalNavigation();
   const [open, setOpen] = useState(false);
   const [timingOpen, setTimingOpen] = useState(false);
   const onOpenChangeRef = useRef(onOpenChange);
@@ -284,110 +211,67 @@ export function SubtitleMenu({
     setTimingOpen(false);
   }, [selectedId]);
 
-  const trigger = useRef<HTMLButtonElement>(null);
-  const panel = useRef<HTMLDivElement>(null);
-  const [otherLanguages, setOtherLanguages] = useState(false);
-  const close = () => {
-    setOpen(false);
-    trigger.current?.focus();
-  };
-  const backToSettings = () => {
-    setTimingOpen(false);
-    requestAnimationFrame(() =>
-      panel.current?.querySelector<HTMLButtonElement>('[data-timing]')?.focus()
-    );
-  };
-  const move = (delta: number) => {
-    const controls = Array.from(
-      panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled)') ??
-        []
-    );
-    const index = controls.indexOf(document.activeElement as HTMLElement);
-    controls[(index + delta + controls.length) % controls.length]?.focus();
-    return true;
-  };
-  const stepLanguage = (delta: number) => {
-    const index = languages.findIndex(([code]) => code === language);
-    updatePreferences({
-      ...preferences,
-      language: languages[(index + delta + languages.length) % languages.length][0],
-    });
-  };
-  const panelNavigation = useKeyboardNavigation({
-    onRestoreFocus: () => {
-      const first = panel.current?.querySelector<HTMLElement>('button:not(:disabled)');
-      first?.focus();
-      return !!first;
-    },
-    onUp: () => move(-1),
-    onDown: () => move(1),
-    onLeft: event => {
-      if ((event.target as HTMLElement).dataset['language']) stepLanguage(-1);
-      return true;
-    },
-    onRight: event => {
-      if ((event.target as HTMLElement).dataset['language']) stepLanguage(1);
-      return true;
-    },
-    onBack: () => {
-      if (timingOpen) backToSettings();
-      else close();
-      return true;
-    },
-  });
+  // Coming back from the timing view lands on the button that opened it
+  const leftTiming = useRef(false);
   useEffect(() => {
-    if (open && !timingOpen)
-      panel.current?.querySelector<HTMLElement>('button:not(:disabled)')?.focus();
-  }, [open, timingOpen]);
+    if (timingOpen || !leftTiming.current) return;
+    leftTiming.current = false;
+    navigation?.focus(NAV.timing);
+    // The store's methods are stable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timingOpen]);
+  const backToSettings = () => {
+    leftTiming.current = true;
+    setTimingOpen(false);
+  };
+
+  const [otherLanguages, setOtherLanguages] = useState(false);
   const preferred = candidates
     .filter(candidate => audioLanguage(candidate.language) === audioLanguage(language))
     .sort((a, b) => Number(a.provider !== 'torrent') - Number(b.provider !== 'torrent'));
   const others = candidates.filter(
     candidate => audioLanguage(candidate.language) !== audioLanguage(language)
   );
-  const trackButton = (candidate: SubtitleCandidateDto) => (
-    <Button
-      key={candidate.id}
-      type="button"
-      aria-pressed={selectedId === candidate.id}
-      onClick={() => onSelect(candidate.id)}
-    >
-      {candidateLabel(candidate)}
-      {candidate.release && candidate.release !== 'root' && (
-        <small style={{ display: 'block', opacity: 0.7 }}>{candidate.release}</small>
-      )}
-    </Button>
-  );
+  const trackOption = (candidate: SubtitleCandidateDto): RadioOption => ({
+    value: candidate.id,
+    label: candidateLabel(candidate),
+    description: candidate.release && candidate.release !== 'root' ? candidate.release : undefined,
+  });
+  const withAudio = Boolean(audioTracks && audioTracks.length > 1 && onSelectAudioTrack);
+  const label = withAudio ? 'Audio and subtitles' : 'Subtitles';
+
   return (
-    <>
-      <TriggerButton
-        ref={trigger}
-        navId={navId}
-        size="lg"
-        selected={open}
-        aria-label={audioTracks && audioTracks.length > 1 ? 'Audio and subtitles' : 'Subtitles'}
-        aria-expanded={open}
-        onClick={() => {
-          if (open) close();
-          else setOpen(true);
-        }}
-      >
-        {audioTracks && audioTracks.length > 1 ? 'Audio / CC' : 'CC'}
-      </TriggerButton>
-      {open && (
-        <Panel
-          ref={node => {
-            panel.current = node;
-            panelNavigation(node);
-          }}
-          role="group"
-          aria-label="Subtitle settings"
+    <Popover
+      open={open}
+      onDismiss={() => (timingOpen && selectedId ? backToSettings() : setOpen(false))}
+      modality="modal"
+      title={timingOpen && selectedId ? 'Subtitle timing' : 'Subtitle settings'}
+      hideTitle
+      placement="top"
+      align="end"
+      size="lg"
+      trigger={props => (
+        <Button
+          {...props}
+          navId={navId}
+          size="lg"
+          selected={open}
+          aria-label={label}
+          onClick={() => setOpen(value => !value)}
         >
+          {withAudio ? 'Audio / CC' : 'CC'}
+        </Button>
+      )}
+    >
+      <div className={styles.body}>
+        <ScrollArea label={label}>
           {timingOpen && selectedId ? (
-            <>
-              <Button type="button" onClick={backToSettings}>
-                Back to subtitle settings
-              </Button>
+            <Stack gap="md">
+              <ActionGroup>
+                <Button navId={NAV.timingBack} icon={<ArrowLeftIcon />} onClick={backToSettings}>
+                  Back to subtitle settings
+                </Button>
+              </ActionGroup>
               <SubtitleTiming
                 key={selectedId}
                 cues={subtitleCues}
@@ -395,94 +279,106 @@ export function SubtitleMenu({
                 pendingPosition={pendingPosition}
                 offset={offset}
                 onOffsetChange={onOffsetChange}
-                onConfirm={backToSettings}
               />
-            </>
+            </Stack>
           ) : (
-            <>
-              {audioTracks && audioTracks.length > 1 && onSelectAudioTrack && (
-                <div role="group" aria-label="Audio language" style={{ display: 'grid' }}>
-                  <h3>Audio</h3>
-                  {audioTracks.map(track => (
-                    <Button
-                      key={track.index}
-                      type="button"
-                      aria-pressed={track.index === selectedAudioTrackIndex}
-                      onClick={() => onSelectAudioTrack(track.index)}
-                    >
-                      {audioLabel(track)}
-                    </Button>
-                  ))}
-                </div>
+            <Stack gap="md">
+              {withAudio && audioTracks && onSelectAudioTrack && (
+                <RadioGroup
+                  navId={NAV.audio}
+                  label="Audio"
+                  options={audioTracks.map(track => ({
+                    value: String(track.index),
+                    label: audioLabel(track),
+                  }))}
+                  value={
+                    selectedAudioTrackIndex === undefined ? null : String(selectedAudioTrackIndex)
+                  }
+                  onChange={value => onSelectAudioTrack(Number(value))}
+                />
               )}
-              <h3>Subtitle preferences</h3>
-              <Button
-                type="button"
-                data-language="true"
-                aria-label="Subtitle language"
-                onClick={() => stepLanguage(1)}
-              >
-                Language: {languages.find(([code]) => code === language)?.[1]} ◀ ▶
-              </Button>
-              <Button
-                type="button"
-                aria-pressed={hearingImpaired}
-                onClick={() =>
-                  updatePreferences({ ...preferences, hearingImpaired: !hearingImpaired })
+              <Select
+                navId={NAV.language}
+                label="Subtitle language"
+                items={languages.map(([value, name]) => ({ value, label: name }))}
+                value={language}
+                onChange={value => updatePreferences({ ...preferences, language: value })}
+                fullWidth
+              />
+              <Switch
+                navId={NAV.hearingImpaired}
+                label="Hearing impaired"
+                checked={hearingImpaired}
+                onCheckedChange={checked =>
+                  updatePreferences({ ...preferences, hearingImpaired: checked })
                 }
-              >
-                Hearing impaired: {hearingImpaired ? 'On' : 'Off'}
-              </Button>
-              {/* Not `disabled`: it has the focus when pressed, and a disabled button drops it to
-                  the page, out of reach of the remote */}
-              <Button
-                type="button"
-                aria-disabled={loading}
-                onClick={() => {
-                  if (!loading) onSearch(language, hearingImpaired);
-                }}
-              >
-                {loading ? 'Searching…' : 'Find subtitles'}
-              </Button>
-              <div role="group" aria-label="Subtitle tracks" style={{ display: 'grid' }}>
-                <h3>Subtitles</h3>
-                <Button type="button" aria-pressed={!selectedId} onClick={() => onSelect(null)}>
-                  Off
+              />
+              <ActionGroup>
+                <Button
+                  navId={NAV.search}
+                  loading={loading}
+                  onClick={() => onSearch(language, hearingImpaired)}
+                >
+                  {loading ? 'Searching…' : 'Find subtitles'}
                 </Button>
-                {preferred.map(trackButton)}
-                {others.length > 0 && (
-                  <Button
-                    type="button"
-                    aria-expanded={otherLanguages}
-                    onClick={() => setOtherLanguages(value => !value)}
-                  >
-                    Other languages ({others.length})
-                  </Button>
-                )}
-                {otherLanguages && others.map(trackButton)}
-              </div>
-              {selectedId && (
-                <Button data-timing="true" type="button" onClick={() => setTimingOpen(true)}>
-                  Adjust subtitle timing ({offset > 0 ? '+' : ''}
-                  {Number(offset.toFixed(2))}s)
-                </Button>
+              </ActionGroup>
+              <RadioGroup
+                navId={NAV.tracks}
+                label="Subtitle tracks"
+                options={[{ value: OFF, label: 'Off' }, ...preferred.map(trackOption)]}
+                value={
+                  selectedId === null
+                    ? OFF
+                    : preferred.some(candidate => candidate.id === selectedId)
+                      ? selectedId
+                      : null
+                }
+                onChange={value => onSelect(value === OFF ? null : value)}
+              />
+              {others.length > 0 && (
+                <Disclosure
+                  navId={NAV.others}
+                  title={`Other languages (${others.length})`}
+                  expanded={otherLanguages}
+                  onExpandedChange={setOtherLanguages}
+                >
+                  <RadioGroup
+                    navId={NAV.otherTracks}
+                    label="Other languages"
+                    options={others.map(trackOption)}
+                    value={
+                      others.some(candidate => candidate.id === selectedId) ? selectedId : null
+                    }
+                    onChange={onSelect}
+                  />
+                </Disclosure>
               )}
-            </>
+              {selectedId && (
+                <ActionGroup>
+                  <Button navId={NAV.timing} onClick={() => setTimingOpen(true)}>
+                    Adjust subtitle timing ({offset > 0 ? '+' : ''}
+                    {Number(offset.toFixed(2))}s)
+                  </Button>
+                </ActionGroup>
+              )}
+            </Stack>
           )}
           {message && (
-            <p role="status" aria-live="polite">
+            <Text role="status" aria-live="polite">
               {message}
-            </p>
+            </Text>
           )}
           {configured === false && (
-            <p>
+            <Text tone="secondary">
               OpenSubtitles search is not configured. Embedded and torrent subtitles remain
               available.
-            </p>
+            </Text>
           )}
-          {configured && available === false && <p>Subtitle provider is currently unavailable.</p>}
-        </Panel>
-      )}
-    </>
+          {configured && available === false && (
+            <Text tone="secondary">Subtitle provider is currently unavailable.</Text>
+          )}
+        </ScrollArea>
+      </div>
+    </Popover>
   );
 }

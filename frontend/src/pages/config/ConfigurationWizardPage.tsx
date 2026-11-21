@@ -304,6 +304,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
           {advancedOptionalGroups.length > 0 && (
             <Disclosure
               navId={NAV.advanced}
+              headingLevel={2}
               title={`Advanced settings (${advancedOptionalGroups.length} ${
                 advancedOptionalGroups.length === 1 ? 'group' : 'groups'
               })`}

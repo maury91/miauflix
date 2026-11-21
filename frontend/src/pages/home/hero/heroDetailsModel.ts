@@ -1,10 +1,6 @@
 import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { formatRuntime, getMediaTitle } from '@shared/lib/media.utils';
-import {
-  qualityLabel,
-  type QualityState,
-  sourceQualityState,
-} from '@shared/ui/quality-badge/quality';
+import { qualityLabel, type QualityState, sourceQualityState } from '@shared/lib/source-quality';
 
 export type SourceAvailability = 'available' | 'pending' | 'unavailable' | null | undefined;
 

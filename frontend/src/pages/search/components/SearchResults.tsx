@@ -1,8 +1,8 @@
 import type { SearchResultDetailDto, SearchResultDto } from '@miauflix/backend';
+import { ErrorNotice } from '@shared/components';
 import { Heading, MediaTile, Message, Text } from '@shared/design-system';
 import { artworkUrl, formatRuntime } from '@shared/lib/media.utils';
 import { FocusGroup, useActiveIdWithin } from '@shared/navigation';
-import { ErrorNotice } from '@shared/ui';
 import { searchResultKey } from '@store/slices/search';
 import { useEffect, useRef } from 'react';
 

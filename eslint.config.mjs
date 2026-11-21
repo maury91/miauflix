@@ -205,32 +205,15 @@ export default [
     rules: {
       'simple-import-sort/imports': 'warn',
       'simple-import-sort/exports': 'warn',
-      // Prefer library variants to feature-local visual overrides.
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector:
-            "CallExpression[callee.name='styled'] > Identifier.arguments[name=/^(Button|BaseButton|Input|Select|FieldLabel|LoadingIndicator|Spinner|Alert|Switch)$/]",
-          message:
-            'Use the Miauflix UI component props. Add shared visual variants in shared/ui and put positioning/spacing on a parent. Document any existing domain-specific exception.',
-        },
-      ],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
   {
-    // Components migrated to build-time styles (docs/development/css-architecture.md); add each
-    // folder as it migrates, so it can't go back to generating CSS at runtime.
-    files: [
-      'frontend/src/**/*.css.ts',
-      'frontend/src/shared/ui/media-card/**/*.{ts,tsx}',
-      'frontend/src/shared/design-system/**/*.{ts,tsx}',
-      // Phase 6 of docs/plans/style-guide.md: the web flows on the design system
-      'frontend/src/pages/{config,qr,settings}/**/*.{ts,tsx}',
-      'frontend/src/features/integrations/ui/**/*.{ts,tsx}',
-    ],
+    // Styles are build-time classes (docs/development/css-architecture.md): nothing in the frontend
+    // generates CSS at runtime
+    files: ['frontend/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -239,9 +222,25 @@ export default [
             {
               name: 'styled-components',
               message:
-                'This component is styled at build time: use a *.css.ts file, data-* attributes for variants and inline styles for continuous values.',
+                'Style at build time: a *.css.ts file, data-* attributes for variants and inline styles for continuous values.',
             },
           ],
+        },
+      ],
+    },
+  },
+  {
+    // One implementation per control (docs/plans/style-guide.md, section 11): features and pages
+    // compose the design system's controls instead of styling native ones
+    files: ['frontend/src/{app,features,pages}/**/*.tsx'],
+    ignores: ['**/*.stories.tsx', '**/*.test.tsx'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'JSXOpeningElement[name.name=/^(button|input|select|textarea)$/]',
+          message:
+            'Use the design system control (Button, IconButton, TextField, Select, Switch…) from @shared/design-system.',
         },
       ],
     },

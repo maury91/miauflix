@@ -1,6 +1,6 @@
+import { introLetterRects } from '@shared/brand/logo/logoGeometry';
+import { LogoGlyphs, type LogoHandle } from '@shared/brand/logo/LogoGlyphs';
 import { mapObject, typedEntries } from '@shared/lib/object';
-import { introLetterRects } from '@shared/ui/logo/logoGeometry';
-import { LogoGlyphs, type LogoHandle } from '@shared/ui/logo/LogoGlyphs';
 import { gsap } from 'gsap';
 import React, {
   forwardRef,
@@ -11,7 +11,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import styled from 'styled-components';
+
+import * as styles from './introAnimation.css';
 
 export interface LogoAnimationHandle {
   start: () => void;
@@ -63,29 +64,6 @@ const PULSE_ATTACK_S = 0.05;
 const PULSE_RELEASE_S = 0.22;
 /** How much each letter grows as the logo expands. */
 const LETTER_SCALE = 10;
-
-const AnimationContainer = styled.div<{ $lowResource: boolean }>`
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${({ $lowResource }) =>
-    !$lowResource &&
-    `
-      will-change: transform, opacity, filter;
-      backface-visibility: hidden;
-      perspective: 1000px;
-      contain: layout style paint;
-    `}
-  font: 7vw/1 sans-serif;
-  z-index: 1002;
-`;
 
 const useIntroAnimationAudio = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -540,11 +518,11 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     }, [autoStart, introAnimation]);
 
     return (
-      <AnimationContainer
+      <div
         ref={containerRef}
-        className={className}
+        className={className ? `${styles.container} ${className}` : styles.container}
         style={style}
-        $lowResource={lowResourceAnimation}
+        data-low-resource={lowResourceAnimation || undefined}
       >
         <div
           ref={backgroundRef}
@@ -562,7 +540,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           }}
         />
         <LogoGlyphs ref={logoRef} style={{ visibility: logoVisible ? 'visible' : 'hidden' }} />
-      </AnimationContainer>
+      </div>
     );
   }
 );

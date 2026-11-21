@@ -1,20 +1,11 @@
 import { AvplayMedia, type PlayerMedia } from '@features/player/lib/avplay-media';
 import type { SubtitleCue } from '@features/player/lib/vtt';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 
+import * as styles from './avplayVideo.css';
 import { SubtitleCaption } from './SubtitleCaption';
 
 import type { AVPlay } from '@/types/tizen';
-
-/** AVPlay draws in this element's area, below the page. */
-const VideoPlane = styled.object`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`;
 
 export type PlayerMediaHandler = (event: { currentTarget: PlayerMedia }) => void;
 
@@ -160,7 +151,12 @@ export function AvplayVideo({
 
   return (
     <>
-      <VideoPlane ref={planeRef} type="application/avplayer" aria-label={label} />
+      <object
+        ref={planeRef}
+        className={styles.plane}
+        type="application/avplayer"
+        aria-label={label}
+      />
       {caption && (
         <SubtitleCaption
           text={caption.text}

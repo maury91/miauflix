@@ -87,6 +87,8 @@ function States() {
 
 /** Focus is virtual: the navigation layer passes `focused`; here it is set directly. */
 export const OnCanvas: Story = {
+  // A disabled control's text is exempt from contrast (WCAG 1.4.3)
+  parameters: { a11y: { context: { exclude: ['[data-disabled="true"]'] } } },
   render: () => (
     <SurfaceStage surface="solid">
       <States />

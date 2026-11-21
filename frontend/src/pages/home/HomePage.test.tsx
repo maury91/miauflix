@@ -127,7 +127,6 @@ vi.mock('@features/notifications/api/notifications.api', () => ({
   useMarkNotificationReadMutation,
   useMarkAllNotificationsReadMutation,
 }));
-vi.mock('@shared/components', () => ({ Spinner: () => null }));
 const noSessions: never[] = [];
 vi.mock('@store/slices/auth', () => ({
   selectAvailableSessions: () => noSessions,

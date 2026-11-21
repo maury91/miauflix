@@ -21,7 +21,7 @@ describe('SourcePreparationStatus', () => {
       />
     );
     expect(screen.getByText('720p')).toBeInTheDocument();
-    expect(screen.getByText('WEB')).toBeInTheDocument();
+    expect(screen.getByText('720p, WEB source')).toBeInTheDocument();
   });
 
   it('replaces the quality with a no-source badge once every source proved fake', () => {
@@ -67,7 +67,7 @@ describe('SourcePreparationStatus', () => {
         preparation={baseSnapshot({ source: { id: 760, quality: 'FHD', sourceType: 'DCP' } })}
       />
     );
-    expect(screen.getByText('DCP')).toBeInTheDocument();
+    expect(screen.getByText('1080p, DCP source')).toBeInTheDocument();
     expect(screen.getByText('1080p')).toBeInTheDocument();
   });
 
@@ -83,7 +83,7 @@ describe('SourcePreparationStatus', () => {
     );
 
     expect(screen.getByText('1080p')).toBeInTheDocument();
-    expect(screen.getByText('WEB')).toBeInTheDocument();
+    expect(screen.getByText('1080p, WEB source')).toBeInTheDocument();
     expect(screen.queryByText('WEBRip')).not.toBeInTheDocument();
   });
 
@@ -101,7 +101,7 @@ describe('SourcePreparationStatus', () => {
 
     expect(screen.getByText('Checking sources')).toBeInTheDocument();
     expect(screen.getByText('720p')).toBeInTheDocument();
-    expect(screen.getByText('Blu-ray')).toBeInTheDocument();
+    expect(screen.getByText('720p, Blu-ray source')).toBeInTheDocument();
   });
 
   it('adds an accessible quality warning icon for CAM and TS releases', () => {
