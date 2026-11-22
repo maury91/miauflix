@@ -1,8 +1,9 @@
-import { type EntityManager, IsNull, type Repository } from 'typeorm';
+import { type EntityManager, IsNull, Not, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import type { UserRole } from '@entities/user.entity';
 import { User } from '@entities/user.entity';
+import type { LanguagePreferences } from '@mytypes/language-preferences.types';
 
 export class UserRepository {
   private readonly repository: Repository<User>;
@@ -43,6 +44,15 @@ export class UserRepository {
   /** Accounts that never had a Plushie look (created before profiles). */
   async findWithoutAvatar(): Promise<Pick<User, 'id'>[]> {
     return this.repository.find({ select: { id: true }, where: { avatar: IsNull() } });
+  }
+
+  /** Every profile's stored language preferences (profiles that never set any are left out). */
+  async findLanguagePreferences(): Promise<LanguagePreferences[]> {
+    const users = await this.repository.find({
+      select: { id: true, languagePreferences: true },
+      where: { languagePreferences: Not(IsNull()) },
+    });
+    return users.flatMap(user => (user.languagePreferences ? [user.languagePreferences] : []));
   }
 
   async findByRole(role: UserRole): Promise<User[]> {

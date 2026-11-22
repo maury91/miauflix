@@ -26,6 +26,9 @@ const {
 vi.mock('@features/player/api/playback.api', async () => {
   const React = await import('react');
   return {
+    // The audio panel's sources load only once it opens
+    useGetAudioSourcesQuery: () => ({ data: undefined, isError: false }),
+    useSearchAudioSourcesMutation: () => [vi.fn(), { isLoading: false, isError: false }],
     useCreateSessionMutation: () => {
       const [result, setResult] = React.useState<{ data?: CreatePlaybackSessionResponse }>({});
       const [requestVersion, setRequestVersion] = React.useState(0);
@@ -442,6 +445,8 @@ describe('PlayerView', () => {
     press('ArrowDown');
     expect(screen.getByRole('button', { name: 'Subtitles' })).toHaveFocus();
     press('ArrowRight');
+    expect(screen.getByRole('button', { name: 'Audio' })).toHaveFocus();
+    press('ArrowRight');
     expect(screen.getByRole('button', { name: 'Toggle fullscreen' })).toHaveFocus();
     press('ArrowUp');
     expect(playButton).toHaveFocus();
@@ -655,6 +660,7 @@ describe('PlayerView', () => {
     // Down to play/pause, Down to the row under the bar, then along it to the volume
     press('ArrowDown');
     press('ArrowDown');
+    press('ArrowRight');
     press('ArrowRight');
     press('ArrowRight');
     press('ArrowRight');
@@ -1052,9 +1058,9 @@ describe('PlayerView', () => {
     video.currentTime = 45;
     act(() => startAudioPlayback.mock.lastCall?.[0].onReady());
     fireEvent.timeUpdate(video);
-    fireEvent.click(screen.getByRole('button', { name: 'Audio and subtitles' }));
-    expect(screen.getByRole('radio', { name: /French.*AC3/ })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('radio', { name: /English.*AC3/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Audio' }));
+    expect(screen.getByRole('radio', { name: 'French (5.1)' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('radio', { name: 'English (5.1)' }));
     expect(startAudioPlayback.mock.lastCall?.[0]).toMatchObject({
       startSeconds: 45,
       audioTrackIndex: 1,
@@ -1107,6 +1113,11 @@ describe('PlayerView', () => {
           )
         );
         fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
+        fireEvent.click(
+          await screen.findByRole('button', {
+            name: provider === 'embedded' ? /^Embedded/ : /^From files/,
+          })
+        );
         fireEvent.click(await screen.findByRole('radio', { description: /Local English/ }));
         expect(view.container.querySelector('track')?.getAttribute('src')).toContain(
           'local-candidate'
@@ -1154,7 +1165,8 @@ describe('PlayerView', () => {
     );
     await screen.findByLabelText('Subtitles fixture');
     fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
-    const search = await screen.findByRole('button', { name: /Find subtitles/ });
+    fireEvent.click(await screen.findByRole('button', { name: /^Online/ }));
+    const search = await screen.findByRole('button', { name: /Search in/ });
     await waitFor(() => expect(search).not.toBeDisabled());
     fireEvent.click(search);
     const select = await screen.findByRole('radio', { description: /A long release/ });
@@ -1186,7 +1198,7 @@ describe('PlayerView', () => {
       textTrack.activeCues = [];
       act(() => cueListeners.forEach(listener => listener()));
       expect(screen.queryByTestId('subtitle-caption')).toBeNull();
-      fireEvent.click(screen.getByRole('button', { name: /Adjust subtitle timing/ }));
+      fireEvent.click(screen.getByRole('button', { name: /Synchronize subtitles/ }));
       expect(screen.getByText('Preview word')).toBeInTheDocument();
       expect(screen.getByLabelText('Now')).toBeInTheDocument();
       fireEvent.click(screen.getByRole('button', { name: 'Subtitles 5 seconds later' }));
@@ -1260,9 +1272,9 @@ describe('PlayerView', () => {
         refresh: false,
       });
       fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
-      expect(
-        screen.getByRole('button', { name: 'Adjust subtitle timing (+10.25s)' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Synchronize subtitles/ })).toHaveTextContent(
+        '+10.25s'
+      );
       view.unmount();
     } finally {
       if (descriptor) Object.defineProperty(prototype, 'track', descriptor);

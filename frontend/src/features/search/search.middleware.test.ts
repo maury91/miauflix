@@ -1,6 +1,7 @@
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type { SearchClientMessage } from '@miauflix/backend';
 import { configureStore, type Middleware } from '@reduxjs/toolkit';
+import { setActiveLanguage } from '@shared/i18n/translate';
 import { searchActions, searchSlice } from '@store/slices/search';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -42,7 +43,7 @@ describe('searchMiddleware', () => {
     vi.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
 
     expect(sent).toEqual([
-      { type: 'search', requestId: expect.any(Number), page: 1, query: 'dune' },
+      { type: 'search', requestId: expect.any(Number), page: 1, language: 'en', query: 'dune' },
     ]);
     expect(store.getState().search.status).toBe('loading');
   });
@@ -116,10 +117,82 @@ describe('searchMiddleware', () => {
     );
 
     expect(sent).toEqual([
-      { type: 'search-recent-add', kind: 'genre', query: '27' },
-      { type: 'search-recents' },
-      { type: 'search-genres' },
-      { type: 'search-recent-remove', kind: 'query', query: 'Dune' },
+      { type: 'search-recent-add', kind: 'genre', query: '27', language: 'en' },
+      { type: 'search-recents', language: 'en' },
+      { type: 'search-genres', language: 'en' },
+      { type: 'search-recent-remove', kind: 'query', query: 'Dune', language: 'en' },
     ]);
+  });
+
+  describe('when the interface language changes', () => {
+    afterEach(() => setActiveLanguage('en'));
+
+    it('loads the genres, recents and active search again in it', () => {
+      const { store, sent } = setupTest();
+      store.dispatch(searchActions.genreSelected({ key: '27', name: 'Horror' }));
+      store.dispatch(searchActions.serverMessage({ type: 'search-genres', items: [] }));
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-recents',
+          items: [{ kind: 'query', query: 'Dune', label: 'Dune', searchedAt: '' }],
+        })
+      );
+      sent.length = 0;
+
+      setActiveLanguage('it');
+      store.dispatch(searchActions.catalogLanguageChanged());
+
+      // No genres were loaded, so none are asked for
+      expect(sent).toEqual([
+        { type: 'search-recents', language: 'it' },
+        expect.objectContaining({ type: 'search', genre: '27', page: 1, language: 'it' }),
+      ]);
+      expect(sent[1]).not.toHaveProperty('commit');
+    });
+
+    it('ignores genres and recents that arrive for the earlier language', () => {
+      const { store } = setupTest();
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-genres',
+          items: [{ key: '18', name: 'Drama' }],
+          language: 'en',
+        })
+      );
+      setActiveLanguage('it');
+      store.dispatch(searchActions.catalogLanguageChanged());
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-genres',
+          items: [{ key: '18', name: 'Dramma (stale)' }],
+          language: 'en',
+        })
+      );
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-recents',
+          items: [{ kind: 'query', query: 'Dune', label: 'Dune', searchedAt: '' }],
+          language: 'en',
+        })
+      );
+      expect(store.getState().search.genres).toEqual([{ key: '18', name: 'Drama' }]);
+      expect(store.getState().search.recents).toEqual([]);
+
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-genres',
+          items: [{ key: '18', name: 'Dramma' }],
+          language: 'it',
+        })
+      );
+      expect(store.getState().search.genres).toEqual([{ key: '18', name: 'Dramma' }]);
+    });
+
+    it('sends nothing while Search was never opened', () => {
+      const { store, sent } = setupTest();
+      setActiveLanguage('it');
+      store.dispatch(searchActions.catalogLanguageChanged());
+      expect(sent).toEqual([]);
+    });
   });
 });

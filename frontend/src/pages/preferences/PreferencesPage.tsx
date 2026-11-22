@@ -1,5 +1,8 @@
 import { useUpdateLanguagePreferencesMutation } from '@features/profiles/api/profiles.api';
-import { languagePreferencesOf } from '@features/profiles/lib/language-preferences';
+import {
+  languagePreferencesOf,
+  supportsAutoSubtitles,
+} from '@features/profiles/lib/language-preferences';
 import type { LanguagePreferences } from '@miauflix/backend';
 import { List, Message, Section, Select, SettingRow } from '@shared/design-system';
 import type { SelectItems } from '@shared/design-system/option-list/selectItems';
@@ -27,6 +30,7 @@ const NAV = {
   audio: 'preferences-audio',
   animeAudio: 'preferences-anime-audio',
   subtitles: 'preferences-subtitles',
+  autoSubtitles: 'preferences-auto-subtitles',
   animeSubtitles: 'preferences-anime-subtitles',
 } as const;
 
@@ -46,7 +50,8 @@ const ROWS = {
 
 /**
  * The watching profile's languages: the interface's, and the audio and subtitles titles start
- * with (anime has its own). Each choice is saved as soon as it is made.
+ * with (anime has its own), and whether subtitles turn on by themselves. Each choice is saved as
+ * soon as it is made.
  */
 export default function PreferencesPage({ onDismiss }: { onDismiss: () => void }) {
   const t = useT();
@@ -60,6 +65,7 @@ export default function PreferencesPage({ onDismiss }: { onDismiss: () => void }
   const latest = useRef<LanguagePreferences | null>(null);
   const queue = useRef<Promise<void>>(Promise.resolve());
   const preferences = draft ?? languagePreferencesOf(user);
+  const autoSubtitlesSupported = supportsAutoSubtitles(user);
 
   const update = (next: LanguagePreferences) => {
     if (!session) return;
@@ -71,7 +77,12 @@ export default function PreferencesPage({ onDismiss }: { onDismiss: () => void }
       // Superseded: the newer save carries this choice too
       if (latest.current !== next) return;
       try {
-        await save({ session, preferences: next }).unwrap();
+        // A server from before automatic subtitles rejects preferences that carry the setting
+        const { autoSubtitles, ...languages } = next;
+        await save({
+          session,
+          preferences: autoSubtitlesSupported ? { ...languages, autoSubtitles } : languages,
+        }).unwrap();
         if (latest.current === next) setDraft(null);
       } catch {
         // The message reports the failure; the draft stays for the next choice to retry
@@ -137,6 +148,17 @@ export default function PreferencesPage({ onDismiss }: { onDismiss: () => void }
       </Section>
       <Section title={t('preferences.subtitles')}>
         <List>
+          {autoSubtitlesSupported && (
+            <SettingRow
+              title={t('preferences.autoSubtitles')}
+              description={t('preferences.autoSubtitlesDescription')}
+              toggle={{
+                navId: NAV.autoSubtitles,
+                checked: preferences.autoSubtitles,
+                onCheckedChange: autoSubtitles => update({ ...preferences, autoSubtitles }),
+              }}
+            />
+          )}
           {row('subtitles', 'default')}
           {row('subtitles', 'anime')}
         </List>

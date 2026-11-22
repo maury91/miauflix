@@ -4,11 +4,12 @@ import { takeStaleCatalogLanguage } from '@features/media/lib/catalog-language';
 import { I18nProvider, useInterfaceLanguage } from '@shared/i18n';
 import { useAppDispatch, useAppSelector } from '@store';
 import { selectCurrentUser } from '@store/slices/auth';
+import { searchActions } from '@store/slices/search';
 import { type ReactNode, useEffect } from 'react';
 
 /**
- * Catalog data (titles, overviews, genres) follows the interface language: when it changes, the
- * titles loaded in another language load again.
+ * Catalog data (titles, overviews, genres, seasons, search results) follows the interface
+ * language: when it changes, what was loaded in another language loads again.
  */
 function CatalogLanguage() {
   const language = useInterfaceLanguage();
@@ -17,6 +18,7 @@ function CatalogLanguage() {
     if (!takeStaleCatalogLanguage(language)) return;
     dispatch(mediaApi.util.invalidateTags(['Catalog']));
     dispatch(listsApi.util.invalidateTags(['Catalog']));
+    dispatch(searchActions.catalogLanguageChanged());
   }, [dispatch, language]);
   return null;
 }

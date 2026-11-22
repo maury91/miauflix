@@ -1,5 +1,6 @@
 import type { Messages } from '../en';
 import { api } from './api';
+import { audio } from './audio';
 import { auth } from './auth';
 import { common } from './common';
 import { config } from './config';
@@ -35,6 +36,7 @@ export const it: Messages = {
   ...details,
   ...home,
   ...subtitles,
+  ...audio,
   ...player,
   ...languages,
   ...preferences,

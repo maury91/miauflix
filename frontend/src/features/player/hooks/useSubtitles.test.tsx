@@ -28,7 +28,7 @@ const candidate = {
   provider: 'opensubtitles',
 } as unknown as SubtitleCandidateDto;
 
-function renderSubtitles() {
+function renderSubtitles(options: { preferredLanguage?: string; autoEnable?: boolean } = {}) {
   // Refs keep their identity across renders, as they do in the player.
   const sessionStorageKey = { current: storageKey };
   const videoRef = { current: null };
@@ -44,6 +44,7 @@ function renderSubtitles() {
       playsInAvplay: false,
       audioSeek: null,
       audioTrackIndex: undefined,
+      ...options,
     })
   );
 }
@@ -62,6 +63,30 @@ describe('useSubtitles', () => {
     expect(searchSubtitles).toHaveBeenCalledWith(
       expect.objectContaining({ streamingKey: 'key', refresh: false, localOnly: true })
     );
+    expect(result.current.selectedId).toBeNull();
+  });
+
+  it('turns a track on with automatic subtitles, remembering it only once the viewer chooses', async () => {
+    const { result } = renderSubtitles({ preferredLanguage: 'it', autoEnable: true });
+    await waitFor(() => expect(result.current.selectedId).toBe('track-1'));
+    const request = searchSubtitles.mock.calls[0]?.[0];
+    expect(request).toMatchObject({ streamingKey: 'key', language: 'it', refresh: false });
+    expect(request).not.toHaveProperty('localOnly');
+    expect(readMediaSubtitles(storageKey)).toBeNull();
+
+    act(() => result.current.select(null));
+    expect(readMediaSubtitles(storageKey)).toMatchObject({ language: 'it', selectedFileId: null });
+  });
+
+  it('keeps subtitles the viewer turned off for the title, even with automatic subtitles', async () => {
+    saveMediaSubtitles(storageKey, {
+      language: 'it',
+      hearingImpaired: false,
+      selectedFileId: null,
+      offset: 0,
+    });
+    const { result } = renderSubtitles({ preferredLanguage: 'it', autoEnable: true });
+    await waitFor(() => expect(result.current.candidates).toEqual([candidate]));
     expect(result.current.selectedId).toBeNull();
   });
 

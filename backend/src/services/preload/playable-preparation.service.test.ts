@@ -581,6 +581,44 @@ describe('PlayablePreparationService', () => {
     ]);
   });
 
+  describe('with a source the viewer chose', () => {
+    const prepareChosen = (sources: unknown[], sourceId: number, extra: object = {}) =>
+      new PlayablePreparationService({
+        mediaService: {
+          getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+        } as never,
+        sourceService: movieService(sources) as never,
+        targets: movieTargets as never,
+        ...extra,
+      }).prepare(
+        { kind: 'movie', mediaId: 42 },
+        { ...warmOptions(), preferences: { quality: 'auto', allowHevc: false }, sourceId }
+      );
+
+    it('plays it over a better-ranked source', async () => {
+      const best = candidate(1, 9);
+      const picked = candidate(2, 1);
+      expect((await prepareChosen([best, picked], 2)).source).toBe(picked);
+    });
+
+    it.each([
+      ['its codec is not supported', { videoCodec: VideoCodec.X265 }],
+      ['it is known to hold no video', { hasVideo: false }],
+    ])('falls back to the other sources when %s', async (_case, fields) => {
+      const other = candidate(1, 1);
+      const picked = { ...candidate(2, 9), ...fields };
+      expect((await prepareChosen([other, picked], 2)).source).toBe(other);
+    });
+
+    it('falls back to a source that fits when it is too large for storage', async () => {
+      const huge = withFiles(5, 9, [{ path: 'Movie/movie.mkv', length: 43e9 }]);
+      const small = withFiles(2, 8, [{ path: 'Movie/movie.mkv', length: 4e9 }]);
+      const prepared = await prepareChosen([huge, small], 5, { storage: roomFor(10e9) });
+      expect(prepared.noRoom).toBeUndefined();
+      expect(prepared.source).toBe(small);
+    });
+  });
+
   it('sizes a movie by its main video, and leaves a source with unknown files to admission', async () => {
     // The whole pack would not fit, but only its largest video is streamed
     const pack = withFiles(1, 9, [
@@ -865,6 +903,52 @@ describe('PlayablePreparationService', () => {
 
     expect(prepared).toMatchObject({ source: backup, target: movieTarget(backup), state: 'cold' });
     expect(warmup.warm).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    [2, 2],
+    // A chosen source that is no longer a candidate: the usual pick
+    [3, 1],
+  ])('plays the source the viewer chose (%i) while it is a candidate', async (sourceId, played) => {
+    const best = {
+      id: 1,
+      file: Buffer.from('a'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 9,
+    };
+    const dubbed = {
+      id: 2,
+      file: Buffer.from('b'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 1,
+    };
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
+        requestMovieVerification: jest.fn(),
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([best, dubbed]),
+        processSourceMetadata: jest.fn(),
+      } as never,
+      warmup: { warm: jest.fn() } as never,
+      targets: movieTargets as never,
+    });
+
+    const prepared = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'warm',
+        resolveOnly: true,
+        sourceId,
+        preferences: { quality: 'auto', allowHevc: true },
+        workClass: 'interactive',
+      }
+    );
+
+    expect(prepared.source?.id).toBe(played);
   });
 
   it('falls back to magnet playback when source metadata cannot be resolved', async () => {

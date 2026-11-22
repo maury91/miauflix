@@ -30,6 +30,8 @@ export const api: Translation<typeof english> = {
   'api.failedToMarkNotificationAsRead': 'Nepavyko pažymėti pranešimo kaip perskaityto',
   'api.failedToMarkNotificationsAsRead': 'Nepavyko pažymėti pranešimų kaip perskaitytų',
   'api.failedToRequestAnAvailabilityNotification': 'Nepavyko įjungti pranešimo apie pasiekiamumą',
+  'api.failedToLoadAudioSources': 'Nepavyko įkelti pavadinimo šaltinių',
+  'api.failedToSearchAudioSources': 'Nepavyko ieškoti šaltinių ta kalba',
   'api.failedToSearchSubtitles': 'Nepavyko ieškoti subtitrų',
   'api.failedToStartPlayback': 'Nepavyko pradėti atkūrimo',
   'api.failedToUpdatePlaybackPreparationIntent': 'Nepavyko atnaujinti atkūrimo paruošimo užklausos',

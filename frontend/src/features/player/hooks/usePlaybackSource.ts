@@ -110,6 +110,13 @@ export function usePlaybackSource({
    * swarms, so each new session normally brings the next candidate; a repeat ends the walk.
    */
   const failedSources = useRef<{ key: string; ids: Set<number> }>({ key: '', ids: new Set() });
+  /**
+   * The source the viewer chose for this playable (one in another language) and the audio it is
+   * chosen for: the sessions that follow play it, until it fails or the viewer retries.
+   */
+  const chosenSource = useRef<{ key: string; sourceId: number; audioLanguage: string } | null>(
+    null
+  );
   const pushedAttempt = useSelector(selectSourceAttempt(playable));
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<PlaybackStatus>('checking');
@@ -179,6 +186,18 @@ export function usePlaybackSource({
     [playableKey]
   );
 
+  /**
+   * Play another source of this playable, with its audio in `audioLanguage`: the current session
+   * plays on until the new one arrives.
+   */
+  const chooseSource = useCallback(
+    (sourceId: number, audioLanguage: string) => {
+      chosenSource.current = { key: playableKey, sourceId, audioLanguage };
+      restartSession(true);
+    },
+    [playableKey, restartSession]
+  );
+
   const releasePicture = useCallback(() => {
     setHeldPlaybackId(null);
     setHeldSession(null);
@@ -218,6 +237,8 @@ export function usePlaybackSource({
     const key = JSON.stringify(playable);
     if (failedSources.current.key !== key) failedSources.current = { key, ids: new Set() };
     const sourceId = sessionRequest.data?.source.id;
+    // A chosen source that fails isn't asked for again
+    if (chosenSource.current?.sourceId === sourceId) chosenSource.current = null;
     if (sourceId !== undefined && !failedSources.current.ids.has(sourceId)) {
       // The backend records a source that cannot play, so a new session picks the next one.
       failedSources.current.ids.add(sourceId);
@@ -262,6 +283,7 @@ export function usePlaybackSource({
   /** Start over from the first source, after a failure. */
   const retry = useCallback(() => {
     failedSources.current = { key: '', ids: new Set() };
+    chosenSource.current = null;
     setError(null);
     setStatus('checking');
     setAttempt(value => value + 1);
@@ -292,13 +314,19 @@ export function usePlaybackSource({
     // Sources this player already failed to play: the backend cannot see a browser rejection.
     const avoidSourceIds =
       failedSources.current.key === JSON.stringify(playable) ? [...failedSources.current.ids] : [];
+    const chosen =
+      chosenSource.current?.key === JSON.stringify(playable) ? chosenSource.current : null;
     if (sessionInFlight.current?.key !== sessionKey)
       sessionInFlight.current = {
         key: sessionKey,
         promise: createSession({
           playable,
           ...(avoidSourceIds.length ? { avoidSourceIds } : {}),
-          preferences: playbackPreferences(avplay, audioLanguageRef.current),
+          ...(chosen ? { sourceId: chosen.sourceId } : {}),
+          preferences: playbackPreferences(
+            avplay,
+            chosen?.audioLanguage ?? audioLanguageRef.current
+          ),
         }).unwrap(),
       };
     void sessionInFlight.current.promise
@@ -376,6 +404,7 @@ export function usePlaybackSource({
     failPlayback,
     failSource,
     restartSession,
+    chooseSource,
     retry,
     handleMediaError,
     settlePendingFailure,

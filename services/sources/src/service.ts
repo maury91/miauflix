@@ -34,6 +34,7 @@ const searchSchema = z
       tvdbId: z.number().int().positive().nullable().optional(),
       title: z.string().trim().min(1).max(500),
       originalTitle: z.string().max(500).optional(),
+      localizedTitles: z.array(z.string().trim().min(1).max(500)).max(10).optional(),
       year: z.number().int().min(1800).max(3000).nullable().optional(),
       isAnime: z.boolean().optional(),
       releaseDate: z.string().nullable().optional(),
@@ -43,6 +44,10 @@ const searchSchema = z
     airDate: z.string().nullable().optional(),
     purpose: z.enum(['interactive', 'background']),
     skipProviders: z.array(z.string().max(100)).max(1000).optional(),
+    language: z
+      .string()
+      .regex(/^[a-z]{2,3}$/)
+      .optional(),
   })
   .refine(r => r.media.kind === 'movie' || (r.season !== undefined && r.episode !== undefined));
 const fileSchema = z.object({

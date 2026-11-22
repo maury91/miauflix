@@ -20,6 +20,7 @@ const profile = (
       interface: null,
       audio: { default: null, anime: null },
       subtitles: { default: null, anime: null },
+      autoSubtitles: false,
     },
   },
 });

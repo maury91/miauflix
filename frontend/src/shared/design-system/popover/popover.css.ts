@@ -1,4 +1,4 @@
-import { keyframes, style } from '@vanilla-extract/css';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 
 import {
   color,
@@ -9,6 +9,7 @@ import {
   radius,
   shadowOverlay,
   space,
+  tvSafeArea,
   typeScale,
 } from '../tokens';
 
@@ -18,6 +19,8 @@ import {
  * the one overlay shadow, so it reads over artwork too.
  *
  * - `data-placement="bottom" | "top"`, `data-align="start" | "end"`
+ * - `data-placement="sheet"`: the full height of the positioned container it is drawn in, docked
+ *   to its end edge (sliding in from it), with its content in a column that can scroll
  * - `data-size="sm" | "md" | "lg"`: 16, 22 or 30rem wide (fixed, so content never resizes it)
  */
 
@@ -30,6 +33,14 @@ export const root = style({
 const appear = keyframes({
   from: { opacity: 0, transform: 'translateY(-0.5rem)' },
   to: { opacity: 1, transform: 'translateY(0)' },
+});
+const slideIn = keyframes({
+  from: { opacity: 0, transform: 'translateX(2rem)' },
+  to: { opacity: 1, transform: 'translateX(0)' },
+});
+const slideInRtl = keyframes({
+  from: { opacity: 0, transform: 'translateX(-2rem)' },
+  to: { opacity: 1, transform: 'translateX(0)' },
 });
 const appearAbove = keyframes({
   from: { opacity: 0, transform: 'translateY(0.5rem)' },
@@ -68,9 +79,36 @@ export const panel = style({
     '&[data-align="end"]': { right: 0 },
     '[dir="rtl"] &[data-align="start"]': { left: 'auto', right: 0 },
     '[dir="rtl"] &[data-align="end"]': { right: 'auto', left: 0 },
+    // After the alignment rules, so its own edges win
+    '&[data-placement="sheet"]': {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: '100%',
+      padding: space.lg,
+      borderRadius: `${radius.lg} 0 0 ${radius.lg}`,
+      animation: `${slideIn} ${duration.panel} ${easing.standard}`,
+    },
+    '[dir="rtl"] &[data-placement="sheet"]': {
+      right: 'auto',
+      left: 0,
+      borderRadius: `0 ${radius.lg} ${radius.lg} 0`,
+      animation: `${slideInRtl} ${duration.panel} ${easing.standard}`,
+    },
+    '&[data-placement="sheet"][data-size="lg"]': { width: '32rem' },
   },
   '@media': {
-    '(prefers-reduced-motion: reduce)': { animation: 'none' },
+    // Matching each animated placement's specificity, so none of them still moves
+    '(prefers-reduced-motion: reduce)': {
+      animation: 'none',
+      selectors: {
+        '&[data-placement]': { animation: 'none' },
+        '[dir="rtl"] &[data-placement="sheet"]': { animation: 'none' },
+      },
+    },
   },
 });
 
@@ -83,4 +121,11 @@ export const title = style({
   // The app's global heading rule uppercases and lightens h1–h6
   fontStyle: 'normal',
   textTransform: 'none',
+});
+
+// On a TV the sheet's content keeps inside the safe area, at the top and bottom and the end edge
+globalStyle(`html[data-density="tv"] ${panel}[data-placement="sheet"]`, {
+  paddingTop: tvSafeArea.y,
+  paddingBottom: tvSafeArea.y,
+  paddingRight: tvSafeArea.x,
 });

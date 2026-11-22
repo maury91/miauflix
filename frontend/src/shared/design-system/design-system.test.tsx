@@ -2098,6 +2098,91 @@ describe('Popover', () => {
     rerender(content(false));
     expect(screen.getByRole('button', { name: 'Tracks' })).toHaveFocus();
   });
+
+  describe('as a non-modal sheet', () => {
+    const containers = () => {
+      const first = document.body.appendChild(document.createElement('div'));
+      const second = document.body.appendChild(document.createElement('div'));
+      return { first, second, cleanup: () => (first.remove(), second.remove()) };
+    };
+    const sheet = (container: HTMLElement, onDismiss: () => void, children?: ReactNode) => (
+      <Popover
+        open
+        modality="nonModal"
+        placement="sheet"
+        container={container}
+        title="Subtitles"
+        onDismiss={onDismiss}
+        trigger={triggerProps => (
+          <button type="button" {...triggerProps}>
+            CC
+          </button>
+        )}
+      >
+        <button type="button">Off</button>
+        {children}
+      </Popover>
+    );
+    const moveFocus = (from: HTMLElement, to: HTMLElement) => {
+      from.focus();
+      to.focus();
+    };
+
+    it('still closes when focus leaves it after it moved to another container', () => {
+      const { first, second, cleanup } = containers();
+      const onDismiss = vi.fn();
+      const { rerender } = render(
+        <>
+          {sheet(first, onDismiss)}
+          <button type="button">Outside</button>
+        </>
+      );
+      rerender(
+        <>
+          {sheet(second, onDismiss)}
+          <button type="button">Outside</button>
+        </>
+      );
+      moveFocus(
+        screen.getByRole('button', { name: 'Off' }),
+        screen.getByRole('button', { name: 'Outside' })
+      );
+      expect(onDismiss).toHaveBeenCalledTimes(1);
+      cleanup();
+    });
+
+    it('stays open while focus moves into a sheet nested in it, drawn elsewhere', () => {
+      const { first, second, cleanup } = containers();
+      const onParentDismiss = vi.fn();
+      render(
+        sheet(
+          first,
+          onParentDismiss,
+          <Popover
+            open
+            modality="nonModal"
+            placement="sheet"
+            container={second}
+            title="Languages"
+            onDismiss={vi.fn()}
+            trigger={triggerProps => (
+              <button type="button" {...triggerProps}>
+                More
+              </button>
+            )}
+          >
+            <button type="button">Italian</button>
+          </Popover>
+        )
+      );
+      moveFocus(
+        screen.getByRole('button', { name: 'Off' }),
+        screen.getByRole('button', { name: 'Italian' })
+      );
+      expect(onParentDismiss).not.toHaveBeenCalled();
+      cleanup();
+    });
+  });
 });
 
 describe('KeyHint', () => {

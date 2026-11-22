@@ -25,6 +25,10 @@ describe('release languages', () => {
     [[Language.LITHUANIAN], ['en'], true],
     [[Language.LITHUANIAN], ['lt', 'en'], false],
     [[Language.ITALIAN], ['en'], true],
+    [[Language.POLISH], ['it', 'en'], true],
+    [[Language.POLISH], ['pl'], false],
+    [[Language.HINDI, Language.ENGLISH], ['it'], false],
+    [[Language.KOREAN], ['en'], false],
     [[], ['en'], false],
     [null, ['en'], false],
   ] as const)(

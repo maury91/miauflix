@@ -40,14 +40,17 @@ export class Planner {
       failed = new Set<string>(),
       skipped = new Set<string>();
     const retryTimes: number[] = [];
-    const memoryKey = `${request.media.kind === 'movie' ? 'movie' : 'tv'}:${request.media.tmdbId}${kind === 'tv' ? `:s${request.season}:e${request.episode}` : ''}`;
+    // A search in a language is remembered apart: it doesn't stand for the title's own search
+    const memoryKey = `${request.media.kind === 'movie' ? 'movie' : 'tv'}:${request.media.tmdbId}${kind === 'tv' ? `:s${request.season}:e${request.episode}` : ''}${request.language ? `:lang:${request.language}` : ''}`;
     const ttl =
       kind === 'movie'
         ? 12 * 3600_000
         : request.airDate && this.now() - Date.parse(request.airDate) < 7 * 86400_000
           ? 1800_000
           : 86400_000;
+    // A search in a language looks for every release in it, not for enough to play
     const sufficient = () =>
+      !request.language &&
       isSufficient(request, [...seen.values()], {
         minSeeders: this.config.number('SOURCES_MIN_SEEDERS'),
         movieMinHealthy: this.config.number('SOURCES_MOVIE_MIN_HEALTHY'),

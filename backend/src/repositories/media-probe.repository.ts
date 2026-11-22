@@ -1,4 +1,4 @@
-import type { Repository } from 'typeorm';
+import { In, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { MediaProbe } from '@entities/media-probe.entity';
@@ -42,6 +42,17 @@ export class MediaProbeRepository {
           probeCodecs(JSON.parse(kept?.result ?? result)),
           manager
         );
+    });
+  }
+
+  /** The stored probes of these sources' files. */
+  findBySourceIds(
+    sourceIds: readonly number[]
+  ): Promise<Array<{ sourceId: number; filePath: string; result: string }>> {
+    if (!sourceIds.length) return Promise.resolve([]);
+    return this.repository.find({
+      select: ['sourceId', 'filePath', 'result'],
+      where: { sourceId: In([...sourceIds]) },
     });
   }
 

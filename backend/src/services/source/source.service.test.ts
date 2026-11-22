@@ -162,6 +162,55 @@ describe('SourceService', () => {
   beforeAll(() => configureFakerSeed());
   beforeEach(() => jest.useFakeTimers());
   afterEach(() => jest.useRealTimers());
+  describe('search in a language', () => {
+    it('asks every provider by the title in that language, without recording it as the title search', async () => {
+      jest.useRealTimers();
+      const mocks = setupTest();
+      const titlesFor = jest.fn().mockResolvedValue(['Projektas „Hail Mary“']);
+      const service = new SourceService({
+        db: mocks.mockDatabase,
+        peers: mocks.mockPeers,
+        sourcesClient: mocks.mockSourcesClient as never,
+        magnetService: mocks.mockSourceMetadataFileService,
+        config: mocks.mockConfigService,
+        searchTitles: { titlesFor },
+        ...sourceServiceDependencies(),
+      });
+      mocks.mockMovieRepository.findById.mockResolvedValue({
+        ...mocks.mockMovie,
+        contentDirectoriesSearched: ['indexer-a'],
+      });
+
+      const sources = await service.searchMovieSourcesInLanguage(mocks.mockMovie.id, 'lt');
+
+      expect(titlesFor).toHaveBeenCalledWith(
+        'movie',
+        mocks.mockMovie.mediaId,
+        mocks.mockMovie.title,
+        ['lt']
+      );
+      expect(mocks.mockSourcesClient.search).toHaveBeenCalledWith(
+        expect.objectContaining({
+          language: 'lt',
+          skipProviders: [],
+          media: expect.objectContaining({ localizedTitles: ['Projektas „Hail Mary“'] }),
+        }),
+        expect.anything()
+      );
+      expect(mocks.mockMovieRepository.recordSourceSearch).not.toHaveBeenCalled();
+      expect(sources).toEqual([mocks.mockContentSource1, mocks.mockContentSource2]);
+    });
+
+    it('searches English as the title search, from every provider', async () => {
+      jest.useRealTimers();
+      const { service, mockMovie, mockSourcesClient } = setupTest();
+      await service.searchMovieSourcesInLanguage(mockMovie.id, 'en');
+      const request = mockSourcesClient.search.mock.calls[0][0];
+      expect(request.language).toBeUndefined();
+      expect(request.skipProviders).toEqual([]);
+    });
+  });
+
   describe('episode availability', () => {
     const now = Date.parse('2026-10-19T12:00:00Z');
 
@@ -320,7 +369,8 @@ describe('SourceService', () => {
       });
 
       expect(releases).toHaveBeenCalledWith(
-        expect.objectContaining({ seasonNumber: 1, episodeNumber: 8 })
+        expect.objectContaining({ seasonNumber: 1, episodeNumber: 8 }),
+        undefined
       );
       expect(episodeSources.associate).toHaveBeenCalledWith(5, 11, 'Show.S01E08.mkv', 'single');
       // The announcement uses the numbering the app shows.

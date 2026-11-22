@@ -13,6 +13,7 @@ import type {
 import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type { BackgroundJobService } from '@services/background-job/background-job.service';
+import { MIRROR_LANGUAGE } from '@services/media/mirror-language';
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { SourceMetadata } from '@services/sources-client/source-candidate';
 import { fromCandidate } from '@services/sources-client/source-candidate';
@@ -24,6 +25,7 @@ import { traced } from '@utils/tracing.util';
 import { providerSourcesToEntities } from '@utils/transformers.util';
 
 import { matchEpisodeFile } from './episode-file-matcher';
+import type { SearchTitlesService } from './search-titles.service';
 import type { SourceAvailabilityService } from './source-availability.service';
 import type { SourceMetadataFileService } from './source-metadata-file.service';
 
@@ -70,6 +72,18 @@ function mayContainEpisode(
   );
 }
 
+/**
+ * Which providers a search asks: those not searched yet for the title, or, for a search in a
+ * language, every one. English is the titles' own language: its search is the title's own.
+ */
+function searchScope(
+  searched: string[],
+  language?: string
+): { skipProviders: string[]; language?: string } {
+  if (!language) return { skipProviders: searched };
+  return language === MIRROR_LANGUAGE ? { skipProviders: [] } : { skipProviders: [], language };
+}
+
 function releaseQualityRank(value: string | null | undefined): number {
   const type = value?.toUpperCase().replace(/[^A-Z0-9]/g, '') ?? '';
   if (type.includes('REMUX')) return 9;
@@ -102,6 +116,8 @@ export interface SourceServiceOptions {
   backgroundJobs: BackgroundJobService;
   notifications: NotificationService;
   availability: SourceAvailabilityService;
+  /** The title's names in the server's other languages; searches use the mirror's title alone without it. */
+  searchTitles?: Pick<SearchTitlesService, 'titlesFor'>;
 }
 
 /**
@@ -130,6 +146,7 @@ export class SourceService {
   private readonly backgroundJobs: BackgroundJobService;
   private readonly notifications: NotificationService;
   private readonly availability: SourceAvailabilityService;
+  private readonly searchTitles?: Pick<SearchTitlesService, 'titlesFor'>;
 
   constructor({
     db,
@@ -140,6 +157,7 @@ export class SourceService {
     backgroundJobs,
     notifications,
     availability,
+    searchTitles,
   }: SourceServiceOptions) {
     this.peers = peers;
     this.sourcesClient = sourcesClient;
@@ -148,6 +166,7 @@ export class SourceService {
     this.backgroundJobs = backgroundJobs;
     this.notifications = notifications;
     this.availability = availability;
+    this.searchTitles = searchTitles;
     this.movieRepository = db.getMovieRepository();
     this.contentSourceRepository = db.getContentSourceRepository();
     this.episodeSourceRepository = db.getEpisodeSourceRepository();
@@ -203,7 +222,13 @@ export class SourceService {
   /**
    * Search for sources for a specific movie
    */
-  @SingleFlight(movie => movie.id + ':' + movie.contentDirectoriesSearched?.join(','))
+  @SingleFlight(
+    (movie, _onDemand, _priority, language) =>
+      movie.id +
+      ':' +
+      movie.contentDirectoriesSearched?.join(',') +
+      (language ? `:${language}` : '')
+  )
   private async searchSourcesForMovie(
     movie: {
       id: number;
@@ -215,7 +240,9 @@ export class SourceService {
       contentDirectoriesSearched?: string[];
     },
     isOnDemand: boolean = false,
-    priority = 20
+    priority = 20,
+    /** Look for releases in this language (ISO 639-1) instead: see `searchInLanguage`. */
+    language?: string
   ): Promise<{ directory: string; sources: ContentSource[] } | void> {
     try {
       const previousSources = await this.contentSourceRepository.findByMovieId(movie.id);
@@ -244,6 +271,12 @@ export class SourceService {
       const timer = setInterval(() => {
         void flush().catch(() => undefined);
       }, 250);
+      const localizedTitles = await this.localizedTitles(
+        'movie',
+        movie.mediaId,
+        movie.title,
+        language
+      );
       try {
         for await (const item of this.sourcesClient.search(
           {
@@ -253,11 +286,12 @@ export class SourceService {
               tmdbId: movie.mediaId,
               imdbId: movie.imdbId,
               title: movie.title,
+              ...(localizedTitles.length ? { localizedTitles } : {}),
               year:
                 movie.year ?? (movie.releaseDate ? Number(movie.releaseDate.slice(0, 4)) : null),
             },
             purpose: isOnDemand ? 'interactive' : 'background',
-            skipProviders: movie.contentDirectoriesSearched ?? [],
+            ...searchScope(movie.contentDirectoriesSearched ?? [], language),
           },
           this.searchLifetime.signal
         )) {
@@ -272,6 +306,8 @@ export class SourceService {
             }
           } else {
             await flush();
+            // A search in a language doesn't stand for the title's own search
+            if (language) continue;
             await this.movieRepository.recordSourceSearch(
               movie.id,
               item.providersSearched,
@@ -289,6 +325,7 @@ export class SourceService {
         .sort((left, right) => right.rank - left.rank)[0];
       const mediaId = movie.mediaId ?? (await this.movieRepository.findById(movie.id))?.mediaId;
       if (
+        !language &&
         mediaId &&
         previousQuality > 0 &&
         nextQualitySource &&
@@ -373,6 +410,8 @@ export class SourceService {
     providerSeasonNumber?: number | null;
     providerEpisodeNumber?: number | null;
     airDate?: string | null;
+    /** Look for releases in this language (ISO 639-1) too, whatever is stored already. */
+    language?: string;
   }): Promise<EpisodeSource[]> {
     if (!this.isEpisodeWithinLeakTolerance(episode.airDate)) return [];
     const existing = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
@@ -380,17 +419,19 @@ export class SourceService {
     // Matches with a live swarm are enough. Weak ones are searched again now and then: a provider
     // enabled since (or newer releases) may have a better copy. So are ones stored before release
     // languages were recorded: the search records them, and selection needs them.
+    // A search for a language always runs: it looks for what isn't stored yet.
     if (
-      single.some(
+      !episode.language &&
+      (single.some(
         association =>
           (association.source?.broadcasters ?? 0) >= WEAK_SWARM_BROADCASTERS &&
           association.source?.languages !== null
       ) ||
-      (single.length &&
-        Date.now() - (this.weakEpisodeSearches.get(episode.episodeId) ?? 0) < WEAK_RESEARCH_MS)
+        (single.length &&
+          Date.now() - (this.weakEpisodeSearches.get(episode.episodeId) ?? 0) < WEAK_RESEARCH_MS))
     )
       return existing;
-    if (single.length) {
+    if (single.length && !episode.language) {
       this.weakEpisodeSearches.set(episode.episodeId, Date.now());
       if (this.weakEpisodeSearches.size > 1000)
         this.weakEpisodeSearches.delete(this.weakEpisodeSearches.keys().next().value!);
@@ -400,7 +441,7 @@ export class SourceService {
       seasonNumber: episode.providerSeasonNumber ?? episode.seasonNumber,
       episodeNumber: episode.providerEpisodeNumber ?? episode.episodeNumber,
     };
-    const releases = await this.getTVReleases(searched);
+    const releases = await this.getTVReleases(searched, episode.language);
     const associate = (allowCombined: boolean) =>
       releases.flatMap(release => {
         const match = matchEpisodeFile(
@@ -518,6 +559,30 @@ export class SourceService {
     return associations;
   }
 
+  /**
+   * The title's names in the other languages profiles use, or in `language` alone; none when they
+   * can't be had.
+   */
+  private async localizedTitles(
+    kind: 'movie' | 'show',
+    mediaId: number,
+    title: string,
+    language?: string
+  ): Promise<string[]> {
+    if (!this.searchTitles) return [];
+    try {
+      return await this.searchTitles.titlesFor(
+        kind,
+        mediaId,
+        title,
+        language ? [language] : undefined
+      );
+    } catch (error) {
+      logger.warn('SourceService', `Searching ${kind} ${mediaId} by its English title only`, error);
+      return [];
+    }
+  }
+
   /** Unknown air dates preserve on-demand behavior; known upcoming episodes wait for the configured window. */
   public isEpisodeWithinLeakTolerance(airDate?: string | null, now = Date.now()): boolean {
     if (!airDate) return true;
@@ -526,20 +591,26 @@ export class SourceService {
     return airTime <= now + (this.config.get('LEAK_TOLERANCE') ?? 0);
   }
 
-  private async getTVReleases(episode: {
-    showImdbId: string | null;
-    showTmdbId?: number;
-    showTitle?: string;
-    showYear?: number | null;
-    seasonNumber: number;
-    episodeNumber: number;
-    airDate?: string | null;
-  }): Promise<TVRelease[]> {
-    const key = `${episode.showImdbId ?? episode.showTmdbId}:${episode.seasonNumber}:${episode.episodeNumber}`;
+  private async getTVReleases(
+    episode: {
+      showImdbId: string | null;
+      showTmdbId?: number;
+      showTitle?: string;
+      showYear?: number | null;
+      seasonNumber: number;
+      episodeNumber: number;
+      airDate?: string | null;
+    },
+    language?: string
+  ): Promise<TVRelease[]> {
+    const key = `${episode.showImdbId ?? episode.showTmdbId}:${episode.seasonNumber}:${episode.episodeNumber}${language ? `:${language}` : ''}`;
     const cached = this.tvReleaseSearches.get(key);
     if (cached && cached.expiresAt > Date.now()) return cached.promise;
     const promise = (async () => {
       const releases = new Map<string, TVRelease>();
+      const localizedTitles = episode.showTmdbId
+        ? await this.localizedTitles('show', episode.showTmdbId, episode.showTitle ?? '', language)
+        : [];
       for await (const item of this.sourcesClient.search(
         {
           media: {
@@ -547,12 +618,14 @@ export class SourceService {
             tmdbId: episode.showTmdbId ?? 0,
             imdbId: episode.showImdbId,
             title: episode.showTitle ?? '',
+            ...(localizedTitles.length ? { localizedTitles } : {}),
             year: episode.showYear,
           },
           season: episode.seasonNumber,
           episode: episode.episodeNumber,
           airDate: episode.airDate,
           purpose: 'interactive',
+          ...(language ? searchScope([], language) : {}),
         },
         AbortSignal.any([this.searchLifetime.signal, AbortSignal.timeout(20_000)])
       )) {
@@ -647,6 +720,32 @@ export class SourceService {
    * Find all sources for a specific movie
    */
   @traced('SourceService')
+  /**
+   * Look for a movie's releases in a language (ISO 639-1): by its title in that language and by
+   * its title with the language's release tag, from every provider. Returns the movie's sources
+   * once the search ends or `timeoutMs` passes; the search goes on storing what it finds.
+   */
+  public async searchMovieSourcesInLanguage(
+    movieId: number,
+    language: string,
+    timeoutMs = 15_000
+  ): Promise<ContentSource[]> {
+    const movie = await this.movieRepository.findById(movieId);
+    if (!movie) return [];
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      await Promise.race([
+        this.searchSourcesForMovie(movie, true, 30, language),
+        new Promise<void>(resolve => {
+          timer = setTimeout(resolve, timeoutMs);
+        }),
+      ]);
+      return await this.getSourcesForMovie(movieId);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   public async getSourcesForMovie(movieId: number): Promise<ContentSource[]> {
     return this.contentSourceRepository.findByMovieId(movieId);
   }

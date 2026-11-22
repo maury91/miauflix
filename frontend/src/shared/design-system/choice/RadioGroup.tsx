@@ -1,6 +1,7 @@
 import { FocusGroup } from '@shared/navigation/NavigationProvider';
 import { type KeyboardEvent, type ReactNode, useId } from 'react';
 
+import { visuallyHidden } from '../a11y.css';
 import * as fieldStyles from '../field/field.css';
 import * as styles from './choice.css';
 import { ChoiceError, ChoiceFrame } from './ChoiceFrame';
@@ -10,12 +11,16 @@ export interface RadioOption<Value extends string = string> {
   value: Value;
   label: string;
   description?: ReactNode;
+  /** Short facts at the option's end (a Badge such as "Default"); shown with `appearance="rows"`. */
+  metadata?: ReactNode;
   disabled?: boolean;
 }
 
 export interface RadioGroupProps<Value extends string = string> {
   /** The question the choices answer; the group's accessible name. */
   label: string;
+  /** Keeps the label for assistive technology only, when a heading above already shows it. */
+  hideLabel?: boolean;
   /** Short text next to the label, such as a translated "Optional". */
   indicator?: string;
   /** Help below the label. Not a focus target. */
@@ -28,6 +33,11 @@ export interface RadioGroupProps<Value extends string = string> {
   onChange: (value: Value) => void;
   /** Vertical moves with Up/Down, horizontal with Left/Right (style guide, section 9). */
   orientation?: 'vertical' | 'horizontal';
+  /**
+   * `rows` draws each option as a full-width row on a quiet fill, with its `metadata` at the end
+   * (a panel's list of choices); `plain` hugs the text. Vertical only.
+   */
+  appearance?: 'plain' | 'rows';
   /** The option holding virtual focus (outline). Confirm selects it: focus never selects. */
   focusedValue?: Value;
   /** Called when the pointer moves onto an option, so the navigation layer can focus it. */
@@ -59,6 +69,7 @@ const preventArrowSelection = (event: KeyboardEvent<HTMLInputElement>) => {
  */
 export function RadioGroup<Value extends string = string>({
   label,
+  hideLabel = false,
   indicator,
   description,
   error,
@@ -66,6 +77,7 @@ export function RadioGroup<Value extends string = string>({
   value,
   onChange,
   orientation = 'vertical',
+  appearance = 'plain',
   focusedValue,
   onPointerFocus,
   name,
@@ -81,7 +93,7 @@ export function RadioGroup<Value extends string = string>({
       aria-invalid={error ? true : undefined}
       disabled={disabled}
     >
-      <legend className={fieldStyles.labelRow}>
+      <legend className={hideLabel ? visuallyHidden : fieldStyles.labelRow}>
         <span className={fieldStyles.label}>{label}</span>
         {indicator && <span className={fieldStyles.indicator}>{indicator}</span>}
       </legend>
@@ -91,7 +103,7 @@ export function RadioGroup<Value extends string = string>({
         </p>
       )}
       <FocusGroup id={navId} layout={orientation} disabled={navId === undefined}>
-        <div className={styles.options} data-orientation={orientation}>
+        <div className={styles.options} data-orientation={orientation} data-appearance={appearance}>
           {options.map((option, index) => {
             const optionDisabled = disabled || Boolean(option.disabled);
             // By position: a value may hold a space, which would split an ID reference list
@@ -101,6 +113,7 @@ export function RadioGroup<Value extends string = string>({
                 <ChoiceFrame
                   label={option.label}
                   description={option.description}
+                  metadata={appearance === 'rows' ? option.metadata : undefined}
                   labelId={`${optionId}-label`}
                   descriptionId={option.description ? `${optionId}-description` : undefined}
                   focused={focusedValue === option.value}

@@ -9,6 +9,11 @@ export interface SubtitleSearchOptions {
   localOnly?: boolean;
   /** Turn the first track found on when nothing remembered is among them. */
   autoSelect?: boolean;
+  /**
+   * Remember the result as the title's subtitle choice; by default, unless `localOnly`. A track the
+   * profile's automatic subtitles turned on is not: the viewer did not choose it.
+   */
+  persist?: boolean;
 }
 
 interface Subtitles {
@@ -34,7 +39,7 @@ export function useSubtitleLanguage({
   search,
 }: Subtitles) {
   return useCallback(
-    (language: string | null) => {
+    (language: string | null, hearingImpaired = false) => {
       if (language === null) {
         select(null);
         return;
@@ -48,7 +53,7 @@ export function useSubtitleLanguage({
       }
       const found = candidates.find(inLanguage);
       if (found) select(found.id);
-      else void search(language, false, { autoSelect: true });
+      else void search(language, hearingImpaired, { autoSelect: true });
     },
     [cancelSearch, candidates, search, select, selectedId]
   );

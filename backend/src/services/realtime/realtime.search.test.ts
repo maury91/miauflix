@@ -117,7 +117,30 @@ describe('RealtimeSearchChannel', () => {
     channel.handle(client, { type: 'search-genres' });
     await flush();
 
-    expect(sent).toEqual([{ type: 'search-genres', items: [{ key: '18', name: 'Drama' }] }]);
+    expect(sent).toEqual([
+      { type: 'search-genres', items: [{ key: '18', name: 'Drama' }], language: 'en' },
+    ]);
+  });
+
+  it('names genres and recent genre searches in the language asked for', async () => {
+    const { channel, search, client } = setupTest();
+
+    channel.handle(client, { type: 'search-genres', language: 'it' });
+    channel.handle(client, { type: 'search-recents', language: 'lt' });
+    channel.handle(client, {
+      type: 'search-recent-add',
+      kind: 'genre',
+      query: '18',
+      language: 'it',
+    });
+    channel.handle(client, { type: 'search-genres', language: '../en' });
+    await flush();
+
+    expect(search.listGenres.mock.calls).toEqual([['it'], ['en']]);
+    expect(search.listRecents.mock.calls).toEqual([
+      ['user', 'lt'],
+      ['user', 'it'],
+    ]);
   });
 
   it('accepts the anime shortcut as a genre', async () => {

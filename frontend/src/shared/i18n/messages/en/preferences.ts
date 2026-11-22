@@ -24,6 +24,9 @@ export const preferences = {
   'preferences.animeAudioDescription': 'Choose a different audio language for anime.',
   'preferences.subtitlesDescription':
     'Miauflix looks for subtitles in this language first and offers them below the progress bar.',
+  'preferences.autoSubtitles': 'Automatic subtitles',
+  'preferences.autoSubtitlesDescription':
+    'Subtitles in your subtitle language turn on when a title starts, unless you changed them for that title.',
   'preferences.animeSubtitlesDescription': 'Choose a different subtitle language for anime.',
   'preferences.deviceLanguage': 'Device language ({language})',
   'preferences.sameAsMovies': 'Same as movies and TV shows',

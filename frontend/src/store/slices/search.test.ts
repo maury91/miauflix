@@ -117,6 +117,19 @@ describe('search slice', () => {
     expect(state.genres).toEqual([{ key: '18', name: 'Drama' }]);
   });
 
+  it('renames the selected genre when genres arrive in another language', () => {
+    const state = reduce(
+      initialSearchState,
+      searchActions.genreSelected({ key: '27', name: 'Horror' }),
+      searchActions.serverMessage({
+        type: 'search-genres',
+        items: [{ key: '27', name: 'Orrore' }],
+      })
+    );
+    expect(state.query).toBe('Orrore');
+    expect(state.genre).toBe('27');
+  });
+
   it('drops the previous query results when the new query fails', () => {
     const state = reduce(
       initialSearchState,

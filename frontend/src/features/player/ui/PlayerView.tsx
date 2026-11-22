@@ -1,5 +1,6 @@
 import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
 import { useAudioDelivery } from '@features/player/hooks/useAudioDelivery';
+import { useAudioSources } from '@features/player/hooks/useAudioSources';
 import {
   resumePosition,
   usePlaybackProgress,
@@ -181,8 +182,10 @@ function PlayerScreen({
     audioSeek: audio.audioSeek,
     audioTrackIndex: audio.audioTrackIndex,
     preferredLanguage: mediaLanguage(languages.subtitles),
+    autoEnable: languages.autoSubtitles,
   });
   const showSubtitleLanguage = useSubtitleLanguage(subtitles);
+  const audioSources = useAudioSources(playable);
   const prompts = usePlaybackPrompts({
     playable,
     nextEpisode,
@@ -308,12 +311,21 @@ function PlayerScreen({
   const navigation = useNavigation();
   // Back leaves the player, after whatever is open inside it (the subtitle panel) took it. An
   // element scope, so it wins over page-wide handlers of the screens underneath.
-  const pageRef = useKeyboardNavigation({
+  const keyboardRef = useKeyboardNavigation({
     onBack: () => {
       onBack();
       return true;
     },
   });
+  /** The player element: the subtitle panel is drawn over it, in full screen too. */
+  const [page, setPage] = useState<HTMLElement | null>(null);
+  const pageRef = useCallback(
+    (element: HTMLElement | null) => {
+      keyboardRef(element);
+      setPage(element);
+    },
+    [keyboardRef]
+  );
   // A failure's action takes the focus, in the commit that shows it
   const notifyShown = status === 'exhausted' && !availabilityRequest.isSuccess;
   useLayoutEffect(() => {
@@ -449,8 +461,11 @@ function PlayerScreen({
               subtitleOffset={subtitles.offset}
               onSearchSubtitles={subtitles.search}
               onSelectSubtitle={subtitles.select}
+              onShowSubtitleLanguage={showSubtitleLanguage}
               onSubtitleOffsetChange={subtitles.changeOffset}
               subtitlePreferencesKey={currentUser?.id ?? null}
+              subtitleDefaultLanguage={mediaLanguage(languages.subtitles)}
+              overlayContainer={page}
               onControlsInsetChange={subtitles.setControlsInset}
               onHeaderInsetChange={subtitles.setHeaderInset}
               languageButtons={
@@ -470,6 +485,20 @@ function PlayerScreen({
               audioTracks={audio.audioTracks}
               selectedAudioTrackIndex={audio.audioTrackIndex}
               onSelectAudioTrack={audio.selectAudioTrack}
+              audioMenu={{
+                originalLanguage,
+                defaultLanguage: mediaLanguage(
+                  preferredAudioLanguage(languages, originalLanguage) ?? navigator.language
+                ),
+                sources: audioSources.sources,
+                sourcesFailed: audioSources.sourcesFailed,
+                currentSourceId: session.source.id,
+                searching: audioSources.searching,
+                searchFailed: audioSources.searchFailed,
+                onSearch: audioSources.searchLanguage,
+                onPlaySource: source.chooseSource,
+                onOpenChange: audioSources.onPanelOpenChange,
+              }}
               onSeek={audioDelivery ? audio.seekConvertedAudio : undefined}
             />
             <p

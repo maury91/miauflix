@@ -136,43 +136,86 @@ export const SOURCE_PATTERNS: PatternConfig<Source>[] = [
 
 // ===== LANGUAGE PATTERNS =====
 
+/**
+ * One of the tags as a word of its own. Letters outside ASCII bound words too, unlike `\b`: the
+ * "Cz" of the Polish "Człowiek" names no language. `caseSensitive` for tags that are also
+ * ordinary words in other cases ("Attila the Hun").
+ */
+const tags = (alternatives: string, caseSensitive = false): RegExp =>
+  new RegExp(
+    `(?<![\\p{L}\\p{N}])(?:${alternatives})(?![\\p{L}\\p{N}])`,
+    caseSensitive ? 'gu' : 'giu'
+  );
+
+/**
+ * Tags as release names write them, checked against the names of stored releases. Short codes
+ * that are also common words or names ("Dan", "nor", "fin", "Lt Dan") are left out.
+ */
 export const LANGUAGE_PATTERNS: PatternConfig<Language>[] = [
   {
     // Also English subtitles ("EngSub", "Eng-Subs") and dubs ("EngDub").
-    regex: /(\beng\b|\benglish\b|\beng[ -]?(?:sub|dub)s?\b)/gi,
+    regex: tags('eng|english|eng[ -]?(?:sub|dub)s?'),
     value: Language.ENGLISH,
     specificity: 85,
   },
   {
-    // French scene tags: dubs (VF, VFF, VFQ, VFI, TRUEFRENCH) and French subtitles (VOSTFR).
-    regex: /(\bfre\b|\bfra\b|\b(?:true|sub)?french\b|\bvf[fqi]?\b|\bvostfr\b)/gi,
+    // French scene tags: dubs (VF, VFF, VFQ, VFI, VF2, TRUEFRENCH) and subtitles (VOSTFR).
+    regex: tags('fre|fra|(?:true|sub)?french|vf[fqi2]?|vostfr'),
     value: Language.FRENCH,
     specificity: 90,
   },
-  { regex: /(\bspa\b|\besp\b|\bspanish\b)/gi, value: Language.SPANISH, specificity: 90 },
-  { regex: /(\bger\b|\bdeu\b|\bgerman\b)/gi, value: Language.GERMAN, specificity: 85 },
+  {
+    // Also the Spain and Latin-American dubs: "Castellano", "Latino", "LAT" (as in "ESP-LAT-ENG").
+    regex: tags('spa|esp|spanish|español|espanol|castellano|latino|lat'),
+    value: Language.SPANISH,
+    specificity: 90,
+  },
+  { regex: tags('ger|deu|german|deutsch'), value: Language.GERMAN, specificity: 85 },
   {
     // Also Italian subtitles ("SubITA", "Sub-ITA") and "iTALiAN"/"Italiano".
-    regex: /(\bita\b|\bitalian[oa]?\b|\bsub[ -]?ita\b)/gi,
+    regex: tags('ita|italian[oa]?|sub[ -]?ita'),
     value: Language.ITALIAN,
     specificity: 85,
   },
-  { regex: /(\bpor\b|\bportuguese\b)/gi, value: Language.PORTUGUESE, specificity: 90 },
-  { regex: /(\bnld\b|\bdutch\b)/gi, value: Language.DUTCH, specificity: 90 },
-  { regex: /(\bswe\b|\bswedish\b)/gi, value: Language.SWEDISH, specificity: 90 },
-  { regex: /(\bcze\b|\bczech\b)/gi, value: Language.CZECH, specificity: 90 },
-  { regex: /(\bslo\b|\bslovak\b)/gi, value: Language.SLOVAK, specificity: 90 },
-  { regex: /(\bchi\b|\bchinese\b|\bmandarin\b)/gi, value: Language.CHINESE, specificity: 85 },
-  { regex: /(\bjpn?\b|\bjap\b|\bjapanese\b)/gi, value: Language.JAPANESE, specificity: 90 },
+  {
+    // Also the Brazilian dubs and subtitles: "PT-BR", "Dublado", "Legendado".
+    regex: tags('por|portuguese|português|portugues|pt[ -]?br|dublado|legendado'),
+    value: Language.PORTUGUESE,
+    specificity: 90,
+  },
+  { regex: tags('nld|dut|dutch|nl(?:[ ._-]?subs?)?'), value: Language.DUTCH, specificity: 90 },
+  { regex: tags('swe(?:[ ._-]?subs?)?|swedish'), value: Language.SWEDISH, specificity: 90 },
+  { regex: tags('danish|dk'), value: Language.DANISH, specificity: 90 },
+  { regex: tags('norwegian|norsk'), value: Language.NORWEGIAN, specificity: 90 },
+  { regex: tags('finnish|suomi'), value: Language.FINNISH, specificity: 90 },
+  {
+    // Polish dubs, subtitles and voice-overs: "PL", "PLDUB", "PLSUB", "Lektor".
+    regex: tags('pl(?:[ ._-]?(?:dub|sub)s?)?|pol|polish|lektor'),
+    value: Language.POLISH,
+    specificity: 90,
+  },
+  { regex: tags('cze?|czech'), value: Language.CZECH, specificity: 90 },
+  { regex: tags('slo|sk|svk|slovak'), value: Language.SLOVAK, specificity: 90 },
+  { regex: tags('HUN', true), value: Language.HUNGARIAN, specificity: 90 },
+  { regex: tags('hungarian|magyar'), value: Language.HUNGARIAN, specificity: 90 },
+  { regex: tags('romanian|rosubs?'), value: Language.ROMANIAN, specificity: 90 },
+  { regex: tags('rus|russian'), value: Language.RUSSIAN, specificity: 90 },
+  { regex: tags('ukr|ukrainian'), value: Language.UKRAINIAN, specificity: 90 },
+  { regex: tags('TR', true), value: Language.TURKISH, specificity: 90 },
+  { regex: tags('turkish'), value: Language.TURKISH, specificity: 90 },
+  { regex: tags('gre|greek'), value: Language.GREEK, specificity: 90 },
+  { regex: tags('chi|ch[st]|chinese|mandarin'), value: Language.CHINESE, specificity: 85 },
+  { regex: tags('jpn?|jap|japanese'), value: Language.JAPANESE, specificity: 90 },
+  { regex: tags('kor|korean'), value: Language.KOREAN, specificity: 90 },
+  { regex: tags('hin|hindi'), value: Language.HINDI, specificity: 90 },
   {
     // Lithuanian dubs and subtitles ("LT subs", "LT.Dub"). A bare "LT" is too common to count.
-    regex:
-      /(\bltu\b|\blt[ ._-]?(?:subs?|dub(?:bed)?)\b|\blithuanian\b|\bliet\b|\blietuvi\p{L}*)/giu,
+    regex: tags('ltu|lt[ ._-]?(?:subs?|dub(?:bed)?)|lithuanian|liet|lietuvi\\p{L}*'),
     value: Language.LITHUANIAN,
     specificity: 90,
   },
   {
-    regex: /(\bmulti\b|\bmultilingual\b|\bmultisubs\b|\bdual\b)/gi,
+    regex: tags('multi|multilingual|multisubs|dual'),
     value: Language.MULTI,
     specificity: 95,
   },

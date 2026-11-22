@@ -49,11 +49,14 @@ interface SubtitlesOptions {
   audioTrackIndex: number | undefined;
   /** The profile's subtitle language for this title (ISO 639-1); the device's when absent. */
   preferredLanguage?: string;
+  /** Turn a track in `preferredLanguage` on when nothing is remembered for the title. */
+  autoEnable?: boolean;
 }
 
 /**
  * Subtitle search, choice and timing for the current session: restores the remembered choice
- * (or searches locally in the profile's subtitle language), loads the chosen track as WebVTT, as styled
+ * (or searches in the profile's subtitle language, turning a track on when the profile asks for
+ * automatic subtitles), loads the chosen track as WebVTT, as styled
  * ASS, or as cues for AVPlay, and keeps the remembered choice and offset up to date.
  */
 export function useSubtitles({
@@ -68,6 +71,7 @@ export function useSubtitles({
   audioSeek,
   audioTrackIndex,
   preferredLanguage,
+  autoEnable = false,
 }: SubtitlesOptions) {
   const [searchSubtitles] = useSearchSubtitlesMutation();
   const rememberedSubtitles = useRef<MediaSubtitles | null>(readMediaSubtitles(storageKey));
@@ -157,7 +161,12 @@ export function useSubtitles({
     async (
       language: string,
       hearingImpaired: boolean,
-      { restoring = false, localOnly = false, autoSelect = false }: SubtitleSearchOptions = {}
+      {
+        restoring = false,
+        localOnly = false,
+        autoSelect = false,
+        persist = !localOnly,
+      }: SubtitleSearchOptions = {}
     ) => {
       if (!session || sessionStorageKey.current !== storageKey) return;
       const request = ++requestId.current;
@@ -202,7 +211,7 @@ export function useSubtitles({
             offset: keepsOffset ? remembered.offset : 0,
           };
           rememberedSubtitles.current = preferences;
-          if (!localOnly) saveMediaSubtitles(storageKey, preferences);
+          if (persist) saveMediaSubtitles(storageKey, preferences);
           setSelectedId(selected?.id ?? null);
           setOffset(preferences.offset);
         }
@@ -226,6 +235,8 @@ export function useSubtitles({
   // Read when a session starts, not a dependency: the title's details can arrive later
   const preferredLanguageRef = useRef('en');
   preferredLanguageRef.current = preferredLanguage ?? (navigator.language.split('-')[0] || 'en');
+  const autoEnableRef = useRef(autoEnable);
+  autoEnableRef.current = autoEnable;
 
   useEffect(() => {
     if (!session || sessionStorageKey.current !== storageKey) return;
@@ -236,6 +247,13 @@ export function useSubtitles({
       setSubtitleWindow(minuteWindow(saved.positionSeconds));
     if (remembered)
       void search(remembered.language, remembered.hearingImpaired, { restoring: true });
+    else if (autoEnableRef.current)
+      // Any provider may have the track; the choice is remembered only once the viewer makes one
+      void search(preferredLanguageRef.current, false, {
+        restoring: true,
+        autoSelect: true,
+        persist: false,
+      });
     else void search(preferredLanguageRef.current, false, { restoring: true, localOnly: true });
   }, [session, storageKey, search, sessionStorageKey, sessionKeyVersion, resumeRef]);
 
@@ -263,9 +281,19 @@ export function useSubtitles({
         };
         rememberedSubtitles.current = next;
         saveMediaSubtitles(storageKey, next);
+      } else if (id === null) {
+        // Off before the first automatic search settled: remembered, so it isn't turned on again
+        const next: MediaSubtitles = {
+          language: searchPreferences?.language ?? preferredLanguageRef.current,
+          hearingImpaired: searchPreferences?.hearingImpaired ?? false,
+          selectedFileId: null,
+          offset: 0,
+        };
+        rememberedSubtitles.current = next;
+        saveMediaSubtitles(storageKey, next);
       }
     },
-    [cancelSearch, candidates, storageKey, videoRef]
+    [cancelSearch, candidates, searchPreferences, storageKey, videoRef]
   );
 
   const changeOffset = useCallback(

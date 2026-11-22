@@ -1,5 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
+  AudioSourcesResponse,
   CreatePlaybackSessionResponse,
   PlayableRef,
   SubtitleSearchResponse,
@@ -20,12 +21,60 @@ export interface CreatePlaybackSessionRequest {
   deferDownload?: boolean;
   /** Sources this browser failed to play, so the backend picks another one. */
   avoidSourceIds?: number[];
+  /** The source the viewer chose (one in another language). */
+  sourceId?: number;
+}
+
+/** The same session handling for every playback request. */
+function request<T>(
+  api: { getState: () => unknown; dispatch: (action: unknown) => unknown },
+  errorContext: string,
+  requestFn: (headers: Record<string, string>) => Promise<Response>
+) {
+  const session = selectCurrentSessionId(api.getState() as RootState);
+  const headers: Record<string, string> = session ? { 'X-Session-Id': session } : {};
+  return authenticatedRequest<T>({
+    requestFn: () => requestFn(headers),
+    session,
+    errorContext,
+    onInvalidSession: () => {
+      api.dispatch({ type: 'auth/clearAuth' });
+      api.dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+    },
+  });
 }
 
 export const playbackApi = createApi({
   reducerPath: 'playbackApi',
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
   endpoints: builder => ({
+    /** The title's known sources, with the languages they play in. */
+    getAudioSources: builder.query<AudioSourcesResponse, { playable: PlayableRef }>({
+      async queryFn({ playable }, api) {
+        return request<AudioSourcesResponse>(api, t('api.failedToLoadAudioSources'), headers =>
+          backendClient.api.playback.sources.$post({ json: { playable } }, { headers })
+        );
+      },
+    }),
+    /** Look for the title's releases in a language; the sources found replace the list above. */
+    searchAudioSources: builder.mutation<
+      AudioSourcesResponse,
+      { playable: PlayableRef; language: string }
+    >({
+      async queryFn(input, api) {
+        return request<AudioSourcesResponse>(api, t('api.failedToSearchAudioSources'), headers =>
+          backendClient.api.playback.sources.search.$post({ json: input }, { headers })
+        );
+      },
+      async onQueryStarted({ playable }, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(playbackApi.util.upsertQueryData('getAudioSources', { playable }, data));
+        } catch {
+          // The list keeps what it had; the panel says the search failed.
+        }
+      },
+    }),
     searchSubtitles: builder.mutation<
       SubtitleSearchResponse,
       { streamingKey: string; language: string; hearingImpaired: boolean; refresh?: boolean }
@@ -51,7 +100,7 @@ export const playbackApi = createApi({
       },
     }),
     createSession: builder.mutation<CreatePlaybackSessionResponse, CreatePlaybackSessionRequest>({
-      async queryFn({ playable, preferences, deferDownload, avoidSourceIds }, api) {
+      async queryFn({ playable, preferences, deferDownload, avoidSourceIds, sourceId }, api) {
         const session = selectCurrentSessionId(api.getState() as RootState);
         const headers: Record<string, string> = session ? { 'X-Session-Id': session } : {};
         return authenticatedRequest<CreatePlaybackSessionResponse>({
@@ -64,6 +113,7 @@ export const playbackApi = createApi({
                   ...(deferDownload ? { deferDownload } : {}),
                   // Sources this browser failed to play, so the backend picks another one.
                   ...(avoidSourceIds?.length ? { avoidSourceIds } : {}),
+                  ...(sourceId ? { sourceId } : {}),
                 },
               },
               { headers }
@@ -82,4 +132,9 @@ export const playbackApi = createApi({
   }),
 });
 
-export const { useCreateSessionMutation, useSearchSubtitlesMutation } = playbackApi;
+export const {
+  useCreateSessionMutation,
+  useSearchSubtitlesMutation,
+  useGetAudioSourcesQuery,
+  useSearchAudioSourcesMutation,
+} = playbackApi;

@@ -29,6 +29,8 @@ export const api = {
   'api.failedToMarkNotificationAsRead': 'Failed to mark notification as read',
   'api.failedToMarkNotificationsAsRead': 'Failed to mark notifications as read',
   'api.failedToRequestAnAvailabilityNotification': 'Could not set up an availability alert',
+  'api.failedToLoadAudioSources': "Couldn't load the title's sources",
+  'api.failedToSearchAudioSources': "Couldn't search for sources in that language",
   'api.failedToSearchSubtitles': "Couldn't search for subtitles",
   'api.failedToStartPlayback': 'Failed to start playback',
   'api.failedToUpdatePlaybackPreparationIntent': 'Could not update the request to prepare playback',

@@ -10,12 +10,13 @@ import {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 
 import { visuallyHidden } from '../a11y.css';
 import { containTab, isEditing } from '../overlayFocus';
 import { SurfaceContextProvider } from '../surface';
 import * as styles from './popover.css';
-import { isTopPopover, pushPopover } from './popoverStack';
+import { isInNestedPopover, isTopPopover, pushPopover } from './popoverStack';
 
 /** Props for the element that opens the popover; the feature's own `onClick` toggles `open`. */
 export interface PopoverTriggerProps {
@@ -43,7 +44,18 @@ export interface PopoverProps {
   /** Renders the trigger with the props that describe the popover. */
   trigger: (props: PopoverTriggerProps) => ReactNode;
   children: ReactNode;
-  placement?: 'bottom' | 'top';
+  /**
+   * `sheet` docks the panel to the end edge of `container`, its full height (a side panel over a
+   * player); `bottom` and `top` place it next to the trigger.
+   */
+  placement?: 'bottom' | 'top' | 'sheet';
+  /**
+   * Where a `sheet` is drawn: a positioned element it covers the end of (the player, so the sheet
+   * shows in full screen too). Without one, the sheet is drawn next to the trigger.
+   */
+  container?: HTMLElement | null;
+  /** The navId focused on opening (a group enters at its chosen item); else the first item. */
+  initialNavId?: string;
   /** Which trigger edge it lines up with; `end` for triggers near the end of the screen. */
   align?: 'start' | 'end';
   size?: 'sm' | 'md' | 'lg';
@@ -90,6 +102,8 @@ export function Popover({
   placement = 'bottom',
   align = 'start',
   size = 'md',
+  container,
+  initialNavId,
 }: PopoverProps) {
   const [id] = useState(() => Symbol('popover'));
   const parent = useContext(ParentPopoverContext);
@@ -98,6 +112,10 @@ export function Popover({
   const rootRef = useRef<HTMLSpanElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  // A sheet without a container to cover sits above its trigger instead
+  const sheet = placement === 'sheet' && Boolean(container);
+  /** Where the panel is drawn: the container for a sheet, else inline. */
+  const portal = sheet ? container : null;
   const latest = useRef({ onDismiss, modality });
   latest.current = { onDismiss, modality };
 
@@ -105,11 +123,17 @@ export function Popover({
     if (!open) return;
     const panel = panelRef.current;
     const triggerElement = triggerRef.current;
-    const pop = pushPopover(id, parent);
+    const pop = pushPopover(id, parent, panel);
     // The navigation layer may already have mirrored focus onto the first item inside
     if (!panel?.contains(document.activeElement)) panel?.focus({ preventScroll: true });
+    // A sheet is drawn elsewhere: its panel counts as inside too, as do popovers nested in this one
     const inside = (target: EventTarget | null) =>
-      target instanceof Node && Boolean(rootRef.current?.contains(target));
+      target instanceof Node &&
+      Boolean(
+        rootRef.current?.contains(target) ||
+          panelRef.current?.contains(target) ||
+          isInNestedPopover(id, target)
+      );
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isTopPopover(id) || !panel) return;
@@ -156,9 +180,35 @@ export function Popover({
         triggerElement?.focus({ preventScroll: true });
       }
     };
-    // The enclosing popover is fixed for this one's lifetime
+    // The enclosing popover is fixed for this one's lifetime. A new portal destination draws a
+    // new panel: its listeners move to it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, id]);
+  }, [open, id, portal]);
+  const panel = (
+    <SurfaceContextProvider value="solid">
+      <div
+        ref={panelRef}
+        id={panelId}
+        role="dialog"
+        aria-modal={modality === 'modal' || undefined}
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        className={styles.panel}
+        data-placement={sheet ? 'sheet' : placement === 'sheet' ? 'top' : placement}
+        data-align={align}
+        data-size={size}
+      >
+        <h2 id={titleId} className={hideTitle ? visuallyHidden : styles.title}>
+          {title}
+        </h2>
+        {/* Modal contains virtual focus (Tab included) and restores the opener; non-modal only
+            takes it */}
+        <FocusScope contain={modality === 'modal'} autoFocus initialId={initialNavId}>
+          <ParentPopoverContext.Provider value={id}>{children}</ParentPopoverContext.Provider>
+        </FocusScope>
+      </div>
+    </SurfaceContextProvider>
+  );
 
   return (
     <span ref={rootRef} className={styles.root}>
@@ -168,31 +218,7 @@ export function Popover({
         'aria-expanded': open,
         'aria-controls': open ? panelId : undefined,
       })}
-      {open && (
-        <SurfaceContextProvider value="solid">
-          <div
-            ref={panelRef}
-            id={panelId}
-            role="dialog"
-            aria-modal={modality === 'modal' || undefined}
-            aria-labelledby={titleId}
-            tabIndex={-1}
-            className={styles.panel}
-            data-placement={placement}
-            data-align={align}
-            data-size={size}
-          >
-            <h2 id={titleId} className={hideTitle ? visuallyHidden : styles.title}>
-              {title}
-            </h2>
-            {/* Modal contains virtual focus (Tab included) and restores the opener; non-modal only
-                takes it */}
-            <FocusScope contain={modality === 'modal'} autoFocus>
-              <ParentPopoverContext.Provider value={id}>{children}</ParentPopoverContext.Provider>
-            </FocusScope>
-          </div>
-        </SurfaceContextProvider>
-      )}
+      {open && (portal ? createPortal(panel, portal) : panel)}
     </span>
   );
 }

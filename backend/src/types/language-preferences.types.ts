@@ -18,10 +18,31 @@ export interface LanguagePreferences {
   interface: string | null;
   audio: LanguageChoice;
   subtitles: LanguageChoice;
+  /**
+   * Turn subtitles in the subtitle language on when playback starts, for titles without a
+   * remembered subtitle choice.
+   */
+  autoSubtitles: boolean;
 }
+
+/**
+ * Preferences as a client saves them: clients from before `autoSubtitles` leave it out, which
+ * keeps the stored choice.
+ */
+export type LanguagePreferencesUpdate = Omit<LanguagePreferences, 'autoSubtitles'> & {
+  autoSubtitles?: boolean;
+};
 
 export const DEFAULT_LANGUAGE_PREFERENCES: LanguagePreferences = {
   interface: null,
   audio: { default: null, anime: null },
   subtitles: { default: null, anime: null },
+  autoSubtitles: false,
 };
+
+/** Stored preferences with what they predate filled in (none stored: the defaults). */
+export function withDefaultLanguagePreferences(
+  stored: Partial<LanguagePreferences> | null | undefined
+): LanguagePreferences {
+  return { ...DEFAULT_LANGUAGE_PREFERENCES, ...stored };
+}

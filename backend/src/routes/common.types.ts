@@ -9,6 +9,7 @@ import type { MediaService } from '@services/media/media.service';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { AudioPlaybackService } from '@services/playback/audio-playback.service';
+import type { AudioSourcesService } from '@services/playback/audio-sources.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
 import type { StreamService } from '@services/playback/stream.service';
 import type { TvRemuxService } from '@services/playback/tv-remux.service';
@@ -49,6 +50,7 @@ export interface Deps {
   qrLoginService: QrLoginService;
   preloadIntentService: PreloadIntentService;
   playbackSessionService: PlaybackSessionService;
+  audioSourcesService: AudioSourcesService;
   audioPlaybackService: AudioPlaybackService;
   tvRemuxService: TvRemuxService;
   profileService: ProfileService;

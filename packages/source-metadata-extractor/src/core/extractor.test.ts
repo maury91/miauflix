@@ -35,6 +35,36 @@ describe('extractSourceMetadata', () => {
     ['Some Movie 2024 LTU 1080p WEB-DL', [Language.LITHUANIAN]],
     ['Some Movie 2024 1080p LT.Dub WEB-DL', [Language.LITHUANIAN]],
     ['Forrest Gump 1994 Lt Dan Edition 1080p BluRay', []],
+    // Tags as stored release names write them
+    ['Some.Movie.2026.MULTi.VFF.2160p.WEB.H265-TRB', [Language.FRENCH, Language.MULTI]],
+    ['Some Movie (2026) [1080p][Castellano]', [Language.SPANISH]],
+    [
+      'Some.Movie.2025.2160p.WEB-DL.ENG.LATINO.DDP5.1.H265-BTM',
+      [Language.ENGLISH, Language.SPANISH],
+    ],
+    ['Some Movie (2025) 720p HDTC [Dublado PT-BR]', [Language.PORTUGUESE]],
+    ['Some Movie 2010 DVDRip NL gesproken', [Language.DUTCH]],
+    ['Some Movie 2024 SweSub 720p BRRip x265', [Language.SWEDISH]],
+    ['Some Movie (2026) [PL.AI.720p.WEBRip.XviD.AC3-OzW] [Lektor PL]', [Language.POLISH]],
+    ['Some.Movie.2026.PLDUB.720p.BRRip.XviD.AC3-OzW', [Language.POLISH]],
+    ['Some.Movie.2026.1080p.CZ-SK.WEB-DL.DDP5.1.H264', [Language.CZECH, Language.SLOVAK]],
+    ['Some.Movie.2026.MA.WEBRip.x264.HUN-FULCRUM', [Language.HUNGARIAN]],
+    ['Attila the Hun 1954 1080p BluRay x264', []],
+    ['Człowiek ze Stali (2013) [1080p.BDRip.x264] [Lektor PL]', [Language.POLISH]],
+    ['Some.Movie.2026.MULTi.VF2.1080p.WEBRip.x265-KTH', [Language.FRENCH, Language.MULTI]],
+    ['Some Movie (2026) WEB-DL [Ukr Dub]', [Language.UKRAINIAN]],
+    [
+      'Some.Movie.2026.1080p.BluRay.MULTi.LAT.ITA.RUS.H264-BTM',
+      [Language.ITALIAN, Language.MULTI, Language.RUSSIAN, Language.SPANISH],
+    ],
+    ['Some Movie 1999 1080P DSNP WEB-DL DE-EN-TR DDP5 1 H264', [Language.TURKISH]],
+    ['Some Movie 2026 KOREAN 1080p WEBRip x265', [Language.KOREAN]],
+    ['Some Movie (2026) 1080p WEBRip x264 [ Hin, Eng ] ESub', [Language.ENGLISH, Language.HINDI]],
+    ['Some.Movie.2026.WEB.1080p.Chs.Eng', [Language.CHINESE, Language.ENGLISH]],
+    ['Some Movie 2021 1080p BluRay x264 Greek Audio', [Language.GREEK]],
+    ['Some.Movie.2005.DANiSH.1080p.BluRay.x264', [Language.DANISH]],
+    ['Some Movie 2026 NORWEGIAN 1080p BluRay x264', [Language.NORWEGIAN]],
+    ['Some.Movie.2025.FiNNiSH.2160p.WEB.h265-TRB', [Language.FINNISH]],
   ])('recognizes the languages of %s', (name, languages) => {
     expect([...extractSourceMetadata({ name, size: 1_000_000_000 }).language].sort()).toEqual(
       [...languages].sort()

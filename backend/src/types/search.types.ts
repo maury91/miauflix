@@ -57,14 +57,15 @@ export type SearchClientMessage =
       query?: string;
       genre?: SearchGenreKey;
       page: number;
+      /** Catalog language of titles and genre names (`it`, `pt-BR`); English when absent. */
       language?: string;
       /** Record the search as a recent (explicit submit, chip, or opened result). */
       commit?: boolean;
     }
-  | { type: 'search-genres' }
-  | { type: 'search-recent-add'; kind: SearchRecentKind; query: string }
-  | { type: 'search-recent-remove'; kind: SearchRecentKind; query: string }
-  | { type: 'search-recents' };
+  | { type: 'search-genres'; language?: string }
+  | { type: 'search-recent-add'; kind: SearchRecentKind; query: string; language?: string }
+  | { type: 'search-recent-remove'; kind: SearchRecentKind; query: string; language?: string }
+  | { type: 'search-recents'; language?: string };
 
 /** Realtime messages the server sends in reply. */
 export type SearchServerMessage =
@@ -76,6 +77,7 @@ export type SearchServerMessage =
       error?: ApiErrorBody;
     }
   | { type: 'search-details'; requestId: number; items: SearchResultDetailDto[] }
-  | { type: 'search-genres'; items: SearchGenreDto[] }
-  | { type: 'search-recents'; items: SearchRecentDto[] }
+  /** `language`: the one the list was asked for, so a reply for an earlier one can be told apart. */
+  | { type: 'search-genres'; items: SearchGenreDto[]; language?: string }
+  | { type: 'search-recents'; items: SearchRecentDto[]; language?: string }
   | (SearchPageDto & { type: 'search-results'; requestId: number });

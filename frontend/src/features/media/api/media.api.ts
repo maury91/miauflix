@@ -256,6 +256,7 @@ export const mediaApi = createApi({
     getSeason: builder.query<SeasonResponse, { showId: number; season: number }>({
       providesTags: (_result, _error, { showId, season }) => [
         { type: 'Season', id: `${showId}:${season}` },
+        'Catalog',
       ],
       async queryFn({ showId, season }, api) {
         return {
@@ -264,6 +265,7 @@ export const mediaApi = createApi({
               backendClient.api.shows[':id'].seasons[':season'].$get(
                 {
                   param: { id: String(showId), season: String(season) },
+                  query: { lang: catalogLanguage() },
                 },
                 { headers }
               ),

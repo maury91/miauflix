@@ -33,6 +33,8 @@ export const api: Translation<typeof english> = {
   'api.failedToMarkNotificationAsRead': 'Impossibile segnare la notifica come letta',
   'api.failedToMarkNotificationsAsRead': 'Impossibile segnare le notifiche come lette',
   'api.failedToRequestAnAvailabilityNotification': 'Impossibile attivare l’avviso di disponibilità',
+  'api.failedToLoadAudioSources': 'Impossibile caricare le fonti del titolo',
+  'api.failedToSearchAudioSources': 'Impossibile cercare fonti in quella lingua',
   'api.failedToSearchSubtitles': 'Impossibile cercare i sottotitoli',
   'api.failedToStartPlayback': 'Impossibile avviare la riproduzione',
   'api.failedToUpdatePlaybackPreparationIntent':
