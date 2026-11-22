@@ -219,11 +219,15 @@ export function AudioMenu({
   const searchLanguage = picked ?? suggested;
   const inLanguage = alternatives.filter(source => languagesOf(source).includes(searchLanguage));
 
-  /** The source asked for, shown as switching until it plays. */
-  const [switchingTo, setSwitchingTo] = useState<number | null>(null);
+  /**
+   * The source asked for, shown as switching while its session is requested: until another
+   * session plays, whether that source or one played instead.
+   */
+  const [switching, setSwitching] = useState<{ to: number; from: number | undefined } | null>(null);
+  const switchingTo = switching?.to ?? null;
   useEffect(() => {
-    if (switchingTo !== null && switchingTo === currentSourceId) setSwitchingTo(null);
-  }, [currentSourceId, switchingTo]);
+    if (switching && switching.from !== currentSourceId) setSwitching(null);
+  }, [currentSourceId, switching]);
 
   const sourceRow = (source: AudioSourceDto) => {
     const track = source.audioTracks?.find(item => mediaLanguage(item.language) === searchLanguage);
@@ -249,7 +253,7 @@ export function AudioMenu({
         onClick={() => {
           // The language stays chosen once its source plays, whatever is suggested then
           setPicked(searchLanguage);
-          setSwitchingTo(source.id);
+          setSwitching({ to: source.id, from: currentSourceId });
           onPlaySource(source.id, searchLanguage);
         }}
       />

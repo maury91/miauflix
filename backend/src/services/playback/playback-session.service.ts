@@ -368,9 +368,11 @@ export class PlaybackSessionService {
           preferences.supportedAudioCodecs
         );
     }
+    // A source the viewer chose plays as chosen, with converted audio when it needs it.
     if (
       delivery?.mode === 'audio-transcode' &&
       preferences.avoidAudioConversion &&
+      !options.sourceId &&
       prepared.source &&
       this.audioPlaybackService &&
       !(await this.hasUsableRemux(prepared.target, delivery, preferences))

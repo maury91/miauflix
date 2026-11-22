@@ -281,9 +281,19 @@ export function useSubtitles({
         };
         rememberedSubtitles.current = next;
         saveMediaSubtitles(storageKey, next);
+      } else if (id === null) {
+        // Off before the first automatic search settled: remembered, so it isn't turned on again
+        const next: MediaSubtitles = {
+          language: searchPreferences?.language ?? preferredLanguageRef.current,
+          hearingImpaired: searchPreferences?.hearingImpaired ?? false,
+          selectedFileId: null,
+          offset: 0,
+        };
+        rememberedSubtitles.current = next;
+        saveMediaSubtitles(storageKey, next);
       }
     },
-    [cancelSearch, candidates, storageKey, videoRef]
+    [cancelSearch, candidates, searchPreferences, storageKey, videoRef]
   );
 
   const changeOffset = useCallback(

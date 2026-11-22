@@ -197,7 +197,7 @@ export function SubtitleMenu({
    * Shows subtitles in a language: a track of it at hand, else one searched for. Without it, a
    * language choice searches online.
    */
-  onShowLanguage?: (language: string) => void;
+  onShowLanguage?: (language: string, hearingImpaired: boolean) => void;
   onOffsetChange: (offset: number) => void;
   preferencesKey: string | null;
   /** The profile's subtitle language for this title, marked Default (ISO 639-1). */
@@ -286,7 +286,7 @@ export function SubtitleMenu({
     }
     setChosenLanguage(value);
     updatePreferences({ ...preferences, language: value });
-    if (onShowLanguage) onShowLanguage(value);
+    if (onShowLanguage) onShowLanguage(value, preferences.hearingImpaired);
     else onSearch(value, preferences.hearingImpaired);
   };
 

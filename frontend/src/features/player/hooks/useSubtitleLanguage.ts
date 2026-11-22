@@ -39,7 +39,7 @@ export function useSubtitleLanguage({
   search,
 }: Subtitles) {
   return useCallback(
-    (language: string | null) => {
+    (language: string | null, hearingImpaired = false) => {
       if (language === null) {
         select(null);
         return;
@@ -53,7 +53,7 @@ export function useSubtitleLanguage({
       }
       const found = candidates.find(inLanguage);
       if (found) select(found.id);
-      else void search(language, false, { autoSelect: true });
+      else void search(language, hearingImpaired, { autoSelect: true });
     },
     [cancelSearch, candidates, search, select, selectedId]
   );

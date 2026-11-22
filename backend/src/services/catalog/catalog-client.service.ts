@@ -42,13 +42,11 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
   }
 
   getMovie(mediaId: number, language: string): Promise<MovieDetail | null> {
-    this.languages.add(language);
-    return orNull(this.client.getMovie({ mediaId, language }));
+    return this.recording(language, orNull(this.client.getMovie({ mediaId, language })));
   }
 
   getTVShow(mediaId: number, language: string): Promise<TVShowDetail | null> {
-    this.languages.add(language);
-    return orNull(this.client.getShow({ mediaId, language }));
+    return this.recording(language, orNull(this.client.getShow({ mediaId, language })));
   }
 
   getSeason(
@@ -56,8 +54,20 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
     seasonNumber: number,
     language: string
   ): Promise<SeasonDetail | null> {
+    return this.recording(
+      language,
+      orNull(this.client.getSeason({ tvMediaId, seasonNumber, language }))
+    );
+  }
+
+  /**
+   * Records a language once the catalog answered a request for it, so a language the catalog
+   * rejects never joins requestedLanguages().
+   */
+  private async recording<T>(language: string, request: Promise<T>): Promise<T> {
+    const result = await request;
     this.languages.add(language);
-    return orNull(this.client.getSeason({ tvMediaId, seasonNumber, language }));
+    return result;
   }
 
   /** The languages catalog data was asked for since the server started, English included. */
@@ -71,13 +81,11 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
   }
 
   search(query: string, page: number, language: string): Promise<SearchResponse> {
-    this.languages.add(language);
-    return this.client.search({ query, page, language });
+    return this.recording(language, this.client.search({ query, page, language }));
   }
 
   discover(genre: SearchGenreKey, page: number, language: string): Promise<SearchResponse> {
-    this.languages.add(language);
-    return this.client.discover({ genre, page, language });
+    return this.recording(language, this.client.discover({ genre, page, language }));
   }
 
   /** Every catalog genre, most titles first, then the search shortcuts. */
@@ -90,8 +98,7 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
     language: string,
     artworkPriority: 'background' | 'prefetch' | 'returned' = 'returned'
   ): Promise<BatchResponse> {
-    this.languages.add(language);
-    return this.client.batch({ items, language, artworkPriority });
+    return this.recording(language, this.client.batch({ items, language, artworkPriority }));
   }
 
   queueArtwork(items: MediaRef[], priority: ArtworkPriority): Promise<number> {

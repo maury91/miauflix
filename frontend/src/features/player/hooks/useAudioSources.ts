@@ -21,8 +21,8 @@ export function useAudioSources(playable: PlayableRef) {
     [playable, searchSources]
   );
   return {
-    sources: sources.data?.sources,
-    sourcesFailed: sources.isError && !sources.data,
+    sources: sources.currentData?.sources,
+    sourcesFailed: sources.isError && !sources.currentData,
     searching: search.isLoading,
     searchFailed: search.isError,
     searchLanguage,

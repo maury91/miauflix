@@ -101,7 +101,14 @@ export const panel = style({
     '&[data-placement="sheet"][data-size="lg"]': { width: '32rem' },
   },
   '@media': {
-    '(prefers-reduced-motion: reduce)': { animation: 'none' },
+    // Matching each animated placement's specificity, so none of them still moves
+    '(prefers-reduced-motion: reduce)': {
+      animation: 'none',
+      selectors: {
+        '&[data-placement]': { animation: 'none' },
+        '[dir="rtl"] &[data-placement="sheet"]': { animation: 'none' },
+      },
+    },
   },
 });
 

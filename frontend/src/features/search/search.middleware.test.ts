@@ -150,6 +150,44 @@ describe('searchMiddleware', () => {
       expect(sent[1]).not.toHaveProperty('commit');
     });
 
+    it('ignores genres and recents that arrive for the earlier language', () => {
+      const { store } = setupTest();
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-genres',
+          items: [{ key: '18', name: 'Drama' }],
+          language: 'en',
+        })
+      );
+      setActiveLanguage('it');
+      store.dispatch(searchActions.catalogLanguageChanged());
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-genres',
+          items: [{ key: '18', name: 'Dramma (stale)' }],
+          language: 'en',
+        })
+      );
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-recents',
+          items: [{ kind: 'query', query: 'Dune', label: 'Dune', searchedAt: '' }],
+          language: 'en',
+        })
+      );
+      expect(store.getState().search.genres).toEqual([{ key: '18', name: 'Drama' }]);
+      expect(store.getState().search.recents).toEqual([]);
+
+      store.dispatch(
+        searchActions.serverMessage({
+          type: 'search-genres',
+          items: [{ key: '18', name: 'Dramma' }],
+          language: 'it',
+        })
+      );
+      expect(store.getState().search.genres).toEqual([{ key: '18', name: 'Dramma' }]);
+    });
+
     it('sends nothing while Search was never opened', () => {
       const { store, sent } = setupTest();
       setActiveLanguage('it');

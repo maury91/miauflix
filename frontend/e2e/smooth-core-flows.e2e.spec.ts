@@ -63,7 +63,9 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
     })
   );
   await page.route(/\/api\/shows\/42(?:\?.*)?$/, route => route.fulfill({ json: show }));
-  await page.route('**/api/shows/42/seasons/1', route => route.fulfill({ json: season }));
+  await page.route(/\/api\/shows\/42\/seasons\/1(?:\?.*)?$/, route =>
+    route.fulfill({ json: season })
+  );
   await page.route('**/api/media/tv/42/backdrop-focus', route =>
     route.fulfill({ json: { backdropFocus: null } })
   );

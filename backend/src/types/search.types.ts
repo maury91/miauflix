@@ -77,6 +77,7 @@ export type SearchServerMessage =
       error?: ApiErrorBody;
     }
   | { type: 'search-details'; requestId: number; items: SearchResultDetailDto[] }
-  | { type: 'search-genres'; items: SearchGenreDto[] }
-  | { type: 'search-recents'; items: SearchRecentDto[] }
+  /** `language`: the one the list was asked for, so a reply for an earlier one can be told apart. */
+  | { type: 'search-genres'; items: SearchGenreDto[]; language?: string }
+  | { type: 'search-recents'; items: SearchRecentDto[]; language?: string }
   | (SearchPageDto & { type: 'search-results'; requestId: number });

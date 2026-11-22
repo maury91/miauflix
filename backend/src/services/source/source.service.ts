@@ -419,15 +419,16 @@ export class SourceService {
     // Matches with a live swarm are enough. Weak ones are searched again now and then: a provider
     // enabled since (or newer releases) may have a better copy. So are ones stored before release
     // languages were recorded: the search records them, and selection needs them.
+    // A search for a language always runs: it looks for what isn't stored yet.
     if (
-      (!episode.language &&
-        single.some(
-          association =>
-            (association.source?.broadcasters ?? 0) >= WEAK_SWARM_BROADCASTERS &&
-            association.source?.languages !== null
-        )) ||
-      (single.length &&
-        Date.now() - (this.weakEpisodeSearches.get(episode.episodeId) ?? 0) < WEAK_RESEARCH_MS)
+      !episode.language &&
+      (single.some(
+        association =>
+          (association.source?.broadcasters ?? 0) >= WEAK_SWARM_BROADCASTERS &&
+          association.source?.languages !== null
+      ) ||
+        (single.length &&
+          Date.now() - (this.weakEpisodeSearches.get(episode.episodeId) ?? 0) < WEAK_RESEARCH_MS))
     )
       return existing;
     if (single.length && !episode.language) {

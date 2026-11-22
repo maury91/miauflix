@@ -12,7 +12,9 @@ const pad = (n: number) => String(n).padStart(2, '0');
  * The tag release names give a dub or local subtitles in each language (`iTA`, `FRENCH`): a
  * search in a language adds it to the title. Languages without a common tag are searched by
  * their own titles alone: Latvian among them, as `LAT` in release names means Latin-American
- * Spanish. Picked from the names of stored releases (`CZ` over `CZECH`, `TR` over `TURKISH`).
+ * Spanish, and Lithuanian, as the release-name parser doesn't count a bare `LT` (too common), so
+ * what it found would never show as Lithuanian. Picked from the names of stored releases (`CZ`
+ * over `CZECH`, `TR` over `TURKISH`); each one the parser reads as its language.
  */
 export const LANGUAGE_TAGS: Readonly<Record<string, string>> = {
   it: 'ITA',
@@ -30,7 +32,6 @@ export const LANGUAGE_TAGS: Readonly<Record<string, string>> = {
   sk: 'SK',
   hu: 'HUN',
   ro: 'ROMANIAN',
-  lt: 'LT',
   ru: 'RUS',
   uk: 'UKR',
   tr: 'TR',
@@ -61,7 +62,14 @@ function languageVariants(
         .flatMap(queriesOf)
         .map(query => `${query} ${tag}`)
     : [];
-  return [...(request.media.localizedTitles ?? []).flatMap(queriesOf), ...tagged].map(q => ({
+  // Without a tag or titles of its own, the language is searched by the title's own queries
+  // rather than not at all (the provider would count as searched).
+  const own = request.media.localizedTitles?.length
+    ? request.media.localizedTitles
+    : tag
+      ? []
+      : [request.media.title];
+  return [...own.flatMap(queriesOf), ...tagged].map(q => ({
     query: { kind, q },
     matchedBy: 'title' as const,
   }));
@@ -94,12 +102,33 @@ export function variantsFor(
   const caps = provider.caps[kind];
   if (!caps.length) return [];
   const result: Variant[] = [];
+  const episode = anime?.episode;
+  /** "<title> 07" (and the absolute number when it differs), how anime releases are named. */
+  const animeEpisodeQueries = (title: string) =>
+    episode
+      ? [
+          `${title} ${pad(episode.number)}`,
+          ...(episode.absolute && episode.absolute !== episode.number
+            ? [`${title} ${pad(episode.absolute)}`]
+            : []),
+        ]
+      : [];
   if (request.language) {
     // Ids find the title's releases whatever their language, which its own search already did
-    if (caps.includes('q')) result.push(...languageVariants(kind, request, request.language));
+    if (caps.includes('q')) {
+      result.push(...languageVariants(kind, request, request.language));
+      // Anime providers search literal text: the entry's titles with the episode number, tagged
+      // with the language when it has a tag (untagged they'd repeat the title's own search).
+      if (animeSearch && request.media.kind !== 'movie') {
+        const tag = LANGUAGE_TAGS[request.language];
+        const animeTitles = new Set([...(anime?.titles ?? []), request.media.title]);
+        for (const title of animeTitles)
+          for (const q of animeEpisodeQueries(title))
+            result.push({ query: { kind, q: tag ? `${q} ${tag}` : q }, matchedBy: 'title' });
+      }
+    }
     return unique(result, caps);
   }
-  const episode = anime?.episode;
   // Anime ids first: an AniDB episode id names exactly one episode.
   if (kind === 'anime' && anime) {
     for (const [param, value, matchedBy] of [
@@ -150,17 +179,8 @@ export function variantsFor(
           result.push({ query: { kind, q: title }, matchedBy: 'title' });
           continue;
         }
-        if (episode) {
-          result.push({
-            query: { kind, q: `${title} ${pad(episode.number)}` },
-            matchedBy: 'title',
-          });
-          if (episode.absolute && episode.absolute !== episode.number)
-            result.push({
-              query: { kind, q: `${title} ${pad(episode.absolute)}` },
-              matchedBy: 'title',
-            });
-        }
+        for (const q of animeEpisodeQueries(title))
+          result.push({ query: { kind, q }, matchedBy: 'title' });
       }
     }
     for (const title of titles) {

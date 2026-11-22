@@ -179,7 +179,7 @@ export function PlayerControls({
   onSearchSubtitles: (language: string, hearingImpaired: boolean) => void;
   onSelectSubtitle: (id: string | null) => void;
   /** Shows subtitles in a language (a track at hand, else one searched for). */
-  onShowSubtitleLanguage?: (language: string) => void;
+  onShowSubtitleLanguage?: (language: string, hearingImpaired: boolean) => void;
   onSubtitleOffsetChange: (offset: number) => void;
   subtitlePreferencesKey: string | null;
   /** The profile's subtitle language for the title, marked Default in the subtitle panel. */

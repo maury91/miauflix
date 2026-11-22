@@ -333,6 +333,14 @@ it('searches a language by its titles and the title with its release tag only', 
     { kind: 'tv', q: 'Žiedų valdovas S01E02' },
     { kind: 'tv', q: 'Žiedų valdovas S01' },
   ]);
+  // Neither a tag nor titles of its own: the title's own queries, rather than none
+  expect(
+    variantsFor(provider, {
+      media: { ...media, localizedTitles: undefined },
+      purpose: 'interactive',
+      language: 'lt',
+    }).map(v => v.query)
+  ).toEqual([{ kind: 'movie', q: 'The Lord of the Rings 2001' }]);
 });
 it('preserves season zero specials', () => {
   const c = toCandidate(

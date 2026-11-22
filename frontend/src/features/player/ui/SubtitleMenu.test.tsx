@@ -74,7 +74,7 @@ describe('SubtitleMenu', () => {
     expect(within(languages).getByRole('radio', { name: 'Off' })).toBeChecked();
 
     fireEvent.click(within(languages).getByRole('radio', { name: 'English' }));
-    expect(onShowLanguage).toHaveBeenCalledWith('en');
+    expect(onShowLanguage).toHaveBeenCalledWith('en', false);
     expect(onSelect).not.toHaveBeenCalled();
   });
 

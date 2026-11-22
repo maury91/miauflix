@@ -16,7 +16,7 @@ import { visuallyHidden } from '../a11y.css';
 import { containTab, isEditing } from '../overlayFocus';
 import { SurfaceContextProvider } from '../surface';
 import * as styles from './popover.css';
-import { isTopPopover, pushPopover } from './popoverStack';
+import { isInNestedPopover, isTopPopover, pushPopover } from './popoverStack';
 
 /** Props for the element that opens the popover; the feature's own `onClick` toggles `open`. */
 export interface PopoverTriggerProps {
@@ -112,6 +112,10 @@ export function Popover({
   const rootRef = useRef<HTMLSpanElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  // A sheet without a container to cover sits above its trigger instead
+  const sheet = placement === 'sheet' && Boolean(container);
+  /** Where the panel is drawn: the container for a sheet, else inline. */
+  const portal = sheet ? container : null;
   const latest = useRef({ onDismiss, modality });
   latest.current = { onDismiss, modality };
 
@@ -119,13 +123,17 @@ export function Popover({
     if (!open) return;
     const panel = panelRef.current;
     const triggerElement = triggerRef.current;
-    const pop = pushPopover(id, parent);
+    const pop = pushPopover(id, parent, panel);
     // The navigation layer may already have mirrored focus onto the first item inside
     if (!panel?.contains(document.activeElement)) panel?.focus({ preventScroll: true });
-    // A sheet is drawn elsewhere: its panel counts as inside too
+    // A sheet is drawn elsewhere: its panel counts as inside too, as do popovers nested in this one
     const inside = (target: EventTarget | null) =>
       target instanceof Node &&
-      Boolean(rootRef.current?.contains(target) || panelRef.current?.contains(target));
+      Boolean(
+        rootRef.current?.contains(target) ||
+          panelRef.current?.contains(target) ||
+          isInNestedPopover(id, target)
+      );
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isTopPopover(id) || !panel) return;
@@ -172,12 +180,10 @@ export function Popover({
         triggerElement?.focus({ preventScroll: true });
       }
     };
-    // The enclosing popover is fixed for this one's lifetime
+    // The enclosing popover is fixed for this one's lifetime. A new portal destination draws a
+    // new panel: its listeners move to it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, id]);
-
-  // A sheet without a container to cover sits above its trigger instead
-  const sheet = placement === 'sheet' && Boolean(container);
+  }, [open, id, portal]);
   const panel = (
     <SurfaceContextProvider value="solid">
       <div
@@ -212,7 +218,7 @@ export function Popover({
         'aria-expanded': open,
         'aria-controls': open ? panelId : undefined,
       })}
-      {open && (sheet && container ? createPortal(panel, container) : panel)}
+      {open && (portal ? createPortal(panel, portal) : panel)}
     </span>
   );
 }

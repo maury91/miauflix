@@ -93,15 +93,18 @@ export interface PreparationOptions {
 
 /**
  * The source the viewer chose, alone, while it is among the candidates; the candidates as they
- * are otherwise (it was left out, or isn't known).
+ * are otherwise (it was left out, or isn't known). Applied once storage has ruled sources out,
+ * and the other candidates stay the fallback when the chosen one turns out unplayable.
  */
 function chosen<T>(
   candidates: T[],
   sourceId: number | undefined,
-  idOf: (candidate: T) => number = candidate => (candidate as { id: number }).id
+  idOf: (candidate: T) => number = candidate => (candidate as { id: number }).id,
+  /** Whether a candidate can be picked at all (codec, known video): the chosen one must be. */
+  playable: (candidate: T) => boolean = () => true
 ): T[] {
   if (sourceId === undefined) return candidates;
-  const only = candidates.filter(candidate => idOf(candidate) === sourceId);
+  const only = candidates.filter(candidate => idOf(candidate) === sourceId && playable(candidate));
   return only.length ? only : candidates;
 }
 
@@ -175,13 +178,9 @@ export class PlayablePreparationService {
     /** Sources that cannot fit in storage, found when playback is about to start. */
     let noRoom = new Set<number>();
     const avoid = (list: ContentSource[]) =>
-      chosen(
-        list.filter(
-          source => !options.avoidSourceIds?.includes(source.id) && !noRoom.has(source.id)
-        ),
-        options.sourceId
-      );
-    let sources = await this.sourceService
+      list.filter(source => !options.avoidSourceIds?.includes(source.id) && !noRoom.has(source.id));
+    /** Every eligible source: the fallbacks when the viewer's choice turns out unplayable. */
+    let eligible = await this.sourceService
       .getSourcesForMovieWithOnDemandSearch(
         {
           id: media.local.id,
@@ -195,13 +194,13 @@ export class PlayablePreparationService {
       )
       .then(avoid);
     this.throwIfAborted(options.signal);
-    if (!sources.length) {
+    if (!eligible.length) {
       return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
     }
-    if (!sources.some(isUsableSource)) return exhausted(playable);
+    if (!eligible.some(isUsableSource)) return exhausted(playable);
     if (options.through === 'warm') {
       // Playback streams only the main video: size by it, once the torrent's files are known
-      const usable = sources.filter(isUsableSource);
+      const usable = eligible.filter(isUsableSource);
       const files = await Promise.all(usable.map(source => this.movieFile(source)));
       noRoom = await this.withoutRoom(
         usable.map((source, index) => ({
@@ -210,9 +209,12 @@ export class PlayablePreparationService {
           path: files[index]?.path,
         }))
       );
-      sources = avoid(sources);
-      if (!sources.some(isUsableSource)) return withoutRoomResult(playable);
+      eligible = avoid(eligible);
+      if (!eligible.some(isUsableSource)) return withoutRoomResult(playable);
     }
+    const pickable = (source: ContentSource) =>
+      isUsableSource(source) && filterVideoCodecSources([source], options.preferences).length > 0;
+    let sources = chosen(eligible, options.sourceId, undefined, pickable);
     if (!sources.some(source => source.hasVideo === true)) {
       // Nothing verified yet: check the candidates in the background, well before Watch.
       this.sourceService.requestMovieVerification(media.local.id, 10);
@@ -265,10 +267,12 @@ export class PlayablePreparationService {
         const result = await this.finish(playable, source, options, movieTarget);
         const rejected = source.hasVideo === false || this.sourceHealth?.hasFailed(source.id);
         if (result.target || !rejected) return result;
-        if (!sources.some(isUsableSource)) return exhausted(playable);
+        if (!eligible.some(isUsableSource)) return exhausted(playable);
         if (tried.size >= MAX_SOURCE_ATTEMPTS) return result;
+        const untried = (list: ContentSource[]) => list.filter(item => !tried.has(item.id));
+        const remaining = untried(sources);
         const next = this.select(
-          sources.filter(candidate => !tried.has(candidate.id)),
+          remaining.length ? remaining : untried(eligible),
           options.preferences,
           false,
           bitrate
@@ -297,7 +301,8 @@ export class PlayablePreparationService {
         }
         this.throwIfAborted(options.signal);
       }
-      sources = avoid(await this.sourceService.getSourcesForMovie(media.local.id));
+      eligible = avoid(await this.sourceService.getSourcesForMovie(media.local.id));
+      sources = chosen(eligible, options.sourceId, undefined, pickable);
       const selected = this.select(sources, options.preferences, true, bitrate);
       if (selected) {
         return finishMovie(selected);
@@ -348,23 +353,20 @@ export class PlayablePreparationService {
       airDate: episode.airDate,
     });
     this.throwIfAborted(options.signal);
-    const compatible = chosen(
-      matches.filter(
-        match =>
-          match.videoFilePath &&
-          !options.avoidSourceIds?.includes(match.source.id) &&
-          filterVideoCodecSources([match.source], options.preferences).length
-      ),
-      options.sourceId,
-      match => match.source.id
+    /** Every eligible match: the fallbacks when the viewer's choice turns out unplayable. */
+    const eligible = matches.filter(
+      match =>
+        match.videoFilePath &&
+        !options.avoidSourceIds?.includes(match.source.id) &&
+        filterVideoCodecSources([match.source], options.preferences).length
     );
-    if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
+    if (eligible.length && !eligible.some(match => isUsableSource(match.source)))
       return exhausted(playable);
-    if (options.through === 'warm' && compatible.length) {
+    if (options.through === 'warm' && eligible.length) {
       // A season pack streams only the episode's file: its own size, once the torrent is known
-      const fileOf = await this.episodeFiles(compatible);
+      const fileOf = await this.episodeFiles(eligible);
       const noRoom = await this.withoutRoom(
-        compatible
+        eligible
           .filter(match => isUsableSource(match.source))
           .map(match => {
             const file = fileOf(match.source);
@@ -372,25 +374,32 @@ export class PlayablePreparationService {
           })
       );
       if (noRoom.size) {
-        const fitting = compatible.filter(match => !noRoom.has(match.source.id));
+        const fitting = eligible.filter(match => !noRoom.has(match.source.id));
         if (!fitting.some(match => isUsableSource(match.source)))
           return withoutRoomResult(playable);
-        compatible.splice(0, compatible.length, ...fitting);
+        eligible.splice(0, eligible.length, ...fitting);
       }
     }
+    const compatible = chosen(
+      eligible,
+      options.sourceId,
+      match => match.source.id,
+      match => isUsableSource(match.source)
+    );
     const runtimeMinutes = show.local.episodeRuntime;
     const bitrate: BitrateBudget | undefined =
       options.preferences.maxBitrateKbps && runtimeMinutes
-        ? { runtimeSeconds: runtimeMinutes * 60, sizeOf: await this.episodeFileSizes(compatible) }
+        ? { runtimeSeconds: runtimeMinutes * 60, sizeOf: await this.episodeFileSizes(eligible) }
         : undefined;
     this.throwIfAborted(options.signal);
     const tried = new Set<number>();
     // The last attempt's result, so running out of candidates still reports the source tried.
     let lastResult: PreparedPlayable | null = null;
     for (;;) {
-      const candidates = compatible.filter(
-        match => !tried.has(match.source.id) && isUsableSource(match.source)
-      );
+      const untried = (list: typeof eligible) =>
+        list.filter(match => !tried.has(match.source.id) && isUsableSource(match.source));
+      const preferred = untried(compatible);
+      const candidates = preferred.length ? preferred : untried(eligible);
       const exactCandidates = candidates.filter(match => match.matchKind === 'single');
       const usableCandidates = exactCandidates.length ? exactCandidates : candidates;
       const selected = this.select(
@@ -401,7 +410,7 @@ export class PlayablePreparationService {
       );
       const match = usableCandidates.find(candidate => candidate.source.id === selected?.id);
       if (!selected || !match) {
-        if (tried.size && !compatible.some(item => isUsableSource(item.source)))
+        if (tried.size && !eligible.some(item => isUsableSource(item.source)))
           return exhausted(playable);
         return (
           lastResult ?? {
@@ -433,7 +442,7 @@ export class PlayablePreparationService {
       lastResult = result;
       const rejected = selected.hasVideo === false || this.sourceHealth?.hasFailed(selected.id);
       if (result.target || !rejected || tried.size >= MAX_SOURCE_ATTEMPTS) {
-        if (!result.target && !compatible.some(item => isUsableSource(item.source)))
+        if (!result.target && !eligible.some(item => isUsableSource(item.source)))
           return exhausted(playable);
         return result;
       }

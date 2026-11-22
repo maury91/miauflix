@@ -581,6 +581,44 @@ describe('PlayablePreparationService', () => {
     ]);
   });
 
+  describe('with a source the viewer chose', () => {
+    const prepareChosen = (sources: unknown[], sourceId: number, extra: object = {}) =>
+      new PlayablePreparationService({
+        mediaService: {
+          getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+        } as never,
+        sourceService: movieService(sources) as never,
+        targets: movieTargets as never,
+        ...extra,
+      }).prepare(
+        { kind: 'movie', mediaId: 42 },
+        { ...warmOptions(), preferences: { quality: 'auto', allowHevc: false }, sourceId }
+      );
+
+    it('plays it over a better-ranked source', async () => {
+      const best = candidate(1, 9);
+      const picked = candidate(2, 1);
+      expect((await prepareChosen([best, picked], 2)).source).toBe(picked);
+    });
+
+    it.each([
+      ['its codec is not supported', { videoCodec: VideoCodec.X265 }],
+      ['it is known to hold no video', { hasVideo: false }],
+    ])('falls back to the other sources when %s', async (_case, fields) => {
+      const other = candidate(1, 1);
+      const picked = { ...candidate(2, 9), ...fields };
+      expect((await prepareChosen([other, picked], 2)).source).toBe(other);
+    });
+
+    it('falls back to a source that fits when it is too large for storage', async () => {
+      const huge = withFiles(5, 9, [{ path: 'Movie/movie.mkv', length: 43e9 }]);
+      const small = withFiles(2, 8, [{ path: 'Movie/movie.mkv', length: 4e9 }]);
+      const prepared = await prepareChosen([huge, small], 5, { storage: roomFor(10e9) });
+      expect(prepared.noRoom).toBeUndefined();
+      expect(prepared.source).toBe(small);
+    });
+  });
+
   it('sizes a movie by its main video, and leaves a source with unknown files to admission', async () => {
     // The whole pack would not fit, but only its largest video is streamed
     const pack = withFiles(1, 9, [

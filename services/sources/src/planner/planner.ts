@@ -89,11 +89,7 @@ export class Planner {
         for (const variant of variantsFor(provider, request, anime)) {
           for (
             let page = 1;
-            // A search in a language narrows the query: its first page holds what it finds
-            page <=
-            (provider.caps[variant.query.kind].includes('page') && !request.language
-              ? provider.maxPages
-              : 1);
+            page <= (provider.caps[variant.query.kind].includes('page') ? provider.maxPages : 1);
             page++
           ) {
             signal.throwIfAborted();

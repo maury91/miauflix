@@ -175,7 +175,8 @@ export class RealtimeSearchChannel {
 
   private async sendGenres(client: SearchClient, language: string): Promise<void> {
     try {
-      client.send({ type: 'search-genres', items: await this.search.listGenres(language) });
+      const items = await this.search.listGenres(language);
+      client.send({ type: 'search-genres', items, language });
     } catch (error) {
       logger.warn('RealtimeSearch', 'Failed to load search genres', error);
     }
@@ -186,6 +187,7 @@ export class RealtimeSearchChannel {
       client.send({
         type: 'search-recents',
         items: await this.search.listRecents(client.userId, language),
+        language,
       });
     } catch (error) {
       logger.warn('RealtimeSearch', 'Failed to load recent searches', error);

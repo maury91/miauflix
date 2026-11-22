@@ -2,6 +2,7 @@ import { catalogLanguage } from '@features/media/lib/catalog-language';
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type { SearchClientMessage } from '@miauflix/backend';
 import type { Middleware } from '@reduxjs/toolkit';
+import { getActiveLanguage } from '@shared/i18n';
 import { reportApiError } from '@shared/lib/api-error';
 import { searchActions, type SearchState } from '@store/slices/search';
 
@@ -39,6 +40,14 @@ export const searchMiddleware: Middleware = api => {
   };
 
   return next => action => {
+    // Genres or recents for an earlier interface language: the current one's are on their way.
+    if (
+      searchActions.serverMessage.match(action) &&
+      (action.payload.type === 'search-genres' || action.payload.type === 'search-recents') &&
+      action.payload.language !== undefined &&
+      action.payload.language !== getActiveLanguage()
+    )
+      return undefined;
     const result = next(action);
     if (
       searchActions.serverMessage.match(action) &&
