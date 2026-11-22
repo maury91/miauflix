@@ -1,5 +1,5 @@
 import { LogoBackdrop } from '@shared/brand/logo/LogoBackdrop';
-import { useRailContentLeft } from '@shared/brand/logo/useRailContentLeft';
+import { StaticLogo } from '@shared/brand/logo/StaticLogo';
 import {
   Container,
   Heading,
@@ -46,6 +46,11 @@ export interface SettingsLayoutProps {
   header?: ReactNode;
   /** Over the page and outside its navigation scope: a Dialog the page opens. */
   overlay?: ReactNode;
+  /**
+   * The configuration wizard before the app opens: a static logo of the page's own, since the
+   * shared one only moves between the signed-in pages.
+   */
+  staticLogo?: boolean;
   children: ReactNode;
 }
 
@@ -73,12 +78,6 @@ export function SettingsLayout(props: SettingsLayoutProps) {
   );
 }
 
-function RailAlignment() {
-  // The logo lines up with the content beside the back rail, as on the other inner pages
-  useRailContentLeft();
-  return null;
-}
-
 function SettingsScreen({
   title,
   description,
@@ -88,14 +87,15 @@ function SettingsScreen({
   width = 'reading',
   header,
   overlay,
+  staticLogo,
   children,
 }: SettingsLayoutProps) {
   return (
     <FocusScope id={SETTINGS_NAV.scope} layout="horizontal" initialId={initialNavId}>
       <LogoBackdrop />
+      {staticLogo && <StaticLogo placement="corner" />}
       {onBack && (
         <div className={styles.rail}>
-          <RailAlignment />
           <NavRail label={title} navId={SETTINGS_NAV.rail}>
             <NavItem
               navId={SETTINGS_NAV.back}

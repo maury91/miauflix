@@ -60,7 +60,7 @@ vi.mock('@shared/brand/logo/Logo', async () => {
   const React = await import('react');
   return {
     Logo: ({
-      page,
+      position,
       disableMotion,
       visible,
       aboveIntro,
@@ -68,7 +68,7 @@ vi.mock('@shared/brand/logo/Logo', async () => {
       onPulseSettled,
       onPositionTransitionEnd,
     }: {
-      page: string;
+      position: string;
       disableMotion?: boolean;
       visible?: boolean;
       aboveIntro?: boolean;
@@ -84,7 +84,7 @@ vi.mock('@shared/brand/logo/Logo', async () => {
       return (
         <div
           data-testid="logo"
-          data-page={page}
+          data-position={position}
           data-disable-motion={String(disableMotion ?? false)}
           data-visible={String(visible ?? true)}
           data-above-intro={String(aboveIntro ?? false)}
@@ -209,19 +209,19 @@ describe('AppShell intro sequence', () => {
     ['required configuration', 'config_wizard', 'required-config-page'],
     ['first user setup', 'initial_setup', 'setup-page'],
   ])(
-    'opens on the pulsing centred logo, then moves it to %s and shows the page',
+    'opens on the pulsing centred logo, then hides it for the static logo of %s',
     async (_name, page, testId) => {
       appPage.value = page;
       renderAppShell();
 
       const logo = screen.getByTestId('logo');
-      expect(logo).toHaveAttribute('data-page', 'intro');
+      expect(logo).toHaveAttribute('data-position', 'intro');
       expect(logo).toHaveAttribute('data-pulsing', 'true');
       expect(logo).toHaveAttribute('data-disable-motion', 'true');
       expect(screen.queryByTestId(testId)).not.toBeInTheDocument();
 
       await finishBoot();
-      expect(logo).toHaveAttribute('data-page', page);
+      expect(logo).toHaveAttribute('data-position', 'none');
       expect(logo).toHaveAttribute('data-pulsing', 'false');
       expect(logo).toHaveAttribute('data-disable-motion', 'false');
       expect(screen.getByTestId(testId)).toBeInTheDocument();
@@ -242,7 +242,7 @@ describe('AppShell intro sequence', () => {
     appPage.value = 'home';
     act(() => view.rerender(<AppShell />));
 
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'intro');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-above-intro', 'true');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'false');
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
@@ -279,7 +279,7 @@ describe('AppShell intro sequence', () => {
     appPage.value = 'home';
     renderAppShell(true);
 
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'intro');
     expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
     expect(screen.getByTestId('home-page').parentElement).toHaveAttribute('aria-hidden', 'true');
@@ -290,16 +290,16 @@ describe('AppShell intro sequence', () => {
     act(() => idleControls.callback?.());
     expect(introControls.started).toBe(true);
     expect(screen.getByTestId('intro-animation')).toHaveAttribute('data-logo-visible', 'true');
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'intro');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
     expect(introControls.start).not.toBeNull();
     act(() => introControls.start?.());
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'home');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
     expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
     act(() => introControls.complete?.());
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'home');
     expect(window._miauflixAnimationComplete).toBe(true);
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'true');
   });
@@ -308,23 +308,23 @@ describe('AppShell intro sequence', () => {
     appPage.value = 'loading';
     const view = renderAppShell(true);
 
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'intro');
     expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
 
     appPage.value = 'home';
     act(() => view.rerender(<AppShell />));
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'intro');
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
     expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
     act(() => homeControls.hydrated?.());
     act(() => idleControls.callback?.());
 
     expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'home');
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
     expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
     act(() => introControls.complete?.());
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'home');
   });
 
   it('keeps the logo centred and pulsing while the initial checks are unresolved', async () => {
@@ -332,13 +332,13 @@ describe('AppShell intro sequence', () => {
     const view = renderAppShell();
     await finishBoot();
 
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'intro');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-pulsing', 'true');
 
     appPage.value = 'login';
     act(() => view.rerender(<AppShell />));
     await finishBoot();
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'login');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'none');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-pulsing', 'false');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'false');
   });

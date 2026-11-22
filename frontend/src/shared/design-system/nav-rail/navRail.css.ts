@@ -26,7 +26,9 @@ import {
 
 const item = controlSize.md;
 const inset = space.xs;
-const compactWidth = `${parseFloat(item.height) + parseFloat(inset) * 2}rem`;
+/** The compact rail's width: pages put their content, and the app logo, right of it. */
+export const navRailWidth = `${parseFloat(item.height) + parseFloat(inset) * 2}rem`;
+const compactWidth = navRailWidth;
 const fade = `opacity ${duration.standard} ${easing.standard}`;
 
 export const rail = style({

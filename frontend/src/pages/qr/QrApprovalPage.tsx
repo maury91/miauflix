@@ -4,6 +4,7 @@ import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { authenticatedRequest, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { StaticLogo } from '@shared/brand/logo/StaticLogo';
 import {
   ActionGroup,
   Button,
@@ -367,7 +368,10 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
           {/* A new scope per screen: a scope focuses its first action when it mounts, and the
               actions only appear once the request has been checked */}
           <FocusScope key={screenKey} autoFocus>
-            <div className={styles.column}>{content}</div>
+            <div className={styles.stack}>
+              <StaticLogo />
+              <div className={styles.column}>{content}</div>
+            </div>
           </FocusScope>
         </SurfaceContextProvider>
       </NavigationProvider>

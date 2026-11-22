@@ -1,4 +1,7 @@
-import { globalStyle, style } from '@vanilla-extract/css';
+import { navRailWidth } from '@shared/design-system/nav-rail/navRail.css';
+import { outlineRoom } from '@shared/design-system/scroll-area/scrollArea.css';
+import { space } from '@shared/design-system/tokens';
+import { globalStyle, keyframes, style } from '@vanilla-extract/css';
 
 import {
   BRAND_LOGO_ASPECT,
@@ -20,15 +23,52 @@ export const centeredLogoSize = style({
   },
 });
 
+/** Search, settings and profiles: right of the back rail, where Search's columns start. */
+export const INNER_LOGO_LEFT = `calc(${navRailWidth} + ${space.xl})`;
 /**
- * The app's logo, fixed above every page. Where it sits comes from `data-position`:
+ * Details: right of the back rail, over the title's information (the body's padding, then the
+ * ScrollArea's room for focus rings).
+ */
+const DETAILS_LOGO_LEFT = `calc(${navRailWidth} + ${space['2xl']} + ${outlineRoom})`;
+
+/*
+ * The loading pulse, in CSS so the server-rendered logo pulses from the first paint and hydration
+ * keeps the same running animation. The origin is the box's top-left corner, which
+ * `translate(-50%, -50%)` puts at the logo's centre. Browsers with the `scale` property animate it,
+ * so the position transform still transitions when the logo moves; the Samsung TV's Chromium 69
+ * pulses `transform`, repeating the centred position (scaling before the translate draws the same).
+ * Logo.tsx eases a stopped pulse back to full size with the same properties.
+ */
+export const PULSE_SCALE = 1.1;
+export const PULSE_OPACITY = 0.8;
+export const PULSE_MS = 1400;
+
+const pulseTransform = keyframes({
+  '0%': { transformOrigin: '0 0', transform: 'scale(1) translate(-50%, -50%)', opacity: 1 },
+  '50%': {
+    transformOrigin: '0 0',
+    transform: `scale(${PULSE_SCALE}) translate(-50%, -50%)`,
+    opacity: PULSE_OPACITY,
+  },
+  '100%': { transformOrigin: '0 0', transform: 'scale(1) translate(-50%, -50%)', opacity: 1 },
+});
+
+const pulseScale = keyframes({
+  '0%': { transformOrigin: '0 0', scale: '1', opacity: 1 },
+  '50%': { transformOrigin: '0 0', scale: String(PULSE_SCALE), opacity: PULSE_OPACITY },
+  '100%': { transformOrigin: '0 0', scale: '1', opacity: 1 },
+});
+
+/**
+ * The logo shared by the signed-in pages (and the loading screen), fixed above every page; it
+ * moves between them. Where it sits comes from `data-position`:
  *
- * - `page` (sign-in, setup): centred above the page's card
- * - `intro`: centred on the screen, where the intro animation starts
- * - `configuration`: a small mark at the top, over its own backdrop
- * - `home`: the corner, lined up with the content (`--home-content-left`)
+ * - `intro`: centred on the screen, where the intro animation starts (and the loading pulse)
+ * - `home`: the corner, lined up with Home's cards (`--logo-home-left`, set by Logo)
+ * - `inner`: the corner, right of the back rail (search, settings, profiles)
+ * - `details`: the corner, over the details' information
  *
- * `data-above-intro`, `data-hidden` and `data-static` (no transition) complete it.
+ * `data-above-intro`, `data-hidden`, `data-static` (no transition) and `data-pulsing` complete it.
  */
 export const image = style([
   centeredLogoSize,
@@ -38,54 +78,45 @@ export const image = style([
     zIndex: 1002,
     pointerEvents: 'none',
     transition: 'all 0.4s ease-in-out',
-    transform: 'translate(-50%, 0%)',
+    transform: 'translate(-50%, -50%)',
     left: '50%',
-    top: 'calc(50% - 380px)',
+    top: '50%',
     selectors: {
       '&[data-above-intro]': { zIndex: 1003 },
       '&[data-hidden]': { visibility: 'hidden' },
       '&[data-static]': { transition: 'none' },
-      '&[data-position="intro"]': {
-        transform: 'translate(-50%, -50%)',
-        top: '50%',
+      '&[data-position="intro"][data-pulsing]': {
+        animation: `${pulseTransform} ${PULSE_MS}ms ease-in-out infinite`,
       },
-      '&[data-position="configuration"]': { top: '24px', width: 'auto', height: '56px' },
-      '&[data-position="home"]': {
-        transform: 'none',
-        left: 'var(--home-content-left, 5vw)',
-        top: CORNER_LOGO_TOP,
-        width: 'auto',
-        height: CORNER_LOGO_HEIGHT,
-      },
+      '&[data-position="home"]': { left: 'var(--logo-home-left, 5vw)' },
+      '&[data-position="inner"]': { left: INNER_LOGO_LEFT },
+      '&[data-position="details"]': { left: DETAILS_LOGO_LEFT },
     },
-    '@media': {
-      [narrow]: {
-        top: '50px',
+    '@supports': {
+      '(scale: 1)': {
         selectors: {
-          '&[data-position="intro"]': { top: '50%' },
-          '&[data-position="configuration"]': { top: '16px', height: '48px' },
-          '&[data-position="home"]': { top: CORNER_LOGO_TOP, height: CORNER_LOGO_HEIGHT },
+          '&[data-position="intro"][data-pulsing]': {
+            animationName: pulseScale,
+          },
         },
       },
     },
   },
 ]);
 
-globalStyle(`body[data-miauflix-details='true'] ${image}`, {
-  left: '8vw',
-  '@media': { [narrow]: { left: '30vw' } },
+// Doubled attribute: outranks the pulse rules whatever order they are emitted in
+globalStyle(`${image}[data-position="intro"][data-pulsing][data-pulsing]`, {
+  '@media': { '(prefers-reduced-motion: reduce)': { animation: 'none' } },
 });
+
+// The three corner positions share their size and top
+for (const position of ['home', 'inner', 'details']) {
+  globalStyle(`${image}[data-position="${position}"]`, {
+    transform: 'none',
+    top: CORNER_LOGO_TOP,
+    width: 'auto',
+    height: CORNER_LOGO_HEIGHT,
+  });
+}
 
 globalStyle(`body[data-miauflix-player='true'] ${image}`, { display: 'none' });
-
-/** Configuration pages scroll under the small logo: a strip behind it. */
-export const configurationBackdrop = style({
-  position: 'fixed',
-  top: 0,
-  right: 0,
-  left: 0,
-  height: '104px',
-  backgroundColor: '#0a0d0f',
-  zIndex: 1001,
-  '@media': { [narrow]: { height: '80px' } },
-});

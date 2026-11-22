@@ -1,11 +1,7 @@
-import { NARROW_MAX_WIDTH_PX } from '@shared/brand/logo/logoGeometry';
 import { color, fontFamily, layer, radius, space } from '@shared/design-system/tokens';
 import { style } from '@vanilla-extract/css';
 
-/**
- * Starts below the app's logo, which stays where the login screen has it: 130px tall at
- * 50% - 380px (70px tall at 50px on narrow screens).
- */
+/** The page's logo over the card: centred while they fit, scrolled once they don't. */
 export const screen = style({
   outline: 'none',
   position: 'fixed',
@@ -15,16 +11,19 @@ export const screen = style({
   left: 0,
   zIndex: layer.page,
   boxSizing: 'border-box',
+  display: 'flex',
+  flexDirection: 'column',
   overflowY: 'auto',
-  padding: `calc(50vh - 218px) ${space.md} ${space.xl}`,
+  padding: `${space.xl} ${space.md}`,
   backgroundColor: color.canvas,
   color: color.text,
   fontFamily,
-  '@media': {
-    // Short screens push the logo off the top; keep the card from touching the edge
-    '(max-height: 500px)': { paddingTop: space.xl },
-    [`(max-width: ${NARROW_MAX_WIDTH_PX}px)`]: { paddingTop: '152px' },
-  },
+});
+
+/** Takes the free height above and below, so it is centred and scrolls from its top. */
+export const stack = style({
+  flex: 'none',
+  margin: 'auto 0',
 });
 
 export const column = style({

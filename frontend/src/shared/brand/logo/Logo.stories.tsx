@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Logo } from './Logo';
+import { StaticLogo } from './StaticLogo';
 
 const meta: Meta<typeof Logo> = {
   title: 'UI Elements/Logo',
@@ -16,55 +17,23 @@ const meta: Meta<typeof Logo> = {
 export default meta;
 type Story = StoryObj<typeof Logo>;
 
-// Basic logo story
-export const Default: Story = {
-  render: () => (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '7vw',
-      }}
-    >
-      <Logo />
-    </div>
-  ),
-};
+/** Centred and pulsing, as while the app loads (and in the server-rendered page). */
+export const Loading: Story = { args: { position: 'intro', pulsing: true } };
 
-// Different sizes
-export const Small: Story = {
-  render: () => (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '3vw',
-      }}
-    >
-      <Logo />
-    </div>
-  ),
-};
+/** Home's corner, lined up with its cards' margin. */
+export const Home: Story = { args: { position: 'home', homeLeft: 96 } };
 
-export const Large: Story = {
+/** Search, settings and profiles: right of the back rail. */
+export const Inner: Story = { args: { position: 'inner' } };
+
+/** Details: over the title's information. */
+export const Details: Story = { args: { position: 'details' } };
+
+/** Sign-in, setup and QR approval: a static image heading the page. */
+export const Static: Story = {
   render: () => (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '12vw',
-      }}
-    >
-      <Logo />
+    <div style={{ paddingTop: '4rem' }}>
+      <StaticLogo />
     </div>
   ),
 };

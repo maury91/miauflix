@@ -26,6 +26,8 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 - Moving through a number setting without changing it no longer rounds its saved value. On a TV, the approve-sign-in page selects Approve as soon as it appears, and copying the Trakt code no longer moves the selection. Closing the Trakt dialog with the keyboard gives control straight back to Home.
 - Clicking a text field in settings, the profile editor or search lets you type in it again; before, the field looked selected but ignored the keyboard.
 
+- The logo now stays in one place on each page: lined up with the cards on Home, with the title's information on details, and in the same spot on search, settings and profile pages. Sign-in, setup and the first-run configuration show a still logo that is always on screen, and the loading logo pulses from the moment the page appears.
+
 ### Self-hosting
 
 - Admins can add Stremio addons that find torrents (Torrentio, Comet, MediaFusion and similar) under Sources → Advanced setup, by pasting the addon's install link. Configure the addon on its own page first: its settings are part of the link, which Miauwatch keeps hidden. Streams from debrid services or direct links are skipped for now. The built-in Torrentio now runs this way too, keeping its options.

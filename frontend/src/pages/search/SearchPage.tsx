@@ -19,15 +19,7 @@ import {
 } from '@shared/navigation';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { searchActions, searchResultKey } from '@store/slices/search';
-import {
-  type FocusEvent,
-  type KeyboardEvent,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { type FocusEvent, type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import { PopularSearches, RecentSearches } from './components/SearchChips';
 import { searchPanelKind } from './components/searchPanel';
@@ -84,20 +76,7 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
   const fieldRef = useRef<HTMLInputElement>(null);
   // Read once: where focus starts
   const [initialId] = useState(() => search.focus ?? start);
-  // The app logo lines up with the left column, as it does with Home's rows
   const sideRef = useRef<HTMLDivElement>(null);
-  useLayoutEffect(() => {
-    const align = () => {
-      const left = sideRef.current?.getBoundingClientRect().left;
-      if (left) document.body.style.setProperty('--home-content-left', `${left}px`);
-    };
-    align();
-    window.addEventListener('resize', align);
-    return () => {
-      window.removeEventListener('resize', align);
-      document.body.style.removeProperty('--home-content-left');
-    };
-  }, []);
 
   // The layer focuses without scrolling: keep the focused key or chip in view in the side column,
   // by the least scroll. Pointer focus never scrolls: the pointer is already on it

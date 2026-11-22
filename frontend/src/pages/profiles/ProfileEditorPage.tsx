@@ -15,7 +15,6 @@ import {
 } from '@features/profiles/ui/LookControls';
 import * as lookStyles from '@features/profiles/ui/lookControls.css';
 import { LogoBackdrop } from '@shared/brand/logo/LogoBackdrop';
-import { useRailContentLeft } from '@shared/brand/logo/useRailContentLeft';
 import {
   Button,
   Disclosure,
@@ -68,8 +67,6 @@ export interface ProfileEditorPageProps {
 /** Create or edit a profile: its name and Plushie. */
 const ProfileEditorPage: FC<ProfileEditorPageProps> = props => {
   const { onCancel } = props;
-  // The logo lines up with the content beside the back rail, as on the other inner pages.
-  useRailContentLeft();
   // Back ends editing a field first (closing a TV's keyboard), then leaves the page
   const back = usePageBack(onCancel);
   return (

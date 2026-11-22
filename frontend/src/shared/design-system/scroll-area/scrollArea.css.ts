@@ -13,7 +13,7 @@ import { focusRing } from '../tokens';
 
 const rem = (value: string) => parseFloat(value);
 /** Room for the focus outline at the content's edges, which the area clips. */
-const outlineRoom = `${rem(focusRing.width) + rem(focusRing.offset)}rem`;
+export const outlineRoom = `${rem(focusRing.width) + rem(focusRing.offset)}rem`;
 
 export const viewport = style({
   position: 'relative',
