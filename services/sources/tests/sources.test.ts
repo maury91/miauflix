@@ -6,7 +6,7 @@ import { Database } from 'bun:sqlite';
 import { expect, it } from 'bun:test';
 
 import { openDatabase } from '../src/db/database';
-import { migrations } from '../src/db/migrations';
+import { migrations, TORRENTIO_MANIFEST } from '../src/db/migrations';
 import {
   DEFAULT_SOURCES,
   LEGACY_SOURCE_KEY,
@@ -161,7 +161,6 @@ it('drops the untouched Jackett built-ins left by earlier versions, and keeps on
         'maury91-therarbg-imdb',
         'prowlarr-yts',
         'maury91-eztv-api',
-        'maury91-torrentio',
         'maury91-therarbg',
         'maury91-animetosho',
         'prowlarr-nyaasi',
@@ -169,6 +168,10 @@ it('drops the untouched Jackett built-ins left by earlier versions, and keeps on
         'prowlarr-thepiratebay',
       ].map(id => ({ id }))
     );
+    // Torrentio is searched as the Stremio addon it is.
+    expect(
+      db.query("SELECT kind, definition FROM providers WHERE id='maury91-torrentio'").get()
+    ).toEqual({ kind: 'stremio', definition: JSON.stringify({ baseUrl: TORRENTIO_MANIFEST }) });
     db.close();
   } finally {
     rmSync(dir, { recursive: true, force: true });

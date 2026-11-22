@@ -1,6 +1,7 @@
 import {
   type CatalogArgs,
   useAddCardigannProviderMutation,
+  useAddStremioProviderMutation,
   useAddTorznabProviderMutation,
   useLoadDefinitionsMutation,
   useSyncDefinitionsMutation,
@@ -29,7 +30,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { errorMessage } from './sources/errors';
 import * as styles from './sources/sources.css';
 
-/** Navigation IDs of the indexer catalog and the Torznab form. */
+/** Navigation IDs of the indexer catalog, the Stremio form and the Torznab form. */
 const NAV = {
   browse: 'indexers-browse',
   search: 'indexers-search',
@@ -40,6 +41,8 @@ const NAV = {
   results: 'indexers-results',
   add: (entry: { source: string; id: string }) => `indexer-add:${entry.source}|${entry.id}`,
   more: 'indexers-more',
+  stremioUrl: 'stremio-url',
+  stremioSubmit: 'stremio-submit',
   torznabName: 'torznab-name',
   torznabUrl: 'torznab-url',
   torznabKey: 'torznab-key',
@@ -164,6 +167,8 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
   const [addCardigann, cardigann] = useAddCardigannProviderMutation();
   const [addTorznab, torznab] = useAddTorznabProviderMutation();
   const [form, setForm] = useState({ name: '', baseUrl: '', apiKey: '' });
+  const [addStremio, stremio] = useAddStremioProviderMutation();
+  const [addonUrl, setAddonUrl] = useState('');
   const resultsRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestId = useRef(0);
@@ -261,6 +266,18 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
       setSync(await syncNow().unwrap());
     } catch (requestError) {
       setError(errorMessage(requestError, t('indexers.updateFailed')));
+    }
+  };
+
+  const submitStremio = async () => {
+    if (stremio.isLoading || !addonUrl.trim()) return;
+    setError('');
+    try {
+      const view = await addStremio({ url: addonUrl.trim() }).unwrap();
+      setAddonUrl('');
+      onNotice(t('indexers.addedNotice', { name: view.name }));
+    } catch (requestError) {
+      setError(errorMessage(requestError, t('indexers.addonFailed')));
     }
   };
 
@@ -464,6 +481,39 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
             </FocusGroup>
           )}
         </Section>
+      </div>
+
+      <div className={styles.setupPart}>
+        <FormSection
+          title={t('indexers.stremioTitle')}
+          description={t('indexers.stremioDescription')}
+          headingLevel={3}
+          onSubmit={() => void submitStremio()}
+          busy={stremio.isLoading}
+          actions={
+            <Button
+              type="submit"
+              navId={NAV.stremioSubmit}
+              loading={stremio.isLoading}
+              disabled={!addonUrl.trim()}
+            >
+              {t('indexers.addAddon')}
+            </Button>
+          }
+        >
+          {/* The link can hold the addon's settings and keys: keep it hidden like a password. */}
+          <PasswordField
+            navId={NAV.stremioUrl}
+            id="stremio-url"
+            label={t('indexers.stremioUrl')}
+            showLabel={t('indexers.showLink')}
+            hideLabel={t('indexers.hideLink')}
+            autoComplete="off"
+            placeholder="https://torrentio.strem.fun/manifest.json"
+            value={addonUrl}
+            onChange={event => setAddonUrl(event.target.value)}
+          />
+        </FormSection>
       </div>
 
       <div className={styles.setupPart}>

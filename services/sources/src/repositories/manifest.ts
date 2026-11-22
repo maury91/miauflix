@@ -8,10 +8,10 @@ const entry = z
     id: z.string().regex(/^[a-z0-9][a-z0-9._-]{1,63}$/),
     name: z.string().trim().min(1).max(100),
     version: z.string().min(1).max(50),
-    kind: z.enum(['cardigann', 'torznab', 'http']),
+    kind: z.enum(['cardigann', 'torznab', 'stremio', 'http']),
     cardigann: z.string().optional(), // Definition id within its source
     source: z.string().trim().min(1).max(300).default(PROWLARR_SOURCE_KEY),
-    baseUrl: z.string().url().optional(), // torznab/http
+    baseUrl: z.string().url().optional(), // torznab/http; the manifest.json URL for stremio
     defaults: z
       .object({
         enabled: z.boolean().default(false),
@@ -26,6 +26,7 @@ const entry = z
     const required = {
       cardigann: value.cardigann,
       torznab: value.baseUrl,
+      stremio: value.baseUrl,
       http: value.baseUrl,
     }[value.kind];
     if (!required)

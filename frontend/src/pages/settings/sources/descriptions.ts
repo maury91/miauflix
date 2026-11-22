@@ -4,6 +4,7 @@ import { type MessageKey, t } from '@shared/i18n';
 const BY_KIND: Record<ProviderView['kind'], MessageKey> = {
   cardigann: 'sources.kind.cardigann',
   torznab: 'sources.kind.torznab',
+  stremio: 'sources.kind.stremio',
   http: 'sources.kind.http',
 };
 

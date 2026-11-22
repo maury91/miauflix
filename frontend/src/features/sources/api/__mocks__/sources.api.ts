@@ -20,6 +20,7 @@ export const useLoadDefinitionsMutation = mutation();
 export const useSyncDefinitionsMutation = mutation();
 export const useAddCardigannProviderMutation = mutation();
 export const useAddTorznabProviderMutation = mutation();
+export const useAddStremioProviderMutation = mutation();
 export const useRemoveProviderMutation = mutation();
 export const useAddRepositoryMutation = mutation();
 export const useRefreshRepositoryMutation = mutation();

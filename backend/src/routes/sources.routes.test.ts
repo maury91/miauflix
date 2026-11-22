@@ -24,6 +24,7 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
     syncCardigannDefinitions: jest.fn().mockResolvedValue({ syncing: true }),
     addCardigannProvider: jest.fn().mockResolvedValue({ id: 'jackett-nyaasi' }),
     addTorznabProvider: jest.fn().mockResolvedValue({ id: 'torznab-x' }),
+    addStremioProvider: jest.fn().mockResolvedValue({ id: 'stremio-x' }),
     removeProvider: jest.fn().mockResolvedValue(undefined),
   };
   const app = new Hono();
@@ -192,11 +193,20 @@ describe('sources routes', () => {
       baseUrl: 'http://jackett:9117/api',
       apiKey: 'k',
     });
+    const stremio = await app.request(
+      '/sources/providers/stremio',
+      json('POST', { url: ' stremio://addon.example/opts/manifest.json ' })
+    );
+    expect(stremio.status).toBe(201);
+    expect(sourcesClientService.addStremioProvider).toHaveBeenCalledWith({
+      url: 'stremio://addon.example/opts/manifest.json',
+    });
     expect((await app.request('/sources/providers/torznab-x', json('DELETE'))).status).toBe(204);
     expect(sourcesClientService.removeProvider).toHaveBeenCalledWith('torznab-x');
     for (const [path, body] of [
       ['/sources/providers/cardigann', { id: '../x' }],
       ['/sources/providers/torznab', { name: '', baseUrl: 'nope' }],
+      ['/sources/providers/stremio', { url: 'ftp://addon.example/manifest.json' }],
     ] as const)
       expect((await app.request(path, json('POST', body))).status).toBe(400);
     sourcesClientService.addCardigannProvider.mockRejectedValueOnce(

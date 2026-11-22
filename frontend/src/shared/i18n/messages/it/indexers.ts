@@ -67,4 +67,12 @@ export const indexers: Translation<typeof english> = {
   'indexers.apiKey': 'Chiave API',
   'indexers.showKey': 'Mostra chiave API',
   'indexers.hideKey': 'Nascondi chiave API',
+  'indexers.stremioTitle': 'Aggiungi un addon di Stremio',
+  'indexers.stremioDescription':
+    'Incolla il link di installazione di un addon che trova torrent, come Torrentio. Configura prima l’addon sulla sua pagina: le impostazioni fanno parte del link.',
+  'indexers.stremioUrl': 'Link dell’addon',
+  'indexers.addAddon': 'Aggiungi addon',
+  'indexers.addonFailed': 'Impossibile aggiungere questo addon.',
+  'indexers.showLink': 'Mostra link dell’addon',
+  'indexers.hideLink': 'Nascondi link dell’addon',
 };

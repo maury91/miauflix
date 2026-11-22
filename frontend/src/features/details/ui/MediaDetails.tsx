@@ -12,6 +12,7 @@ import { useGetMediaRatingQuery, useSetMediaRatingMutation } from '@features/med
 import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
 import { SourcePreparationStatus } from '@features/preload/ui/SourcePreparationStatus';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
+import { isUnfinished } from '@features/progress/lib/continue-watching';
 import { episodeForSeason } from '@features/progress/lib/episode-rules';
 import type {
   MediaDto,
@@ -233,6 +234,12 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
           kind: 'movie',
           mediaId: media.mediaId,
         })
+      : undefined;
+  // What Continue watching offers: past the first seconds and not finished
+  const resumable = !!movieProgress && !movieProgress.nextEpisode && isUnfinished(movieProgress);
+  const watchedShare =
+    resumable && movieProgress && movieProgress.durationSeconds > 0
+      ? Math.min(1, movieProgress.positionSeconds / movieProgress.durationSeconds)
       : undefined;
   const seasons = useMemo(
     () => [...(showDetails?.seasons ?? [])].sort((a, b) => a.seasonNumber - b.seasonNumber),
@@ -541,9 +548,7 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
         aria-describedby={warmupId}
         onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
       >
-        {movieProgress && movieProgress.state !== 'completed'
-          ? t('details.resume')
-          : t('details.watchNow')}
+        {resumable ? t('details.resume') : t('details.watchNow')}
       </Button>
     );
   const warmupText =
@@ -656,15 +661,25 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
           {watchAction && (
             <div className={styles.watch}>
               {watchAction}
+              {/* Under the button, the share already watched, as on the title's card */}
+              {watchedShare !== undefined && (
+                <div className={styles.watched}>
+                  <ProgressBar decorative size="sm" value={watchedShare} />
+                </div>
+              )}
+              {/* Torrent preparation is said in words: as a bar it read as watch progress */}
               {(warmupState === 'warming' || warmupState === 'paused') &&
-                movieAvailability !== 'unavailable' && (
-                  <div className={styles.warmup} data-warmup-state={warmupState}>
-                    <ProgressBar decorative size="sm" value={warmupPercent / 100} />
-                  </div>
-                )}
-              <span id={warmupId} className={visuallyHidden}>
-                {warmupText}
-              </span>
+              movieAvailability !== 'unavailable' ? (
+                <div className={styles.warmup} data-warmup-state={warmupState} id={warmupId}>
+                  <Text variant="caption" tone="secondary">
+                    {warmupText}
+                  </Text>
+                </div>
+              ) : (
+                <span id={warmupId} className={visuallyHidden}>
+                  {warmupText}
+                </span>
+              )}
             </div>
           )}
           {media._type === 'movie' &&

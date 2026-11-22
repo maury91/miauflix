@@ -15,6 +15,7 @@ const api = vi.hoisted(() => {
     removeProvider: vi.fn(),
     addCardigann: vi.fn(),
     addTorznab: vi.fn(),
+    addStremio: vi.fn(),
     loadDefinitions: vi.fn(),
     syncDefinitions: vi.fn(),
     catalog: [] as unknown[],
@@ -47,6 +48,7 @@ vi.mock('@features/sources/api/sources.api', () => ({
   useSyncDefinitionsMutation: () => [api.syncDefinitions, { isLoading: false }],
   useAddCardigannProviderMutation: () => [api.addCardigann, { isLoading: false }],
   useAddTorznabProviderMutation: () => [api.addTorznab, { isLoading: false }],
+  useAddStremioProviderMutation: () => [api.addStremio, { isLoading: false }],
 }));
 
 import SourcesAddProviders from './SourcesAddProviders';
@@ -117,6 +119,7 @@ beforeEach(() => {
     api.removeProvider,
     api.addCardigann,
     api.addTorznab,
+    api.addStremio,
   ])
     mock.mockReset().mockReturnValue(api.unwrap({}));
   // jsdom lays nothing out: give every element a box, so the navigation layer can focus it
@@ -771,6 +774,36 @@ describe('SourcesPage', () => {
       apiKey: 'k',
     });
     await waitFor(() => expect(screen.getByLabelText('Name')).toHaveValue(''));
+  });
+
+  it('adds a Stremio addon from its link, kept hidden like a key', async () => {
+    api.addStremio.mockReturnValueOnce(api.unwrap({ name: 'Torrentio' }));
+    render(<SourcesPage onDismiss={vi.fn()} />);
+    openAdvanced();
+    expect(screen.getByRole('button', { name: 'Add addon' })).toBeDisabled();
+    const link = screen.getByLabelText('Addon link');
+    expect(link).toHaveAttribute('type', 'password');
+    fireEvent.change(link, {
+      target: { value: ' stremio://torrentio.strem.fun/sort=size/manifest.json ' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Add addon' }));
+    expect(api.addStremio).toHaveBeenCalledWith({
+      url: 'stremio://torrentio.strem.fun/sort=size/manifest.json',
+    });
+    await waitFor(() => expect(screen.getByLabelText('Addon link')).toHaveValue(''));
+  });
+
+  it('shows why an addon could not be added', async () => {
+    api.addStremio.mockReturnValueOnce({
+      unwrap: () => Promise.reject({ status: 400, data: 'This addon is already added' }),
+    });
+    render(<SourcesPage onDismiss={vi.fn()} />);
+    openAdvanced();
+    fireEvent.change(screen.getByLabelText('Addon link'), {
+      target: { value: 'https://addon.example/manifest.json' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Add addon' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('This addon is already added');
   });
 
   it('removes only providers the admin added, and flags FlareSolverr', () => {

@@ -9,6 +9,7 @@ import { AnimeLists } from './anime/anime-lists';
 import { AnimeResolver } from './anime/resolver';
 import { SourcesConfigService } from './config/config.service';
 import { openDatabase } from './db/database';
+import { TORRENTIO_ID, TORRENTIO_MANIFEST } from './db/migrations';
 import { Store } from './db/store';
 import type { ResolveHost } from './http/destination';
 import { type Fetch, HttpClient } from './http/http-client';
@@ -79,6 +80,7 @@ export function createSourcesService(options: SourcesServiceOptions): {
     config = new SourcesConfigService(),
     codec = createSeal(options.keyFile, options.encryptionKey);
   const store = new Store(db, codec.seal, codec.open, options.now);
+  store.moveTorrentioOptions(TORRENTIO_ID, new URL(TORRENTIO_MANIFEST).origin);
   if (options.preloadProviders) {
     const invalid = preloadProviders(store, options.preloadProviders);
     if (invalid.length)
@@ -270,6 +272,16 @@ export function createSourcesService(options: SourcesServiceOptions): {
         )
       ),
     addTorznabProvider: (input, ctx) => guarded(ctx, () => admin.addTorznab(input)),
+    addStremioProvider: (input, ctx) =>
+      guarded(ctx, () =>
+        admin.addStremio(
+          {
+            url: typeof input?.url === 'string' ? input.url : '',
+            name: typeof input?.name === 'string' ? input.name : undefined,
+          },
+          AbortSignal.any([ctx.signal, stopping.signal])
+        )
+      ),
     removeProvider: ({ id }, ctx) => guarded(ctx, () => admin.remove(String(id))),
     torrentFile: async (input, ctx) => {
       const parsed = fileSchema.safeParse(input);

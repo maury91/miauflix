@@ -73,6 +73,7 @@ export const sources = {
   'sources.hide': 'Hide {label}',
   'sources.kind.cardigann': 'Public source from the Prowlarr/Jackett list',
   'sources.kind.torznab': 'Your own Jackett or Prowlarr source',
+  'sources.kind.stremio': 'Stremio addon',
   'sources.kind.http': 'External source',
   'sources.disabledUsage': 'Disabled',
   'sources.usageBudget': '{today} / {budget} requests today',

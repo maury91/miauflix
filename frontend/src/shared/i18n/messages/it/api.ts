@@ -55,6 +55,7 @@ export const api: Translation<typeof english> = {
   'api.failedToLoadTheIndexerList': 'Impossibile caricare l’elenco degli indexer',
   'api.failedToUpdateTheIndexerList': 'Impossibile aggiornare l’elenco degli indexer',
   'api.failedToAddTheIndexer': 'Impossibile aggiungere l’indexer',
+  'api.failedToAddTheAddon': 'Impossibile aggiungere l’addon',
   'api.failedToAddTheEndpoint': 'Impossibile aggiungere l’endpoint',
   'api.failedToRemoveTheProvider': 'Impossibile rimuovere il provider',
   'api.failedToLoadRepositories': 'Impossibile caricare i repository',

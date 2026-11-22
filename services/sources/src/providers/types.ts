@@ -65,7 +65,7 @@ export interface ProviderPage {
 export interface Provider {
   readonly id: string;
   readonly name: string;
-  readonly kind: 'cardigann' | 'torznab' | 'http';
+  readonly kind: 'cardigann' | 'torznab' | 'stremio' | 'http';
   readonly caps: ProviderCaps;
   readonly rate: { perMinute: number; minIntervalMs: number; dailyBudget: number | null };
   readonly requiresFlareSolverr: boolean;

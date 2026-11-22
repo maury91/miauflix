@@ -22,10 +22,17 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 - The player's closed-captions panel is now a side panel over the player, its full height, also in full screen. It lists your default subtitle language first, then languages with tracks, with the rest under More languages. Hearing-impaired subtitles, the subtitle sources (from the video file, from files in the same folder, or online) and the timing each have their own row.
 - The server picker, the player's subtitle panel, error and not-found pages, and the quality badge on titles now match the rest of the app. The subtitle panel opens above the controls, with audio, language and tracks as lists you move through with the remote, and Back from subtitle timing returns to the panel first, and Back now works while a slider is selected in a panel or dialog. On a TV, the server picker now scrolls to keep the selected server or field in view when the list is long. Screens no longer generate styles while you use them, which helps the TV.
 - Moving through a number setting without changing it no longer rounds its saved value. On a TV, the approve-sign-in page selects Approve as soon as it appears, and copying the Trakt code no longer moves the selection. Closing the Trakt dialog with the keyboard gives control straight back to Home.
+- Clicking a text field in settings, the profile editor or search lets you type in it again; before, the field looked selected but ignored the keyboard.
 
 ### Self-hosting
 
+- Admins can add Stremio addons that find torrents (Torrentio, Comet, MediaFusion and similar) under Sources → Advanced setup, by pasting the addon's install link. Configure the addon on its own page first: its settings are part of the link, which Miauflix keeps hidden. Streams from debrid services or direct links are skipped for now. The built-in Torrentio now runs this way too, keeping its options.
 - Source search and downloads recognise the VPN setup (gluetun) on their own and trust its kill switch, so they work as soon as its tunnel is up, with any VPN provider gluetun supports, not only NordVPN.
+
+### Playback fixes
+
+- On a movie's page, the bar under Resume watching now shows how much you've watched, like the title's card. It used to show how much of the torrent was prepared, which looked like watch progress; preparation is now written out under the button ("Preparing torrent (65%)"). A movie that never played past its first seconds offers Watch now instead of Resume watching, matching Continue watching.
+- Playback no longer starts on a release that nobody is sharing when a shared one exists. Such releases could rank first on picture quality alone, and the title then stayed stuck on its first second and never reached Continue watching.
 
 ## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
 

@@ -1,5 +1,5 @@
 import type { Source } from '@miauflix/source-metadata-extractor';
-import { In, LessThan, type Repository } from 'typeorm';
+import { In, IsNull, LessThan, MoreThan, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { ContentSource, QUALITIES } from '@entities/content-source.entity';
@@ -422,6 +422,35 @@ LIMIT ?
         updated += scored.length;
         // Rows that still score 0 (no seeds, unknown everything) would be fetched forever.
         if (sources.length < batchSize || scored.length === 0) return updated;
+      }
+    });
+  }
+
+  /** Recalculates the stored score of every source with no seeders; returns how many changed. */
+  async rescoreUnseededSources(batchSize = 500): Promise<number> {
+    return this.db.transaction(async manager => {
+      const repository = manager.getRepository(ContentSource);
+      let updated = 0;
+      let after = 0;
+      for (;;) {
+        const sources = await repository.find({
+          select: [...SCORE_FIELDS, 'streamingScore'],
+          // Unknown seeders score like none
+          where: [
+            { broadcasters: 0, id: MoreThan(after) },
+            { broadcasters: IsNull(), id: MoreThan(after) },
+          ],
+          order: { id: 'ASC' },
+          take: batchSize,
+        });
+        for (const source of sources) {
+          const streamingScore = calculateStreamingScore(source);
+          if (streamingScore === source.streamingScore) continue;
+          await repository.update(source.id, { streamingScore });
+          updated++;
+        }
+        if (sources.length < batchSize) return updated;
+        after = sources[sources.length - 1].id;
       }
     });
   }

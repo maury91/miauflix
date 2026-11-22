@@ -19,7 +19,15 @@ import {
 } from '@shared/navigation';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { searchActions, searchResultKey } from '@store/slices/search';
-import { type KeyboardEvent, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  type FocusEvent,
+  type KeyboardEvent,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { PopularSearches, RecentSearches } from './components/SearchChips';
 import { searchPanelKind } from './components/searchPanel';
@@ -228,7 +236,9 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
   }, [initialId, tv]);
   // A text field holds no DOM focus outside edit mode: keep it on the page so its keys (typing,
   // Back) still reach it after editing ends
-  const keepFocusInPage = () => {
+  const keepFocusInPage = (event: FocusEvent) => {
+    // Focus moving to another element (a click into the field) is not lost (see usePageBack)
+    if (event.relatedTarget) return;
     queueMicrotask(() => {
       const active = document.activeElement;
       if (!active || active === document.body) mainRef.current?.focus({ preventScroll: true });

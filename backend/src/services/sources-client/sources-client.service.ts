@@ -89,6 +89,10 @@ export class SourcesClientService extends RemoteService<typeof sources> {
     return this.client.addTorznabProvider(input);
   }
 
+  addStremioProvider(input: { url: string; name?: string }): Promise<ProviderView> {
+    return this.client.addStremioProvider(input);
+  }
+
   removeProvider(id: string): Promise<void> {
     return this.client.removeProvider({ id });
   }

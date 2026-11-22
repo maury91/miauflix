@@ -44,6 +44,12 @@ If you already run Jackett or Prowlarr, you can connect its Torznab endpoint by 
 
 This is a working integration. An arbitrary website address is not enough to create a provider, and the declared generic HTTP provider type does not currently have a working implementation.
 
+## Adding Stremio addons
+
+Stremio addons such as Torrentio, Comet or MediaFusion can be added by pasting the addon's install link under Sources → Advanced setup. Configure the addon on its own page first, because its settings (and any keys) are part of the link; Miauflix keeps the link hidden after saving it. The built-in Torrentio provider works this way.
+
+Only results that are torrents are used. Results that come from debrid services or other direct links are skipped for now, and anime is searched only through providers that support it.
+
 ## Administrator source controls
 
 Administrators can enable or disable providers, test whether they respond, change their order, edit supported settings, and remove user-added providers. Provider repositories can also distribute provider definitions and updates.
@@ -65,5 +71,6 @@ Source searching runs in a separate service that can be deployed in Docker. Deve
 - [Implemented provider types](../../services/sources/src/providers/registry.ts)
 - [Provider management](../../services/sources/src/providers/admin.ts)
 - [Torznab integration](../../services/sources/src/providers/torznab/torznab.ts)
+- [Stremio addons](../../services/sources/src/providers/stremio/stremio.ts)
 - [FlareSolverr handling](../../services/sources/src/http/http-client.ts)
 - [Administrator Sources page](../../frontend/src/pages/settings/SourcesPage.tsx)

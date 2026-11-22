@@ -71,4 +71,12 @@ export const indexers: Translation<typeof english> = {
   'indexers.apiKey': 'API raktas',
   'indexers.showKey': 'Rodyti API raktą',
   'indexers.hideKey': 'Slėpti API raktą',
+  'indexers.stremioTitle': 'Pridėti „Stremio“ priedą',
+  'indexers.stremioDescription':
+    'Įklijuokite priedo, kuris randa torrentus (pvz., „Torrentio“), diegimo nuorodą. Pirmiausia sukonfigūruokite priedą jo puslapyje: nustatymai yra nuorodos dalis.',
+  'indexers.stremioUrl': 'Priedo nuoroda',
+  'indexers.addAddon': 'Pridėti priedą',
+  'indexers.addonFailed': 'Nepavyko pridėti šio priedo.',
+  'indexers.showLink': 'Rodyti priedo nuorodą',
+  'indexers.hideLink': 'Slėpti priedo nuorodą',
 };

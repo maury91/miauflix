@@ -12,6 +12,7 @@ import { MigrationVersion } from '@entities/migration-version.entity';
 import { backfillStreamingScores } from './backfill-streaming-scores.migration';
 import { MigrationService } from './migration.service';
 import type { Migration } from './migration.types';
+import { rescoreUnseededSources } from './rescore-unseeded-sources.migration';
 
 describe('MigrationService', () => {
   const dbHelper = createTestDatabase();
@@ -115,5 +116,50 @@ describe('MigrationService', () => {
     expect(scored.streamingScore).toBeGreaterThan(0);
     // Already-scored rows keep their score.
     expect(untouched.streamingScore).toBe(1234);
+  });
+
+  it('rescores unseeded sources below seeded ones, and is a no-op when empty', async () => {
+    const { db, service } = await setupTest([rescoreUnseededSources]);
+    const sources = db.getRepository(ContentSource);
+    await service.run();
+    expect(await sources.count()).toBe(0);
+
+    const row = (overrides: Partial<ContentSource>): Partial<ContentSource> => ({
+      ...createMockContentSource(overrides),
+      id: undefined,
+      storage: undefined,
+    });
+    // Scores stored before unseeded sources were ranked last.
+    await sources.save([
+      row({
+        quality: Quality.FHD,
+        videoCodec: VideoCodec.X265,
+        broadcasters: 0,
+        watchers: 14,
+        streamingScore: 4440,
+      }),
+      row({
+        quality: Quality.FHD,
+        videoCodec: VideoCodec.X265,
+        broadcasters: 4,
+        watchers: 1,
+        streamingScore: 3529,
+      }),
+    ]);
+    await sources.update({ streamingScore: 4440 }, { broadcasters: null as unknown as number });
+    await sources.save(
+      row({ quality: Quality.HD, broadcasters: 0, watchers: 0, streamingScore: 2000 })
+    );
+    const logger = jest.requireMock('@logger').logger;
+    await rescoreUnseededSources({ db, logger });
+
+    const [unknown, seeded, unseeded] = await sources.find({ order: { id: 'ASC' } });
+    expect(unknown.streamingScore).toBeLessThanOrEqual(60);
+    expect(seeded.streamingScore).toBe(3529);
+    expect(unseeded.streamingScore).toBeLessThanOrEqual(60);
+    // Running it again changes nothing.
+    const before = await sources.find({ order: { id: 'ASC' } });
+    await rescoreUnseededSources({ db, logger });
+    expect(await sources.find({ order: { id: 'ASC' } })).toEqual(before);
   });
 });

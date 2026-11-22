@@ -43,6 +43,15 @@ const torznabSchema = z.object({
   baseUrl: z.string().url().max(2000),
   apiKey: z.string().max(500).optional(),
 });
+const stremioSchema = z.object({
+  // An addon's install link: `https://…/manifest.json` or `stremio://…/manifest.json`.
+  url: z
+    .string()
+    .trim()
+    .max(2000)
+    .regex(/^(?:https?|stremio):\/\/\S+$/i),
+  name: z.string().trim().max(100).optional(),
+});
 const repositorySchema = z.object({ url: z.string().url().max(2000) });
 
 /** Maps the service's typed errors to HTTP; anything else goes on to the global handler. */
@@ -92,6 +101,13 @@ export const createSourcesRoutes = (deps: RouteDeps) => {
       admin,
       zValidator('json', torznabSchema),
       async c => c.json(await sources.addTorznabProvider(c.req.valid('json')), 201)
+    )
+    .post(
+      '/providers/stremio',
+      rateLimitGuard(3),
+      admin,
+      zValidator('json', stremioSchema),
+      async c => c.json(await sources.addStremioProvider(c.req.valid('json')), 201)
     )
     .delete('/providers/:id', rateLimitGuard(5), admin, async c => {
       await sources.removeProvider(c.req.param('id'));

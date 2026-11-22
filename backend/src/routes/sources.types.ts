@@ -18,3 +18,4 @@ export type AddRepositoryRequest = { url: string };
 export type TestProviderResponse = { success: boolean; message: string };
 export type AddCardigannProviderRequest = { id: string };
 export type AddTorznabProviderRequest = { name: string; baseUrl: string; apiKey?: string };
+export type AddStremioProviderRequest = { url: string; name?: string };

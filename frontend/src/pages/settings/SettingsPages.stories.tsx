@@ -114,6 +114,7 @@ function mockSourceMutations() {
     sourcesApi.useSyncDefinitionsMutation,
     sourcesApi.useAddCardigannProviderMutation,
     sourcesApi.useAddTorznabProviderMutation,
+    sourcesApi.useAddStremioProviderMutation,
     sourcesApi.useRemoveProviderMutation,
     sourcesApi.useAddRepositoryMutation,
     sourcesApi.useRefreshRepositoryMutation,

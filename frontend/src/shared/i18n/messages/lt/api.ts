@@ -50,6 +50,7 @@ export const api: Translation<typeof english> = {
   'api.failedToLoadTheIndexerList': 'Nepavyko įkelti indeksavimo paslaugų sąrašo',
   'api.failedToUpdateTheIndexerList': 'Nepavyko atnaujinti indeksavimo paslaugų sąrašo',
   'api.failedToAddTheIndexer': 'Nepavyko pridėti indeksavimo paslaugos',
+  'api.failedToAddTheAddon': 'Nepavyko pridėti priedo',
   'api.failedToAddTheEndpoint': 'Nepavyko pridėti API adreso',
   'api.failedToRemoveTheProvider': 'Nepavyko pašalinti teikėjo',
   'api.failedToLoadRepositories': 'Nepavyko įkelti šaltinių saugyklų',

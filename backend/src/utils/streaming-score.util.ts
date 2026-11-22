@@ -35,11 +35,18 @@ const CODEC_SCORES: Record<VideoCodec, number> = {
 };
 
 const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+/**
+ * A source nobody seeds can't stream, however good its file: its score is divided by this, so
+ * it ranks below every seeded source (the lowest seeded score is above 100) but unseeded
+ * sources keep their order among themselves.
+ */
+const UNSEEDED_DIVISOR = 100;
 
 /**
  * How well a source can be streamed, 0-10,000: availability (4000) + quality (3000) +
  * codec (2000) + activity (1000), scaled down for older uploads. Sources are ranked by it
- * wherever several copies of the same media compete.
+ * wherever several copies of the same media compete. A source with no seeders scores at most
+ * 60, below any seeded one: leechers alone (watchers) can't serve the file.
  */
 export function calculateStreamingScore(source: StreamingScoreInput, now = Date.now()): number {
   const broadcasters = source.broadcasters ?? 0;
@@ -61,7 +68,8 @@ export function calculateStreamingScore(source: StreamingScoreInput, now = Date.
     agePenalty = yearsOld < 1 ? 1 : yearsOld < 2 ? 0.85 : 0.7;
   }
 
-  return Math.round((availabilityScore + qualityScore + codecScore + activityScore) * agePenalty);
+  const score = (availabilityScore + qualityScore + codecScore + activityScore) * agePenalty;
+  return Math.round(broadcasters > 0 ? score : score / UNSEEDED_DIVISOR);
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;

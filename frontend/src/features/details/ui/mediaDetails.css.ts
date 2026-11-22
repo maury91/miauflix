@@ -136,10 +136,14 @@ export const block = style({
   marginTop: space.lg,
 });
 
-/** The main action and, while the source warms up, its progress underneath. */
+/** The main action, the share already watched, and torrent preparation in words. */
 export const watch = style({
   display: 'inline-block',
   marginTop: space.md,
+});
+
+export const watched = style({
+  marginTop: space.xs,
 });
 
 export const warmup = style({
