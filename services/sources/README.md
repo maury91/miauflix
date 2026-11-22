@@ -1,8 +1,8 @@
 # Sources service
 
-Bun service implementing the `sources` 1.3 contract on port 3003. It owns source website access; the backend owns persisted candidates, peer metadata, verification, tracker stats, playback and notifications.
+Bun service implementing the `sources` 1.4 contract on port 3003. It owns source website access; the backend owns persisted candidates, peer metadata, verification, tracker stats, playback and notifications.
 
-Indexers run through supported Cardigann definitions fetched at runtime or through external Torznab endpoints (see below); the service contains no code for any particular site. A search tries indexers that search by IMDb id first, then falls back to episode-title and paginated season-pack queries, which find older seasons omitted from newest-first results. Candidates are validated and deduplicated by info hash.
+Indexers run through supported Cardigann definitions fetched at runtime, external Torznab endpoints, or Stremio addons (see below); the service contains no code for any particular site. A search tries indexers that search by IMDb id first, then falls back to episode-title and paginated season-pack queries, which find older seasons omitted from newest-first results. Candidates are validated and deduplicated by info hash.
 
 Search planning applies provider priority, interactive hedging, background budget sharing, persistent result caching and cooldowns after three failures. Background work reserves 20% of daily request budgets for interactive use. Source website requests pass through the bounded HTTP client, including VPN checks, mirrors, metadata caches and FlareSolverr. Definition synchronization can use git, as described below.
 
@@ -17,11 +17,11 @@ npm test --workspace @miauflix/sources-service
 
 Bootstrap environment: `SOURCES_PORT` (3003), `SOURCES_HOST` (0.0.0.0), `SOURCES_DATA_DIR` (or `DATA_DIR`, otherwise ./data), `SOURCES_KEY_FILE` (defaults inside the data directory), and optional `SOURCES_ENCRYPTION_KEY`. Retain the data directory and key across restarts; replacing the key prevents decrypting existing settings/cache/references.
 
-The backend discovers and pushes the Sources configuration schema. Configure VPN checking, request timeout, hedge delay, minimum seeders, daily budget, the definition sources and the sync interval there. Existing `FLARESOLVERR_URL` stored values keep working. `SOURCES_PRELOAD_PROVIDERS` (a service environment variable, `<definition id>@<source URL>` entries separated by spaces or commas) installs and enables providers at startup, once, so a container can come up searching without anyone using the UI.
+The backend discovers and pushes the Sources configuration schema. Configure VPN checking, request timeout, hedge delay, minimum seeders, daily budget, the definition sources and the sync interval there. Existing `FLARESOLVERR_URL` stored values keep working. `SOURCES_PRELOAD_PROVIDERS` (a service environment variable, `<definition id>@<source URL>` entries separated by spaces or commas) installs and enables providers at startup, once, so a container can come up searching without anyone using the UI. `SOURCES_TRUSTED_HOSTS` (setting) lists the LAN hosts Stremio addons may run on; any other addon must resolve to a public address. `SOURCES_DISABLE_PROVIDERS` (provider ids) switches providers off at every startup; test environments use it to keep the built-in Torrentio, a live internet service, out of their searches.
 
-SQLite runs in WAL mode. Ordered `PRAGMA user_version` migrations preserve existing data. Provider settings and cached search payloads are encrypted. The default providers (TheRARBG by IMDb and by title, YTS, EZTV and Torrentio by IMDb, all from the default definition sources, plus a few more switched off) are inserted only when absent.
+SQLite runs in WAL mode. Ordered `PRAGMA user_version` migrations preserve existing data. Provider settings and cached search payloads are encrypted. The default providers (TheRARBG by IMDb and by title, YTS and EZTV from the default definition sources, Torrentio by IMDb as a Stremio addon, plus a few more switched off) are inserted only when absent.
 
-Tests inject an offline fetch implementation; unexpected URLs fail. Provider behavior is tested with small synthetic definitions installed straight into the database (`tests/providers.ts`) and the hand-written ones in `tests/fixtures/cardigann`. The backend E2E suite serves fictional release data and its own test definitions from an indexer mock (`backend-e2e/docker/indexer`), loading them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`.
+Tests inject an offline fetch implementation; unexpected URLs fail. Provider behavior is tested with small synthetic definitions installed straight into the database (`tests/providers.ts`) and the hand-written ones in `tests/fixtures/cardigann`. The backend E2E suite serves fictional release data and its own test definitions from an indexer mock (`backend-e2e/docker/indexer`), loading them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`, with Torrentio switched off through `SOURCES_DISABLE_PROVIDERS`.
 
 ## Provider management
 
@@ -46,8 +46,8 @@ A repository is a JSON array fetched over HTTP(S) (256 KB maximum, refreshed dai
 ]
 ```
 
-The implemented provider kinds are `cardigann` (needs `cardigann`) and `torznab` (needs
-`baseUrl`). Shared types also declare `http`, but the runtime registry does not create an HTTP
+The implemented provider kinds are `cardigann` (needs `cardigann`), `torznab` (needs
+`baseUrl`) and `stremio` (needs `baseUrl`, the addon's `manifest.json` URL). Shared types also declare `http`, but the runtime registry does not create an HTTP
 provider; do not advertise or install it as a working integration. A repository never overwrites a provider owned by another repository; the conflict is
 reported in its `lastError`. Refreshing updates a provider's definition when its `version` changes
 and keeps the admin's `enabled`, `priority` and settings. Settings named like passwords or API keys
@@ -84,6 +84,19 @@ See the [source feature guide](../../docs/features/sources.md) for an overview.
 
 Tests use hand-written definitions and responses under `tests/fixtures/{cardigann,torznab}`; see
 the README there for the GPL note.
+
+## Stremio addons
+
+`src/providers/stremio/` searches Stremio addons that return torrents (Torrentio, Comet, MediaFusion,
+Knightcrawler and similar). It reads the addon's `manifest.json` and asks
+`/stream/movie/tt….json` or `/stream/series/tt…:<season>:<episode>.json`. Only streams with an
+`infoHash` are kept; debrid and other direct-link streams are skipped until sources can be HTTP.
+Release names, seeders (👤) and sizes (💾) are read from each stream's description.
+
+Admins add one with `addStremioProvider` (Settings → Sources → Advanced setup), pasting its install
+link (`https://…/manifest.json` or `stremio://…`). Addons keep their configuration, sometimes keys,
+in that link, so it is stored in the encrypted `manifestUrl` setting and masked in responses. After
+reconfiguring an addon, paste the new link into that setting.
 
 ### Definition sync
 

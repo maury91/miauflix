@@ -35,11 +35,18 @@ const CODEC_SCORES: Record<VideoCodec, number> = {
 };
 
 const YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+/**
+ * A source nobody seeds can't stream, however good its file: its score is divided by this, so
+ * it ranks below every seeded source (the lowest seeded score is above 100) but unseeded
+ * sources keep their order among themselves.
+ */
+const UNSEEDED_DIVISOR = 100;
 
 /**
  * How well a source can be streamed, 0-10,000: availability (4000) + quality (3000) +
  * codec (2000) + activity (1000), scaled down for older uploads. Sources are ranked by it
- * wherever several copies of the same media compete.
+ * wherever several copies of the same media compete. A source with no seeders scores at most
+ * 60, below any seeded one: leechers alone (watchers) can't serve the file.
  */
 export function calculateStreamingScore(source: StreamingScoreInput, now = Date.now()): number {
   const broadcasters = source.broadcasters ?? 0;
@@ -61,7 +68,8 @@ export function calculateStreamingScore(source: StreamingScoreInput, now = Date.
     agePenalty = yearsOld < 1 ? 1 : yearsOld < 2 ? 0.85 : 0.7;
   }
 
-  return Math.round((availabilityScore + qualityScore + codecScore + activityScore) * agePenalty);
+  const score = (availabilityScore + qualityScore + codecScore + activityScore) * agePenalty;
+  return Math.round(broadcasters > 0 ? score : score / UNSEEDED_DIVISOR);
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -86,20 +94,20 @@ export function provenPlayBoost(lastPlayedOn: string | null | undefined, now = D
   return Math.round(PROVEN_PLAY_BOOST * 0.5 ** (ageDays / PROVEN_PLAY_HALF_LIFE_DAYS));
 }
 
-/** The score sources are ranked by for playback: the streaming score plus a proven-play boost. */
-export function playbackRank(
-  source: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>,
-  now = Date.now()
-): number {
-  return (source.streamingScore || 0) + provenPlayBoost(source.lastPlayedOn, now);
+type RankedSource = Pick<ContentSource, 'broadcasters' | 'lastPlayedOn' | 'streamingScore'>;
+
+/**
+ * The score sources are ranked by for playback: the streaming score plus a proven-play boost. An
+ * unseeded source gets no boost, so it stays below every seeded one however well it once played.
+ */
+export function playbackRank(source: RankedSource, now = Date.now()): number {
+  const boost = (source.broadcasters ?? 0) > 0 ? provenPlayBoost(source.lastPlayedOn, now) : 0;
+  return (source.streamingScore || 0) + boost;
 }
 
 /** Order sources best first by `playbackRank`. */
 export function byPlaybackRank(
   now = Date.now()
-): (
-  left: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>,
-  right: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>
-) => number {
+): (left: RankedSource, right: RankedSource) => number {
   return (left, right) => playbackRank(right, now) - playbackRank(left, now);
 }

@@ -80,6 +80,7 @@ export const sources: Translation<typeof english> = {
   'sources.hide': 'Slėpti „{label}“',
   'sources.kind.cardigann': 'Viešas šaltinis iš „Prowlarr“ arba „Jackett“ sąrašo',
   'sources.kind.torznab': 'Jūsų „Jackett“ arba „Prowlarr“ šaltinis',
+  'sources.kind.stremio': '„Stremio“ priedas',
   'sources.kind.http': 'Išorinis šaltinis',
   'sources.disabledUsage': 'Išjungta',
   'sources.usageBudget': 'Šiandienos užklausos: {today} / {budget}',

@@ -49,6 +49,7 @@ export const api = {
   'api.failedToLoadTheIndexerList': 'Failed to load the indexer list',
   'api.failedToUpdateTheIndexerList': 'Failed to update the indexer list',
   'api.failedToAddTheIndexer': 'Failed to add the indexer',
+  'api.failedToAddTheAddon': 'Failed to add the addon',
   'api.failedToAddTheEndpoint': 'Failed to add the endpoint',
   'api.failedToRemoveTheProvider': 'Failed to remove the provider',
   'api.failedToLoadRepositories': 'Failed to load repositories',

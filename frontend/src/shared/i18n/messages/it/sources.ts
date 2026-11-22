@@ -74,6 +74,7 @@ export const sources: Translation<typeof english> = {
   'sources.hide': 'Nascondi {label}',
   'sources.kind.cardigann': "Fonte pubblica dall'elenco di Prowlarr/Jackett",
   'sources.kind.torznab': 'La tua fonte Jackett o Prowlarr',
+  'sources.kind.stremio': 'Addon di Stremio',
   'sources.kind.http': 'Fonte esterna',
   'sources.disabledUsage': 'Disattivata',
   'sources.usageBudget': '{today} / {budget} richieste oggi',

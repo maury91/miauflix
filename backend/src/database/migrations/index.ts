@@ -4,6 +4,7 @@ import { backfillStreamingScores } from './backfill-streaming-scores.migration';
 import { encryptSensitiveColumns } from './encrypt-sensitive-columns.migration';
 import { generateMissingAvatars } from './generate-missing-avatars.migration';
 import type { Migration } from './migration.types';
+import { rescoreUnseededSources } from './rescore-unseeded-sources.migration';
 import { resetSourceServiceSearches } from './reset-source-service-searches.migration';
 import { vacuumPlaintext } from './vacuum-plaintext.migration';
 
@@ -19,4 +20,5 @@ export const migrations: readonly Migration[] = [
   resetSourceServiceSearches,
   generateMissingAvatars,
   backfillMediaVariants,
+  rescoreUnseededSources,
 ];

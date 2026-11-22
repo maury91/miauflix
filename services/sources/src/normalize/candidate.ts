@@ -137,6 +137,7 @@ export function toCandidate(
     absoluteEpisode: raw.absoluteEpisode,
     release: raw.release,
     files: raw.files,
+    ...(raw.streamFile ? { streamFile: raw.streamFile } : {}),
     fileRef: raw.torrentUrl
       ? seal(JSON.stringify({ provider: provider.id, url: raw.torrentUrl }))
       : undefined,
@@ -156,5 +157,8 @@ export function mergeCandidate(first: SourceCandidate, next: SourceCandidate): S
     watchers: Math.max(first.watchers, next.watchers),
     accuracy: ranks[next.accuracy] > ranks[first.accuracy] ? next.accuracy : first.accuracy,
     fileRef: first.fileRef ?? next.fileRef,
+    ...((first.streamFile ?? next.streamFile)
+      ? { streamFile: first.streamFile ?? next.streamFile }
+      : {}),
   };
 }

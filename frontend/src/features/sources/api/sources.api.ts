@@ -1,6 +1,7 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
   AddRepositoryRequest,
+  AddStremioProviderRequest,
   AddTorznabProviderRequest,
   CardigannCatalog,
   CardigannSyncStatus,
@@ -133,6 +134,13 @@ export const sourcesApi = createApi({
           backendClient.api.sources.providers.torznab.$post({ json }, { headers })
         ),
     }),
+    addStremioProvider: builder.mutation<ProviderView, AddStremioProviderRequest>({
+      invalidatesTags: ['Providers', 'Repositories'],
+      queryFn: (json, api) =>
+        adminRequest<ProviderView>(api, t('api.failedToAddTheAddon'), headers =>
+          backendClient.api.sources.providers.stremio.$post({ json }, { headers })
+        ),
+    }),
     removeProvider: builder.mutation<void, string>({
       invalidatesTags: ['Providers', 'Repositories', 'Definitions'],
       queryFn: (id, api) =>
@@ -183,6 +191,7 @@ export const {
   useSyncDefinitionsMutation,
   useAddCardigannProviderMutation,
   useAddTorznabProviderMutation,
+  useAddStremioProviderMutation,
   useRemoveProviderMutation,
   useGetRepositoriesQuery,
   useAddRepositoryMutation,

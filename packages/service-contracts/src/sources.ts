@@ -50,7 +50,7 @@ export interface SourceCandidate {
   watchers: number; // leechers
   uploadDate: string; // ISO
   provider: string; // provider id, persisted into content_source.source
-  providerKind: 'cardigann' | 'torznab' | 'http';
+  providerKind: 'cardigann' | 'torznab' | 'stremio' | 'http';
   matchedBy: MatchedBy;
   accuracy: Accuracy;
   quality: Quality | null;
@@ -72,6 +72,11 @@ export interface SourceCandidate {
    */
   episodeAliases?: { season?: number; episode: number }[];
   files?: string[];
+  /**
+   * The file a stream addon chose for one episode: its index in the torrent's file list. It
+   * identifies the episode in packs whose file names do not.
+   */
+  streamFile?: { season: number; episode: number; index: number };
   /** Opaque id the service resolves in torrentFile(); never a raw URL to the backend. */
   fileRef?: string;
   trailerCode?: string; // only some indexers give one
@@ -198,7 +203,7 @@ export interface CardigannCatalog {
   sync: CardigannSyncStatus;
 }
 
-export const sources = contract('sources', '1.3', {
+export const sources = contract('sources', '1.4', {
   search: stream<SourceSearchRequest, SourceSearchItem, 'vpn_required'>(),
   /** Bytes of the .torrent (base64), or null. Tries fileRef → itorrents → torrage. */
   torrentFile: call<{ hash: string; fileRef?: string }, string | null, 'vpn_required'>(),
@@ -236,6 +241,10 @@ export const sources = contract('sources', '1.3', {
     ProviderView,
     'bad_request'
   >({ since: 2 }),
+  /** Adds a Stremio addon from its install link (`…/manifest.json` or `stremio://…`). */
+  addStremioProvider: call<{ url: string; name?: string }, ProviderView, 'bad_request'>({
+    since: 4,
+  }),
   /** Removes a provider the admin added themselves (not one owned by a repository). */
   removeProvider: call<{ id: string }, void, 'not_found' | 'bad_request'>({ since: 2 }),
 });

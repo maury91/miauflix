@@ -729,9 +729,12 @@ it('discovers fixture sources for movies 550 and 120 through the E2E provider co
     keyFile: join(dir, '.key'),
     encryptionKey: 'test',
     preloadProviders: service.SOURCES_PRELOAD_PROVIDERS,
+    disableProviders: service.SOURCES_DISABLE_PROVIDERS,
     fetch: (async (input: URL | string | Request) => {
       const url = new URL(String(input));
       calls.push(url.href);
+      // The E2E network has no internet: a built-in addon's request would hang, not fail.
+      if (url.host === 'torrentio.strem.fun') return new Promise<Response>(() => {});
       if (url.host === definitionsHost && url.pathname.startsWith('/definitions/')) {
         const file = url.pathname.slice('/definitions/'.length);
         if (!['movies-api.yml', 'imdb-title.yml'].includes(file))
@@ -779,6 +782,7 @@ it('discovers fixture sources for movies 550 and 120 through the E2E provider co
     expect(performance.now() - start).toBeLessThan(1000);
   }
   expect(calls.some(url => url.includes('/definitions/movies-api.yml'))).toBe(true);
+  expect(calls.filter(url => url.includes('torrentio'))).toEqual([]);
 });
 
 it.each([{ invalid: [] }, { invalid: ['missing-at', `UPPER@${DEFS}`, 'bad@not-a-url'] }])(

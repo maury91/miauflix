@@ -3,7 +3,7 @@ import { mkdirSync } from 'node:fs';
 import { Database } from 'bun:sqlite';
 
 import { MIAUFLIX_SOURCE_KEY, PROWLARR_SOURCE_KEY } from '../providers/cardigann/sources';
-import { migrations } from './migrations';
+import { migrations, TORRENTIO_ID, TORRENTIO_MANIFEST } from './migrations';
 
 export function openDatabase(dataDir: string): Database {
   mkdirSync(dataDir, { recursive: true });
@@ -41,7 +41,9 @@ export function openDatabase(dataDir: string): Database {
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'yts', 'YTS', 20, true);
   builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'eztv-api', 'EZTV (API)', 30, true);
   builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'therarbg', 'TheRARBG', 40, true);
-  builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'torrentio', 'Torrentio', 35, true);
+  db.query(
+    "INSERT OR IGNORE INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'stremio','builtin:miauflix','Torrentio',?,1,35)"
+  ).run(TORRENTIO_ID, JSON.stringify({ baseUrl: TORRENTIO_MANIFEST }));
   // Anime only (its definition offers no movie or TV search), by AniDB episode id.
   builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'animetosho', 'AnimeTosho', 45, true);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'nyaasi', 'Nyaa (Prowlarr)', 130, false);

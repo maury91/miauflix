@@ -5,6 +5,7 @@ import type { ProviderRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
 import type { DefinitionStore } from './cardigann/definition-store';
 import { CardigannProvider, settingsOf } from './cardigann/engine';
+import { normalizeManifestUrl, StremioProvider, stremioSettings } from './stremio/stremio';
 import { TorznabProvider, torznabSettings } from './torznab/torznab';
 import type { Provider } from './types';
 
@@ -29,6 +30,14 @@ export class Registry {
     private http: HttpClient,
     readonly definitions: DefinitionStore
   ) {}
+  /** Hosts Stremio addons may be reached on inside the LAN (`SOURCES_TRUSTED_HOSTS`). */
+  trustedHosts(): string[] {
+    return this.config
+      .value('SOURCES_TRUSTED_HOSTS')
+      .split(/[\s,;]+/)
+      .map(host => host.trim().toLowerCase())
+      .filter(Boolean);
+  }
   definition(row: ProviderRow): ProviderDefinition {
     return JSON.parse(row.definition) as ProviderDefinition;
   }
@@ -41,6 +50,7 @@ export class Registry {
     const definition = this.definition(row);
     const schema = [...budgetSettings];
     if (row.kind === 'torznab') schema.push(...torznabSettings);
+    if (row.kind === 'stremio') schema.push(...stremioSettings);
     if (row.kind === 'cardigann') {
       const cached = definition.cardigann
         ? this.definitions.cached(
@@ -65,8 +75,22 @@ export class Registry {
         });
     return schema;
   }
+  /** The addon's manifest URL: the admin's (configured) one, else the repository's. */
+  stremioUrl(row: ProviderRow, settings = this.settings(row)): string | null {
+    const value = settings?.manifestUrl || this.definition(row).baseUrl;
+    if (typeof value !== 'string' || !value) return null;
+    try {
+      return normalizeManifestUrl(value).href;
+    } catch {
+      return null;
+    }
+  }
   /** A definition that cannot run (unsupported feature, or malformed): hidden from admins. */
   unsupportedReason(row: ProviderRow): string | null {
+    if (row.kind === 'stremio')
+      return this.store.settings(row) === null || this.stremioUrl(row)
+        ? null
+        : 'The addon URL is missing or invalid';
     if (row.kind !== 'cardigann') return null;
     const definition = this.definition(row);
     const cached = definition.cardigann
@@ -98,6 +122,16 @@ export class Registry {
     if (row.kind === 'torznab' && definition.baseUrl) {
       if (hit?.key === key) return hit.provider;
       const provider = new TorznabProvider(row.id, row.name, definition.baseUrl, settings);
+      this.built.set(row.id, { key, provider });
+      return provider;
+    }
+    if (row.kind === 'stremio') {
+      const url = this.stremioUrl(row, settings);
+      if (!url) return null;
+      if (hit?.key === key) return hit.provider;
+      const provider = new StremioProvider(row.id, row.name, url, Date.now, () =>
+        this.trustedHosts()
+      );
       this.built.set(row.id, { key, provider });
       return provider;
     }
@@ -148,6 +182,11 @@ export class Registry {
     if (row.kind === 'torznab') {
       const base = this.base(row, settings);
       if (base instanceof TorznabProvider) await base.prepare({ signal, http: this.http });
+    }
+    if (row.kind === 'stremio') {
+      const base = this.base(row, settings);
+      if (!base) return 'The addon URL is missing or invalid';
+      if (base instanceof StremioProvider) await base.prepare({ signal, http: this.http });
     }
     return null;
   }

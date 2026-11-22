@@ -127,6 +127,8 @@ services:
       - SOURCES_PORT=3003
       - SOURCES_DATA_DIR=/app/data
       - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://indexer-mock/definitions movies-api@http://indexer-mock/definitions
+      # Torrentio is a live internet service: E2E searches only the indexer mock.
+      - SOURCES_DISABLE_PROVIDERS=maury91-torrentio
       - SOURCES_ANIME_LISTS_URL=http://anime-lists-mock/Fribb/anime-lists/master/anime-list-full.json
       - SOURCES_ANI_ZIP_URL=http://anizip-mock/mappings
     volumes:

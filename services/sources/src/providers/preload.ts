@@ -36,3 +36,17 @@ export function preloadProviders(store: Store, text: string): string[] {
   }
   return invalid;
 }
+
+/**
+ * Providers named in `SOURCES_DISABLE_PROVIDERS` (ids separated by spaces or commas), switched off
+ * at every startup: a test environment keeps built-in providers that reach the internet, such as
+ * Torrentio, out of its searches. Returns the ids that name no provider.
+ */
+export function disableProviders(store: Store, text: string): string[] {
+  const unknown: string[] = [];
+  for (const id of text.split(/[\s,;]+/).filter(Boolean)) {
+    if (store.provider(id)) store.setEnabled(id, false);
+    else unknown.push(id);
+  }
+  return unknown;
+}

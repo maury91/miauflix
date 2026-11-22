@@ -1,4 +1,4 @@
-import { type RefCallback, useCallback, useRef } from 'react';
+import { type FocusEvent, type RefCallback, useCallback, useRef } from 'react';
 
 import { useKeyboardNavigation } from './useKeyboardNavigation';
 
@@ -10,7 +10,7 @@ export interface PageBackProps {
   ref: RefCallback<HTMLElement>;
   /** Programmatic focus only (see below), never a Tab stop. */
   tabIndex: -1;
-  onBlur: () => void;
+  onBlur: (event?: FocusEvent) => void;
 }
 
 /**
@@ -37,7 +37,11 @@ export function usePageBack(onBack: (() => void) | undefined): PageBackProps {
     },
   });
   const pageRef = useRef<HTMLElement | null>(null);
-  const keepFocusInPage = useCallback(() => {
+  const keepFocusInPage = useCallback((event?: FocusEvent) => {
+    // Focus moving to another element (a click or Tab into a field) is not lost. A native focus
+    // change runs microtasks between focusout and the new focus, while activeElement is still the
+    // body, so checking only there would steal the focus back from the field.
+    if (event?.relatedTarget) return;
     queueMicrotask(() => {
       const active = document.activeElement;
       if (!active || active === document.body) pageRef.current?.focus({ preventScroll: true });

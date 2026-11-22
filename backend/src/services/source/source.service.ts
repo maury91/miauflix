@@ -24,7 +24,7 @@ import { sleep } from '@utils/time';
 import { traced } from '@utils/tracing.util';
 import { providerSourcesToEntities } from '@utils/transformers.util';
 
-import { matchEpisodeFile } from './episode-file-matcher';
+import { type EpisodeFileMatch, matchChosenFile, matchEpisodeFile } from './episode-file-matcher';
 import type { SearchTitlesService } from './search-titles.service';
 import type { SourceAvailabilityService } from './source-availability.service';
 import type { SourceMetadataFileService } from './source-metadata-file.service';
@@ -130,6 +130,8 @@ export class SourceService {
   private readonly episodeSourceRepository: EpisodeSourceRepository;
   /** When episodes whose stored matches were all weak were last searched again. */
   private readonly weakEpisodeSearches = new Map<number, number>();
+  /** A release's files in the torrent's own order, once its metadata has been read. */
+  private readonly torrentFileLists = new WeakMap<SourceMetadata, string[]>();
   private readonly tvReleaseSearches = new Map<
     string,
     { expiresAt: number; promise: Promise<TVRelease[]> }
@@ -396,6 +398,22 @@ export class SourceService {
     if (movie) await this.processSourceDiscovery(movie.id, priority);
   }
 
+  /**
+   * The video a stream addon chose for this episode, by its index in the torrent: for packs whose
+   * file names do not say which episode they hold. Only once the torrent's own file list is known.
+   */
+  private streamFileMatch(
+    metadata: SourceMetadata,
+    seasonNumber: number,
+    episodeNumber: number,
+    allowCombined: boolean
+  ): EpisodeFileMatch | null {
+    const chosen = metadata.streamFile;
+    if (chosen?.season !== seasonNumber || chosen.episode !== episodeNumber) return null;
+    const path = this.torrentFileLists.get(metadata)?.[chosen.index];
+    return path ? matchChosenFile(path, seasonNumber, episodeNumber, allowCombined) : null;
+  }
+
   /** Search once per show, then associate exact torrent files with catalog episodes. */
   public async getSourcesForEpisodeWithOnDemandSearch(episode: {
     episodeId: number;
@@ -444,12 +462,19 @@ export class SourceService {
     const releases = await this.getTVReleases(searched, episode.language);
     const associate = (allowCombined: boolean) =>
       releases.flatMap(release => {
-        const match = matchEpisodeFile(
-          release.metadata,
-          searched.seasonNumber,
-          searched.episodeNumber,
-          allowCombined
-        );
+        const match =
+          matchEpisodeFile(
+            release.metadata,
+            searched.seasonNumber,
+            searched.episodeNumber,
+            allowCombined
+          ) ??
+          this.streamFileMatch(
+            release.metadata,
+            searched.seasonNumber,
+            searched.episodeNumber,
+            allowCombined
+          );
         return match ? [{ release, match }] : [];
       });
     let matches = associate(false);
@@ -460,8 +485,10 @@ export class SourceService {
         )
         .sort((left, right) => {
           const exact = (release: TVRelease) =>
-            release.metadata.season === searched.seasonNumber &&
-            release.metadata.episode === searched.episodeNumber
+            (release.metadata.season === searched.seasonNumber &&
+              release.metadata.episode === searched.episodeNumber) ||
+            (release.metadata.streamFile?.season === searched.seasonNumber &&
+              release.metadata.streamFile.episode === searched.episodeNumber)
               ? 1
               : 0;
           return (
@@ -514,6 +541,7 @@ export class SourceService {
             (await this.availability.recordTorrentFile(source.id, torrentFile)) ?? source.hasVideo;
           candidate.source = source;
           candidate.metadata.files = files;
+          this.torrentFileLists.set(candidate.metadata, files);
         } catch (error) {
           logger.warn(
             'SourceService',

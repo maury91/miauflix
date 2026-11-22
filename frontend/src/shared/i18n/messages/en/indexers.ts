@@ -67,4 +67,12 @@ export const indexers = {
   'indexers.apiKey': 'API key',
   'indexers.showKey': 'Show API key',
   'indexers.hideKey': 'Hide API key',
+  'indexers.stremioTitle': 'Add Stremio addon',
+  'indexers.stremioDescription':
+    'Paste the install link of an addon that finds torrents, such as Torrentio. Configure the addon on its own page first: the settings are part of the link.',
+  'indexers.stremioUrl': 'Addon link',
+  'indexers.addAddon': 'Add addon',
+  'indexers.addonFailed': 'Could not add this addon.',
+  'indexers.showLink': 'Show addon link',
+  'indexers.hideLink': 'Hide addon link',
 } satisfies MessageSection;

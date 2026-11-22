@@ -731,8 +731,13 @@ describe('PlayablePreparationService', () => {
 
   it('prefers a recently played source among close candidates, but never over the asked quality', async () => {
     const today = new Date().toISOString().slice(0, 10);
-    const seeded = { ...candidate(1, 3_100), quality: Quality.FHD };
-    const played = { ...candidate(2, 3_000), quality: Quality.HD, lastPlayedOn: today };
+    const seeded = { ...candidate(1, 3_100), quality: Quality.FHD, broadcasters: 20 };
+    const played = {
+      ...candidate(2, 3_000),
+      quality: Quality.HD,
+      broadcasters: 15,
+      lastPlayedOn: today,
+    };
     const prepare = (quality: Quality | 'auto') =>
       new PlayablePreparationService({
         mediaService: {

@@ -3,7 +3,7 @@ import type { Database } from 'bun:sqlite';
 import type { ProviderPage } from '../providers/types';
 export interface ProviderRow {
   id: string;
-  kind: 'cardigann' | 'torznab' | 'http';
+  kind: 'cardigann' | 'torznab' | 'stremio' | 'http';
   repository_id: string | null;
   name: string;
   version: string | null;
@@ -55,6 +55,22 @@ export class Store {
       console.warn(`Sources: settings unavailable for provider ${row.id}`);
       return null;
     }
+  }
+  /**
+   * The Cardigann Torrentio took its options (`sort=…|qualityfilter=…`) as a setting; as a Stremio
+   * addon they are part of its URL. Runs at every start; does nothing once moved.
+   */
+  moveTorrentioOptions(id: string, origin: string): void {
+    const row = this.provider(id);
+    if (row?.kind !== 'stremio') return;
+    const settings = this.settings(row);
+    if (!settings || !('options' in settings)) return;
+    const { options, ...rest } = settings;
+    const path = typeof options === 'string' ? options.trim().replace(/^\/+|\/+$/g, '') : '';
+    this.setSettings(
+      id,
+      path && !rest.manifestUrl ? { ...rest, manifestUrl: `${origin}/${path}/manifest.json` } : rest
+    );
   }
   provider(id: string): ProviderRow | undefined {
     return this.providers().find(p => p.id === id);

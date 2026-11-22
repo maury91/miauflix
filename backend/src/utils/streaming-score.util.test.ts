@@ -29,9 +29,54 @@ describe('calculateStreamingScore', () => {
       source({ quality: Quality.SD, videoCodec: VideoCodec.X264 }),
       NOW
     );
-    // FHD 2500 + X264 1800, unknown age x0.9; SD only has 500 quality points.
-    expect(fhd).toBe(Math.round((2500 + 1800) * 0.9));
-    expect(sd).toBe(Math.round((500 + 1800) * 0.9));
+    // FHD 2500 + X264 1800, unknown age x0.9; SD only has 500 quality points. Neither is
+    // seeded, so both are divided by 100.
+    expect(fhd).toBe(Math.round(((2500 + 1800) * 0.9) / 100));
+    expect(sd).toBe(Math.round(((500 + 1800) * 0.9) / 100));
+  });
+
+  it('ranks any seeded source above an unseeded one, whatever its quality', () => {
+    // A real movie's sources: playback started on the unseeded 1080p copy and never got going.
+    const unseeded = calculateStreamingScore(
+      source({ quality: Quality.FHD, videoCodec: VideoCodec.X265, watchers: 14 }),
+      NOW
+    );
+    const fourSeeds = calculateStreamingScore(
+      source({
+        quality: Quality.FHD,
+        videoCodec: VideoCodec.X265,
+        broadcasters: 4,
+        watchers: 1,
+        sourceUploadedAt: new Date(NOW - 5 * 365 * 24 * 60 * 60 * 1000),
+      }),
+      NOW
+    );
+    const worstSeeded = calculateStreamingScore(
+      source({
+        quality: '3D',
+        videoCodec: VideoCodec.VC1,
+        broadcasters: 1,
+        watchers: 1000,
+        sourceUploadedAt: new Date(NOW - 5 * 365 * 24 * 60 * 60 * 1000),
+      }),
+      NOW
+    );
+    const bestUnseeded = calculateStreamingScore(
+      source({
+        quality: Quality['8K'],
+        videoCodec: VideoCodec.AV1,
+        watchers: 10_000,
+        sourceUploadedAt: new Date(NOW),
+      }),
+      NOW
+    );
+    expect(fourSeeds).toBeGreaterThan(unseeded);
+    expect(worstSeeded).toBeGreaterThan(bestUnseeded);
+    expect(bestUnseeded).toBe(60);
+    // Unseeded sources keep their order among themselves.
+    expect(unseeded).toBeGreaterThan(
+      calculateStreamingScore(source({ quality: Quality.SD, videoCodec: VideoCodec.X265 }), NOW)
+    );
   });
 
   it('ranks a well-seeded 1080p release above a weakly seeded 4K one', () => {
@@ -92,9 +137,14 @@ describe('calculateStreamingScore', () => {
 
   it('gives no points for 3D and middle points for unknown quality or codec', () => {
     expect(
-      calculateStreamingScore(source({ quality: '3D', videoCodec: VideoCodec.X264 }), NOW)
-    ).toBe(Math.round(1800 * 0.9));
-    expect(calculateStreamingScore(source({}), NOW)).toBe(Math.round(2000 * 0.9));
+      calculateStreamingScore(
+        source({ quality: '3D', videoCodec: VideoCodec.X264, broadcasters: 1 }),
+        NOW
+      )
+    ).toBe(Math.round((40 + 1800 + 10) * 0.9));
+    expect(calculateStreamingScore(source({ broadcasters: 1 }), NOW)).toBe(
+      Math.round((40 + 2000 + 10) * 0.9)
+    );
   });
 });
 
@@ -118,32 +168,50 @@ describe('provenPlayBoost', () => {
   });
 
   it('breaks a tie between equal scores in favour of the proven source', () => {
-    const unproven = { streamingScore: 4_000, lastPlayedOn: null };
-    const proven = { streamingScore: 4_000, lastPlayedOn: daysAgo(2) };
+    const unproven = { streamingScore: 4_000, broadcasters: 1, lastPlayedOn: null };
+    const proven = { streamingScore: 4_000, broadcasters: 1, lastPlayedOn: daysAgo(2) };
     expect([unproven, proven].sort(byPlaybackRank(NOW))).toEqual([proven, unproven]);
   });
 
   it('never lifts a source over a whole quality step', () => {
-    const hd = calculateStreamingScore(source({ quality: Quality.HD }), NOW);
-    const fhd = calculateStreamingScore(source({ quality: Quality.FHD }), NOW);
-    expect(playbackRank({ streamingScore: hd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
-      playbackRank({ streamingScore: fhd, lastPlayedOn: null }, NOW)
-    );
+    const hd = calculateStreamingScore(source({ quality: Quality.HD, broadcasters: 1 }), NOW);
+    const fhd = calculateStreamingScore(source({ quality: Quality.FHD, broadcasters: 1 }), NOW);
+    expect(
+      playbackRank({ streamingScore: hd, broadcasters: 1, lastPlayedOn: daysAgo(0) }, NOW)
+    ).toBeLessThan(playbackRank({ streamingScore: fhd, broadcasters: 1, lastPlayedOn: null }, NOW));
   });
 
   it('never lifts a source over the smallest quality step, even for the oldest uploads', () => {
     const oldUpload = new Date(NOW - 3 * 365 * 24 * 60 * 60 * 1000);
     const fhd = calculateStreamingScore(
-      source({ quality: Quality.FHD, sourceUploadedAt: oldUpload }),
+      source({ quality: Quality.FHD, broadcasters: 1, sourceUploadedAt: oldUpload }),
       NOW
     );
     const twoK = calculateStreamingScore(
-      source({ quality: Quality['2K'], sourceUploadedAt: oldUpload }),
+      source({ quality: Quality['2K'], broadcasters: 1, sourceUploadedAt: oldUpload }),
       NOW
     );
     expect(twoK - fhd).toBe(350);
-    expect(playbackRank({ streamingScore: fhd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
-      playbackRank({ streamingScore: twoK, lastPlayedOn: null }, NOW)
+    expect(
+      playbackRank({ streamingScore: fhd, broadcasters: 1, lastPlayedOn: daysAgo(0) }, NOW)
+    ).toBeLessThan(
+      playbackRank({ streamingScore: twoK, broadcasters: 1, lastPlayedOn: null }, NOW)
+    );
+  });
+
+  it('keeps an unseeded source below every seeded one, even when it played well today', () => {
+    const unseeded = calculateStreamingScore(
+      source({ quality: Quality['4K'], broadcasters: 0 }),
+      NOW
+    );
+    const weakest = calculateStreamingScore(
+      source({ quality: Quality.SD, broadcasters: 1, sourceUploadedAt: new Date(0) }),
+      NOW
+    );
+    expect(
+      playbackRank({ streamingScore: unseeded, broadcasters: 0, lastPlayedOn: daysAgo(0) }, NOW)
+    ).toBeLessThan(
+      playbackRank({ streamingScore: weakest, broadcasters: 1, lastPlayedOn: null }, NOW)
     );
   });
 
@@ -153,11 +221,15 @@ describe('provenPlayBoost', () => {
       NOW
     );
     const seen = calculateStreamingScore(source({ broadcasters: 10, quality: Quality.FHD }), NOW);
-    expect(playbackRank({ streamingScore: seen, lastPlayedOn: daysAgo(1) }, NOW)).toBeGreaterThan(
-      playbackRank({ streamingScore: claimed, lastPlayedOn: null }, NOW)
+    expect(
+      playbackRank({ streamingScore: seen, broadcasters: 1, lastPlayedOn: daysAgo(1) }, NOW)
+    ).toBeGreaterThan(
+      playbackRank({ streamingScore: claimed, broadcasters: 1, lastPlayedOn: null }, NOW)
     );
-    expect(playbackRank({ streamingScore: seen, lastPlayedOn: daysAgo(120) }, NOW)).toBeLessThan(
-      playbackRank({ streamingScore: claimed, lastPlayedOn: null }, NOW)
+    expect(
+      playbackRank({ streamingScore: seen, broadcasters: 1, lastPlayedOn: daysAgo(120) }, NOW)
+    ).toBeLessThan(
+      playbackRank({ streamingScore: claimed, broadcasters: 1, lastPlayedOn: null }, NOW)
     );
   });
 });

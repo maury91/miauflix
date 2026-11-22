@@ -8,6 +8,7 @@ import type {
 import type { ProviderRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
 import type { DefinitionIndex, IndexRow } from './cardigann/definition-index';
+import { addonGuard, normalizeManifestUrl, parseManifest, unusableReason } from './stremio/stremio';
 import { MASK, type Registry } from './registry';
 
 export class AdminError extends Error {
@@ -158,6 +159,14 @@ export class ProviderAdmin {
           !Object.hasOwn(setting.options, String(value))
         )
           throw new AdminError('bad_request', `Invalid value for ${name}`);
+        if (row.kind === 'stremio' && name === 'manifestUrl' && value !== '') {
+          try {
+            settings[name] = normalizeManifestUrl(String(value)).href;
+          } catch {
+            throw new AdminError('bad_request', 'The addon URL is invalid');
+          }
+          continue;
+        }
         if (value === '') delete settings[name];
         else settings[name] = value;
       }
@@ -351,6 +360,77 @@ export class ProviderAdmin {
       priority: this.nextPriority(),
     });
     if (input.apiKey) this.store.setSettings(id, { apiKey: input.apiKey });
+    this.changed();
+    return this.view(this.store.provider(id)!);
+  }
+  /** Adds a Stremio addon by its install link, after checking it offers torrent streams. */
+  async addStremio(
+    input: { url: string; name?: string },
+    signal: AbortSignal
+  ): Promise<ProviderView> {
+    let url: URL;
+    try {
+      url = normalizeManifestUrl(String(input.url ?? ''));
+    } catch (error) {
+      throw new AdminError(
+        'bad_request',
+        error instanceof Error && error.message.startsWith('The addon')
+          ? error.message
+          : 'The addon URL is invalid'
+      );
+    }
+    const alreadyAdded = () => {
+      if (
+        this.store
+          .providers()
+          .some(row => row.kind === 'stremio' && this.registry.stremioUrl(row) === url.href)
+      )
+        throw new AdminError('bad_request', 'This addon is already added');
+    };
+    alreadyAdded();
+    let manifest;
+    try {
+      const response = await this.http.request(url.href, {
+        signal,
+        maxBytes: 256 * 1024,
+        ...addonGuard(url, this.registry.trustedHosts()),
+      });
+      if (!response.ok) throw new Error(`The addon returned HTTP ${response.status}`);
+      manifest = parseManifest(await response.json());
+    } catch (error) {
+      signal.throwIfAborted();
+      throw new AdminError(
+        'bad_request',
+        error instanceof Error && error.message
+          ? error.message.slice(0, 300)
+          : 'Could not reach the addon'
+      );
+    }
+    const unusable = unusableReason(manifest);
+    if (unusable) throw new AdminError('bad_request', unusable);
+    // Another request may have added the same link while the manifest was being read.
+    alreadyAdded();
+    const name = (String(input.name ?? '').trim() || manifest.name.trim()).slice(0, 100);
+    const slug = manifest.id
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 40);
+    let id = `stremio-${slug || 'addon'}`;
+    for (let n = 2; this.store.provider(id); n++) id = `stremio-${slug || 'addon'}-${n}`;
+    this.store.ensureLocalRepository();
+    this.store.insertProvider({
+      id,
+      kind: 'stremio',
+      repositoryId: LOCAL_REPOSITORY,
+      name,
+      version: null,
+      // The URL can hold the addon's configuration and keys: it lives in the encrypted settings.
+      definition: {},
+      enabled: false,
+      priority: this.nextPriority(),
+    });
+    this.store.setSettings(id, { manifestUrl: url.href });
     this.changed();
     return this.view(this.store.provider(id)!);
   }

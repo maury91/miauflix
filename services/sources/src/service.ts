@@ -9,6 +9,7 @@ import { AnimeLists } from './anime/anime-lists';
 import { AnimeResolver } from './anime/resolver';
 import { SourcesConfigService } from './config/config.service';
 import { openDatabase } from './db/database';
+import { TORRENTIO_ID, TORRENTIO_MANIFEST } from './db/migrations';
 import { Store } from './db/store';
 import type { ResolveHost } from './http/destination';
 import { type Fetch, HttpClient } from './http/http-client';
@@ -17,7 +18,7 @@ import { AdminError, ProviderAdmin } from './providers/admin';
 import { DefinitionIndex } from './providers/cardigann/definition-index';
 import { DefinitionStore } from './providers/cardigann/definition-store';
 import { parseSources } from './providers/cardigann/sources';
-import { preloadProviders } from './providers/preload';
+import { disableProviders, preloadProviders } from './providers/preload';
 import { Registry } from './providers/registry';
 import { RepositoryService } from './repositories/repository.service';
 import { TorrentFileService } from './torrent-file/torrent-file.service';
@@ -62,6 +63,8 @@ export interface SourcesServiceOptions {
   resolveHost?: ResolveHost;
   /** Providers to install and enable at startup: `<definition id>@<source URL>` entries. */
   preloadProviders?: string;
+  /** Provider ids to switch off at every startup (test environments). */
+  disableProviders?: string;
   /** Use git for GitHub-hosted definitions (the service entrypoint turns this on). */
   useGit?: boolean;
   /** Where to clone a GitHub definitions repository from (tests point this at a local repo). */
@@ -79,10 +82,16 @@ export function createSourcesService(options: SourcesServiceOptions): {
     config = new SourcesConfigService(),
     codec = createSeal(options.keyFile, options.encryptionKey);
   const store = new Store(db, codec.seal, codec.open, options.now);
+  store.moveTorrentioOptions(TORRENTIO_ID, new URL(TORRENTIO_MANIFEST).origin);
   if (options.preloadProviders) {
     const invalid = preloadProviders(store, options.preloadProviders);
     if (invalid.length)
       console.warn(`Sources: ignored SOURCES_PRELOAD_PROVIDERS entries: ${invalid.join(', ')}`);
+  }
+  if (options.disableProviders) {
+    const unknown = disableProviders(store, options.disableProviders);
+    if (unknown.length)
+      console.warn(`Sources: unknown SOURCES_DISABLE_PROVIDERS entries: ${unknown.join(', ')}`);
   }
   const http = new HttpClient(
     {
@@ -270,6 +279,16 @@ export function createSourcesService(options: SourcesServiceOptions): {
         )
       ),
     addTorznabProvider: (input, ctx) => guarded(ctx, () => admin.addTorznab(input)),
+    addStremioProvider: (input, ctx) =>
+      guarded(ctx, () =>
+        admin.addStremio(
+          {
+            url: typeof input?.url === 'string' ? input.url : '',
+            name: typeof input?.name === 'string' ? input.name : undefined,
+          },
+          AbortSignal.any([ctx.signal, stopping.signal])
+        )
+      ),
     removeProvider: ({ id }, ctx) => guarded(ctx, () => admin.remove(String(id))),
     torrentFile: async (input, ctx) => {
       const parsed = fileSchema.safeParse(input);
