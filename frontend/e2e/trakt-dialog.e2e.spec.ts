@@ -52,11 +52,24 @@ test('contains keyboard navigation and returns control to Home after closing', a
 
   await expect(dialog).toHaveAttribute('aria-modal', 'true');
   await expect(begin).toBeFocused();
-  await page.keyboard.press('ArrowRight');
+  // The actions wrap onto two rows when their labels don't fit side by side (narrow
+  // viewports, longer translations), so spatial navigation follows the rendered layout.
+  const beginBox = (await begin.boundingBox())!;
+  const dismissBox = (await dismiss.boundingBox())!;
+  const stacked = dismissBox.y >= beginBox.y + beginBox.height;
+  await page.keyboard.press(stacked ? 'ArrowDown' : 'ArrowRight');
   await expect(dismiss).toBeFocused();
+  if (stacked) {
+    await page.keyboard.press('ArrowUp');
+    await expect(begin).toBeFocused();
+  }
   await page.keyboard.press('ArrowUp');
   await expect(close).toBeFocused();
   await page.keyboard.press('ArrowDown');
+  if (stacked) {
+    await expect(begin).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+  }
   await expect(dismiss).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(close).toBeFocused();
