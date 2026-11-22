@@ -549,19 +549,29 @@ describe('SourceService', () => {
     }
   );
 
+  const genericPack = ['Pack/Video 1.mkv', 'Pack/Video 2.mkv', 'Pack/notes.txt'];
   it.each([
-    ['the episode the addon chose', { season: 1, episode: 8, index: 1 }, 'Pack/Video 2.mkv'],
-    ['another episode', { season: 1, episode: 7, index: 1 }, null],
-    ['a file that is not a video', { season: 1, episode: 8, index: 2 }, null],
-  ])(
+    ['the episode the addon chose', 1, genericPack, ['Pack/Video 2.mkv', 'single'], 8],
+    ['another episode', 1, genericPack, null, 7],
+    ['a file that is not a video', 2, genericPack, null, 8],
+    ['a file named for another episode', 1, ['Pack/Video 1.mkv', 'Pack/Show.S01E05.mkv'], null, 8],
+    [
+      'a file holding two episodes, as a combined match',
+      1,
+      ['Pack/Video 1.mkv', 'Pack/Show.S01E08-09.mkv'],
+      ['Pack/Show.S01E08-09.mkv', 'combined'],
+      8,
+    ],
+  ] as const)(
     "uses a stream addon's file index for %s when pack file names do not number episodes",
-    async (_case, streamFile, expected) => {
+    async (_case, index, paths, expected, episode: number) => {
       const { service, mockContentSource1, mockDatabase, mockContentSourceRepository } =
         setupTest();
       const torrentFile = Buffer.from('generic pack');
       const source = { ...mockContentSource1, file: torrentFile };
       const associate = jest.fn().mockResolvedValue(undefined);
       Object.assign(mockDatabase.getEpisodeSourceRepository(), { associate });
+      const streamFile = { season: 1, episode, index };
       jest
         .spyOn(service as never, 'getTVReleases')
         .mockResolvedValue([
@@ -570,11 +580,7 @@ describe('SourceService', () => {
       mockContentSourceRepository.findById.mockResolvedValue(source);
       (parseTorrent as unknown as jest.Mock).mockResolvedValue({
         infoHash: source.hash,
-        files: [
-          { path: 'Pack/Video 1.mkv' },
-          { path: 'Pack/Video 2.mkv' },
-          { path: 'Pack/notes.txt' },
-        ],
+        files: paths.map(path => ({ path })),
       });
 
       await service.getSourcesForEpisodeWithOnDemandSearch({
@@ -585,7 +591,7 @@ describe('SourceService', () => {
         airDate: '2020-01-01',
       });
 
-      if (expected) expect(associate).toHaveBeenCalledWith(5, source.id, expected, 'single');
+      if (expected) expect(associate).toHaveBeenCalledWith(5, source.id, ...expected);
       else expect(associate).not.toHaveBeenCalled();
     }
   );

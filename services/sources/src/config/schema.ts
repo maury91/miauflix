@@ -20,6 +20,8 @@ export const createSourcesConfigSchema = (): ServiceConfigSchema => ({
           ['SOURCES_DEFAULT_DAILY_BUDGET', '2000', 'number'],
           ['CARDIGANN_SYNC_INTERVAL_MINUTES', '60', 'number'],
           ['CARDIGANN_DEFINITION_SOURCES', DEFAULT_SOURCES, 'text'],
+          // Stremio addons on the LAN (`host` or `host:port`): every other addon must be public.
+          ['SOURCES_TRUSTED_HOSTS', '', 'text'],
         ].map(([key, defaultValue, type]) => ({
           key,
           description: key.replaceAll('_', ' '),

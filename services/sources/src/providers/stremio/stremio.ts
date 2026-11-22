@@ -87,8 +87,22 @@ export function addonResource(manifest: URL, path: string): string {
   return url.href;
 }
 
-/** Whether an id prefix can match an IMDb id: `tt`, or a narrower one such as `tt123`. */
-const imdbPrefix = (prefix: string) => 'tt'.startsWith(prefix) || /^tt\d*$/.test(prefix);
+/**
+ * How an addon's requests are guarded: its destination (and every redirect) must be a public
+ * address, pinned for the connection, unless the admin listed the addon's host as trusted.
+ */
+export function addonGuard(url: URL, trustedHosts: string[]) {
+  const trusted = trustedHosts.includes(url.host) || trustedHosts.includes(url.hostname);
+  return { blockInternal: true, allowHosts: trusted ? [url.host] : [] };
+}
+
+/**
+ * Whether an id prefix can match the ids Stremio asks streams for: `tt`, a narrower one such as
+ * `tt123`, and for series one reaching into the episode (`tt0944947:1:`).
+ */
+const imdbPrefix = (prefix: string, type: 'movie' | 'series') =>
+  'tt'.startsWith(prefix) ||
+  (type === 'movie' ? /^tt\d*$/ : /^tt(?:\d+(?::\d*){0,2}|\d*)$/).test(prefix);
 
 /**
  * Whether the addon answers stream requests of a type for IMDb ids (`tt…`): for some of them, or
@@ -109,7 +123,7 @@ export function streamsFor(
     return (
       types.includes(type) &&
       (!prefixes?.length ||
-        prefixes.some(p => (id === undefined ? imdbPrefix(p) : id.startsWith(p))))
+        prefixes.some(p => (id === undefined ? imdbPrefix(p, type) : id.startsWith(p))))
     );
   });
 }
@@ -242,15 +256,16 @@ export class StremioProvider implements Provider {
     readonly id: string,
     readonly name: string,
     manifestUrl: string,
-    private readonly now: () => number = Date.now
+    private readonly now: () => number = Date.now,
+    /** Hosts the admin trusts on the LAN (`SOURCES_TRUSTED_HOSTS`). */
+    private readonly trustedHosts: () => string[] = () => []
   ) {
     this.url = normalizeManifestUrl(manifestUrl);
     this.hosts = [this.url.host];
   }
 
-  /** The addon may run on the LAN; nothing it redirects to may. */
   private get guard() {
-    return { blockInternal: true, allowHosts: this.hosts };
+    return addonGuard(this.url, this.trustedHosts());
   }
 
   get caps(): ProviderCaps {
@@ -294,13 +309,12 @@ export class StremioProvider implements Provider {
     // Addons answer for one episode; packs holding it are among the results. Without an
     // episode (a season-pack search) the season's first episode finds the packs.
     // An addon serving only some IMDb ids (`tt123…`) is not asked about the others.
+    // The id checked is the one requested: for series, the episode's (`tt…:season:episode`).
     const type = query.kind === 'movie' ? 'movie' : 'series';
-    if (this.state.manifest && !streamsFor(this.state.manifest, type, imdbid))
+    const id = type === 'movie' ? imdbid : `${imdbid}:${query.season ?? 1}:${query.ep ?? 1}`;
+    if (this.state.manifest && !streamsFor(this.state.manifest, type, id))
       return { results: [], hasMore: false };
-    const path =
-      query.kind === 'movie'
-        ? `movie/${imdbid}`
-        : `series/${imdbid}:${query.season ?? 1}:${query.ep ?? 1}`;
+    const path = `${type}/${id}`;
     const response = await ctx.http.request(addonResource(this.url, `stream/${path}.json`), {
       signal: ctx.signal,
       maxBytes: MAX_STREAMS_BYTES,

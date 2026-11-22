@@ -57,6 +57,25 @@ export function matchEpisodeFile(
 }
 
 /**
+ * How a file a stream addon chose for an episode (by its index in the torrent) holds that episode:
+ * a file naming no episode is taken as the episode itself; one naming several, including it, is a
+ * combined file, used only when combined files are allowed; one naming other episodes is refused.
+ */
+export function matchChosenFile(
+  path: string,
+  seasonNumber: number,
+  episodeNumber: number,
+  allowCombined: boolean
+): EpisodeFileMatch | null {
+  if (!isVideoFile(path)) return null;
+  if (!namesAnyEpisode(path)) return { videoFilePath: path, matchKind: 'single' };
+  const { episodes } = episodeIdentity(path, seasonNumber);
+  if (!episodes.includes(episodeNumber)) return null;
+  if (episodes.length === 1) return { videoFilePath: path, matchKind: 'single' };
+  return allowCombined ? { videoFilePath: path, matchKind: 'combined' } : null;
+}
+
+/**
  * Whether an anime file names the episode in one of the numberings the sources service gave
  * (`episodeAliases`). A file without a season marker inherits the pack's; a number counted from
  * the first episode (an alias without a season) only matches files that name no season.

@@ -8,7 +8,7 @@ import type {
 import type { ProviderRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
 import type { DefinitionIndex, IndexRow } from './cardigann/definition-index';
-import { normalizeManifestUrl, parseManifest, unusableReason } from './stremio/stremio';
+import { addonGuard, normalizeManifestUrl, parseManifest, unusableReason } from './stremio/stremio';
 import { MASK, type Registry } from './registry';
 
 export class AdminError extends Error {
@@ -393,9 +393,7 @@ export class ProviderAdmin {
       const response = await this.http.request(url.href, {
         signal,
         maxBytes: 256 * 1024,
-        // The addon may run on the LAN; nothing it redirects to may.
-        blockInternal: true,
-        allowHosts: [url.host],
+        ...addonGuard(url, this.registry.trustedHosts()),
       });
       if (!response.ok) throw new Error(`The addon returned HTTP ${response.status}`);
       manifest = parseManifest(await response.json());

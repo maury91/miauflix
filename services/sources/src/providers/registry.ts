@@ -30,6 +30,14 @@ export class Registry {
     private http: HttpClient,
     readonly definitions: DefinitionStore
   ) {}
+  /** Hosts Stremio addons may be reached on inside the LAN (`SOURCES_TRUSTED_HOSTS`). */
+  trustedHosts(): string[] {
+    return this.config
+      .value('SOURCES_TRUSTED_HOSTS')
+      .split(/[\s,;]+/)
+      .map(host => host.trim().toLowerCase())
+      .filter(Boolean);
+  }
   definition(row: ProviderRow): ProviderDefinition {
     return JSON.parse(row.definition) as ProviderDefinition;
   }
@@ -121,7 +129,9 @@ export class Registry {
       const url = this.stremioUrl(row, settings);
       if (!url) return null;
       if (hit?.key === key) return hit.provider;
-      const provider = new StremioProvider(row.id, row.name, url);
+      const provider = new StremioProvider(row.id, row.name, url, Date.now, () =>
+        this.trustedHosts()
+      );
       this.built.set(row.id, { key, provider });
       return provider;
     }

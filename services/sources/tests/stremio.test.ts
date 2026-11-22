@@ -483,3 +483,58 @@ it('asks an addon serving some IMDb ids only about those', async () => {
   expect(found.results).toHaveLength(2);
   expect(requests).toEqual(['/manifest.json', '/stream/movie/tt1234567.json']);
 });
+
+it('reaches an addon on the LAN only when its host is trusted', async () => {
+  const lan = new HttpClient(
+    { timeout: () => 2000, flareSolverr: () => '' },
+    fixtureFetch(() => json(TORRENT_ADDON)),
+    Date.now,
+    async () => [{ address: '192.168.1.10', family: 4 }]
+  );
+  const url = 'http://addon.lan:7000/manifest.json';
+  // A name that resolves inside the LAN is refused like an internal address.
+  expect(await new StremioProvider('s', 'S', url).test(ctx(lan))).toMatchObject({
+    success: false,
+  });
+  expect(
+    await new StremioProvider('s', 'S', url, Date.now, () => ['addon.lan:7000']).test(ctx(lan))
+  ).toEqual({ success: true, message: 'Connected to Example Torrents' });
+  // Trusting the host name covers any port.
+  expect(
+    (await new StremioProvider('s', 'S', url, Date.now, () => ['addon.lan']).test(ctx(lan))).success
+  ).toBe(true);
+  expect(
+    (await new StremioProvider('s', 'S', url, Date.now, () => ['other.lan']).test(ctx(lan))).success
+  ).toBe(false);
+});
+
+it('accepts series prefixes reaching into episode ids and checks the episode id asked', async () => {
+  const seriesAddon = {
+    ...TORRENT_ADDON,
+    resources: [{ name: 'stream', types: ['series'], idPrefixes: ['tt0000002:3:'] }],
+  };
+  expect(capsOf(parseManifest(seriesAddon))).toEqual({
+    movie: [],
+    tv: ['imdbid', 'season', 'ep'],
+    anime: [],
+  });
+  // Movies keep plain IMDb-id prefixes.
+  expect(
+    capsOf(
+      parseManifest({
+        ...TORRENT_ADDON,
+        resources: [{ name: 'stream', types: ['movie'], idPrefixes: ['tt0000002:3:'] }],
+      })
+    )
+  ).toEqual({ movie: [], tv: [], anime: [] });
+  const requests: string[] = [];
+  const client = http(url => {
+    requests.push(url.pathname);
+    return url.pathname.endsWith('/manifest.json') ? json(seriesAddon) : json({ streams: [] });
+  });
+  const provider = new StremioProvider('stremio-e', 'E', 'https://addon.example/manifest.json');
+  await provider.prepare(ctx(client));
+  await provider.search({ kind: 'tv', imdbid: 'tt0000002', season: 2, ep: 1 }, ctx(client));
+  await provider.search({ kind: 'tv', imdbid: 'tt0000002', season: 3, ep: 4 }, ctx(client));
+  expect(requests).toEqual(['/manifest.json', '/stream/series/tt0000002:3:4.json']);
+});

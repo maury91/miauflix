@@ -24,11 +24,10 @@ import { sleep } from '@utils/time';
 import { traced } from '@utils/tracing.util';
 import { providerSourcesToEntities } from '@utils/transformers.util';
 
-import { type EpisodeFileMatch, matchEpisodeFile } from './episode-file-matcher';
+import { type EpisodeFileMatch, matchChosenFile, matchEpisodeFile } from './episode-file-matcher';
 import type { SearchTitlesService } from './search-titles.service';
 import type { SourceAvailabilityService } from './source-availability.service';
 import type { SourceMetadataFileService } from './source-metadata-file.service';
-import { isVideoFile } from './video-files';
 
 /** How long a source whose file list could not be fetched waits before another try. */
 const UNRESOLVED_RETRY_MS = 60 * 60_000;
@@ -406,12 +405,13 @@ export class SourceService {
   private streamFileMatch(
     metadata: SourceMetadata,
     seasonNumber: number,
-    episodeNumber: number
+    episodeNumber: number,
+    allowCombined: boolean
   ): EpisodeFileMatch | null {
     const chosen = metadata.streamFile;
     if (chosen?.season !== seasonNumber || chosen.episode !== episodeNumber) return null;
     const path = this.torrentFileLists.get(metadata)?.[chosen.index];
-    return path && isVideoFile(path) ? { videoFilePath: path, matchKind: 'single' } : null;
+    return path ? matchChosenFile(path, seasonNumber, episodeNumber, allowCombined) : null;
   }
 
   /** Search once per show, then associate exact torrent files with catalog episodes. */
@@ -469,7 +469,12 @@ export class SourceService {
             searched.episodeNumber,
             allowCombined
           ) ??
-          this.streamFileMatch(release.metadata, searched.seasonNumber, searched.episodeNumber);
+          this.streamFileMatch(
+            release.metadata,
+            searched.seasonNumber,
+            searched.episodeNumber,
+            allowCombined
+          );
         return match ? [{ release, match }] : [];
       });
     let matches = associate(false);
