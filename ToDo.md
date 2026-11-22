@@ -81,15 +81,15 @@ See [Downloads, storage, and privacy](docs/features/storage-privacy.md#planned-e
   - [x] Support localized catalog metadata and genres in the catalog service.
   - [x] Localize interface strings.
   - [x] Request catalog metadata in the profile's interface language.
-  - [ ] Localize search results and season and episode details (their routes take no language yet).
+  - [x] Localize search results and season and episode details.
 - [x] Translate into Italian
-- [ ] Translate into Lithuanian
+- [x] Translate into Lithuanian
 - [x] Allow users to choose a language for the interface (and default language for subs and audio)
   - [x] Use browser language preferences for audio selection and subtitle search defaults.
   - [x] Let users set their own interface, subtitle, and audio language defaults.
-- [ ] Allow users to choose if they want subs auto-enabled and which language
+- [x] Allow users to choose if they want subs auto-enabled and which language
   - [x] Remember per-title subtitle language and track selection, including subtitles turned off.
-  - [ ] Add a user-wide setting for automatic subtitle enablement and its language.
+  - [x] Add a user-wide setting for automatic subtitle enablement and its language.
 
 ## Auto-translation
 

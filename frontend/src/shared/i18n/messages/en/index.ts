@@ -1,5 +1,6 @@
 import type { PluralMessage } from '../types';
 import { api } from './api';
+import { audio } from './audio';
 import { auth } from './auth';
 import { common } from './common';
 import { config } from './config';
@@ -36,6 +37,7 @@ export const en = {
   ...details,
   ...home,
   ...subtitles,
+  ...audio,
   ...player,
   ...languages,
   ...preferences,

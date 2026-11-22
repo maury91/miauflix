@@ -1,3 +1,4 @@
+import { catalogLanguage } from '@features/media/lib/catalog-language';
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type { SearchClientMessage } from '@miauflix/backend';
 import type { Middleware } from '@reduxjs/toolkit';
@@ -31,6 +32,7 @@ export const searchMiddleware: Middleware = api => {
       type: 'search',
       requestId,
       page,
+      language: catalogLanguage(),
       ...(genre ? { genre } : { query: query.trim() }),
       ...(commit ? { commit } : {}),
     });
@@ -68,19 +70,30 @@ export const searchMiddleware: Middleware = api => {
         request(state.page + 1, false);
     } else if (searchActions.resultOpened.match(action)) {
       const { query, genre } = searchState();
-      if (genre) send({ type: 'search-recent-add', kind: 'genre', query: genre });
+      const language = catalogLanguage();
+      if (genre) send({ type: 'search-recent-add', kind: 'genre', query: genre, language });
       else if (query.trim())
-        send({ type: 'search-recent-add', kind: 'query', query: query.trim() });
+        send({ type: 'search-recent-add', kind: 'query', query: query.trim(), language });
     } else if (searchActions.recentsRequested.match(action)) {
-      send({ type: 'search-recents' });
+      send({ type: 'search-recents', language: catalogLanguage() });
     } else if (searchActions.genresRequested.match(action)) {
-      send({ type: 'search-genres' });
+      send({ type: 'search-genres', language: catalogLanguage() });
     } else if (searchActions.recentRemoved.match(action)) {
       send({
         type: 'search-recent-remove',
         kind: action.payload.kind,
         query: action.payload.query,
+        language: catalogLanguage(),
       });
+    } else if (searchActions.catalogLanguageChanged.match(action)) {
+      // Only what was loaded: Search asks for its genres and recents when it opens
+      const state = searchState();
+      if (state.genres.length) send({ type: 'search-genres', language: catalogLanguage() });
+      if (state.recents.length) send({ type: 'search-recents', language: catalogLanguage() });
+      if (state.status !== 'idle') {
+        cancelDebounce();
+        request(1, false);
+      }
     }
     return result;
   };

@@ -43,5 +43,7 @@ export const languagePreferencesSchema = z
     subtitles: z
       .object({ default: languageCode.nullable(), anime: languageCode.nullable() })
       .strict(),
+    // Optional: clients from before the setting leave it out, keeping the stored choice
+    autoSubtitles: z.boolean().optional(),
   })
   .strict();

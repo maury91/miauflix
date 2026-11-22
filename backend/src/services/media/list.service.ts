@@ -20,6 +20,8 @@ import type { CatalogClientService } from '@services/catalog/catalog-client.serv
 import type { ListClientService } from '@services/list/list-client.service';
 import { traced } from '@utils/tracing.util';
 
+import { MIRROR_LANGUAGE } from './mirror-language';
+
 export const DEFAULT_LIST_REFRESH_PAGES = 6;
 /** Provider pages an unstored list with dropped items reads to count what it keeps. */
 const ON_DEMAND_COUNT_PAGES = 10;
@@ -292,6 +294,7 @@ export class ListService {
     );
     const medias = await this.hydrateMediaDetails(
       batch.items,
+      language,
       this.listRank(slug),
       page * limit,
       loadPriority
@@ -308,7 +311,7 @@ export class ListService {
   async getMediaByRefs(refs: MediaRef[], language = 'en') {
     if (refs.length === 0) return [];
     const batch = await this.catalogClient.batch(refs, language, 'returned');
-    const medias = await this.hydrateMediaDetails(batch.items);
+    const medias = await this.hydrateMediaDetails(batch.items, language);
     // Rebuilt from the refs asked for: a title asked twice comes back twice, in each position
     const byKey = new Map(medias.map(media => [`${media.mediaType}:${media.mediaId}`, media]));
     return refs.flatMap(ref => byKey.get(`${ref.mediaType}:${ref.mediaId}`) ?? []);
@@ -476,7 +479,13 @@ export class ListService {
       language,
       loadPriority === 'prefetch' ? 'prefetch' : 'returned'
     );
-    const medias = await this.hydrateMediaDetails(batch.items, 0, page * limit, loadPriority);
+    const medias = await this.hydrateMediaDetails(
+      batch.items,
+      language,
+      0,
+      page * limit,
+      loadPriority
+    );
     return { medias, total };
   }
 
@@ -648,6 +657,7 @@ export class ListService {
     }
     const medias = await this.hydrateMediaDetails(
       pageRefs.flatMap(ref => details.get(refKey(ref)) ?? []),
+      language,
       this.listRank(slug),
       start,
       loadPriority
@@ -706,8 +716,13 @@ export class ListService {
       mediaId: media.mediaId,
     }));
     try {
-      const batch = await this.catalogClient.batch(refs, 'en', 'background');
-      const hydrated = await this.hydrateMediaDetails(batch.items, listRank, itemOffset);
+      const batch = await this.catalogClient.batch(refs, MIRROR_LANGUAGE, 'background');
+      const hydrated = await this.hydrateMediaDetails(
+        batch.items,
+        MIRROR_LANGUAGE,
+        listRank,
+        itemOffset
+      );
       return hydrated.map(detail => ({ mediaType: detail.mediaType, mediaId: detail.mediaId }));
     } catch (error) {
       logger.warn('ListService', 'Catalog batch failed while projecting a list page', error);
@@ -715,18 +730,27 @@ export class ListService {
     }
   }
 
+  /**
+   * Mirrors the titles locally and returns `details` (in `language`) with their local ids. The
+   * mirror takes English details, fetched again when `details` are in another language (see
+   * `MediaService.withMirrorDetail`).
+   */
   private async hydrateMediaDetails(
     details: Array<MovieDetail | TVShowDetail>,
+    language: string,
     listRank = 0,
     itemOffset = 0,
     loadPriority: ListLoadPriority = 'visible'
   ): Promise<Array<{ localId: number } & (MovieDetail | TVShowDetail)>> {
     const resolved: Array<{ localId: number } & (MovieDetail | TVShowDetail)> = [];
     const localIds = new Map<string, number>();
-    const movieDetails = details.filter(
+    const mirrored = await this.mirrorDetails(details, language);
+    const movieDetails = mirrored.filter(
       (detail): detail is MovieDetail => detail.mediaType === 'movie'
     );
-    const tvDetails = details.filter((detail): detail is TVShowDetail => detail.mediaType === 'tv');
+    const tvDetails = mirrored.filter(
+      (detail): detail is TVShowDetail => detail.mediaType === 'tv'
+    );
 
     try {
       const references = await this.movieRepository.upsertMovieDetails(movieDetails);
@@ -800,6 +824,30 @@ export class ListService {
       }
     }
     return resolved;
+  }
+
+  /** The English details of `details`, each as given when the catalog can't give it in English. */
+  private async mirrorDetails(
+    details: Array<MovieDetail | TVShowDetail>,
+    language: string
+  ): Promise<Array<MovieDetail | TVShowDetail>> {
+    if (language === MIRROR_LANGUAGE || !details.length) return details;
+    const key = (ref: MediaRef) => `${ref.mediaType}:${ref.mediaId}`;
+    const english = new Map<string, MovieDetail | TVShowDetail>();
+    const refs: MediaRef[] = details.map(({ mediaType, mediaId }) => ({ mediaType, mediaId }));
+    try {
+      for (let index = 0; index < refs.length; index += CATALOG_BATCH_LIMIT) {
+        const batch = await this.catalogClient.batch(
+          refs.slice(index, index + CATALOG_BATCH_LIMIT),
+          MIRROR_LANGUAGE,
+          'background'
+        );
+        for (const item of batch.items) english.set(key(item), item);
+      }
+    } catch (error) {
+      logger.warn('ListService', 'English catalog details unavailable for the mirror', error);
+    }
+    return details.map(detail => english.get(key(detail)) ?? detail);
   }
 
   async promoteMediaPriorities(items: MediaPriorityRequest[]): Promise<void> {

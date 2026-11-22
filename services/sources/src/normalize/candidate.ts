@@ -64,6 +64,7 @@ export function toCandidate(
     const aliases = [
       request.media.title,
       request.media.originalTitle,
+      ...(request.media.localizedTitles ?? []),
       ...(query.titles ?? []),
       ...(anime?.titles ?? []),
     ].filter((s): s is string => !!s);
@@ -73,7 +74,11 @@ export function toCandidate(
     finalEpisode = episode;
   // Anime releases number by cour or from the first episode, so their own rules decide first; a
   // match is reported in TMDB's numbering so the backend files it under the episode it asked for.
-  const show = [request.media.title, request.media.originalTitle].map(t => normalized(t ?? ''));
+  const show = [
+    request.media.title,
+    request.media.originalTitle,
+    ...(request.media.localizedTitles ?? []),
+  ].map(t => normalized(t ?? ''));
   const animeMatch: AnimeMatch | null =
     isShow && anime?.episode
       ? matchAnimeRelease(

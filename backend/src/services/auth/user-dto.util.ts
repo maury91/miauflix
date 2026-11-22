@@ -1,5 +1,5 @@
 import type { User } from '@entities/user.entity';
-import { DEFAULT_LANGUAGE_PREFERENCES } from '@mytypes/language-preferences.types';
+import { withDefaultLanguagePreferences } from '@mytypes/language-preferences.types';
 import type { UserDto } from '@mytypes/user.types';
 
 /** The user fields a client may see. */
@@ -14,6 +14,6 @@ export function toUserDto(
     role: user.role,
     avatar: user.avatar ?? null,
     avatarVersion: user.avatarRenderedAt ? new Date(user.avatarRenderedAt).getTime() : null,
-    languagePreferences: user.languagePreferences ?? DEFAULT_LANGUAGE_PREFERENCES,
+    languagePreferences: withDefaultLanguagePreferences(user.languagePreferences),
   };
 }

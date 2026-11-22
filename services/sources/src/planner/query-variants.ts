@@ -7,6 +7,65 @@ export interface Variant {
   matchedBy: MatchedBy;
 }
 const pad = (n: number) => String(n).padStart(2, '0');
+
+/**
+ * The tag release names give a dub or local subtitles in each language (`iTA`, `FRENCH`): a
+ * search in a language adds it to the title. Languages without a common tag are searched by
+ * their own titles alone: Latvian among them, as `LAT` in release names means Latin-American
+ * Spanish. Picked from the names of stored releases (`CZ` over `CZECH`, `TR` over `TURKISH`).
+ */
+export const LANGUAGE_TAGS: Readonly<Record<string, string>> = {
+  it: 'ITA',
+  fr: 'FRENCH',
+  es: 'SPANISH',
+  de: 'GERMAN',
+  pt: 'PORTUGUESE',
+  nl: 'DUTCH',
+  sv: 'SWEDISH',
+  da: 'DANISH',
+  no: 'NORWEGIAN',
+  fi: 'FINNISH',
+  pl: 'PL',
+  cs: 'CZ',
+  sk: 'SK',
+  hu: 'HUN',
+  ro: 'ROMANIAN',
+  lt: 'LT',
+  ru: 'RUS',
+  uk: 'UKR',
+  tr: 'TR',
+  el: 'GREEK',
+  ja: 'JAPANESE',
+  ko: 'KOREAN',
+  zh: 'CHINESE',
+  hi: 'HINDI',
+};
+
+/** A search in a language: its titles alone, and the title's queries with the language's tag. */
+function languageVariants(
+  kind: ProviderQuery['kind'],
+  request: SourceSearchRequest,
+  language: string
+): Variant[] {
+  const queriesOf = (title: string) =>
+    request.media.kind === 'movie'
+      ? [`${title}${request.media.year ? ' ' + request.media.year : ''}`]
+      : [
+          `${title} S${pad(request.season ?? 1)}E${pad(request.episode ?? 1)}`,
+          `${title} S${pad(request.season ?? 1)}`,
+        ];
+  const tag = LANGUAGE_TAGS[language];
+  const tagged = tag
+    ? [request.media.title, request.media.originalTitle]
+        .filter((title): title is string => !!title)
+        .flatMap(queriesOf)
+        .map(query => `${query} ${tag}`)
+    : [];
+  return [...(request.media.localizedTitles ?? []).flatMap(queriesOf), ...tagged].map(q => ({
+    query: { kind, q },
+    matchedBy: 'title' as const,
+  }));
+}
 const ANIME_IDS: readonly Param[] = ['anidbEid', 'anidbAid', 'anilistId'];
 
 /**
@@ -35,6 +94,11 @@ export function variantsFor(
   const caps = provider.caps[kind];
   if (!caps.length) return [];
   const result: Variant[] = [];
+  if (request.language) {
+    // Ids find the title's releases whatever their language, which its own search already did
+    if (caps.includes('q')) result.push(...languageVariants(kind, request, request.language));
+    return unique(result, caps);
+  }
   const episode = anime?.episode;
   // Anime ids first: an AniDB episode id names exactly one episode.
   if (kind === 'anime' && anime) {
@@ -66,7 +130,11 @@ export function variantsFor(
   }
   if (caps.includes('q')) {
     const titles = new Set(
-      [request.media.title, request.media.originalTitle].filter((v): v is string => !!v)
+      [
+        request.media.title,
+        request.media.originalTitle,
+        ...(request.media.localizedTitles ?? []),
+      ].filter((v): v is string => !!v)
     );
     if (isAnime && provider.caps.anime.length) {
       // Release names use the romaji or English title of the entry, then the episode number:
@@ -107,6 +175,11 @@ export function variantsFor(
       for (const q of queries) result.push({ query: { kind, q }, matchedBy: 'title' });
     }
   }
+  return unique(result, caps);
+}
+
+/** The variants with the parameters the provider takes, each query once. */
+function unique(result: Variant[], caps: readonly Param[]): Variant[] {
   const seen = new Set<string>();
   return result
     .map(v => ({

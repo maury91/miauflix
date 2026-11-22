@@ -135,7 +135,19 @@ describe('profile routes', () => {
       expect(profileService.updateLanguagePreferences).toHaveBeenCalledWith(USER_ID, preferences);
       expect(
         ((await response.json()) as { languagePreferences: unknown }).languagePreferences
-      ).toEqual(preferences);
+      ).toEqual({ ...preferences, autoSubtitles: false });
+    });
+
+    it('saves automatic subtitles', async () => {
+      const { app, profileService } = setupTest();
+
+      const response = await putPreferences(app, { ...preferences, autoSubtitles: true });
+
+      expect(response.status).toBe(200);
+      expect(profileService.updateLanguagePreferences).toHaveBeenCalledWith(USER_ID, {
+        ...preferences,
+        autoSubtitles: true,
+      });
     });
 
     it.each([
@@ -144,6 +156,7 @@ describe('profile routes', () => {
       ['a region tag', { ...preferences, interface: 'it-IT' }],
       ['a missing choice', { ...preferences, audio: { default: 'it' } }],
       ['an unknown field', { ...preferences, theme: 'dark' }],
+      ['non-boolean automatic subtitles', { ...preferences, autoSubtitles: 'yes' }],
     ])('rejects %s', async (_label, body) => {
       const { app, profileService } = setupTest();
       expect((await putPreferences(app, body)).status).toBe(400);

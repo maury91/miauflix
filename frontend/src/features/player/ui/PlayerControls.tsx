@@ -26,8 +26,9 @@ import {
   useState,
 } from 'react';
 
+import { AudioMenu, type AudioMenuProps, type AudioTrack } from './AudioMenu';
 import * as styles from './playerControls.css';
-import { type AudioTrack, SubtitleMenu } from './SubtitleMenu';
+import { SubtitleMenu } from './SubtitleMenu';
 import type { SubtitleTimingCue } from './SubtitleTiming';
 
 import ArrowLeftIcon from '~icons/mdi/arrow-left';
@@ -51,6 +52,7 @@ const PLAYER_NAV = {
   toolbar: 'player-toolbar',
   playPause: 'player-play-pause',
   subtitles: 'player-subtitles',
+  audio: 'player-audio',
   fullscreen: 'player-fullscreen',
   mute: 'player-mute',
   volume: 'player-volume',
@@ -144,14 +146,18 @@ export function PlayerControls({
   subtitleOffset,
   onSearchSubtitles,
   onSelectSubtitle,
+  onShowSubtitleLanguage,
   onSubtitleOffsetChange,
   subtitlePreferencesKey,
+  subtitleDefaultLanguage,
+  overlayContainer,
   durationSeconds,
   onSeek,
   pendingPosition,
   audioTracks,
   selectedAudioTrackIndex,
   onSelectAudioTrack,
+  audioMenu,
   downloadedRanges,
   onControlsInsetChange,
   onHeaderInsetChange,
@@ -172,14 +178,25 @@ export function PlayerControls({
   subtitleOffset: number;
   onSearchSubtitles: (language: string, hearingImpaired: boolean) => void;
   onSelectSubtitle: (id: string | null) => void;
+  /** Shows subtitles in a language (a track at hand, else one searched for). */
+  onShowSubtitleLanguage?: (language: string) => void;
   onSubtitleOffsetChange: (offset: number) => void;
   subtitlePreferencesKey: string | null;
+  /** The profile's subtitle language for the title, marked Default in the subtitle panel. */
+  subtitleDefaultLanguage?: string;
+  /** The player element the subtitle panel is drawn over (it is the full-screen element too). */
+  overlayContainer?: HTMLElement | null;
   durationSeconds?: number;
   onSeek?: (position: number) => void;
   pendingPosition?: number;
   audioTracks?: AudioTrack[];
   selectedAudioTrackIndex?: number;
   onSelectAudioTrack?: (index: number) => void;
+  /** The audio panel's sources and actions; without it the panel isn't offered. */
+  audioMenu?: Omit<
+    AudioMenuProps,
+    'navId' | 'container' | 'tracks' | 'selectedTrackIndex' | 'onSelectTrack'
+  >;
   /** Downloaded parts of the file, drawn under the watched part; null when unknown. */
   downloadedRanges?: DownloadedRanges | null;
   /**
@@ -219,7 +236,7 @@ export function PlayerControls({
   const videoFocused = useRef(video.focused);
   videoFocused.current = video.focused;
 
-  // An open subtitle panel keeps the controls up
+  // An open panel (subtitles, audio) keeps the controls up
   const menuOpen = useRef(false);
   // Shown now; hidden after a while without input (paused, `shown` keeps them up regardless)
   const reveal = useCallback(() => {
@@ -529,9 +546,6 @@ export function PlayerControls({
                 videoRef={videoRef}
                 subtitleCues={subtitleCues}
                 pendingPosition={pendingPosition}
-                audioTracks={audioTracks}
-                selectedAudioTrackIndex={selectedAudioTrackIndex}
-                onSelectAudioTrack={onSelectAudioTrack}
                 candidates={subtitleCandidates}
                 configured={subtitleConfigured}
                 available={subtitleAvailable}
@@ -541,9 +555,26 @@ export function PlayerControls({
                 offset={subtitleOffset}
                 onSearch={onSearchSubtitles}
                 onSelect={onSelectSubtitle}
+                onShowLanguage={onShowSubtitleLanguage}
                 onOffsetChange={onSubtitleOffsetChange}
                 preferencesKey={subtitlePreferencesKey}
+                defaultLanguage={subtitleDefaultLanguage}
+                container={overlayContainer}
               />
+              {audioMenu && (
+                <AudioMenu
+                  {...audioMenu}
+                  navId={PLAYER_NAV.audio}
+                  container={overlayContainer}
+                  tracks={audioTracks}
+                  selectedTrackIndex={selectedAudioTrackIndex}
+                  onSelectTrack={onSelectAudioTrack}
+                  onOpenChange={open => {
+                    onMenuOpenChange(open);
+                    audioMenu.onOpenChange?.(open);
+                  }}
+                />
+              )}
               {/* The remote sets the TV's volume, and the TV app is always full screen */}
               {!builtForTizen && (
                 <>

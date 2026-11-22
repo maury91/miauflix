@@ -9,6 +9,11 @@ export interface SubtitleSearchOptions {
   localOnly?: boolean;
   /** Turn the first track found on when nothing remembered is among them. */
   autoSelect?: boolean;
+  /**
+   * Remember the result as the title's subtitle choice; by default, unless `localOnly`. A track the
+   * profile's automatic subtitles turned on is not: the viewer did not choose it.
+   */
+  persist?: boolean;
 }
 
 interface Subtitles {

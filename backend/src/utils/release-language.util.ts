@@ -18,7 +18,23 @@ const CODES: Partial<Record<Language, string[]>> = {
   [Language.JAPANESE]: ['ja', 'jpn'],
   [Language.KOREAN]: ['ko', 'kor'],
   [Language.LITHUANIAN]: ['lt', 'lit'],
+  [Language.DANISH]: ['da', 'dan'],
+  [Language.NORWEGIAN]: ['no', 'nor', 'nb', 'nob'],
+  [Language.FINNISH]: ['fi', 'fin'],
+  [Language.POLISH]: ['pl', 'pol'],
+  [Language.HUNGARIAN]: ['hu', 'hun'],
+  [Language.ROMANIAN]: ['ro', 'ron', 'rum'],
+  [Language.RUSSIAN]: ['ru', 'rus'],
+  [Language.UKRAINIAN]: ['uk', 'ukr'],
+  [Language.TURKISH]: ['tr', 'tur'],
+  [Language.GREEK]: ['el', 'ell', 'gre'],
+  [Language.HINDI]: ['hi', 'hin'],
 };
+
+/** The ISO 639-1 code of a language a release name gives; undefined for MULTI. */
+export function releaseLanguageCode(language: Language): string | undefined {
+  return CODES[language]?.[0];
+}
 
 /**
  * Languages a release name gives only when it was made for that language's market: a dub or
@@ -36,6 +52,17 @@ const MARKET_LANGUAGES = new Set<Language>([
   Language.CZECH,
   Language.SLOVAK,
   Language.LITHUANIAN,
+  Language.DANISH,
+  Language.NORWEGIAN,
+  Language.FINNISH,
+  Language.POLISH,
+  Language.HUNGARIAN,
+  Language.ROMANIAN,
+  Language.RUSSIAN,
+  Language.UKRAINIAN,
+  Language.TURKISH,
+  Language.GREEK,
+  Language.HINDI,
 ]);
 
 /**

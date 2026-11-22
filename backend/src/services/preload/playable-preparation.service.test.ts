@@ -867,6 +867,52 @@ describe('PlayablePreparationService', () => {
     expect(warmup.warm).not.toHaveBeenCalled();
   });
 
+  it.each([
+    [2, 2],
+    // A chosen source that is no longer a candidate: the usual pick
+    [3, 1],
+  ])('plays the source the viewer chose (%i) while it is a candidate', async (sourceId, played) => {
+    const best = {
+      id: 1,
+      file: Buffer.from('a'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 9,
+    };
+    const dubbed = {
+      id: 2,
+      file: Buffer.from('b'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 1,
+    };
+    const service = new PlayablePreparationService({
+      mediaService: {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      } as never,
+      sourceService: {
+        requestMovieVerification: jest.fn(),
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([best, dubbed]),
+        processSourceMetadata: jest.fn(),
+      } as never,
+      warmup: { warm: jest.fn() } as never,
+      targets: movieTargets as never,
+    });
+
+    const prepared = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'warm',
+        resolveOnly: true,
+        sourceId,
+        preferences: { quality: 'auto', allowHevc: true },
+        workClass: 'interactive',
+      }
+    );
+
+    expect(prepared.source?.id).toBe(played);
+  });
+
   it('falls back to magnet playback when source metadata cannot be resolved', async () => {
     const source = {
       id: 208,

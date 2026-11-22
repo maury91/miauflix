@@ -25,6 +25,7 @@ import { MediaLoadClientService } from '@services/media-load/media-load-client.s
 import { createStorageHandoff } from '@services/media-load/storage-handoff';
 import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
+import { AudioSourcesService } from '@services/playback/audio-sources.service';
 import { PlaybackPiecesService } from '@services/playback/playback-pieces.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlaybackTargetService } from '@services/playback/playback-target.service';
@@ -43,6 +44,7 @@ import { SearchService } from '@services/search/search.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { createSecurityCleanup } from '@services/security/security-cleanup';
 import { SourceMetadataFileService, SourceService } from '@services/source';
+import { SearchTitlesService } from '@services/source/search-titles.service';
 import { SourceAvailabilityService } from '@services/source/source-availability.service';
 import { SourceHealthService } from '@services/source/source-health.service';
 import { SourcesClientService } from '@services/sources-client/sources-client.service';
@@ -142,6 +144,7 @@ try {
     backgroundJobs,
     notifications: notificationService,
     availability: sourceAvailabilityService,
+    searchTitles: new SearchTitlesService(catalogClient, db.getUserRepository()),
   });
   const playbackTargetService = new PlaybackTargetService(
     db,
@@ -203,6 +206,12 @@ try {
     playedSources: db.getContentSourceRepository(),
     remux: tvRemuxService,
   });
+  const audioSourcesService = new AudioSourcesService(
+    mediaService,
+    sourceService,
+    db.getEpisodeSourceRepository(),
+    db.getMediaProbeRepository()
+  );
   const playbackPiecesService = new PlaybackPiecesService(
     playbackSessionService,
     mediaLoadClient,
@@ -366,6 +375,7 @@ try {
     statsService,
     preloadIntentService,
     playbackSessionService,
+    audioSourcesService,
     audioPlaybackService,
     tvRemuxService,
     progressService,

@@ -1,7 +1,7 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
   AvatarLook,
-  LanguagePreferences,
+  LanguagePreferencesUpdate,
   LoginResponse,
   UserDto,
   UserRole,
@@ -149,7 +149,7 @@ export const profilesApi = createApi({
     /** Replace the session's profile languages; every copy of the profile picks them up. */
     updateLanguagePreferences: builder.mutation<
       UserDto,
-      { session: string; preferences: LanguagePreferences }
+      { session: string; preferences: LanguagePreferencesUpdate }
     >({
       async queryFn({ session, preferences }, { dispatch }) {
         const updated = await authenticatedRequest<UserDto>({

@@ -1,4 +1,4 @@
-import { style, type StyleRule } from '@vanilla-extract/css';
+import { globalStyle, style, type StyleRule } from '@vanilla-extract/css';
 
 import {
   color,
@@ -238,6 +238,18 @@ export const options = style({
   },
 });
 
+/** A row's facts at its end, after the text. */
+export const metadata = style({
+  display: 'flex',
+  flex: 'none',
+  alignItems: 'center',
+  marginLeft: 'auto',
+  paddingLeft: space.sm,
+  selectors: {
+    '[dir="rtl"] &': { marginLeft: 0, marginRight: 'auto', paddingLeft: 0, paddingRight: space.sm },
+  },
+});
+
 export const option = style({
   margin: `${space.xs} 0`,
   selectors: {
@@ -246,4 +258,31 @@ export const option = style({
       margin: `${space.xs} 0 0 ${space.lg}`,
     },
   },
+});
+
+/*
+ * `rows`: each option a full-width row on a quiet fill (a panel's list), selected rows on a
+ * stronger one. The outline stays the focus mark; selection is the fill and the white indicator.
+ */
+globalStyle(`${options}[data-appearance="rows"]`, { alignItems: 'stretch' });
+globalStyle(`${options}[data-appearance="rows"] > ${option}`, { margin: `0 0 ${space.xs}` });
+globalStyle(`${options}[data-appearance="rows"] ${choice}`, {
+  display: 'flex',
+  alignItems: 'center',
+  boxSizing: 'border-box',
+  width: '100%',
+  minHeight: '3rem',
+  padding: `${space.xs} ${space.md}`,
+  borderRadius: radius.md,
+  backgroundColor: color.surfaceHover,
+  transition: `background-color ${duration.fast} ${easing.standard}`,
+});
+globalStyle(`${options}[data-appearance="rows"] ${choice}[data-checked]`, {
+  backgroundColor: color.borderSubtle,
+});
+globalStyle(`${options}[data-appearance="rows"] ${choice}::after`, {
+  top: `-${outlineDistance}rem`,
+  right: `-${outlineDistance}rem`,
+  bottom: `-${outlineDistance}rem`,
+  left: `-${outlineDistance}rem`,
 });

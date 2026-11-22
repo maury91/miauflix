@@ -226,6 +226,27 @@ describe('usePlaybackSource', () => {
     expect(result.current.session).toBeNull();
   });
 
+  it('plays the source the viewer chose, in its language, until it fails', async () => {
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(1)) })
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(5)) })
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(2)) });
+    const { result } = renderSource(handlers);
+    await waitFor(() => expect(result.current.session?.source.id).toBe(1));
+
+    act(() => result.current.chooseSource(5, 'lt'));
+    // The current session plays on while the chosen one is requested
+    expect(result.current.pictureHeld).toBe(true);
+    await waitFor(() => expect(result.current.session?.source.id).toBe(5));
+    const request = createSession.mock.lastCall?.[0];
+    expect(request).toMatchObject({ sourceId: 5 });
+    expect(request.preferences.audioLanguages[0]).toBe('lt');
+
+    act(() => result.current.handleMediaError());
+    await waitFor(() => expect(result.current.session?.source.id).toBe(2));
+    expect(createSession.mock.lastCall?.[0]).not.toHaveProperty('sourceId');
+  });
+
   it('starts over from the first source on retry', async () => {
     createSession.mockReturnValue({ unwrap: () => Promise.resolve(sessionFor(1)) });
     const { result } = renderSource(handlers);

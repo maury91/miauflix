@@ -272,6 +272,8 @@ export class PlaybackSessionService {
     preferences: AudioPlaybackPreferences & PlaybackPreferences,
     options: {
       avoidSourceIds?: readonly number[];
+      /** The source the viewer chose; played while it is a candidate. */
+      sourceId?: number;
       deferDownload?: boolean;
       sessionId?: string;
     } = {}
@@ -286,6 +288,7 @@ export class PlaybackSessionService {
         through: options.deferDownload ? 'sources' : 'warm',
         ...(resumeFraction ? { resumeFraction } : {}),
         ...(avoid.length ? { avoidSourceIds: avoid } : {}),
+        ...(options.sourceId ? { sourceId: options.sourceId } : {}),
         preferences: { ...preferences, allowHevc },
         workClass: 'interactive',
         ownerKey: this.playableKey(playable),

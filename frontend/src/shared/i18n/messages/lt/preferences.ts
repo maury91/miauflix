@@ -23,6 +23,9 @@ export const preferences: Translation<typeof english> = {
   'preferences.animeAudioDescription': 'Anime kūriniams galite pasirinkti kitą garso kalbą.',
   'preferences.subtitlesDescription':
     '„Miauflix“ pirmiausia ieško subtitrų šia kalba ir siūlo juos po atkūrimo juosta.',
+  'preferences.autoSubtitles': 'Automatiniai subtitrai',
+  'preferences.autoSubtitlesDescription':
+    'Pradėjus žiūrėti, įjungiami subtitrai jūsų pasirinkta subtitrų kalba, nebent tam kūriniui juos pakeitėte.',
   'preferences.animeSubtitlesDescription': 'Anime kūriniams galite pasirinkti kitą subtitrų kalbą.',
   'preferences.deviceLanguage': 'Įrenginio kalba ({language})',
   'preferences.sameAsMovies': 'Kaip filmams ir serialams',

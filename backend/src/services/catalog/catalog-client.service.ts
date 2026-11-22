@@ -29,6 +29,8 @@ const orNull = <T>(promise: Promise<T>): Promise<T | null> =>
 /** The catalog service, with the backend's calling conventions. */
 export class CatalogClientService extends RemoteService<typeof catalog> {
   private readonly artworkStreamReadyListeners = new Set<() => void>();
+  /** Languages catalog data was asked for since the server started (profiles' interfaces). */
+  private readonly languages = new Set<string>();
 
   constructor(configurationService: ConfigurationService) {
     super(configurationService, {
@@ -40,10 +42,12 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
   }
 
   getMovie(mediaId: number, language: string): Promise<MovieDetail | null> {
+    this.languages.add(language);
     return orNull(this.client.getMovie({ mediaId, language }));
   }
 
   getTVShow(mediaId: number, language: string): Promise<TVShowDetail | null> {
+    this.languages.add(language);
     return orNull(this.client.getShow({ mediaId, language }));
   }
 
@@ -52,7 +56,13 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
     seasonNumber: number,
     language: string
   ): Promise<SeasonDetail | null> {
+    this.languages.add(language);
     return orNull(this.client.getSeason({ tvMediaId, seasonNumber, language }));
+  }
+
+  /** The languages catalog data was asked for since the server started, English included. */
+  requestedLanguages(): string[] {
+    return [...this.languages];
   }
 
   /** Both numberings of a show's episodes (empty while the show keeps TMDB's seasons). */
@@ -61,10 +71,12 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
   }
 
   search(query: string, page: number, language: string): Promise<SearchResponse> {
+    this.languages.add(language);
     return this.client.search({ query, page, language });
   }
 
   discover(genre: SearchGenreKey, page: number, language: string): Promise<SearchResponse> {
+    this.languages.add(language);
     return this.client.discover({ genre, page, language });
   }
 
@@ -78,6 +90,7 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
     language: string,
     artworkPriority: 'background' | 'prefetch' | 'returned' = 'returned'
   ): Promise<BatchResponse> {
+    this.languages.add(language);
     return this.client.batch({ items, language, artworkPriority });
   }
 

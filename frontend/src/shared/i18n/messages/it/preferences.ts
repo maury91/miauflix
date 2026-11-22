@@ -24,6 +24,9 @@ export const preferences: Translation<typeof english> = {
   'preferences.animeAudioDescription': 'Puoi scegliere una lingua audio diversa per gli anime.',
   'preferences.subtitlesDescription':
     'Miauflix cerca prima i sottotitoli in questa lingua e li propone sotto la barra di avanzamento.',
+  'preferences.autoSubtitles': 'Sottotitoli automatici',
+  'preferences.autoSubtitlesDescription':
+    "I sottotitoli nella tua lingua dei sottotitoli si attivano all'avvio di un titolo, a meno che tu non li abbia cambiati per quel titolo.",
   'preferences.animeSubtitlesDescription':
     'Puoi scegliere una lingua diversa per i sottotitoli degli anime.',
   'preferences.deviceLanguage': 'Lingua del dispositivo ({language})',

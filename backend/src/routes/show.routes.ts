@@ -99,9 +99,16 @@ export const createShowRoutes = ({
           id: z.string().regex(/^\d+$/, 'Show ID must be a number'),
         })
       ),
+      zValidator(
+        'query',
+        z.object({
+          lang: z.string().min(2).max(5).optional().default('en'),
+        })
+      ),
       async c => {
         const showId = Number(c.req.valid('param').id);
-        const result = await mediaService.getTVShowByMediaId(showId, 'en');
+        const { lang } = c.req.valid('query');
+        const result = await mediaService.getTVShowByMediaId(showId, lang);
         if (!result) {
           throw new HttpError(404, 'Show not found');
         }
@@ -129,9 +136,16 @@ export const createShowRoutes = ({
           season: z.string().regex(/^\d+$/, 'Season must be a number'),
         })
       ),
+      zValidator(
+        'query',
+        z.object({
+          lang: z.string().min(2).max(5).optional().default('en'),
+        })
+      ),
       async c => {
         const { id, season } = c.req.valid('param');
-        const hydrated = await mediaService.getSeason(Number(id), Number(season), 'en');
+        const { lang } = c.req.valid('query');
+        const hydrated = await mediaService.getSeason(Number(id), Number(season), lang);
         if (!hydrated) {
           throw new HttpError(404, 'Season not found');
         }

@@ -83,10 +83,26 @@ export interface PreparationOptions {
   onSourceAttempt?: (attempt: SourceAttempt) => void;
   /** Sources to leave out, e.g. the one a backup is being prepared for. */
   avoidSourceIds?: readonly number[];
+  /** The source the viewer chose (one in another language): played while it is a candidate. */
+  sourceId?: number;
   /** With `warm`: resolve the file to play but leave warming to the caller. */
   resolveOnly?: boolean;
   /** With `warm`: where playback will resume, as a fraction (0–1) of the playable's duration. */
   resumeFraction?: number;
+}
+
+/**
+ * The source the viewer chose, alone, while it is among the candidates; the candidates as they
+ * are otherwise (it was left out, or isn't known).
+ */
+function chosen<T>(
+  candidates: T[],
+  sourceId: number | undefined,
+  idOf: (candidate: T) => number = candidate => (candidate as { id: number }).id
+): T[] {
+  if (sourceId === undefined) return candidates;
+  const only = candidates.filter(candidate => idOf(candidate) === sourceId);
+  return only.length ? only : candidates;
 }
 
 /** Sources tried for one preparation before reporting the last result. */
@@ -159,7 +175,12 @@ export class PlayablePreparationService {
     /** Sources that cannot fit in storage, found when playback is about to start. */
     let noRoom = new Set<number>();
     const avoid = (list: ContentSource[]) =>
-      list.filter(source => !options.avoidSourceIds?.includes(source.id) && !noRoom.has(source.id));
+      chosen(
+        list.filter(
+          source => !options.avoidSourceIds?.includes(source.id) && !noRoom.has(source.id)
+        ),
+        options.sourceId
+      );
     let sources = await this.sourceService
       .getSourcesForMovieWithOnDemandSearch(
         {
@@ -327,11 +348,15 @@ export class PlayablePreparationService {
       airDate: episode.airDate,
     });
     this.throwIfAborted(options.signal);
-    const compatible = matches.filter(
-      match =>
-        match.videoFilePath &&
-        !options.avoidSourceIds?.includes(match.source.id) &&
-        filterVideoCodecSources([match.source], options.preferences).length
+    const compatible = chosen(
+      matches.filter(
+        match =>
+          match.videoFilePath &&
+          !options.avoidSourceIds?.includes(match.source.id) &&
+          filterVideoCodecSources([match.source], options.preferences).length
+      ),
+      options.sourceId,
+      match => match.source.id
     );
     if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
       return exhausted(playable);

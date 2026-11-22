@@ -46,6 +46,48 @@ describe('ProfileService', () => {
     expect(setup.userRepository.findById).toHaveBeenCalledWith(USER_ID);
   });
 
+  describe('language preferences', () => {
+    const languages = {
+      interface: 'it',
+      audio: { default: 'it', anime: 'original' },
+      subtitles: { default: 'it', anime: null },
+    };
+
+    it('saves automatic subtitles when given', async () => {
+      const setup = await setupTest();
+      dataDir = setup.dataDir;
+
+      await setup.service.updateLanguagePreferences(USER_ID, { ...languages, autoSubtitles: true });
+      expect(setup.userRepository.update).toHaveBeenCalledWith(USER_ID, {
+        languagePreferences: { ...languages, autoSubtitles: true },
+      });
+    });
+
+    it('keeps the stored automatic subtitles for a client from before the setting', async () => {
+      const setup = await setupTest();
+      dataDir = setup.dataDir;
+      setup.userRepository.findById.mockResolvedValue({
+        id: USER_ID,
+        languagePreferences: { ...languages, autoSubtitles: true },
+      } as never);
+
+      await setup.service.updateLanguagePreferences(USER_ID, { ...languages, interface: 'lt' });
+      expect(setup.userRepository.update).toHaveBeenCalledWith(USER_ID, {
+        languagePreferences: { ...languages, interface: 'lt', autoSubtitles: true },
+      });
+    });
+
+    it('leaves automatic subtitles off for preferences stored before the setting', async () => {
+      const setup = await setupTest();
+      dataDir = setup.dataDir;
+
+      await setup.service.updateLanguagePreferences(USER_ID, languages);
+      expect(setup.userRepository.update).toHaveBeenCalledWith(USER_ID, {
+        languagePreferences: { ...languages, autoSubtitles: false },
+      });
+    });
+  });
+
   it('marks the saved picture as outdated when the look changes', async () => {
     const setup = await setupTest();
     dataDir = setup.dataDir;

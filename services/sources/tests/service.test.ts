@@ -13,6 +13,7 @@ import { afterEach, expect, it } from 'bun:test';
 
 import { mergeCandidate, toCandidate } from '../src/normalize/candidate';
 import { magnetHash, normalizeHash } from '../src/normalize/magnet';
+import { variantsFor } from '../src/planner/query-variants';
 import type { Provider } from '../src/providers/types';
 import { createSourcesService } from '../src/service';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
@@ -274,6 +275,65 @@ it('normalizes a cached ID-only response separately for each requested episode',
   db.close();
 });
 
+it("searches and matches the titles in the profiles' other languages", () => {
+  const movie: SourceSearchRequest = {
+    media: {
+      kind: 'movie',
+      tmdbId: 120,
+      imdbId: null,
+      title: 'The Lord of the Rings',
+      localizedTitles: ['Il Signore degli Anelli'],
+      year: 2001,
+    },
+    purpose: 'interactive',
+  };
+  const provider = {
+    ...stubProvider,
+    caps: { movie: ['q'], tv: [], anime: [] },
+  } as unknown as Provider;
+  expect(variantsFor(provider, movie).map(variant => variant.query)).toEqual([
+    { kind: 'movie', q: 'The Lord of the Rings 2001' },
+    { kind: 'movie', q: 'Il Signore degli Anelli 2001' },
+  ]);
+  const match = (title: string) =>
+    toCandidate({ title, hash }, stubProvider, 'title', { kind: 'movie' }, movie, v => v);
+  expect(match('Il Signore degli Anelli 2001 1080p ITA')).not.toBeNull();
+  expect(match('The Lord of the Rings 2001 1080p')).not.toBeNull();
+  expect(match('Il Signore del Mondo 2001 1080p')).toBeNull();
+});
+it('searches a language by its titles and the title with its release tag only', () => {
+  const provider = {
+    ...stubProvider,
+    caps: { movie: ['q', 'imdbid'], tv: ['q', 'imdbid'], anime: [] },
+  } as unknown as Provider;
+  const media = {
+    kind: 'movie' as const,
+    tmdbId: 120,
+    imdbId: 'tt0120737',
+    title: 'The Lord of the Rings',
+    localizedTitles: ['Il Signore degli Anelli'],
+    year: 2001,
+  };
+  expect(
+    variantsFor(provider, { media, purpose: 'interactive', language: 'it' }).map(v => v.query)
+  ).toEqual([
+    { kind: 'movie', q: 'Il Signore degli Anelli 2001' },
+    { kind: 'movie', q: 'The Lord of the Rings 2001 ITA' },
+  ]);
+  // A language without a common tag: its own titles alone
+  expect(
+    variantsFor(provider, {
+      media: { ...media, kind: 'show', localizedTitles: ['Žiedų valdovas'] },
+      season: 1,
+      episode: 2,
+      purpose: 'interactive',
+      language: 'xx',
+    }).map(v => v.query)
+  ).toEqual([
+    { kind: 'tv', q: 'Žiedų valdovas S01E02' },
+    { kind: 'tv', q: 'Žiedų valdovas S01' },
+  ]);
+});
 it('preserves season zero specials', () => {
   const c = toCandidate(
     { title: 'Example Show S00E01', hash, season: 0, episode: 1 },

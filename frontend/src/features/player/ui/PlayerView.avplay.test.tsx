@@ -30,6 +30,9 @@ const {
 vi.mock('@features/player/api/playback.api', async () => {
   const React = await import('react');
   return {
+    // The audio panel's sources load only once it opens
+    useGetAudioSourcesQuery: () => ({ data: undefined, isError: false }),
+    useSearchAudioSourcesMutation: () => [vi.fn(), { isLoading: false, isError: false }],
     useCreateSessionMutation: () => {
       const [result, setResult] = React.useState<{ data?: CreatePlaybackSessionResponse }>({});
       const [requestVersion, setRequestVersion] = React.useState(0);
@@ -238,7 +241,8 @@ describe('PlayerView on a Samsung TV', () => {
     render(<PlayerView playable={playable} title="Subtitles fixture" onBack={vi.fn()} />);
     await screen.findByLabelText('Subtitles fixture');
     fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
-    const search = await screen.findByRole('button', { name: /Find subtitles/ });
+    fireEvent.click(await screen.findByRole('button', { name: /^Online/ }));
+    const search = await screen.findByRole('button', { name: /Search in/ });
     await waitFor(() => expect(search).not.toBeDisabled());
     fireEvent.click(search);
     fireEvent.click(await screen.findByRole('radio', { description: /A long release/ }));
@@ -252,7 +256,7 @@ describe('PlayerView on a Samsung TV', () => {
     act(() => listener().oncurrentplaytime?.(10_500));
     expect(await screen.findByTestId('avplay-caption')).toHaveTextContent('Preview word');
 
-    fireEvent.click(screen.getByRole('button', { name: /Adjust subtitle timing/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Synchronize subtitles/ }));
     fireEvent.click(screen.getByRole('button', { name: 'Subtitles 5 seconds later' }));
     expect(screen.queryByTestId('avplay-caption')).toBeNull();
     expect(screen.getByText('Timing adjustment: +5s')).toBeInTheDocument();

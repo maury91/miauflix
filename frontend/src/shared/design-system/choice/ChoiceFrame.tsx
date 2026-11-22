@@ -34,6 +34,8 @@ interface ChoiceFrameProps extends Omit<ChoiceProps, 'description'> {
   indicatorAtEnd?: boolean;
   /** The visual indicator with the native control inside. */
   indicator: ReactNode;
+  /** Short facts after the text, at the far end (a radio row's Badge). */
+  metadata?: ReactNode;
 }
 
 /**
@@ -54,6 +56,7 @@ export function ChoiceFrame({
   disabled,
   indicatorAtEnd = false,
   indicator,
+  metadata,
 }: ChoiceFrameProps) {
   // A radio option is the selected child its group is entered at
   const nav = useNavFocus<HTMLLabelElement>(navId, { focused, disabled, selected: checked });
@@ -83,6 +86,7 @@ export function ChoiceFrame({
           </span>
         )}
       </span>
+      {metadata && <span className={styles.metadata}>{metadata}</span>}
     </label>
   );
 }

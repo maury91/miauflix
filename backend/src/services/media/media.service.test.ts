@@ -109,6 +109,38 @@ describe('MediaService', () => {
       expect(result?.detail).toBe(detail);
     });
 
+    it('mirrors English details when asked for another language', async () => {
+      const { mediaService } = setupTest();
+      const english = movieDetail(THE_WILD_ROBOT_MEDIA_ID);
+      const italian = { ...english, title: 'Il robot selvaggio' };
+      const local = createMockMovie({ mediaId: THE_WILD_ROBOT_MEDIA_ID, title: english.title });
+      mockCatalogClient.getMovie.mockImplementation(async (_id, language) =>
+        language === 'it' ? italian : english
+      );
+      mockMovieRepo.upsertMovieDetail.mockResolvedValueOnce(local);
+
+      const result = await mediaService.getMovieByMediaId(THE_WILD_ROBOT_MEDIA_ID, 'it');
+
+      expect(mockMovieRepo.upsertMovieDetail).toHaveBeenCalledWith(english);
+      expect(result?.detail).toBe(italian);
+      expect(result?.local).toBe(local);
+    });
+
+    it('mirrors the details asked for when English ones are unavailable', async () => {
+      const { mediaService } = setupTest();
+      const italian = { ...movieDetail(THE_WILD_ROBOT_MEDIA_ID), title: 'Il robot selvaggio' };
+      mockCatalogClient.getMovie.mockImplementation(async (_id, language) => {
+        if (language === 'it') return italian;
+        throw new Error('catalog down');
+      });
+      mockMovieRepo.upsertMovieDetail.mockResolvedValueOnce(createMockMovie({}));
+
+      const result = await mediaService.getMovieByMediaId(THE_WILD_ROBOT_MEDIA_ID, 'it');
+
+      expect(mockMovieRepo.upsertMovieDetail).toHaveBeenCalledWith(italian);
+      expect(result?.detail).toBe(italian);
+    });
+
     it('returns null when the catalog does not know the media', async () => {
       const { mediaService } = setupTest();
       mockCatalogClient.getMovie.mockResolvedValueOnce(null);

@@ -7,7 +7,10 @@ import type { Database } from '@database/database';
 import type { User } from '@entities/user.entity';
 import type { AvatarLook } from '@mytypes/avatar.types';
 import type { ConfigService } from '@mytypes/configuration';
-import type { LanguagePreferences } from '@mytypes/language-preferences.types';
+import {
+  type LanguagePreferencesUpdate,
+  withDefaultLanguagePreferences,
+} from '@mytypes/language-preferences.types';
 import type { UserRepository } from '@repositories/user.repository';
 import { traced } from '@utils/tracing.util';
 
@@ -80,13 +83,23 @@ export class ProfileService {
     return this.userRepository.update(userId, changes);
   }
 
-  /** Replace the profile's interface, audio and subtitle languages. */
+  /**
+   * Replace the profile's interface, audio and subtitle languages. An update without
+   * `autoSubtitles` (a client from before it) keeps the stored choice.
+   */
   @traced('ProfileService')
   async updateLanguagePreferences(
     userId: string,
-    languagePreferences: LanguagePreferences
+    update: LanguagePreferencesUpdate
   ): Promise<User | null> {
-    return this.userRepository.update(userId, { languagePreferences });
+    const autoSubtitles =
+      update.autoSubtitles ??
+      withDefaultLanguagePreferences(
+        (await this.userRepository.findById(userId))?.languagePreferences
+      ).autoSubtitles;
+    return this.userRepository.update(userId, {
+      languagePreferences: { ...update, autoSubtitles },
+    });
   }
 
   @traced('ProfileService')

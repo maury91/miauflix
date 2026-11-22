@@ -14,6 +14,11 @@ export interface SourceMediaRef {
   tvdbId?: number | null;
   title: string;
   originalTitle?: string;
+  /**
+   * The title in the other languages the server's profiles use (`Il Signore degli Anelli`):
+   * searched and matched like `title`, so releases named for those languages are found too.
+   */
+  localizedTitles?: string[];
   year?: number | null;
   releaseDate?: string | null;
   /** Treat as anime; the sources service also recognises anime from its own mapping. */
@@ -27,6 +32,12 @@ export interface SourceSearchRequest {
   purpose: 'interactive' | 'background';
   /** Providers already known to have nothing; the planner skips them unless stale. */
   skipProviders?: string[];
+  /**
+   * Look for releases in this language (ISO 639-1, `it`): title queries only, by the titles in
+   * `media.localizedTitles` and by the title with the language's release tag (`… ITA`). Every
+   * provider is asked, whatever it already returned for the title.
+   */
+  language?: string;
 }
 export type MatchedBy = 'imdb' | 'tmdb' | 'tvdb' | 'anidb' | 'anilist' | 'title';
 export type Accuracy = 'high' | 'medium' | 'low';

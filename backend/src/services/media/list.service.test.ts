@@ -648,13 +648,51 @@ describe('ListService.getMediaByRefs', () => {
 
     const medias = await service.getMediaByRefs(refs, 'it');
 
-    expect(catalogClient.batch).toHaveBeenCalledTimes(1);
-    expect(catalogClient.batch).toHaveBeenCalledWith(refs, 'it', 'returned');
+    // The titles found, again in English for the local mirror
+    expect(catalogClient.batch.mock.calls).toEqual([
+      [refs, 'it', 'returned'],
+      [
+        [
+          { mediaType: 'movie', mediaId: 101 },
+          { mediaType: 'tv', mediaId: 202 },
+        ],
+        'en',
+        'background',
+      ],
+    ]);
     expect(medias.map(media => [media.mediaType, media.mediaId, media.localId])).toEqual([
       ['tv', 202, 22],
       ['movie', 101, 11],
     ]);
     expect(backgroundJobs.enqueueBestEffort).toHaveBeenCalledTimes(2);
+  });
+
+  it('mirrors English details and returns the ones in the language asked for', async () => {
+    const { database, listClient, catalogClient } = setupTest();
+    catalogClient.batch.mockImplementation(
+      async (_refs, language) =>
+        ({
+          items: [
+            {
+              mediaType: 'movie',
+              mediaId: 101,
+              title: language === 'it' ? 'Il robot selvaggio' : 'The Wild Robot',
+            },
+          ],
+          missing: [],
+          errors: [],
+        }) as never
+    );
+    const upsertMovieDetails = jest.fn().mockResolvedValue([{ id: 11, mediaId: 101 }]);
+    database.getMovieRepository().upsertMovieDetails = upsertMovieDetails;
+    const service = new ListService(database, catalogClient, listClient);
+
+    const medias = await service.getMediaByRefs([{ mediaType: 'movie', mediaId: 101 }], 'it');
+
+    expect(upsertMovieDetails).toHaveBeenCalledWith([
+      expect.objectContaining({ mediaId: 101, title: 'The Wild Robot' }),
+    ]);
+    expect(medias).toEqual([expect.objectContaining({ title: 'Il robot selvaggio', localId: 11 })]);
   });
 
   it('returns a title asked for twice in both positions', async () => {

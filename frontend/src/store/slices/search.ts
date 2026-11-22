@@ -100,6 +100,8 @@ export const searchSlice = createSlice({
     resultOpened(_state, _action: PayloadAction<SearchResultDto>) {},
     recentsRequested() {},
     genresRequested() {},
+    /** The interface language changed: genres, recents and results load again in it. */
+    catalogLanguageChanged() {},
     recentRemoved(state, action: PayloadAction<SearchRecentDto>) {
       state.recents = state.recents.filter(
         recent => recent.kind !== action.payload.kind || recent.query !== action.payload.query
@@ -124,6 +126,9 @@ export const searchSlice = createSlice({
       }
       if (message.type === 'search-genres') {
         state.genres = message.items;
+        // A selected genre shows its name, now in the language the genres came in
+        const selected = state.genre && message.items.find(genre => genre.key === state.genre);
+        if (selected) state.query = selected.name;
         return;
       }
       // Ids grow monotonically, so anything older than the active search's first page is stale.

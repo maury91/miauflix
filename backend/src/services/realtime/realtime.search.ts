@@ -16,6 +16,15 @@ import { KeyedTokenBucket } from '@utils/keyed-token-bucket';
 const SEARCH_BURST = 10;
 const SEARCHES_PER_SECOND = 5;
 
+/** The catalog language titles and genre names come in; English when absent or malformed. */
+const languageSchema = z
+  .string()
+  .regex(/^[a-z]{2}(-[A-Z]{2})?$/u)
+  .optional();
+
+const messageLanguage = (message: Record<string, unknown>): string =>
+  languageSchema.safeParse(message.language).data ?? 'en';
+
 const searchMessageSchema = z
   .object({
     type: z.literal('search'),
@@ -23,10 +32,7 @@ const searchMessageSchema = z
     query: z.string().trim().min(1).max(100).optional(),
     genre: searchGenreKeySchema.optional(),
     page: z.number().int().min(1).max(500),
-    language: z
-      .string()
-      .regex(/^[a-z]{2}(-[A-Z]{2})?$/u)
-      .optional(),
+    language: languageSchema,
     commit: z.boolean().optional(),
   })
   .refine(message => (message.query === undefined) !== (message.genre === undefined));
@@ -82,11 +88,11 @@ export class RealtimeSearchChannel {
       return true;
     }
     if (message.type === 'search-recents') {
-      void this.sendRecents(client);
+      void this.sendRecents(client, messageLanguage(message));
       return true;
     }
     if (message.type === 'search-genres') {
-      void this.sendGenres(client);
+      void this.sendGenres(client, messageLanguage(message));
       return true;
     }
     if (message.type === 'search-recent-add' || message.type === 'search-recent-remove') {
@@ -94,13 +100,14 @@ export class RealtimeSearchChannel {
       if (!parsed.success) return false;
       const { kind, query } = parsed.data;
       if (kind === 'genre' && !searchGenreKeySchema.safeParse(query).success) return false;
+      const language = messageLanguage(message);
       if (parsed.data.type === 'search-recent-add') {
-        void this.commit(client, kind, query);
+        void this.commit(client, kind, query, language);
         return true;
       }
       void this.search
         .removeRecent(client.userId, kind, query)
-        .then(() => this.sendRecents(client))
+        .then(() => this.sendRecents(client, language))
         .catch(error => logger.warn('RealtimeSearch', 'Failed to remove recent search', error));
       return true;
     }
@@ -117,7 +124,8 @@ export class RealtimeSearchChannel {
     state.latestKey = key;
     const input: SearchInput =
       genre !== undefined ? { genre, page, language } : { query: query!, page, language };
-    if (commit) void this.commit(client, genre !== undefined ? 'genre' : 'query', genre ?? query!);
+    if (commit)
+      void this.commit(client, genre !== undefined ? 'genre' : 'query', genre ?? query!, language);
     void this.run(client, state, key, requestId, input);
     return true;
   }
@@ -151,26 +159,34 @@ export class RealtimeSearchChannel {
     }
   }
 
-  private async commit(client: SearchClient, kind: 'genre' | 'query', query: string) {
+  private async commit(
+    client: SearchClient,
+    kind: 'genre' | 'query',
+    query: string,
+    language: string
+  ) {
     try {
       await this.search.recordRecent(client.userId, kind, query);
-      await this.sendRecents(client);
+      await this.sendRecents(client, language);
     } catch (error) {
       logger.warn('RealtimeSearch', 'Failed to record recent search', error);
     }
   }
 
-  private async sendGenres(client: SearchClient): Promise<void> {
+  private async sendGenres(client: SearchClient, language: string): Promise<void> {
     try {
-      client.send({ type: 'search-genres', items: await this.search.listGenres('en') });
+      client.send({ type: 'search-genres', items: await this.search.listGenres(language) });
     } catch (error) {
       logger.warn('RealtimeSearch', 'Failed to load search genres', error);
     }
   }
 
-  private async sendRecents(client: SearchClient): Promise<void> {
+  private async sendRecents(client: SearchClient, language: string): Promise<void> {
     try {
-      client.send({ type: 'search-recents', items: await this.search.listRecents(client.userId) });
+      client.send({
+        type: 'search-recents',
+        items: await this.search.listRecents(client.userId, language),
+      });
     } catch (error) {
       logger.warn('RealtimeSearch', 'Failed to load recent searches', error);
     }

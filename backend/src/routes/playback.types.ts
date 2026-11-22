@@ -4,6 +4,12 @@ import { z } from 'zod';
 import { type PlayableRef, playableRefSchema } from '@mytypes/playable.types';
 import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
 
+export type {
+  AudioSourceDto,
+  AudioSourcesResponse,
+  AudioSourceTrack,
+} from '@services/playback/audio-sources.service';
+
 /** A codec as ffprobe names it (`codec_name`): every platform reports its codecs this way. */
 const codecNameSchema = z.string().regex(/^[a-z0-9_]{1,32}$/);
 
@@ -48,6 +54,17 @@ export const createPlaybackSessionRequestSchema = z
     preferences: playbackPreferencesSchema,
     deferDownload: z.boolean().optional(),
     avoidSourceIds: z.array(z.number().int().positive()).max(50).optional(),
+    sourceId: z.number().int().positive().optional(),
+  })
+  .strict();
+
+export const audioSourcesRequestSchema = z.object({ playable: playableRefSchema }).strict();
+
+export const audioSourcesSearchSchema = z
+  .object({
+    playable: playableRefSchema,
+    /** ISO 639-1 */
+    language: z.string().regex(/^[a-z]{2,3}$/),
   })
   .strict();
 
@@ -57,6 +74,8 @@ export interface CreatePlaybackSessionRequest {
   deferDownload?: boolean;
   /** Sources this player already failed to play, so selection moves on to another one. */
   avoidSourceIds?: number[];
+  /** The source the viewer chose (one in another language); played while it is a candidate. */
+  sourceId?: number;
 }
 
 export interface CreatePlaybackSessionResponse {
