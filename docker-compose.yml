@@ -1,4 +1,4 @@
-# Miauflix: prebuilt images, set up from the browser.
+# Miauwatch: prebuilt images, set up from the browser.
 # Usage: docker compose up -d, then open http://localhost:3000
 # Guide: docs/setup/docker-setup.md#prebuilt-images
 #
@@ -165,7 +165,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
-  # Updates the Miauflix containers (labelled com.centurylinklabs.watchtower.enable=true) when a
+  # Updates the Miauwatch containers (labelled com.centurylinklabs.watchtower.enable=true) when a
   # new image is published, by default every day at 4:00 (WATCHTOWER_SCHEDULE: seconds first, TZ).
   # Fork of containrrr/watchtower, which is archived and no longer works with current Docker.
   watchtower:

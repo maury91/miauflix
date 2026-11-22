@@ -1,4 +1,5 @@
 import { useCreateAdminMutation } from '@features/setup/api/setup.api';
+import { StaticLogo } from '@shared/brand/logo/StaticLogo';
 import {
   Button,
   FormSection,
@@ -180,15 +181,18 @@ const SetupPage: FC = () => (
     exit={{ opacity: 0 }}
     transition={{ duration: 0.5 }}
   >
-    <NavigationProvider>
-      <FocusScope initialId={NAV.email}>
-        <div className={styles.card}>
-          <Surface padding="xl" radius="lg" border>
-            <AdminAccountForm />
-          </Surface>
-        </div>
-      </FocusScope>
-    </NavigationProvider>
+    <div className={styles.stack}>
+      <StaticLogo />
+      <NavigationProvider>
+        <FocusScope initialId={NAV.email}>
+          <div className={styles.card}>
+            <Surface padding="xl" radius="lg" border>
+              <AdminAccountForm />
+            </Surface>
+          </div>
+        </FocusScope>
+      </NavigationProvider>
+    </div>
   </motion.div>
 );
 

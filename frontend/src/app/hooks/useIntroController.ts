@@ -77,7 +77,12 @@ export function scheduleWhenSettled(callback: () => void): () => void {
 }
 
 /** Coordinates mounted Home and logo readiness with the intro's Redux phase. */
-export function useIntroController(appState: AppState, homeEligible: boolean) {
+export function useIntroController(
+  appState: AppState,
+  homeEligible: boolean,
+  /** The shared logo was hidden (a page drew its own): it reappears centred, without moving. */
+  logoWasHiddenRef?: { readonly current: boolean }
+) {
   const dispatch = useAppDispatch();
   const introPhase = useAppSelector(selectIntroPhase);
   const [homeHydrated, setHomeHydrated] = useState(false);
@@ -108,7 +113,7 @@ export function useIntroController(appState: AppState, homeEligible: boolean) {
 
   useEffect(() => {
     if (homeEligible && introPhase === 'pending') {
-      setLogoCentered(!hasShownScreenRef.current);
+      setLogoCentered(!hasShownScreenRef.current || !!logoWasHiddenRef?.current);
     }
     dispatch(setIntroEligible(homeEligible));
     if (!homeEligible) {
@@ -118,7 +123,7 @@ export function useIntroController(appState: AppState, homeEligible: boolean) {
       setIntroHasStarted(false);
       setLogoSettled(false);
     }
-  }, [dispatch, homeEligible, introPhase]);
+  }, [dispatch, homeEligible, introPhase, logoWasHiddenRef]);
 
   // Everything the intro needs is ready; the loading pulse stops and settles before it plays.
   const introReady =

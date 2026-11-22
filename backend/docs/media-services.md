@@ -1,6 +1,6 @@
 # Media services
 
-Miauflix separates catalog information, provider-backed lists, and playable sources. A title appearing in the catalog does not guarantee that a downloadable video is available. For a viewer's guide, see [Browsing](../../docs/features/browsing.md) and [Accounts](../../docs/features/accounts.md).
+Miauwatch separates catalog information, provider-backed lists, and playable sources. A title appearing in the catalog does not guarantee that a downloadable video is available. For a viewer's guide, see [Browsing](../../docs/features/browsing.md) and [Accounts](../../docs/features/accounts.md).
 
 ## Ownership
 
@@ -23,9 +23,9 @@ Catalog workers perform changed-title scans and season synchronization. `EPISODE
 
 ## Lists, watchlists, and Trakt
 
-The list service supplies popular and trending titles, personal watchlists/favorites/history, and community lists. Personal Trakt lists require linking a Trakt account from an authenticated Miauflix account. Trakt credentials do not sign the user into Miauflix.
+The list service supplies popular and trending titles, personal watchlists/favorites/history, and community lists. Personal Trakt lists require linking a Trakt account from an authenticated Miauwatch account. Trakt credentials do not sign the user into Miauwatch.
 
-The backend also keeps a local per-user watchlist. Add/remove actions can synchronize with linked Trakt accounts. Playback synchronization uses a durable outbox and retries; temporary provider failure does not require discarding local progress. Like/Dislike/Love ratings are local Miauflix ratings, separate from catalog scores.
+The backend also keeps a local per-user watchlist. Add/remove actions can synchronize with linked Trakt accounts. Playback synchronization uses a durable outbox and retries; temporary provider failure does not require discarding local progress. Like/Dislike/Love ratings are local Miauwatch ratings, separate from catalog scores.
 
 ## Search
 

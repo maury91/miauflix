@@ -15,7 +15,7 @@ export const integrations = {
   'integrations.copyFailed': "Couldn't copy the code. Enter it manually.",
   'integrations.startFailed': "Couldn't start connecting to Trakt",
   'integrations.title': 'Connect Trakt',
-  'integrations.description': 'Link your Trakt and Miauflix accounts.',
+  'integrations.description': 'Link your Trakt and Miauwatch accounts.',
   'integrations.close': 'Close Trakt dialog',
   'integrations.openTrakt': 'Open Trakt',
   'integrations.copyCode': 'Copy code',

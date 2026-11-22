@@ -54,7 +54,7 @@ function RevealAdvanced({ request }: { request: number }) {
 }
 
 /**
- * Which sources Miauflix searches, in which order, and how to add more. On the navigation layer:
+ * Which sources Miauwatch searches, in which order, and how to add more. On the navigation layer:
  * each source is a row (switch, Test, options), and Advanced setup holds the catalog and forms.
  */
 export default function SourcesPage({ onDismiss }: SourcesPageProps) {

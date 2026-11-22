@@ -38,7 +38,7 @@ export const createListConfigSchema = (): ServiceConfigSchema => ({
           key: 'TRAKT_REDIRECT_URI',
           label: 'Trakt Redirect URI',
           description:
-            'Use the exact redirect URI registered in your Trakt application. Miauflix uses it when refreshing Trakt authorization; the current site origin is suggested automatically.',
+            'Use the exact redirect URI registered in your Trakt application. Miauwatch uses it when refreshing Trakt authorization; the current site origin is suggested automatically.',
           required: true,
           inputType: 'text',
           defaultValueSource: 'browser-origin',

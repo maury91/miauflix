@@ -1,6 +1,7 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import { downloadedBlocks, type DownloadedRanges } from '@features/player/lib/seek-track';
 import type { SubtitleCandidateDto } from '@miauflix/backend';
+import { brandLogoUrl } from '@shared/brand/logo/brandLogo';
 import { builtForTizen } from '@shared/config/constants';
 import {
   Button,
@@ -75,11 +76,7 @@ export function PlayerHeader({
             {t('player.backToDetails')}
           </Button>
         </FocusGroup>
-        <img
-          className={styles.logo}
-          src={`${import.meta.env.BASE_URL}assets/images/logo.svg`}
-          alt={t('player.logo')}
-        />
+        <img className={styles.logo} src={brandLogoUrl} alt={t('player.logo')} />
       </header>
     </SurfaceContextProvider>
   );

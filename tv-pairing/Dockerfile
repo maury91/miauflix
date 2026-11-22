@@ -1,5 +1,5 @@
 # The TV pairing service hosted for everyone (see tv-pairing/README.md); not part of a
-# Miauflix install. No dependencies: Bun runs the TypeScript sources directly.
+# Miauwatch install. No dependencies: Bun runs the TypeScript sources directly.
 FROM oven/bun:1.4.0 AS production
 WORKDIR /app
 COPY tv-pairing/package.json tv-pairing/tsconfig.json ./

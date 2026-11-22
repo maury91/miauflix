@@ -56,7 +56,6 @@ export const header = style({
 });
 
 export const logo = style({
-  width: '14.5vh',
   height: '4vh',
 });
 

@@ -1,4 +1,4 @@
-# Getting Started with Miauflix
+# Getting Started with Miauwatch
 
 > **Fastest path:** use the prebuilt images, no clone needed. See [Prebuilt Images](docker-setup.md#prebuilt-images).
 
@@ -102,10 +102,10 @@ npm run start:backend:e2e
 ## Configuration System
 
 <p align="center">
-  <img src="../assets/miauflix%20env%20wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
+  <img src="../assets/miauflix%20env%20wizard.gif" alt="Miauwatch Environment Setup Wizard" width="800">
 </p>
 
-Miauflix includes an intelligent configuration wizard that:
+Miauwatch includes an intelligent configuration wizard that:
 
 - ✅ Automatically detects missing environment variables
 - 🧙‍♂️ Guides you through an interactive setup process
@@ -121,7 +121,7 @@ For a complete reference of all available environment variables, see the [Enviro
 
 ## Initial User
 
-The supplied base Compose file enables browser setup (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true`). On first start, open Miauflix on this computer and choose the first administrator's email and password. Complete this step before opening the server to other devices. The one-time setup closes after an administrator exists.
+The supplied base Compose file enables browser setup (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true`). On first start, open Miauwatch on this computer and choose the first administrator's email and password. Complete this step before opening the server to other devices. The one-time setup closes after an administrator exists.
 
 If you run the backend directly with that option unset or `false`, it instead generates an administrator account on first startup and prints its credentials to the logs. The HTTPS Compose overlay also uses this generated-account mode because it disables unauthenticated setup. Keep those logs private. A profile/password editor is still planned; do not rely on an existing change-password screen.
 

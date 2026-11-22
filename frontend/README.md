@@ -1,4 +1,4 @@
-# Miauflix Frontend
+# Miauwatch Frontend
 
 Modern React + Vite client that powers the TV experience. The source tree keeps routing, domain features, shared building blocks, and app bootstrap concerns clearly separated.
 

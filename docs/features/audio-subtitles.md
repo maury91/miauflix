@@ -2,27 +2,27 @@
 
 [Back to all features](../features.md)
 
-Different video files contain different kinds of sound and subtitles. Miauflix checks what your device can play and adapts delivery where supported.
+Different video files contain different kinds of sound and subtitles. Miauwatch checks what your device can play and adapts delivery where supported.
 
 ## Audio-track selection
 
-A video can contain several audio tracks, such as different languages or a commentary track. Miauflix can expose those tracks for selection and uses the languages reported by your browser when choosing an initial track. The choices depend on what the source actually contains.
+A video can contain several audio tracks, such as different languages or a commentary track. Miauwatch can expose those tracks for selection and uses the languages reported by your browser when choosing an initial track. The choices depend on what the source actually contains.
 
 ## Sound conversion for your device
 
-Some files use sound formats that a browser cannot play. When needed, Miauflix converts the selected audio track to stereo AAC, a widely supported format, while streaming. This processing happens on your server.
+Some files use sound formats that a browser cannot play. When needed, Miauwatch converts the selected audio track to stereo AAC, a widely supported format, while streaming. This processing happens on your server.
 
-When the sound already works on your device, Miauflix can keep it unchanged. It can also put compatible video and audio into a different container, like moving the same contents into a different package, without re-encoding them. This avoids unnecessary conversion.
+When the sound already works on your device, Miauwatch can keep it unchanged. It can also put compatible video and audio into a different container, like moving the same contents into a different package, without re-encoding them. This avoids unnecessary conversion.
 
 ## Video compatibility
 
-HEVC, also called H.265, is a video format supported by some devices but not others. Miauflix can deliver it unchanged to compatible devices, including supported Samsung TV playback.
+HEVC, also called H.265, is a video format supported by some devices but not others. Miauwatch can deliver it unchanged to compatible devices, including supported Samsung TV playback.
 
-An optional server setting allows HEVC conversion to H.264 for devices that need it. This is disabled by default and is limited to 1080p at 30 frames per second. Conversion uses server processing power; it is not a promise that every file will play on every device. When HEVC cannot be delivered and conversion is disabled, Miauflix can look for a compatible H.264 source instead.
+An optional server setting allows HEVC conversion to H.264 for devices that need it. This is disabled by default and is limited to 1080p at 30 frames per second. Conversion uses server processing power; it is not a promise that every file will play on every device. When HEVC cannot be delivered and conversion is disabled, Miauwatch can look for a compatible H.264 source instead.
 
 ## Subtitles already in the download
 
-Miauflix automatically looks for text subtitles embedded inside a video and matching subtitle files included in the torrent. Supported separate files include SRT, VTT, ASS, and SSA.
+Miauwatch automatically looks for text subtitles embedded inside a video and matching subtitle files included in the torrent. Supported separate files include SRT, VTT, ASS, and SSA.
 
 The server converts selected local text subtitles into WebVTT for the player. This works without an OpenSubtitles account or API key, for movies and episodes. Subtitles stored as pictures, including PGS and VobSub, are not currently converted.
 
@@ -32,7 +32,7 @@ Plain captions use white outlined text without a black box, near the bottom of t
 
 ## OpenSubtitles search
 
-For movies, Miauflix can search OpenSubtitles for additional subtitles when the administrator configures an API key. The movie needs an IMDb identifier for this search. OpenSubtitles search for TV episodes is not implemented; episodes can still use the local subtitle options described above.
+For movies, Miauwatch can search OpenSubtitles for additional subtitles when the administrator configures an API key. The movie needs an IMDb identifier for this search. OpenSubtitles search for TV episodes is not implemented; episodes can still use the local subtitle options described above.
 
 ## Subtitle preferences and timing
 

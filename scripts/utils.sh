@@ -98,7 +98,7 @@ ensure_development_data_dir() {
 use_source_compose_files() {
   local env_file="${1:-.env}"
 
-  # docker-compose.build.yml runs Miauflix as this user, so it can read the mounted .env.
+  # docker-compose.build.yml runs Miauwatch as this user, so it can read the mounted .env.
   export USER_ID="${USER_ID:-$(id -u)}"
   export GROUP_ID="${GROUP_ID:-$(id -g)}"
 

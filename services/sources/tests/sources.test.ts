@@ -127,7 +127,7 @@ it('keeps cached definitions and the catalog when migrating to configurable sour
   }
 });
 
-it('defaults to Prowlarr plus the Miauflix folder, with none of the blocked trackers listed here', () => {
+it('defaults to Prowlarr plus the Miauwatch folder, with none of the blocked trackers listed here', () => {
   expect(parseSources(DEFAULT_SOURCES).sources.map(source => source.key)).toEqual([
     PROWLARR_SOURCE_KEY,
     MIAUFLIX_SOURCE_KEY,

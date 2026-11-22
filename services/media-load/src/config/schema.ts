@@ -164,7 +164,7 @@ export const createMediaLoadConfigSchema = (
         {
           key: 'DOWNLOAD_PATH_EXCLUSIVE',
           description:
-            'Miauflix owns the download directory: anything in it that is not one of its downloads (for example downloads left behind after the database was deleted) is deleted when the service starts. Turn it off if the directory holds other files.',
+            'Miauwatch owns the download directory: anything in it that is not one of its downloads (for example downloads left behind after the database was deleted) is deleted when the service starts. Turn it off if the directory holds other files.',
           booleanStateDescriptions: {
             true: 'Unknown files in the download directory are deleted',
             false: 'Unknown files in the download directory are kept',

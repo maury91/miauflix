@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Opens the Miauflix TV app's DevTools on this machine, without the Tizen SDK: what
+// Opens the Miauwatch TV app's DevTools on this machine, without the Tizen SDK: what
 // `sdb shell 0 debug <app>` and `sdb forward` do, over SDB's own protocol. It closes the app,
 // launches it in debug mode and serves its inspector on 127.0.0.1:<port> until stopped (Ctrl-C),
 // for Chrome's chrome://inspect and scripts/tv-bench.mjs.

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Build the frontend as a Samsung TV (Tizen) app and zip it into dist/miauflix.wgt.
+# Build the frontend as a Samsung TV (Tizen) app and zip it into dist/miauwatch.wgt.
 # The package is unsigned: install it with Apps2Samsung, which signs it with a Samsung
 # certificate ("Force Samsung Certificate").
 #
@@ -26,7 +26,7 @@ source "${SCRIPT_DIR}/utils.sh"
 
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 BUILD_DIR="${PROJECT_ROOT}/dist/frontend-tizen"
-WGT_PATH="${PROJECT_ROOT}/dist/miauflix.wgt"
+WGT_PATH="${PROJECT_ROOT}/dist/miauwatch.wgt"
 
 API_URL="${MIAUFLIX_TV_API_URL}"
 PAIRING_URL="${MIAUFLIX_TV_PAIRING_URL:-https://pair.miauflix.cat}"
@@ -82,7 +82,7 @@ VITE_TIZEN=true VITE_API_URL="${API_URL:-/}" VITE_TV_PAIRING_URL="${PAIRING_URL}
 
 sed "s/version=\"[^\"]*\" viewmodes/version=\"${VERSION}\" viewmodes/" \
   "${PROJECT_ROOT}/frontend/tizen/config.xml" > "${BUILD_DIR}/config.xml"
-# The launcher icon, generated from assets/tv-logo.png
+# The launcher icon, generated from frontend/public/favicon.svg
 node "${SCRIPT_DIR}/generate-tv-icons.mjs" "${BUILD_DIR}"
 
 rm -f "${WGT_PATH}"

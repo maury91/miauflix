@@ -166,7 +166,7 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
   });
   const { geometry, margin, rowHeight, windowWidth, windowHeight } = useMediaBoxSizes();
   const layout = homeLayout({ width: windowWidth, height: windowHeight }, geometry);
-  // The hero and the fixed app logo line up with the rows' left edge.
+  // The hero lines up with the rows' left edge (the app logo computes the same margin itself).
   useEffect(() => {
     document.body.style.setProperty('--home-content-left', `${margin}px`);
     return () => {

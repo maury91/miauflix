@@ -1,6 +1,7 @@
 import { LOGIN_NAV } from '@features/auth/ui/login/loginNav';
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { LoginWithQR } from '@features/auth/ui/login/LoginWithQR';
+import { StaticLogo } from '@shared/brand/logo/StaticLogo';
 import { Icon, Inline, SplitLayout, Surface, Text } from '@shared/design-system';
 import { useT } from '@shared/i18n';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
@@ -45,6 +46,7 @@ const LoginPage: FC = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
+      <StaticLogo />
       <NavigationProvider>
         <FocusScope id={LOGIN_NAV.scope} layout="horizontal" initialId={LOGIN_NAV.email}>
           <div className={styles.content}>

@@ -8,7 +8,7 @@ export const subtitlesConfigurationDefinition = serviceConfiguration({
     OPENSUBTITLES_API_KEY: variable({
       label: 'OpenSubtitles API key',
       description:
-        'The API key assigned to this Miauflix server for OpenSubtitles.com. It is used for subtitle searches and downloads and is never exposed to viewers.',
+        'The API key assigned to this Miauwatch server for OpenSubtitles.com. It is used for subtitle searches and downloads and is never exposed to viewers.',
       required: false,
       password: true,
       link: 'https://www.opensubtitles.com/consumers',

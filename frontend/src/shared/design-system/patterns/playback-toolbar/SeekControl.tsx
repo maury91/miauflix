@@ -32,7 +32,7 @@ export interface SeekControlProps {
 const clampShare = (value: number) => Math.min(1, Math.max(0, value));
 
 /**
- * The player's seek bar: a Slider in the brand colour with Miauflix's paw as its thumb, the
+ * The player's seek bar: a Slider in the brand colour with Miauwatch's paw as its thumb, the
  * downloaded blocks under the watched fill and the times at its ends. Not a stop for the remote:
  * the toolbar's primary control (play/pause, beside it) seeks with Left/Right. A mouse drags it
  * and previews up to the pointer; Tab reaches it, and its arrows then seek by `keyStep`. The

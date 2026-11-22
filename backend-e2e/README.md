@@ -1,6 +1,6 @@
 # Backend E2E Tests
 
-This directory contains end-to-end integration tests for the Miauflix backend. The tests run against a fully containerized environment with mock services to simulate external APIs.
+This directory contains end-to-end integration tests for the Miauwatch backend. The tests run against a fully containerized environment with mock services to simulate external APIs.
 
 ## Overview
 
@@ -16,7 +16,7 @@ The E2E test suite provides:
 
 The test environment consists of:
 
-- **Backend Service**: The main Miauflix backend application
+- **Backend Service**: The main Miauwatch backend application
 - **TMDB Mock**: Mock service for The Movie Database API
 - **Indexer Mock**: Fictional release data, plus the Cardigann definitions that query it (the sources service loads them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`; `SOURCES_DISABLE_PROVIDERS` keeps the built-in Torrentio, which needs the internet, switched off)
 - **Trakt Mock**: Mock service for Trakt API

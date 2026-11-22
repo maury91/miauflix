@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-Miauflix uses environment variables for bootstrap and deployment settings. Application settings can be edited in the browser or CLI configuration wizard and are persisted in the data directory. Saved application values can override environment defaults.
+Miauwatch uses environment variables for bootstrap and deployment settings. Application settings can be edited in the browser or CLI configuration wizard and are persisted in the data directory. Saved application values can override environment defaults.
 
 **For Docker installations, start with browser setup.** The CLI wizard is also available from a source checkout. This page covers commonly used settings; the configuration UI reflects each running service's current schema.
 
@@ -31,7 +31,7 @@ For a source checkout, a root `.env` can provide bootstrap values. For Docker, `
 
 #### Media Catalog Service (Required)
 
-The media catalog (TMDB today) runs as its own Bun service. Configure its published settings through Miauflix's UI or CLI and retain the application and service data volumes and encryption keys. The backend needs the service address; the default Compose file supplies it automatically:
+The media catalog (TMDB today) runs as its own Bun service. Configure its published settings through Miauwatch's UI or CLI and retain the application and service data volumes and encryption keys. The backend needs the service address; the default Compose file supplies it automatically:
 
 ```bash
 # Default Docker Compose deployment (internal network)
@@ -63,7 +63,7 @@ Limits and storage thresholds apply at once. The connection settings, `DISABLE_D
 
 `DOWNLOAD_PATH` is a path inside the services container. The Compose files mount the downloads folder (`DOWNLOADS_HOST_PATH`) there at `/usr/src/app/downloads`. The standalone media-load image defaults to `/app/data/downloads` inside its data volume when the backend has no configured download path.
 
-`DOWNLOAD_PATH_EXCLUSIVE` (default `true`, advanced) means Miauflix owns `DOWNLOAD_PATH`: when media-load starts, and right after it adopts downloads imported from an older backend, it deletes every entry of that directory that is not one of its downloads. That clears downloads left behind when its database was deleted, which take disk space the storage threshold cannot see. An entry holding media-load's own database is always kept, and nothing is deleted while the storage import is still open. Set it to `false` if the directory holds anything else.
+`DOWNLOAD_PATH_EXCLUSIVE` (default `true`, advanced) means Miauwatch owns `DOWNLOAD_PATH`: when media-load starts, and right after it adopts downloads imported from an older backend, it deletes every entry of that directory that is not one of its downloads. That clears downloads left behind when its database was deleted, which take disk space the storage threshold cannot see. An entry holding media-load's own database is always kept, and nothing is deleted while the storage import is still open. Set it to `false` if the directory holds anything else.
 
 The service keeps its records in `MEDIA_LOAD_DATA_DIR` (`/app/data/media-load` in the services image). They are encrypted with the backend's `SOURCE_SECURITY_KEY`, which the backend sends when it connects, so keep that key and the services data volume together.
 
@@ -90,10 +90,10 @@ TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
 LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 ```
 
-- **Description**: OAuth application client ID and the exact redirect URI configured for the Trakt.tv integration. Trakt no longer issues client secrets to new apps, and Miauflix does not need one
+- **Description**: OAuth application client ID and the exact redirect URI configured for the Trakt.tv integration. Trakt no longer issues client secrets to new apps, and Miauwatch does not need one
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
 - **Required for**: Trakt features that consume the shared Trakt application credentials
-- **Configuration**: Use the `TRAKT` group in Miauflix's configuration UI. Retain the List Service data directory and active key across restarts.
+- **Configuration**: Use the `TRAKT` group in Miauwatch's configuration UI. Retain the List Service data directory and active key across restarts.
 - **Encryption key**: `LIST_SERVICE_ENCRYPTION_KEY` is optional. If set, keep it stable and store it in deployment secrets; the service uses it directly and does not create a key file. Otherwise, it generates a key in its data directory. Losing or changing the active key makes encrypted associations, pending authorizations, and cached pages unreadable.
 
 #### NordVPN (Optional)
@@ -163,7 +163,7 @@ ENABLE_FRONTEND=true
 - **PORT**: Server listening port (default: 3000)
 - **CORS_ORIGIN**: Comma-separated list of allowed origins (or `*` for all)
 - **ALLOW_TV_APP**: Accept the [Samsung TV app](samsung-tv.md), which runs from local files (origin `file://`, which web pages cannot send) and signs in with bearer tokens instead of cookies (default: `true`). Its origin is allowed without credentials. Set `false` if you don't use the TV app
-- **ALLOW_TV_APP_NULL_ORIGIN**: Also accept the TV app from the opaque origin `null`, for a TV that reports local files that way (default: `false`, needs `ALLOW_TV_APP`). Any web page can send `null` (from a sandboxed iframe or a `data:` URL), so with this on, a page you visit can read Miauflix's unauthenticated responses and, while first-run setup is open (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` with no admin yet), create the admin account. Turn it on only if the TV app can't connect otherwise
+- **ALLOW_TV_APP_NULL_ORIGIN**: Also accept the TV app from the opaque origin `null`, for a TV that reports local files that way (default: `false`, needs `ALLOW_TV_APP`). Any web page can send `null` (from a sandboxed iframe or a `data:` URL), so with this on, a page you visit can read Miauwatch's unauthenticated responses and, while first-run setup is open (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` with no admin yet), create the admin account. Turn it on only if the TV app can't connect otherwise
 - **TV_PAIRING_ENABLED**: Announce this server to the pairing service every two minutes, so the [Samsung TV app](samsung-tv.md#how-the-tv-finds-your-server) on the same network (behind the same public IP) finds it (default: `true`). Off, the TV finds the server by scanning the local network or by typing its address
 - **TV_PAIRING_URL**: The pairing service (default: `https://pair.miauflix.cat`). Point it at your own [`tv-pairing`](../../tv-pairing/README.md) instance, and package the TV app with the same one (`--pairing-url`)
 - **TV_PAIRING_ADDRESSES**: The addresses a TV on your network reaches the server at, announced instead of the detected ones (comma-separated origins, e.g. `http://192.168.1.10:3000`). By default the server announces its private IPv4 addresses (outside Docker) and the private IPv4 addresses a browser on your network opened it at
@@ -277,7 +277,7 @@ The supplied production HTTPS setup uses Caddy, rather than manually configured 
 
 ```bash
 COMPOSE_FILE=docker-compose.yml:docker-compose.https.yml
-MIAUFLIX_DOMAIN=miauflix.example.com
+MIAUFLIX_DOMAIN=miauwatch.example.com
 REVERSE_PROXY_SECRET=your-secure-random-string
 MIAUFLIX_VERSION=latest
 ```
@@ -340,7 +340,7 @@ There are two modes for creating the first admin account.
 
 ### Default mode (auto-creation)
 
-By default (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` unset or `false`), Miauflix generates an admin account on first startup if no admin exists:
+By default (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` unset or `false`), Miauwatch generates an admin account on first startup if no admin exists:
 
 - Email: `admin@<hostname>.local`
 - Password: randomly generated, printed to the startup logs

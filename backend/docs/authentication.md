@@ -1,6 +1,6 @@
 # Authentication system
 
-Miauflix authenticates its own accounts with passwords or an approved QR login. API access uses JWTs; opaque refresh tokens renew sessions. Browsers and the installed Samsung TV app use different token transports. Trakt account linking is a separate integration and never authenticates a Miauflix account.
+Miauwatch authenticates its own accounts with passwords or an approved QR login. API access uses JWTs; opaque refresh tokens renew sessions. Browsers and the installed Samsung TV app use different token transports. Trakt account linking is a separate integration and never authenticates a Miauwatch account.
 
 For available account controls and planned UI, see [Accounts and your personal collection](../../docs/features/accounts.md). The implementation is in [auth routes](../src/routes/auth.routes.ts), [AuthService](../src/services/auth/auth.service.ts), and [auth middleware](../src/middleware/auth.middleware.ts).
 

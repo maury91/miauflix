@@ -148,17 +148,17 @@ describe('Storage settings page', () => {
     render(<StoragePage onDismiss={vi.fn()} />);
     const legend = within(screen.getByRole('list', { name: 'Space used by file type' }));
     expect(legend.getByText('Movies').parentElement).toHaveTextContent('Movies2 GiB');
-    // The disk's 60 GiB in use, less Miauflix's 2 GiB
+    // The disk's 60 GiB in use, less Miauwatch's 2 GiB
     expect(legend.getByText('Other data').parentElement).toHaveTextContent('Other data58 GiB');
     // The disk's 40 GiB free, less the 10 GiB kept for playback
     expect(legend.getByText('Free').parentElement).toHaveTextContent('Free30 GiB');
-    // What Miauflix doesn't control comes last
+    // What Miauwatch doesn't control comes last
     expect(legend.getAllByRole('listitem').at(-1)).toHaveTextContent('Other data58 GiB');
     expect(screen.getByText('Limit 50 GiB')).toBeInTheDocument();
     expect(screen.getByText(/used or reserved 3 GiB of its 50 GiB limit/)).toBeInTheDocument();
     expect(
       screen.getByText(
-        /Local only\. The video is complete and Miauflix will keep it on this server without reloading its torrent/
+        /Local only\. The video is complete and Miauwatch will keep it on this server without reloading its torrent/
       )
     ).toBeInTheDocument();
     const row = within(screen.getByRole('list', { name: 'Downloaded content' }));
@@ -282,9 +282,9 @@ describe('Storage settings page', () => {
     fireEvent.focus(limit);
     fireEvent.change(limit, { target: { value: '500' } });
     fireEvent.blur(limit);
-    // 40 GiB free plus the 2 GiB Miauflix holds
+    // 40 GiB free plus the 2 GiB Miauwatch holds
     expect(
-      screen.getByText(/exceeds the space Miauflix can use on this disk \(42 GiB\)/)
+      screen.getByText(/exceeds the space Miauwatch can use on this disk \(42 GiB\)/)
     ).toBeInTheDocument();
   });
 
@@ -296,7 +296,7 @@ describe('Storage settings page', () => {
     fireEvent.blur(limit);
     expect(screen.getByText('Limit 0 B (not saved)')).toBeInTheDocument();
     expect(
-      screen.getByText(/A storage limit of 0 prevents Miauflix from saving downloads/)
+      screen.getByText(/A storage limit of 0 prevents Miauwatch from saving downloads/)
     ).toBeInTheDocument();
   });
 

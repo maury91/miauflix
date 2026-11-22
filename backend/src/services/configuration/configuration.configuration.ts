@@ -90,7 +90,7 @@ export const serverConfigurationDefinition = serviceConfiguration({
     }),
     DATA_DIR: variable({
       description:
-        'Directory for Miauflix runtime data, including configuration, database, and cache files',
+        'Directory for Miauwatch runtime data, including configuration, database, and cache files',
       required: false,
       advanced: true,
       defaultValue: path.resolve(process.cwd(), './data'),

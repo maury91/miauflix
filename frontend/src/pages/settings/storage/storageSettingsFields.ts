@@ -4,7 +4,7 @@ import { type MessageKey, t } from '@shared/i18n';
 /** The configuration group that holds media-load's storage settings. */
 export const STORAGE_SETTINGS_GROUP = 'MEDIA_LOAD';
 
-/** Shown first: what decides how much Miauflix keeps and for how long. */
+/** Shown first: what decides how much Miauwatch keeps and for how long. */
 export const MAIN_STORAGE_KEYS = [
   'STORAGE_THRESHOLD',
   'STORAGE_PLAYBACK_RESERVE',

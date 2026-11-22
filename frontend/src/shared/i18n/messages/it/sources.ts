@@ -7,7 +7,7 @@ export const sources: Translation<typeof english> = {
   'sources.source': 'fonte',
   'sources.testFailed': 'Test di {name} non riuscito.',
   'sources.title': 'Fonti',
-  'sources.description': 'Miauflix cerca nelle fonti i file di film e serie TV.',
+  'sources.description': 'Miauwatch cerca nelle fonti i file di film e serie TV.',
   'sources.count': {
     one: '{count} provider · {enabled} attivi',
     other: '{count} provider · {enabled} attivi',
@@ -22,7 +22,7 @@ export const sources: Translation<typeof english> = {
   'sources.removedName': '{name} rimosso.',
   'sources.removeFailed': 'Non è stato possibile rimuovere {name}.',
   'sources.order':
-    'Miauflix controlla le fonti dall’alto verso il basso. Sposta una fonte più in alto per darle la precedenza.',
+    'Miauwatch controlla le fonti dall’alto verso il basso. Sposta una fonte più in alto per darle la precedenza.',
   'sources.advanced': 'Configurazione avanzata',
   'sources.advancedDescription': 'Jackett, endpoint Torznab e repository.',
   'sources.repositories': 'Repository',
@@ -47,12 +47,12 @@ export const sources: Translation<typeof english> = {
   'sources.repositoryUrl': 'URL del repository',
   'sources.how': 'Come funziona',
   'sources.step.search': 'Cerca',
-  'sources.step.searchText': 'Miauflix controlla in ordine le fonti attive.',
+  'sources.step.searchText': 'Miauwatch controlla in ordine le fonti attive.',
   'sources.step.find': 'Trova',
-  'sources.step.findText': 'Miauflix cerca i file del film o della serie TV che hai scelto.',
+  'sources.step.findText': 'Miauwatch cerca i file del film o della serie TV che hai scelto.',
   'sources.step.watch': 'Guarda',
   'sources.step.watchText':
-    'Puoi iniziare a guardare appena Miauflix trova una fonte riproducibile.',
+    'Puoi iniziare a guardare appena Miauwatch trova una fonte riproducibile.',
   'sources.settings': 'Impostazioni',
   'sources.moveUp': 'Sposta in alto',
   'sources.moveDown': 'Sposta in basso',

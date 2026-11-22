@@ -1,6 +1,6 @@
 # Assisted configuration
 
-Miauflix manages application settings through the administrator's browser configuration editor and an interactive terminal wizard. Environment variables can provide bootstrap values; saved application settings live in the persistent configuration store rather than being written to a generated `.env` file.
+Miauwatch manages application settings through the administrator's browser configuration editor and an interactive terminal wizard. Environment variables can provide bootstrap values; saved application settings live in the persistent configuration store rather than being written to a generated `.env` file.
 
 ## Features
 

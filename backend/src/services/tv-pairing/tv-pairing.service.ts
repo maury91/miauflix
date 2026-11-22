@@ -32,7 +32,7 @@ export interface TvPairingServiceOptions {
  *
  * The addresses are TV_PAIRING_ADDRESSES when set. Otherwise they are the server's private IPv4
  * addresses (outside a container) and the private IPv4 addresses it was reached at, from the
- * requests' Host header: in Docker, the one a browser on the network opened Miauflix at.
+ * requests' Host header: in Docker, the one a browser on the network opened Miauwatch at.
  */
 export class TvPairingService {
   private readonly id = randomUUID();

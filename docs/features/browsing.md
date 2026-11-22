@@ -2,13 +2,13 @@
 
 [Back to all features](../features.md)
 
-Miauflix presents movies and TV shows in a visual catalog. You can explore the catalog before choosing something to play; you do not need to organize a folder of media files first.
+Miauwatch presents movies and TV shows in a visual catalog. You can explore the catalog before choosing something to play; you do not need to organize a folder of media files first.
 
 ## Movie and TV information
 
-Title pages show artwork, a description, genres, and available catalog scores. TV pages let you move between seasons and episodes. Miauflix currently gets this information from The Movie Database (TMDB).
+Title pages show artwork, a description, genres, and available catalog scores. TV pages let you move between seasons and episodes. Miauwatch currently gets this information from The Movie Database (TMDB).
 
-A title appearing in the catalog does not guarantee that a playable source is available. The catalog describes the title; source discovery finds a copy that Miauflix can play.
+A title appearing in the catalog does not guarantee that a playable source is available. The catalog describes the title; source discovery finds a copy that Miauwatch can play.
 
 ## Browse lists
 
@@ -22,11 +22,11 @@ Search lets you type a query, choose a genre, and move through pages of results.
 
 ## Details that load ahead
 
-Miauflix starts loading useful details while you move around the catalog. For shows, this can include the season you are likely to open next, such as the season you were watching. Returning from a title page restores focus to the selected card, which helps when browsing with a remote.
+Miauwatch starts loading useful details while you move around the catalog. For shows, this can include the season you are likely to open next, such as the season you were watching. Returning from a title page restores focus to the selected card, which helps when browsing with a remote.
 
 ## Artwork suited to the screen
 
-Miauflix requests artwork sizes suited to cards, episode pictures, logos, and large backgrounds. The Samsung TV build also adjusts background image sizes to the TV's generation to balance sharpness and responsiveness.
+Miauwatch requests artwork sizes suited to cards, episode pictures, logos, and large backgrounds. The Samsung TV build also adjusts background image sizes to the TV's generation to balance sharpness and responsiveness.
 
 Home cards are one picture each: your server draws the title's logo onto its backdrop (or the title's name, for titles without a logo) above the episode line, in the size the card needs, and keeps the most recently used pictures in memory (100 MB by default; `CARD_IMAGE_CACHE_MB` in the Media Catalog settings). One picture per card is quicker for the TV to draw than a backdrop and a logo on top of it.
 

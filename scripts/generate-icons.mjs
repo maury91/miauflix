@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-// Generate the website icons from one square source image (the TV icons come from
-// assets/tv-logo.png, see generate-tv-icons.mjs).
+// Generate raster website icons from the same square SVG used for the TV launcher.
 //
-// Usage: npm run generate:icons [-- path/to/source.png]   (default: assets/favicon.png)
+// Usage: npm run generate:icons [-- path/to/square-image]   (default: frontend/public/favicon.svg)
 //
 // Writes, under frontend/ (keeping the source's transparency):
 //
@@ -20,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const source = path.resolve(root, process.argv[2] ?? 'assets/favicon.png');
+const source = path.resolve(root, process.argv[2] ?? 'frontend/public/favicon.svg');
 const publicDir = path.join(root, 'frontend/public');
 const iconsDir = path.join(publicDir, 'assets/icons');
 

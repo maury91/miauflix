@@ -46,7 +46,7 @@ export interface ScanOptions {
 }
 
 /**
- * Probe every other host of the TV's /24 network for a Miauflix server, and resolve with the
+ * Probe every other host of the TV's /24 network for a Miauwatch server, and resolve with the
  * servers that answered. A host with nothing listening costs one timeout, so it is kept short.
  */
 export async function scanSubnet(

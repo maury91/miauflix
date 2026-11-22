@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { glTextureBudget, heroBackdropSizes, readTvDevice } from './tv-profile';
 
 const AUTO = { moving: 'auto', resting: 'auto' };
-// The two TVs Miauflix was measured on
+// The two TVs Miauwatch was measured on
 const TU8072_AGENT =
   'Mozilla/5.0 (SMART-TV; LINUX; Tizen 5.5) AppleWebKit/537.36 (KHTML, like Gecko) 69.0.3497.106.1/5.5 TV Safari/537.36';
 const QCQ80_AGENT =

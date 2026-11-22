@@ -9,7 +9,7 @@ export const config: Translation<typeof english> = {
   'config.summary.MEDIA_LOAD':
     'Download via torrent, limiti di archiviazione e statistiche dei tracker.',
   'config.summary.DOWNLOAD': 'Buffer iniziale e conversione video per la riproduzione.',
-  'config.summary.SOURCE': 'Come Miauflix trova e ordina le fonti dei film.',
+  'config.summary.SOURCE': 'Come Miauwatch trova e ordina le fonti dei film.',
   'config.summary.TMDB': 'Impostazioni del provider The Movie Database.',
   'config.summary.VPN': 'Instradamento di rete e rilevamento della VPN.',
   'config.summary.JWT': 'Sessioni API e impostazioni dei token di accesso.',
@@ -22,7 +22,7 @@ export const config: Translation<typeof english> = {
   'config.reactivated': 'Riattivati: {services}',
   'config.actionFailed.test': 'Test della configurazione di {service} non riuscito.',
   'config.actionFailed.save': 'Salvataggio della configurazione di {service} non riuscito.',
-  'config.setUp': 'Configura Miauflix',
+  'config.setUp': 'Configura Miauwatch',
   'config.optionalTitle': 'Impostazioni facoltative',
   'config.optionalDescription': 'Configura le integrazioni che vuoi usare.',
   'config.requiredComplete': 'Impostazioni obbligatorie salvate',
@@ -52,7 +52,7 @@ export const config: Translation<typeof english> = {
   'config.saved': 'Impostazioni salvate.',
   'config.notSavedTests':
     'Le modifiche non sono state salvate. Controlla i test non riusciti e riprova.',
-  'config.description': 'Compila i campi obbligatori per avviare i servizi di Miauflix.',
+  'config.description': 'Compila i campi obbligatori per avviare i servizi di Miauwatch.',
   'config.title': 'Configurazione',
   'config.loading': 'Caricamento della configurazione…',
   'config.needConfiguration': 'Configura questi servizi: {services}',
@@ -75,7 +75,7 @@ export const config: Translation<typeof english> = {
   'config.testing': 'Test in corso…',
   'config.test': 'Prova',
   'config.suggestedRedirect':
-    'Miauflix ha usato questo browser per suggerire un URI di reindirizzamento. Salvalo per continuare.',
+    'Miauwatch ha usato questo browser per suggerire un URI di reindirizzamento. Salvalo per continuare.',
   'config.unsavedRequired': 'Salva le impostazioni obbligatorie per continuare.',
   'config.testFailedTitle': 'Test di {group} non riuscito',
   'config.checkEntry': 'Controlla {key}: {description}',

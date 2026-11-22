@@ -9,12 +9,13 @@ import {
   navigateBack,
   useRoute,
 } from '@app/router';
-import { resolveScreen } from '@app/screens';
+import { type AppScreen, resolveScreen } from '@app/screens';
 import { IntroAnimation } from '@app/shell/IntroAnimation';
 import { VersionBadge } from '@app/shell/VersionBadge';
 import { useMissingProfilePictures } from '@features/profiles/avatar/useMissingProfilePictures';
 import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
+import { selectMediaBoxSizes } from '@pages/home/home-layout';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
 import PreferencesPage from '@pages/preferences/PreferencesPage';
@@ -25,7 +26,7 @@ import SearchPage from '@pages/search/SearchPage';
 import SourcesPage from '@pages/settings/SourcesPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
-import { Logo } from '@shared/brand/logo/Logo';
+import { Logo, type LogoPosition } from '@shared/brand/logo/Logo';
 import { ErrorBoundary } from '@shared/components';
 import { builtForTizen } from '@shared/config/constants';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
@@ -38,7 +39,7 @@ import {
   setSession,
 } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { NotFoundScreen } from './shell/NotFoundScreen';
 import * as styles from './appShell.css';
@@ -52,6 +53,14 @@ function Redirect({ to }: { to: AppRoute }) {
 }
 
 const HOME: AppRoute = { type: 'home' };
+/** Screens with a static logo of their own instead of the shared, moving one. */
+const STATIC_LOGO_SCREENS: ReadonlySet<AppScreen['kind']> = new Set([
+  'qrApproval',
+  'setup',
+  'login',
+  'optionalConfig',
+  'requiredConfig',
+]);
 const PROFILES: AppRoute = { type: 'profiles' };
 
 function LoadingContainer() {
@@ -71,6 +80,7 @@ export function AppShell() {
   /** The profile Who's watching focuses next (one just created). */
   const [profileFocus, setProfileFocus] = useState<string | null>(null);
   const homeEligible = appState === 'home' && route.type === 'home' && !configurationWizardActive;
+  const logoWasHiddenRef = useRef(false);
   const {
     introPhase,
     introHasStarted,
@@ -85,7 +95,9 @@ export function AppShell() {
     handleLogoSettled,
     handleIntroStart,
     handleHomeHydrated,
-  } = useIntroController(appState, homeEligible);
+  } = useIntroController(appState, homeEligible, logoWasHiddenRef);
+  // Home's logo lines up with its cards: their margin follows from the window size alone
+  const { margin: homeLeft } = useAppSelector(selectMediaBoxSizes);
 
   const handleConfigDismiss = useCallback(() => {
     setConfigurationWizardActive(false);
@@ -118,34 +130,33 @@ export function AppShell() {
     requiredConfigActive: configurationWizardActive,
     isAdmin,
   });
-  const profileScreen =
-    screen.kind === 'whosWatching' || screen.kind === 'newProfile' || screen.kind === 'editProfile';
-
-  const logoPage =
+  // The shared logo belongs to the signed-in pages and moves between them. It starts centred
+  // (pulsing while loading); sign-in, setup and the configuration wizard draw their own, static.
+  const logoPosition: LogoPosition =
     homeEligible && introPhase !== 'complete'
       ? introPhase === 'playing' && introHasStarted
         ? 'home'
         : 'intro'
-      : // Where the login screen has it, whether or not this browser is signed in
-        route.type === 'qrApproval'
-        ? 'login'
-        : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
-          ? 'intro'
-          : // Profile and settings pages carry the logo in the corner, as Home does
-            profileScreen ||
-              configurationWizardActive ||
-              appState === 'config' ||
-              route.type === 'configuration' ||
-              route.type === 'storage' ||
-              route.type === 'preferences'
-            ? 'home'
-            : appState;
+      : screen.kind === 'loading'
+        ? 'intro'
+        : STATIC_LOGO_SCREENS.has(screen.kind)
+          ? 'none'
+          : screen.kind === 'media' || screen.kind === 'notFound'
+            ? route.type === 'movieDetails' || route.type === 'showDetails'
+              ? 'details'
+              : 'home'
+            : screen.kind === 'redirect' && screen.to.type === 'home'
+              ? 'home'
+              : 'inner';
+  useEffect(() => {
+    logoWasHiddenRef.current = logoPosition === 'none';
+  }, [logoPosition]);
   const logoMotionDisabled =
     (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);
   // The centred logo pulses until the app knows where to go; the intro then takes over.
   const logoPulsing =
-    logoPage === 'intro' && !(homeEligible && (introReady || introPhase === 'playing'));
+    logoPosition === 'intro' && !(homeEligible && (introReady || introPhase === 'playing'));
 
   const renderPage = () => {
     switch (screen.kind) {
@@ -203,7 +214,7 @@ export function AppShell() {
         );
       }
       case 'optionalConfig':
-        return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} />;
+        return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} staticLogo />;
       case 'requiredConfig':
         return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
       case 'configuration':
@@ -244,7 +255,8 @@ export function AppShell() {
   return (
     <ErrorBoundary>
       <Logo
-        page={logoPage}
+        position={logoPosition}
+        homeLeft={homeLeft}
         disableMotion={logoMotionDisabled}
         visible={showSharedLogo}
         aboveIntro={homeEligible && (introPhase === 'pending' || introPhase === 'centering')}

@@ -6,7 +6,7 @@ Deferred. The active implementation scope is the legacy-style home browser and m
 experience. Session selection and a general application navigation foundation are intentionally
 not part of the current work.
 
-Future UI work must use Miauflix's deterministic in-house navigation model rather than
+Future UI work must use Miauwatch's deterministic in-house navigation model rather than
 `@noriginmedia/norigin-spatial-navigation`. A focused region owns directional input while it can
 handle it and returns an explicit escape direction only at a meaningful boundary. Navigation must
 be derived from application state and known layout, not DOM geometry.
@@ -55,7 +55,7 @@ Keep current authentication, initial setup, QR login, and configuration behavior
 their presentation with the restored entertainment UI:
 
 - black cinematic canvas;
-- context-sensitive Miauflix logo placement;
+- context-sensitive Miauwatch logo placement;
 - viewport-relative type and spacing;
 - red deterministic focus treatment;
 - clear keyboard and remote states;

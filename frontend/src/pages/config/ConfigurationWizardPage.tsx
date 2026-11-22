@@ -268,13 +268,19 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     [getServiceEntries, markServiceSaved, optionalService, saveServiceConfig, t, testServiceConfig]
   );
 
-  if (isLoading) return <SettingsLayout title={t('config.setUp')}>{null}</SettingsLayout>;
+  if (isLoading)
+    return (
+      <SettingsLayout title={t('config.setUp')} staticLogo>
+        {null}
+      </SettingsLayout>
+    );
 
   const isOptionalStep = Boolean(optionalService);
   if (!current || !currentName) {
     const firstOptional = primaryOptionalGroups[0]?.[0];
     return (
       <SettingsLayout
+        staticLogo
         title={t('config.optionalTitle')}
         description={t('config.optionalDescription')}
         initialNavId={NAV.finish}
@@ -338,6 +344,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const groupNav = serviceGroupNav(groupName);
   return (
     <SettingsLayout
+      staticLogo
       title={isOptionalStep ? groupName : t('config.setUp')}
       description={isOptionalStep ? t('config.reviewOptional') : t('config.fillRequired')}
       initialNavId={groupNav.group}

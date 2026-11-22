@@ -67,7 +67,7 @@ const REPOSITORIES = [
   {
     id: 'builtin:miauflix',
     url: 'builtin:miauflix',
-    name: 'Miauflix',
+    name: 'Miauwatch',
     builtIn: true,
     lastFetchedAt: null,
     lastError: null,
@@ -214,7 +214,7 @@ const STORAGE_SETTINGS: ConfigEntryView[] = [
   storageSetting(
     'DOWNLOAD_PATH_EXCLUSIVE',
     'true',
-    'Miauflix owns the download directory: anything in it that is not one of its downloads is deleted when the service starts.',
+    'Miauwatch owns the download directory: anything in it that is not one of its downloads is deleted when the service starts.',
     {
       advanced: true,
       inputType: 'boolean',

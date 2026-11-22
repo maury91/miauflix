@@ -36,7 +36,7 @@ export const indexers: Translation<typeof english> = {
   'indexers.endpointFailed': 'Nepavyko pridėti šio API adreso.',
   'indexers.jackettTitle': 'Pridėti „Jackett“ indeksavimo paslaugą',
   'indexers.jackettDescription':
-    '„Miauflix“ automatiškai atnaujina viešų „Jackett“ indeksavimo paslaugų sąrašą. Kai kurioms reikia „FlareSolverr“. Paslaugos, kurioms reikia paskyros sekiklyje, nepalaikomos.',
+    '„Miauwatch“ automatiškai atnaujina viešų „Jackett“ indeksavimo paslaugų sąrašą. Kai kurioms reikia „FlareSolverr“. Paslaugos, kurioms reikia paskyros sekiklyje, nepalaikomos.',
   'indexers.browse': 'Naršyti indeksavimo paslaugas',
   'indexers.search': 'Ieškoti indeksavimo paslaugų',
   'indexers.source': 'Šaltinis',
@@ -45,10 +45,10 @@ export const indexers: Translation<typeof english> = {
   'indexers.check': 'Tikrinti, ar yra naujinių',
   'indexers.sourceFailed': 'Nepavyko atnaujinti „{source}“: {error}',
   'indexers.retrying': {
-    one: '„Miauflix“ dar kartą bandys nuskaityti {count} indeksavimo paslaugą.',
-    few: '„Miauflix“ dar kartą bandys nuskaityti {count} indeksavimo paslaugas.',
-    many: '„Miauflix“ dar kartą bandys nuskaityti {count} indeksavimo paslaugos duomenis.',
-    other: '„Miauflix“ dar kartą bandys nuskaityti {count} indeksavimo paslaugų.',
+    one: '„Miauwatch“ dar kartą bandys nuskaityti {count} indeksavimo paslaugą.',
+    few: '„Miauwatch“ dar kartą bandys nuskaityti {count} indeksavimo paslaugas.',
+    many: '„Miauwatch“ dar kartą bandys nuskaityti {count} indeksavimo paslaugos duomenis.',
+    other: '„Miauwatch“ dar kartą bandys nuskaityti {count} indeksavimo paslaugų.',
   },
   'indexers.available': 'Pasiekiamos indeksavimo paslaugos',
   'indexers.addFrom': 'Pridėti „{id}“ iš „{source}“',
@@ -57,7 +57,7 @@ export const indexers: Translation<typeof english> = {
   'indexers.add': 'Pridėti',
   'indexers.loading': 'Įkeliamos indeksavimo paslaugos…',
   'indexers.more': 'Rodyti daugiau',
-  'indexers.none': 'Indeksavimo paslaugos čia pasirodys, kai „Miauflix“ atsisiųs sąrašą.',
+  'indexers.none': 'Indeksavimo paslaugos čia pasirodys, kai „Miauwatch“ atsisiųs sąrašą.',
   'indexers.noMatch':
     'Filtrų neatitinka nė viena indeksavimo paslauga. Pabandykite pakeisti filtrus.',
   'indexers.showing': 'Rodoma {shown} iš {total} atitikmenų',

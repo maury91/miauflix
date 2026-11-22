@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -27,31 +27,26 @@ vi.hoisted(() => {
 const renderIntro = async () => {
   const ref = createRef<LogoAnimationHandle>();
   const onReady = vi.fn();
-  const { container } = render(<IntroAnimation ref={ref} onReady={onReady} />);
+  render(<IntroAnimation ref={ref} onReady={onReady} />);
   await waitFor(() => expect(onReady).toHaveBeenCalled());
-  const letters = Array.from(container.querySelectorAll('h1 > svg')) as SVGSVGElement[];
-  expect(letters).toHaveLength(8);
-  return { intro: ref.current!, letters };
+  return { intro: ref.current!, logo: screen.getByAltText<HTMLImageElement>('Miauwatch logo') };
 };
 
 describe('IntroAnimation', () => {
-  it('places every letter exactly on its box, without its margins', async () => {
-    const { letters } = await renderIntro();
+  it('uses the same wordmark as the page logo', async () => {
+    const { logo } = await renderIntro();
 
-    for (const letter of letters) {
-      expect(letter.style.marginLeft).toBe('0px');
-      expect(letter.style.marginRight).toBe('0px');
-    }
+    expect(logo).toHaveAttribute('src', '/assets/images/logo.svg');
   });
 
-  it('grows every letter as the logo expands', async () => {
-    const { intro, letters } = await renderIntro();
+  it('expands the wordmark and restores its initial scale on reset', async () => {
+    const { intro, logo } = await renderIntro();
+    const scale = () => Number(/scale\(([\d.]+)/.exec(logo.style.transform)?.[1] ?? 1);
 
     intro.seek(0.25);
+    expect(scale()).toBeGreaterThan(1);
 
-    for (const letter of letters) {
-      const scale = Number(/scale\(([\d.]+)/.exec(letter.style.transform)?.[1]);
-      expect(scale).toBeGreaterThan(1);
-    }
+    intro.reset();
+    expect(scale()).toBe(1);
   });
 });

@@ -67,11 +67,8 @@ test.describe('Login flow', () => {
       animations: 'disabled',
     });
 
-    const title = await page.title();
-    expect(title).toMatch(/miauflix/i);
-
-    const pageContent = await page.content();
-    expect(pageContent).toMatch(/miauflix/i);
+    await expect(page).toHaveTitle('Miauwatch');
+    await expect(page.getByAltText('Miauwatch logo')).toBeVisible();
   });
 
   test('should have functional login form elements with validation', async ({ page }) => {

@@ -1,5 +1,5 @@
 /**
- * The Miauflix design system (docs/plans/style-guide.md): the app's one UI library. Import from
+ * The Miauwatch design system (docs/plans/style-guide.md): the app's one UI library. Import from
  * here; features keep their state, API calls and copy, and pass them in.
  */
 export type { ActionStateProps } from './action/actionInternals';

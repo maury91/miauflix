@@ -20,7 +20,7 @@ export const LEGACY_SOURCE_KEY = 'Jackett/Jackett@master:src/Jackett.Common/Defi
 export const PROWLARR_SOURCE_KEY = 'Prowlarr/Indexers@master:definitions/v11';
 export const MIAUFLIX_SOURCE_KEY = 'maury91/miauflix-indexers@main:definitions';
 /**
- * Prowlarr's definitions mirror Jackett's, minus the trackers it blocks, and Miauflix's own
+ * Prowlarr's definitions mirror Jackett's, minus the trackers it blocks, and Miauwatch's own
  * folder adds what those lack (ID-based search through the sites' JSON APIs). Jackett's folder
  * can be added to the list.
  */

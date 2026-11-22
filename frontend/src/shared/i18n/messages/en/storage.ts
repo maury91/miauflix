@@ -24,14 +24,14 @@ export const storage = {
   'storage.status.unknown': 'Unknown',
   'storage.freeFailed': 'Could not delete this download. Try again.',
   'storage.seedingConfigured':
-    'Miauflix shares completed downloads for the time set in Storage settings, then keeps them locally.',
-  'storage.seedingNone': 'Miauflix stops sharing each download as soon as it finishes.',
+    'Miauwatch shares completed downloads for the time set in Storage settings, then keeps them locally.',
+  'storage.seedingNone': 'Miauwatch stops sharing each download as soon as it finishes.',
   'storage.seedingFor':
-    'Miauflix keeps sharing completed downloads for {duration}, then keeps them locally.',
+    'Miauwatch keeps sharing completed downloads for {duration}, then keeps them locally.',
   'storage.freed': 'Freed {size} used by {name}.',
   'storage.title': 'Storage',
   'storage.description':
-    'See what Miauflix stores on this server. Delete downloads to free up space.',
+    'See what Miauwatch stores on this server. Delete downloads to free up space.',
   'storage.back': 'Back to Home',
   'storage.confirmTitle': 'Delete download for {name}?',
   'storage.confirmDescription': 'This frees up {size} on the server. Download it again to watch.',
@@ -48,7 +48,7 @@ export const storage = {
   'storage.beingWatched': 'Being watched',
   'storage.freeSpace': 'Delete download',
   'storage.legend':
-    'Active. The download is incomplete and its torrent is loaded. Inactive. The download is incomplete and its torrent is unloaded. Available offline. The video is complete and Miauflix can still load its torrent. Local only. The video is complete and Miauflix will keep it on this server without reloading its torrent. {seeding}',
+    'Active. The download is incomplete and its torrent is loaded. Inactive. The download is incomplete and its torrent is unloaded. Available offline. The video is complete and Miauwatch can still load its torrent. Local only. The video is complete and Miauwatch will keep it on this server without reloading its torrent. {seeding}',
   'storage.videoComplete': 'Video complete',
   'storage.percentDownloaded': '{percent}% downloaded',
   'storage.currentlyWatched': 'Playing now',
@@ -64,23 +64,23 @@ export const storage = {
   'storage.field.STORAGE_PLAYBACK_RESERVE': 'Reserved for playback',
   'storage.field.CONTENT_SEED_DURATION_SECONDS': 'Seeding after download',
   'storage.field.DOWNLOAD_PATH': 'Download folder',
-  'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'Download folder is exclusive to Miauflix',
+  'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'Download folder is exclusive to Miauwatch',
   'storage.field.STORAGE_PAD_FILE_SIZES': 'Pad file sizes',
   'storage.seedDescription':
     'Choose how long to share each download after it finishes. Set it to 0 to stop sharing right away.',
-  'storage.zeroLimit': 'A storage limit of 0 prevents Miauflix from saving downloads.',
+  'storage.zeroLimit': 'A storage limit of 0 prevents Miauwatch from saving downloads.',
   'storage.limitOverDisk':
-    'The limit exceeds the space Miauflix can use on this disk ({capacity}). Downloads will stop when the disk fills up.',
+    'The limit exceeds the space Miauwatch can use on this disk ({capacity}). Downloads will stop when the disk fills up.',
   'storage.reserveTakesAll':
-    "All storage is reserved for playback. Miauflix won't download anything in advance.",
+    "All storage is reserved for playback. Miauwatch won't download anything in advance.",
   'storage.settingsTitle': 'Storage settings',
   'storage.settingsDescription':
-    'Set how much space Miauflix can use, how much to reserve for playback, and how long to share completed downloads. Changes take effect without a restart.',
+    'Set how much space Miauwatch can use, how much to reserve for playback, and how long to share completed downloads. Changes take effect without a restart.',
   'storage.settingsLoading': 'Loading storage settings…',
   'storage.settingsLoadFailed':
     'Could not load storage settings. You can still change them on the Configuration page.',
   'storage.advanced': 'Advanced',
-  'storage.advancedDescription': 'Choose the download folder and how Miauflix writes files to it.',
+  'storage.advancedDescription': 'Choose the download folder and how Miauwatch writes files to it.',
   'storage.settingsActions': 'Storage settings actions',
   'storage.saved': 'Storage settings saved.',
   'storage.saveFailed': "Couldn't save storage settings. Try again.",
@@ -92,8 +92,8 @@ export const storage = {
   'storage.spaceByKind': 'Space used by file type',
   'storage.free': 'Free',
   'storage.counts':
-    'Miauflix has used or reserved {charged} of its {limit} limit, including space set aside for downloads in progress.',
+    'Miauwatch has used or reserved {charged} of its {limit} limit, including space set aside for downloads in progress.',
   'storage.aheadStop':
-    'Miauflix stops downloading in advance at {size} and keeps the rest of the space for playback.',
+    'Miauwatch stops downloading in advance at {size} and keeps the rest of the space for playback.',
   'storage.checkValues': 'Check these values: {keys}.',
 } satisfies MessageSection;

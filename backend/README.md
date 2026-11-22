@@ -1,4 +1,4 @@
-# Miauflix Backend
+# Miauwatch Backend
 
 The backend serves the browser app and authenticated API, manages users and personal state, and streams media from encrypted torrent storage. Frontend authentication, playback sessions, preloading, seeking, audio conversion, and subtitles are implemented.
 

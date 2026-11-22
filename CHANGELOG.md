@@ -1,12 +1,14 @@
-# Miauflix Changelog
+# Miauwatch Changelog
 
 Release notes for viewers and self-hosters. See the [detailed changelog](DETAILED_CHANGELOG.md) for implementation and upgrade notes.
 
 ## Unreleased
 
+- Miauflix is now Miauwatch, with a new wordmark and icon for the web and Samsung TV apps. Existing installs can upgrade in place.
+
 ### Languages
 
-- Miauflix is now available in Italian and Lithuanian. A new Preferences page in the profile menu sets each profile's interface language, its preferred audio and subtitle languages, and separate audio and subtitle choices for anime. Audio can also be set to the title's original language. Titles, descriptions and genres on Home, in details, in search and in season episode lists follow the interface language.
+- Miauwatch is now available in Italian and Lithuanian. A new Preferences page in the profile menu sets each profile's interface language, its preferred audio and subtitle languages, and separate audio and subtitle choices for anime. Audio can also be set to the title's original language. Titles, descriptions and genres on Home, in details, in search and in season episode lists follow the interface language.
 - Source search also looks for releases under the title's name in every language the server's profiles use (their interface and audio languages), so Italian or Lithuanian releases are found too. Stored titles stay in English, whichever language a profile browses in.
 - Releases dubbed or subtitled in Polish, Russian, Ukrainian, Hungarian, Turkish, Hindi, Greek or a Nordic language are now recognized, and more Czech, Slovak, Spanish, Portuguese and Dutch releases are, so they rank after releases in your own language.
 - A new Automatic subtitles preference turns on subtitles in your subtitle language when you start a title, unless you changed the subtitles for that title before.
@@ -17,16 +19,18 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 ### App and navigation
 
 - Configuration, Sources, Storage, the Trakt dialog and the page that approves a TV's QR sign-in now match the rest of the app and work with the remote. Back leaves a text field before it leaves the page. Opening a source's settings takes you to its first field, and on a phone each source's buttons sit under its description.
-- Storage shows a bar of the server's disk split into movies, episodes, anime, TV copies, free space and, last, other files, with Miauflix's limit marked. Downloads show their artwork, size, progress and status, and you can sort them by size, name, type, progress or status. Admins can change the storage limit, the space kept free for playback, how long finished downloads keep sharing, and the download folder there; the bar previews a new limit before you save it.
+- Storage shows a bar of the server's disk split into movies, episodes, anime, TV copies, free space and, last, other files, with Miauwatch's limit marked. Downloads show their artwork, size, progress and status, and you can sort them by size, name, type, progress or status. Admins can change the storage limit, the space kept free for playback, how long finished downloads keep sharing, and the download folder there; the bar previews a new limit before you save it.
 - On settings and profile pages, the page now scrolls under a solid strip behind the logo instead of running through it.
 - The player's closed-captions panel is now a side panel over the player, its full height, also in full screen. It lists your default subtitle language first, then languages with tracks, with the rest under More languages. Hearing-impaired subtitles, the subtitle sources (from the video file, from files in the same folder, or online) and the timing each have their own row.
 - The server picker, the player's subtitle panel, error and not-found pages, and the quality badge on titles now match the rest of the app. The subtitle panel opens above the controls, with audio, language and tracks as lists you move through with the remote, and Back from subtitle timing returns to the panel first, and Back now works while a slider is selected in a panel or dialog. On a TV, the server picker now scrolls to keep the selected server or field in view when the list is long. Screens no longer generate styles while you use them, which helps the TV.
 - Moving through a number setting without changing it no longer rounds its saved value. On a TV, the approve-sign-in page selects Approve as soon as it appears, and copying the Trakt code no longer moves the selection. Closing the Trakt dialog with the keyboard gives control straight back to Home.
 - Clicking a text field in settings, the profile editor or search lets you type in it again; before, the field looked selected but ignored the keyboard.
 
+- The logo now stays in one place on each page: lined up with the cards on Home, with the title's information on details, and in the same spot on search, settings and profile pages. Sign-in, setup and the first-run configuration show a still logo that is always on screen, and the loading logo pulses from the moment the page appears.
+
 ### Self-hosting
 
-- Admins can add Stremio addons that find torrents (Torrentio, Comet, MediaFusion and similar) under Sources → Advanced setup, by pasting the addon's install link. Configure the addon on its own page first: its settings are part of the link, which Miauflix keeps hidden. Streams from debrid services or direct links are skipped for now. The built-in Torrentio now runs this way too, keeping its options.
+- Admins can add Stremio addons that find torrents (Torrentio, Comet, MediaFusion and similar) under Sources → Advanced setup, by pasting the addon's install link. Configure the addon on its own page first: its settings are part of the link, which Miauwatch keeps hidden. Streams from debrid services or direct links are skipped for now. The built-in Torrentio now runs this way too, keeping its options.
 - Source search and downloads recognise the VPN setup (gluetun) on their own and trust its kill switch, so they work as soon as its tunnel is up, with any VPN provider gluetun supports, not only NordVPN.
 
 ### Playback fixes

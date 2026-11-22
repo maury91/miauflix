@@ -56,8 +56,8 @@ are masked in responses.
 ## Cardigann definitions and Torznab
 
 `CARDIGANN_DEFINITION_SOURCES` lists folders of Jackett-format YAML files. Defaults include
-Prowlarr's `definitions/v11` and Miauflix's own indexer definitions; Jackett's folder can also be
-added. Prowlarr's definitions mirror Jackett's minus trackers it blocks, while Miauflix's folder
+Prowlarr's `definitions/v11` and Miauwatch's own indexer definitions; Jackett's folder can also be
+added. Prowlarr's definitions mirror Jackett's minus trackers it blocks, while Miauwatch's folder
 adds ID-based searches through site JSON APIs. Each entry is a GitHub folder URL (`…/tree/<ref>/<path>`) or any http(s) folder serving
 an `index.json`. The service lists it through the GitHub trees API, or `<url>/index.json` for
 other hosts. Definitions are GPL-2.0:

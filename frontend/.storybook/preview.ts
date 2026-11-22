@@ -46,7 +46,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          'Miauflix UI',
+          'Miauwatch UI',
           ['Introduction', 'Composition', 'Components'],
           'Design System',
           ['Foundations', 'Controls'],

@@ -1,6 +1,6 @@
 # Source identity, playback targets, and file claims
 
-Miauflix separates a downloadable source from the movies or episodes it contains, the file a viewer plays, and the consumers that need that file. This separation lets several accounts play different episodes from one season pack without sharing a mutable file selection.
+Miauwatch separates a downloadable source from the movies or episodes it contains, the file a viewer plays, and the consumers that need that file. This separation lets several accounts play different episodes from one season pack without sharing a mutable file selection.
 
 See [TV source architecture](tv-source-support.md) for episode discovery and continuation, and [System overview](system-overview.md) for service boundaries.
 

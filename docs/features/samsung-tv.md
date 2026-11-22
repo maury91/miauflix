@@ -2,7 +2,7 @@
 
 [Back to all features](../features.md)
 
-Miauflix has a Samsung TV build for Tizen, the operating system used by Samsung smart TVs. It connects to your Miauflix server, which runs on a separate computer or server.
+Miauwatch has a Samsung TV build for Tizen, the operating system used by Samsung smart TVs. It connects to your Miauwatch server, which runs on a separate computer or server.
 
 ## An installable TV app
 
@@ -20,13 +20,13 @@ Subtitles use plain outlined captions that move above the open controls. Embedde
 
 ## Native Samsung playback
 
-On Tizen, Miauflix can use Samsung's native AVPlay player. This lets compatible videos use the TV's own playback capabilities, including supported H.264/H.265 video and several audio formats, with audio-track switching.
+On Tizen, Miauwatch can use Samsung's native AVPlay player. This lets compatible videos use the TV's own playback capabilities, including supported H.264/H.265 video and several audio formats, with audio-track switching.
 
 Audio formats outside that supported set, such as DTS or TrueHD, can use server-side audio conversion and the browser video player instead. Source selection also applies a TV bitrate preference to avoid choosing files that demand too much data. These are compatibility choices, not a continuously changing picture-quality mode.
 
 ## Find your server
 
-The TV app can discover Miauflix servers through a pairing service and by checking addresses on its local network. You can also enter a server address manually. The app remembers the chosen server and can reconnect when it becomes available again.
+The TV app can discover Miauwatch servers through a pairing service and by checking addresses on its local network. You can also enter a server address manually. The app remembers the chosen server and can reconnect when it becomes available again.
 
 Settings includes a Change server option. Changing servers signs you out and returns to the server picker. The pairing service is optional and can be left out of a TV package.
 

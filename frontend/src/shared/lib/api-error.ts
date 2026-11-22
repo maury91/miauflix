@@ -38,13 +38,13 @@ export function reportApiError(context: string, error: ApiErrorBody | string): v
     if (reported.has(error.errorId)) return;
     reported.add(error.errorId);
     console.error(
-      `[Miauflix] ${context}: ${error.message} (code ${error.code}, error id ${error.errorId}). ` +
+      `[Miauwatch] ${context}: ${error.message} (code ${error.code}, error id ${error.errorId}). ` +
         `Search the server logs (docker logs) for "error ${error.errorId}".`,
       error
     );
     return;
   }
-  console.error(`[Miauflix] ${context}: ${error}`);
+  console.error(`[Miauwatch] ${context}: ${error}`);
 }
 
 /**

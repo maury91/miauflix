@@ -1,10 +1,10 @@
 # Development Workflow Guide
 
-This guide covers the development workflow, coding conventions, and best practices for contributing to Miauflix.
+This guide covers the development workflow, coding conventions, and best practices for contributing to Miauwatch.
 
 ## Project Structure
 
-Miauflix uses an npm workspace monorepo structure:
+Miauwatch uses an npm workspace monorepo structure:
 
 ```text
 miauflix/
@@ -476,4 +476,4 @@ docker compose ps
 - Request review from maintainers
 - Update documentation as needed
 
-This workflow ensures consistent, high-quality contributions to the Miauflix codebase.
+This workflow ensures consistent, high-quality contributions to the Miauwatch codebase.

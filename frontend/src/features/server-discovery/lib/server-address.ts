@@ -1,4 +1,4 @@
-/** The port a Miauflix server listens on unless configured otherwise (PORT). */
+/** The port a Miauwatch server listens on unless configured otherwise (PORT). */
 export const DEFAULT_SERVER_PORT = 3000;
 
 const IPV4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;

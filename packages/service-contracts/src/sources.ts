@@ -170,7 +170,7 @@ export interface CardigannCatalogQuery {
   tv?: boolean;
   anime?: boolean;
   publicOnly?: boolean;
-  /** Hide indexers Miauflix cannot use. */
+  /** Hide indexers Miauwatch cannot use. */
   supportedOnly?: boolean;
   offset: number;
   /** 0 returns only the total and the sync status. */

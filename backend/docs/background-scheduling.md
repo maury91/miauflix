@@ -1,6 +1,6 @@
 # Background scheduling
 
-Miauflix uses Bunqueue for all recurring work. The schedule definitions live next to
+Miauwatch uses Bunqueue for all recurring work. The schedule definitions live next to
 their owning domain:
 
 - [`services/source/source.schedule.ts`](../src/services/source/source.schedule.ts) — source discovery, metadata, and statistics seeds

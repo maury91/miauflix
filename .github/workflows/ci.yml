@@ -329,21 +329,21 @@ jobs:
       matrix:
         include:
           - image: miauflix
-            description: Miauflix backend, serves the web frontend
+            description: Miauwatch backend, serves the web frontend
           - image: miauflix-services
-            description: Miauflix bunqueue, media catalog, lists, source search and torrent engine in one container
+            description: Miauwatch bunqueue, media catalog, lists, source search and torrent engine in one container
           - image: miauflix-catalog-services
-            description: Miauflix bunqueue, media catalog and lists (no VPN needed)
+            description: Miauwatch bunqueue, media catalog and lists (no VPN needed)
           - image: miauflix-media-catalog
-            description: Miauflix media catalog service
+            description: Miauwatch media catalog service
           - image: miauflix-list-service
-            description: Miauflix list service
+            description: Miauwatch list service
           - image: miauflix-sources
-            description: Miauflix source search service
+            description: Miauwatch source search service
           - image: miauflix-media-load
-            description: Miauflix torrent engine (downloads, encrypted storage, tracker scrapes)
+            description: Miauwatch torrent engine (downloads, encrypted storage, tracker scrapes)
           - image: miauflix-tv-pairing
-            description: Miauflix TV pairing service (hosted, pairs TV apps with servers)
+            description: Miauwatch TV pairing service (hosted, pairs TV apps with servers)
 
     steps:
       - name: Download digests

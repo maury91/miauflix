@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Drives the Miauflix page on a TV over Chrome DevTools and measures frame timing.
+// Drives the Miauwatch page on a TV over Chrome DevTools and measures frame timing.
 // See docs/development/tv-benchmarks.md for the scenarios and past results.
 //
 // Usage: node scripts/tv-bench.mjs '<steps>' [devtools host, default 127.0.0.1:9222]
@@ -118,7 +118,9 @@ const KEYS = { ArrowUp: 38, ArrowDown: 40, ArrowLeft: 37, ArrowRight: 39, Enter:
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const pages = await (await fetch(`http://${host}/json`)).json();
-const page = pages.find(entry => entry.type === 'page' && entry.title === 'Miauflix') ?? pages[0];
+const page =
+  pages.find(entry => entry.type === 'page' && ['Miauwatch', 'Miauflix'].includes(entry.title)) ??
+  pages[0];
 if (!page) throw new Error(`No page to debug at ${host}`);
 
 const ws = new WebSocket(page.webSocketDebuggerUrl);

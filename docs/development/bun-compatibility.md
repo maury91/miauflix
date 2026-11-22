@@ -1,6 +1,6 @@
 # Bun Compatibility
 
-Miauflix originally ran on Bun and moved to Node.js in `a2f8046c` ("Move from Bun to Node.js, implement magnet service"). The services moved back first; the backend followed on 2026-11-08 (see [The backend on Bun](#the-backend-on-bun-2026-11-08)). WebTorrent, now in the media-load service, still runs without uTP.
+Miauwatch originally ran on Bun and moved to Node.js in `a2f8046c` ("Move from Bun to Node.js, implement magnet service"). The services moved back first; the backend followed on 2026-11-08 (see [The backend on Bun](#the-backend-on-bun-2026-11-08)). WebTorrent, now in the media-load service, still runs without uTP.
 
 ## Status (checked 2026-10-24)
 

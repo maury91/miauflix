@@ -30,10 +30,12 @@ const NAV = {
 
 interface ConfigWizardPageProps {
   onDismiss: () => void;
+  /** Opened before the app (a configuration gate), not from settings: the page's own static logo. */
+  staticLogo?: boolean;
 }
 
 /** Edit and test service configuration while keeping the initial service-card order after saves. */
-const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
+const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss, staticLogo }) => {
   const t = useT();
   const { data: configEntries = [], isLoading: isConfigLoading } = useGetConfigQuery(undefined);
   const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =
@@ -299,6 +301,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
         title={t('config.title')}
         onBack={onDismiss}
         backLabel={t('common.backToHome')}
+        staticLogo={staticLogo}
       >
         <ProgressSpinner label={t('config.loading')} />
       </SettingsLayout>
@@ -312,6 +315,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
       description={description}
       onBack={onDismiss}
       backLabel={t('common.backToHome')}
+      staticLogo={staticLogo}
       initialNavId={firstGroup ? serviceGroupNav(formatServiceName(firstGroup)).group : NAV.home}
     >
       <Stack gap="lg">

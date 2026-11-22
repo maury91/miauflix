@@ -1,6 +1,6 @@
-# Miauflix features
+# Miauwatch features
 
-Miauflix is a streaming app you run on your own computer or server. It brings together movie and TV information, finds playable files, and sends video to your browser or Samsung TV. You do not need to organize a media library by hand.
+Miauwatch is a streaming app you run on your own computer or server. It brings together movie and TV information, finds playable files, and sends video to your browser or Samsung TV. You do not need to organize a media library by hand.
 
 ## [Browsing and finding something to watch](features/browsing.md)
 
@@ -16,7 +16,7 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 ## [Watching movies and episodes](features/watching.md)
 
 - Start watching while a file is still downloading.
-- Let Miauflix choose a suitable source and try another if one fails.
+- Let Miauwatch choose a suitable source and try another if one fails.
 - Prepare files while browsing and download upcoming video ahead of playback.
 - Reuse already downloaded files.
 - Pause, seek, change volume, and enter fullscreen.
@@ -41,11 +41,11 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 
 ## [Samsung TV and remote controls](features/samsung-tv.md)
 
-- Package and install Miauflix as a Samsung Tizen TV app.
+- Package and install Miauwatch as a Samsung Tizen TV app.
 - Use Samsung's native video player for supported files.
 - Navigate browsing, details, and player controls with a remote or keyboard.
 - Use compatibility adjustments and appropriately sized artwork for older TVs.
-- Find a Miauflix server on your network, enter its address, or change servers.
+- Find a Miauwatch server on your network, enter its address, or change servers.
 - Reconnect to a remembered server and sign in by scanning a QR code.
 
 ## [Accounts and your personal collection](features/accounts.md)

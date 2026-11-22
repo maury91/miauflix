@@ -15,7 +15,7 @@ export const integrations: Translation<typeof english> = {
   'integrations.copyFailed': 'Nepavyko nukopijuoti kodo. Įveskite jį ranka.',
   'integrations.startFailed': 'Nepavyko pradėti susiejimo su „Trakt“',
   'integrations.title': 'Susieti su „Trakt“',
-  'integrations.description': 'Susiekite savo „Trakt“ ir „Miauflix“ paskyras.',
+  'integrations.description': 'Susiekite savo „Trakt“ ir „Miauwatch“ paskyras.',
   'integrations.close': 'Užverti „Trakt“ langą',
   'integrations.openTrakt': 'Atverti „Trakt“',
   'integrations.copyCode': 'Kopijuoti kodą',
