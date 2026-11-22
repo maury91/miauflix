@@ -2,6 +2,7 @@ import { authApi } from '@features/auth/api/auth.api';
 import type { MediaRatingRef, MediaRatingResponse } from '@miauflix/backend';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -27,7 +28,7 @@ export const ratingsApi = listsApi.injectEndpoints({
               { headers }
             ),
           session,
-          errorContext: 'Failed to load your rating',
+          errorContext: t('api.failedToLoadYourRating'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -46,7 +47,7 @@ export const ratingsApi = listsApi.injectEndpoints({
         return authenticatedRequest<MediaRatingResponse>({
           requestFn: () => backendClient.api.ratings.$put({ json: item }, { headers }),
           session,
-          errorContext: 'Failed to save your rating',
+          errorContext: t('api.failedToSaveYourRating'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));

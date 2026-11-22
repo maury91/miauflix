@@ -1,4 +1,5 @@
 import { FilterChip, Heading, RemovableChip } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { FocusGroup } from '@shared/navigation';
 
 import { SEARCH_NAV } from '../searchNav';
@@ -24,11 +25,12 @@ export function PopularSearches({
   selected: string | null;
   onSelect: (index: number) => void;
 }) {
+  const t = useT();
   return (
     <section className={styles.section} aria-labelledby="search-popular-title">
       <div className={styles.title}>
         <Heading level={2} variant="heading" id="search-popular-title">
-          Popular searches
+          {t('search.popular')}
         </Heading>
       </div>
       {/* One genre per line, as wide as the column */}
@@ -64,11 +66,12 @@ export function RecentSearches({
   onSelect: (index: number) => void;
   onRemove: (index: number) => void;
 }) {
+  const t = useT();
   return (
     <section className={styles.section} aria-labelledby="search-recents-title">
       <div className={styles.title}>
         <Heading level={2} variant="heading" id="search-recents-title">
-          Recent searches
+          {t('search.recent')}
         </Heading>
       </div>
       <FocusGroup id={SEARCH_NAV.recents} layout="spatial">
@@ -77,7 +80,7 @@ export function RecentSearches({
             <div key={recent.key} className={styles.rowItem}>
               <RemovableChip
                 navId={SEARCH_NAV.recent(recent.key)}
-                removeLabel={`Remove “${recent.label}”`}
+                removeLabel={t('search.remove', { label: recent.label })}
                 onClick={() => onSelect(index)}
                 onRemove={() => onRemove(index)}
               >

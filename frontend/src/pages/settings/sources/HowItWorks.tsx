@@ -1,4 +1,6 @@
 import { Grid, Heading, Icon, Surface, Text } from '@shared/design-system';
+import type { MessageKey } from '@shared/i18n';
+import { useT } from '@shared/i18n';
 import type { ReactNode } from 'react';
 
 import * as styles from './sources.css';
@@ -9,18 +11,10 @@ import SearchIcon from '~icons/mdi/magnify';
 import WatchIcon from '~icons/mdi/play-circle-outline';
 
 const STEPS = [
-  { icon: <SearchIcon />, title: 'Search', text: 'Miauflix checks your enabled sources in order.' },
-  {
-    icon: <FindIcon />,
-    title: 'Find',
-    text: 'It looks for available files matching your movie or TV show.',
-  },
-  {
-    icon: <WatchIcon />,
-    title: 'Watch',
-    text: 'Available results can be used to start playback.',
-  },
-];
+  { icon: <SearchIcon />, title: 'sources.step.search', text: 'sources.step.searchText' },
+  { icon: <FindIcon />, title: 'sources.step.find', text: 'sources.step.findText' },
+  { icon: <WatchIcon />, title: 'sources.step.watch', text: 'sources.step.watchText' },
+] as const satisfies readonly { icon: ReactNode; title: MessageKey; text: MessageKey }[];
 
 function StepIcon({ children }: { children: ReactNode }) {
   return (
@@ -32,6 +26,7 @@ function StepIcon({ children }: { children: ReactNode }) {
 
 /** What sources are for, in three steps. Passive: nothing here takes focus. */
 export function HowItWorks() {
+  const t = useT();
   return (
     <Surface as="section" border radius="lg" padding="md" aria-labelledby="how-it-works">
       <Grid columns={{ compact: 1, medium: 2, expanded: 4 }} gap="md" align="center">
@@ -40,7 +35,7 @@ export function HowItWorks() {
             <InfoIcon />
           </StepIcon>
           <Heading level={2} variant="heading" id="how-it-works">
-            How it works
+            {t('sources.how')}
           </Heading>
         </div>
         {STEPS.map(step => (
@@ -48,10 +43,10 @@ export function HowItWorks() {
             <StepIcon>{step.icon}</StepIcon>
             <div className={styles.stepText}>
               <Heading level={3} variant="label">
-                {step.title}
+                {t(step.title)}
               </Heading>
               <Text variant="caption" tone="secondary">
-                {step.text}
+                {t(step.text)}
               </Text>
             </div>
           </div>

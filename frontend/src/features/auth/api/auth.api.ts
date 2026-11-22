@@ -8,6 +8,7 @@ import type {
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { refreshSession, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import type { SessionInfo } from '@store/slices/auth';
 
 async function handleAuthRequest<T>(
@@ -33,7 +34,7 @@ async function handleAuthRequest<T>(
       },
     };
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage = error instanceof Error ? error.message : t('api.unknownError');
     const errorStatus = (error as { status?: number })?.status || 500;
     return {
       error: { status: errorStatus, data: errorMessage },
@@ -49,7 +50,7 @@ export const authApi = createApi({
       async queryFn(credentials) {
         return handleAuthRequest<LoginResponse>(
           () => backendClient.api.auth.login.$post({ json: credentials }),
-          'Login failed'
+          t('api.loginFailed')
         );
       },
     }),
@@ -58,7 +59,7 @@ export const authApi = createApi({
       async queryFn({ session }) {
         return handleAuthRequest<RefreshResponse>(
           () => backendClient.api.auth.refresh[':session'].$post({ param: { session } }),
-          'Refresh failed'
+          t('api.refreshFailed')
         );
       },
     }),
@@ -67,7 +68,7 @@ export const authApi = createApi({
       async queryFn({ session }) {
         return handleAuthRequest<{ message: string }>(
           () => backendClient.api.auth.logout[':session'].$post({ param: { session } }),
-          'Logout failed'
+          t('api.logoutFailed')
         );
       },
     }),
@@ -76,7 +77,7 @@ export const authApi = createApi({
       async queryFn() {
         const sessionsResult = await handleAuthRequest<SessionInfo[]>(
           () => backendClient.api.auth.sessions.$get(),
-          'List sessions failed'
+          t('api.listSessionsFailed')
         );
         if (!('data' in sessionsResult) || sessionsResult.data.length !== 1) {
           return sessionsResult;
@@ -86,7 +87,7 @@ export const authApi = createApi({
         const headers = { 'X-Session-Id': session.session };
         const validation = await request(
           () => backendClient.api.auth.session.$get({}, { headers }),
-          'Session validation failed'
+          t('api.sessionValidationFailed')
         );
 
         if (!('error' in validation) || validation.error.status !== 401) {
@@ -108,7 +109,7 @@ export const authApi = createApi({
       async queryFn() {
         return handleAuthRequest<QrLoginResponse>(
           () => backendClient.api.auth.qr.$post(),
-          'QR login failed'
+          t('api.qrLoginFailed')
         );
       },
     }),

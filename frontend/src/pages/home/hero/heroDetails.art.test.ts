@@ -1,5 +1,6 @@
 import type { MediaDto } from '@miauflix/backend';
 import { RecordingPainter } from '@shared/design-system/gl/testing';
+import { t } from '@shared/i18n';
 
 import { heroDetailsArt } from './heroDetails.art';
 import { heroDetailsModel } from './heroDetailsModel';
@@ -19,6 +20,7 @@ const art = heroDetailsArt(heroDetailsModel(movie), {
   windowHeight: 1080,
   detailsWidth: 720,
   width: 1920,
+  t,
 });
 
 const draw = (logoUrl: string | null) => {

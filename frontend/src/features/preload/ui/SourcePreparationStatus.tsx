@@ -1,6 +1,7 @@
 import type { PreloadPreparationSnapshot } from '@miauflix/backend';
 import { Badge, ProgressSpinner } from '@shared/design-system';
 import { visuallyHidden } from '@shared/design-system/a11y.css';
+import { useT } from '@shared/i18n';
 import {
   qualityDescription,
   qualityLabel,
@@ -38,11 +39,12 @@ function QualityBadges({
   label: string | null;
   sourceType: SourceReleaseType | null;
 }) {
+  const t = useT();
   const release = sourceLabel(sourceType);
   const state = sourceQualityState(sourceType);
   const warning = state === 'warning';
   if (!label && !warning) return null;
-  const warningText = `${release} release may have lower audio and video quality.`;
+  const warningText = t('details.lowerQuality', { release: release ?? '' });
   return (
     <span className={styles.badges}>
       {label && (
@@ -76,6 +78,7 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   preparation,
   availability,
 }) => {
+  const t = useT();
   if (mediaKind !== 'movie') return null;
   if (preparation && !matchesMedia(preparation, mediaKind)) return null;
 
@@ -85,8 +88,12 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   if (unavailable) {
     return (
       <div className={styles.status} aria-live="polite">
-        <span role="img" aria-label="No source available" title="No source available">
-          <Badge icon={<NoSourceIcon />}>No source</Badge>
+        <span
+          role="img"
+          aria-label={t('details.noSourceAvailable')}
+          title={t('details.noSourceAvailable')}
+        >
+          <Badge icon={<NoSourceIcon />}>{t('details.noSourceBadge')}</Badge>
         </span>
       </div>
     );
@@ -105,12 +112,12 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
     <div className={styles.status} aria-live="polite">
       {showDiscovery && (
         <span className={styles.discovery}>
-          {loading && <ProgressSpinner size="sm" label="Checking sources" />}
+          {loading && <ProgressSpinner size="sm" label={t('details.checkingSources')} />}
           {preparation?.state === 'error' && (
-            <span className={visuallyHidden}>Could not check sources.</span>
+            <span className={visuallyHidden}>{t('details.checkFailed')}</span>
           )}
           {preparation?.state === 'no_source' && (
-            <span className={visuallyHidden}>No compatible source found yet</span>
+            <span className={visuallyHidden}>{t('details.noCompatible')}</span>
           )}
         </span>
       )}

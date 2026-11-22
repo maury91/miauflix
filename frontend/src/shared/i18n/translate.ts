@@ -1,11 +1,12 @@
 import { en, type MessageKey, type Messages } from './messages/en';
 import { it } from './messages/it';
+import { lt } from './messages/lt';
 
 /** Interface languages with a full catalog, English first (the fallback). */
-export const INTERFACE_LANGUAGES = ['en', 'it'] as const;
+export const INTERFACE_LANGUAGES = ['en', 'it', 'lt'] as const;
 export type InterfaceLanguage = (typeof INTERFACE_LANGUAGES)[number];
 
-const CATALOGS: Record<InterfaceLanguage, Messages> = { en, it };
+const CATALOGS: Record<InterfaceLanguage, Messages> = { en, it, lt };
 
 /** Values for a message's `{name}` placeholders; `count` also picks a plural form. */
 export type MessageParams = Record<string, string | number>;
@@ -34,13 +35,13 @@ export function resolveInterfaceLanguage(
 
 const pluralRules = new Map<InterfaceLanguage, Intl.PluralRules>();
 
-function pluralForm(language: InterfaceLanguage, count: number): 'one' | 'other' {
+function pluralForm(language: InterfaceLanguage, count: number): Intl.LDMLPluralRule {
   let rules = pluralRules.get(language);
   if (!rules) {
     rules = new Intl.PluralRules(language);
     pluralRules.set(language, rules);
   }
-  return rules.select(count) === 'one' ? 'one' : 'other';
+  return rules.select(count);
 }
 
 /** A message in `language` (English when it has none), with its placeholders filled in. */
@@ -55,7 +56,7 @@ export function translate(
   const text =
     typeof message === 'string'
       ? message
-      : message[pluralForm(language, Number(params?.['count'] ?? 0))];
+      : (message[pluralForm(language, Number(params?.['count'] ?? 0))] ?? message.other);
   if (!params) return text;
   return text.replace(/\{(\w+)\}/g, (placeholder, name: string) =>
     name in params ? String(params[name]) : placeholder

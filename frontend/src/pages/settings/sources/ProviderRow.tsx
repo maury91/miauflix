@@ -1,5 +1,6 @@
 import type { ProviderView } from '@miauflix/backend';
 import { Badge, IconButton, Menu, type MenuEntry, Switch } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { FocusGroup } from '@shared/navigation';
 import type { DragEvent, ReactNode } from 'react';
 
@@ -49,13 +50,14 @@ interface ProviderRowProps {
  * its options (settings, order, removal). The pointer can also drag the row by its handle.
  */
 export function ProviderRow(props: ProviderRowProps) {
+  const t = useT();
   const { provider, index, count, busy } = props;
   const nav = providerNav(provider.id);
   const items: MenuEntry[] = [
-    { id: 'settings', label: 'Settings' },
-    { id: 'up', label: 'Move up', disabled: busy || index === 0 },
-    { id: 'down', label: 'Move down', disabled: busy || index === count - 1 },
-    ...(props.onRemove ? [{ id: 'remove', label: 'Remove' }] : []),
+    { id: 'settings', label: t('sources.settings') },
+    { id: 'up', label: t('sources.moveUp'), disabled: busy || index === 0 },
+    { id: 'down', label: t('sources.moveDown'), disabled: busy || index === count - 1 },
+    ...(props.onRemove ? [{ id: 'remove', label: t('sources.remove') }] : []),
   ];
   const choose = (id: string) => {
     const choice = id as MenuChoice;
@@ -86,7 +88,7 @@ export function ProviderRow(props: ProviderRowProps) {
         <span
           className={styles.handle}
           aria-hidden="true"
-          title="Drag to reorder"
+          title={t('sources.drag')}
           onMouseDown={() => props.onArm(true)}
           onMouseUp={() => props.onArm(false)}
         >
@@ -106,14 +108,14 @@ export function ProviderRow(props: ProviderRowProps) {
           <div className={styles.rowActions}>
             <IconButton
               navId={nav.test}
-              label={`Test ${provider.name}`}
-              tooltip="Test"
+              label={t('sources.testName', { name: provider.name })}
+              tooltip={t('sources.test')}
               icon={<PlayIcon />}
               loading={props.testing}
               onClick={props.onTest}
             />
             <Menu
-              label={`${provider.name} options`}
+              label={t('sources.options', { name: provider.name })}
               items={items}
               align="end"
               onAction={choose}
@@ -121,7 +123,7 @@ export function ProviderRow(props: ProviderRowProps) {
                 <IconButton
                   {...trigger}
                   navId={nav.more}
-                  label={`More options for ${provider.name}`}
+                  label={t('sources.moreOptions', { name: provider.name })}
                   icon={<MoreIcon />}
                 />
               )}
@@ -136,17 +138,26 @@ export function ProviderRow(props: ProviderRowProps) {
 
 /** What the source is, its kind, how much it was used today and what went wrong lately. */
 function ProviderFacts({ provider }: { provider: ProviderView }) {
+  const t = useT();
   return (
     <span className={styles.facts}>
       <span>{describeProvider(provider)}</span>
       <span>{usageLabel(provider)}</span>
-      {provider.health.lastError && <span>Last error: {provider.health.lastError}</span>}
+      {provider.health.lastError && (
+        <span>{t('sources.lastError', { error: provider.health.lastError })}</span>
+      )}
       {provider.health.cooldownUntil && (
-        <span>Paused until {new Date(provider.health.cooldownUntil).toLocaleString()}</span>
+        <span>
+          {t('sources.pausedUntil', {
+            date: new Date(provider.health.cooldownUntil).toLocaleString(),
+          })}
+        </span>
       )}
       <span className={styles.badges}>
         <Badge>{provider.kind}</Badge>
-        {provider.requiresFlareSolverr && <Badge tone="warning">needs FlareSolverr</Badge>}
+        {provider.requiresFlareSolverr && (
+          <Badge tone="warning">{t('sources.needsFlareSolverr')}</Badge>
+        )}
       </span>
     </span>
   );

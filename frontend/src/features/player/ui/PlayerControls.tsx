@@ -14,6 +14,7 @@ import {
 import { visuallyHidden } from '@shared/design-system/a11y.css';
 import { SurfaceContextProvider } from '@shared/design-system/surface';
 import { getKeyboardAction, useKeyboard } from '@shared/hooks/useKeyboard';
+import { useT } from '@shared/i18n';
 import { FocusGroup, useActiveIdWithin, useFocusable, useNavigation } from '@shared/navigation';
 import {
   type ReactNode,
@@ -63,18 +64,19 @@ export function PlayerHeader({
   onBack: () => void;
   visible?: boolean;
 }) {
+  const t = useT();
   return (
     <SurfaceContextProvider value="overMedia">
       <header className={styles.header} data-hidden={visible ? undefined : true}>
         <FocusGroup id={PLAYER_NAV.header} layout="horizontal">
           <Button navId={PLAYER_NAV.back} icon={<ArrowLeftIcon />} onClick={onBack}>
-            Back to details
+            {t('player.backToDetails')}
           </Button>
         </FocusGroup>
         <img
           className={styles.logo}
           src={`${import.meta.env.BASE_URL}assets/images/logo.svg`}
-          alt="Miauflix logo"
+          alt={t('player.logo')}
         />
       </header>
     </SurfaceContextProvider>
@@ -154,6 +156,7 @@ export function PlayerControls({
   onControlsInsetChange,
   onHeaderInsetChange,
   prompts,
+  languageButtons,
 }: {
   videoRef: RefObject<PlayerMedia | null>;
   preparing?: boolean;
@@ -191,7 +194,10 @@ export function PlayerControls({
    * their own between the video and the seek bar.
    */
   prompts?: ReactNode;
+  /** The ways to watch (LanguageButtons), at the start of the row under the seek bar. */
+  languageButtons?: ReactNode;
 }) {
+  const t = useT();
   const [paused, setPaused] = useState(true);
   const [mediaReady, setMediaReady] = useState(false);
   const loading = preparing || !mediaReady;
@@ -280,7 +286,7 @@ export function PlayerControls({
       void media
         .play()
         .then(() => setNotice(''))
-        .catch(() => setNotice('Playback could not start. Try Play again.'));
+        .catch(() => setNotice(t('player.playFailed')));
     } else media.pause();
     reveal();
   };
@@ -464,7 +470,7 @@ export function PlayerControls({
         data-paused={paused || undefined}
         tabIndex={0}
         role="button"
-        aria-label="Playback controls"
+        aria-label={t('player.controls')}
         onMouseMove={video.onMouseMove}
         onClick={toggle}
       />
@@ -476,24 +482,27 @@ export function PlayerControls({
       <div ref={controls} className={styles.controls}>
         {notice && (
           <div className={styles.notice}>
-            <Message tone="danger" toneLabel="Error" variant="banner" live="assertive">
+            <Message tone="danger" toneLabel={t('common.error')} variant="banner" live="assertive">
               {notice}
             </Message>
           </div>
         )}
         <PlaybackToolbar
           navId={PLAYER_NAV.toolbar}
-          label="Playback toolbar"
+          label={t('player.toolbar')}
           hidden={!shown}
-          busyLabel={loading ? 'Preparing playback…' : undefined}
+          busyLabel={loading ? t('player.preparing') : undefined}
           seek={
             <SeekControl
-              label="Seek"
+              label={t('player.seek')}
               position={position}
               duration={duration}
               onSeek={seek}
               keyStep={SEEK_STEP_SECONDS}
-              valueText={`${formatTime(position)} of ${formatTime(duration)}`}
+              valueText={t('player.timeOf', {
+                position: formatTime(position),
+                duration: formatTime(duration),
+              })}
               elapsedText={formatTime(position)}
               remainingText={formatTime(duration)}
               downloaded={downloadedBlocks(downloadedRanges)}
@@ -504,12 +513,13 @@ export function PlayerControls({
               <IconButton
                 navId={PLAYER_NAV.playPause}
                 size="lg"
-                label={paused ? 'Play' : 'Pause'}
+                label={paused ? t('player.play') : t('player.pause')}
                 icon={paused ? <PlayIcon /> : <PauseIcon />}
                 onClick={toggle}
               />
             </div>
           }
+          start={languageButtons}
           end={
             <Inline gap="sm" align="center">
               <SubtitleMenu
@@ -540,21 +550,19 @@ export function PlayerControls({
                   <IconButton
                     navId={PLAYER_NAV.fullscreen}
                     size="lg"
-                    label="Toggle fullscreen"
+                    label={t('player.fullscreen')}
                     icon={<FullscreenIcon />}
                     onClick={() => {
                       const request = document.fullscreenElement
                         ? document.exitFullscreen()
                         : videoRef.current?.parentElement?.requestFullscreen();
-                      void request?.catch(() =>
-                        setNotice('Fullscreen is unavailable in this browser.')
-                      );
+                      void request?.catch(() => setNotice(t('player.fullscreenUnavailable')));
                     }}
                   />
                   <IconButton
                     navId={PLAYER_NAV.mute}
                     size="lg"
-                    label={muted ? 'Unmute' : 'Mute'}
+                    label={muted ? t('player.unmute') : t('player.mute')}
                     icon={muted ? <MutedIcon /> : <VolumeIcon />}
                     onClick={() => {
                       if (videoRef.current) videoRef.current.muted = !muted;
@@ -564,7 +572,7 @@ export function PlayerControls({
                   <div className={styles.volume}>
                     {/* Named without a header, so it fits the row */}
                     <span id="player-volume-label" className={visuallyHidden}>
-                      Volume
+                      {t('player.volume')}
                     </span>
                     <Slider
                       navId={PLAYER_NAV.volume}

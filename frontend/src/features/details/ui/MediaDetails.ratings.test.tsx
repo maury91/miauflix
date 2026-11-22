@@ -172,7 +172,7 @@ describe('Details saved ratings', () => {
     query.isFetching = false;
     mutation.isError = true;
     setupTest();
-    expect(screen.getByRole('alert')).toHaveTextContent('Could not save your rating');
+    expect(screen.getByRole('alert')).toHaveTextContent("Couldn't save your rating");
     expect(screen.getByLabelText('Like it', { selector: 'button' })).toHaveAttribute(
       'aria-pressed',
       'true'

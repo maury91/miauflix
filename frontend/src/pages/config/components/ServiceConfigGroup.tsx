@@ -11,6 +11,7 @@ import {
   Surface,
   Text,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { FocusGroup } from '@shared/navigation';
 import type { FC } from 'react';
 import { useEffect, useId, useState } from 'react';
@@ -58,6 +59,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
   showAllOptionalFields = false,
   serviceStatus,
 }) => {
+  const t = useT();
   const titleId = useId();
   const nav = serviceGroupNav(groupName);
   const missingCount = entries.filter(
@@ -101,20 +103,20 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
   }, [hasAdvancedTestFailure, hasMissingAdvancedRequiredValue]);
 
   const status: { text: string; tone: NonNullable<BadgeProps['tone']> } = hasMissingRequiredValues
-    ? { text: `${missingCount} missing`, tone: 'danger' }
+    ? { text: t('config.status.missing', { count: missingCount }), tone: 'danger' }
     : serviceIssue
       ? serviceStatus?.status === 'error'
-        ? { text: 'error', tone: 'danger' }
-        : { text: 'degraded', tone: 'warning' }
+        ? { text: t('config.status.error'), tone: 'danger' }
+        : { text: t('config.status.degraded'), tone: 'warning' }
       : hasFailedTest
-        ? { text: 'test failed', tone: 'danger' }
+        ? { text: t('config.status.testFailed'), tone: 'danger' }
         : hasChanges
-          ? { text: 'save required', tone: 'warning' }
+          ? { text: t('config.status.saveRequired'), tone: 'warning' }
           : result?.success && result.testMode === 'live'
-            ? { text: 'connection checked', tone: 'success' }
+            ? { text: t('config.status.connectionChecked'), tone: 'success' }
             : result?.success
-              ? { text: 'validated', tone: 'success' }
-              : { text: 'configured', tone: 'success' };
+              ? { text: t('config.status.validated'), tone: 'success' }
+              : { text: t('config.status.configured'), tone: 'success' };
 
   const fields = (list: ConfigEntryView[]) =>
     list.map(entry => (
@@ -151,7 +153,9 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
 
           {serviceIssue && serviceIssueText && (
             <Message tone={serviceStatus?.status === 'error' ? 'danger' : 'warning'} live="polite">
-              {serviceStatus?.status === 'error' ? 'Service error: ' : 'Service degraded: '}
+              {t(
+                serviceStatus?.status === 'error' ? 'config.serviceError' : 'config.serviceDegraded'
+              )}{' '}
               {serviceIssueText}
             </Message>
           )}
@@ -162,7 +166,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
           {!optionalInline && optionalEntries.length > 1 && (
             <Disclosure
               navId={nav.optional}
-              title={`Optional settings (${optionalEntries.length})`}
+              title={t('config.optionalCount', { count: optionalEntries.length })}
               headingLevel={3}
               expanded={showOptionalSettings}
               onExpandedChange={setShowOptionalSettings}
@@ -174,7 +178,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
           {advancedEntries.length > 0 && (
             <Disclosure
               navId={nav.advanced}
-              title={`Advanced settings (${advancedEntries.length})`}
+              title={t('config.advancedCount', { count: advancedEntries.length })}
               headingLevel={3}
               expanded={showAdvancedSettings}
               onExpandedChange={setShowAdvancedSettings}
@@ -183,7 +187,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
             </Disclosure>
           )}
 
-          <ActionGroup navId={nav.actions} label={`${groupName} actions`}>
+          <ActionGroup navId={nav.actions} label={t('config.groupActions', { group: groupName })}>
             <Button
               navId={nav.save}
               onClick={onSave}
@@ -193,7 +197,11 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
                 (busy ? activeAction === 'testing' || activeAction === 'saved' : !hasChanges)
               }
             >
-              {activeAction === 'saving' ? 'Saving' : activeAction === 'saved' ? 'Saved' : 'Save'}
+              {activeAction === 'saving'
+                ? t('common.saving')
+                : activeAction === 'saved'
+                  ? t('config.savedShort')
+                  : t('common.save')}
             </Button>
             <Button
               navId={nav.test}
@@ -201,17 +209,17 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
               loading={activeAction === 'testing'}
               disabled={disabled || (busy && activeAction !== 'testing')}
             >
-              {activeAction === 'testing' ? 'Testing' : 'Test'}
+              {t(activeAction === 'testing' ? 'config.testing' : 'config.test')}
             </Button>
           </ActionGroup>
 
           {hasChanges && !hasMissingRequiredValues && (
             <Message tone="info">
               {hasSuggestedRequiredValue
-                ? 'The redirect URI is suggested from this browser, but it is required and still unsaved. Save these settings to continue.'
+                ? t('config.suggestedRedirect')
                 : hasUnsavedRequiredValues
-                  ? 'Required settings are filled in but not saved yet. Save these settings to continue.'
-                  : 'Save these settings to continue.'}
+                  ? t('config.unsavedRequired')
+                  : t('config.saveToContinue')}
             </Message>
           )}
 
@@ -220,7 +228,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
               tone={
                 !result.success ? 'danger' : result.testMode === 'validation' ? 'info' : 'success'
               }
-              title={result.success ? undefined : `Failed to test ${groupName}`}
+              title={result.success ? undefined : t('config.testFailedTitle', { group: groupName })}
               live={result.success ? 'polite' : 'assertive'}
             >
               {result.message}
@@ -228,21 +236,16 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
                 <ul className={styles.causes}>
                   {failedTestEntries.map(entry => (
                     <li key={entry.key}>
-                      {entry.testFailureHelp ?? `Check ${entry.key}: ${entry.description}`}
+                      {entry.testFailureHelp ??
+                        t('config.checkEntry', { key: entry.key, description: entry.description })}
                     </li>
                   ))}
                 </ul>
               )}
             </Message>
           )}
-          {restarted && (
-            <Message tone="success">Service reloaded with the saved configuration.</Message>
-          )}
-          {needsProcessRestart && (
-            <Message tone="warning">
-              A full process restart is required to apply these changes.
-            </Message>
-          )}
+          {restarted && <Message tone="success">{t('config.reloaded')}</Message>}
+          {needsProcessRestart && <Message tone="warning">{t('config.restartRequired')}</Message>}
         </Stack>
       </Surface>
     </FocusGroup>

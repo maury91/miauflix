@@ -3,6 +3,7 @@ import type { ConfigEntryView, SaveConfigsResult, TestConfigsResult } from '@mia
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -32,7 +33,7 @@ export const configApi = createApi({
         return authenticatedRequest<ConfigEntryView[]>({
           requestFn: () => backendClient.api.config.$get({}, { headers }),
           session: sessionId,
-          errorContext: 'Failed to fetch config',
+          errorContext: t('api.failedToFetchConfig'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -46,7 +47,7 @@ export const configApi = createApi({
       async queryFn() {
         return request<SystemStatusResponse>(
           () => backendClient.api.status.$get(),
-          'Failed to fetch service status'
+          t('api.failedToFetchServiceStatus')
         ).then(result => {
           if ('data' in result) {
             return { data: result.data['services'] };
@@ -64,7 +65,7 @@ export const configApi = createApi({
         return authenticatedRequest<SaveConfigsResult>({
           requestFn: () => backendClient.api.config.$put({ json: { entries } }, { headers }),
           session: sessionId,
-          errorContext: 'Failed to update config',
+          errorContext: t('api.failedToUpdateConfig'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -87,7 +88,7 @@ export const configApi = createApi({
               { headers }
             ),
           session: sessionId,
-          errorContext: `Failed to test ${service} configuration`,
+          errorContext: t('api.testServiceFailed', { service }),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -111,7 +112,7 @@ export const configApi = createApi({
               { headers }
             ),
           session: sessionId,
-          errorContext: `Failed to save ${service} configuration`,
+          errorContext: t('api.saveServiceFailed', { service }),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -129,7 +130,7 @@ export const configApi = createApi({
           requestFn: () =>
             backendClient.api.config[':service'].restart.$post({ param: { service } }, { headers }),
           session: sessionId,
-          errorContext: 'Failed to restart service',
+          errorContext: t('api.failedToRestartService'),
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));

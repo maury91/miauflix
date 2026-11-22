@@ -11,6 +11,7 @@ import {
   Surface,
   Text,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { FocusGroup } from '@shared/navigation';
 import { useId, useState } from 'react';
 
@@ -47,6 +48,7 @@ interface StorageSettingsProps {
  * same values stay editable on the Configuration page.
  */
 export function StorageSettings({ form, capacityBytes }: StorageSettingsProps) {
+  const t = useT();
   const titleId = useId();
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const { limitBytes, reserveBytes } = form.draft;
@@ -62,12 +64,12 @@ export function StorageSettings({ form, capacityBytes }: StorageSettingsProps) {
   );
 
   const warnings = [
-    limitBytes === 0 ? 'A limit of 0 keeps nothing: Miauflix can’t store any download.' : null,
+    limitBytes === 0 ? t('storage.zeroLimit') : null,
     capacityBytes !== null && limitBytes !== null && limitBytes > capacityBytes
-      ? `The limit is more than this disk can give Miauflix (${formatBytes(capacityBytes)}): downloads will stop when the disk fills before the limit is reached.`
+      ? t('storage.limitOverDisk', { capacity: formatBytes(capacityBytes) })
       : null,
     limitBytes !== null && reserveBytes !== null && reserveBytes >= limitBytes && limitBytes > 0
-      ? 'The playback reserve takes the whole limit, so nothing downloads ahead of time.'
+      ? t('storage.reserveTakesAll')
       : null,
   ].filter((warning): warning is string => warning !== null);
 
@@ -77,28 +79,24 @@ export function StorageSettings({ form, capacityBytes }: StorageSettingsProps) {
         <Stack gap="lg">
           <div>
             <Heading level={2} id={titleId} variant="heading">
-              Storage settings
+              {t('storage.settingsTitle')}
             </Heading>
             <div className={styles.description}>
-              <Text tone="secondary">
-                How much Miauflix may keep, how much stays free for playback, and how long finished
-                downloads keep sharing. Changes apply without a restart.
-              </Text>
+              <Text tone="secondary">{t('storage.settingsDescription')}</Text>
             </div>
           </div>
 
-          {form.loading && <ProgressSpinner label="Loading storage settings…" />}
+          {form.loading && <ProgressSpinner label={t('storage.settingsLoading')} />}
           {form.failed && (
-            <Message tone="danger" toneLabel="Error">
-              Could not load the storage settings. They can still be changed on the Configuration
-              page.
+            <Message tone="danger" toneLabel={t('common.error')}>
+              {t('storage.settingsLoadFailed')}
             </Message>
           )}
 
           {byKey(MAIN_STORAGE_KEYS).map(field)}
 
           {warnings.map(warning => (
-            <Message key={warning} tone="warning" toneLabel="Warning">
+            <Message key={warning} tone="warning" toneLabel={t('common.warning')}>
               {warning}
             </Message>
           ))}
@@ -106,8 +104,8 @@ export function StorageSettings({ form, capacityBytes }: StorageSettingsProps) {
           {byKey(ADVANCED_STORAGE_KEYS).length > 0 && (
             <Disclosure
               navId={STORAGE_SETTINGS_NAV.advanced}
-              title="Advanced"
-              description="The download folder and how files are written to it."
+              title={t('storage.advanced')}
+              description={t('storage.advancedDescription')}
               headingLevel={3}
               expanded={advancedOpen}
               onExpandedChange={setAdvancedOpen}
@@ -117,14 +115,14 @@ export function StorageSettings({ form, capacityBytes }: StorageSettingsProps) {
           )}
 
           {form.entries.length > 0 && (
-            <ActionGroup navId={STORAGE_SETTINGS_NAV.actions} label="Storage settings actions">
+            <ActionGroup navId={STORAGE_SETTINGS_NAV.actions} label={t('storage.settingsActions')}>
               <Button
                 navId={STORAGE_SETTINGS_NAV.save}
                 loading={form.saving}
                 disabled={!form.hasChanges}
                 onClick={() => void form.save()}
               >
-                {form.saving ? 'Saving' : 'Save'}
+                {form.saving ? t('common.saving') : t('common.save')}
               </Button>
             </ActionGroup>
           )}
@@ -135,7 +133,7 @@ export function StorageSettings({ form, capacityBytes }: StorageSettingsProps) {
             )}
           </div>
           {form.outcome?.tone === 'danger' && (
-            <Message tone="danger" toneLabel="Error" live="assertive">
+            <Message tone="danger" toneLabel={t('common.error')} live="assertive">
               {form.outcome.message}
             </Message>
           )}

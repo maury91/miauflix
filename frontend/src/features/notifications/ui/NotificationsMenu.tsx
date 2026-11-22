@@ -1,6 +1,7 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
 import { Badge, Button, Heading, List, ListItem, Text } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { useT } from '@shared/i18n';
 import { artworkUrl } from '@shared/lib/media.utils';
 import { formatRelativeTime } from '@shared/lib/relative-time';
 import { FocusScope, useActiveIdWithin, useNavigation } from '@shared/navigation';
@@ -82,6 +83,7 @@ const NotificationRow: FC<{
   navId?: string;
   onOpen: (notification: NotificationItem) => void;
 }> = ({ notification, navId, onOpen }) => {
+  const t = useT();
   const copy = notificationCopy(notification);
   const unread = !notification.readAt;
   const poster = notification.poster ? artworkUrl(notification.poster, 'card', POSTER_SIZE) : null;
@@ -113,7 +115,11 @@ const NotificationRow: FC<{
           </time>
         </>
       }
-      metadata={unread ? <Badge accessibleLabel="Unread">New</Badge> : undefined}
+      metadata={
+        unread ? (
+          <Badge accessibleLabel={t('notifications.unread')}>{t('notifications.new')}</Badge>
+        ) : undefined
+      }
       onClick={() => onOpen(notification)}
     />
   );
@@ -138,6 +144,7 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
   onExit,
   onPointerEnter,
 }) => {
+  const t = useT();
   const listRef = useRef<HTMLDivElement>(null);
   const { focus, lastInput } = useNavigation();
   const unreadSentinel = useSentinel(
@@ -218,30 +225,30 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
     <>
       <header className={styles.header}>
         <Heading level={2} variant="heading">
-          Notifications
+          {t('home.notifications')}
         </Heading>
         {unreadCount > 0 && (
           <Button navId={nav(NOTIFICATIONS_NAV.markAll)} size="sm" onClick={onMarkAllRead}>
-            Mark all as read
+            {t('notifications.markAll')}
           </Button>
         )}
       </header>
       <div ref={listRef} className={styles.list} aria-live="polite">
         {unread.failed ? (
           <div className={styles.message}>
-            <Text tone="secondary">Notifications could not be loaded.</Text>{' '}
+            <Text tone="secondary">{t('notifications.loadFailed')}</Text>{' '}
             <Button navId={nav(NOTIFICATIONS_NAV.retry)} size="sm" onClick={unread.retry}>
-              Retry
+              {t('common.retry')}
             </Button>
           </div>
         ) : unread.loading && !unread.items.length ? (
           <p className={styles.message}>
-            <Text tone="secondary">Loading notifications…</Text>
+            <Text tone="secondary">{t('notifications.loading')}</Text>
           </p>
         ) : (
           <>
             {unread.items.length > 0 && (
-              <List label="Unread notifications" divided>
+              <List label={t('notifications.unreadList')} divided>
                 {unread.items.map(notification => (
                   <NotificationRow
                     key={notification.id}
@@ -255,12 +262,12 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
             {unread.hasMore && <div ref={unreadSentinel} className={styles.sentinel} />}
             {unread.loadingMore && (
               <p className={styles.message}>
-                <Text tone="secondary">Loading more…</Text>
+                <Text tone="secondary">{t('notifications.loadingMore')}</Text>
               </p>
             )}
             {!unread.items.length && (
               <p className={styles.message}>
-                <Text tone="secondary">You’re all caught up.</Text>
+                <Text tone="secondary">{t('notifications.caughtUp')}</Text>
               </p>
             )}
             {unreadExhausted && hasRead && (
@@ -271,12 +278,12 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
                   aria-expanded={showRead}
                   onClick={onToggleShowRead}
                 >
-                  {showRead ? 'Hide read notifications' : 'Show read notifications'}
+                  {t(showRead ? 'notifications.hideRead' : 'notifications.showRead')}
                 </Button>
               </div>
             )}
             {unreadExhausted && showRead && read.items.length > 0 && (
-              <List label="Read notifications" divided>
+              <List label={t('notifications.readList')} divided>
                 {read.items.map(notification => (
                   <NotificationRow
                     key={notification.id}
@@ -292,7 +299,7 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
             )}
             {unreadExhausted && showRead && (read.loading || read.loadingMore) && (
               <p className={styles.message}>
-                <Text tone="secondary">Loading more…</Text>
+                <Text tone="secondary">{t('notifications.loadingMore')}</Text>
               </p>
             )}
           </>
@@ -308,7 +315,7 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
       {...{ [NOTIFICATIONS_PANEL_ATTRIBUTE]: '' }}
       onMouseEnter={onPointerEnter}
     >
-      <section className={styles.panel} aria-label="Notifications">
+      <section className={styles.panel} aria-label={t('home.notifications')}>
         {focused ? (
           <FocusScope id={NOTIFICATIONS_NAV.scope} contain initialId={firstId}>
             {content}

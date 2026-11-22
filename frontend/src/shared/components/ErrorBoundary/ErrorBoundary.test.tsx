@@ -51,7 +51,7 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-    expect(screen.getByText('Try Again')).toBeInTheDocument();
+    expect(screen.getByText('Try again')).toBeInTheDocument();
   });
 
   it('renders custom fallback when provided', () => {
@@ -94,7 +94,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
 
     // Click reset button
-    screen.getByText('Try Again').click();
+    screen.getByText('Try again').click();
 
     // Rerender with no error
     rerender(
@@ -116,7 +116,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
 
-    expect(screen.getByText('Technical Details')).toBeInTheDocument();
+    expect(screen.getByText('Technical details')).toBeInTheDocument();
 
     process.env['NODE_ENV'] = originalEnv;
   });

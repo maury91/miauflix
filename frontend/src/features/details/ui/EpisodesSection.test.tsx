@@ -65,7 +65,7 @@ describe('EpisodesSection', () => {
     const [seasonOne] = screen.getAllByRole('list');
     const rows = within(seasonOne!).getAllByRole('button');
     expect(rows[1]).toHaveAccessibleName(/E2 · Episode title 2/);
-    expect(rows[1]).toHaveTextContent('Resume 25%');
+    expect(rows[1]).toHaveTextContent('Resume from 25%');
     expect(rows[0]).not.toHaveTextContent('Resume');
   });
 
@@ -78,7 +78,7 @@ describe('EpisodesSection', () => {
   it('offers a retry for a season that failed to load', () => {
     const props = renderSection({ failedSeasons: [3] });
     expect(screen.getByText(/Failed to load Season 3/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
     expect(props.onRetrySeason).toHaveBeenCalledWith(3);
   });
 
@@ -106,7 +106,7 @@ describe('EpisodesSection', () => {
 
   it('shows that more episodes are loading', () => {
     renderSection({ loading: true });
-    expect(screen.getByRole('status')).toHaveTextContent('Loading more episodes...');
+    expect(screen.getByRole('status')).toHaveTextContent('Loading more episodes…');
   });
 
   it('marks episodes without any real source, preferring pushed availability', () => {

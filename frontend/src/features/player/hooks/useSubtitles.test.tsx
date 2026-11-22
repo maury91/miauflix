@@ -85,11 +85,50 @@ describe('useSubtitles', () => {
     expect(readMediaSubtitles(storageKey)).toMatchObject({ selectedFileId: null, offset: 0 });
   });
 
+  it('starts an auto-selected track that is not the remembered one at no offset', async () => {
+    saveMediaSubtitles(storageKey, {
+      language: 'it',
+      hearingImpaired: false,
+      selectedFileId: 99,
+      offset: 3,
+    });
+    const { result } = renderSubtitles();
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    await act(() => result.current.search('it', false, { autoSelect: true }));
+    expect(result.current.selectedId).toBe('track-1');
+    expect(result.current.offset).toBe(0);
+    expect(readMediaSubtitles(storageKey)).toMatchObject({ selectedFileId: 11, offset: 0 });
+  });
+
+  it('lets a later choice cancel a search that would turn a track on', async () => {
+    const { result } = renderSubtitles();
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    let finish = (_value: unknown) => undefined as void;
+    searchSubtitles.mockReturnValue({
+      unwrap: () =>
+        new Promise(resolve => {
+          finish = resolve;
+        }),
+    });
+    let searching: unknown;
+    act(() => {
+      searching = result.current.search('it', false, { autoSelect: true });
+    });
+    expect(result.current.loading).toBe(true);
+    act(() => result.current.select(null));
+    expect(result.current.loading).toBe(false);
+    await act(async () => {
+      finish({ configured: true, available: true, candidates: [candidate] });
+      await searching;
+    });
+    expect(result.current.selectedId).toBeNull();
+  });
+
   it('reports a failed search without stopping playback', async () => {
     searchSubtitles.mockReturnValue({ unwrap: () => Promise.reject(new Error('down')) });
     const { result } = renderSubtitles();
     await waitFor(() =>
-      expect(result.current.message).toBe('Subtitle search failed. Playback can continue.')
+      expect(result.current.message).toBe("Couldn't search for subtitles. You can keep watching.")
     );
     expect(result.current.available).toBe(false);
     expect(result.current.loading).toBe(false);

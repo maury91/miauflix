@@ -19,6 +19,7 @@ import {
 import { ITEM_WIDTH_OF_HEIGHT } from '@shared/design-system/carousel/collectionGeometry';
 import { GlGroup, useGlParent, useRenderMode } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
+import { useT } from '@shared/i18n';
 import { presentError } from '@shared/lib/api-error';
 import { IDLE, imagePreloader, NEARBY } from '@shared/lib/image-preloader';
 import { artworkUrl } from '@shared/lib/media.utils';
@@ -35,6 +36,7 @@ import {
   useState,
 } from 'react';
 
+import { CONTINUE_CATEGORY } from '../home-feed';
 import { homeRowLayout } from '../homeLayout';
 import { HOME_NAV } from '../homeNav';
 import { createCoalescer } from '../hooks/coalescer';
@@ -143,6 +145,9 @@ export const CategoryRow = memo(
     },
     forwardedRef
   ) {
+    const t = useT();
+    const name =
+      category.slug === CONTINUE_CATEGORY.slug ? t('home.continueWatching') : category.name;
     const navId = HOME_NAV.row(category.slug);
     const layer = useOptionalNavigation();
     const { itemWidth, perPage } = geometry;
@@ -476,11 +481,11 @@ export const CategoryRow = memo(
         IS_TV
           ? undefined
           : {
-              previousLabel: `Previous ${category.name} items`,
-              nextLabel: `Next ${category.name} items`,
+              previousLabel: t('home.previousItems', { category: name }),
+              nextLabel: t('home.nextItems', { category: name }),
               onPage,
             },
-      [category.name, onPage]
+      [name, onPage, t]
     );
 
     // From the geometry, not the store: the row's sizes all come from collectionGeometry
@@ -490,19 +495,19 @@ export const CategoryRow = memo(
     const loading = !mediaOverride && !total && (loadIntent === 'dormant' || !current.currentData);
     const failed = !mediaOverride && current.isError && !current.currentData;
     const empty = !failed && !loading && !total;
-    const errorMessage = failed ? errorText(current.error, 'Failed to load content.') : '';
+    const errorMessage = failed ? errorText(current.error, t('home.loadFailed')) : '';
     const glState: CategoryRowState = failed
       ? { kind: 'failed', text: errorMessage }
       : empty
-        ? { kind: 'empty', text: 'Nothing here yet.' }
+        ? { kind: 'empty', text: t('home.nothingHere') }
         : null;
     const rowLayout = homeRowLayout(windowHeight);
     const title = (
       <div className={styles.title}>
         <Heading level={2} variant="heading" id={titleId} maxLines={1}>
-          {category.name}
+          {name}
         </Heading>
-        {glRows && <CategoryRowTitleGl name={category.name} state={glState} geometry={geometry} />}
+        {glRows && <CategoryRowTitleGl name={name} state={glState} geometry={geometry} />}
       </div>
     );
     if (failed) {
@@ -522,7 +527,7 @@ export const CategoryRow = memo(
       return (
         <div className={styles.row}>
           {title}
-          <div className={styles.state}>Nothing here yet.</div>
+          <div className={styles.state}>{t('home.nothingHere')}</div>
         </div>
       );
     }
@@ -557,11 +562,11 @@ export const CategoryRow = memo(
                 y={rowLayout.cardsMiddle}
                 height={0}
               >
-                <ProgressSpinner label="Loading..." showLabel />
+                <ProgressSpinner label={t('common.loading')} showLabel />
               </GlGroup>
             ) : (
               <div className={styles.loading}>
-                <ProgressSpinner label="Loading..." showLabel />
+                <ProgressSpinner label={t('common.loading')} showLabel />
               </div>
             ))}
         </div>

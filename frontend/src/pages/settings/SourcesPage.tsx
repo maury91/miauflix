@@ -15,6 +15,7 @@ import {
   ProgressSpinner,
   Text,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { useOptionalNavigation } from '@shared/navigation';
 import { useEffect, useState } from 'react';
 
@@ -57,6 +58,7 @@ function RevealAdvanced({ request }: { request: number }) {
  * each source is a row (switch, Test, options), and Advanced setup holds the catalog and forms.
  */
 export default function SourcesPage({ onDismiss }: SourcesPageProps) {
+  const t = useT();
   const providers = useGetProvidersQuery(undefined, { pollingInterval: 10_000 });
   const [updateProvider, updating] = useUpdateProviderMutation();
   const [reorder, reordering] = useReorderProvidersMutation();
@@ -90,7 +92,11 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
   const busy = updating.isLoading || reordering.isLoading;
 
   const reorderTo = (ids: string[], name: string) =>
-    void run(() => reorder(ids).unwrap(), `Moved ${name}.`, `Could not move ${name}.`);
+    void run(
+      () => reorder(ids).unwrap(),
+      t('sources.moved', { name }),
+      t('sources.moveFailed', { name })
+    );
   const move = (provider: ProviderView, offset: -1 | 1) => {
     const ids = ordered.map(item => item.id);
     const from = ids.indexOf(provider.id);
@@ -111,7 +117,7 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
     if (from < 0 || to < 0) return;
     ids.splice(from, 1);
     ids.splice(to, 0, source);
-    reorderTo(ids, ordered.find(item => item.id === source)?.name ?? 'source');
+    reorderTo(ids, ordered.find(item => item.id === source)?.name ?? t('sources.source'));
   };
   const test = async (provider: ProviderView) => {
     setNotice('');
@@ -122,7 +128,7 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
       if (result.success) setNotice(`${provider.name}: ${result.message}`);
       else setError(`${provider.name}: ${result.message}`);
     } catch (requestError) {
-      setError(errorMessage(requestError, `Could not test ${provider.name}.`));
+      setError(errorMessage(requestError, t('sources.testFailed', { name: provider.name })));
     } finally {
       setTesting(null);
     }
@@ -134,10 +140,10 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
 
   return (
     <SettingsLayout
-      title="Sources"
-      description="Miauflix uses sources to find available files for movies and TV shows."
+      title={t('sources.title')}
+      description={t('sources.description')}
       onBack={onDismiss}
-      backLabel="Back to Home"
+      backLabel={t('common.backToHome')}
       width="full"
     >
       <RevealAdvanced request={revealRequest} />
@@ -146,16 +152,14 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
       <section className={styles.block} aria-labelledby="sources-list-title">
         <div className={styles.sectionBar}>
           <Heading level={2} id="sources-list-title">
-            Sources
+            {t('sources.title')}
           </Heading>
           {providers.data && (
-            <Badge>
-              {`${ordered.length} provider${ordered.length === 1 ? '' : 's'} · ${enabledCount} enabled`}
-            </Badge>
+            <Badge>{t('sources.count', { count: ordered.length, enabled: enabledCount })}</Badge>
           )}
           <ActionGroup>
             <Button navId={SOURCES_NAV.add} icon={<AddIcon />} onClick={openAdvanced}>
-              Add source
+              {t('sources.add')}
             </Button>
           </ActionGroup>
         </div>
@@ -164,30 +168,30 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
           {notice && <Message tone="success">{notice}</Message>}
         </div>
         {error && (
-          <Message tone="danger" toneLabel="Error" live="assertive">
+          <Message tone="danger" toneLabel={t('common.error')} live="assertive">
             {error}
           </Message>
         )}
-        {providers.isLoading && <ProgressSpinner label="Loading sources…" />}
+        {providers.isLoading && <ProgressSpinner label={t('sources.loading')} />}
         {!providers.isLoading && providers.error && !providers.data && (
           <Message
             tone="danger"
-            toneLabel="Error"
+            toneLabel={t('common.error')}
             live="assertive"
             actions={
               <ActionGroup>
                 <Button navId={SOURCES_NAV.retry} onClick={() => void providers.refetch()}>
-                  Try again
+                  {t('sources.tryAgain')}
                 </Button>
               </ActionGroup>
             }
           >
-            Could not load sources.
+            {t('sources.loadFailed')}
           </Message>
         )}
 
         {ordered.length > 0 && (
-          <ul className={styles.providers} aria-label="Sources">
+          <ul className={styles.providers} aria-label={t('sources.title')}>
             {ordered.map((provider, index) => (
               <ProviderRow
                 key={provider.id}
@@ -215,8 +219,8 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
                 onToggle={enabled =>
                   void run(
                     () => updateProvider({ id: provider.id, enabled }).unwrap(),
-                    `${provider.name} ${enabled ? 'enabled' : 'disabled'}.`,
-                    `Could not update ${provider.name}.`
+                    t(enabled ? 'sources.enabled' : 'sources.disabled', { name: provider.name }),
+                    t('sources.updateFailed', { name: provider.name })
                   )
                 }
                 onTest={() => void test(provider)}
@@ -227,8 +231,8 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
                     ? () =>
                         void run(
                           () => removeProvider(provider.id).unwrap(),
-                          `Removed ${provider.name}.`,
-                          `Could not remove ${provider.name}.`
+                          t('sources.removedName', { name: provider.name }),
+                          t('sources.removeFailed', { name: provider.name })
                         )
                     : undefined
                 }
@@ -250,8 +254,7 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
         <p className={styles.hint}>
           <InfoIcon aria-hidden="true" />
           <Text as="span" variant="caption" tone="secondary">
-            Sources are searched from top to bottom. Change their order to set which sources
-            Miauflix checks first.
+            {t('sources.order')}
           </Text>
         </p>
       </section>

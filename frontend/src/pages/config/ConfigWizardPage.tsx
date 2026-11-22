@@ -8,6 +8,7 @@ import {
 import type { ConfigServiceActionResult } from '@miauflix/backend';
 import { SettingsLayout } from '@pages/settings/SettingsLayout';
 import { ActionGroup, Button, Message, ProgressSpinner, Stack } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -33,6 +34,7 @@ interface ConfigWizardPageProps {
 
 /** Edit and test service configuration while keeping the initial service-card order after saves. */
 const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
+  const t = useT();
   const { data: configEntries = [], isLoading: isConfigLoading } = useGetConfigQuery(undefined);
   const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =
     useGetServiceStatusesQuery(undefined);
@@ -161,8 +163,8 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             testMode: 'validation',
             message:
               'error' in response
-                ? errorMessage(response.error, `Failed to test ${service}.`)
-                : `No test result was returned for ${service}.`,
+                ? errorMessage(response.error, t('config.testFailed', { service }))
+                : t('config.noTestResult', { service }),
           },
         }));
       } finally {
@@ -173,7 +175,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
         });
       }
     },
-    [getServiceEntries, testServiceConfig]
+    [getServiceEntries, t, testServiceConfig]
   );
 
   const handleServiceSave = useCallback(
@@ -189,7 +191,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
               service,
               success: false,
               testMode: 'validation',
-              message: errorMessage(response.error, `Failed to save ${service}.`),
+              message: errorMessage(response.error, t('config.saveServiceFailed', { service })),
             },
           }));
           return;
@@ -205,7 +207,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
               .map(item => `${item.service}: ${item.message}`)
               .concat(
                 response.data.restarted.length
-                  ? [`Reactivated: ${response.data.restarted.join(', ')}`]
+                  ? [t('config.reactivated', { services: response.data.restarted.join(', ') })]
                   : []
               )
               .join(' · '),
@@ -214,7 +216,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             response.data.success && !response.data.changed.includes(service)
               ? {
                   ...savedResult,
-                  message: `${service} configuration is valid. No changes to save.`,
+                  message: t('config.validNoChanges', { service }),
                 }
               : savedResult;
           setServiceResults(current => ({ ...current, [service]: finalResult }));
@@ -242,13 +244,13 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
         }
       }
     },
-    [getServiceEntries, markServiceSaved, saveServiceConfig]
+    [getServiceEntries, markServiceSaved, saveServiceConfig, t]
   );
 
   const handleSave = useCallback(async () => {
     const entries = getSubmittableEntries();
     if (entries.length === 0) {
-      setGlobalResult({ success: true, message: 'No changes to save.' });
+      setGlobalResult({ success: true, message: t('config.noChanges') });
       return;
     }
 
@@ -258,7 +260,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
     if ('error' in result) {
       setGlobalResult({
         success: false,
-        message: errorMessage(result.error, 'Failed to save configuration.'),
+        message: errorMessage(result.error, t('config.saveFailed')),
       });
     } else {
       setServiceResults(current => ({
@@ -281,21 +283,24 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
         success: result.data.success,
         message: result.data.success
           ? result.data.restarted.length
-            ? `Configuration saved successfully. Reactivated: ${result.data.restarted.join(', ')}.`
-            : 'Configuration saved successfully.'
-          : 'No changes were saved because one or more services failed testing.',
+            ? t('config.savedReactivated', { services: result.data.restarted.join(', ') })
+            : t('config.saved')
+          : t('config.notSavedTests'),
       });
       if (result.data.success) servicesBeingSaved.forEach(service => markServiceSaved(service));
     }
-  }, [dirtyServices, getSubmittableEntries, markServiceSaved, updateConfig]);
+  }, [dirtyServices, getSubmittableEntries, markServiceSaved, t, updateConfig]);
 
-  const description =
-    'Configure your Miauflix instance. Required fields must be filled before services can start.';
+  const description = t('config.description');
 
   if (isConfigLoading) {
     return (
-      <SettingsLayout title="Configuration" onBack={onDismiss} backLabel="Back to Home">
-        <ProgressSpinner label="Loading configuration…" />
+      <SettingsLayout
+        title={t('config.title')}
+        onBack={onDismiss}
+        backLabel={t('common.backToHome')}
+      >
+        <ProgressSpinner label={t('config.loading')} />
       </SettingsLayout>
     );
   }
@@ -303,17 +308,18 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
   const firstGroup = sortedGroups[0]?.[0];
   return (
     <SettingsLayout
-      title="Configuration"
+      title={t('config.title')}
       description={description}
       onBack={onDismiss}
-      backLabel="Back to Home"
+      backLabel={t('common.backToHome')}
       initialNavId={firstGroup ? serviceGroupNav(formatServiceName(firstGroup)).group : NAV.home}
     >
       <Stack gap="lg">
         {missingGroups.length > 0 && (
           <Message tone="warning" variant="banner">
-            The following services need configuration:{' '}
-            {missingGroups.map(formatServiceName).join(', ')}
+            {t('config.needConfiguration', {
+              services: missingGroups.map(formatServiceName).join(', '),
+            })}
           </Message>
         )}
 
@@ -355,10 +361,10 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
               !isSaving && (dirtyServices.size === 0 || Object.keys(serviceActions).length > 0)
             }
           >
-            Save configuration
+            {t('config.saveConfiguration')}
           </Button>
           <Button navId={NAV.home} onClick={onDismiss}>
-            Go to Home
+            {t('config.goHome')}
           </Button>
         </ActionGroup>
       </Stack>

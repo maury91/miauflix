@@ -140,10 +140,10 @@ describe('CategoryRow on the Samsung TV', () => {
       isError: false,
     }));
     const view = render(layer(<CategoryRow {...props(false)} />));
-    expect(screen.queryByText('Loading...')).toBeNull();
+    expect(screen.queryByText('Loading…')).toBeNull();
 
     view.rerender(layer(<CategoryRow {...props(true)} />));
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('Loading…')).toBeInTheDocument();
   });
 
   it('marks the selection on the card only while the row holds focus', () => {

@@ -58,7 +58,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   expect(initialStatus.status()).toBe(200);
   await expect(initialStatus.json()).resolves.toEqual({ available: true });
 
-  await expect(page.getByText("Let's create your admin account!")).toBeVisible();
+  await expect(page.getByText('Create an admin account to set up Miauflix.')).toBeVisible();
   const emailInput = page.locator('#setup-email');
   const passwordInput = page.locator('#setup-password');
   const confirmPasswordInput = page.locator('#setup-confirm-password');
@@ -253,7 +253,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   const statusAfterSave = (await statusAfterSaveResponse.json()) as ServiceStatusResponse;
   expect(statusAfterSave.services.CATALOG.status).toBe('ready');
 
-  await page.getByRole('button', { name: 'Finish and start using Miauflix' }).click();
+  await page.getByRole('button', { name: 'Finish setup' }).click();
   await expect(page.getByRole('heading', { name: 'Optional settings', exact: true })).toHaveCount(
     0
   );

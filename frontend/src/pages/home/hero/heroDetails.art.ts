@@ -1,5 +1,6 @@
 import { hex, type Painter, type TextSpec } from '@shared/design-system/gl/art';
 import { color } from '@shared/design-system/tokens';
+import type { Translate } from '@shared/i18n';
 
 import type { HeroDetailsModel, HeroStatus } from './heroDetailsModel';
 import { HERO_DETAILS, HERO_TYPE, heroTypeScale } from './heroType';
@@ -13,11 +14,12 @@ const NEUTRAL = { border: '#253034', fill: 'rgba(17, 23, 25, 0.86)' };
 const TEXT_DIM = '#50585B';
 
 /** The status badge's text and colours, as the hero has drawn them since before the Badge. */
-function statusLook(status: HeroStatus) {
-  if (status.kind === 'unavailable') return { label: 'No source', color: TEXT_DIM, ...NEUTRAL };
+function statusLook(status: HeroStatus, t: Translate) {
+  if (status.kind === 'unavailable')
+    return { label: t('home.noSource'), color: TEXT_DIM, ...NEUTRAL };
   if (status.kind === 'checking')
     return {
-      label: 'Checking…',
+      label: t('home.checking'),
       color: color.textSecondary,
       border: 'rgba(0,0,0,0)',
       fill: 'rgba(0,0,0,0)',
@@ -45,6 +47,8 @@ export interface HeroDetailsArtOptions {
   detailsWidth: number;
   /** The hero's width: the logo's box is a share of it. */
   width: number;
+  /** The interface language's translate function (`useT`), for the status badge. */
+  t: Translate;
 }
 
 /**
@@ -54,7 +58,7 @@ export interface HeroDetailsArtOptions {
  */
 export function heroDetailsArt(
   model: HeroDetailsModel,
-  { windowHeight, detailsWidth, width }: HeroDetailsArtOptions
+  { windowHeight, detailsWidth, width, t }: HeroDetailsArtOptions
 ) {
   const type = heroTypeScale(windowHeight);
   const metaSize = type.metadata;
@@ -83,7 +87,7 @@ export function heroDetailsArt(
         value: spec('metadata', model.rating, color.text, 100),
       }
     : null;
-  const status = model.status ? statusLook(model.status) : null;
+  const status = model.status ? statusLook(model.status, t) : null;
   const statusText = status ? spec('status', status.label, status.color, 300) : null;
   const genres = model.genres ? spec('metadata', model.genres, color.text, detailsWidth) : null;
   const overview = model.overview

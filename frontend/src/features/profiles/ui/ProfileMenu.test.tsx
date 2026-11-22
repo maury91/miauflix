@@ -59,7 +59,7 @@ describe('ProfileMenu', () => {
       'Switch profile',
       'Edit profile',
       'Preferences',
-      'Logout',
+      'Sign out',
     ]);
   });
 
@@ -68,7 +68,7 @@ describe('ProfileMenu', () => {
     const switchProfile = screen.getByRole('button', { name: 'Switch profile' });
     const editProfile = screen.getByRole('button', { name: 'Edit profile' });
     const preferences = screen.getByRole('button', { name: 'Preferences' });
-    const logout = screen.getByRole('button', { name: 'Logout' });
+    const logout = screen.getByRole('button', { name: 'Sign out' });
     expect(switchProfile).toHaveFocus();
 
     press('ArrowDown');

@@ -33,6 +33,8 @@ import {
 } from '@shared/design-system';
 import { TIZEN_IME_DONE } from '@shared/hooks/useKeyboard';
 import { usePageBack } from '@shared/hooks/usePageBack';
+import type { MessageKey } from '@shared/i18n';
+import { useT } from '@shared/i18n';
 import { FocusGroup, FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { useAppSelector } from '@store/hooks';
 import { selectAdminSession, type SessionInfo } from '@store/slices/auth';
@@ -45,11 +47,11 @@ import * as styles from './profileEditorPage.css';
 import ArrowLeftIcon from '~icons/mdi/arrow-left';
 
 type TabId = 'shape' | 'color' | 'face' | 'accessories';
-const TABS: { id: TabId; label: string }[] = [
-  { id: 'shape', label: 'Shape' },
-  { id: 'color', label: 'Color & fabric' },
-  { id: 'face', label: 'Face' },
-  { id: 'accessories', label: 'Accessories' },
+const TABS: { id: TabId; label: MessageKey }[] = [
+  { id: 'shape', label: 'look.shape' },
+  { id: 'color', label: 'look.tab.color' },
+  { id: 'face', label: 'look.tab.face' },
+  { id: 'accessories', label: 'look.tab.accessories' },
 ];
 const TABS_ID = 'profile-look';
 
@@ -93,6 +95,7 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = props => {
  * Cancel). The form column scrolls to keep the focused control in view.
  */
 function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
+  const t = useT();
   const creating = !profile;
   const adminSession = useAppSelector(selectAdminSession);
   const navigation = useNavigation();
@@ -137,12 +140,12 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
   const submit = async () => {
     if (busy || submitting.current) return;
     const displayName = name.trim();
-    if (!displayName) return setError('Give the profile a name.');
+    if (!displayName) return setError(t('profiles.nameRequired'));
     if (creating) {
-      if (!adminSession) return setError('Only an administrator can add profiles.');
-      if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError('Enter a valid email address.');
+      if (!adminSession) return setError(t('profiles.adminOnly'));
+      if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError(t('profiles.invalidEmail'));
       if (password.length < MIN_PASSWORD_LENGTH)
-        return setError(`The password needs at least ${MIN_PASSWORD_LENGTH} characters.`);
+        return setError(t('profiles.shortPassword', { count: MIN_PASSWORD_LENGTH }));
     }
     setError(null);
     submitting.current = true;
@@ -150,7 +153,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
     try {
       await save(displayName);
     } catch {
-      setError('Saving the profile failed.');
+      setError(t('profiles.saveFailed'));
     } finally {
       submitting.current = false;
       setRendering(false);
@@ -172,7 +175,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
       : await updateProfile({ session: profile.session, displayName, avatar, image });
     if ('error' in result) {
       const message = (result.error as { data?: unknown }).data;
-      setError(typeof message === 'string' ? message : 'Saving the profile failed.');
+      setError(typeof message === 'string' ? message : t('profiles.saveFailed'));
       return;
     }
     onDone('session' in result.data ? result.data.user.id : result.data.id);
@@ -182,8 +185,13 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
     <FocusScope id={NAV.scope} layout="horizontal" initialId={NAV.name}>
       <LogoBackdrop />
       <div className={styles.rail}>
-        <NavRail label="Profile" navId={NAV.rail}>
-          <NavItem navId={NAV.back} icon={<ArrowLeftIcon />} label="Back" onClick={onCancel} />
+        <NavRail label={t('profiles.rail.editor')} navId={NAV.rail}>
+          <NavItem
+            navId={NAV.back}
+            icon={<ArrowLeftIcon />}
+            label={t('common.back')}
+            onClick={onCancel}
+          />
         </NavRail>
       </div>
       <SurfaceContextProvider value="solid">
@@ -192,7 +200,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
             <div className={styles.preview}>
               <div className={styles.title}>
                 <Heading level={1} id="profile-editor-title">
-                  {creating ? 'Add profile' : 'Edit profile'}
+                  {creating ? t('profiles.add') : t('profiles.edit')}
                 </Heading>
               </div>
               <div className={styles.stage}>
@@ -203,7 +211,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                 </div>
               </div>
               <Button navId={NAV.surprise} size="lg" onClick={surprise}>
-                Surprise me
+                {t('profiles.surprise')}
               </Button>
             </div>
           </FocusGroup>
@@ -212,13 +220,13 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
               <div className={styles.formContent}>
                 <FormSection
                   navId={NAV.form}
-                  title="Name and Plushie"
+                  title={t('profiles.form')}
                   titleHidden
                   onSubmit={() => void submit()}
                   busy={busy}
                   message={
                     error ? (
-                      <Message tone="danger" toneLabel="Error" live="assertive">
+                      <Message tone="danger" toneLabel={t('common.error')} live="assertive">
                         {error}
                       </Message>
                     ) : undefined
@@ -226,10 +234,10 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                   actions={
                     <>
                       <Button navId={NAV.save} type="submit" loading={busy} disabled={busy}>
-                        {creating ? 'Create profile' : 'Save changes'}
+                        {creating ? t('profiles.create') : t('profiles.saveChanges')}
                       </Button>
                       <Button navId={NAV.cancel} onClick={onCancel}>
-                        Cancel
+                        {t('common.cancel')}
                       </Button>
                     </>
                   }
@@ -237,7 +245,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                   <TextField
                     navId={NAV.name}
                     id="profile-name"
-                    label="Profile name"
+                    label={t('profiles.name')}
                     value={name}
                     maxLength={40}
                     autoComplete="off"
@@ -249,7 +257,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                       <TextField
                         navId={NAV.email}
                         id="profile-email"
-                        label="Email"
+                        label={t('profiles.email')}
                         type="email"
                         value={email}
                         autoComplete="off"
@@ -259,9 +267,9 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                       <PasswordField
                         navId={NAV.password}
                         id="profile-password"
-                        label="Password"
-                        showLabel="Show password"
-                        hideLabel="Hide password"
+                        label={t('profiles.password')}
+                        showLabel={t('profiles.showPassword')}
+                        hideLabel={t('profiles.hidePassword')}
                         value={password}
                         autoComplete="new-password"
                         onChange={event => setPassword(event.target.value)}
@@ -272,8 +280,8 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                   <Tabs
                     id={TABS_ID}
                     navId={NAV.tabs}
-                    label="Plushie"
-                    items={TABS}
+                    label={t('profiles.plushie')}
+                    items={TABS.map(({ id, label }) => ({ id, label: t(label) }))}
                     selectedId={tab}
                     onSelect={setTab}
                   />
@@ -314,7 +322,7 @@ function ProfileEditor({ profile, onDone, onCancel }: ProfileEditorPageProps) {
                   ))}
                   <Disclosure
                     navId={NAV.fineTune}
-                    title="Fine-tune"
+                    title={t('profiles.fineTune')}
                     expanded={fineTuneOpen}
                     onExpandedChange={setFineTuneOpen}
                   >

@@ -236,14 +236,14 @@ describe('PlayerView', () => {
     expect(screen.getByText('Preparing “Clayface” for playback…')).toBeInTheDocument();
     expect(
       await screen.findByText(
-        "There is no source for “Clayface”. Press “Notify me” to receive a notification once it's out."
+        "“Clayface” isn't available to watch yet. Select “Notify me” to get an alert when it's ready."
       )
     ).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Notify me' }));
 
     expect(requestAvailability).toHaveBeenCalledWith(playable);
     expect(
-      await screen.findByText("We'll notify you as soon as “Clayface” is out.")
+      await screen.findByText("We'll let you know when “Clayface” is available to watch.")
     ).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Notify me' })).not.toBeInTheDocument();
   });
@@ -262,7 +262,7 @@ describe('PlayerView', () => {
     expect(
       await screen.findByText(/There isn't enough space to play this movie\./)
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 
   it('keeps a remote working while preparing and after a failure', async () => {
@@ -274,7 +274,7 @@ describe('PlayerView', () => {
 
     // While preparing, Back holds the focus so a remote's Back works
     expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
-    expect(await screen.findByRole('button', { name: 'Retry' })).toHaveFocus();
+    expect(await screen.findByRole('button', { name: 'Try again' })).toHaveFocus();
   });
 
   it('gives the focus back to Back when Retry removes its button', async () => {
@@ -286,12 +286,12 @@ describe('PlayerView', () => {
 
     render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
 
-    const retry = await screen.findByRole('button', { name: 'Retry' });
+    const retry = await screen.findByRole('button', { name: 'Try again' });
     retry.focus();
     fireEvent.click(retry);
 
     await waitFor(() =>
-      expect(screen.queryByRole('button', { name: 'Retry' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument()
     );
     expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
   });
@@ -362,8 +362,8 @@ describe('PlayerView', () => {
 
     render(<PlayerView playable={playable} title="The Shawshank Redemption" onBack={vi.fn()} />);
 
-    await screen.findByRole('button', { name: 'Retry' });
-    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    await screen.findByRole('button', { name: 'Try again' });
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
 
     await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
     expect(
@@ -873,7 +873,11 @@ describe('PlayerView', () => {
       await waitFor(() => expect(createSession).toHaveBeenCalledTimes(expectedCalls));
     }
 
-    expect(await screen.findByText(/could not load any of its sources/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'None of the sources for “Failing fixture” could be played. Try again.'
+      )
+    ).toBeInTheDocument();
     expect(createSession).toHaveBeenCalledTimes(4);
     // Each retry tells the backend which sources already failed in this browser.
     expect(createSession.mock.calls.map(([request]) => request.avoidSourceIds)).toEqual([
@@ -893,7 +897,11 @@ describe('PlayerView', () => {
 
     fireEvent.error(await screen.findByLabelText('Repeat fixture'));
 
-    expect(await screen.findByText(/could not load any of its sources/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'None of the sources for “Repeat fixture” could be played. Try again.'
+      )
+    ).toBeInTheDocument();
     expect(createSession).toHaveBeenCalledTimes(2);
   });
 
@@ -1603,7 +1611,7 @@ describe('playback status copy', () => {
         { status: 500, data: 'Source metadata could not be resolved' },
         'Toy Story 5'
       )
-    ).toContain('could not be prepared');
+    ).toContain("Couldn't prepare the source");
     expect(
       describePlaybackFailure(
         { status: 500, data: 'database details must stay hidden' },
@@ -1611,7 +1619,7 @@ describe('playback status copy', () => {
       )
     ).not.toContain('database details');
     expect(describePlaybackFailure(new Error('Failed to start playback'), 'Toy Story 5')).toContain(
-      'Retry'
+      'Try again'
     );
   });
 });

@@ -1,4 +1,5 @@
 import type { ConfigEntryView } from '@miauflix/backend';
+import { type MessageKey, t } from '@shared/i18n';
 
 /** The configuration group that holds media-load's storage settings. */
 export const STORAGE_SETTINGS_GROUP = 'MEDIA_LOAD';
@@ -22,13 +23,13 @@ const TIME_UNITS = ['s', 'm', 'h', 'd'];
 const SECONDS_PER: Record<string, number> = { s: 1, m: 60, h: 3600, d: 86_400 };
 
 /** Labels for people; the Configuration page keeps the keys' own names. */
-const LABELS: Record<string, string> = {
-  STORAGE_THRESHOLD: 'Storage limit',
-  STORAGE_PLAYBACK_RESERVE: 'Reserved for playback',
-  CONTENT_SEED_DURATION_SECONDS: 'Seeding after download',
-  DOWNLOAD_PATH: 'Download folder',
-  DOWNLOAD_PATH_EXCLUSIVE: 'Miauflix owns the download folder',
-  STORAGE_PAD_FILE_SIZES: 'Pad file sizes',
+const LABELS: Record<string, MessageKey> = {
+  STORAGE_THRESHOLD: 'storage.field.STORAGE_THRESHOLD',
+  STORAGE_PLAYBACK_RESERVE: 'storage.field.STORAGE_PLAYBACK_RESERVE',
+  CONTENT_SEED_DURATION_SECONDS: 'storage.field.CONTENT_SEED_DURATION_SECONDS',
+  DOWNLOAD_PATH: 'storage.field.DOWNLOAD_PATH',
+  DOWNLOAD_PATH_EXCLUSIVE: 'storage.field.DOWNLOAD_PATH_EXCLUSIVE',
+  STORAGE_PAD_FILE_SIZES: 'storage.field.STORAGE_PAD_FILE_SIZES',
 };
 
 /** Media-load's storage settings from the full configuration, in the order the page shows them. */
@@ -45,7 +46,8 @@ export function storageSettingEntries(entries: ConfigEntryView[]): ConfigEntryVi
  * `fromFieldValue` convert between what is stored and what those controls edit.
  */
 export function storageFieldEntry(entry: ConfigEntryView): ConfigEntryView {
-  const label = LABELS[entry.key] ?? entry.label;
+  const key = LABELS[entry.key];
+  const label = key ? t(key) : entry.label;
   if (entry.key === 'STORAGE_THRESHOLD' || entry.key === 'STORAGE_PLAYBACK_RESERVE') {
     return { ...entry, label, inputType: 'size', sizeUnits: SIZE_UNITS };
   }
@@ -54,8 +56,7 @@ export function storageFieldEntry(entry: ConfigEntryView): ConfigEntryView {
       ...entry,
       label,
       // The stored description counts in seconds; this control picks its own unit
-      description:
-        'How long to keep sharing a download after its video is complete. Set to 0 to stop sharing straight away.',
+      description: t('storage.seedDescription'),
       inputType: 'time',
       timeUnits: TIME_UNITS,
     };
@@ -109,12 +110,11 @@ export function describeDuration(stored: string | undefined): string | null {
   if (seconds === 0) return null;
   const [unit, name] =
     seconds % 86_400 === 0
-      ? [86_400, 'day']
+      ? ([86_400, 'day'] as const)
       : seconds % 3600 === 0
-        ? [3600, 'hour']
+        ? ([3600, 'hour'] as const)
         : seconds % 60 === 0
-          ? [60, 'minute']
-          : [1, 'second'];
-  const count = seconds / unit;
-  return `${count} ${name}${count === 1 ? '' : 's'}`;
+          ? ([60, 'minute'] as const)
+          : ([1, 'second'] as const);
+  return t(`storage.duration.${name}`, { count: seconds / unit });
 }

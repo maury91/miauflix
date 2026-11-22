@@ -1,5 +1,7 @@
 ## ✍️ Coding Conventions
 
+See also [maintainability and performance](maintainability-and-performance.md) for the size limits, readability and performance standards, and how they are enforced.
+
 ### Modules & Imports
 
 - Pure **ESM** (`"type":"module"` in _package.json_).

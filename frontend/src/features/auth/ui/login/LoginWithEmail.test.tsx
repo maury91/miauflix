@@ -37,7 +37,7 @@ const press = (key: string, init: KeyboardEventInit = {}) =>
 const fieldFocused = (label: RegExp) =>
   screen.getByLabelText(label).closest('[data-focused]') !== null;
 
-const email = () => screen.getByLabelText(/^email$/i);
+const email = () => screen.getByLabelText(/^email address$/i);
 const password = () => screen.getByLabelText(/^password$/i);
 const submit = () => screen.getByRole('button', { name: /continue/i });
 
@@ -108,7 +108,7 @@ describe('LoginWithEmail', () => {
   it('starts on the email field', () => {
     render(<Form />);
 
-    expect(fieldFocused(/^email$/i)).toBe(true);
+    expect(fieldFocused(/^email address$/i)).toBe(true);
     // Virtual focus only: editing (and a TV's keyboard) starts with Confirm
     expect(email()).not.toHaveFocus();
     press('Enter');
@@ -134,7 +134,7 @@ describe('LoginWithEmail', () => {
 
     press('ArrowUp');
     press('ArrowUp');
-    expect(fieldFocused(/^email$/i)).toBe(true);
+    expect(fieldFocused(/^email address$/i)).toBe(true);
   });
 
   it("moves on to the password with the TV keyboard's Done key", () => {
@@ -149,7 +149,7 @@ describe('LoginWithEmail', () => {
 
   it('puts the focus back on the password after a failed sign-in', () => {
     const { rerender } = render(<Form />);
-    expect(fieldFocused(/^email$/i)).toBe(true);
+    expect(fieldFocused(/^email address$/i)).toBe(true);
 
     mutationState.error = { data: { message: 'Invalid credentials' } };
     rerender(<Form />);
@@ -188,7 +188,7 @@ describe('LoginWithEmail', () => {
 
     await user.click(password());
     expect(fieldFocused(/^password$/i)).toBe(true);
-    expect(fieldFocused(/^email$/i)).toBe(false);
+    expect(fieldFocused(/^email address$/i)).toBe(false);
   });
 
   it('tabs through the fields, the reveal toggle and Continue', async () => {

@@ -116,7 +116,9 @@ describe('SourcePreparationStatus', () => {
     );
 
     expect(
-      screen.getByRole('img', { name: 'CAM release may have lower audio and video quality.' })
+      screen.getByRole('img', {
+        name: 'This release (CAM) may have lower picture and sound quality.',
+      })
     ).toBeInTheDocument();
     expect(screen.getByText('CAM')).toBeInTheDocument();
   });

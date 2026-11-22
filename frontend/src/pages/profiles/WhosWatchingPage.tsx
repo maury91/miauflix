@@ -10,6 +10,7 @@ import {
 } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { useTouchScreen } from '@shared/hooks/useTouchScreen';
+import { useT } from '@shared/i18n';
 import { FocusGroup, FocusScope, NavigationProvider, useActiveIdWithin } from '@shared/navigation';
 import { useAppSelector } from '@store/hooks';
 import {
@@ -97,6 +98,7 @@ function WhosWatchingScreen({
   onAdd,
   onBack,
 }: WhosWatchingPageProps) {
+  const t = useT();
   const profiles = useAppSelector(selectProfiles);
   const adminSession = useAppSelector(selectAdminSession);
   const currentUser = useAppSelector(selectCurrentUser);
@@ -119,8 +121,13 @@ function WhosWatchingScreen({
       <LogoBackdrop />
       {onBack && (
         <div className={styles.rail}>
-          <NavRail label="Profiles" navId={NAV.rail}>
-            <NavItem navId={NAV.back} icon={<ArrowLeftIcon />} label="Back" onClick={onBack} />
+          <NavRail label={t('profiles.rail')} navId={NAV.rail}>
+            <NavItem
+              navId={NAV.back}
+              icon={<ArrowLeftIcon />}
+              label={t('common.back')}
+              onClick={onBack}
+            />
           </NavRail>
         </div>
       )}
@@ -129,7 +136,7 @@ function WhosWatchingScreen({
           <div className={styles.body}>
             <div className={styles.title}>
               <Heading level={1} variant="display" align="center" id="whos-watching-title">
-                Who’s watching?
+                {t('profiles.whosWatching')}
               </Heading>
             </div>
             <FocusGroup id={NAV.profiles} layout="spatial">
@@ -153,7 +160,7 @@ function WhosWatchingScreen({
                         {(touch || editUserId === userId) && (
                           <IconButton
                             navId={editNavId(userId)}
-                            label={`Edit ${name}`}
+                            label={t('profiles.editName', { name })}
                             icon={<EditIcon />}
                             onClick={() => onEdit(profile)}
                           />

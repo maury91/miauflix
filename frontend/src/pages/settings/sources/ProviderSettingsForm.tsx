@@ -9,6 +9,7 @@ import {
   Switch,
   TextField,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { useOptionalNavigation } from '@shared/navigation';
 import { useEffect, useState } from 'react';
 
@@ -31,6 +32,7 @@ export function ProviderSettingsForm({
   provider: ProviderView;
   onSaved: (message: string) => void;
 }) {
+  const t = useT();
   const [update, { isLoading }] = useUpdateProviderMutation();
   const [values, setValues] = useState<Record<string, string | boolean>>(() =>
     Object.fromEntries(
@@ -62,30 +64,30 @@ export function ProviderSettingsForm({
     setError('');
     try {
       await update({ id: provider.id, settings: values }).unwrap();
-      onSaved(`Saved settings for ${provider.name}.`);
+      onSaved(t('sources.savedSettings', { name: provider.name }));
     } catch (requestError) {
-      setError(errorMessage(requestError, 'Could not save settings.'));
+      setError(errorMessage(requestError, t('sources.saveFailed')));
     }
   };
 
   return (
     <div className={styles.form}>
       <FormSection
-        title={`${provider.name} settings`}
+        title={t('sources.settingsTitle', { name: provider.name })}
         titleHidden
         headingLevel={3}
         onSubmit={() => void submit()}
         busy={isLoading}
         message={
           error ? (
-            <Message tone="danger" toneLabel="Error" live="assertive">
+            <Message tone="danger" toneLabel={t('common.error')} live="assertive">
               {error}
             </Message>
           ) : undefined
         }
         actions={
           <Button type="submit" navId={providerSettingsSaveNav(provider.id)} loading={isLoading}>
-            Save settings
+            {t('sources.saveSettings')}
           </Button>
         }
       >
@@ -114,7 +116,10 @@ export function ProviderSettingsForm({
                 items={[
                   {
                     value: '',
-                    label: `Default${placeholder === undefined ? '' : ` (${placeholder})`}`,
+                    label:
+                      placeholder === undefined
+                        ? t('sources.defaultOption')
+                        : t('sources.defaultOptionWith', { value: placeholder }),
                   },
                   ...Object.entries(setting.options).map(([optionValue, label]) => ({
                     value: optionValue,
@@ -131,8 +136,8 @@ export function ProviderSettingsForm({
               <PasswordField
                 id={id}
                 label={setting.label}
-                showLabel={`Show ${setting.label}`}
-                hideLabel={`Hide ${setting.label}`}
+                showLabel={t('sources.show', { label: setting.label })}
+                hideLabel={t('sources.hide', { label: setting.label })}
                 value={String(value ?? '')}
                 placeholder={placeholder}
                 autoComplete="off"

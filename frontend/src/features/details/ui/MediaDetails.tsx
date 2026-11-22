@@ -39,6 +39,8 @@ import {
   useWindowClass,
 } from '@shared/design-system';
 import { visuallyHidden } from '@shared/design-system/a11y.css';
+import { useT } from '@shared/i18n';
+import { t as translate } from '@shared/i18n';
 import { presentError } from '@shared/lib/api-error';
 import type { BackdropPositionContext } from '@shared/lib/backdrop-focus';
 import { getBackdropPlacement } from '@shared/lib/backdrop-focus';
@@ -111,16 +113,16 @@ const formatYear = (value: string | null | undefined) => value?.slice(0, 4) ?? '
 function warmupDescription(state: WarmupState, progress: number): string {
   switch (state) {
     case 'warming':
-      return `Warming up torrent, ${progress}% ready`;
+      return translate('details.warming', { progress });
     case 'ready':
-      return 'Torrent warmup ready';
+      return translate('details.warmReady');
     case 'paused':
-      return 'Torrent warmup paused';
+      return translate('details.warmPaused');
     case 'failed':
-      return 'Torrent warmup failed';
+      return translate('details.warmFailed');
     case 'not_requested':
     default:
-      return 'Torrent warmup not requested';
+      return translate('details.warmNotRequested');
   }
 }
 
@@ -169,6 +171,7 @@ export function MediaDetails(props: MediaDetailsProps) {
 }
 
 function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDetailsProps) {
+  const t = useT();
   const dispatch = useDispatch();
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const watchlistType: 'movie' | 'tv' = media._type === 'movie' ? 'movie' : 'tv';
@@ -363,11 +366,9 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
     }
     return [
       formatYear(current.firstAirDate),
-      current.seasons.length
-        ? `${current.seasons.length} season${current.seasons.length === 1 ? '' : 's'}`
-        : '',
+      current.seasons.length ? t('details.seasonCount', { count: current.seasons.length }) : '',
     ].filter(Boolean);
-  }, [current]);
+  }, [current, t]);
   const rating = current?.rating ? current.rating.toFixed(1) : null;
 
   const targetEpisodeForSeason = useCallback(
@@ -488,7 +489,7 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
   const ratingItems: IconButtonGroupItem[] = [
     {
       id: 'watchlist',
-      label: inWatchlist ? 'Remove from watchlist' : 'Add to watchlist',
+      label: inWatchlist ? t('details.removeFromWatchlist') : t('details.addToWatchlist'),
       icon: inWatchlist ? <BookmarkIcon /> : <BookmarkOutlineIcon />,
       pressed: inWatchlist,
       // Busy, not disabled: disabling the focused button would drop focus
@@ -500,9 +501,9 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
     },
     ...(
       [
-        ['dislike', "Don't like it", ThumbDownIcon, ThumbDownOutlineIcon],
-        ['like', 'Like it', ThumbUpIcon, ThumbUpOutlineIcon],
-        ['love', 'Love it', HeartIcon, HeartOutlineIcon],
+        ['dislike', t('details.dislike'), ThumbDownIcon, ThumbDownOutlineIcon],
+        ['like', t('details.like'), ThumbUpIcon, ThumbUpOutlineIcon],
+        ['love', t('details.love'), HeartIcon, HeartOutlineIcon],
       ] as const
     ).map(([value, label, OnIcon, OffIcon]) => ({
       id: value,
@@ -531,7 +532,7 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
           void requestAvailability({ kind: 'movie', mediaId: media.mediaId });
         }}
       >
-        {notifyRequested ? 'Notification Set' : 'Notify Me'}
+        {notifyRequested ? t('details.notificationSet') : t('details.notifyMe')}
       </Button>
     ) : (
       <Button
@@ -540,14 +541,16 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
         aria-describedby={warmupId}
         onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
       >
-        {movieProgress && movieProgress.state !== 'completed' ? 'Resume Watching' : 'Watch Now'}
+        {movieProgress && movieProgress.state !== 'completed'
+          ? t('details.resume')
+          : t('details.watchNow')}
       </Button>
     );
   const warmupText =
     movieAvailability === 'unavailable'
       ? notifyRequested
-        ? `We'll notify you as soon as a source for this movie is out`
-        : 'No source available yet'
+        ? t('details.notifyPromised')
+        : t('details.noSourceYet')
       : warmupDescription(warmupState, warmupDisplayPercent);
 
   const loading = media._type === 'movie' ? movie.isLoading : show.isLoading;
@@ -584,7 +587,7 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
             {rating && (
               <span className={styles.fact}>
                 <StarIcon className={styles.star} aria-hidden="true" />
-                <span className={visuallyHidden}>Rating </span>
+                <span className={visuallyHidden}>{`${t('details.ratingLabel')} `}</span>
                 {rating}
               </span>
             )}
@@ -604,24 +607,24 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
           ) : null}
           {loading && (
             <div className={styles.block}>
-              <ProgressSpinner label="Loading details..." showLabel />
+              <ProgressSpinner label={t('details.loading')} showLabel />
             </div>
           )}
           {loadError && (
             <div className={styles.block}>
-              <Message tone="danger" toneLabel="Error" live="assertive">
-                {errorText(loadError, 'Failed to load details.')}
+              <Message tone="danger" toneLabel={t('common.error')} live="assertive">
+                {errorText(loadError, t('details.loadFailed'))}
               </Message>
             </div>
           )}
           {current && (
             <div className={styles.overview}>
-              <Text maxLines={4}>{current.overview || 'No overview available.'}</Text>
+              <Text maxLines={4}>{current.overview || t('details.noOverview')}</Text>
             </div>
           )}
           <div className={styles.block}>
             <IconButtonGroup
-              label="Rate this title"
+              label={t('details.rate')}
               size="lg"
               navId={NAV.actions}
               items={ratingItems}
@@ -631,22 +634,22 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
             <div className={styles.block}>
               <Message
                 tone="danger"
-                toneLabel="Error"
+                toneLabel={t('common.error')}
                 live="assertive"
                 actions={
                   <Button navId={NAV.ratingRetry} onClick={() => void savedRating.refetch()}>
-                    Retry
+                    {t('common.retry')}
                   </Button>
                 }
               >
-                {errorText(savedRating.error, 'Could not load your rating.')}
+                {errorText(savedRating.error, t('details.ratingLoadFailed'))}
               </Message>
             </div>
           )}
           {ratingUpdate.isError && (
             <div className={styles.block}>
-              <Message tone="danger" toneLabel="Error" live="assertive">
-                {errorText(ratingUpdate.error, 'Could not save your rating. Please try again.')}
+              <Message tone="danger" toneLabel={t('common.error')} live="assertive">
+                {errorText(ratingUpdate.error, t('details.ratingSaveFailed'))}
               </Message>
             </div>
           )}
@@ -669,15 +672,15 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
             notifyRequestedHere &&
             availabilityRequest.isError && (
               <div className={styles.block}>
-                <Message tone="danger" toneLabel="Error" live="assertive">
-                  The notification could not be saved. Try again.
+                <Message tone="danger" toneLabel={t('common.error')} live="assertive">
+                  {t('details.notifyFailed')}
                 </Message>
               </div>
             )}
           {hasEpisodes && (
             <nav className={styles.seasons} aria-labelledby={`${NAV.seasons}-heading`}>
               <Heading level={2} id={`${NAV.seasons}-heading`}>
-                Seasons
+                {t('details.seasons')}
               </Heading>
               <FocusGroup id={NAV.seasons} layout="vertical">
                 <div className={styles.seasonList}>
@@ -708,7 +711,7 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
   );
 
   return (
-    <main ref={pageRef} className={styles.page} aria-label={`${title} details`}>
+    <main ref={pageRef} className={styles.page} aria-label={t('details.label', { title })}>
       <div
         className={styles.backdrop}
         style={{
@@ -724,11 +727,11 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
         initialId={media._type === 'movie' ? NAV.watch : NAV.info}
       >
         <div className={styles.rail}>
-          <NavRail label="Details" navId={NAV.rail}>
+          <NavRail label={t('details.rail')} navId={NAV.rail}>
             <NavItem
               navId={NAV.back}
               icon={<ArrowLeftIcon />}
-              label="Back to browse"
+              label={t('details.backToBrowse')}
               onClick={onBack}
             />
           </NavRail>

@@ -14,6 +14,8 @@ import {
   Switch,
   Text,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
+import { languageName, MEDIA_LANGUAGES, t as translate } from '@shared/i18n';
 import { useOptionalNavigation } from '@shared/navigation';
 import { type RefObject, useEffect, useRef, useState } from 'react';
 
@@ -38,21 +40,6 @@ const NAV = {
 /** The "no subtitles" choice among the tracks (candidate IDs are never this). */
 const OFF = '__off__';
 
-const languages = [
-  ['en', 'English'],
-  ['lt', 'Lithuanian'],
-  ['pl', 'Polish'],
-  ['ru', 'Russian'],
-  ['es', 'Spanish'],
-  ['fr', 'French'],
-  ['de', 'German'],
-  ['it', 'Italian'],
-  ['pt', 'Portuguese'],
-  ['ja', 'Japanese'],
-  ['ko', 'Korean'],
-  ['zh', 'Chinese'],
-];
-
 interface Preferences {
   language: string;
   hearingImpaired: boolean;
@@ -62,7 +49,9 @@ function readPreferences(key: string | null): Preferences {
   const browserLanguage =
     typeof navigator === 'undefined' ? 'en' : navigator.language.split('-')[0];
   const defaults = {
-    language: languages.some(([code]) => code === browserLanguage) ? browserLanguage : 'en',
+    language: (MEDIA_LANGUAGES as readonly string[]).includes(browserLanguage)
+      ? browserLanguage
+      : 'en',
     hearingImpaired: false,
   };
   if (!key || typeof window === 'undefined') return defaults;
@@ -73,7 +62,8 @@ function readPreferences(key: string | null): Preferences {
     if (!stored) return defaults;
     return {
       language:
-        typeof stored.language === 'string' && languages.some(([code]) => code === stored.language)
+        typeof stored.language === 'string' &&
+        (MEDIA_LANGUAGES as readonly string[]).includes(stored.language)
           ? stored.language
           : defaults.language,
       hearingImpaired: stored.hearingImpaired === true,
@@ -96,11 +86,11 @@ function candidateLabel(candidate: SubtitleCandidateDto): string {
   return [
     candidate.languageLabel,
     candidate.provider === 'embedded'
-      ? 'Embedded'
+      ? translate('subtitles.embedded')
       : candidate.provider === 'torrent'
-        ? 'Torrent file'
-        : 'Online',
-    candidate.hearingImpaired ? 'SDH' : null,
+        ? translate('subtitles.torrentFile')
+        : translate('subtitles.online'),
+    candidate.hearingImpaired ? translate('subtitles.sdh') : null,
   ]
     .filter(Boolean)
     .join(' · ');
@@ -111,22 +101,15 @@ export type AudioTrack = NonNullable<
 >[number];
 
 function audioLabel(track: AudioTrack) {
-  let language = track.language;
-  if (language && language !== 'und') {
-    try {
-      language =
-        new Intl.DisplayNames([navigator.language], { type: 'language' }).of(
-          audioLanguage(language) ?? language
-        ) ?? language;
-    } catch {
-      /* Keep unfamiliar language tags readable. */
-    }
-  } else language = `Track ${track.index + 1}`;
+  const language =
+    track.language && track.language !== 'und'
+      ? languageName(track.language)
+      : translate('subtitles.track', { number: track.index + 1 });
   return [
     language,
     track.title,
     track.codec?.toUpperCase(),
-    track.channels ? `${track.channels} channels` : null,
+    track.channels ? translate('subtitles.channels', { count: track.channels }) : null,
   ]
     .filter(Boolean)
     .join(' · ');
@@ -183,6 +166,7 @@ export function SubtitleMenu({
   onOffsetChange: (offset: number) => void;
   preferencesKey: string | null;
 }) {
+  const t = useT();
   const navigation = useOptionalNavigation();
   const [open, setOpen] = useState(false);
   const [timingOpen, setTimingOpen] = useState(false);
@@ -238,14 +222,14 @@ export function SubtitleMenu({
     description: candidate.release && candidate.release !== 'root' ? candidate.release : undefined,
   });
   const withAudio = Boolean(audioTracks && audioTracks.length > 1 && onSelectAudioTrack);
-  const label = withAudio ? 'Audio and subtitles' : 'Subtitles';
+  const label = withAudio ? t('subtitles.audioAndSubtitles') : t('subtitles.subtitles');
 
   return (
     <Popover
       open={open}
       onDismiss={() => (timingOpen && selectedId ? backToSettings() : setOpen(false))}
       modality="modal"
-      title={timingOpen && selectedId ? 'Subtitle timing' : 'Subtitle settings'}
+      title={timingOpen && selectedId ? t('subtitles.timingTitle') : t('subtitles.settingsTitle')}
       hideTitle
       placement="top"
       align="end"
@@ -259,7 +243,7 @@ export function SubtitleMenu({
           aria-label={label}
           onClick={() => setOpen(value => !value)}
         >
-          {withAudio ? 'Audio / CC' : 'CC'}
+          {withAudio ? t('subtitles.triggerWithAudio') : t('subtitles.trigger')}
         </Button>
       )}
     >
@@ -269,7 +253,7 @@ export function SubtitleMenu({
             <Stack gap="md">
               <ActionGroup>
                 <Button navId={NAV.timingBack} icon={<ArrowLeftIcon />} onClick={backToSettings}>
-                  Back to subtitle settings
+                  {t('subtitles.backToSettings')}
                 </Button>
               </ActionGroup>
               <SubtitleTiming
@@ -286,7 +270,7 @@ export function SubtitleMenu({
               {withAudio && audioTracks && onSelectAudioTrack && (
                 <RadioGroup
                   navId={NAV.audio}
-                  label="Audio"
+                  label={t('subtitles.audio')}
                   options={audioTracks.map(track => ({
                     value: String(track.index),
                     label: audioLabel(track),
@@ -299,15 +283,15 @@ export function SubtitleMenu({
               )}
               <Select
                 navId={NAV.language}
-                label="Subtitle language"
-                items={languages.map(([value, name]) => ({ value, label: name }))}
+                label={t('subtitles.language')}
+                items={MEDIA_LANGUAGES.map(value => ({ value, label: languageName(value) }))}
                 value={language}
                 onChange={value => updatePreferences({ ...preferences, language: value })}
                 fullWidth
               />
               <Switch
                 navId={NAV.hearingImpaired}
-                label="Hearing impaired"
+                label={t('subtitles.hearingImpaired')}
                 checked={hearingImpaired}
                 onCheckedChange={checked =>
                   updatePreferences({ ...preferences, hearingImpaired: checked })
@@ -319,13 +303,13 @@ export function SubtitleMenu({
                   loading={loading}
                   onClick={() => onSearch(language, hearingImpaired)}
                 >
-                  {loading ? 'Searching…' : 'Find subtitles'}
+                  {loading ? t('subtitles.searching') : t('subtitles.find')}
                 </Button>
               </ActionGroup>
               <RadioGroup
                 navId={NAV.tracks}
-                label="Subtitle tracks"
-                options={[{ value: OFF, label: 'Off' }, ...preferred.map(trackOption)]}
+                label={t('subtitles.tracks')}
+                options={[{ value: OFF, label: t('subtitles.off') }, ...preferred.map(trackOption)]}
                 value={
                   selectedId === null
                     ? OFF
@@ -338,13 +322,13 @@ export function SubtitleMenu({
               {others.length > 0 && (
                 <Disclosure
                   navId={NAV.others}
-                  title={`Other languages (${others.length})`}
+                  title={t('subtitles.otherLanguagesCount', { count: others.length })}
                   expanded={otherLanguages}
                   onExpandedChange={setOtherLanguages}
                 >
                   <RadioGroup
                     navId={NAV.otherTracks}
-                    label="Other languages"
+                    label={t('subtitles.otherLanguages')}
                     options={others.map(trackOption)}
                     value={
                       others.some(candidate => candidate.id === selectedId) ? selectedId : null
@@ -356,8 +340,9 @@ export function SubtitleMenu({
               {selectedId && (
                 <ActionGroup>
                   <Button navId={NAV.timing} onClick={() => setTimingOpen(true)}>
-                    Adjust subtitle timing ({offset > 0 ? '+' : ''}
-                    {Number(offset.toFixed(2))}s)
+                    {t('subtitles.adjustTiming', {
+                      offset: `${offset > 0 ? '+' : ''}${Number(offset.toFixed(2))}`,
+                    })}
                   </Button>
                 </ActionGroup>
               )}
@@ -368,14 +353,9 @@ export function SubtitleMenu({
               {message}
             </Text>
           )}
-          {configured === false && (
-            <Text tone="secondary">
-              OpenSubtitles search is not configured. Embedded and torrent subtitles remain
-              available.
-            </Text>
-          )}
+          {configured === false && <Text tone="secondary">{t('subtitles.notConfigured')}</Text>}
           {configured && available === false && (
-            <Text tone="secondary">Subtitle provider is currently unavailable.</Text>
+            <Text tone="secondary">{t('subtitles.providerUnavailable')}</Text>
           )}
         </ScrollArea>
       </div>

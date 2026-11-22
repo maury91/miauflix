@@ -33,6 +33,7 @@ import {
   useGlBackendReady,
 } from '@shared/design-system/gl';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
+import { useT } from '@shared/i18n';
 import { getMediaTitle } from '@shared/lib/media.utils';
 import { FocusGroup, FocusScope, type InputKind, NavigationProvider } from '@shared/navigation';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
@@ -137,6 +138,7 @@ const HomePage: FC<HomePageProps> = props => (
 );
 
 const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
+  const t = useT();
   // The rows drawn by WebGL; the DOM rows stay (invisible) for focus and semantics.
   // Decided once; a surface that loses its context for good turns it off (the DOM rows remount)
   const [glWanted] = useState(() => glRowsEnabled && glSurfaceSupported());
@@ -148,7 +150,8 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
   const currentUser = useSelector(selectCurrentUser);
   const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
 
-  const { view, playable, routeQuery, routeMedia, nextEpisode } = useMediaRoute(activeRoute);
+  const { view, playable, routeQuery, routeMedia, nextEpisode, titleLanguage } =
+    useMediaRoute(activeRoute);
   const browsing = view === 'browse';
   // Only the rows need the renderer: details and the player don't wait for its chunk
   useGlBackendReady(glRows && browsing);
@@ -490,7 +493,7 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
     return (
       <main className={styles.page}>
         <div className={styles.fullPageState}>
-          <ProgressSpinner size="lg" label="Loading categories…" showLabel />
+          <ProgressSpinner size="lg" label={t('home.loadingCategories')} showLabel />
         </div>
       </main>
     );
@@ -499,8 +502,8 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
     return (
       <main className={styles.page}>
         <div className={styles.fullPageState}>
-          <Message tone="danger" toneLabel="Error">
-            Failed to load categories.
+          <Message tone="danger" toneLabel={t('common.error')}>
+            {t('home.categoriesFailed')}
           </Message>
         </div>
       </main>
@@ -595,22 +598,19 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                 <SurfaceContextProvider value="solid">
                   <FocusScope autoFocus>
                     <EmptyState
-                      heading="Unable to load this title"
+                      heading={t('home.titleFailedHeading')}
                       message={
-                        <Message tone="danger" toneLabel="Error" live="assertive">
-                          <ErrorNotice
-                            error={routeQuery.error}
-                            fallback="Unable to load this title."
-                          />
+                        <Message tone="danger" toneLabel={t('common.error')} live="assertive">
+                          <ErrorNotice error={routeQuery.error} fallback={t('home.titleFailed')} />
                         </Message>
                       }
                       actions={
                         <>
                           <Button navId="title-retry" onClick={() => void routeQuery.refetch()}>
-                            Retry
+                            {t('common.retry')}
                           </Button>
                           <Button navId="title-back" onClick={navigation.returnToBrowse}>
-                            Back to Home
+                            {t('common.backToHome')}
                           </Button>
                         </>
                       }
@@ -619,13 +619,15 @@ const HomeContent: FC<HomePageProps> = ({ route, interactive = true, onHydrated 
                 </SurfaceContextProvider>
               </NavigationProvider>
             ) : (
-              <ProgressSpinner size="lg" label="Loading the title…" />
+              <ProgressSpinner size="lg" label={t('home.loadingTitle')} />
             )}
           </div>
         ) : view === 'player' && playable ? (
           <PlayerView
             playable={playable}
-            title={selectedMedia ? getMediaTitle(selectedMedia) : 'Selected title'}
+            title={selectedMedia ? getMediaTitle(selectedMedia) : t('player.selectedTitle')}
+            titleLanguage={titleLanguage}
+            titleLanguageLoading={!routeQuery.isError}
             onBack={navigation.returnToDetails}
             nextEpisode={nextEpisode}
             onPlayNext={() => {

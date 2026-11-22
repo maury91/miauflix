@@ -52,9 +52,9 @@ describe('SetupPage', () => {
     );
     expect(confirmation).toHaveAttribute('type', 'password');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Show confirmation password' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Show password confirmation' }));
     expect(confirmation).toHaveAttribute('type', 'text');
-    expect(screen.getByRole('button', { name: 'Hide confirmation password' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Hide password confirmation' })).toHaveAttribute(
       'aria-pressed',
       'true'
     );
@@ -63,7 +63,7 @@ describe('SetupPage', () => {
   it('starts on the email field', () => {
     render(<SetupPage />);
 
-    expect(fieldFocused('Email')).toBe(true);
+    expect(fieldFocused('Email address')).toBe(true);
   });
 
   it('describes the password strength', async () => {
@@ -80,7 +80,7 @@ describe('SetupPage', () => {
     const user = userEvent.setup();
     render(<SetupPage />);
 
-    await user.type(screen.getByLabelText('Email'), 'admin@example.com');
+    await user.type(screen.getByLabelText('Email address'), 'admin@example.com');
     await user.type(screen.getByLabelText('Password'), 'password123');
     await user.type(screen.getByLabelText('Confirm password'), 'password124');
     await user.click(screen.getByRole('button', { name: 'Create admin account' }));
@@ -96,7 +96,7 @@ describe('SetupPage', () => {
     const user = userEvent.setup();
     render(<SetupPage />);
 
-    await user.type(screen.getByLabelText('Email'), 'admin@example.com');
+    await user.type(screen.getByLabelText('Email address'), 'admin@example.com');
     await user.type(screen.getByLabelText('Password'), 'password123');
     await user.type(screen.getByLabelText('Confirm password'), 'password123{Enter}');
 
@@ -110,14 +110,14 @@ describe('SetupPage', () => {
     const user = userEvent.setup();
     render(<SetupPage />);
 
-    const email = screen.getByLabelText('Email');
+    const email = screen.getByLabelText('Email address');
     await user.type(email, 'malformed');
     await user.type(screen.getByLabelText('Password'), 'password123');
     await user.type(screen.getByLabelText('Confirm password'), 'password123');
     await user.click(screen.getByRole('button', { name: 'Create admin account' }));
 
     expect(email).toHaveAccessibleDescription('Enter a valid email address');
-    expect(fieldFocused('Email')).toBe(true);
+    expect(fieldFocused('Email address')).toBe(true);
     expect(mocks.createAdmin).not.toHaveBeenCalled();
   });
 });

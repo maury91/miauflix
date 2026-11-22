@@ -8,6 +8,7 @@ import {
   useGlPaint,
   useGlParent,
 } from '@shared/design-system/gl';
+import { useT } from '@shared/i18n';
 import { getBackdropPlacement } from '@shared/lib/backdrop-focus';
 import { artworkUrl } from '@shared/lib/media.utils';
 import { type FC, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -128,6 +129,8 @@ function GlHero({
     [width, height, windowHeight, detailsLeft]
   );
 
+  // The details' texts are built in the interface language: a change builds them again
+  const t = useT();
   const details = useMemo(
     () =>
       media
@@ -135,10 +138,11 @@ function GlHero({
             windowHeight,
             detailsWidth: geometry.detailsWidth,
             width,
+            t,
           })
         : null,
     // geometry follows width and detailsLeft
-    [availability, media, preparation, windowHeight, geometry.detailsWidth, width]
+    [availability, media, preparation, windowHeight, geometry.detailsWidth, width, t]
   );
   const logoUrl = heroLogo ? artworkUrl(heroLogo, 'logo', 500) : null;
   const logoStatus = useGlImageStatus(logoUrl);
@@ -172,9 +176,10 @@ function GlHero({
             windowHeight,
             detailsWidth: geometry.detailsWidth,
             width,
+            t,
           })
         : null,
-    [upcomingMedia, windowHeight, geometry.detailsWidth, width]
+    [upcomingMedia, windowHeight, geometry.detailsWidth, width, t]
   );
   const upcomingLogo = upcoming?.heroLogo ? artworkUrl(upcoming.heroLogo, 'logo', 500) : null;
   useEffect(() => {
@@ -369,6 +374,7 @@ function GlHeroText({
   preparation: PreloadPreparationSnapshot | null;
   availability: SourceAvailability;
 }) {
+  const t = useT();
   if (!media) return null;
   const details = heroDetailsModel(media, preparation, availability);
   const status = details.status;
@@ -376,9 +382,9 @@ function GlHeroText({
     status?.kind === 'quality'
       ? status.label
       : status?.kind === 'unavailable'
-        ? 'No source'
+        ? t('home.noSource')
         : status?.kind === 'checking'
-          ? 'Checking…'
+          ? t('home.checking')
           : null;
   return (
     <header

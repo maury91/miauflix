@@ -1,5 +1,6 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
 import type { PlayableRef } from '@miauflix/backend';
+import { t } from '@shared/i18n';
 import { qualityLabel, sourceLabel } from '@shared/lib/source-quality';
 
 export interface NotificationCopy {
@@ -22,24 +23,26 @@ function episodeLabel({ seasonNumber, episodeNumber }: NotificationItem): string
 export function notificationCopy(notification: NotificationItem): NotificationCopy {
   const label = qualityLabel(notification.quality);
   const release = sourceLabel(notification.sourceType);
-  const withQuality = (sentence: string) => (label ? `${sentence} in` : `${sentence}.`);
+  const withQuality = (sentence: string) =>
+    t(label ? 'notifications.withQuality' : 'notifications.sentence', { sentence });
 
   if (notification.type === 'movie_quality_upgrade') {
     // Notifications stored before quality was recorded keep their original sentence.
     if (!label && !release)
       return {
-        heading: 'Better quality available',
+        heading: t('notifications.betterQuality'),
         text: notification.message,
         qualityLabel: null,
         release: null,
       };
     const previous = sourceLabel(notification.previousSourceType);
-    const upgrade = [release, previous && `(was ${previous})`].filter(Boolean).join(' ');
+    const upgrade = [release, previous && t('notifications.was', { previous })]
+      .filter(Boolean)
+      .join(' ');
     return {
-      heading: 'Better quality available',
-      text: label
-        ? `${notification.title} is now available in`
-        : `${notification.title} is now available as`,
+      heading: t('notifications.betterQuality'),
+      // The row puts the title before the sentence: the sentence doesn't repeat it
+      text: label ? t('notifications.availableIn') : t('notifications.availableAs'),
       qualityLabel: label,
       release: upgrade || null,
     };
@@ -48,15 +51,17 @@ export function notificationCopy(notification: NotificationItem): NotificationCo
   const episode = notification.mediaType === 'tv' ? episodeLabel(notification) : null;
   if (notification.mediaType === 'tv')
     return {
-      heading: 'New episode available',
-      text: withQuality(`${episode ?? 'A new episode'} is now available to watch`),
+      heading: t('notifications.newEpisode'),
+      text: withQuality(
+        t('notifications.episodeAvailable', { episode: episode ?? t('notifications.aNewEpisode') })
+      ),
       qualityLabel: label,
       release: label ? release : null,
     };
 
   return {
-    heading: 'Just added',
-    text: withQuality(`${notification.title} is now available`),
+    heading: t('notifications.justAdded'),
+    text: withQuality(t('notifications.nowAvailable')),
     qualityLabel: label,
     release: label ? release : null,
   };

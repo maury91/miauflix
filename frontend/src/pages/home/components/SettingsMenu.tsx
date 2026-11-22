@@ -1,5 +1,6 @@
 import { Heading, List, ListItem, useFlyoutBottom } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { useT } from '@shared/i18n';
 import { FocusScope } from '@shared/navigation';
 import type { FC, ReactNode } from 'react';
 
@@ -24,17 +25,11 @@ const SETTINGS_MENU_NAV = {
   area: (area: SettingsArea) => `settings-menu:${area}`,
 } as const;
 
-const AREAS: Record<SettingsArea, { title: string; icon: ReactNode }> = {
-  configuration: { title: 'Configuration', icon: <ConfigurationIcon /> },
-  storage: { title: 'Storage', icon: <StorageIcon /> },
-  sources: { title: 'Sources', icon: <SourcesIcon /> },
-  server: { title: 'Change server', icon: <ServerIcon /> },
-};
-
-const DESCRIPTIONS: Record<Exclude<SettingsArea, 'server'>, string> = {
-  configuration: 'Services, integrations and server configuration',
-  storage: 'Downloaded files and the space they use',
-  sources: 'Source providers and the order they are searched in',
+const ICONS: Record<SettingsArea, ReactNode> = {
+  configuration: <ConfigurationIcon />,
+  storage: <StorageIcon />,
+  sources: <SourcesIcon />,
+  server: <ServerIcon />,
 };
 
 export interface SettingsMenuProps {
@@ -67,6 +62,7 @@ export const SettingsMenu: FC<SettingsMenuProps> = ({
   onExit,
   onPointerEnter,
 }) => {
+  const t = useT();
   const bottom = useFlyoutBottom(`[${SETTINGS_RAIL_ITEM_ATTRIBUTE}]`);
   const placed = bottom !== null;
   const inUse = focused && placed;
@@ -90,9 +86,9 @@ export const SettingsMenu: FC<SettingsMenuProps> = ({
           key={area}
           // Only an open panel registers its areas, so the rail never moves into it
           navId={inUse ? SETTINGS_MENU_NAV.area(area) : undefined}
-          leading={AREAS[area].icon}
-          title={AREAS[area].title}
-          description={area === 'server' ? serverAddress : DESCRIPTIONS[area]}
+          leading={ICONS[area]}
+          title={t(`home.area.${area}`)}
+          description={area === 'server' ? serverAddress : t(`home.areaDescription.${area}`)}
           onClick={() => onOpen(area)}
         />
       ))}
@@ -111,7 +107,7 @@ export const SettingsMenu: FC<SettingsMenuProps> = ({
       <section className={styles.panel} aria-labelledby="settings-menu-title">
         <div className={styles.header}>
           <Heading level={2} variant="heading" id="settings-menu-title">
-            Settings
+            {t('home.settings')}
           </Heading>
         </div>
         {inUse && areas[0] ? (

@@ -1,0 +1,122 @@
+import type { storage as english } from '../en/storage';
+import type { Translation } from '../types';
+
+export const storage: Translation<typeof english> = {
+  'storage.kind.movie': 'Filmas',
+  'storage.kind.episode': 'Serija',
+  'storage.kind.anime': 'Anime',
+  'storage.category.movie': 'Filmai',
+  'storage.category.episode': 'Serijos',
+  'storage.category.anime': 'Anime',
+  'storage.category.unknown': 'Neatpažinti atsisiuntimai',
+  'storage.category.remux': 'TV skirtos „remux“ kopijos',
+  'storage.category.other': 'Kiti duomenys',
+  'storage.unavailable': 'Nepasiekiama',
+  'storage.sort.size': 'Dydis (nuo didžiausio)',
+  'storage.sort.name': 'Pavadinimas (pagal abėcėlę)',
+  'storage.sort.type': 'Tipas',
+  'storage.sort.progress': 'Atsisiuntimo eiga',
+  'storage.sort.status': 'Būsena',
+  'storage.status.active': 'Aktyvus',
+  'storage.status.available_offline': 'Galima žiūrėti neprisijungus',
+  'storage.status.local_only': 'Tik serveryje',
+  'storage.status.inactive': 'Neaktyvus',
+  'storage.status.unknown': 'Nežinoma',
+  'storage.freeFailed': 'Nepavyko ištrinti atsisiuntimo. Pabandykite dar kartą.',
+  'storage.seedingConfigured':
+    '„Miauflix“ dalijasi atsisiųstais failais tiek laiko, kiek nurodyta saugyklos nustatymuose. Paskui jie lieka tik serveryje.',
+  'storage.seedingNone': '„Miauflix“ nustoja dalytis failu iškart, kai jį atsisiunčia.',
+  'storage.seedingFor':
+    'Atsisiųstų failų dalijimosi trukmė: {duration}. Paskui jie lieka tik serveryje.',
+  'storage.freed': 'Atlaisvinta vieta ({size}), kurią užėmė „{name}“.',
+  'storage.title': 'Saugykla',
+  'storage.description':
+    'Čia matote, ką „Miauflix“ saugo serveryje. Norėdami atlaisvinti vietos, ištrinkite atsisiuntimus.',
+  'storage.back': 'Grįžti į pradžią',
+  'storage.confirmTitle': 'Ištrinti „{name}“ atsisiuntimą?',
+  'storage.confirmDescription':
+    'Serveryje atsilaisvins {size}. Norėdami vėl žiūrėti, turėsite atsisiųsti iš naujo.',
+  'storage.deleteDownload': 'Ištrinti atsisiuntimą',
+  'storage.updating': 'Atnaujinami saugyklos duomenys…',
+  'storage.loading': 'Įkeliami saugyklos duomenys…',
+  'storage.refreshFailed':
+    'Nepavyko atnaujinti saugyklos duomenų. Rodomi paskutiniai turimi duomenys.',
+  'storage.loadFailed':
+    'Nepavyko įkelti saugyklos duomenų. Patikrinkite ryšį ir bandykite dar kartą.',
+  'storage.downloads': 'Atsisiuntimai',
+  'storage.sortBy': 'Rikiuoti pagal',
+  'storage.empty': 'Šiame serveryje nėra išsaugotų atsisiuntimų.',
+  'storage.list': 'Atsisiųstas turinys',
+  'storage.freeLabel': 'Ištrinti „{name}“ atsisiuntimą',
+  'storage.beingWatched': 'Žiūrima',
+  'storage.freeSpace': 'Ištrinti atsisiuntimą',
+  'storage.legend':
+    'Aktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis įkeltas. Neaktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis neįkeltas. Galima žiūrėti neprisijungus. Vaizdo įrašas atsisiųstas ir „Miauflix“ dar gali įkelti jo „torrent“ šaltinį. Tik serveryje. Vaizdo įrašas lieka serveryje ir „Miauflix“ jo „torrent“ šaltinio nebeįkels. {seeding}',
+  'storage.videoComplete': 'Vaizdo įrašas atsiųstas',
+  'storage.percentDownloaded': 'Atsiųsta {percent} %',
+  'storage.currentlyWatched': 'Dabar žiūrima',
+  'storage.reserved': 'Rezervuota: {size}',
+  'storage.tvRemux': 'TV skirta „remux“ kopija: {size}',
+  'storage.torrentLoadedUntil': '„Torrent“ šaltinis įkeltas iki {date}',
+  'storage.torrentMayReloadUntil': '„Torrent“ šaltinį dar galima įkelti iki {date}',
+  'storage.duration.day': {
+    one: '{count} diena',
+    few: '{count} dienos',
+    many: '{count} dienos',
+    other: '{count} dienų',
+  },
+  'storage.duration.hour': {
+    one: '{count} valanda',
+    few: '{count} valandos',
+    many: '{count} valandos',
+    other: '{count} valandų',
+  },
+  'storage.duration.minute': {
+    one: '{count} minutė',
+    few: '{count} minutės',
+    many: '{count} minutės',
+    other: '{count} minučių',
+  },
+  'storage.duration.second': {
+    one: '{count} sekundė',
+    few: '{count} sekundės',
+    many: '{count} sekundės',
+    other: '{count} sekundžių',
+  },
+  'storage.field.STORAGE_THRESHOLD': 'Saugyklos limitas',
+  'storage.field.STORAGE_PLAYBACK_RESERVE': 'Vieta atkūrimui',
+  'storage.field.CONTENT_SEED_DURATION_SECONDS': 'Dalijimasis po atsisiuntimo',
+  'storage.field.DOWNLOAD_PATH': 'Atsisiuntimų aplankas',
+  'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'Atsisiuntimų aplankas skirtas tik „Miauflix“',
+  'storage.field.STORAGE_PAD_FILE_SIZES': 'Iš anksto skirti vietos failams',
+  'storage.seedDescription':
+    'Pasirinkite, kiek laiko dalytis failu, kai jis atsisiųstas. Įveskite 0, kad dalijimasis baigtųsi iškart.',
+  'storage.zeroLimit': 'Nustačius 0 limitą, „Miauflix“ negalės išsaugoti atsisiuntimų.',
+  'storage.limitOverDisk':
+    'Limitas viršija „Miauflix“ prieinamą vietą diske ({capacity}). Kai diskas prisipildys, atsisiuntimai sustos.',
+  'storage.reserveTakesAll': 'Visa vieta skirta atkūrimui. „Miauflix“ nieko nesiųs iš anksto.',
+  'storage.settingsTitle': 'Saugyklos nustatymai',
+  'storage.settingsDescription':
+    'Nustatykite, kiek vietos gali naudoti „Miauflix“, kiek jos palikti atkūrimui ir kiek laiko dalytis atsisiųstais failais. Pakeitimai įsigalioja be paleidimo iš naujo.',
+  'storage.settingsLoading': 'Įkeliami saugyklos nustatymai…',
+  'storage.settingsLoadFailed':
+    'Nepavyko įkelti saugyklos nustatymų. Juos vis tiek galite pakeisti konfigūracijos puslapyje.',
+  'storage.advanced': 'Išplėstiniai nustatymai',
+  'storage.advancedDescription':
+    'Pasirinkite atsisiuntimų aplanką ir nustatykite, kaip „Miauflix“ į jį įrašo failus.',
+  'storage.settingsActions': 'Saugyklos nustatymų veiksmai',
+  'storage.saved': 'Saugyklos nustatymai išsaugoti.',
+  'storage.saveFailed': 'Nepavyko išsaugoti saugyklos nustatymų. Pabandykite dar kartą.',
+  'storage.diskUsage': 'Disko vietos naudojimas',
+  'storage.storageUsage': 'Saugyklos naudojimas',
+  'storage.usageUnavailable': 'Naudojimo duomenų nėra',
+  'storage.limit': 'Limitas: {size}',
+  'storage.notSaved': '(neišsaugota)',
+  'storage.spaceByKind': 'Užimama vieta pagal failų tipą',
+  'storage.free': 'Laisva',
+  'storage.counts':
+    'Iš galimų {limit} „Miauflix“ jau naudoja arba rezervavo {charged}. Įskaičiuota ir vieta dar siunčiamiems failams.',
+  'storage.aheadStop':
+    'Išankstiniams atsisiuntimams „Miauflix“ naudoja iki {size}. Likusi vieta skirta atkūrimui.',
+  'storage.checkValues': 'Patikrinkite šias reikšmes: {keys}.',
+};

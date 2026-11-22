@@ -1,6 +1,7 @@
 import type { LoginResponse, SetupStatusResponse } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 
 async function handleSetupRequest<T>(
   requestFn: () => Promise<Response>,
@@ -20,7 +21,7 @@ async function handleSetupRequest<T>(
         : errorContext;
     return { error: { status: res.status, data: errorMessage } };
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorMessage = error instanceof Error ? error.message : t('api.unknownError');
     const errorStatus = (error as { status?: number })?.status || 500;
     return { error: { status: errorStatus, data: errorMessage } };
   }
@@ -34,7 +35,7 @@ export const setupApi = createApi({
       async queryFn() {
         return handleSetupRequest<SetupStatusResponse>(
           () => backendClient.api.auth.setup.$get(),
-          'Setup status check failed'
+          t('api.setupStatusCheckFailed')
         );
       },
     }),
@@ -43,7 +44,7 @@ export const setupApi = createApi({
       async queryFn(credentials) {
         return handleSetupRequest<LoginResponse>(
           () => backendClient.api.auth.setup.$post({ json: credentials }),
-          'Admin creation failed'
+          t('api.adminCreationFailed')
         );
       },
     }),

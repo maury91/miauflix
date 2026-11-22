@@ -1,6 +1,7 @@
 import { useLoginMutation } from '@features/auth/api/auth.api';
 import { Button, FormSection, Message, PasswordField, TextField } from '@shared/design-system';
 import { TIZEN_IME_DONE } from '@shared/hooks/useKeyboard';
+import { t as translate, useT } from '@shared/i18n';
 import { useNavigation } from '@shared/navigation';
 import type { FC, KeyboardEvent } from 'react';
 import { useEffect, useState } from 'react';
@@ -17,7 +18,7 @@ function describeError(error: unknown): string {
       if (typeof message === 'string' && message) return message;
     }
   }
-  return 'Sign-in failed. Check your email and password.';
+  return translate('auth.signInFailed');
 }
 
 /**
@@ -30,6 +31,7 @@ export const LoginWithEmail: FC<{
   /** Show the form's title; without it the title only names the form for assistive technology. */
   showTitle: boolean;
 }> = ({ showTitle }) => {
+  const t = useT();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading, error }] = useLoginMutation();
@@ -52,13 +54,13 @@ export const LoginWithEmail: FC<{
   return (
     <FormSection
       navId={LOGIN_NAV.form}
-      title="Sign in"
+      title={t('auth.signIn')}
       titleHidden={!showTitle}
       onSubmit={submit}
       busy={isLoading}
       message={
         error ? (
-          <Message tone="danger" toneLabel="Error" live="assertive">
+          <Message tone="danger" toneLabel={t('common.error')} live="assertive">
             {describeError(error)}
           </Message>
         ) : undefined
@@ -71,31 +73,31 @@ export const LoginWithEmail: FC<{
           loading={isLoading}
           disabled={!email.trim() || !password.trim()}
         >
-          Continue
+          {t('auth.continue')}
         </Button>
       }
     >
       <TextField
         navId={LOGIN_NAV.email}
         id="email"
-        label="Email"
+        label={t('auth.email')}
         type="email"
         value={email}
         onChange={event => setEmail(event.target.value)}
         onKeyDown={nextOnDone}
-        placeholder="Enter your email"
+        placeholder={t('auth.enterEmail')}
         required
         autoComplete="email"
       />
       <PasswordField
         navId={LOGIN_NAV.password}
         id="password"
-        label="Password"
-        showLabel="Show password"
-        hideLabel="Hide password"
+        label={t('auth.password')}
+        showLabel={t('auth.showPassword')}
+        hideLabel={t('auth.hidePassword')}
         value={password}
         onChange={event => setPassword(event.target.value)}
-        placeholder="Enter your password"
+        placeholder={t('auth.enterPassword')}
         required
         autoComplete="current-password"
       />

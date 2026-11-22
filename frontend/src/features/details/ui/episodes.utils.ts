@@ -1,4 +1,5 @@
 import type { ProgressEntry } from '@miauflix/backend';
+import { t } from '@shared/i18n';
 
 type EpisodeProgress = Pick<ProgressEntry, 'state' | 'positionSeconds' | 'durationSeconds'>;
 
@@ -30,6 +31,6 @@ export function episodeProgress(entry: EpisodeProgress | undefined): number | un
 export function episodeProgressLabel(entry: EpisodeProgress | undefined): string | null {
   const share = episodeProgress(entry);
   if (share === undefined) return null;
-  if (entry?.state === 'completed') return 'Watched';
-  return `Resume ${Math.round(share * 100)}%`;
+  if (entry?.state === 'completed') return t('details.watched');
+  return t('details.resumePercent', { percent: Math.round(share * 100) });
 }

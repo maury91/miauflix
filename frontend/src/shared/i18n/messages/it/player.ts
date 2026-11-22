@@ -2,43 +2,39 @@ import type { player as english } from '../en/player';
 import type { Translation } from '../types';
 
 export const player: Translation<typeof english> = {
-  'player.trying': 'Provo la fonte {position} di {total} per “{title}”…',
-  'player.downloadingPart': 'Scarico questa parte di “{title}”…',
-  'player.converting': 'Converto “{title}” per la riproduzione…',
+  'player.trying': 'Tentativo con la fonte {position} di {total} per “{title}”…',
+  'player.downloadingPart': 'Download di questa parte di “{title}”…',
+  'player.converting': 'Conversione di “{title}” per la riproduzione…',
   'player.noSource':
-    "Non c'è nessuna fonte per “{title}”. Premi “Avvisami” per ricevere una notifica appena esce.",
+    '“{title}” non è ancora disponibile. Seleziona “Avvisami” per ricevere un avviso appena potrai guardarlo.',
   'player.noRoomMovie':
-    "Non c'è abbastanza spazio per riprodurre questo film. Libera spazio sul server o aumenta il suo limite di archiviazione, poi riprova.",
+    'Non c’è abbastanza spazio per riprodurre il film. Libera spazio sul server o aumenta il limite di archiviazione, poi riprova.',
   'player.noRoomEpisode':
-    "Non c'è abbastanza spazio per riprodurre questo episodio. Libera spazio sul server o aumenta il suo limite di archiviazione, poi riprova.",
+    'Non c’è abbastanza spazio per riprodurre l’episodio. Libera spazio sul server o aumenta il limite di archiviazione, poi riprova.',
   'player.failure.unavailable':
-    "Non c'è ancora nessuna fonte riproducibile per “{title}”. Riprova più tardi o scegli un altro titolo.",
-  'player.failure.session':
-    'La tua sessione non può riprodurre “{title}”. Accedi di nuovo, poi riprova.',
-  'player.failure.rateLimited':
-    'I controlli di riproduzione per “{title}” sono temporaneamente limitati. Attendi un momento, poi riprova.',
-  'player.failure.detail': 'Non è stato possibile avviare “{title}”: {detail}',
+    '“{title}” non è ancora disponibile. Riprova più tardi o scegli un altro titolo.',
+  'player.failure.session': 'Accedi di nuovo per guardare “{title}”.',
+  'player.failure.rateLimited': 'Aspetta un attimo prima di riprovare a riprodurre “{title}”.',
+  'player.failure.detail': 'Impossibile riprodurre “{title}”. {detail}',
   'player.failure.offline':
-    'Miauflix non è riuscito a raggiungere il servizio di riproduzione per “{title}”. Controlla la connessione, poi riprova.',
+    'Impossibile collegarsi per riprodurre “{title}”. Controlla la connessione e riprova.',
   'player.failure.server':
-    'Non è stato possibile preparare la fonte di “{title}”. Riprova o scegli un altro titolo.',
-  'player.failure.generic':
-    'Non è stato possibile avviare “{title}”. Riprova per preparare di nuovo la fonte.',
+    'Impossibile preparare la fonte per “{title}”. Riprova o scegli un altro titolo.',
+  'player.failure.generic': 'Impossibile avviare “{title}”. Riprova.',
   'player.failure.selectedSource':
-    'Non è stato possibile caricare la fonte scelta per “{title}”. Riprova per preparare di nuovo la fonte.',
-  'player.failure.allSources':
-    'Non è stato possibile caricare nessuna fonte di “{title}”. Riprova per preparare di nuovo la fonte.',
-  'player.status.checking': 'Controllo le fonti di “{title}”…',
-  'player.status.preparing': 'Preparo “{title}” per la riproduzione…',
+    'Impossibile caricare la fonte selezionata per “{title}”. Riprova.',
+  'player.failure.allSources': 'Nessuna fonte per “{title}” ha funzionato. Riprova.',
+  'player.status.checking': 'Verifica delle fonti per “{title}”…',
+  'player.status.preparing': 'Preparazione di “{title}”…',
   'player.status.ready': '“{title}” è pronto.',
-  'player.status.unavailable': "Non c'è ancora nessuna fonte riproducibile per “{title}”.",
-  'player.status.error': 'Non è stato possibile avviare “{title}”.',
+  'player.status.unavailable': '“{title}” non è ancora disponibile.',
+  'player.status.error': 'Impossibile avviare “{title}”.',
   'player.backToDetails': 'Torna ai dettagli',
   'player.logo': 'Logo di Miauflix',
-  'player.playFailed': 'Non è stato possibile avviare la riproduzione. Premi di nuovo Riproduci.',
+  'player.playFailed': 'Impossibile avviare la riproduzione. Premi di nuovo “Riproduci”.',
   'player.controls': 'Controlli di riproduzione',
   'player.toolbar': 'Barra di riproduzione',
-  'player.preparing': 'Preparo la riproduzione…',
+  'player.preparing': 'Preparazione della riproduzione…',
   'player.seek': 'Avanzamento',
   'player.timeOf': '{position} di {duration}',
   'player.play': 'Riproduci',
@@ -51,16 +47,16 @@ export const player: Translation<typeof english> = {
   'player.label': 'Lettore',
   'player.skipIntro': 'Salta intro',
   'player.credits': 'Titoli di coda',
-  'player.skipCredits': 'Salta titoli di coda ({seconds}s)',
+  'player.skipCredits': 'Salta i titoli di coda ({seconds} s)',
   'player.watchCredits': 'Guarda i titoli di coda',
   'player.nextEpisode': 'Prossimo episodio',
-  'player.playNext': 'Riproduci il prossimo episodio ({seconds}s)',
-  'player.stay': 'Resta',
-  'player.notifyPromised': 'Ti avviseremo appena “{title}” sarà disponibile.',
+  'player.playNext': 'Guarda il prossimo episodio ({seconds} s)',
+  'player.stay': 'Resta su questo episodio',
+  'player.notifyPromised': 'Ti avviseremo appena potrai guardare “{title}”.',
   'player.notifyMe': 'Avvisami',
-  'player.notifyFailed': 'Non è stato possibile salvare la notifica. Riprova.',
+  'player.notifyFailed': 'Impossibile attivare l’avviso. Riprova.',
   'player.selectedTitle': 'Titolo selezionato',
   'player.audioConversionFailed':
-    'Impossibile avviare la conversione dell’audio. Riprova la riproduzione.',
-  'player.audioFailed': 'Riproduzione dell’audio non riuscita. Riprova la riproduzione.',
+    'Impossibile avviare la conversione dell’audio. Prova a riprodurre di nuovo il video.',
+  'player.audioFailed': 'Problema con l’audio. Prova a riprodurre di nuovo il video.',
 };

@@ -1,6 +1,7 @@
 import { beginTraktAssociation } from '@features/integrations/api/trakt.api';
 import type { ProviderAuthorization } from '@miauflix/service-contracts';
 import { Button, Dialog, Stack } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { useOptionalNavigation } from '@shared/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -32,6 +33,7 @@ interface TraktConnectModalProps {
  * false when the dialog is closed (its close button, the scrim or Back).
  */
 export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectModalProps) {
+  const t = useT();
   const [authorization, setAuthorization] = useState<ProviderAuthorization | null>(null);
   const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -65,7 +67,7 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
       await navigator.clipboard.writeText(authorization.userCode);
       setCopied(true);
     } catch {
-      setError('Unable to copy the code. Please enter it manually.');
+      setError(t('integrations.copyFailed'));
     }
   };
 
@@ -80,7 +82,7 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
       }
       setAuthorization(result.data);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unable to start Trakt association');
+      setError(error instanceof Error ? error.message : t('integrations.startFailed'));
     } finally {
       setBusy(false);
     }
@@ -90,10 +92,10 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
     <Dialog
       open
       size="lg"
-      title="Connect Trakt"
-      description="Connect your Trakt account to your Miauflix account to get started."
+      title={t('integrations.title')}
+      description={t('integrations.description')}
       onDismiss={() => onDismiss(false)}
-      closeLabel="Close Trakt dialog"
+      closeLabel={t('integrations.close')}
       actions={
         authorization ? (
           <>
@@ -102,10 +104,10 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
               icon={<ExternalIcon />}
               onClick={() => window.open(activationUrl, '_blank', 'noopener,noreferrer')}
             >
-              Open Trakt
+              {t('integrations.openTrakt')}
             </Button>
             <Button navId={TRAKT_NAV.copy} icon={<CopyIcon />} onClick={() => void copyCode()}>
-              Copy code
+              {t('integrations.copyCode')}
             </Button>
           </>
         ) : (
@@ -116,10 +118,10 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
               loading={busy}
               onClick={() => void begin()}
             >
-              Let&apos;s go
+              {t('integrations.letsGo')}
             </Button>
             <Button navId={TRAKT_NAV.dismiss} onClick={() => onDismiss(true)}>
-              Don’t ask again
+              {t('integrations.neverAsk')}
             </Button>
           </>
         )

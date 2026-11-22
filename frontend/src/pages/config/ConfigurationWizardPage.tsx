@@ -17,6 +17,7 @@ import {
   Stack,
   Text,
 } from '@shared/design-system';
+import { type MessageKey, t as translate, useT } from '@shared/i18n';
 import { FocusGroup, useNavigation } from '@shared/navigation';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -62,37 +63,38 @@ interface Props {
   onDismiss: () => void;
 }
 
-const SERVICE_SUMMARIES: Record<string, string> = {
-  CATALOG: 'Movie and show metadata from The Movie Database.',
-  CATALOG_RUNTIME: 'Episode syncing and catalog freshness behavior.',
-  LIST: 'Trakt lists and watchlist integration.',
-  SOURCES: 'Source providers, search budgets and VPN protection.',
-  MEDIA_LOAD: 'Torrent engine service: downloads, storage limits and tracker scrapes.',
-  DOWNLOAD: 'Playback preparation: warmup buffer and video conversion.',
-  SOURCE: 'Source discovery and ranking for available movies.',
-  TMDB: 'The Movie Database provider settings.',
-  VPN: 'Network routing and VPN detection.',
-  JWT: 'API sessions and access token settings.',
-  QUEUE: 'Background job queue connection.',
-  SERVER: 'HTTP server and runtime settings.',
+const SERVICE_SUMMARIES: Record<string, MessageKey> = {
+  CATALOG: 'config.summary.CATALOG',
+  CATALOG_RUNTIME: 'config.summary.CATALOG_RUNTIME',
+  LIST: 'config.summary.LIST',
+  SOURCES: 'config.summary.SOURCES',
+  MEDIA_LOAD: 'config.summary.MEDIA_LOAD',
+  DOWNLOAD: 'config.summary.DOWNLOAD',
+  SOURCE: 'config.summary.SOURCE',
+  TMDB: 'config.summary.TMDB',
+  VPN: 'config.summary.VPN',
+  JWT: 'config.summary.JWT',
+  QUEUE: 'config.summary.QUEUE',
+  SERVER: 'config.summary.SERVER',
 };
 
 const ADVANCED_OPTIONAL_GROUPS = new Set(['CATALOG_RUNTIME', 'JWT', 'QUEUE', 'SERVER']);
 
 function getServiceSummary(name: string, entries: ConfigEntryView[]): string {
-  return SERVICE_SUMMARIES[name] ?? entries[0]?.serviceDescription ?? 'Optional service settings.';
+  const summary = SERVICE_SUMMARIES[name];
+  if (summary) return translate(summary);
+  return entries[0]?.serviceDescription ?? translate('config.summary.fallback');
 }
 
-function getReadiness(entries: ConfigEntryView[]): string {
-  const missingRequired = entries.some(entry => entry.required && !entry.hasValue);
-  if (missingRequired) return 'Needs setup';
-  return 'Ready';
+function isReady(entries: ConfigEntryView[]): boolean {
+  return !entries.some(entry => entry.required && !entry.hasValue);
 }
 
 const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, duration));
 
 /** Guide required service configuration step by step, then offer optional settings before dismissal. */
 export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
+  const t = useT();
   const { data: entries = [], isLoading } = useGetConfigQuery(undefined);
   const { data: serviceStatuses = {} } = useGetServiceStatusesQuery(undefined);
   const [testServiceConfig] = useTestServiceConfigMutation();
@@ -165,7 +167,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     ADVANCED_OPTIONAL_GROUPS.has(name)
   );
   const renderOptionalService = ([name, group]: [string, ConfigEntryView[]]) => {
-    const readiness = getReadiness(group);
+    const ready = isReady(group);
     return (
       <ListItem
         key={name}
@@ -174,9 +176,11 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
         description={getServiceSummary(name, group)}
         metadata={
           <span className={styles.optionalMeta}>
-            <Badge tone={readiness === 'Ready' ? 'success' : 'warning'}>{readiness}</Badge>
+            <Badge tone={ready ? 'success' : 'warning'}>
+              {t(ready ? 'config.ready' : 'config.needsSetup')}
+            </Badge>
             <Text as="span" variant="caption" tone="secondary">
-              {group.length} settings
+              {t('config.settingCount', { count: group.length })}
             </Text>
           </span>
         }
@@ -232,7 +236,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
               message: [
                 ...consumerResults.map(item => `${item.service}: ${item.message}`),
                 ...(reactivatedServices.length
-                  ? [`Reactivated: ${reactivatedServices.join(', ')}`]
+                  ? [t('config.reactivated', { services: reactivatedServices.join(', ') })]
                   : []),
               ].join(' · '),
             }
@@ -244,7 +248,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
           service: service as ConfigServiceActionResult['service'],
           success: false,
           testMode: 'validation',
-          message: `Failed to ${action} ${service} configuration.`,
+          message: t(`config.actionFailed.${action}`, { service }),
         },
       }));
       const savedSuccessfully = action === 'save' && Boolean(responseData?.success);
@@ -261,18 +265,18 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
         return next;
       });
     },
-    [getServiceEntries, markServiceSaved, optionalService, saveServiceConfig, testServiceConfig]
+    [getServiceEntries, markServiceSaved, optionalService, saveServiceConfig, t, testServiceConfig]
   );
 
-  if (isLoading) return <SettingsLayout title="Set up Miauflix">{null}</SettingsLayout>;
+  if (isLoading) return <SettingsLayout title={t('config.setUp')}>{null}</SettingsLayout>;
 
   const isOptionalStep = Boolean(optionalService);
   if (!current || !currentName) {
     const firstOptional = primaryOptionalGroups[0]?.[0];
     return (
       <SettingsLayout
-        title="Optional settings"
-        description="Everything required is configured. Review integrations for watching, or finish setup with the defaults already in place."
+        title={t('config.optionalTitle')}
+        description={t('config.optionalDescription')}
         initialNavId={NAV.finish}
       >
         <FocusOnStep
@@ -280,13 +284,12 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
           id={firstOptional ? optionalNavId(firstOptional) : NAV.finish}
         />
         <Stack gap="lg">
-          <Message tone="info" title="Required settings are complete">
-            You can finish setup now. Optional integrations are ready to review; open one to review
-            or change it.
+          <Message tone="info" title={t('config.requiredComplete')}>
+            {t('config.requiredCompleteBody')}
           </Message>
           <ActionGroup navId={NAV.finishActions}>
             <Button navId={NAV.finish} onClick={onDismiss}>
-              Finish and start using Miauflix
+              {t('config.finish')}
             </Button>
             {requiredGroups.length > 0 && (
               <Button
@@ -294,22 +297,20 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
                 icon={<ArrowLeftIcon />}
                 onClick={() => setStep(Math.max(0, requiredGroups.length - 1))}
               >
-                Previous step
+                {t('config.previousStep')}
               </Button>
             )}
           </ActionGroup>
-          <List navId={NAV.optional} label="Optional services">
+          <List navId={NAV.optional} label={t('config.optionalServices')}>
             {primaryOptionalGroups.map(renderOptionalService)}
           </List>
           {advancedOptionalGroups.length > 0 && (
             <Disclosure
               navId={NAV.advanced}
               headingLevel={2}
-              title={`Advanced settings (${advancedOptionalGroups.length} ${
-                advancedOptionalGroups.length === 1 ? 'group' : 'groups'
-              })`}
+              title={t('config.advancedGroups', { count: advancedOptionalGroups.length })}
             >
-              <List label="Advanced services">
+              <List label={t('config.advancedServices')}>
                 {advancedOptionalGroups.map(renderOptionalService)}
               </List>
             </Disclosure>
@@ -330,25 +331,21 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const currentResult = results[currentName];
   const nextStepHint = !canContinue
     ? hasCompleteRequiredValues && dirtyServices.has(currentName)
-      ? 'Save these settings to continue.'
-      : 'Complete the required settings to continue.'
+      ? t('config.saveToContinue')
+      : t('config.completeRequired')
     : undefined;
   const groupName = formatServiceName(currentName);
   const groupNav = serviceGroupNav(groupName);
   return (
     <SettingsLayout
-      title={isOptionalStep ? groupName : 'Set up Miauflix'}
-      description={
-        isOptionalStep
-          ? 'Review these settings, then save them or go back to the optional settings.'
-          : 'Fill in the settings each service needs, then save them to continue.'
-      }
+      title={isOptionalStep ? groupName : t('config.setUp')}
+      description={isOptionalStep ? t('config.reviewOptional') : t('config.fillRequired')}
       initialNavId={groupNav.group}
     >
       <FocusOnStep step={currentName} id={groupNav.group} />
       <Stack gap="lg">
         {!isOptionalStep && (
-          <ol className={styles.timeline} aria-label="Required configuration steps">
+          <ol className={styles.timeline} aria-label={t('config.requiredSteps')}>
             {requiredGroups.map(([name], index) => {
               const state = savedServices.has(name)
                 ? 'complete'
@@ -374,7 +371,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
                 <span className={styles.timelineMarker} aria-hidden="true">
                   {requiredGroups.length + 1}
                 </span>
-                <span className={styles.timelineName}>Optional services</span>
+                <span className={styles.timelineName}>{t('config.optionalServices')}</span>
               </li>
             )}
           </ol>
@@ -401,7 +398,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
                   isOptionalStep ? setOptionalService(null) : setStep(Math.max(0, step - 1))
                 }
               >
-                Previous step
+                {t('config.previousStep')}
               </Button>
             ) : (
               <span />
@@ -413,7 +410,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
                 onClick={() => setStep(step + 1)}
                 disabled={!canContinue}
               >
-                Next step
+                {t('config.nextStep')}
               </Button>
             )}
           </div>

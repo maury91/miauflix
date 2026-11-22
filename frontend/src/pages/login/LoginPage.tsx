@@ -2,6 +2,7 @@ import { LOGIN_NAV } from '@features/auth/ui/login/loginNav';
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { LoginWithQR } from '@features/auth/ui/login/LoginWithQR';
 import { Icon, Inline, SplitLayout, Surface, Text } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { selectWindowSize } from '@store/slices/measurements';
 import { motion } from 'framer-motion';
@@ -22,6 +23,7 @@ const QR_MIN_WIDTH = 720;
  * form reaches the panel (when it has an action) and Left comes back.
  */
 const LoginPage: FC = () => {
+  const t = useT();
   const [showQR, setShowQR] = useState(false);
   const { width: windowWidth } = useSelector(selectWindowSize);
 
@@ -64,7 +66,7 @@ const LoginPage: FC = () => {
             <RemoteIcon />
           </Icon>
           <Text variant="caption" tone="secondary">
-            Use remote to navigate and focus
+            {t('auth.remoteHint')}
           </Text>
         </Inline>
       </div>

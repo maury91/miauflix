@@ -6,36 +6,31 @@ export const player = {
   'player.downloadingPart': 'Downloading this part of “{title}”…',
   'player.converting': 'Converting “{title}” for playback…',
   'player.noSource':
-    "There is no source for “{title}”. Press “Notify me” to receive a notification once it's out.",
+    "“{title}” isn't available to watch yet. Select “Notify me” to get an alert when it's ready.",
   'player.noRoomMovie':
-    "There isn't enough space to play this movie. Free up space on the server, or raise its storage limit, then retry.",
+    "There isn't enough space to play this movie. Free up space on the server or increase its storage limit, then try again.",
   'player.noRoomEpisode':
-    "There isn't enough space to play this episode. Free up space on the server, or raise its storage limit, then retry.",
+    "There isn't enough space to play this episode. Free up space on the server or increase its storage limit, then try again.",
   'player.failure.unavailable':
-    'No playable source is available for “{title}” yet. Try again later, or choose another title.',
-  'player.failure.session':
-    'Your session cannot access playback for “{title}”. Sign in again, then retry.',
-  'player.failure.rateLimited':
-    'Playback checks for “{title}” are temporarily limited. Wait a moment, then retry.',
-  'player.failure.detail': 'Playback for “{title}” could not start: {detail}',
+    "“{title}” isn't available to watch yet. Try again later or pick something else.",
+  'player.failure.session': 'Sign in again to watch “{title}”.',
+  'player.failure.rateLimited': 'Wait a moment before trying to play “{title}” again.',
+  'player.failure.detail': "Couldn't play “{title}”. {detail}",
   'player.failure.offline':
-    'Miauflix could not reach the playback service for “{title}”. Check your connection, then retry.',
+    "Couldn't connect to play “{title}”. Check your connection and try again.",
   'player.failure.server':
-    'The source for “{title}” could not be prepared. Retry or choose another title.',
-  'player.failure.generic':
-    'Playback for “{title}” could not start. Retry to try source preparation again.',
-  'player.failure.selectedSource':
-    'Playback for “{title}” could not load the selected source. Retry to try source preparation again.',
-  'player.failure.allSources':
-    'Playback for “{title}” could not load any of its sources. Retry to try source preparation again.',
+    "Couldn't prepare the source for “{title}”. Try again or pick something else.",
+  'player.failure.generic': "Couldn't start “{title}”. Try again.",
+  'player.failure.selectedSource': "Couldn't load the selected source for “{title}”. Try again.",
+  'player.failure.allSources': 'None of the sources for “{title}” could be played. Try again.',
   'player.status.checking': 'Checking sources for “{title}”…',
   'player.status.preparing': 'Preparing “{title}” for playback…',
   'player.status.ready': 'Ready to play “{title}”.',
-  'player.status.unavailable': 'No playable source is available for “{title}” yet.',
-  'player.status.error': 'Playback for “{title}” could not start.',
+  'player.status.unavailable': "“{title}” isn't available to watch yet.",
+  'player.status.error': "Couldn't start “{title}”.",
   'player.backToDetails': 'Back to details',
   'player.logo': 'Miauflix logo',
-  'player.playFailed': 'Playback could not start. Try Play again.',
+  'player.playFailed': "Couldn't start playback. Press Play again.",
   'player.controls': 'Playback controls',
   'player.toolbar': 'Playback toolbar',
   'player.preparing': 'Preparing playback…',
@@ -55,11 +50,12 @@ export const player = {
   'player.watchCredits': 'Watch credits',
   'player.nextEpisode': 'Next episode',
   'player.playNext': 'Play next episode ({seconds}s)',
-  'player.stay': 'Stay',
-  'player.notifyPromised': "We'll notify you as soon as “{title}” is out.",
+  'player.stay': 'Stay on this episode',
+  'player.notifyPromised': "We'll let you know when “{title}” is available to watch.",
   'player.notifyMe': 'Notify me',
-  'player.notifyFailed': 'The notification could not be saved. Try again.',
+  'player.notifyFailed': "Couldn't set up the alert. Try again.",
   'player.selectedTitle': 'Selected title',
-  'player.audioConversionFailed': 'Audio conversion could not start. Retry playback.',
-  'player.audioFailed': 'Audio playback failed. Retry playback.',
+  'player.audioConversionFailed':
+    "Couldn't start converting the audio. Try playing the video again.",
+  'player.audioFailed': "Couldn't play the audio. Try playing the video again.",
 } satisfies MessageSection;

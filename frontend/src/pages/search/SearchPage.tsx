@@ -9,6 +9,7 @@ import {
   SurfaceContextProvider,
 } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { type Translate, useT } from '@shared/i18n';
 import {
   FocusGroup,
   FocusScope,
@@ -34,12 +35,13 @@ import SpaceIcon from '~icons/mdi/keyboard-space';
 const NEXT_PAGE_THRESHOLD = 3;
 export const MAX_RECENT_CHIPS = 5;
 
-const KEYS = alphanumericKeys({
-  space: { label: 'Space', icon: <SpaceIcon /> },
-  delete: { label: 'Delete', icon: <DeleteIcon /> },
-  // Spelled out: a bare cross reads as "close"
-  clear: { label: 'Clear' },
-});
+const searchKeys = (t: Translate) =>
+  alphanumericKeys({
+    space: { label: t('search.key.space'), icon: <SpaceIcon /> },
+    delete: { label: t('search.key.delete'), icon: <DeleteIcon /> },
+    // Spelled out: a bare cross reads as "close"
+    clear: { label: t('search.key.clear') },
+  });
 
 interface SearchPageProps {
   onDismiss: () => void;
@@ -65,6 +67,8 @@ export default function SearchPage(props: SearchPageProps) {
 }
 
 function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
+  const t = useT();
+  const keys = useMemo(() => searchKeys(t), [t]);
   const dispatch = useAppDispatch();
   const search = useAppSelector(state => state.search);
   const { focus, lastInput } = useNavigation();
@@ -144,7 +148,7 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
     | { onSearch: () => void; submitLabel: string }
     | { onSearch?: undefined; submitLabel?: undefined } = tv
     ? {}
-    : { onSearch: submit, submitLabel: 'Search' };
+    : { onSearch: submit, submitLabel: t('search.search') };
   const panel = searchPanelKind(search.status, search.results.length);
   useEffect(() => {
     if (!focusResultsWhenReady.current || search.status === 'loading') return;
@@ -242,15 +246,15 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
   };
 
   const heading = search.genre
-    ? `Popular in “${search.query}”`
-    : `Results for “${search.query.trim()}”`;
+    ? t('search.popularIn', { genre: search.query })
+    : t('search.resultsFor', { query: search.query.trim() });
   const showResults = search.status !== 'idle' || search.results.length > 0;
 
   return (
     <main
       ref={pageRef}
       className={styles.page}
-      aria-label="Search"
+      aria-label={t('search.search')}
       // Programmatic focus only (see keepFocusInPage), never a Tab stop
       tabIndex={-1}
       onKeyDown={typeIntoField}
@@ -258,11 +262,11 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
     >
       <FocusScope id={SEARCH_NAV.scope} layout="horizontal" initialId={initialId}>
         <div className={styles.rail}>
-          <NavRail label="Search" navId={SEARCH_NAV.rail}>
+          <NavRail label={t('search.search')} navId={SEARCH_NAV.rail}>
             <NavItem
               navId={SEARCH_NAV.back}
               icon={<ArrowLeftIcon />}
-              label="Back to Home"
+              label={t('common.backToHome')}
               onClick={leave}
             />
           </NavRail>
@@ -275,8 +279,8 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
                   {tv && (
                     <div className={styles.keyboard}>
                       <SearchKeyboard
-                        label="On-screen keyboard"
-                        keys={KEYS}
+                        label={t('search.keyboard')}
+                        keys={keys}
                         value={text}
                         onChange={setQuery}
                         // The browsed genre shows no text, so Clear has nothing to change: it
@@ -313,14 +317,14 @@ function SearchScreen({ onDismiss, tv = IS_TV }: SearchPageProps) {
                       // shows the text, so it is not a focus stop and has no submit arrow
                       navId={tv ? undefined : SEARCH_NAV.field}
                       size="lg"
-                      label="Search"
+                      label={t('search.search')}
                       labelHidden
                       value={search.query}
                       // The remote types with the on-screen keyboard, not the system IME
                       readOnly={tv}
                       tabIndex={tv ? -1 : undefined}
                       maxLength={100}
-                      placeholder="Search for movies, TV shows, anime..."
+                      placeholder={t('search.placeholder')}
                       autoComplete="off"
                       spellCheck={false}
                       onChange={event => setQuery(event.target.value)}

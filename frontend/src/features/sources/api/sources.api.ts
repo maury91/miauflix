@@ -12,6 +12,7 @@ import type {
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -81,82 +82,82 @@ export const sourcesApi = createApi({
     getProviders: builder.query<ProviderView[], void>({
       providesTags: ['Providers'],
       queryFn: (_arg, api) =>
-        adminRequest<ProviderView[]>(api, 'Failed to load providers', headers =>
+        adminRequest<ProviderView[]>(api, t('api.failedToLoadProviders'), headers =>
           backendClient.api.sources.providers.$get({}, { headers })
         ),
     }),
     updateProvider: builder.mutation<ProviderView, { id: string } & UpdateProviderRequest>({
       invalidatesTags: ['Providers'],
       queryFn: ({ id, ...json }, api) =>
-        adminRequest<ProviderView>(api, 'Failed to update provider', headers =>
+        adminRequest<ProviderView>(api, t('api.failedToUpdateProvider'), headers =>
           backendClient.api.sources.providers[':id'].$patch({ param: { id }, json }, { headers })
         ),
     }),
     reorderProviders: builder.mutation<ProviderView[], string[]>({
       invalidatesTags: ['Providers'],
       queryFn: (ids, api) =>
-        adminRequest<ProviderView[]>(api, 'Failed to reorder providers', headers =>
+        adminRequest<ProviderView[]>(api, t('api.failedToReorderProviders'), headers =>
           backendClient.api.sources.providers.order.$put({ json: { ids } }, { headers })
         ),
     }),
     testProvider: builder.mutation<TestProviderResponse, string>({
       queryFn: (id, api) =>
-        adminRequest<TestProviderResponse>(api, 'Failed to test provider', headers =>
+        adminRequest<TestProviderResponse>(api, t('api.testProviderFailed'), headers =>
           backendClient.api.sources.providers[':id'].test.$post({ param: { id } }, { headers })
         ),
     }),
     /** One page of the synced Jackett list. A mutation so pages are never cached or shared. */
     loadDefinitions: builder.mutation<CardigannCatalog, CatalogArgs>({
       queryFn: (args, api) =>
-        adminRequest<CardigannCatalog>(api, 'Failed to load the indexer list', headers =>
+        adminRequest<CardigannCatalog>(api, t('api.failedToLoadTheIndexerList'), headers =>
           backendClient.api.sources.definitions.$get({ query: catalogQuery(args) }, { headers })
         ),
     }),
     syncDefinitions: builder.mutation<CardigannSyncStatus, void>({
       queryFn: (_arg, api) =>
-        adminRequest<CardigannSyncStatus>(api, 'Failed to update the indexer list', headers =>
+        adminRequest<CardigannSyncStatus>(api, t('api.failedToUpdateTheIndexerList'), headers =>
           backendClient.api.sources.definitions.sync.$post({}, { headers })
         ),
     }),
     addCardigannProvider: builder.mutation<ProviderView, { id: string; source?: string }>({
       invalidatesTags: ['Providers', 'Repositories', 'Definitions'],
       queryFn: (json, api) =>
-        adminRequest<ProviderView>(api, 'Failed to add the indexer', headers =>
+        adminRequest<ProviderView>(api, t('api.failedToAddTheIndexer'), headers =>
           backendClient.api.sources.providers.cardigann.$post({ json }, { headers })
         ),
     }),
     addTorznabProvider: builder.mutation<ProviderView, AddTorznabProviderRequest>({
       invalidatesTags: ['Providers', 'Repositories'],
       queryFn: (json, api) =>
-        adminRequest<ProviderView>(api, 'Failed to add the endpoint', headers =>
+        adminRequest<ProviderView>(api, t('api.failedToAddTheEndpoint'), headers =>
           backendClient.api.sources.providers.torznab.$post({ json }, { headers })
         ),
     }),
     removeProvider: builder.mutation<void, string>({
       invalidatesTags: ['Providers', 'Repositories', 'Definitions'],
       queryFn: (id, api) =>
-        adminRequest<void>(api, 'Failed to remove the provider', headers =>
+        adminRequest<void>(api, t('api.failedToRemoveTheProvider'), headers =>
           backendClient.api.sources.providers[':id'].$delete({ param: { id } }, { headers })
         ),
     }),
     getRepositories: builder.query<RepositoryView[], void>({
       providesTags: ['Repositories'],
       queryFn: (_arg, api) =>
-        adminRequest<RepositoryView[]>(api, 'Failed to load repositories', headers =>
+        adminRequest<RepositoryView[]>(api, t('api.failedToLoadRepositories'), headers =>
           backendClient.api.sources.repositories.$get({}, { headers })
         ),
     }),
     addRepository: builder.mutation<RepositoryView, AddRepositoryRequest>({
       invalidatesTags: ['Providers', 'Repositories'],
       queryFn: (json, api) =>
-        adminRequest<RepositoryView>(api, 'Failed to add repository', headers =>
+        adminRequest<RepositoryView>(api, t('api.failedToAddRepository'), headers =>
           backendClient.api.sources.repositories.$post({ json }, { headers })
         ),
     }),
     refreshRepository: builder.mutation<RepositoryView, string>({
       invalidatesTags: ['Providers', 'Repositories'],
       queryFn: (id, api) =>
-        adminRequest<RepositoryView>(api, 'Failed to refresh repository', headers =>
+        adminRequest<RepositoryView>(api, t('api.failedToRefreshRepository'), headers =>
           backendClient.api.sources.repositories[':id'].refresh.$post(
             { param: { id } },
             { headers }
@@ -166,7 +167,7 @@ export const sourcesApi = createApi({
     removeRepository: builder.mutation<void, string>({
       invalidatesTags: ['Providers', 'Repositories'],
       queryFn: (id, api) =>
-        adminRequest<void>(api, 'Failed to remove repository', headers =>
+        adminRequest<void>(api, t('api.failedToRemoveRepository'), headers =>
           backendClient.api.sources.repositories[':id'].$delete({ param: { id } }, { headers })
         ),
     }),

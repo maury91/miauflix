@@ -1,4 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
+import { catalogLanguage } from '@features/media/lib/catalog-language';
 import { mediaFromMovie, mediaFromShow } from '@features/media/lib/media-cards';
 import type {
   BackdropFocusBackgroundResponse,
@@ -12,6 +13,7 @@ import type {
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { type ApiRequestResult, authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
@@ -80,7 +82,10 @@ const cardKey = (mediaType: 'movie' | 'tv', mediaId: number) => `${mediaType}:${
 
 /** A card that could not be loaded at all: its query settles with an error instead of waiting. */
 const failedCard = (error: unknown): CardResult => ({
-  error: { status: 500, data: error instanceof Error ? error.message : 'Failed to fetch titles' },
+  error: {
+    status: 500,
+    data: error instanceof Error ? error.message : t('api.failedToFetchTitles'),
+  },
 });
 
 /** Resolve each card from its own details route; one that throws settles with an error. */
@@ -121,7 +126,7 @@ function flushMediaCards() {
           const card = cards.get(cardKey(ref.mediaType, ref.mediaId));
           if (card) resolve({ data: card });
           else if ('error' in result) resolve(result);
-          else resolve({ error: { status: 404, data: 'Title not found' } });
+          else resolve({ error: { status: 404, data: t('api.titleNotFound') } });
         }
       })
       .catch(error => {
@@ -158,14 +163,14 @@ async function titleCard(
   getState: () => unknown,
   dispatch: (action: unknown) => unknown
 ): Promise<CardResult> {
-  const query = { param: { id: String(mediaId) }, query: { lang: 'en' } };
+  const query = { param: { id: String(mediaId) }, query: { lang: catalogLanguage() } };
   if (mediaType === 'movie') {
     const result = await scheduleMediaDetailRequest('movie', () =>
       sessionRequest<MovieResponse>(
         headers => backendClient.api.movies[':id'].$get(query, { headers }),
         getState,
         dispatch,
-        'Failed to fetch movie details'
+        t('api.failedToFetchMovieDetails')
       )
     );
     return 'data' in result ? { data: mediaFromMovie(result.data) } : result;
@@ -175,7 +180,7 @@ async function titleCard(
       headers => backendClient.api.shows[':id'].$get(query, { headers }),
       getState,
       dispatch,
-      'Failed to fetch show details'
+      t('api.failedToFetchShowDetails')
     )
   );
   return 'data' in result ? { data: mediaFromShow(result.data) } : result;
@@ -184,40 +189,41 @@ async function titleCard(
 export const mediaApi = createApi({
   reducerPath: 'mediaApi',
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
-  tagTypes: ['Movie', 'Season'],
+  tagTypes: ['Movie', 'Season', 'Catalog'],
   endpoints: builder => ({
     getMovie: builder.query<MovieResponse, number>({
-      providesTags: (_result, _error, mediaId) => [{ type: 'Movie', id: mediaId }],
+      providesTags: (_result, _error, mediaId) => [{ type: 'Movie', id: mediaId }, 'Catalog'],
       async queryFn(mediaId, api) {
         return {
           ...(await scheduleMediaDetailRequest('movie', () =>
             sessionRequest<MovieResponse>(
               headers =>
                 backendClient.api.movies[':id'].$get(
-                  { param: { id: String(mediaId) }, query: { lang: 'en' } },
+                  { param: { id: String(mediaId) }, query: { lang: catalogLanguage() } },
                   { headers }
                 ),
               api.getState,
               api.dispatch,
-              'Failed to fetch movie details'
+              t('api.failedToFetchMovieDetails')
             )
           )),
         };
       },
     }),
     getShow: builder.query<ShowResponse, number>({
+      providesTags: ['Catalog'],
       async queryFn(mediaId, api) {
         return {
           ...(await scheduleMediaDetailRequest('show', () =>
             sessionRequest<ShowResponse>(
               headers =>
                 backendClient.api.shows[':id'].$get(
-                  { param: { id: String(mediaId) }, query: { lang: 'en' } },
+                  { param: { id: String(mediaId) }, query: { lang: catalogLanguage() } },
                   { headers }
                 ),
               api.getState,
               api.dispatch,
-              'Failed to fetch show details'
+              t('api.failedToFetchShowDetails')
             )
           )),
         };
@@ -229,16 +235,20 @@ export const mediaApi = createApi({
      * details request per title would run into the backend's per-address limit.
      */
     getMediaCard: builder.query<MediaDto, MediaBatchRef>({
+      providesTags: ['Catalog'],
       queryFn: (ref, api) =>
         loadMediaCard(
           ref,
           items =>
             sessionRequest<MediaBatchResponse>(
               headers =>
-                backendClient.api.media.batch.$post({ json: { items, lang: 'en' } }, { headers }),
+                backendClient.api.media.batch.$post(
+                  { json: { items, lang: catalogLanguage() } },
+                  { headers }
+                ),
               api.getState,
               api.dispatch,
-              'Failed to fetch titles'
+              t('api.failedToFetchTitles')
             ),
           () => titleCard(ref, api.getState, api.dispatch)
         ),
@@ -259,7 +269,7 @@ export const mediaApi = createApi({
               ),
             api.getState,
             api.dispatch,
-            'Failed to fetch season details'
+            t('api.failedToFetchSeasonDetails')
           )),
         };
       },
@@ -279,7 +289,7 @@ export const mediaApi = createApi({
               ),
             api.getState,
             api.dispatch,
-            'Failed to analyze backdrop focus'
+            t('api.failedToAnalyzeBackdropFocus')
           )),
         };
       },
@@ -299,7 +309,7 @@ export const mediaApi = createApi({
               ),
             api.getState,
             api.dispatch,
-            'Failed to queue backdrop focus preparation'
+            t('api.failedToQueueBackdropFocusPreparation')
           )),
         };
       },

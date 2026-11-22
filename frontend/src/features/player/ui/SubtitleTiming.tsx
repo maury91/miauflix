@@ -1,6 +1,7 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import { IconButton, Slider, Stack, Text } from '@shared/design-system';
 import { visuallyHidden } from '@shared/design-system/a11y.css';
+import { useT } from '@shared/i18n';
 import { useOptionalNavigation } from '@shared/navigation';
 import { type RefObject, useEffect, useState } from 'react';
 
@@ -89,6 +90,7 @@ export function SubtitleTiming({
   offset: number;
   onOffsetChange: (offset: number) => void;
 }) {
+  const t = useT();
   const navigation = useOptionalNavigation();
   useEffect(() => {
     navigation?.focus(SUBTITLE_TIMING_NAV.offset);
@@ -113,11 +115,11 @@ export function SubtitleTiming({
     onOffsetChange(offset + amount);
   };
   return (
-    <section aria-label="Subtitle synchronization">
+    <section aria-label={t('subtitles.synchronization')}>
       <Stack gap="sm">
-        <div className={styles.preview} role="group" aria-label="Subtitle timing preview">
-          <div className={styles.now} aria-label="Now">
-            <span>Now</span>
+        <div className={styles.preview} role="group" aria-label={t('subtitles.preview')}>
+          <div className={styles.now} aria-label={t('subtitles.now')}>
+            <span>{t('subtitles.now')}</span>
             <ArrowRightIcon className={styles.nowIcon} aria-hidden="true" />
           </div>
           {timingLines(cues, now, offset).map(({ cue, index, active, displacement }) => (
@@ -132,21 +134,23 @@ export function SubtitleTiming({
           ))}
           {!cues.length && (
             <div className={styles.line} style={{ transform: 'translateY(-50%)' }}>
-              No subtitle cues near this position.
+              {t('subtitles.noCues')}
             </div>
           )}
         </div>
-        <Text id="subtitle-offset-label">Timing adjustment: {seconds(offset)}</Text>
+        <Text id="subtitle-offset-label">
+          {t('subtitles.adjustment', { offset: seconds(offset) })}
+        </Text>
         <div className={styles.adjustment}>
           <IconButton
             navId={SUBTITLE_TIMING_NAV.earlier}
-            label="Subtitles 5 seconds earlier"
+            label={t('subtitles.earlier')}
             icon={<MinusIcon />}
             onClick={() => shift(-5)}
           />
           <div className={styles.slider}>
             <span id="subtitle-offset-name" className={visuallyHidden}>
-              Subtitle timing adjustment
+              {t('subtitles.adjustmentName')}
             </span>
             <Slider
               navId={SUBTITLE_TIMING_NAV.offset}
@@ -157,18 +161,25 @@ export function SubtitleTiming({
               step={0.25}
               keyStep={0.5}
               value={offset}
-              valueText={`${offset > 0 ? 'later' : offset < 0 ? 'earlier' : 'no adjustment'}, ${Math.abs(offset).toFixed(2)} seconds`}
+              valueText={t(
+                offset > 0
+                  ? 'subtitles.valueLater'
+                  : offset < 0
+                    ? 'subtitles.valueEarlier'
+                    : 'subtitles.valueNone',
+                { seconds: Math.abs(offset).toFixed(2) }
+              )}
               onChange={onOffsetChange}
             />
           </div>
           <IconButton
             navId={SUBTITLE_TIMING_NAV.later}
-            label="Subtitles 5 seconds later"
+            label={t('subtitles.later')}
             icon={<PlusIcon />}
             onClick={() => shift(5)}
           />
         </div>
-        <div className={styles.range} aria-label="Timing adjustment range">
+        <div className={styles.range} aria-label={t('subtitles.range')}>
           <span>{seconds(min)}</span>
           <span>{seconds(max)}</span>
         </div>

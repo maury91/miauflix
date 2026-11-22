@@ -5,6 +5,7 @@ import type {
 } from '@miauflix/service-contracts';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { t } from '@shared/i18n';
 
 /**
  * Start Trakt device authorization for the current user and return its code and polling details.
@@ -20,7 +21,7 @@ export const beginTraktAssociation = (
         { headers: { 'X-Session-Id': session } }
       ),
     session,
-    errorContext: 'Unable to start Trakt association',
+    errorContext: t('api.unableToStartTraktAssociation'),
   });
 
 /**
@@ -38,7 +39,7 @@ export const pollTraktAssociation = (
         { headers: { 'X-Session-Id': session } }
       ),
     session,
-    errorContext: 'Unable to check Trakt association',
+    errorContext: t('api.unableToCheckTraktAssociation'),
   });
 
 /**
@@ -55,7 +56,7 @@ export const getTraktAssociation = (
         { headers: { 'X-Session-Id': session } }
       ),
     session,
-    errorContext: 'Unable to load Trakt association',
+    errorContext: t('api.unableToLoadTraktAssociation'),
   });
 
 /**
@@ -72,5 +73,5 @@ export const disconnectTrakt = (
         { headers: { 'X-Session-Id': session } }
       ),
     session,
-    errorContext: 'Unable to disconnect Trakt',
+    errorContext: t('api.unableToDisconnectTrakt'),
   });

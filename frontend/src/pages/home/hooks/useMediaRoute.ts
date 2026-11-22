@@ -84,6 +84,18 @@ export function useMediaRoute(route: AppRoute) {
     if (titleKind === 'show') return show?.mediaId === titleId ? mediaFromShow(show!) : null;
     return null;
   }, [routedMovie.data, routedShow.data, titleId, titleKind]);
+  // What the player's language buttons need; older servers send neither field
+  const routedDetail = titleKind === 'movie' ? routedMovie.data : routedShow.data;
+  const titleLanguage = useMemo(
+    () =>
+      routedDetail?.mediaId === titleId && routedDetail
+        ? {
+            originalLanguage: routedDetail.originalLanguage ?? null,
+            anime: routedDetail.anime ?? false,
+          }
+        : null,
+    [routedDetail, titleId]
+  );
 
   const episodeRoute = route.type === 'episodePlayer' ? route : null;
   const currentSeasonQuery = useGetSeasonQuery(
@@ -109,5 +121,5 @@ export function useMediaRoute(route: AppRoute) {
     ? findNextEpisode(episodeRoute, currentSeason, nextSeasonQuery.currentData)
     : null;
 
-  return { view, playable, routeQuery, routeMedia, nextEpisode };
+  return { view, playable, routeQuery, routeMedia, nextEpisode, titleLanguage };
 }

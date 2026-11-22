@@ -45,7 +45,7 @@ describe('notificationCopy', () => {
   it('announces a just-added movie without a known quality', () => {
     expect(notificationCopy(item({}))).toEqual({
       heading: 'Just added',
-      text: 'Example Film is now available.',
+      text: 'Now available.',
       qualityLabel: null,
       release: null,
     });
@@ -61,7 +61,7 @@ describe('notificationCopy', () => {
           previousSourceType: 'CAM',
         })
       )
-    ).toMatchObject({ qualityLabel: '4K', release: 'Blu-ray (was CAM)' });
+    ).toMatchObject({ text: 'Now available in', qualityLabel: '4K', release: 'Blu-ray (was CAM)' });
   });
 
   it('keeps the stored message for upgrades recorded without quality', () => {

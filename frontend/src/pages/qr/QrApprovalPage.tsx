@@ -18,6 +18,7 @@ import {
   SurfaceContextProvider,
   Text,
 } from '@shared/design-system';
+import { t as translate, useT } from '@shared/i18n';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { useAppDispatch, useAppSelector } from '@store/hooks';
 import {
@@ -84,10 +85,11 @@ function DeviceRow({
   request: ApprovalRequest;
   secondsLeft: number | null;
 }) {
+  const t = useT();
   const device = describeDevice(request.device?.userAgent);
   const DeviceIcon = DEVICE_ICONS[device.kind];
   return (
-    <List label="Device">
+    <List label={t('auth.device')}>
       <ListItem
         leading={
           <Icon size="lg">
@@ -96,7 +98,9 @@ function DeviceRow({
         }
         title={device.name}
         description={
-          secondsLeft !== null ? `Code expires in ${formatTimeRemaining(secondsLeft)}` : undefined
+          secondsLeft !== null
+            ? t('auth.codeExpiresIn', { time: formatTimeRemaining(secondsLeft) })
+            : undefined
         }
       />
     </List>
@@ -158,6 +162,7 @@ function Outcome({
 
 /** Approve, from a signed-in browser, a device that shows a QR login code (e.g. the TV app). */
 export default function QrApprovalPage({ approvalToken }: { approvalToken: string }) {
+  const t = useT();
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const currentSessionId = useAppSelector(selectCurrentSessionId);
@@ -177,7 +182,7 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
   const inspect = useCallback(async () => {
     const result = await request<ApprovalRequest>(
       () => backendClient.api.auth.qr[':approvalToken'].$get({ param: { approvalToken } }),
-      'Unable to check this sign-in request'
+      translate('auth.checkFailed')
     );
     if (!('error' in result)) setPhase({ kind: 'request', request: result.data });
     else if (result.error.status === 404) setPhase({ kind: 'missing' });
@@ -205,10 +210,7 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
     const result = await authenticatedRequest<{ state: 'approved' | 'rejected' }>({
       requestFn: () => endpoint[decision].$post({ param: { approvalToken } }, { headers }),
       session: sessionId,
-      errorContext:
-        decision === 'approve'
-          ? 'Unable to approve this sign-in'
-          : 'Unable to decline this sign-in',
+      errorContext: decision === 'approve' ? t('auth.approveFailed') : t('auth.declineFailed'),
       onInvalidSession: () => {
         if (sessionId) dispatch(sessionRemoved(sessionId));
         dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
@@ -241,7 +243,7 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
       return (
         <Card>
           <div className={styles.markRow}>
-            <ProgressSpinner size="lg" label="Checking the sign-in request…" />
+            <ProgressSpinner size="lg" label={t('auth.checking')} />
           </div>
         </Card>
       );
@@ -249,48 +251,48 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
       return (
         <Card>
           <Heading level={1} variant="heading" align="center">
-            Something went wrong
+            {t('auth.somethingWrong')}
           </Heading>
-          <Message tone="danger" toneLabel="Error" live="assertive">
+          <Message tone="danger" toneLabel={t('common.error')} live="assertive">
             {phase.message}
           </Message>
           <ActionGroup layout="column">
             <Button navId={NAV.retry} fullWidth onClick={() => void inspect()}>
-              Try again
+              {t('common.tryAgain')}
             </Button>
           </ActionGroup>
         </Card>
       );
     if (phase.kind === 'missing' || expired)
       return (
-        <Outcome icon={<ExpiredIcon />} tone="muted" title="This code has expired">
-          Show a new QR code on your device and scan it again.
+        <Outcome icon={<ExpiredIcon />} tone="muted" title={t('auth.expiredTitle')}>
+          {t('auth.expiredBody')}
         </Outcome>
       );
     const { request: current } = phase;
     if (current.state === 'approved' || current.state === 'claimed')
       return (
-        <Outcome icon={<CheckIcon />} tone="success" title="Approved">
-          {describeDevice(current.device?.userAgent).name} is signing in. You can close this page.
+        <Outcome icon={<CheckIcon />} tone="success" title={t('auth.approved')}>
+          {t('auth.approvedBody', { device: describeDevice(current.device?.userAgent).name })}
         </Outcome>
       );
     if (current.state === 'rejected')
       return (
-        <Outcome icon={<DeclinedIcon />} tone="muted" title="Sign-in declined">
-          The device was not signed in. You can close this page.
+        <Outcome icon={<DeclinedIcon />} tone="muted" title={t('auth.declined')}>
+          {t('auth.declinedBody')}
         </Outcome>
       );
     if (!sessionId && profiles.length > 1)
       return (
         <Card>
           <Heading level={1} variant="heading" align="center">
-            Who is approving?
+            {t('auth.whoApproves')}
           </Heading>
           <Text tone="secondary" align="center">
-            Choose the profile that signs this device in.
+            {t('auth.chooseProfile')}
           </Text>
           <DeviceRow request={current} secondsLeft={secondsLeft} />
-          <ActionGroup layout="column" label="Profiles">
+          <ActionGroup layout="column" label={t('auth.profiles')}>
             {profiles.map(profile => (
               <Button
                 key={profile.session}
@@ -308,10 +310,10 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
       return (
         <Card>
           <Heading level={1} variant="heading" align="center">
-            Sign in to continue
+            {t('auth.signInToContinue')}
           </Heading>
           <Text tone="secondary" align="center">
-            Sign in to your Miauflix account here to approve this device.
+            {t('auth.signInToApprove')}
           </Text>
           <DeviceRow request={current} secondsLeft={secondsLeft} />
           <div className={styles.signIn}>
@@ -322,14 +324,14 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
     return (
       <Card mark={<TvIcon />} tone="neutral">
         <Heading level={1} variant="heading" align="center">
-          Sign in on this device?
+          {t('auth.signInHere')}
         </Heading>
         <Text tone="secondary" align="center">
-          Only approve a device you are setting up yourself. It will use your account.
+          {t('auth.approveWarning')}
         </Text>
         <DeviceRow request={current} secondsLeft={secondsLeft} />
         {actionError && (
-          <Message tone="danger" toneLabel="Error" live="assertive">
+          <Message tone="danger" toneLabel={t('common.error')} live="assertive">
             {actionError}
           </Message>
         )}
@@ -342,7 +344,7 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
             disabled={busy === 'reject'}
             onClick={() => void decide('approve')}
           >
-            Approve
+            {t('auth.approve')}
           </Button>
           <Button
             navId={NAV.decline}
@@ -351,7 +353,7 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
             disabled={busy === 'approve'}
             onClick={() => void decide('reject')}
           >
-            Decline
+            {t('auth.decline')}
           </Button>
         </ActionGroup>
       </Card>
@@ -359,7 +361,7 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
   })();
 
   return (
-    <main className={styles.screen} aria-label="Approve sign-in">
+    <main className={styles.screen} aria-label={t('auth.approveSignIn')}>
       <NavigationProvider>
         <SurfaceContextProvider value="solid">
           {/* A new scope per screen: a scope focuses its first action when it mounts, and the

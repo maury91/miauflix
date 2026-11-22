@@ -1,5 +1,6 @@
 import type { ServiceStatuses } from '@features/config/api/config.api';
 import type { ConfigEntryView } from '@miauflix/backend';
+import { t } from '@shared/i18n';
 
 /**
  * Order groups needing configuration first, then degraded/error services, then the rest.
@@ -95,9 +96,9 @@ export function attributeMissingVars(
   if (foreign.size === 0) return status;
 
   const parts = [
-    ...(own.length ? [`Missing required configuration: ${own.join(', ')}`] : []),
-    ...[...foreign].map(
-      ([owner, keys]) => `Waiting for ${owner} configuration (${keys.join(', ')})`
+    ...(own.length ? [t('config.missingRequired', { keys: own.join(', ') })] : []),
+    ...[...foreign].map(([owner, keys]) =>
+      t('config.waitingFor', { owner, keys: keys.join(', ') })
     ),
   ];
   const message = parts.join('; ');

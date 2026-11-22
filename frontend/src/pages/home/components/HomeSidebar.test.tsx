@@ -138,7 +138,7 @@ describe('HomeSidebar', () => {
     const names = screen
       .getAllByRole('button')
       .map(button => button.getAttribute('aria-label') ?? button.textContent);
-    expect(names).toEqual(['Notifications', 'Search', 'Profile, Maurizio is watching', 'Settings']);
+    expect(names).toEqual(['Notifications', 'Search', 'Profile for Maurizio', 'Settings']);
     fireEvent.click(screen.getByRole('button', { name: /^Profile/ }));
     expect(onEnterProfile).toHaveBeenCalledTimes(1);
   });

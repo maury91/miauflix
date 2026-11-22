@@ -70,11 +70,15 @@ describe('ServerPicker', () => {
   it('connects to a typed address once it answers', async () => {
     vi.mocked(probeServer).mockResolvedValueOnce(false);
     render(<ServerPicker />);
-    const input = screen.getByLabelText('Or type its address');
+    const input = screen.getByLabelText('Or enter the server address');
 
     fireEvent.change(input, { target: { value: '192.168.1.20' } });
     fireEvent.click(screen.getByRole('button', { name: 'Connect' }));
-    expect(await screen.findByText('No Miauflix server answers at 192.168.1.20:3000')).toBeTruthy();
+    expect(
+      await screen.findByText(
+        'No Miauflix server responded at 192.168.1.20:3000. Check the address and try again.'
+      )
+    ).toBeTruthy();
     expect(connectTvServer).not.toHaveBeenCalled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Connect' }));
@@ -86,7 +90,7 @@ describe('ServerPicker', () => {
     vi.mocked(probeServer).mockResolvedValue(true);
     render(<ServerPicker lastServer="http://192.168.1.10:3000" />);
 
-    expect(screen.getByText(/192\.168\.1\.10:3000 doesn't answer/)).toBeTruthy();
+    expect(screen.getByText(/192\.168\.1\.10:3000 isn't responding/)).toBeTruthy();
     await act(() => vi.advanceTimersByTimeAsync(10_000));
     expect(connectTvServer).toHaveBeenCalledWith('http://192.168.1.10:3000');
   });
@@ -100,7 +104,7 @@ describe('ServerPicker', () => {
     const server = await screen.findByRole('button', { name: '192.168.1.10:3000' });
     await waitFor(() => expect(focused(server)).toBe(true));
     const search = screen.getByRole('button', { name: /Search again|Searching/ });
-    const input = screen.getByLabelText('Or type its address');
+    const input = screen.getByLabelText('Or enter the server address');
     const connect = screen.getByRole('button', { name: 'Connect' });
 
     press('ArrowDown');
@@ -124,6 +128,6 @@ describe('ServerPicker', () => {
   it('starts on the address when no server is found', async () => {
     render(<ServerPicker />);
     await act(() => vi.advanceTimersByTimeAsync(0));
-    expect(focused(screen.getByLabelText('Or type its address'))).toBe(true);
+    expect(focused(screen.getByLabelText('Or enter the server address'))).toBe(true);
   });
 });

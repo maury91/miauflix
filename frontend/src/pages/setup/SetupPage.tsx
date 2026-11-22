@@ -7,6 +7,7 @@ import {
   Surface,
   TextField,
 } from '@shared/design-system';
+import { useT } from '@shared/i18n';
 import { FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { useAppDispatch } from '@store';
 import { authSlice } from '@store/slices/auth';
@@ -25,7 +26,13 @@ const NAV = {
 
 const MIN_PASSWORD_LENGTH = 8;
 
-const STRENGTH_LABELS = ['Very weak', 'Weak', 'Fair', 'Good', 'Strong'] as const;
+const STRENGTH_LABELS = [
+  'auth.strength.0',
+  'auth.strength.1',
+  'auth.strength.2',
+  'auth.strength.3',
+  'auth.strength.4',
+] as const;
 
 function getPasswordStrength(password: string): number {
   if (password.length === 0) return 0;
@@ -47,6 +54,7 @@ type ValidationError = { field: FieldName; message: string } | null;
  * the server returns. The same design system fields and form as the login screen.
  */
 function AdminAccountForm() {
+  const t = useT();
   const [email, setEmail] = useState('');
   const emailInput = useRef<HTMLInputElement>(null);
   const [password, setPassword] = useState('');
@@ -60,16 +68,16 @@ function AdminAccountForm() {
     if (isLoading) return;
     let invalid: ValidationError = null;
     if (password !== confirmPassword) {
-      invalid = { field: 'confirm', message: 'Passwords do not match' };
+      invalid = { field: 'confirm', message: t('auth.passwordsDiffer') };
     }
     if (password.length < MIN_PASSWORD_LENGTH) {
       invalid = {
         field: 'password',
-        message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters`,
+        message: t('auth.passwordTooShort', { count: MIN_PASSWORD_LENGTH }),
       };
     }
     if (!emailInput.current?.validity.valid) {
-      invalid = { field: 'email', message: 'Enter a valid email address' };
+      invalid = { field: 'email', message: t('auth.invalidEmail') };
     }
     setValidationError(invalid);
     if (invalid) {
@@ -93,13 +101,13 @@ function AdminAccountForm() {
 
   return (
     <FormSection
-      title="Welcome to Miauflix"
-      description="Let's create your admin account!"
+      title={t('auth.welcome')}
+      description={t('auth.createAdminIntro')}
       onSubmit={() => void handleSubmit()}
       busy={isLoading}
       message={
         apiError ? (
-          <Message tone="danger" toneLabel="Error" live="assertive">
+          <Message tone="danger" toneLabel={t('common.error')} live="assertive">
             {apiError}
           </Message>
         ) : undefined
@@ -112,7 +120,7 @@ function AdminAccountForm() {
           loading={isLoading}
           disabled={!email.trim() || !password.trim() || !confirmPassword.trim()}
         >
-          Create admin account
+          {t('auth.createAdmin')}
         </Button>
       }
     >
@@ -120,7 +128,7 @@ function AdminAccountForm() {
         ref={emailInput}
         navId={NAV.email}
         id="setup-email"
-        label="Email"
+        label={t('auth.email')}
         type="email"
         value={email}
         onChange={event => setEmail(event.target.value)}
@@ -132,13 +140,13 @@ function AdminAccountForm() {
       <PasswordField
         navId={NAV.password}
         id="setup-password"
-        label="Password"
-        showLabel="Show password"
-        hideLabel="Hide password"
+        label={t('auth.password')}
+        showLabel={t('auth.showPassword')}
+        hideLabel={t('auth.hidePassword')}
         description={
           password
-            ? `Strength: ${STRENGTH_LABELS[strength]}`
-            : `At least ${MIN_PASSWORD_LENGTH} characters`
+            ? t('auth.strength', { strength: t(STRENGTH_LABELS[strength]!) })
+            : t('auth.atLeast', { count: MIN_PASSWORD_LENGTH })
         }
         error={errorFor('password')}
         value={password}
@@ -149,13 +157,13 @@ function AdminAccountForm() {
       <PasswordField
         navId={NAV.confirm}
         id="setup-confirm-password"
-        label="Confirm password"
-        showLabel="Show confirmation password"
-        hideLabel="Hide confirmation password"
+        label={t('auth.confirmPassword')}
+        showLabel={t('auth.showConfirmation')}
+        hideLabel={t('auth.hideConfirmation')}
         error={errorFor('confirm')}
         value={confirmPassword}
         onChange={event => setConfirmPassword(event.target.value)}
-        placeholder="Repeat your password"
+        placeholder={t('auth.repeatPassword')}
         required
         autoComplete="new-password"
       />

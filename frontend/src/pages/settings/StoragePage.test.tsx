@@ -146,7 +146,7 @@ const press = (key: string) => fireEvent.keyDown(document.activeElement ?? docum
 describe('Storage settings page', () => {
   it('shows the disk by kind of data, the limit, and each download with its artwork', () => {
     render(<StoragePage onDismiss={vi.fn()} />);
-    const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
+    const legend = within(screen.getByRole('list', { name: 'Space used by file type' }));
     expect(legend.getByText('Movies').parentElement).toHaveTextContent('Movies2 GiB');
     // The disk's 60 GiB in use, less Miauflix's 2 GiB
     expect(legend.getByText('Other data').parentElement).toHaveTextContent('Other data58 GiB');
@@ -155,9 +155,11 @@ describe('Storage settings page', () => {
     // What Miauflix doesn't control comes last
     expect(legend.getAllByRole('listitem').at(-1)).toHaveTextContent('Other data58 GiB');
     expect(screen.getByText('Limit 50 GiB')).toBeInTheDocument();
-    expect(screen.getByText(/counts 3 GiB against its 50 GiB limit/)).toBeInTheDocument();
+    expect(screen.getByText(/used or reserved 3 GiB of its 50 GiB limit/)).toBeInTheDocument();
     expect(
-      screen.getByText(/Local only means it is complete and will never be loaded by its torrent/)
+      screen.getByText(
+        /Local only\. The video is complete and Miauflix will keep it on this server without reloading its torrent/
+      )
     ).toBeInTheDocument();
     const row = within(screen.getByRole('list', { name: 'Downloaded content' }));
     expect(row.getByText('Example Film')).toBeInTheDocument();
@@ -182,13 +184,13 @@ describe('Storage settings page', () => {
       },
     ];
     render(<StoragePage onDismiss={vi.fn()} />);
-    const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
+    const legend = within(screen.getByRole('list', { name: 'Space used by file type' }));
     expect(legend.getByText('Movies').parentElement).toHaveTextContent('Movies1.5 GiB');
     expect(legend.getByText('TV remuxes').parentElement).toHaveTextContent('TV remuxes512 MiB');
     expect(legend.getByText('Anime').parentElement).toHaveTextContent('Anime1 GiB');
     expect(screen.getByText('S01E03 · The Third')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Free space used by Example Anime (S01E03 · The Third)' })
+      screen.getByRole('button', { name: 'Delete download for Example Anime (S01E03 · The Third)' })
     ).toBeInTheDocument();
   });
 
@@ -224,7 +226,7 @@ describe('Storage settings page', () => {
     delete olderItem.remuxBytes;
     storageApi.data!.items = [olderItem as typeof baseItem];
     render(<StoragePage onDismiss={vi.fn()} />);
-    const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
+    const legend = within(screen.getByRole('list', { name: 'Space used by file type' }));
     expect(legend.getByText('Unmatched downloads').parentElement).toHaveTextContent(
       'Unmatched downloads2 GiB'
     );
@@ -240,12 +242,12 @@ describe('Storage settings page', () => {
     expect(screen.getByLabelText('Seeding after download unit')).toHaveValue('h');
     // Only the storage settings, not the rest of media-load's
     expect(screen.queryByText(/CONTENT_DOWNLOAD_LIMIT/)).not.toBeInTheDocument();
-    const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
+    const legend = within(screen.getByRole('list', { name: 'Space used by file type' }));
     expect(legend.getByText('Reserved for playback').parentElement).toHaveTextContent(
       'Reserved for playback10 GiB'
     );
-    expect(screen.getByText(/ahead of time stop at 40 GiB/)).toBeInTheDocument();
-    expect(screen.getByText(/seed for 1 hour before becoming local only/)).toBeInTheDocument();
+    expect(screen.getByText(/stops downloading in advance at 40 GiB/)).toBeInTheDocument();
+    expect(screen.getByText(/sharing completed downloads for 1 hour/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
   });
 
@@ -282,7 +284,7 @@ describe('Storage settings page', () => {
     fireEvent.blur(limit);
     // 40 GiB free plus the 2 GiB Miauflix holds
     expect(
-      screen.getByText(/more than this disk can give Miauflix \(42 GiB\)/)
+      screen.getByText(/exceeds the space Miauflix can use on this disk \(42 GiB\)/)
     ).toBeInTheDocument();
   });
 
@@ -293,7 +295,9 @@ describe('Storage settings page', () => {
     fireEvent.change(limit, { target: { value: '0' } });
     fireEvent.blur(limit);
     expect(screen.getByText('Limit 0 B (not saved)')).toBeInTheDocument();
-    expect(screen.getByText(/A limit of 0 keeps nothing/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/A storage limit of 0 prevents Miauflix from saving downloads/)
+    ).toBeInTheDocument();
   });
 
   it('shows a seeding time that is not a whole number of minutes in seconds', () => {
@@ -324,7 +328,7 @@ describe('Storage settings page', () => {
     storageApi.data!.summary.filesystem = null;
     render(<StoragePage onDismiss={vi.fn()} />);
     expect(screen.getByRole('heading', { name: 'Storage usage' })).toBeInTheDocument();
-    const legend = within(screen.getByRole('list', { name: 'Space by kind' }));
+    const legend = within(screen.getByRole('list', { name: 'Space used by file type' }));
     expect(legend.queryByText('Other data')).not.toBeInTheDocument();
     expect(legend.queryByText('Free')).not.toBeInTheDocument();
   });
@@ -392,7 +396,7 @@ describe('Storage settings page', () => {
   it('shows the empty state when no content is stored', () => {
     storageApi.data!.items = [];
     render(<StoragePage onDismiss={vi.fn()} />);
-    expect(screen.getByText('No downloaded content is using storage.')).toBeInTheDocument();
+    expect(screen.getByText('No downloads stored on this server.')).toBeInTheDocument();
   });
 
   it('offers retry when the inventory cannot be loaded', () => {
@@ -407,7 +411,7 @@ describe('Storage settings page', () => {
   it('keeps stale inventory visible and offers retry after a refresh error', () => {
     storageApi.error = { status: 500 };
     render(<StoragePage onDismiss={vi.fn()} />);
-    expect(screen.getByRole('alert')).toHaveTextContent('Showing the last loaded results');
+    expect(screen.getByRole('alert')).toHaveTextContent('Showing the last available data');
     expect(screen.getByText('Example Film')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
     expect(storageApi.refetch).toHaveBeenCalled();
@@ -415,10 +419,10 @@ describe('Storage settings page', () => {
 
   it('lets the admin cancel a removal without calling the API', () => {
     render(<StoragePage onDismiss={vi.fn()} />);
-    const free = screen.getByRole('button', { name: 'Free space used by Example Film' });
+    const free = screen.getByRole('button', { name: 'Delete download for Example Film' });
     pointerPress(free);
-    const dialog = screen.getByRole('dialog', { name: 'Free space used by Example Film?' });
-    expect(dialog).toHaveAccessibleDescription(/This deletes 2 GiB from this server/);
+    const dialog = screen.getByRole('dialog', { name: 'Delete download for Example Film?' });
+    expect(dialog).toHaveAccessibleDescription(/This frees up 2 GiB on the server/);
     // The least destructive choice comes first, and takes focus
     const cancel = screen.getByRole('button', { name: 'Cancel' });
     expect(focused()).toBe(cancel);
@@ -431,7 +435,7 @@ describe('Storage settings page', () => {
   it('closes the confirmation on Back, then leaves the page on the next Back', () => {
     const onDismiss = vi.fn();
     render(<StoragePage onDismiss={onDismiss} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Delete download for Example Film' }));
     press('Escape');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(onDismiss).not.toHaveBeenCalled();
@@ -444,20 +448,22 @@ describe('Storage settings page', () => {
       unwrap: async () => ({ success: true }),
     }));
     render(<StoragePage onDismiss={vi.fn()} />);
-    pointerPress(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    pointerPress(screen.getByRole('button', { name: 'Delete download for Example Film' }));
     fireEvent.click(screen.getByRole('button', { name: 'Delete download' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
     expect(storageApi.removeStorage).toHaveBeenCalledWith(7);
     expect(storageApi.refetch).not.toHaveBeenCalled();
     expect(screen.getByText(/Freed .* used by Example Film/)).toBeInTheDocument();
-    expect(focused()).toBe(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    expect(focused()).toBe(
+      screen.getByRole('button', { name: 'Delete download for Example Film' })
+    );
   });
 
   it('prevents removing a download while it is being watched', () => {
     storageApi.data!.items[0] = { ...baseItem, activeStreams: 1 };
     render(<StoragePage onDismiss={vi.fn()} />);
-    expect(screen.getByText(/Currently being watched/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Free space used by Example Film' })).toBeDisabled();
+    expect(screen.getByText(/Playing now/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete download for Example Film' })).toBeDisabled();
   });
 
   it('keeps the confirmation open and explains an API deletion failure', async () => {
@@ -467,7 +473,7 @@ describe('Storage settings page', () => {
       },
     }));
     render(<StoragePage onDismiss={vi.fn()} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Free space used by Example Film' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Delete download for Example Film' }));
     fireEvent.click(screen.getByRole('button', { name: 'Delete download' }));
     expect(await screen.findByRole('alert')).toHaveTextContent(
       'This download is currently being watched'

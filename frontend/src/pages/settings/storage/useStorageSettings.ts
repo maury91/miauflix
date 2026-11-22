@@ -1,5 +1,6 @@
 import { useGetConfigQuery, useSaveServiceConfigMutation } from '@features/config/api/config.api';
 import { useConfigForm } from '@pages/config/hooks/useConfigForm';
+import { t } from '@shared/i18n';
 import { useCallback, useMemo, useState } from 'react';
 
 import { parseSize, STORAGE_SETTINGS_GROUP, storageSettingEntries } from './storageSettingsFields';
@@ -41,7 +42,7 @@ export function useStorageSettings({ onSaved }: { onSaved?: () => void } = {}) {
     if (result?.success) {
       // Edits made while it was saving stay to be saved
       markServiceSaved(STORAGE_SETTINGS_GROUP, submitted);
-      setOutcome({ tone: 'success', message: 'Storage settings saved.' });
+      setOutcome({ tone: 'success', message: t('storage.saved') });
       onSaved?.();
       return;
     }
@@ -50,10 +51,10 @@ export function useStorageSettings({ onSaved }: { onSaved?: () => void } = {}) {
     setOutcome({
       tone: 'danger',
       message: invalid.length
-        ? `Check these values: ${invalid.join(', ')}.`
+        ? t('storage.checkValues', { keys: invalid.join(', ') })
         : failures.length
           ? failures.map(item => item.message).join(' · ')
-          : 'Could not save the storage settings. Please try again.',
+          : t('storage.saveFailed'),
     });
   }, [getServiceEntries, markServiceSaved, onSaved, saveServiceConfig]);
 

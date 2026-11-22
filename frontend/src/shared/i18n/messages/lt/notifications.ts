@@ -1,0 +1,31 @@
+import type { notifications as english } from '../en/notifications';
+import type { Translation } from '../types';
+
+export const notifications: Translation<typeof english> = {
+  'notifications.unread': 'Neperskaityta',
+  'notifications.new': 'Nauja',
+  'notifications.markAll': 'Pažymėti visus kaip perskaitytus',
+  'notifications.loadFailed': 'Nepavyko įkelti pranešimų.',
+  'notifications.loading': 'Įkeliami pranešimai…',
+  'notifications.unreadList': 'Neperskaityti pranešimai',
+  'notifications.loadingMore': 'Įkeliama daugiau…',
+  'notifications.caughtUp': 'Neperskaitytų pranešimų nėra.',
+  'notifications.hideRead': 'Slėpti perskaitytus pranešimus',
+  'notifications.showRead': 'Rodyti perskaitytus pranešimus',
+  'notifications.readList': 'Perskaityti pranešimai',
+  'notifications.betterQuality': 'Galima žiūrėti geresne kokybe',
+  'notifications.was': '(anksčiau: {previous})',
+  'notifications.availableIn': 'Dabar galima žiūrėti:',
+  'notifications.availableAs': 'Dabar galima žiūrėti:',
+  'notifications.newEpisode': 'Nauja serija',
+  'notifications.aNewEpisode': 'Nauja serija',
+  'notifications.episodeAvailable': 'Jau galima žiūrėti: {episode}',
+  'notifications.justAdded': 'Ką tik pridėta',
+  'notifications.nowAvailable': 'Jau galima žiūrėti',
+  'notifications.withQuality': '{sentence} ·',
+  'notifications.sentence': '{sentence}.',
+  'notifications.justNow': 'ką tik',
+  'notifications.minutesAgo': 'prieš {count} min.',
+  'notifications.hoursAgo': 'prieš {count} val.',
+  'notifications.daysAgo': 'prieš {count} d.',
+};

@@ -274,7 +274,7 @@ describe('CategoryRow page window', () => {
   it('says a loaded empty row is empty, and leaves it out of the navigation', () => {
     render(layer(<CategoryRow {...makeProps(0, true, { total: 0 })} />));
 
-    expect(screen.getByText('Nothing here yet.')).toBeInTheDocument();
+    expect(screen.getByText('No titles here yet.')).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'Popular' })).not.toBeInTheDocument();
   });
 
@@ -289,8 +289,8 @@ describe('CategoryRow page window', () => {
 
     render(layer(<CategoryRow {...makeProps(0, true)} />));
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-    expect(screen.queryByText('Nothing here yet.')).not.toBeInTheDocument();
+    expect(screen.getByText('Loading…')).toBeInTheDocument();
+    expect(screen.queryByText('No titles here yet.')).not.toBeInTheDocument();
   });
 
   it('enters on its remembered card at the leading slot', () => {
@@ -315,7 +315,7 @@ describe('CategoryRow page window', () => {
       };
     });
     const view = render(layer(<CategoryRow {...makeProps(7)} />));
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('Loading…')).toBeInTheDocument();
 
     loaded = true;
     view.rerender(layer(<CategoryRow {...makeProps(7)} />));

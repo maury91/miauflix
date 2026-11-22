@@ -7,13 +7,18 @@ import {
 } from '@features/player/hooks/usePlaybackProgress';
 import { type NextEpisode, usePlaybackPrompts } from '@features/player/hooks/usePlaybackPrompts';
 import { usePlaybackSource } from '@features/player/hooks/usePlaybackSource';
+import { useSubtitleLanguage } from '@features/player/hooks/useSubtitleLanguage';
 import { useSubtitles } from '@features/player/hooks/useSubtitles';
 import { getAvplay, type PlayerMedia } from '@features/player/lib/avplay-media';
+import { languageOptions, preferredAudioLanguage } from '@features/player/lib/language-options';
 import { mediaSubtitleKey } from '@features/player/lib/media-subtitles';
+import { languagePreferencesOf, titleLanguages } from '@features/profiles/lib/language-preferences';
 import type { PlayableRef } from '@miauflix/backend';
 import { builtForTizen } from '@shared/config/constants';
 import { Button } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { mediaLanguage } from '@shared/i18n';
+import { useT } from '@shared/i18n';
 import { FocusScope, NavigationProvider, useNavigation } from '@shared/navigation';
 import { selectCurrentUser } from '@store/slices/auth';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -26,6 +31,7 @@ import {
   getStreamStageMessage,
 } from '../lib/playback-copy';
 import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
+import { LanguageButtons } from './LanguageButtons';
 import { PlayerControls, PlayerHeader, PlayerPrompt } from './PlayerControls';
 import * as styles from './playerView.css';
 import { SubtitleCaption } from './SubtitleCaption';
@@ -35,9 +41,22 @@ import BellIcon from '~icons/mdi/bell-ring-outline';
 /** How long a held picture waits for AVPlay to play before it goes anyway. */
 const PICTURE_HOLD_LIMIT_MS = 15_000;
 
+/** What the title's language buttons need to know about it; null while its details load. */
+export interface PlayerTitleLanguage {
+  originalLanguage: string | null;
+  anime: boolean;
+}
+
 interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
+  titleLanguage: PlayerTitleLanguage | null;
+  /**
+   * The title's details are still loading (`titleLanguage` is null for now): the first session
+   * waits for them, so it asks for the audio the profile wants for this title. False once they
+   * failed to load: playback starts with the profile's languages alone.
+   */
+  titleLanguageLoading?: boolean;
   onBack: () => void;
   nextEpisode: NextEpisode | null;
   onPlayNext: () => void;
@@ -59,8 +78,22 @@ export function PlayerView(props: PlayerViewProps) {
   );
 }
 
-function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: PlayerViewProps) {
+function PlayerScreen({
+  playable,
+  title,
+  titleLanguage,
+  titleLanguageLoading = false,
+  onBack,
+  nextEpisode,
+  onPlayNext,
+}: PlayerViewProps) {
+  const t = useT();
   const currentUser = useSelector(selectCurrentUser);
+  const languages = titleLanguages(
+    languagePreferencesOf(currentUser),
+    titleLanguage?.anime ?? false
+  );
+  const originalLanguage = titleLanguage?.originalLanguage ?? null;
   /** Samsung TVs play through AVPlay, which decodes far more than their browser does. */
   const [avplay] = useState(() => (builtForTizen ? getAvplay() : undefined));
   const videoRef = useRef<PlayerMedia | null>(null);
@@ -104,6 +137,8 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
     title,
     avplay: !!avplay,
     subtitleKey: subtitleStorageKey,
+    audioLanguage: preferredAudioLanguage(languages, originalLanguage),
+    audioLanguageKnown: titleLanguage !== null || !titleLanguageLoading,
   });
   const { session, status, error } = source;
   const [requestAvailability, availabilityRequest] = useRequestAvailabilityMutation();
@@ -145,7 +180,9 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
     playsInAvplay,
     audioSeek: audio.audioSeek,
     audioTrackIndex: audio.audioTrackIndex,
+    preferredLanguage: mediaLanguage(languages.subtitles),
   });
+  const showSubtitleLanguage = useSubtitleLanguage(subtitles);
   const prompts = usePlaybackPrompts({
     playable,
     nextEpisode,
@@ -296,9 +333,15 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
         ? getStreamStageMessage(streamStage, title)
         : getPlaybackStatusMessage(status, title);
   const selectedSubtitle = subtitles.selected;
+  const languageChoices = languageOptions({
+    tracks: audio.audioTracks ?? [],
+    preferences: languages,
+    originalLanguage,
+    deviceLanguage: navigator.language,
+  });
 
   return (
-    <main ref={pageRef} className={styles.page} aria-label="Player">
+    <main ref={pageRef} className={styles.page} aria-label={t('player.label')}>
       <FocusScope id={NAV.scope}>
         {!session && <PlayerHeader onBack={onBack} />}
         {session ? (
@@ -364,29 +407,29 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
                   {prompts.inIntro && (
                     <PlayerPrompt layout="intro">
                       <Button navId="player-skip-intro" onClick={prompts.skipIntro}>
-                        Skip intro
+                        {t('player.skipIntro')}
                       </Button>
                     </PlayerPrompt>
                   )}
                   {prompts.skipCountdown !== null && (
-                    <PlayerPrompt layout="group" label="Credits">
+                    <PlayerPrompt layout="group" label={t('player.credits')}>
                       <Button navId="player-skip-credits" onClick={prompts.skipCredits}>
-                        Skip credits ({prompts.skipCountdown}s)
+                        {t('player.skipCredits', { seconds: prompts.skipCountdown })}
                       </Button>
                       <Button navId="player-watch-credits" onClick={prompts.watchCredits}>
-                        Watch credits
+                        {t('player.watchCredits')}
                       </Button>
                     </PlayerPrompt>
                   )}
                   {prompts.skipCountdown === null &&
                     nextEpisode &&
                     prompts.nextCountdown !== null && (
-                      <PlayerPrompt layout="group" label="Next episode">
+                      <PlayerPrompt layout="group" label={t('player.nextEpisode')}>
                         <Button navId="player-next-episode" onClick={prompts.playNextEpisode}>
-                          Play next episode ({prompts.nextCountdown}s)
+                          {t('player.playNext', { seconds: prompts.nextCountdown })}
                         </Button>
                         <Button navId="player-stay" onClick={prompts.stay}>
-                          Stay
+                          {t('player.stay')}
                         </Button>
                       </PlayerPrompt>
                     )}
@@ -410,6 +453,17 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
               subtitlePreferencesKey={currentUser?.id ?? null}
               onControlsInsetChange={subtitles.setControlsInset}
               onHeaderInsetChange={subtitles.setHeaderInset}
+              languageButtons={
+                <LanguageButtons
+                  options={languageChoices}
+                  audioTrackIndex={audio.audioTrackIndex}
+                  subtitleLanguage={selectedSubtitle?.language ?? null}
+                  onChoose={option => {
+                    audio.selectAudioTrack(option.audioTrackIndex);
+                    showSubtitleLanguage(option.subtitleLanguage);
+                  }}
+                />
+              }
               downloadedRanges={source.downloadedRanges}
               durationSeconds={audioDelivery?.durationSeconds}
               pendingPosition={audio.pendingPosition}
@@ -438,7 +492,7 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
               <>
                 <span>
                   {availabilityRequest.isSuccess
-                    ? `We'll notify you as soon as “${title}” is out.`
+                    ? t('player.notifyPromised', { title })
                     : getNoSourceMessage(title)}
                 </span>
                 {!availabilityRequest.isSuccess && (
@@ -448,11 +502,11 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
                     loading={availabilityRequest.isLoading}
                     onClick={() => void requestAvailability(playable)}
                   >
-                    Notify me
+                    {t('player.notifyMe')}
                   </Button>
                 )}
                 {availabilityRequest.isError && (
-                  <span role="alert">The notification could not be saved. Try again.</span>
+                  <span role="alert">{t('player.notifyFailed')}</span>
                 )}
               </>
             ) : (
@@ -460,7 +514,7 @@ function PlayerScreen({ playable, title, onBack, nextEpisode, onPlayNext }: Play
             )}
             {error && (
               <Button navId={NAV.retry} onClick={source.retry}>
-                Retry
+                {t('common.retry')}
               </Button>
             )}
           </div>

@@ -174,6 +174,6 @@ describe('ConfigWizardPage', () => {
     fireEvent.click(advanced);
     expect(screen.getByText('Catalog runtime')).toBeVisible();
     expect(screen.getByText('JWT')).toBeVisible();
-    expect(screen.getByText('Background job queue connection.')).toBeVisible();
+    expect(screen.getByText('Connection to the background job queue.')).toBeVisible();
   });
 });

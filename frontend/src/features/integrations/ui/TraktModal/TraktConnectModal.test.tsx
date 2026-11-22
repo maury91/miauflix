@@ -60,7 +60,7 @@ describe('Trakt dialog dismissal', () => {
   // the story covers them
   it('starts on the first action and moves between the actions', () => {
     setupTest();
-    const first = screen.getByRole('button', { name: "Let's go" });
+    const first = screen.getByRole('button', { name: 'Connect Trakt' });
     const never = screen.getByRole('button', { name: 'Don’t ask again' });
     expect(first).toHaveAttribute('data-focused');
     press('ArrowRight');
@@ -121,13 +121,13 @@ describe('Trakt dialog dismissal', () => {
     const open = vi.spyOn(window, 'open').mockImplementation(() => null);
     const { onDismiss } = setupTest();
     try {
-      fireEvent.click(screen.getByRole('button', { name: "Let's go" }));
+      fireEvent.click(screen.getByRole('button', { name: 'Connect Trakt' }));
       const openButton = await screen.findByRole('button', { name: 'Open Trakt' });
       expect(open).not.toHaveBeenCalled();
       expect(screen.getByText('ABCD')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Open Trakt' })).toHaveAttribute('data-focused');
       expect(screen.getByText('Scan the QR code')).toBeInTheDocument();
-      expect(screen.getByLabelText('Scan to connect your Trakt account')).toHaveAttribute(
+      expect(screen.getByLabelText('QR code to connect your Trakt account')).toHaveAttribute(
         'data-value',
         'https://trakt.tv/activate/ABCD'
       );
@@ -160,7 +160,7 @@ describe('Trakt dialog dismissal', () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
     setupTest();
-    fireEvent.click(screen.getByRole('button', { name: "Let's go" }));
+    fireEvent.click(screen.getByRole('button', { name: 'Connect Trakt' }));
     await screen.findByRole('button', { name: 'Copy code' });
     press('ArrowRight');
     fireEvent.click(screen.getByRole('button', { name: 'Copy code' }));
@@ -187,7 +187,7 @@ describe('Trakt dialog dismissal', () => {
     const view = render(
       <TraktModal sessionId="test-session" onConnected={onConnected} onDismiss={vi.fn()} />
     );
-    fireEvent.click(screen.getByRole('button', { name: "Let's go" }));
+    fireEvent.click(screen.getByRole('button', { name: 'Connect Trakt' }));
     await waitFor(() => expect(onConnected).toHaveBeenCalledTimes(1), { timeout: 7000 });
     expect(pollAuthorization).toHaveBeenCalledExactlyOnceWith('device-id', 'test-session');
     view.unmount();

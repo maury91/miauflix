@@ -2,6 +2,7 @@ import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
 import type { ProviderAuthorization } from '@miauflix/service-contracts';
 import { Message, PairingPanel } from '@shared/design-system';
 import { visuallyHidden } from '@shared/design-system/a11y.css';
+import { useT } from '@shared/i18n';
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 
@@ -40,40 +41,41 @@ export function TraktAuthorization({
   error,
   copied,
 }: AuthorizationProps) {
+  const t = useT();
   const secondsRemaining = useSecondsRemaining(Date.parse(authorization.expiresAt));
   return (
     <>
       <PairingPanel
-        title="Scan the QR code"
-        instructions={`Or open ${authorization.verificationUrl} and enter this code.`}
+        title={t('integrations.scanQr')}
+        instructions={t('integrations.orOpen', { url: authorization.verificationUrl })}
         state={secondsRemaining > 0 ? 'ready' : 'expired'}
-        loadingLabel="Getting a code"
+        loadingLabel={t('auth.gettingCode')}
         qr={
           <QRCode
             className={styles.qrCode}
             value={activationUrl}
             size={300}
             level="M"
-            aria-label="Scan to connect your Trakt account"
+            aria-label={t('integrations.scanLabel')}
           />
         }
         userCode={authorization.userCode}
-        userCodeLabel="Code"
+        userCodeLabel={t('integrations.code')}
         status={
           secondsRemaining > 0
-            ? `Code expires in ${formatTimeRemaining(secondsRemaining)}`
-            : 'Code expired'
+            ? t('auth.codeExpiresIn', { time: formatTimeRemaining(secondsRemaining) })
+            : t('auth.codeExpired')
         }
         message={
           error ? (
-            <Message tone="danger" toneLabel="Error" live="assertive">
+            <Message tone="danger" toneLabel={t('common.error')} live="assertive">
               {error}
             </Message>
           ) : undefined
         }
       />
       <span className={visuallyHidden} role="status">
-        {copied ? 'Code copied' : ''}
+        {copied ? t('integrations.codeCopied') : ''}
       </span>
     </>
   );

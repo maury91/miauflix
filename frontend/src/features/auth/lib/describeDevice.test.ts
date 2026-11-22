@@ -20,7 +20,7 @@ describe('describeDevice', () => {
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36',
       { kind: 'computer', name: 'Chrome on macOS' },
     ],
-    [null, { kind: 'unknown', name: 'A new device' }],
+    [null, { kind: 'unknown', name: 'New device' }],
   ])('%s', (userAgent: string | null, expected: object) => {
     expect(describeDevice(userAgent)).toEqual(expected);
   });

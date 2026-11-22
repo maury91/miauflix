@@ -126,7 +126,7 @@ describe('attributeMissingVars', () => {
     ).toEqual({
       status: 'degraded',
       reason:
-        'Missing required configuration: LIST_SERVICE_URL, UNKNOWN_KEY; Waiting for TRAKT configuration (TRAKT_CLIENT_ID)',
+        'Required settings are missing: LIST_SERVICE_URL, UNKNOWN_KEY; Waiting for TRAKT configuration (TRAKT_CLIENT_ID)',
       missingVars: ['LIST_SERVICE_URL', 'UNKNOWN_KEY'],
     });
   });
