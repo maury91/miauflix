@@ -36,7 +36,7 @@ export const indexers: Translation<typeof english> = {
   'indexers.endpointFailed': 'Non è stato possibile aggiungere questo endpoint.',
   'indexers.jackettTitle': 'Aggiungi un indexer Jackett',
   'indexers.jackettDescription':
-    'Miauflix aggiorna automaticamente l’elenco degli indexer pubblici di Jackett. Alcuni richiedono FlareSolverr. Gli indexer che richiedono un account sul tracker non sono supportati.',
+    'Miauwatch aggiorna automaticamente l’elenco degli indexer pubblici di Jackett. Alcuni richiedono FlareSolverr. Gli indexer che richiedono un account sul tracker non sono supportati.',
   'indexers.browse': 'Sfoglia gli indexer',
   'indexers.search': 'Cerca indexer',
   'indexers.source': 'Fonte',
@@ -45,8 +45,8 @@ export const indexers: Translation<typeof english> = {
   'indexers.check': 'Cerca aggiornamenti',
   'indexers.sourceFailed': "L'ultimo aggiornamento di {source} non è riuscito: {error}",
   'indexers.retrying': {
-    one: 'Miauflix riproverà a leggere {count} indexer.',
-    other: 'Miauflix riproverà a leggere {count} indexer.',
+    one: 'Miauwatch riproverà a leggere {count} indexer.',
+    other: 'Miauwatch riproverà a leggere {count} indexer.',
   },
   'indexers.available': 'Indexer disponibili',
   'indexers.addFrom': 'Aggiungi {id} da {source}',
@@ -55,7 +55,7 @@ export const indexers: Translation<typeof english> = {
   'indexers.add': 'Aggiungi',
   'indexers.loading': 'Caricamento degli indexer…',
   'indexers.more': 'Mostra altri',
-  'indexers.none': 'Gli indexer compariranno qui appena Miauflix avrà scaricato l’elenco.',
+  'indexers.none': 'Gli indexer compariranno qui appena Miauwatch avrà scaricato l’elenco.',
   'indexers.noMatch': 'Nessun indexer corrisponde. Prova a cambiare i filtri.',
   'indexers.showing': '{shown} risultati su {total}',
   'indexers.inTotal': ' ({count} in totale)',

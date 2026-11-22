@@ -76,7 +76,7 @@ describe('ServerPicker', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Connect' }));
     expect(
       await screen.findByText(
-        'No Miauflix server responded at 192.168.1.20:3000. Check the address and try again.'
+        'No Miauwatch server responded at 192.168.1.20:3000. Check the address and try again.'
       )
     ).toBeTruthy();
     expect(connectTvServer).not.toHaveBeenCalled();

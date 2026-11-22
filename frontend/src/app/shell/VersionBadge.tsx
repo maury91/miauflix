@@ -8,7 +8,7 @@ export function VersionBadge() {
   if (!APP_VERSION) return null;
   return (
     <div className={styles.badge} data-testid="app-version">
-      Miauflix v{APP_VERSION}
+      Miauwatch v{APP_VERSION}
     </div>
   );
 }

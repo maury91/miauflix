@@ -31,7 +31,7 @@ export const player: Translation<typeof english> = {
   'player.status.unavailable': '„{title}“ dar negalima žiūrėti.',
   'player.status.error': 'Nepavyko paleisti „{title}“.',
   'player.backToDetails': 'Grįžti prie kūrinio informacijos',
-  'player.logo': '„Miauflix“ logotipas',
+  'player.logo': '„Miauwatch“ logotipas',
   'player.playFailed': 'Nepavyko pradėti atkūrimo. Dar kartą paspauskite „Leisti“.',
   'player.controls': 'Atkūrimo valdikliai',
   'player.toolbar': 'Atkūrimo įrankių juosta',

@@ -2,7 +2,7 @@
 
 The documents here are **not** descriptions of the current system. They are plans, deferred roadmaps, and records of past investigations, kept for their reasoning. Parts may already be implemented, abandoned, or superseded; check the code and the reference docs before relying on them.
 
-For how Miauflix works today, use the [architecture references](../architecture/README.md), the [backend docs](../../backend/docs/), the service READMEs, and the [development guides](../development/). Planned user-facing work is tracked in [ToDo.md](../../ToDo.md).
+For how Miauwatch works today, use the [architecture references](../architecture/README.md), the [backend docs](../../backend/docs/), the service READMEs, and the [development guides](../development/). Planned user-facing work is tracked in [ToDo.md](../../ToDo.md).
 
 | Document                                                    | Kind                 | Status                                          |
 | ----------------------------------------------------------- | -------------------- | ----------------------------------------------- |

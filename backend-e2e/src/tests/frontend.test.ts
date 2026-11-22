@@ -30,12 +30,17 @@ describe('Frontend Serving', () => {
     expect(html).toMatch(/<head/i);
     expect(html).toMatch(/<body/i);
 
-    // Check for common frontend elements (Miauflix uses different structure)
-    expect(html).toMatch(/<title>Miauflix<\/title>/i);
+    // Check for common frontend elements (Miauwatch uses different structure)
+    expect(html).toMatch(/<title>Miauwatch<\/title>/i);
     expect(html).toMatch(/window\.API_URL/); // Check for API URL configuration
   });
 
   it('should serve frontend static assets', async () => {
+    const favicon = await fetch(new URL('/favicon.svg', global.BACKEND_URL));
+    expect(favicon.status).toBe(200);
+    expect(favicon.headers.get('content-type')).toMatch(/image\/svg\+xml/);
+    expect(await favicon.text()).toContain('Miauwatch');
+
     // First get the HTML to see what assets are referenced
     const htmlResponse = await fetch(global.BACKEND_URL);
     const html = await htmlResponse.text();
@@ -179,7 +184,7 @@ describe('Frontend Serving', () => {
         expect(response.headers.get('content-type')).toMatch(/text\/html/);
 
         const html = await response.text();
-        expect(html).toMatch(/<title>Miauflix<\/title>/i);
+        expect(html).toMatch(/<title>Miauwatch<\/title>/i);
       } else {
         console.log(`ℹ️ SPA route ${route} not configured (status: ${response.status})`);
       }

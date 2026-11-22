@@ -1,10 +1,10 @@
 # Docker Setup Guide
 
-This guide covers Docker-based deployment and development setup for Miauflix.
+This guide covers Docker-based deployment and development setup for Miauwatch.
 
 ## Prebuilt Images
 
-The quickest way to run Miauflix needs no clone and no build. Download [`docker-compose.yml`](../../docker-compose.yml) into an empty folder and start it:
+The quickest way to run Miauwatch needs no clone and no build. Download [`docker-compose.yml`](../../docker-compose.yml) into an empty folder and start it:
 
 ```bash
 curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.yml
@@ -17,9 +17,9 @@ On first boot the `miauflix` logs show `Starting in degraded mode`: that's expec
 
 > **Image tags:** `docker-compose.yml` uses `latest`, the newest release. Set `MIAUFLIX_VERSION` in `.env` to a version such as `0.0.1` to upgrade only when you choose, or to `edge` to follow `main`.
 
-> **Automatic updates:** `docker-compose.yml` runs [Watchtower](https://watchtower.nickfedor.com/), which pulls the image tag you chose every day at 4:00 (UTC unless you set `TZ`) and recreates the Miauflix containers when it changed. Set `WATCHTOWER_SCHEDULE` in `.env` to change the time (a cron expression with seconds first, e.g. `0 30 3 * * *`), or remove the `watchtower` service to update by hand with `docker compose pull && docker compose up -d`. With a pinned version tag it only picks up rebuilds of that tag.
+> **Automatic updates:** `docker-compose.yml` runs [Watchtower](https://watchtower.nickfedor.com/), which pulls the image tag you chose every day at 4:00 (UTC unless you set `TZ`) and recreates the Miauwatch containers when it changed. Set `WATCHTOWER_SCHEDULE` in `.env` to change the time (a cron expression with seconds first, e.g. `0 30 3 * * *`), or remove the `watchtower` service to update by hand with `docker compose pull && docker compose up -d`. With a pinned version tag it only picks up rebuilds of that tag.
 
-> **Security:** `docker-compose.yml` sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
+> **Security:** `docker-compose.yml` sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauwatch until you open it up.
 
 > **VPN:** Source search and the torrent engine each check for a VPN: until they detect one, source search won't search and the torrent engine stays disconnected from peers, because they would see your real IP. Set one up as described in [Using a VPN](#using-a-vpn), or [opt out](#running-without-a-vpn) if you accept the risk.
 
@@ -46,7 +46,7 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml:
 
 ### Open it to your local network
 
-To watch from a TV, phone or another computer at home, open Miauflix to your network **after** you have created the admin account:
+To watch from a TV, phone or another computer at home, open Miauwatch to your network **after** you have created the admin account:
 
 1. In the `.env` next to `docker-compose.yml`, publish the port on every network interface instead of this computer only:
 
@@ -54,7 +54,7 @@ To watch from a TV, phone or another computer at home, open Miauflix to your net
    MIAUFLIX_LISTEN_ADDRESS=0.0.0.0
    ```
 
-   Setting it in `.env` rather than editing the port mapping keeps the change when `./update.sh --files` replaces the compose files (see [Updating Miauflix](#updating-miauflix)).
+   Setting it in `.env` rather than editing the port mapping keeps the change when `./update.sh --files` replaces the compose files (see [Updating Miauwatch](#updating-miauwatch)).
 
 2. Apply the change:
 
@@ -64,11 +64,11 @@ To watch from a TV, phone or another computer at home, open Miauflix to your net
 
 3. Find this computer's address on your network (`ipconfig getifaddr en0` on macOS, `hostname -I` on Linux, `ipconfig` on Windows) and open `http://<that address>:3000` on the other device. If it doesn't load, allow port 3000 through the computer's firewall.
 
-The admin setup endpoint closes for good once an admin exists, so this is safe on a home network. Don't forward port 3000 on your router: to reach Miauflix from the internet, put it behind HTTPS with a domain as described in [HTTPS with a domain](#https-with-a-domain).
+The admin setup endpoint closes for good once an admin exists, so this is safe on a home network. Don't forward port 3000 on your router: to reach Miauwatch from the internet, put it behind HTTPS with a domain as described in [HTTPS with a domain](#https-with-a-domain).
 
 ### HTTPS with a domain
 
-To reach Miauflix from the internet (for example on a VPS), add [`docker-compose.https.yml`](../../docker-compose.https.yml) and its [`Caddyfile`](../../Caddyfile). [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain and forwards traffic to Miauflix.
+To reach Miauwatch from the internet (for example on a VPS), add [`docker-compose.https.yml`](../../docker-compose.https.yml) and its [`Caddyfile`](../../Caddyfile). [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain and forwards traffic to Miauwatch.
 
 1. Point your domain's DNS at the server and allow ports 80 and 443 (TCP) through its firewall.
 2. Download both files next to `docker-compose.yml`:
@@ -82,11 +82,11 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
 
    ```bash
    COMPOSE_FILE=docker-compose.yml:docker-compose.https.yml
-   MIAUFLIX_DOMAIN=miauflix.example.com
+   MIAUFLIX_DOMAIN=miauwatch.example.com
    REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
    ```
 
-   `COMPOSE_FILE` lets plain `docker compose` commands use both files (see [Combining compose files](#combining-compose-files)). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files. The backend stays outside the VPN, so nothing else changes (a `MIAUFLIX_UPSTREAM=vpn:3000` line left from older instructions is ignored and can be removed):
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files (see [Combining compose files](#combining-compose-files)). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauwatch only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files. The backend stays outside the VPN, so nothing else changes (a `MIAUFLIX_UPSTREAM=vpn:3000` line left from older instructions is ignored and can be removed):
 
    ```bash
    COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml
@@ -99,7 +99,7 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    docker compose logs miauflix --since=15m
    ```
 
-Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauflix prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS, and `CORS_ORIGIN=https://<your domain>`: the realtime connection (live playback updates, notifications, search) only accepts that origin, and the default allows only `localhost`. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
+Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauwatch prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS, and `CORS_ORIGIN=https://<your domain>`: the realtime connection (live playback updates, notifications, search) only accepts that origin, and the default allows only `localhost`. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
 
 The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a viewer whose own connection goes through a VPN it delivered video at about 4 Mbit/s, while HTTP/2 over the same path did about 150 Mbit/s. To turn HTTP/3 back on, remove the `servers` block at the top of the `Caddyfile`, add `- '443:443/udp'` to the `caddy` ports, and on Linux raise the kernel's UDP buffers (`net.core.rmem_max` and `net.core.wmem_max` to `7500000`), or Caddy's HTTP/3 stalls as well.
 
@@ -124,7 +124,7 @@ To test a branch before merging, open **Actions → CI Pipeline → Run workflow
 
 ### Using a VPN
 
-Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default source search and media load refuse to work until each detects a NordVPN connection, or finds itself behind a healthy gluetun (the setup below): gluetun's firewall is the kill switch, so with it the check needs no NordVPN and no configuration.
+Miauwatch finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default source search and media load refuse to work until each detects a NordVPN connection, or finds itself behind a healthy gluetun (the setup below): gluetun's firewall is the kill switch, so with it the check needs no NordVPN and no configuration.
 
 [`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes everything that reaches indexers, trackers and peers through NordVPN with [gluetun](https://github.com/qdm12/gluetun): the `miauflix-sources` and `miauflix-media-load` containers and FlareSolverr. Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP. The backend and `miauflix-catalog-services` only talk to your browser, TMDB and Trakt, so they stay on the normal network.
 
@@ -157,7 +157,7 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
    docker compose up -d
    ```
 
-The `vpn` service owns the network of source search and media load; the backend reaches them through it (`vpn:3003` and `vpn:3004`), and Miauflix's port stays published by the `miauflix` container as without the VPN. FlareSolverr, when its file is listed, shares the VPN's network too. Gluetun connects to NordVPN's P2P servers. Source search and media load each check that their own connection is NordVPN-protected, and refuse searches, tracker scrapes and downloads until it is. `http://localhost:3000/api/status` shows each one's check as `vpn` (`protected`, `unprotected` or `disabled`) under `services.SOURCES` and `services.MEDIA_LOAD`.
+The `vpn` service owns the network of source search and media load; the backend reaches them through it (`vpn:3003` and `vpn:3004`), and Miauwatch's port stays published by the `miauflix` container as without the VPN. FlareSolverr, when its file is listed, shares the VPN's network too. Gluetun connects to NordVPN's P2P servers. Source search and media load each check that their own connection is NordVPN-protected, and refuse searches, tracker scrapes and downloads until it is. `http://localhost:3000/api/status` shows each one's check as `vpn` (`protected`, `unprotected` or `disabled`) under `services.SOURCES` and `services.MEDIA_LOAD`.
 
 To check the connection, compare the address source search and media load use with your own:
 
@@ -167,7 +167,7 @@ docker compose exec vpn wget -qO- https://ipinfo.io/ip
 
 #### Running without a VPN
 
-If you accept that peers see your real IP (for example while trying Miauflix on a laptop), add `DISABLE_VPN_CHECK=true` to a `.env` file next to `docker-compose.yml`. Don't do this on a server. It is the default of each service's own setting, `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK`, which you can also change on the configuration page.
+If you accept that peers see your real IP (for example while trying Miauwatch on a laptop), add `DISABLE_VPN_CHECK=true` to a `.env` file next to `docker-compose.yml`. Don't do this on a server. It is the default of each service's own setting, `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK`, which you can also change on the configuration page.
 
 ### One container for all services
 
@@ -190,7 +190,7 @@ npm run start:backend:docker:prod
 
 `npm run start:backend:docker:prod` (and `stop:` / `restart:`) use the `COMPOSE_FILE` from `.env` when it's set. Otherwise they pick `docker-compose.yml`, `docker-compose.build.yml`, `docker-compose.flaresolverr.yml` and `docker-compose.tracing.yml`, plus `docker-compose.vpn.yml` once `NORDVPN_PRIVATE_KEY` is in `.env`. With your own `COMPOSE_FILE`, run `docker compose up -d --build` after a `git pull` to rebuild.
 
-The build file also mounts `.env` into the `miauflix` container for bootstrap environment values. The configuration wizard (`npm run config-only:docker`) saves application settings in the persistent data directory. It runs Miauflix as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauflix up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
+The build file also mounts `.env` into the `miauflix` container for bootstrap environment values. The configuration wizard (`npm run config-only:docker`) saves application settings in the persistent data directory. It runs Miauwatch as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauwatch up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
 
 ### Importing an existing data directory
 
@@ -213,7 +213,7 @@ Keep the same `LIST_SERVICE_ENCRYPTION_KEY` when that variable supplies the list
 
 ### Secrets set in `.env`
 
-Miauflix generates `JWT_SECRET` and `SOURCE_SECURITY_KEY` on first start and saves them in its `config.json`. When one is set as an environment variable instead, Miauflix uses it and deliberately doesn't save it, so it's only known for as long as the variable is passed in.
+Miauwatch generates `JWT_SECRET` and `SOURCE_SECURITY_KEY` on first start and saves them in its `config.json`. When one is set as an environment variable instead, Miauwatch uses it and deliberately doesn't save it, so it's only known for as long as the variable is passed in.
 
 The base Compose file does not pass these variables; `docker-compose.build.yml` mounts `.env`. When deployment environment variables supply active keys, preserve their exact values. To inspect which generated-key names are persisted without printing their values:
 
@@ -242,7 +242,7 @@ services:
 - **miauflix-media-load**: Torrent engine and downloads; behind the VPN with `docker-compose.vpn.yml`
 - **miauflix-services** (`docker-compose.all-in-one.yml`): the three above in one container
 - **autoheal**: Restarts the backend when its healthcheck fails (see [Health checks and automatic restarts](#health-checks-and-automatic-restarts))
-- **watchtower**: Updates the Miauflix containers when a new image is published (not with `docker-compose.build.yml`)
+- **watchtower**: Updates the Miauwatch containers when a new image is published (not with `docker-compose.build.yml`)
 - **vpn** (`docker-compose.vpn.yml`): [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN; `miauflix-sources`, `miauflix-media-load` and FlareSolverr share its network
 - **caddy** (`docker-compose.https.yml`): HTTPS reverse proxy with automatic Let's Encrypt certificates
 - **flaresolverr** (`docker-compose.flaresolverr.yml`): Cloudflare bypass proxy for protected content sources, see the [FlareSolverr Configuration Guide](flaresolverr.md)
@@ -336,7 +336,7 @@ Docker prefixes volume names with the project name, by default the folder name: 
 ### Backup Strategy
 
 ```bash
-# Backup essential data (with Miauflix stopped)
+# Backup essential data (with Miauwatch stopped)
 docker compose stop miauflix miauflix-catalog-services miauflix-sources miauflix-media-load
 docker compose run --rm --no-deps --entrypoint tar -v "$PWD":/backup miauflix \
   -czf /backup/miauflix-data.tar.gz -C /usr/src/app/data .
@@ -345,7 +345,7 @@ docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup
 docker compose start miauflix-catalog-services miauflix-sources miauflix-media-load miauflix
 ```
 
-Keep `.env` with the backups for deployment settings and any explicitly supplied secrets. The data volumes contain saved application configuration and generated encryption keys; retain them together. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauflix can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).
+Keep `.env` with the backups for deployment settings and any explicitly supplied secrets. The data volumes contain saved application configuration and generated encryption keys; retain them together. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauwatch can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).
 
 ## Troubleshooting
 
@@ -474,7 +474,7 @@ docker compose top miauflix
 
 ## Updates and Maintenance
 
-### Updating Miauflix
+### Updating Miauwatch
 
 With the prebuilt images, Watchtower updates them every night. To update right away, download [`scripts/update.sh`](../../scripts/update.sh) next to `docker-compose.yml` once:
 

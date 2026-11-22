@@ -1,4 +1,4 @@
-# Contributing to Miauflix
+# Contributing to Miauwatch
 
 Contributions are welcome and appreciated!
 

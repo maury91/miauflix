@@ -13,9 +13,9 @@ import * as styles from './storageUsage.css';
 const percent = (share: number) => `${Math.min(100, Math.max(0, share * 100))}%`;
 
 /**
- * The disk at a glance: what each kind of media takes and Miauflix's TV remuxes from the start,
- * then the room kept for playback and the free space, with Miauflix's limit marked, and last
- * everything else on the disk, which Miauflix doesn't control. The bar itself is decorative: the legend says the same in words.
+ * The disk at a glance: what each kind of media takes and Miauwatch's TV remuxes from the start,
+ * then the room kept for playback and the free space, with Miauwatch's limit marked, and last
+ * everything else on the disk, which Miauwatch doesn't control. The bar itself is decorative: the legend says the same in words.
  */
 export function StorageUsage({ usage }: { usage: Usage }) {
   const t = useT();
@@ -24,7 +24,7 @@ export function StorageUsage({ usage }: { usage: Usage }) {
   const limitShare = limitBytes === null ? null : Math.min(1, limitBytes / totalBytes);
   const miauflix = segments.filter(segment => segment.category !== 'other');
   const other = segments.find(segment => segment.category === 'other');
-  // The playback reserve is free space held back: drawn next to Miauflix's data, so the rest of
+  // The playback reserve is free space held back: drawn next to Miauwatch's data, so the rest of
   // the free space stays one stretch, with the limit marked in it
   const shownReserve = reserveBytes === null ? 0 : Math.min(reserveBytes, freeBytes ?? Infinity);
   const shownFree = freeBytes === null ? null : freeBytes - shownReserve;

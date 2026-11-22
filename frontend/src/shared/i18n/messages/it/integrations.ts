@@ -15,7 +15,7 @@ export const integrations: Translation<typeof english> = {
   'integrations.copyFailed': 'Impossibile copiare il codice. Inseriscilo a mano.',
   'integrations.startFailed': 'Impossibile avviare il collegamento con Trakt',
   'integrations.title': 'Collega Trakt',
-  'integrations.description': 'Collega il tuo account Trakt a Miauflix.',
+  'integrations.description': 'Collega il tuo account Trakt a Miauwatch.',
   'integrations.close': 'Chiudi la finestra di Trakt',
   'integrations.openTrakt': 'Apri Trakt',
   'integrations.copyCode': 'Copia codice',

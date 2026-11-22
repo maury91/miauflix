@@ -36,7 +36,7 @@ export const indexers = {
   'indexers.endpointFailed': 'Could not add this endpoint.',
   'indexers.jackettTitle': 'Add Jackett indexer',
   'indexers.jackettDescription':
-    'Miauflix keeps the list of public Jackett indexers up to date. Some need FlareSolverr. Indexers that require a tracker account aren’t supported.',
+    'Miauwatch keeps the list of public Jackett indexers up to date. Some need FlareSolverr. Indexers that require a tracker account aren’t supported.',
   'indexers.browse': 'Browse indexers',
   'indexers.search': 'Search indexers',
   'indexers.source': 'Source',
@@ -45,8 +45,8 @@ export const indexers = {
   'indexers.check': 'Check for updates',
   'indexers.sourceFailed': 'Last update of {source} failed: {error}',
   'indexers.retrying': {
-    one: 'Miauflix will try reading {count} indexer again.',
-    other: 'Miauflix will try reading {count} indexers again.',
+    one: 'Miauwatch will try reading {count} indexer again.',
+    other: 'Miauwatch will try reading {count} indexers again.',
   },
   'indexers.available': 'Available indexers',
   'indexers.addFrom': 'Add {id} from {source}',
@@ -55,7 +55,7 @@ export const indexers = {
   'indexers.add': 'Add',
   'indexers.loading': 'Loading indexers…',
   'indexers.more': 'Show more',
-  'indexers.none': 'Indexers will appear here once Miauflix downloads the list.',
+  'indexers.none': 'Indexers will appear here once Miauwatch downloads the list.',
   'indexers.noMatch': 'No indexers match these filters. Try changing the filters.',
   'indexers.showing': 'Showing {shown} of {total} matches',
   'indexers.inTotal': ' ({count} in total)',

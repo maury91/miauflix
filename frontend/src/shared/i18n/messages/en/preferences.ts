@@ -23,7 +23,7 @@ export const preferences = {
     'Playback starts in this language when an audio track is available.',
   'preferences.animeAudioDescription': 'Choose a different audio language for anime.',
   'preferences.subtitlesDescription':
-    'Miauflix looks for subtitles in this language first and offers them below the progress bar.',
+    'Miauwatch looks for subtitles in this language first and offers them below the progress bar.',
   'preferences.autoSubtitles': 'Automatic subtitles',
   'preferences.autoSubtitlesDescription':
     'Subtitles in your subtitle language turn on when a title starts, unless you changed them for that title.',

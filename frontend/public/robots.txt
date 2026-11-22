@@ -1,4 +1,4 @@
-# Miauflix robots.txt
+# Miauwatch robots.txt
 User-agent: *
 Allow: /
 

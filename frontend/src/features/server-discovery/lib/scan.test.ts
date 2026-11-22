@@ -11,7 +11,7 @@ afterEach(() => {
 });
 
 describe('probeServer', () => {
-  it('accepts Miauflix servers, with or without the service name', async () => {
+  it('accepts Miauwatch servers, with or without the service name', async () => {
     const fetchMock = vi.fn<typeof fetch>();
     vi.stubGlobal('fetch', fetchMock);
 

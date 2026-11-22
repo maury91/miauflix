@@ -1,7 +1,7 @@
 # TV pairing service
 
-Lets the Miauflix Samsung TV app find the Miauflix servers on its network. It is hosted for
-everyone at `https://pair.miauflix.cat`; it is **not** part of a Miauflix install. Run your own
+Lets the Miauwatch Samsung TV app find the Miauwatch servers on its network. It is hosted for
+everyone at `https://pair.miauflix.cat`; it is **not** part of a Miauwatch install. Run your own
 and point both sides at it (`TV_PAIRING_URL` on the server,
 `npm run package:tizen -- --pairing-url <origin>` for the TV app) to keep away from the hosted one.
 
@@ -30,7 +30,7 @@ server until it announces again, within two minutes. CORS allows any origin with
 
 Anyone behind the same public IP can announce a server, or read the announced addresses: that
 includes the other customers of a carrier-grade NAT. The addresses are private ones, and the TV
-only lists the servers that answer as Miauflix servers.
+only lists the servers that answer as Miauwatch servers.
 
 `GET /health` → `{ "status": "ok" }`.
 
@@ -40,8 +40,8 @@ only lists the servers that answer as Miauflix servers.
 docker run -d -p 3003:3003 ghcr.io/maury91/miauflix-tv-pairing:latest
 ```
 
-A standalone Bun service, not one of the Miauflix workspaces: it has no dependencies and shares no
-code with Miauflix. From a checkout: `cd tv-pairing && bun run src/index.ts`; tests: `bun test`;
+A standalone Bun service, not one of the Miauwatch workspaces: it has no dependencies and shares no
+code with Miauwatch. From a checkout: `cd tv-pairing && bun run src/index.ts`; tests: `bun test`;
 types: `npx tsc --noEmit`.
 
 | Variable                      | Default   | Meaning                                                                                                                                                                                                           |

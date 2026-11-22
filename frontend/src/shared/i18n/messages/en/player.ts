@@ -29,7 +29,7 @@ export const player = {
   'player.status.unavailable': "“{title}” isn't available to watch yet.",
   'player.status.error': "Couldn't start “{title}”.",
   'player.backToDetails': 'Back to details',
-  'player.logo': 'Miauflix logo',
+  'player.logo': 'Miauwatch logo',
   'player.playFailed': "Couldn't start playback. Press Play again.",
   'player.controls': 'Playback controls',
   'player.toolbar': 'Playback toolbar',

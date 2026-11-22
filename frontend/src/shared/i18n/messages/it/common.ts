@@ -18,5 +18,5 @@ export const common: Translation<typeof english> = {
   'common.unexpected': 'Ricarica la pagina. Se il problema si ripresenta, contatta l’assistenza.',
   'common.technicalDetails': 'Dettagli tecnici',
   'common.pageNotFound': 'Pagina non trovata',
-  'common.logo': 'Logo di Miauflix',
+  'common.logo': 'Logo di Miauwatch',
 };

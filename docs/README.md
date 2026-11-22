@@ -1,14 +1,14 @@
-# Miauflix Documentation
+# Miauwatch Documentation
 
-Welcome to the Miauflix documentation! This guide helps you find the right information for your needs.
+Welcome to the Miauwatch documentation! This guide helps you find the right information for your needs.
 
 ## Quick Navigation
 
 ### 🚀 Getting Started
 
 - **Just want to try it?** Use the [prebuilt images](setup/docker-setup.md#prebuilt-images)
-- **New to Miauflix?** Start with [Getting Started](setup/getting-started.md)
-- **What can Miauflix do?** Browse the [Feature Guide](features.md)
+- **New to Miauwatch?** Start with [Getting Started](setup/getting-started.md)
+- **What can Miauwatch do?** Browse the [Feature Guide](features.md)
 - **Why it works the way it does?** Read the [Philosophy](philosophy.md)
 - **Docker deployment?** See [Docker Setup](setup/docker-setup.md)
 - **HTTPS configuration?** Check [HTTPS with a domain](setup/docker-setup.md#https-with-a-domain)
@@ -61,7 +61,7 @@ docs/
 
 ### I want to...
 
-- **Deploy Miauflix** → [Getting Started](setup/getting-started.md)
+- **Deploy Miauwatch** → [Getting Started](setup/getting-started.md)
 - **Develop features** → [Development Workflow](development/workflow.md)
 - **Understand the architecture** → [System Overview](architecture/system-overview.md)
 - **Run tests** → [Testing Guide](development/testing-guide.md)

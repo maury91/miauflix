@@ -22,7 +22,7 @@ export const preferences: Translation<typeof english> = {
   'preferences.audioDescription': 'Jei yra garso takelis šia kalba, atkūrimas pradedamas su juo.',
   'preferences.animeAudioDescription': 'Anime kūriniams galite pasirinkti kitą garso kalbą.',
   'preferences.subtitlesDescription':
-    '„Miauflix“ pirmiausia ieško subtitrų šia kalba ir siūlo juos po atkūrimo juosta.',
+    '„Miauwatch“ pirmiausia ieško subtitrų šia kalba ir siūlo juos po atkūrimo juosta.',
   'preferences.autoSubtitles': 'Automatiniai subtitrai',
   'preferences.autoSubtitlesDescription':
     'Pradėjus žiūrėti, įjungiami subtitrai jūsų pasirinkta subtitrų kalba, nebent tam kūriniui juos pakeitėte.',

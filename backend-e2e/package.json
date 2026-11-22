@@ -1,7 +1,7 @@
 {
   "name": "miauflix-backend-e2e",
   "version": "1.0.0",
-  "description": "End-to-end integration tests for Miauflix backend",
+  "description": "End-to-end integration tests for Miauwatch backend",
   "scripts": {
     "lint": "eslint .",
     "test": "jest",

@@ -65,7 +65,7 @@ function createApiRoutes(services: Deps) {
       .use(createAuditLogMiddleware(deps.auditLogService))
       // This endpoint is not rate limited because a flood attack would mark the container as unhealthy and trigger the restart
       .get('/health', c => {
-        // `service` lets the TV app tell a Miauflix server apart when it scans the network
+        // `service` lets the TV app tell a Miauwatch server apart when it scans the network
         return c.json({ status: 'ok', service: 'miauflix' });
       })
       .get('/stats', rateLimitGuard(10), authGuard(), c => {
@@ -141,6 +141,7 @@ export function createRoutes(deps: Deps) {
   // This allows running a single container that serves both API and SPA
   if (frontendEnabled && frontendDir) {
     app.get('/assets/*', serveStatic({ root: frontendDir }));
+    app.get('/favicon.svg', serveStatic({ root: frontendDir }));
     app.get('/favicon.png', serveStatic({ root: frontendDir }));
     app.get('/favicon.ico', serveStatic({ root: frontendDir }));
     app.get('/robots.txt', serveStatic({ root: frontendDir }));

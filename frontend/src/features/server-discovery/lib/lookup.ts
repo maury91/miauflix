@@ -7,7 +7,7 @@ export interface AnnouncedServer {
 }
 
 /**
- * The Miauflix servers that announced themselves from the TV's public IP, so the TV's own
+ * The Miauwatch servers that announced themselves from the TV's public IP, so the TV's own
  * network: the pairing service matches them by the address it sees requests come from.
  */
 export async function lookupAnnouncedServers(pairingUrl: string): Promise<AnnouncedServer[]> {

@@ -1,4 +1,4 @@
-// Environment configuration for MiauFlix frontend
+// Environment configuration for Miauwatch frontend
 // Phase 0 bootstrap - handles environment variables safely
 import { z } from 'zod';
 
@@ -112,7 +112,7 @@ export const computedEnv = {
 
 // Development logging
 if (computedEnv.DEV) {
-  console.log('🚀 MiauFlix Frontend Environment:', {
+  console.log('🚀 Miauwatch Frontend Environment:', {
     API_URL: env.API_URL,
     NODE_ENV: env.NODE_ENV,
     TIZEN: env.TIZEN,

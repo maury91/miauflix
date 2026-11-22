@@ -2,23 +2,23 @@
 
 [Back to all features](../features.md)
 
-Choose a movie or episode and Miauflix prepares a playable source for your device. A source is a particular copy of the video, which may differ in picture quality, sound, size, or available languages.
+Choose a movie or episode and Miauwatch prepares a playable source for your device. A source is a particular copy of the video, which may differ in picture quality, sound, size, or available languages.
 
 ## Start watching before the download finishes
 
-Miauflix downloads media through BitTorrent, which transfers pieces of a file from other people sharing it. It can play the pieces already downloaded while fetching the rest. You do not have to wait for the whole movie or episode to arrive.
+Miauwatch downloads media through BitTorrent, which transfers pieces of a file from other people sharing it. It can play the pieces already downloaded while fetching the rest. You do not have to wait for the whole movie or episode to arrive.
 
 Startup time depends on the source, the people sharing it, your connection, and any conversion the server needs to do. A catalog entry alone does not promise immediate playback.
 
 ## Automatic source selection and fallback
 
-Miauflix chooses sources using quality, device compatibility, and bitrate preferences. Bitrate is roughly how much video data must arrive each second; a very large file may need a faster connection than a smaller one.
+Miauwatch chooses sources using quality, device compatibility, and bitrate preferences. Bitrate is roughly how much video data must arrive each second; a very large file may need a faster connection than a smaller one.
 
 Completed downloads are preferred when suitable, so a title you have already downloaded can start from local storage. If a source is found to be unusable, playback can try another source. These choices are automatic; a quality picker beside Watch Now is still planned.
 
 ## Preparation while you browse
 
-While you focus on a title, Miauflix can begin fetching the information and initial file pieces needed for playback. It also checks audio and local subtitles ahead of time. During playback, it downloads pieces ahead of your current position to reduce interruptions.
+While you focus on a title, Miauwatch can begin fetching the information and initial file pieces needed for playback. It also checks audio and local subtitles ahead of time. During playback, it downloads pieces ahead of your current position to reduce interruptions.
 
 ## Player controls
 
@@ -28,7 +28,7 @@ Seeking to a part that has not downloaded yet can require more waiting. Sources 
 
 ## Resume and Continue watching
 
-Miauflix saves playback progress for your account. The home screen's Continue watching row offers unfinished movies and shows, and playback can resume near where you stopped. It can also suggest the next episode of a show. Very short starts and completed titles are excluded from the unfinished list.
+Miauwatch saves playback progress for your account. The home screen's Continue watching row offers unfinished movies and shows, and playback can resume near where you stopped. It can also suggest the next episode of a show. Very short starts and completed titles are excluded from the unfinished list.
 
 Progress belongs to the account, so different people can keep separate viewing positions. See the [feature overview](../features.md) for the related account, watchlist, and rating features.
 
@@ -40,7 +40,7 @@ On a keyboard or TV remote, press Down from the video to reach the prompt, then 
 
 ## Next episodes and credits
 
-For TV playback, Miauflix can prepare the next episode in advance and offer automatic continuation. It recognizes named end-credit chapters, including anime Ending, ED, and Outro chapters in the second half of the video. Without a usable credits marker, it uses a countdown near the final 90 seconds. Skipping to the next episode marks the current one complete; **Stay** cancels the next-episode prompt.
+For TV playback, Miauwatch can prepare the next episode in advance and offer automatic continuation. It recognizes named end-credit chapters, including anime Ending, ED, and Outro chapters in the second half of the video. Without a usable credits marker, it uses a countdown near the final 90 seconds. Skipping to the next episode marks the current one complete; **Stay** cancels the next-episode prompt.
 
 When chapters indicate a scene after the credits, **Skip credits** jumps to that scene after five seconds of playback through the credits. Select **Watch credits** to keep watching them. Seeking into the credits suppresses this automatic skip; seeking back before them allows it again. The next-episode countdown starts no earlier than the chapter where the scene resumes.
 

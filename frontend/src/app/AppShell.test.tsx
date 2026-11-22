@@ -388,7 +388,7 @@ describe('AppShell intro sequence', () => {
       const view = renderAppShell();
       expect(screen.queryByTestId('app-version')).not.toBeInTheDocument();
       await finishBoot();
-      expect(screen.getByTestId('app-version')).toHaveTextContent(/^Miauflix v\d+\.\d+\.\d+/);
+      expect(screen.getByTestId('app-version')).toHaveTextContent(/^Miauwatch v\d+\.\d+\.\d+/);
 
       appPage.value = 'home';
       act(() => navigate({ type: 'movieDetails', mediaId: 7 }));

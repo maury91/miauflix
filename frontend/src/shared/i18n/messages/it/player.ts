@@ -30,7 +30,7 @@ export const player: Translation<typeof english> = {
   'player.status.unavailable': '“{title}” non è ancora disponibile.',
   'player.status.error': 'Impossibile avviare “{title}”.',
   'player.backToDetails': 'Torna ai dettagli',
-  'player.logo': 'Logo di Miauflix',
+  'player.logo': 'Logo di Miauwatch',
   'player.playFailed': 'Impossibile avviare la riproduzione. Premi di nuovo “Riproduci”.',
   'player.controls': 'Controlli di riproduzione',
   'player.toolbar': 'Barra di riproduzione',

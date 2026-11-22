@@ -78,7 +78,7 @@ beforeEach(() => {
     {
       id: 'builtin:miauflix',
       url: 'builtin:miauflix',
-      name: 'Miauflix',
+      name: 'Miauwatch',
       builtIn: true,
       lastFetchedAt: null,
       lastError: null,
@@ -203,7 +203,7 @@ describe('SourcesPage', () => {
   it('explains what sources are and lists them by priority with usage and status', () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     expect(screen.getByRole('heading', { name: 'Sources', level: 1 })).toBeInTheDocument();
-    expect(screen.getByText(/Sources help Miauflix find files/)).toBeInTheDocument();
+    expect(screen.getByText(/Sources help Miauwatch find files/)).toBeInTheDocument();
     expect(screen.getByText('How it works')).toBeInTheDocument();
     for (const step of ['Search', 'Find', 'Watch'])
       expect(screen.getByRole('heading', { name: step })).toBeInTheDocument();

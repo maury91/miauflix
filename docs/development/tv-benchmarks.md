@@ -15,7 +15,7 @@ these numbers feed is [tv-performance-plan.md](../plans/tv-performance-plan.md),
    session; run the script again. `localStorage['miauflix:gl-tuning'] = '{}'`, then a reload
    (it's read at start), exposes the GL stats as `window.__glRows` without changing anything else.
 2. Run the scenarios with [`scripts/tv-bench.mjs`](../../scripts/tv-bench.mjs). It finds the
-   Miauflix page, sends remote keys over the DevTools protocol, and records
+   Miauwatch page, sends remote keys over the DevTools protocol, and records
    `requestAnimationFrame` intervals between `start` and `stop`:
 
    ```bash

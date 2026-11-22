@@ -5,7 +5,7 @@
 > a 2023 QCQ80; this is not a compatibility guarantee for every Samsung model.
 
 The frontend can be packaged as a Tizen app (`.wgt`) that runs from the TV's storage and talks
-to your Miauflix backend over HTTPS. It targets 2020 TVs (Tizen 5.5, Chromium 69) and newer.
+to your Miauwatch backend over HTTPS. It targets 2020 TVs (Tizen 5.5, Chromium 69) and newer.
 
 ## Build the package
 
@@ -22,19 +22,18 @@ npm run package:tizen
 
 The package works with any server: the TV finds yours on first start (see
 [How the TV finds your server](#how-the-tv-finds-your-server)). To skip that, pass your backend's
-origin (no path), e.g. `npm run package:tizen -- https://miauflix.example.com`, and the TV
+origin (no path), e.g. `npm run package:tizen -- https://miauwatch.example.com`, and the TV
 starts on it. `--no-pairing` leaves the pairing service out, `--pairing-url <origin>` uses your
 own. The script builds the frontend with `VITE_TIZEN=true`
 into `dist/frontend-tizen` (one classic script with relative paths, hash routing, polyfills for
 Chromium 69), adds `frontend/tizen/config.xml` with the version from the root `package.json`
-and the 512x423 launcher icon, and zips it into `dist/miauflix.wgt`.
+and the 512x423 launcher icon, and zips it into `dist/miauwatch.wgt`.
 Chromium 69 ignores newer CSS (flex `gap`, `inset`, `aspect-ratio`, `clamp()`, `:focus-visible`
 and more), so this build rewrites the extracted stylesheet with a PostCSS pass
 (`frontend/src/shared/styles/legacy-chromium-postcss.ts`). It fails the build on `clamp()`,
 `min()` and `max()`, which need the TV's viewport. Inline styles don't go through it: keep them
-to what Chromium 69 supports. The package is
-unsigned. The launcher icon is generated on every build from `assets/tv-logo.png`, the only
-copy of the TV icons, by `scripts/generate-tv-icons.mjs`: replace that image to change it.
+to what Chromium 69 supports. The package is unsigned. Each TV build generates its launcher icon
+from `frontend/public/favicon.svg`, the square mark shared with the web app.
 
 ### Backdrop sizes
 
@@ -58,7 +57,7 @@ MIAUFLIX_TV_HERO_BACKDROP=w780 MIAUFLIX_TV_HERO_BACKDROP_RESTING=original npm ru
 
 ## Playback and controls
 
-On a TV with Samsung AVPlay available, Miauflix uses that native player for supported video
+On a TV with Samsung AVPlay available, Miauwatch uses that native player for supported video
 and audio, including compatible HEVC files and native audio-track selection. Unsupported
 audio can use server-side conversion and the browser video player instead. The TV requests
 a bitrate preference of 8 Mbit/s when choosing sources; it does not continuously switch
@@ -89,7 +88,7 @@ back):
   [open it to your local network](docker-setup.md#open-it-to-your-local-network).
 
 - **Or type its address**, like `192.168.1.10` (port 3000 and `http://` are added) or
-  `https://miauflix.example.com`.
+  `https://miauwatch.example.com`.
 
 **Settings → Change server** on the TV signs out and opens the picker again. Over plain
 `http://`, the TV sends its tokens unencrypted on your network.
@@ -108,7 +107,7 @@ The backend accepts the app's origin `file://` without credentials while `ALLOW_
 default); web pages cannot send that origin. If the app can't reach the backend (it loads but
 every request fails), the TV may report local files as the opaque origin `null`: set
 `ALLOW_TV_APP_NULL_ORIGIN=true`. Any web page can send `null` too, so that lets a page you visit
-read Miauflix's unauthenticated responses and, while first-run setup is open, create the admin
+read Miauwatch's unauthenticated responses and, while first-run setup is open, create the admin
 account. Finish setup before turning it on. The backend must run a version with this support
 before the TV app can sign in.
 
@@ -128,7 +127,7 @@ before the TV app can sign in.
    ```
 
    `install:tizen` (`scripts/install-tizen.sh`, or set `MIAUFLIX_TV_IP`) checks the TV,
-   installs `dist/miauflix.wgt` signed with a Samsung certificate, and opens it. The first
+   installs `dist/miauwatch.wgt` signed with a Samsung certificate, and opens it. The first
    install for a TV opens a Samsung account sign-in in the browser to create that certificate;
    later installs reuse it (as does the Apps2Samsung desktop app on the same computer) for the
    year it is valid; `apps2samsung-cli cert --tv <ip>` shows until when. Extra
@@ -137,7 +136,7 @@ before the TV app can sign in.
 
 The desktop app works too: enable **Force Samsung Certificate** (and **Partner Signing** on
 desktop) in its settings, pick the TV, choose **Custom WGT File** and select
-`dist/miauflix.wgt`.
+`dist/miauwatch.wgt`.
 
 Rebuild and reinstall the package for every frontend update.
 

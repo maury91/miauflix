@@ -1,4 +1,4 @@
-# Miauflix design system and adoption plan
+# Miauwatch design system and adoption plan
 
 Status: phases 0–4 built, phase 5 built (Home browse and its panels, Search, Who's watching and the profile editor moved; only the Tizen hardware pass is left), phase 6 built (configuration, QR approval, Trakt, Sources and Storage moved; screenshots and a phone/touch pass are left), phase 7 done (old `shared/ui` deleted, styled-components uninstalled, ESLint and accessibility checks enforced; screenshots and a Tizen hardware pass are left). Progress is tracked in the checklist in section 13: update it with every change. Last updated 2026-11-21. Repository findings refer to `maury91/miauflix` main at `c84c4fcd112939ef140c36baf317c2abfe3dc2d3` unless stated otherwise.
 
@@ -94,7 +94,7 @@ There are no separate login/settings/player palettes. `PALETTE` and `SETTINGS_PA
 
 ### Palette
 
-![Miauflix palette swatches labeled by role and value, with the translucent action color shown over canvas and white](style-guide-palette.svg)
+![Miauwatch palette swatches labeled by role and value, with the translucent action color shown over canvas and white](style-guide-palette.svg)
 
 | Role                              | Value                                                     | Notes                                                                                                     |
 | --------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -140,7 +140,7 @@ _Proposed action styling on the existing movie details screen._
 
 Text fields, TextArea, NumberField input, MediaTile/CollectionTile/ProfileTile, ListItem rows, Switch, Checkbox, Radio, Slider/SeekControl. The focused element gets a white `focusOutline` outside its box, `0.125rem` wide with `0.125rem` offset (2px on web, 3px on TV), following the element's radius.
 
-Unlike TV UIs that never expose an editable field (typing goes through an on-screen keyboard into a non-focusable display), Miauflix keeps real editable inputs on every platform, so fields need this treatment. An invalid focused field shows both the outline and its error border/text.
+Unlike TV UIs that never expose an editable field (typing goes through an on-screen keyboard into a non-focusable display), Miauwatch keeps real editable inputs on every platform, so fields need this treatment. An invalid focused field shows both the outline and its error border/text.
 
 Chromium 69 draws `outline` as a rectangle that ignores `border-radius`. Draw the outline with an absolutely positioned pseudo-element carrying the border and radius, toggled with `opacity`, so it follows the shape, causes no layout and changes only compositing. A shared FocusIndicator recipe owns this; no component draws its own.
 
@@ -249,7 +249,7 @@ Every action is fully rounded: text buttons, tabs and chips are pills; IconButto
 - Keep the Home row logic in `frontend/src/pages/home/home-layout.ts` (`mediaBoxSizes`) as the collection geometry contract for Carousel, MediaTile rows and Search results. Card width and gap are shares of the window height (35.2vh, 2vh); rows keep at least a 5vw side margin; as many whole cards as fit are centred, with at most half a card peeking on each side; every row has a fixed height (33vh) so rows are placed and scrolled without measuring. It is the documented exception to the rem rule and feeds the translate-based positioning in section 6.
 - Tiles scale on focus with `transform`, keeping the tuned value from `MediaCard.css.ts`: `scale(1.03)`, 150 ms ease-out. The pointer focuses tiles instead of hovering them, so the separate 1.015 hover scale goes. Row geometry already leaves room for the growth.
 
-![Miauflix Home with its informational hero above two artwork carousels and a white outer focus outline around the first tile](style-guide-tv-browse.png)
+![Miauwatch Home with its informational hero above two artwork carousels and a white outer focus outline around the first tile](style-guide-tv-browse.png)
 
 _Proposed tile focus on the existing Home layout._
 

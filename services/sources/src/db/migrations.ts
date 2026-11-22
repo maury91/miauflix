@@ -44,4 +44,5 @@ export const migrations = [
   // addon, and its cached addon pages predate episode numbering: search it afresh.
   `DELETE FROM search_memory WHERE provider_id='${TORRENTIO_ID}';
    DELETE FROM query_cache WHERE provider_id='${TORRENTIO_ID}';`,
+  `UPDATE repositories SET name='Miauwatch' WHERE id='builtin:miauflix' AND built_in=1;`,
 ];

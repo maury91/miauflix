@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Install dist/miauflix.wgt (from npm run package:tizen) on a Samsung TV in Developer Mode and
+# Install dist/miauwatch.wgt (from npm run package:tizen) on a Samsung TV in Developer Mode and
 # open it, with apps2samsung-cli, which signs it with a Samsung certificate. The first install
 # for a TV asks for a Samsung account sign-in in the browser to create that certificate.
 #
@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/utils.sh"
 
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-WGT_PATH="${PROJECT_ROOT}/dist/miauflix.wgt"
+WGT_PATH="${PROJECT_ROOT}/dist/miauwatch.wgt"
 CLI="${APPS2SAMSUNG_CLI:-apps2samsung-cli}"
 
 TV_IP="${MIAUFLIX_TV_IP}"
@@ -41,4 +41,4 @@ print_status "Checking the TV at ${TV_IP}..."
 print_status "Installing ${WGT_PATH}..."
 "${CLI}" install "${WGT_PATH}" --tv "${TV_IP}" --launch "$@"
 
-print_status "Miauflix is installed on ${TV_IP}"
+print_status "Miauwatch is installed on ${TV_IP}"

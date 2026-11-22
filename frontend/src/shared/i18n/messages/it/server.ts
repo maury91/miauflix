@@ -3,12 +3,12 @@ import type { Translation } from '../types';
 
 export const server: Translation<typeof english> = {
   'server.noAnswer':
-    'Nessun server Miauflix risponde a {address}. Controlla l’indirizzo e riprova.',
+    'Nessun server Miauwatch risponde a {address}. Controlla l’indirizzo e riprova.',
   'server.typeAddress': 'Inserisci l’indirizzo del server, per esempio 192.168.1.10:3000.',
-  'server.title': 'Collegati al tuo server Miauflix',
+  'server.title': 'Collegati al tuo server Miauwatch',
   'server.lastDown':
     '{address} non risponde. La TV si ricollegherà quando il server sarà di nuovo online.',
-  'server.needsServer': 'Scegli il server Miauflix a cui collegare la TV.',
+  'server.needsServer': 'Scegli il server Miauwatch a cui collegare la TV.',
   'server.onNetwork': 'Nella tua rete',
   'server.servers': 'Server',
   'server.lastUsed': '(ultimo usato)',

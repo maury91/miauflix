@@ -1,8 +1,8 @@
-# Running your own Miauflix server
+# Running your own Miauwatch server
 
 [Back to all features](../features.md)
 
-Miauflix runs on a computer or server you control. Your browser or TV connects to that server to browse and play media.
+Miauwatch runs on a computer or server you control. Your browser or TV connects to that server to browse and play media.
 
 ## Docker deployment
 
@@ -18,7 +18,7 @@ The configuration system can test connection settings, report service status, an
 
 ## Catalog information and updates
 
-Miauflix obtains descriptions, artwork, genres, and movie and TV information through its catalog service. The currently connected catalog provider is TMDB. Background jobs keep catalog information fresh, including season and episode information.
+Miauwatch obtains descriptions, artwork, genres, and movie and TV information through its catalog service. The currently connected catalog provider is TMDB. Background jobs keep catalog information fresh, including season and episode information.
 
 Episode updates can focus on shows being watched or cover all incomplete seasons, depending on the server configuration. The catalog is separate from source discovery: a description and poster do not mean a downloadable release has been found.
 
@@ -28,7 +28,7 @@ The optional Caddy deployment provides HTTPS for a configured domain. HTTPS encr
 
 ## Automatic updates and recovery
 
-The supplied Compose setup includes an updater that checks for new Miauflix container images on a schedule. It also includes a health-check helper that can restart the application container when it becomes unhealthy. These are deployment features provided by the included supporting containers.
+The supplied Compose setup includes an updater that checks for new Miauwatch container images on a schedule. It also includes a health-check helper that can restart the application container when it becomes unhealthy. These are deployment features provided by the included supporting containers.
 
 ## Troubleshooting tools
 
@@ -36,7 +36,7 @@ An optional tracing setup sends timing information to Jaeger. This helps an admi
 
 ## Separate, replaceable services
 
-Catalog information, lists, and source searches run in separate services. Miauflix communicates with them through versioned contracts: agreed formats for requests, responses, configuration, and status.
+Catalog information, lists, and source searches run in separate services. Miauwatch communicates with them through versioned contracts: agreed formats for requests, responses, configuration, and status.
 
 Developers can run a compatible replacement service at a configured address, including in a separate Docker container. This requires implementing the expected contract. The current built-in catalog is TMDB and the built-in list integration is Trakt; the ordinary settings interface does not provide an arbitrary catalog or list-plugin installer.
 

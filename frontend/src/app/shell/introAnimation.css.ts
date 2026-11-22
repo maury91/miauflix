@@ -14,7 +14,6 @@ export const container = style({
   backfaceVisibility: 'hidden',
   perspective: '1000px',
   contain: 'layout style paint',
-  font: '7vw/1 sans-serif',
   zIndex: 1002,
   selectors: {
     '&[data-low-resource]': {

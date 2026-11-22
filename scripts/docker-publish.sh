@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# MiauFlix Docker Image Management Script
+# Miauwatch Docker Image Management Script
 # This script helps with building, tagging, and pushing Docker images to GitHub Container Registry
 
 set -e
@@ -26,7 +26,7 @@ check_login() {
 
 # Build images
 build_images() {
-    print_status "Building MiauFlix Docker image..."
+    print_status "Building Miauwatch Docker image..."
 
     export DOCKER_BUILDKIT=1
     print_status "Building and compiling backend image..."
@@ -87,8 +87,8 @@ push_images() {
 
 # List images
 list_images() {
-    print_status "Local MiauFlix Docker image:"
-    docker images | grep -E "(${REPOSITORY}|miauflix)" || echo "No MiauFlix images found locally"
+    print_status "Local Miauwatch Docker image:"
+    docker images | grep -E "(${REPOSITORY}|miauflix)" || echo "No Miauwatch images found locally"
 }
 
 # Clean up old images
@@ -106,7 +106,7 @@ usage() {
     echo "  build     Build Docker images"
     echo "  push      Push images to registry (requires build first)"
     echo "  deploy    Build and push images"
-    echo "  list      List local MiauFlix images"
+    echo "  list      List local Miauwatch images"
     echo "  cleanup   Clean up old Docker images"
     echo "  login     Show login instructions"
     echo ""

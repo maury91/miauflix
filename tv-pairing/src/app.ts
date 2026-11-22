@@ -1,7 +1,7 @@
 import { RateLimiter } from './rate-limit';
 
 /**
- * Lets a Miauflix TV app find the Miauflix servers on its network.
+ * Lets a Miauwatch TV app find the Miauwatch servers on its network.
  *
  * One endpoint, `POST /v1/discovery`:
  * - `{ role: 'server', id, urls, name? }`: a server announces the addresses it can be reached at

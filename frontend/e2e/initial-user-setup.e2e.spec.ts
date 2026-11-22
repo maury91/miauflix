@@ -58,7 +58,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   expect(initialStatus.status()).toBe(200);
   await expect(initialStatus.json()).resolves.toEqual({ available: true });
 
-  await expect(page.getByText('Create an admin account to set up Miauflix.')).toBeVisible();
+  await expect(page.getByText('Create an admin account to set up Miauwatch.')).toBeVisible();
   const emailInput = page.locator('#setup-email');
   const passwordInput = page.locator('#setup-password');
   const confirmPasswordInput = page.locator('#setup-confirm-password');
@@ -233,7 +233,7 @@ test('completes first-run admin and required configuration through the UI', asyn
     timeout: 5_000,
   });
   // The wizard carries the logo in the corner, as Home does: 3vh from the top, 4vh tall
-  const logo = page.getByAltText('Miauflix logo');
+  const logo = page.getByAltText('Miauwatch logo');
   const logoBox = await logo.boundingBox();
   const viewport = page.viewportSize()!;
   expect(logoBox?.y).toBeCloseTo(viewport.height * 0.03, 0);

@@ -7,7 +7,7 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
 export const catalogConfigurationDefinition = serviceConfiguration({
   name: 'Media Catalog',
   description:
-    'The media catalog service provides Miauflix with its movie and TV catalogue, including seasons, episodes, and posters.',
+    'The media catalog service provides Miauwatch with its movie and TV catalogue, including seasons, episodes, and posters.',
   variables: {
     CATALOG_SERVICE_URL: variable({
       label: 'Catalog Service URL',

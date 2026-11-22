@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "miauflix",
+      "name": "miauwatch",
       "dependencies": {
         "concurrently": "9.2.1",
       },

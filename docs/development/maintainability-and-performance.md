@@ -1,6 +1,6 @@
 # Maintainability and performance standards
 
-Status: proposal (2026-11-21). These are the standards code in Miauflix is written to: easy for a
+Status: proposal (2026-11-21). These are the standards code in Miauwatch is written to: easy for a
 person to read, fast to run. They describe the target, not the code as it is; existing code that
 falls short is debt, tracked in [Current debt](#current-debt) and paid down when it is touched. They
 build on [coding conventions](coding-conventions.md) and [CSS architecture](css-architecture.md).

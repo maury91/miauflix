@@ -10,9 +10,9 @@ export const auth: Translation<typeof english> = {
   'auth.passwordsDiffer': 'Slaptažodžiai nesutampa',
   'auth.passwordTooShort': 'Slaptažodžio simbolių skaičius turi būti bent {count}',
   'auth.invalidEmail': 'Įveskite galiojantį el. pašto adresą',
-  'auth.welcome': 'Sveiki atvykę į „Miauflix“',
+  'auth.welcome': 'Sveiki atvykę į „Miauwatch“',
   'auth.createAdminIntro':
-    'Sukurkite administratoriaus paskyrą, kad galėtumėte konfigūruoti „Miauflix“.',
+    'Sukurkite administratoriaus paskyrą, kad galėtumėte konfigūruoti „Miauwatch“.',
   'auth.createAdmin': 'Sukurti administratoriaus paskyrą',
   'auth.email': 'El. pašto adresas',
   'auth.password': 'Slaptažodis',

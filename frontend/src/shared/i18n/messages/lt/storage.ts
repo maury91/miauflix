@@ -24,14 +24,14 @@ export const storage: Translation<typeof english> = {
   'storage.status.unknown': 'Nežinoma',
   'storage.freeFailed': 'Nepavyko ištrinti atsisiuntimo. Pabandykite dar kartą.',
   'storage.seedingConfigured':
-    '„Miauflix“ dalijasi atsisiųstais failais tiek laiko, kiek nurodyta saugyklos nustatymuose. Paskui jie lieka tik serveryje.',
-  'storage.seedingNone': '„Miauflix“ nustoja dalytis failu iškart, kai jį atsisiunčia.',
+    '„Miauwatch“ dalijasi atsisiųstais failais tiek laiko, kiek nurodyta saugyklos nustatymuose. Paskui jie lieka tik serveryje.',
+  'storage.seedingNone': '„Miauwatch“ nustoja dalytis failu iškart, kai jį atsisiunčia.',
   'storage.seedingFor':
     'Atsisiųstų failų dalijimosi trukmė: {duration}. Paskui jie lieka tik serveryje.',
   'storage.freed': 'Atlaisvinta vieta ({size}), kurią užėmė „{name}“.',
   'storage.title': 'Saugykla',
   'storage.description':
-    'Čia matote, ką „Miauflix“ saugo serveryje. Norėdami atlaisvinti vietos, ištrinkite atsisiuntimus.',
+    'Čia matote, ką „Miauwatch“ saugo serveryje. Norėdami atlaisvinti vietos, ištrinkite atsisiuntimus.',
   'storage.back': 'Grįžti į pradžią',
   'storage.confirmTitle': 'Ištrinti „{name}“ atsisiuntimą?',
   'storage.confirmDescription':
@@ -51,7 +51,7 @@ export const storage: Translation<typeof english> = {
   'storage.beingWatched': 'Žiūrima',
   'storage.freeSpace': 'Ištrinti atsisiuntimą',
   'storage.legend':
-    'Aktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis įkeltas. Neaktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis neįkeltas. Galima žiūrėti neprisijungus. Vaizdo įrašas atsisiųstas ir „Miauflix“ dar gali įkelti jo „torrent“ šaltinį. Tik serveryje. Vaizdo įrašas lieka serveryje ir „Miauflix“ jo „torrent“ šaltinio nebeįkels. {seeding}',
+    'Aktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis įkeltas. Neaktyvus. Atsisiuntimas nebaigtas, o „torrent“ šaltinis neįkeltas. Galima žiūrėti neprisijungus. Vaizdo įrašas atsisiųstas ir „Miauwatch“ dar gali įkelti jo „torrent“ šaltinį. Tik serveryje. Vaizdo įrašas lieka serveryje ir „Miauwatch“ jo „torrent“ šaltinio nebeįkels. {seeding}',
   'storage.videoComplete': 'Vaizdo įrašas atsiųstas',
   'storage.percentDownloaded': 'Atsiųsta {percent} %',
   'storage.currentlyWatched': 'Dabar žiūrima',
@@ -87,23 +87,23 @@ export const storage: Translation<typeof english> = {
   'storage.field.STORAGE_PLAYBACK_RESERVE': 'Vieta atkūrimui',
   'storage.field.CONTENT_SEED_DURATION_SECONDS': 'Dalijimasis po atsisiuntimo',
   'storage.field.DOWNLOAD_PATH': 'Atsisiuntimų aplankas',
-  'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'Atsisiuntimų aplankas skirtas tik „Miauflix“',
+  'storage.field.DOWNLOAD_PATH_EXCLUSIVE': 'Atsisiuntimų aplankas skirtas tik „Miauwatch“',
   'storage.field.STORAGE_PAD_FILE_SIZES': 'Iš anksto skirti vietos failams',
   'storage.seedDescription':
     'Pasirinkite, kiek laiko dalytis failu, kai jis atsisiųstas. Įveskite 0, kad dalijimasis baigtųsi iškart.',
-  'storage.zeroLimit': 'Nustačius 0 limitą, „Miauflix“ negalės išsaugoti atsisiuntimų.',
+  'storage.zeroLimit': 'Nustačius 0 limitą, „Miauwatch“ negalės išsaugoti atsisiuntimų.',
   'storage.limitOverDisk':
-    'Limitas viršija „Miauflix“ prieinamą vietą diske ({capacity}). Kai diskas prisipildys, atsisiuntimai sustos.',
-  'storage.reserveTakesAll': 'Visa vieta skirta atkūrimui. „Miauflix“ nieko nesiųs iš anksto.',
+    'Limitas viršija „Miauwatch“ prieinamą vietą diske ({capacity}). Kai diskas prisipildys, atsisiuntimai sustos.',
+  'storage.reserveTakesAll': 'Visa vieta skirta atkūrimui. „Miauwatch“ nieko nesiųs iš anksto.',
   'storage.settingsTitle': 'Saugyklos nustatymai',
   'storage.settingsDescription':
-    'Nustatykite, kiek vietos gali naudoti „Miauflix“, kiek jos palikti atkūrimui ir kiek laiko dalytis atsisiųstais failais. Pakeitimai įsigalioja be paleidimo iš naujo.',
+    'Nustatykite, kiek vietos gali naudoti „Miauwatch“, kiek jos palikti atkūrimui ir kiek laiko dalytis atsisiųstais failais. Pakeitimai įsigalioja be paleidimo iš naujo.',
   'storage.settingsLoading': 'Įkeliami saugyklos nustatymai…',
   'storage.settingsLoadFailed':
     'Nepavyko įkelti saugyklos nustatymų. Juos vis tiek galite pakeisti konfigūracijos puslapyje.',
   'storage.advanced': 'Išplėstiniai nustatymai',
   'storage.advancedDescription':
-    'Pasirinkite atsisiuntimų aplanką ir nustatykite, kaip „Miauflix“ į jį įrašo failus.',
+    'Pasirinkite atsisiuntimų aplanką ir nustatykite, kaip „Miauwatch“ į jį įrašo failus.',
   'storage.settingsActions': 'Saugyklos nustatymų veiksmai',
   'storage.saved': 'Saugyklos nustatymai išsaugoti.',
   'storage.saveFailed': 'Nepavyko išsaugoti saugyklos nustatymų. Pabandykite dar kartą.',
@@ -115,8 +115,8 @@ export const storage: Translation<typeof english> = {
   'storage.spaceByKind': 'Užimama vieta pagal failų tipą',
   'storage.free': 'Laisva',
   'storage.counts':
-    'Iš galimų {limit} „Miauflix“ jau naudoja arba rezervavo {charged}. Įskaičiuota ir vieta dar siunčiamiems failams.',
+    'Iš galimų {limit} „Miauwatch“ jau naudoja arba rezervavo {charged}. Įskaičiuota ir vieta dar siunčiamiems failams.',
   'storage.aheadStop':
-    'Išankstiniams atsisiuntimams „Miauflix“ naudoja iki {size}. Likusi vieta skirta atkūrimui.',
+    'Išankstiniams atsisiuntimams „Miauwatch“ naudoja iki {size}. Likusi vieta skirta atkūrimui.',
   'storage.checkValues': 'Patikrinkite šias reikšmes: {keys}.',
 };

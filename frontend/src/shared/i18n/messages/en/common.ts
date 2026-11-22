@@ -18,5 +18,5 @@ export const common = {
   'common.unexpected': 'Refresh the page. If the problem keeps happening, contact support.',
   'common.technicalDetails': 'Technical details',
   'common.pageNotFound': 'Page not found',
-  'common.logo': 'Miauflix logo',
+  'common.logo': 'Miauwatch logo',
 } satisfies MessageSection;

@@ -261,7 +261,7 @@ export class CardigannProvider implements Provider {
         date: date?.toISOString(),
         imdbid: (result.imdbid ?? result.imdb)?.match(/tt\d+/)?.[0],
         category: result.category ? this.categoryName(result.category) : undefined,
-        // Miauflix extension: a curated pick (SeaDex) as `best` or `alt`.
+        // Miauwatch extension: a curated pick (SeaDex) as `best` or `alt`.
         release: result.release === 'best' || result.release === 'alt' ? result.release : undefined,
       });
     }

@@ -1,4 +1,4 @@
-# Build the Miauflix images from this clone of the repository instead of pulling the published ones.
+# Build the Miauwatch images from this clone of the repository instead of pulling the published ones.
 # Usage: put this in a .env file in the repository root, then run docker compose up -d --build
 #   COMPOSE_FILE=docker-compose.yml:docker-compose.build.yml
 # npm run start:backend:docker:prod does this for you. Guide: docs/setup/docker-setup.md#building-from-source

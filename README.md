@@ -1,11 +1,13 @@
 <p align="center">
-  <img src="./assets/logo.png" alt="Miauflix logo" style="max-width: 720px; width: 90%">
+  <img src="./frontend/public/favicon.svg" alt="" width="144">
 </p>
+
+# Miauwatch
 
 [![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial-blue.svg)](LICENSE)
 [![CI Status](https://github.com/maury91/miauflix/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix/actions/workflows/ci.yml)
 
-Miauflix is a self-hosted app for watching movies and TV shows in your browser or on your TV. While you’re looking at a title, Miauflix can already find a source, check its audio and subtitles, and start downloading the first pieces. It does that in the background so playback can be ready by the time you press **Watch Now**.
+Miauwatch is a self-hosted app for watching movies and TV shows in your browser or on your TV. While you’re looking at a title, Miauwatch can already find a source, check its audio and subtitles, and start downloading the first pieces. It does that in the background so playback can be ready by the time you press **Watch Now**.
 
 [Quick start](#quick-start) · [Screenshots](#screenshots) · [Documentation](docs/README.md)
 
@@ -19,14 +21,14 @@ You can also connect these services:
 - [OpenSubtitles](https://www.opensubtitles.com/consumers) for finding additional movie subtitles. You'll need an API key.
 - [Jackett or Prowlarr](docs/features/sources.md#connecting-jackett-or-prowlarr) for searching indexers you already use. Enter the Torznab URL and an API key if your endpoint requires one. (note: Prowlarr definitions are auto-synched, you do not need to setup or run a Prowlarr instance).
 
-In an empty folder, download the Compose file and start Miauflix.
+In an empty folder, download the Compose file and start Miauwatch.
 
 ```bash
 curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.yml
 docker compose up -d
 ```
 
-Open <http://localhost:3000>, create your admin account, and enter your TMDB token. The default setup is reachable only from the machine running Docker. Once your admin account exists, you can [open Miauflix to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network).
+Open <http://localhost:3000>, create your admin account, and enter your TMDB token. The default setup is reachable only from the machine running Docker. Once your admin account exists, you can [open Miauwatch to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network).
 
 ### Watch something
 
@@ -38,15 +40,15 @@ Open a movie or episode you have permission to watch and select **Watch Now**.
 
 - Use a remote to browse and play on your TV. Scan the sign-in QR code with your phone.
 - Keep a watchlist, rate titles, and pick up where you left off. You can also sync your watchlist and playback progress with Trakt.
-- Search across multiple source providers, including Jackett and Prowlarr integrations. Miauflix picks a source that suits your device.
-- Keep downloads on your server. Miauflix encrypts each download with its own key, uses random file and directory names, and pads file sizes.
+- Search across multiple source providers, including Jackett and Prowlarr integrations. Miauwatch picks a source that suits your device.
+- Keep downloads on your server. Miauwatch encrypts each download with its own key, uses random file and directory names, and pads file sizes.
 
 See the [feature guide](docs/features.md) for details and the [task list](ToDo.md) for planned work.
 
 ## Screenshots
 
 <p align="center">
-  <img src="./frontend/e2e/home.storybook.spec.ts-snapshots/home-page-browse-1440x900-storybook-chromium-linux.png" alt="Miauflix home screen" width="760"><br>
+  <img src="./frontend/e2e/home.storybook.spec.ts-snapshots/home-page-browse-1440x900-storybook-chromium-linux.png" alt="Miauwatch home screen" width="760"><br>
   <sub>Browse the catalog</sub>
 </p>
 
@@ -77,7 +79,7 @@ See the [feature guide](docs/features.md) for details and the [task list](ToDo.m
 - [Deploy on a domain with HTTPS](docs/setup/docker-setup.md#https-with-a-domain)
 - [See the prebuilt Docker images for AMD64 and ARM64](docs/setup/docker-setup.md#prebuilt-images)
 - [Configure environment variables](docs/setup/environment-variables.md) or [set up FlareSolverr](docs/setup/flaresolverr.md)
-- [Read about the design decisions behind Miauflix](docs/philosophy.md)
+- [Read about the design decisions behind Miauwatch](docs/philosophy.md)
 
 ## Contributing
 

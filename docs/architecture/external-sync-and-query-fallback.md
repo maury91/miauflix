@@ -1,6 +1,6 @@
 # External synchronization and query fallback
 
-Miauflix separates provider synchronization from request-time data loading. The catalog, list, and source services own their provider access and caches. The backend combines their responses with its local indexes and account/playback state.
+Miauwatch separates provider synchronization from request-time data loading. The catalog, list, and source services own their provider access and caches. The backend combines their responses with its local indexes and account/playback state.
 
 See [System overview](system-overview.md) for service ownership and [Service contracts](service-contract-v2.md) for the internal transport.
 

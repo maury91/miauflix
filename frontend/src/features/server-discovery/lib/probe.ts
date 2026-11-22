@@ -4,7 +4,7 @@ export interface ProbeOptions {
 }
 
 /**
- * Whether a Miauflix server answers at `url` (an origin), by its unauthenticated health check.
+ * Whether a Miauwatch server answers at `url` (an origin), by its unauthenticated health check.
  * Servers from before the health check named the service only answer `status: 'ok'`.
  */
 export async function probeServer(

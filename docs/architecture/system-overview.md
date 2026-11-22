@@ -1,6 +1,6 @@
 # System Architecture Overview
 
-Miauflix is a self-hosted streaming application. Its backend serves a React frontend, owns accounts and playback, and delegates catalog information, lists, and source searches to separate services.
+Miauwatch is a self-hosted streaming application. Its backend serves a React frontend, owns accounts and playback, and delegates catalog information, lists, and source searches to separate services.
 
 For a user-facing explanation, see the [Feature Guide](../features.md). This page describes the current ownership boundaries; [architecture diagrams](diagrams.md) provide additional views. Features still being developed are tracked in [ToDo.md](../../ToDo.md).
 
@@ -26,7 +26,7 @@ For a user-facing explanation, see the [Feature Guide](../features.md). This pag
 
 The backend exposes the application API under `/api` and hosts the browser frontend. The frontend owns navigation and display state, including the home feed, search, details, and player. It uses authenticated API requests and a realtime connection for supported operations.
 
-The backend owns Miauflix accounts, authentication, local watchlists and ratings, progress, notifications, persisted source candidates, torrent verification, and playback sessions. Its local movie/show records are indexes of catalog data needed for joins and source matching; they are not the authoritative full catalog.
+The backend owns Miauwatch accounts, authentication, local watchlists and ratings, progress, notifications, persisted source candidates, torrent verification, and playback sessions. Its local movie/show records are indexes of catalog data needed for joins and source matching; they are not the authoritative full catalog.
 
 The frontend also has a Tizen build. It uses Samsung AVPlay when available and suitable, with browser playback for converted delivery. TV-specific code registers remote keys, adapts styles and artwork, and finds or remembers the backend server.
 
@@ -42,7 +42,7 @@ TMDB is the currently wired provider. The service has a provider abstraction, bu
 
 The list service owns Trakt access, encrypted provider credentials, public and personal list pages, account association, and watchlist/playback synchronization. Public lists include popular, trending, and community lists; personal lists include watchlists, favorites, and history.
 
-A Trakt connection belongs to an authenticated Miauflix account. Trakt authorization does not create or authenticate a Miauflix login. Playback synchronization uses a durable outbox with retries, while the backend retains local progress used by the application.
+A Trakt connection belongs to an authenticated Miauwatch account. Trakt authorization does not create or authenticate a Miauwatch login. Playback synchronization uses a durable outbox with retries, while the backend retains local progress used by the application.
 
 ### Sources service
 
@@ -65,13 +65,13 @@ The backend clients share a remote-service implementation. Each configured servi
 
 On connection or reconnection, the backend negotiates a supported contract major, obtains the service's configuration schema, delivers the saved configuration snapshot, and observes service status. A previous-major adapter can be used when that particular client supplies one. Calls fail as unavailable or not configured while a required service is not ready.
 
-The contract layer provides calls, streams, subscriptions, and byte delivery. These internal service contracts are distinct from the public browser API. A replacement service must implement the expected contract and management behavior; running an arbitrary Docker image does not install a Miauflix provider.
+The contract layer provides calls, streams, subscriptions, and byte delivery. These internal service contracts are distinct from the public browser API. A replacement service must implement the expected contract and management behavior; running an arbitrary Docker image does not install a Miauwatch provider.
 
 Implementation: [remote service client](../../backend/src/services/remote/remote-service.ts), [contract protocol](../../packages/contract/src/protocol.ts), and [service contracts](../../packages/service-contracts/src/).
 
 ## Authentication and authorization
 
-Miauflix has two account roles: `user` and `admin`. Protected API requests use JWT access tokens. Administrators can create additional accounts through the API and manage configuration, sources, and storage; a complete account-management interface remains planned.
+Miauwatch has two account roles: `user` and `admin`. Protected API requests use JWT access tokens. Administrators can create additional accounts through the API and manage configuration, sources, and storage; a complete account-management interface remains planned.
 
 Browser access and refresh tokens use session-scoped HttpOnly cookies. Protected API calls identify the session with `X-Session-Id`; middleware reads its access-token cookie, falling back to `Authorization: Bearer`. Login, renewal, logout, and session discovery have their own routes and transport handling. The installed TV app requests explicit token transport because it runs from a different origin and cannot rely on those browser cookies: access uses Bearer authorization, while refresh/logout use `X-Refresh-Token`. QR login lets an authenticated account approve a new device session.
 

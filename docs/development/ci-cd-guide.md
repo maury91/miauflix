@@ -1,6 +1,6 @@
-# GitHub Actions for Miauflix
+# GitHub Actions for Miauwatch
 
-This document explains how GitHub Actions have been configured to automatically run tests, linting, and type checking for the Miauflix project.
+This document explains how GitHub Actions have been configured to automatically run tests, linting, and type checking for the Miauwatch project.
 
 ## Available Workflows
 

@@ -1,6 +1,6 @@
 # Architecture
 
-These references describe Miauflix's implemented runtime, ownership boundaries, and data invariants. Use the [Feature Guide](../features.md) for viewer-facing explanations and [ToDo.md](../../ToDo.md) for planned work.
+These references describe Miauwatch's implemented runtime, ownership boundaries, and data invariants. Use the [Feature Guide](../features.md) for viewer-facing explanations and [ToDo.md](../../ToDo.md) for planned work.
 
 | Reference                                                                          | Scope                                                                                        |
 | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |

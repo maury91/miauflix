@@ -1,4 +1,4 @@
-# Miauflix Architecture Diagrams
+# Miauwatch Architecture Diagrams
 
 These diagrams describe the current runtime and ownership boundaries. The arrows show who calls
 whom; the database shapes show ownership. See the [system overview](system-overview.md) for details
@@ -12,7 +12,7 @@ flowchart LR
   TV[Samsung Tizen app]
   Edge[Optional Caddy HTTPS]
 
-  subgraph Core[Miauflix application]
+  subgraph Core[Miauwatch application]
     Backend[Node and Hono backend<br/>API and static frontend]
     BackendDB[(Backend SQLite)]
     Downloads[(Encrypted download storage)]
@@ -86,14 +86,14 @@ flowchart TB
 
 Ownership invariants:
 
-- The backend never stores Trakt credentials and Trakt is not a Miauflix identity provider.
+- The backend never stores Trakt credentials and Trakt is not a Miauwatch identity provider.
 - The List Service is the only reader and writer of Trakt association secrets.
 - The sources service owns indexer definitions, credentials/settings, and search caches; the backend
   owns persisted candidates, verification, episode associations, and playback.
 - The Media Catalog service is the only owner of full provider metadata; the backend keeps only the
   projection needed for lists, source discovery, and playback.
 - Public list projections use the `public` subject. Personal projections use the authenticated
-  Miauflix user ID and remain available only while the provider still defines that list for the
+  Miauwatch user ID and remain available only while the provider still defines that list for the
   subject.
 
 ## 3. Provider list ingestion and query
@@ -140,22 +140,22 @@ page fan-out followed by generation activation.
 
 ## 4. Authentication and account association are separate
 
-### Miauflix QR login
+### Miauwatch QR login
 
 ```mermaid
 sequenceDiagram
   actor Screen as Requesting device
   actor Phone as Approving device
-  participant API as Miauflix backend
+  participant API as Miauwatch backend
   participant DB as Backend SQLite
 
   Screen->>API: POST /api/auth/qr
   API->>DB: Store hashed approval and claim tokens with expiry
   API-->>Screen: requestId, claimToken, approval URL, expiry, interval
   Screen-->>Screen: Render approval URL as QR code
-  Phone->>API: Open Miauflix approval URL
+  Phone->>API: Open Miauwatch approval URL
   API-->>Phone: Device context and pending state
-  Phone->>API: Authenticate with Miauflix email and password
+  Phone->>API: Authenticate with Miauwatch email and password
   Phone->>API: Approve or reject request
   API->>DB: Conditional pending-to-approved or pending-to-rejected update
 
@@ -168,7 +168,7 @@ sequenceDiagram
 
 The approval and claim tokens are independent, short-lived, stored only as hashes, and bound to the
 same request ID. The final state transition is single-use and race-safe. Approval requires an
-authenticated Miauflix account; a device already signed in does not need to enter its password again.
+authenticated Miauwatch account; a device already signed in does not need to enter its password again.
 
 Browser login and QR claim deliver access and refresh tokens as session-scoped HttpOnly cookies.
 The client identifies its session with `X-Session-Id`; middleware reads the matching access cookie
@@ -182,20 +182,20 @@ first and then falls back to `Authorization: Bearer`. A packaged TV app requests
 sequenceDiagram
   actor User
   participant UI as Authenticated frontend
-  participant API as Miauflix backend
+  participant API as Miauwatch backend
   participant Lists as List Service
   participant Trakt
   participant ListDB as List Service SQLite
 
   User->>UI: Connect Trakt
-  UI->>API: Start association with authenticated Miauflix session
+  UI->>API: Start association with authenticated Miauwatch session
   API->>Lists: Start device flow with authenticated user ID
   Lists->>Trakt: Request device code
   Trakt-->>Lists: Verification URL, user code, expiry, interval
   Lists->>ListDB: Store encrypted pending authorization
   Lists-->>API: Public device authorization details
   API-->>UI: Verification URL and code
-  User->>Trakt: Approve Miauflix on Trakt
+  User->>Trakt: Approve Miauwatch on Trakt
 
   loop While pending
     UI->>API: Poll authorization ID with authenticated session
@@ -210,7 +210,7 @@ sequenceDiagram
   API-->>UI: Association connected
 ```
 
-Trakt proves access to a Trakt account; it never authenticates a Miauflix user. Disconnecting asks
+Trakt proves access to a Trakt account; it never authenticates a Miauwatch user. Disconnecting asks
 the List Service to revoke the provider token and remove the association.
 
 ## 5. Playback and streaming path

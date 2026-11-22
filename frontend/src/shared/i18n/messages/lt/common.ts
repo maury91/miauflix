@@ -19,5 +19,5 @@ export const common: Translation<typeof english> = {
     'Įkelkite puslapį iš naujo. Jei problema kartojasi, kreipkitės į pagalbos tarnybą.',
   'common.technicalDetails': 'Techninė informacija',
   'common.pageNotFound': 'Puslapis nerastas',
-  'common.logo': '„Miauflix“ logotipas',
+  'common.logo': '„Miauwatch“ logotipas',
 };

@@ -236,7 +236,7 @@ the stories, unit tests and visual snapshots passing, and add a CHANGELOG line.
    3. `rail/rail.styles.ts`: always on screen, and expanding it inserts a rule today
    4. `button/Button.tsx`: the base for most controls
    5. `spinner/Spinner.tsx`, `loading-indicator/LoadingIndicator.tsx`, `modal/Modal.tsx` (static)
-   6. `logo/Logo.tsx`, `logo/LogoGlyphs.tsx`: its placement changes during the intro, inserting
+   6. `logo/Logo.tsx`: its placement changes during the intro, inserting
       rules at startup. After the uncommitted TV work on `Logo.tsx` is committed.
 2. **Home and startup.** After the uncommitted TV performance work (`MediaHero`, `CategoryRow`,
    `HomePage`, `IntroAnimation`, `useIntroController`, `image-preloader`) is committed:

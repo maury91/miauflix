@@ -2,7 +2,7 @@
 
 [Back to all features](../features.md)
 
-Miauflix downloads media as it plays and manages the files on your server. It also provides storage and network controls for the person running that server.
+Miauwatch downloads media as it plays and manages the files on your server. It also provides storage and network controls for the person running that server.
 
 ## Encrypted downloads and sensitive records
 
@@ -12,13 +12,13 @@ Encryption depends on keeping the server's keys safe. It does not mean every dat
 
 ## What the disk shows
 
-Miauflix is built to run on a rented server (a VPS). The aim is that an automated scan of that server's disk finds nothing that identifies a download, without someone first studying how Miauflix works. For each download started with the current version:
+Miauwatch is built to run on a rented server (a VPS). The aim is that an automated scan of that server's disk finds nothing that identifies a download, without someone first studying how Miauwatch works. For each download started with the current version:
 
 - **Its own random key.** Each download gets two random values when it starts. One gives it its own encryption key, derived from the server's master key (`SOURCE_SECURITY_KEY`); the other names its files. Neither comes from the torrent, so knowing a torrent's info hash does not tell you where its files are or how to decrypt them, even with the master key.
 - **Random names.** The download's folder has a random name, and each file's name is a keyed hash of its path. Nothing on disk carries a torrent name, info hash, or file name. Names alone do not hide a download: file sizes can still be matched to known torrents, which is what size padding covers.
 - **No shared encryption.** Every byte position in a download is encrypted differently, and no two downloads share a key, so knowing one file's content does not help decrypt another.
 - **Size padding.** Encrypted files otherwise keep their exact size, and a torrent's file sizes are close to unique. Each file is padded with random bytes to a rounded size: files over 64 KiB grow by at most about 3%, and smaller files all take 64 KiB. `STORAGE_PAD_FILE_SIZES=false` turns it off, and then sizes can identify downloads despite the random names. See [Environment Variables](../setup/environment-variables.md).
-- **Clean logs.** Logs name downloads by an internal number. In everything written through Miauflix's loggers, anything that looks like an info hash or magnet link, including inside library errors, is replaced with `[redacted]`. `docker logs` keeps logs on the server, so this matters as much as the files. Output that bypasses the loggers is not redacted: media-load's crash output (an uncaught error printed by the runtime), and the torrent libraries' own debug output when `DEBUG=*` is set.
+- **Clean logs.** Logs name downloads by an internal number. In everything written through Miauwatch's loggers, anything that looks like an info hash or magnet link, including inside library errors, is replaced with `[redacted]`. `docker logs` keeps logs on the server, so this matters as much as the files. Output that bypasses the loggers is not redacted: media-load's crash output (an uncaught error printed by the runtime), and the torrent libraries' own debug output when `DEBUG=*` is set.
 
 What still links downloads to torrents is media-load's database: each download's random values, its file list and name, and its source (info hash, magnet link, `.torrent` file), all encrypted with the master key. The same database also keeps each file's exact length and offset, the piece length and the total size unencrypted, since storage accounting needs them; these are exact even when the files on disk are padded. The backend's database holds the sources too. Today both live on the same server as the master key, so someone holding a full copy of the disk can decrypt everything. That takes knowing this project, which is the line this design draws: it keeps a server from being flagged by generic scanning, not from an investigation that already targets it.
 
@@ -32,7 +32,7 @@ What still links downloads to torrents is media-load's database: each download's
 
 ### Keeping the master key off the disk
 
-Miauflix saves `SOURCE_SECURITY_KEY` in its `config.json` on first start. When it is passed as an environment variable instead, Miauflix uses it without saving it. See [Secrets set in `.env`](../setup/docker-setup.md#secrets-set-in-env).
+Miauwatch saves `SOURCE_SECURITY_KEY` in its `config.json` on first start. When it is passed as an environment variable instead, Miauwatch uses it without saving it. See [Secrets set in `.env`](../setup/docker-setup.md#secrets-set-in-env).
 
 That alone does not take the key off the disk:
 
@@ -45,13 +45,13 @@ Even then, this does not hide anything on its own, since the database next to it
 
 ## Reusing downloads and seeding
 
-A completed download can be reused the next time someone watches it. After completion, Miauflix can keep sharing it with other torrent users for a configured period. This sharing is called seeding.
+A completed download can be reused the next time someone watches it. After completion, Miauwatch can keep sharing it with other torrent users for a configured period. This sharing is called seeding.
 
-When the seeding period ends, Miauflix can disconnect the torrent while retaining its encrypted files locally. Ending seeding and deleting the download are separate actions.
+When the seeding period ends, Miauwatch can disconnect the torrent while retaining its encrypted files locally. Ending seeding and deleting the download are separate actions.
 
 ## Automatic space management
 
-Miauflix tracks downloaded and reserved space against its storage budget. When it needs to reclaim space, it considers how files are currently being used and protects active playback. Retained downloads may eventually be removed to make room for other content.
+Miauwatch tracks downloaded and reserved space against its storage budget. When it needs to reclaim space, it considers how files are currently being used and protects active playback. Retained downloads may eventually be removed to make room for other content.
 
 This means a previously downloaded title is not guaranteed to stay on disk forever. It may need downloading again after cleanup.
 
@@ -67,9 +67,9 @@ The server has configurable limits for torrent connections, download speed, uplo
 
 ## VPN checks and NordVPN deployment
 
-A VPN routes traffic through another server. Miauflix checks VPN status and uses it to gate source and download activity unless checks are explicitly disabled. The detector recognizes NordVPN-protected connections, and trusts gluetun when a service runs behind it: gluetun's firewall drops everything outside the tunnel, so its health stands for the check with any provider gluetun supports. Other VPNs need their exit IPs in the known VPN IPs setting.
+A VPN routes traffic through another server. Miauwatch checks VPN status and uses it to gate source and download activity unless checks are explicitly disabled. The detector recognizes NordVPN-protected connections, and trusts gluetun when a service runs behind it: gluetun's firewall drops everything outside the tunnel, so its health stands for the check with any provider gluetun supports. Other VPNs need their exit IPs in the known VPN IPs setting.
 
-The optional Docker VPN setup runs Miauflix and its services through Gluetun with NordVPN. That setup provides the network tunnel and firewall, and Miauflix's own checks follow gluetun's health there.
+The optional Docker VPN setup runs Miauwatch and its services through Gluetun with NordVPN. That setup provides the network tunnel and firewall, and Miauwatch's own checks follow gluetun's health there.
 
 ## Planned improvements
 
@@ -93,7 +93,7 @@ Things to know before relying on it:
 
 - **Backups count.** Managed databases keep automated backups and snapshots, for days or weeks. Wiping the data means deleting those too.
 - **The connection string is on the server.** Anyone holding a copy of the disk can reach the database with it until you revoke it, so you need to notice and act first.
-- **Memory still holds both halves** while Miauflix runs.
+- **Memory still holds both halves** while Miauwatch runs.
 
 A further option, **locked boot**, would keep the master key encrypted and ask for a passphrase at startup, from the command line or the browser. A stopped server's disk would then hold nothing usable, at the cost of entering the passphrase after every restart.
 

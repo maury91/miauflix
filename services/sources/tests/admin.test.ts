@@ -82,8 +82,8 @@ it('lists the built-in providers in priority order', async () => {
     enabled: true,
   });
   expect(providers.slice(6).every(p => !p.enabled)).toBe(true);
-  expect((await client.repositories()).map(r => [r.id, r.builtIn, r.providerCount])).toEqual([
-    ['builtin:miauflix', true, 9],
+  expect(await client.repositories()).toMatchObject([
+    { id: 'builtin:miauflix', name: 'Miauwatch', builtIn: true, providerCount: 9 },
   ]);
 });
 

@@ -1,6 +1,6 @@
 # Trakt playback synchronization
 
-The backend progress endpoint saves Miauflix progress locally, then sends a small
+The backend progress endpoint saves Miauwatch progress locally, then sends a small
 internal request to the List Service. The List Service writes an encrypted durable
 outbox and acknowledges without waiting for Trakt. Frequent playing positions for
 the same playable replace a pending position; completion events are retained
@@ -45,7 +45,7 @@ service is ready.
 Existing local records are not bulk-exported on account connection.
 
 Trakt rejects pauses above 80% progress and requires a stop scrobble. Such late
-pauses are exported using stop; Trakt can mark them watched while Miauflix keeps
+pauses are exported using stop; Trakt can mark them watched while Miauwatch keeps
 the exact local position.
 
 ## Implementation references

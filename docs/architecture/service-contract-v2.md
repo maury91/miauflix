@@ -1,6 +1,6 @@
 # Service contracts
 
-Miauflix uses typed, versioned contracts for communication between the backend and its catalog, list, source and media-load services. Each service owns its implementation, configuration schema, and persistent data. The backend owns the public browser API and calls these internal services through typed clients.
+Miauwatch uses typed, versioned contracts for communication between the backend and its catalog, list, source and media-load services. Each service owns its implementation, configuration schema, and persistent data. The backend owns the public browser API and calls these internal services through typed clients.
 
 See [System overview](system-overview.md) for ownership and deployment, and [External synchronization and query fallback](external-sync-and-query-fallback.md) for request-time data loading.
 
@@ -116,7 +116,7 @@ The runtime's `bytes` primitive exposes `url()`, `path()`, and `open()`. Signed 
 
 Remote `open()` performs an HTTP request to the service; local `open()` calls the byte handler directly. Local URL generation requires a host-provided `bytesBaseUrl` that serves the service's HTTP handler. Range behavior belongs to the byte implementation and its forwarded request headers.
 
-Miauflix's backend serves `/api/stream/:token` by proxying `media-load`'s `read` bytes response, forwarding the viewer's `Range`. FFmpeg reads verified decrypted ranges from the backend's private loopback input, which opens the same call. The supplied Caddy configuration does not route video to a separate contract-based streaming service.
+Miauwatch's backend serves `/api/stream/:token` by proxying `media-load`'s `read` bytes response, forwarding the viewer's `Range`. FFmpeg reads verified decrypted ranges from the backend's private loopback input, which opens the same call. The supplied Caddy configuration does not route video to a separate contract-based streaming service.
 
 Implementation: [signed tickets](../../packages/contract/src/tickets.ts), [local transport](../../packages/contract/src/local.ts), [video route](../../backend/src/routes/stream.routes.ts), and [FFmpeg input](../../backend/src/services/playback/source-input.ts).
 

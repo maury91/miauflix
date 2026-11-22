@@ -122,7 +122,7 @@ export const InteractiveControls: InteractiveControlsStory = {
     },
     backgroundImage: {
       control: 'boolean',
-      description: 'Use Miauflix streaming interface background',
+      description: 'Use Miauwatch streaming interface background',
     },
     showInfo: {
       control: 'boolean',

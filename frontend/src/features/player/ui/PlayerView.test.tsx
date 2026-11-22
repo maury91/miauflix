@@ -382,7 +382,7 @@ describe('PlayerView', () => {
     const video = await screen.findByLabelText('Toy Story 5');
     expect(video).not.toHaveAttribute('controls');
     expect(screen.getByRole('slider', { name: 'Seek' })).toBeInTheDocument();
-    expect(screen.getByAltText('Miauflix logo')).toBeInTheDocument();
+    expect(screen.getByAltText('Miauwatch logo')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Back to details/ }));
     expect(onBack).toHaveBeenCalledTimes(1);
   });
@@ -567,7 +567,7 @@ describe('PlayerView', () => {
       fireEvent.pointerMove(controls);
       expect(screen.getByRole('banner')).not.toHaveAttribute('data-hidden');
       expect(screen.getByRole('button', { name: /Back to details/ })).toBeInTheDocument();
-      expect(screen.getByAltText('Miauflix logo')).toBeInTheDocument();
+      expect(screen.getByAltText('Miauwatch logo')).toBeInTheDocument();
       expect(screen.getByRole('slider', { name: 'Seek' })).toBeInTheDocument();
     } finally {
       view.unmount();

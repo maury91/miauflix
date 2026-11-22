@@ -3,9 +3,8 @@ import { MotionConfig } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
 import { useT } from '../../i18n';
+import { brandLogoUrl } from './brandLogo';
 import * as styles from './logo.css';
-
-const logoSvgUrl = `${import.meta.env.BASE_URL}assets/images/logo.svg`;
 
 /**
  * The centred logo breathes while the app loads. It animates `scale`, not `transform`, so the
@@ -137,7 +136,7 @@ export const Logo = ({
         data-hidden={!visible || undefined}
         data-above-intro={aboveIntro || undefined}
         data-pulsing={isIntro && pulsing ? 'true' : undefined}
-        src={logoSvgUrl}
+        src={brandLogoUrl}
         alt={t('common.logo')}
         onTransitionEnd={event => {
           if (event.propertyName === 'top') onPositionTransitionEnd?.();

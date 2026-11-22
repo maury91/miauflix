@@ -1,6 +1,6 @@
 # FlareSolverr setup
 
-FlareSolverr is an optional helper for source websites that present browser challenges. Miauflix's source-search service can ask it to fetch a protected page. It is not needed for every provider and does not guarantee access to every protected website.
+FlareSolverr is an optional helper for source websites that present browser challenges. Miauwatch's source-search service can ask it to fetch a protected page. It is not needed for every provider and does not guarantee access to every protected website.
 
 ## Where it fits
 
@@ -42,7 +42,7 @@ When building from a checkout, include `docker-compose.build.yml` as well. See [
 
 ## Running the helper separately
 
-You can run the helper outside the Miauflix Compose stack. For example, to expose it only on this computer:
+You can run the helper outside the Miauwatch Compose stack. For example, to expose it only on this computer:
 
 ```bash
 docker run -d \
@@ -88,7 +88,7 @@ FlareSolverr does not make unsupported Cardigann definitions or private-tracker 
 
 ### Searches are slower
 
-Fetching a page through a browser helper can take longer than a direct request. Miauflix bounds requests with timeouts and response-size limits; it does not promise a fixed search time. A slow or failing provider may also enter a cooldown.
+Fetching a page through a browser helper can take longer than a direct request. Miauwatch bounds requests with timeouts and response-size limits; it does not promise a fixed search time. A slow or failing provider may also enter a cooldown.
 
 ## Implementation and related guides
 

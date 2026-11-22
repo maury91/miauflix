@@ -7,7 +7,7 @@ const PARAMS: Record<string, Param> = {
   tvdbid: 'tvdbid',
   season: 'season',
   ep: 'ep',
-  // Miauflix extensions for anime definitions (`anime-search` mode).
+  // Miauwatch extensions for anime definitions (`anime-search` mode).
   anidbaid: 'anidbAid',
   anidbeid: 'anidbEid',
   anilistid: 'anilistId',
@@ -61,7 +61,7 @@ export function deriveCaps(
     caps: {
       movie: capsFor('movie-search', unrestricted || categories.movie.length > 0),
       tv: capsFor('tv-search', unrestricted || categories.tv.length > 0),
-      // An `anime-search` mode (a Miauflix extension) lists the anime ids a site takes; otherwise
+      // An `anime-search` mode (a Miauwatch extension) lists the anime ids a site takes; otherwise
       // an anime category with text search is searched by title.
       anime: modes['anime-search']
         ? capsFor('anime-search', unrestricted || categories.anime.length > 0)

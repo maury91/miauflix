@@ -2,8 +2,8 @@ import { color, radius, space } from '@shared/design-system/tokens';
 import { globalStyle, style, styleVariants } from '@vanilla-extract/css';
 
 /**
- * The disk bar: one segment per kind of data Miauflix stored from the start, the free space as the
- * track, other data at the end, and a mark where Miauflix's limit falls. Margins instead of flex `gap` (Chromium 69).
+ * The disk bar: one segment per kind of data Miauwatch stored from the start, the free space as the
+ * track, other data at the end, and a mark where Miauwatch's limit falls. Margins instead of flex `gap` (Chromium 69).
  */
 export const header = style({
   display: 'flex',
@@ -45,7 +45,7 @@ export const segment = style({
   },
 });
 
-/** The free space between Miauflix's data and everything else, which closes the bar. */
+/** The free space between Miauwatch's data and everything else, which closes the bar. */
 export const freeSpace = style({
   flex: '1 1 auto',
 });
@@ -61,7 +61,7 @@ export const swatch = styleVariants({
   free: { backgroundColor: color.control, boxShadow: `inset 0 0 0 1px ${color.borderControl}` },
 });
 
-/** The playback reserve: free space held back, hatched, right after Miauflix's data. */
+/** The playback reserve: free space held back, hatched, right after Miauwatch's data. */
 const hatching = `repeating-linear-gradient(135deg, ${color.textSecondary} 0, ${color.textSecondary} 2px, transparent 2px, transparent 6px)`;
 
 export const reserve = style({

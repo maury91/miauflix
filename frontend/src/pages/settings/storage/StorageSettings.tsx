@@ -36,7 +36,7 @@ const STORAGE_SETTINGS_NAV = {
 interface StorageSettingsProps {
   form: StorageSettingsForm;
   /**
-   * The most Miauflix could hold on this disk (free space plus what it holds now); null when the
+   * The most Miauwatch could hold on this disk (free space plus what it holds now); null when the
    * disk's size is unknown.
    */
   capacityBytes: number | null;

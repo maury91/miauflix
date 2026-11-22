@@ -10,27 +10,27 @@ export interface UsageSegment {
 }
 
 export interface StorageUsage {
-  /** What the bar spans: the disk, or Miauflix's limit when the disk's size is unknown. */
+  /** What the bar spans: the disk, or Miauwatch's limit when the disk's size is unknown. */
   totalBytes: number;
   /** Whether `totalBytes` is the disk's size. */
   isDisk: boolean;
   /** Used space, in the bar's order; empty categories left out. */
   segments: UsageSegment[];
   /**
-   * Used space: the disk's, or what Miauflix holds when the disk's size is unknown. Null when
+   * Used space: the disk's, or what Miauwatch holds when the disk's size is unknown. Null when
    * neither is known (a download's size isn't measured and there are no disk stats).
    */
   usedBytes: number | null;
   freeBytes: number | null;
-  /** Miauflix's storage limit, where the bar marks it (null without a limit). */
+  /** Miauwatch's storage limit, where the bar marks it (null without a limit). */
   limitBytes: number | null;
   /** Whether `limitBytes` is an edit not saved yet. */
   limitDraft: boolean;
   /** The room kept for playback just under the limit (null without a limit or reserve). */
   reserveBytes: number | null;
-  /** The most Miauflix could hold: free space plus what it holds now (null without disk stats). */
+  /** The most Miauwatch could hold: free space plus what it holds now (null without disk stats). */
   capacityBytes: number | null;
-  /** What Miauflix counts against its limit (written plus reserved for downloads). */
+  /** What Miauwatch counts against its limit (written plus reserved for downloads). */
   chargedBytes: number;
 }
 
@@ -65,8 +65,8 @@ const videoBytes = (item: StorageItemView) =>
   Math.max(0, (item.physicalBytes ?? 0) - remuxBytesOf(item));
 
 /**
- * The disk as the bar shows it: each kind of media Miauflix stored, its TV copies, then whatever
- * else is on the disk (other data) and the free space, with Miauflix's limit marked on it.
+ * The disk as the bar shows it: each kind of media Miauwatch stored, its TV copies, then whatever
+ * else is on the disk (other data) and the free space, with Miauwatch's limit marked on it.
  */
 /** Settings typed but not saved yet, which the bar shows in place of the saved ones. */
 export interface UsageDraft {
@@ -89,7 +89,7 @@ export function computeUsage(
   const { filesystem } = summary;
   if (filesystem) {
     const diskUsed = Math.max(0, filesystem.totalBytes - filesystem.freeBytes);
-    // Everything on the disk that isn't Miauflix's: the system, other apps, their files
+    // Everything on the disk that isn't Miauwatch's: the system, other apps, their files
     add('other', Math.max(0, diskUsed - miauflixBytes));
   }
   const order: UsageCategory[] = ['movie', 'episode', 'anime', 'unknown', 'remux', 'other'];

@@ -1,4 +1,4 @@
-# Run every Miauflix service in one container (miauflix-services) instead of three, to save memory
+# Run every Miauwatch service in one container (miauflix-services) instead of three, to save memory
 # and processes. Usage: add it to COMPOSE_FILE in .env, e.g.
 #   COMPOSE_FILE=docker-compose.yml:docker-compose.all-in-one.yml
 # Guide: docs/setup/docker-setup.md#one-container-for-all-services
