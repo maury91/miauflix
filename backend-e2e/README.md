@@ -18,7 +18,7 @@ The test environment consists of:
 
 - **Backend Service**: The main Miauflix backend application
 - **TMDB Mock**: Mock service for The Movie Database API
-- **Indexer Mock**: Fictional release data, plus the Cardigann definitions that query it (the sources service loads them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`)
+- **Indexer Mock**: Fictional release data, plus the Cardigann definitions that query it (the sources service loads them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`; `SOURCES_DISABLE_PROVIDERS` keeps the built-in Torrentio, which needs the internet, switched off)
 - **Trakt Mock**: Mock service for Trakt API
 - **AniList, ani.zip and anime-lists mocks**: Replay AniList's GraphQL rankings, ani.zip's episode mappings and Fribb's AniList → TMDB id list (fixtures in `test-fixtures/providers/{anilist,anizip,anime-lists}`). The AniList mock keys POST requests by a hash of the GraphQL body, with the season variables replaced so the fixtures do not go stale when the season changes
 - **Test Runner**: Jest-based tests that interact with the backend

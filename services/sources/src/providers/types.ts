@@ -53,6 +53,8 @@ export interface RawResult {
   date?: Date | string;
   imdbid?: string;
   files?: string[];
+  /** The torrent file (by index) holding the episode the provider was asked for. */
+  streamFile?: { season: number; episode: number; index: number };
   trailerCode?: string;
   batch?: boolean;
   release?: 'best' | 'alt';

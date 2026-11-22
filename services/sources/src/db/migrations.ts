@@ -40,4 +40,8 @@ export const migrations = [
   // Its saved options are encrypted; moveTorrentioOptions() carries them into the addon URL.
   `UPDATE providers SET kind='stremio', definition='${JSON.stringify({ baseUrl: TORRENTIO_MANIFEST })}' WHERE id='${TORRENTIO_ID}' AND kind='cardigann';
    DELETE FROM query_cache WHERE provider_id='${TORRENTIO_ID}';`,
+  // What Torrentio found as a Cardigann definition no longer says whether it was searched as an
+  // addon, and its cached addon pages predate episode numbering: search it afresh.
+  `DELETE FROM search_memory WHERE provider_id='${TORRENTIO_ID}';
+   DELETE FROM query_cache WHERE provider_id='${TORRENTIO_ID}';`,
 ];

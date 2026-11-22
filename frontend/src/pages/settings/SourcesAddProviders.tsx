@@ -272,9 +272,11 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
   const submitStremio = async () => {
     if (stremio.isLoading || !addonUrl.trim()) return;
     setError('');
+    const submitted = addonUrl;
     try {
-      const view = await addStremio({ url: addonUrl.trim() }).unwrap();
-      setAddonUrl('');
+      const view = await addStremio({ url: submitted.trim() }).unwrap();
+      // A link typed while the request ran is the user's next one: keep it.
+      setAddonUrl(current => (current === submitted ? '' : current));
       onNotice(t('indexers.addedNotice', { name: view.name }));
     } catch (requestError) {
       setError(errorMessage(requestError, t('indexers.addonFailed')));

@@ -549,6 +549,47 @@ describe('SourceService', () => {
     }
   );
 
+  it.each([
+    ['the episode the addon chose', { season: 1, episode: 8, index: 1 }, 'Pack/Video 2.mkv'],
+    ['another episode', { season: 1, episode: 7, index: 1 }, null],
+    ['a file that is not a video', { season: 1, episode: 8, index: 2 }, null],
+  ])(
+    "uses a stream addon's file index for %s when pack file names do not number episodes",
+    async (_case, streamFile, expected) => {
+      const { service, mockContentSource1, mockDatabase, mockContentSourceRepository } =
+        setupTest();
+      const torrentFile = Buffer.from('generic pack');
+      const source = { ...mockContentSource1, file: torrentFile };
+      const associate = jest.fn().mockResolvedValue(undefined);
+      Object.assign(mockDatabase.getEpisodeSourceRepository(), { associate });
+      jest
+        .spyOn(service as never, 'getTVReleases')
+        .mockResolvedValue([
+          { metadata: { season: 1, batch: true, files: [], streamFile }, source },
+        ] as never);
+      mockContentSourceRepository.findById.mockResolvedValue(source);
+      (parseTorrent as unknown as jest.Mock).mockResolvedValue({
+        infoHash: source.hash,
+        files: [
+          { path: 'Pack/Video 1.mkv' },
+          { path: 'Pack/Video 2.mkv' },
+          { path: 'Pack/notes.txt' },
+        ],
+      });
+
+      await service.getSourcesForEpisodeWithOnDemandSearch({
+        episodeId: 5,
+        showImdbId: 'tt1234567',
+        seasonNumber: 1,
+        episodeNumber: 8,
+        airDate: '2020-01-01',
+      });
+
+      if (expected) expect(associate).toHaveBeenCalledWith(5, source.id, expected, 'single');
+      else expect(associate).not.toHaveBeenCalled();
+    }
+  );
+
   it('returns existing sources immediately', async () => {
     const { service, mockMovie, mockContentSource1, mockContentSource2, mockSourcesClient } =
       setupTest();

@@ -18,7 +18,7 @@ import { AdminError, ProviderAdmin } from './providers/admin';
 import { DefinitionIndex } from './providers/cardigann/definition-index';
 import { DefinitionStore } from './providers/cardigann/definition-store';
 import { parseSources } from './providers/cardigann/sources';
-import { preloadProviders } from './providers/preload';
+import { disableProviders, preloadProviders } from './providers/preload';
 import { Registry } from './providers/registry';
 import { RepositoryService } from './repositories/repository.service';
 import { TorrentFileService } from './torrent-file/torrent-file.service';
@@ -63,6 +63,8 @@ export interface SourcesServiceOptions {
   resolveHost?: ResolveHost;
   /** Providers to install and enable at startup: `<definition id>@<source URL>` entries. */
   preloadProviders?: string;
+  /** Provider ids to switch off at every startup (test environments). */
+  disableProviders?: string;
   /** Use git for GitHub-hosted definitions (the service entrypoint turns this on). */
   useGit?: boolean;
   /** Where to clone a GitHub definitions repository from (tests point this at a local repo). */
@@ -85,6 +87,11 @@ export function createSourcesService(options: SourcesServiceOptions): {
     const invalid = preloadProviders(store, options.preloadProviders);
     if (invalid.length)
       console.warn(`Sources: ignored SOURCES_PRELOAD_PROVIDERS entries: ${invalid.join(', ')}`);
+  }
+  if (options.disableProviders) {
+    const unknown = disableProviders(store, options.disableProviders);
+    if (unknown.length)
+      console.warn(`Sources: unknown SOURCES_DISABLE_PROVIDERS entries: ${unknown.join(', ')}`);
   }
   const http = new HttpClient(
     {

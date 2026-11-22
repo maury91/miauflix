@@ -71,25 +71,46 @@ const streamsSchema = z.object({ streams: z.array(z.unknown()).default([]) });
 
 /** `stremio://host/…` (the install link addons show) and a bare base URL both mean the manifest. */
 export function normalizeManifestUrl(input: string): URL {
-  let text = input.trim().replace(/^stremio:\/\//i, 'https://');
-  if (!/\/manifest\.json$/i.test(new URL(text).pathname))
-    text = `${text.replace(/\/+$/, '')}/manifest.json`;
-  const url = new URL(text);
+  const url = new URL(input.trim().replace(/^stremio:\/\//i, 'https://'));
   if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password)
     throw new Error('The addon URL must be http(s) without credentials');
+  if (!/\/manifest\.json$/i.test(url.pathname))
+    url.pathname = `${url.pathname.replace(/\/+$/, '')}/manifest.json`;
   url.hash = '';
   return url;
 }
 
-/** Whether the addon answers stream requests of a type for IMDb ids (`tt…`). */
-function streamsFor(manifest: StremioManifest, type: 'movie' | 'series'): boolean {
+/** Where an addon answers `/stream/…`: the manifest's folder, keeping any query it carries. */
+export function addonResource(manifest: URL, path: string): string {
+  const url = new URL(manifest.href);
+  url.pathname = `${url.pathname.replace(/\/manifest\.json$/i, '')}/${path}`;
+  return url.href;
+}
+
+/** Whether an id prefix can match an IMDb id: `tt`, or a narrower one such as `tt123`. */
+const imdbPrefix = (prefix: string) => 'tt'.startsWith(prefix) || /^tt\d*$/.test(prefix);
+
+/**
+ * Whether the addon answers stream requests of a type for IMDb ids (`tt…`): for some of them, or
+ * for `id` when given.
+ */
+export function streamsFor(
+  manifest: StremioManifest,
+  type: 'movie' | 'series',
+  id?: string
+): boolean {
   return manifest.resources.some(entry => {
     const name = typeof entry === 'string' ? entry : entry.name;
     if (name !== 'stream') return false;
+    // As Stremio reads it: the short form inherits the manifest's prefixes; an object resource
+    // without its own prefixes takes every id.
     const types = (typeof entry === 'string' ? undefined : entry.types) ?? manifest.types;
-    const prefixes =
-      (typeof entry === 'string' ? undefined : entry.idPrefixes) ?? manifest.idPrefixes;
-    return types.includes(type) && (!prefixes?.length || prefixes.some(p => 'tt'.startsWith(p)));
+    const prefixes = typeof entry === 'string' ? manifest.idPrefixes : entry.idPrefixes;
+    return (
+      types.includes(type) &&
+      (!prefixes?.length ||
+        prefixes.some(p => (id === undefined ? imdbPrefix(p) : id.startsWith(p))))
+    );
   });
 }
 
@@ -99,6 +120,16 @@ export function capsOf(manifest: StremioManifest): ProviderCaps {
     tv: streamsFor(manifest, 'series') ? SERIES : [],
     anime: [],
   };
+}
+
+/** Why an addon cannot be searched as installed, or null when it can. */
+export function unusableReason(manifest: StremioManifest): string | null {
+  if (manifest.behaviorHints?.configurationRequired)
+    return 'This addon must be configured first: add the link it gives after configuring it';
+  const caps = capsOf(manifest);
+  if (!caps.movie.length && !caps.tv.length)
+    return 'This addon does not offer streams for movies or series by IMDb id';
+  return null;
 }
 
 export function parseManifest(body: unknown): StremioManifest {
@@ -121,11 +152,23 @@ function releaseName(text: string, filename?: string, name?: string): string {
   return filename?.trim() || name?.replace(/\s+/g, ' ').trim() || '';
 }
 
-/** One Stremio stream as a search result; streams that are not torrents give none. */
+/** The episode a series request asked the addon for (the URL always names one). */
+export interface StreamEpisode {
+  season: number;
+  ep: number;
+}
+
+const EPISODE_IN_NAME = /s\d{1,2}[ ._-]*e\d{1,3}/i;
+
+/**
+ * One Stremio stream as a search result; streams that are not torrents give none. Every stream an
+ * addon returns for an episode holds that episode, so results carry the numbering asked for.
+ */
 export function streamToResult(
   raw: unknown,
   imdbid: string,
-  kind: 'movie' | 'tv'
+  kind: 'movie' | 'tv',
+  asked?: StreamEpisode
 ): RawResult | null {
   const parsed = streamSchema.safeParse(raw);
   if (!parsed.success) return null;
@@ -141,6 +184,7 @@ export function streamToResult(
   const trackers = (stream.sources ?? [])
     .filter(source => source.startsWith('tracker:'))
     .map(source => source.slice('tracker:'.length));
+  const files = filename && filename !== title ? [filename] : undefined;
   const params = new URLSearchParams({ xt: `urn:btih:${hash}` });
   for (const tracker of trackers) params.append('tr', tracker);
   return {
@@ -152,8 +196,31 @@ export function streamToResult(
     seeders: seeders === undefined ? undefined : Number(seeders),
     imdbid,
     category: kind === 'movie' ? 'Movies' : 'TV',
-    files: filename && filename !== title ? [filename] : undefined,
+    files,
+    ...(kind === 'tv' && asked ? numbering(title, files, asked) : {}),
+    // The addon's pick within the torrent: what names a pack's episode when file names do not.
+    ...(kind === 'tv' &&
+    asked &&
+    stream.fileIdx !== undefined &&
+    Number.isInteger(stream.fileIdx) &&
+    stream.fileIdx >= 0
+      ? { streamFile: { season: asked.season, episode: asked.ep, index: stream.fileIdx } }
+      : {}),
   };
+}
+
+function numbering(
+  title: string,
+  files: string[] | undefined,
+  asked: StreamEpisode
+): Pick<RawResult, 'season' | 'episode' | 'batch'> {
+  // Named for an episode: its own numbering decides, so a mismatch is still caught.
+  if (EPISODE_IN_NAME.test(title)) return {};
+  // A release holding a differently named file is a pack; the backend matches the episode to
+  // one of its files before using it.
+  if (files) return { season: asked.season, batch: true };
+  // Nothing says it holds more than the episode asked for.
+  return { season: asked.season, episode: asked.ep };
 }
 
 export class StremioProvider implements Provider {
@@ -164,7 +231,7 @@ export class StremioProvider implements Provider {
   readonly maxPages = 1;
   readonly settingsSchema = stremioSettings;
   readonly hosts: string[];
-  private readonly base: string;
+  private readonly url: URL;
   /** Shared by every copy the registry makes, so the manifest is fetched once per day. */
   private readonly state: { manifest: StremioManifest | null; until: number } = {
     manifest: null,
@@ -174,12 +241,16 @@ export class StremioProvider implements Provider {
   constructor(
     readonly id: string,
     readonly name: string,
-    private readonly manifestUrl: string,
+    manifestUrl: string,
     private readonly now: () => number = Date.now
   ) {
-    const url = normalizeManifestUrl(manifestUrl);
-    this.hosts = [url.host];
-    this.base = url.href.replace(/\/manifest\.json$/i, '');
+    this.url = normalizeManifestUrl(manifestUrl);
+    this.hosts = [this.url.host];
+  }
+
+  /** The addon may run on the LAN; nothing it redirects to may. */
+  private get guard() {
+    return { blockInternal: true, allowHosts: this.hosts };
   }
 
   get caps(): ProviderCaps {
@@ -193,9 +264,10 @@ export class StremioProvider implements Provider {
   }
 
   private async manifest(ctx: { signal: AbortSignal; http: HttpClient }): Promise<StremioManifest> {
-    const response = await ctx.http.request(normalizeManifestUrl(this.manifestUrl).href, {
+    const response = await ctx.http.request(this.url.href, {
       signal: ctx.signal,
       maxBytes: MAX_MANIFEST_BYTES,
+      ...this.guard,
     });
     if (!response.ok) throw new Error(`Addon HTTP ${response.status}`);
     return parseManifest(await response.json());
@@ -221,20 +293,33 @@ export class StremioProvider implements Provider {
     const imdbid = `tt${query.imdbid.replace(/^tt/, '')}`;
     // Addons answer for one episode; packs holding it are among the results. Without an
     // episode (a season-pack search) the season's first episode finds the packs.
+    // An addon serving only some IMDb ids (`tt123…`) is not asked about the others.
+    const type = query.kind === 'movie' ? 'movie' : 'series';
+    if (this.state.manifest && !streamsFor(this.state.manifest, type, imdbid))
+      return { results: [], hasMore: false };
     const path =
       query.kind === 'movie'
         ? `movie/${imdbid}`
         : `series/${imdbid}:${query.season ?? 1}:${query.ep ?? 1}`;
-    const response = await ctx.http.request(`${this.base}/stream/${path}.json`, {
+    const response = await ctx.http.request(addonResource(this.url, `stream/${path}.json`), {
       signal: ctx.signal,
       maxBytes: MAX_STREAMS_BYTES,
+      ...this.guard,
     });
     if (!response.ok) throw new Error(`Addon HTTP ${response.status}`);
     const parsed = streamsSchema.safeParse(await response.json());
     if (!parsed.success) throw new Error('The addon returned an unreadable stream list');
     return {
       results: parsed.data.streams.flatMap(
-        stream => streamToResult(stream, imdbid, query.kind === 'movie' ? 'movie' : 'tv') ?? []
+        stream =>
+          (query.kind === 'movie'
+            ? streamToResult(stream, imdbid, 'movie')
+            : streamToResult(
+                stream,
+                imdbid,
+                'tv',
+                query.season === undefined ? undefined : { season: query.season, ep: query.ep ?? 1 }
+              )) ?? []
       ),
       hasMore: false,
     };
@@ -243,12 +328,8 @@ export class StremioProvider implements Provider {
   async test(ctx: { signal: AbortSignal; http: HttpClient }) {
     try {
       const manifest = await this.manifest(ctx);
-      const caps = capsOf(manifest);
-      if (!caps.movie.length && !caps.tv.length)
-        return {
-          success: false,
-          message: 'The addon does not offer streams for movies or series by IMDb id',
-        };
+      const unusable = unusableReason(manifest);
+      if (unusable) return { success: false, message: unusable };
       return { success: true, message: `Connected to ${manifest.name}` };
     } catch (error) {
       return {

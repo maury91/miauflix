@@ -168,17 +168,17 @@ describe('provenPlayBoost', () => {
   });
 
   it('breaks a tie between equal scores in favour of the proven source', () => {
-    const unproven = { streamingScore: 4_000, lastPlayedOn: null };
-    const proven = { streamingScore: 4_000, lastPlayedOn: daysAgo(2) };
+    const unproven = { streamingScore: 4_000, broadcasters: 1, lastPlayedOn: null };
+    const proven = { streamingScore: 4_000, broadcasters: 1, lastPlayedOn: daysAgo(2) };
     expect([unproven, proven].sort(byPlaybackRank(NOW))).toEqual([proven, unproven]);
   });
 
   it('never lifts a source over a whole quality step', () => {
     const hd = calculateStreamingScore(source({ quality: Quality.HD, broadcasters: 1 }), NOW);
     const fhd = calculateStreamingScore(source({ quality: Quality.FHD, broadcasters: 1 }), NOW);
-    expect(playbackRank({ streamingScore: hd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
-      playbackRank({ streamingScore: fhd, lastPlayedOn: null }, NOW)
-    );
+    expect(
+      playbackRank({ streamingScore: hd, broadcasters: 1, lastPlayedOn: daysAgo(0) }, NOW)
+    ).toBeLessThan(playbackRank({ streamingScore: fhd, broadcasters: 1, lastPlayedOn: null }, NOW));
   });
 
   it('never lifts a source over the smallest quality step, even for the oldest uploads', () => {
@@ -192,8 +192,26 @@ describe('provenPlayBoost', () => {
       NOW
     );
     expect(twoK - fhd).toBe(350);
-    expect(playbackRank({ streamingScore: fhd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
-      playbackRank({ streamingScore: twoK, lastPlayedOn: null }, NOW)
+    expect(
+      playbackRank({ streamingScore: fhd, broadcasters: 1, lastPlayedOn: daysAgo(0) }, NOW)
+    ).toBeLessThan(
+      playbackRank({ streamingScore: twoK, broadcasters: 1, lastPlayedOn: null }, NOW)
+    );
+  });
+
+  it('keeps an unseeded source below every seeded one, even when it played well today', () => {
+    const unseeded = calculateStreamingScore(
+      source({ quality: Quality['4K'], broadcasters: 0 }),
+      NOW
+    );
+    const weakest = calculateStreamingScore(
+      source({ quality: Quality.SD, broadcasters: 1, sourceUploadedAt: new Date(0) }),
+      NOW
+    );
+    expect(
+      playbackRank({ streamingScore: unseeded, broadcasters: 0, lastPlayedOn: daysAgo(0) }, NOW)
+    ).toBeLessThan(
+      playbackRank({ streamingScore: weakest, broadcasters: 1, lastPlayedOn: null }, NOW)
     );
   });
 
@@ -203,11 +221,15 @@ describe('provenPlayBoost', () => {
       NOW
     );
     const seen = calculateStreamingScore(source({ broadcasters: 10, quality: Quality.FHD }), NOW);
-    expect(playbackRank({ streamingScore: seen, lastPlayedOn: daysAgo(1) }, NOW)).toBeGreaterThan(
-      playbackRank({ streamingScore: claimed, lastPlayedOn: null }, NOW)
+    expect(
+      playbackRank({ streamingScore: seen, broadcasters: 1, lastPlayedOn: daysAgo(1) }, NOW)
+    ).toBeGreaterThan(
+      playbackRank({ streamingScore: claimed, broadcasters: 1, lastPlayedOn: null }, NOW)
     );
-    expect(playbackRank({ streamingScore: seen, lastPlayedOn: daysAgo(120) }, NOW)).toBeLessThan(
-      playbackRank({ streamingScore: claimed, lastPlayedOn: null }, NOW)
+    expect(
+      playbackRank({ streamingScore: seen, broadcasters: 1, lastPlayedOn: daysAgo(120) }, NOW)
+    ).toBeLessThan(
+      playbackRank({ streamingScore: claimed, broadcasters: 1, lastPlayedOn: null }, NOW)
     );
   });
 });

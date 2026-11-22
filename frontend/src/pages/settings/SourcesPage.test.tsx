@@ -804,6 +804,27 @@ describe('SourcesPage', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: 'Add addon' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('This addon is already added');
+    expect(screen.getByLabelText('Addon link')).toHaveValue('https://addon.example/manifest.json');
+  });
+
+  it('keeps a link typed while the previous addon was being added', async () => {
+    let finish: (value: unknown) => void = () => {};
+    api.addStremio.mockReturnValueOnce({
+      unwrap: () => new Promise(resolve => (finish = resolve)),
+    });
+    render(<SourcesPage onDismiss={vi.fn()} />);
+    openAdvanced();
+    const link = screen.getByLabelText('Addon link');
+    fireEvent.change(link, { target: { value: 'https://first.example/manifest.json' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Add addon' }));
+    fireEvent.change(link, { target: { value: 'https://second.example/manifest.json' } });
+    finish({ name: 'First' });
+    await waitFor(() => expect(api.addStremio).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(screen.getByLabelText('Addon link')).toHaveValue(
+        'https://second.example/manifest.json'
+      )
+    );
   });
 
   it('removes only providers the admin added, and flags FlareSolverr', () => {

@@ -8,7 +8,7 @@ import type {
 import type { ProviderRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
 import type { DefinitionIndex, IndexRow } from './cardigann/definition-index';
-import { capsOf, normalizeManifestUrl, parseManifest } from './stremio/stremio';
+import { normalizeManifestUrl, parseManifest, unusableReason } from './stremio/stremio';
 import { MASK, type Registry } from './registry';
 
 export class AdminError extends Error {
@@ -379,15 +379,24 @@ export class ProviderAdmin {
           : 'The addon URL is invalid'
       );
     }
-    if (
-      this.store
-        .providers()
-        .some(row => row.kind === 'stremio' && this.registry.stremioUrl(row) === url.href)
-    )
-      throw new AdminError('bad_request', 'This addon is already added');
+    const alreadyAdded = () => {
+      if (
+        this.store
+          .providers()
+          .some(row => row.kind === 'stremio' && this.registry.stremioUrl(row) === url.href)
+      )
+        throw new AdminError('bad_request', 'This addon is already added');
+    };
+    alreadyAdded();
     let manifest;
     try {
-      const response = await this.http.request(url.href, { signal, maxBytes: 256 * 1024 });
+      const response = await this.http.request(url.href, {
+        signal,
+        maxBytes: 256 * 1024,
+        // The addon may run on the LAN; nothing it redirects to may.
+        blockInternal: true,
+        allowHosts: [url.host],
+      });
       if (!response.ok) throw new Error(`The addon returned HTTP ${response.status}`);
       manifest = parseManifest(await response.json());
     } catch (error) {
@@ -399,12 +408,10 @@ export class ProviderAdmin {
           : 'Could not reach the addon'
       );
     }
-    const caps = capsOf(manifest);
-    if (!caps.movie.length && !caps.tv.length)
-      throw new AdminError(
-        'bad_request',
-        'This addon does not offer streams for movies or series by IMDb id'
-      );
+    const unusable = unusableReason(manifest);
+    if (unusable) throw new AdminError('bad_request', unusable);
+    // Another request may have added the same link while the manifest was being read.
+    alreadyAdded();
     const name = (String(input.name ?? '').trim() || manifest.name.trim()).slice(0, 100);
     const slug = manifest.id
       .toLowerCase()

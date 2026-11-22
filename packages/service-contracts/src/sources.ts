@@ -72,6 +72,11 @@ export interface SourceCandidate {
    */
   episodeAliases?: { season?: number; episode: number }[];
   files?: string[];
+  /**
+   * The file a stream addon chose for one episode: its index in the torrent's file list. It
+   * identifies the episode in packs whose file names do not.
+   */
+  streamFile?: { season: number; episode: number; index: number };
   /** Opaque id the service resolves in torrentFile(); never a raw URL to the backend. */
   fileRef?: string;
   trailerCode?: string; // only some indexers give one

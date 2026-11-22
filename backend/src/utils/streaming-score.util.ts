@@ -94,20 +94,20 @@ export function provenPlayBoost(lastPlayedOn: string | null | undefined, now = D
   return Math.round(PROVEN_PLAY_BOOST * 0.5 ** (ageDays / PROVEN_PLAY_HALF_LIFE_DAYS));
 }
 
-/** The score sources are ranked by for playback: the streaming score plus a proven-play boost. */
-export function playbackRank(
-  source: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>,
-  now = Date.now()
-): number {
-  return (source.streamingScore || 0) + provenPlayBoost(source.lastPlayedOn, now);
+type RankedSource = Pick<ContentSource, 'broadcasters' | 'lastPlayedOn' | 'streamingScore'>;
+
+/**
+ * The score sources are ranked by for playback: the streaming score plus a proven-play boost. An
+ * unseeded source gets no boost, so it stays below every seeded one however well it once played.
+ */
+export function playbackRank(source: RankedSource, now = Date.now()): number {
+  const boost = (source.broadcasters ?? 0) > 0 ? provenPlayBoost(source.lastPlayedOn, now) : 0;
+  return (source.streamingScore || 0) + boost;
 }
 
 /** Order sources best first by `playbackRank`. */
 export function byPlaybackRank(
   now = Date.now()
-): (
-  left: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>,
-  right: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>
-) => number {
+): (left: RankedSource, right: RankedSource) => number {
   return (left, right) => playbackRank(right, now) - playbackRank(left, now);
 }
