@@ -1,6 +1,6 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 
-import { ServiceSecretCodec } from '@miauflix/service-configuration';
+import { ServiceSecretCodec } from '@miauwatch/service-configuration';
 
 export function createSeal(keyFile: string, encryptionKey?: string) {
   const key = createHash('sha256')

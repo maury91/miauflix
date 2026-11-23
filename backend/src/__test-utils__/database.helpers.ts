@@ -10,7 +10,7 @@ import type { ConfigurationService } from '@services/configuration/configuration
  * Test database helper utilities for creating isolated test databases
  */
 export class TestDatabaseHelper {
-  private static readonly TEST_BASE_DIR = '/tmp/miauflix-test';
+  private static readonly TEST_BASE_DIR = '/tmp/miauwatch-test';
   private testDir: string;
   private database: Database | null = null;
   private readonly encryptionKey: string;

@@ -2,7 +2,7 @@ import type {
   SourceCandidate,
   SourceSearchItem,
   SourceSearchRequest,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { AnimeResolver } from '../anime/resolver';
 import type { SourcesConfigService } from '../config/config.service';

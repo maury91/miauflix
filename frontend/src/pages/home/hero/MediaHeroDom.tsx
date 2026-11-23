@@ -1,5 +1,5 @@
 import { SourcePreparationStatus } from '@features/preload/ui/SourcePreparationStatus';
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto } from '@miauwatch/backend';
 import { builtForTizen } from '@shared/config/constants';
 import { type BackdropPositionContext, getBackdropPlacement } from '@shared/lib/backdrop-focus';
 import { artworkUrl } from '@shared/lib/media.utils';

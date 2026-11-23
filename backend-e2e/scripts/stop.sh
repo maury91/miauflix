@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Stop script for miauflix development environment
+# Stop script for miauwatch development environment
 # Usage: ./scripts/stop.sh
 
 set -e
@@ -11,9 +11,9 @@ root_dir=$(dirname "$backend_e2e_dir")
 
 # Configuration for development environment
 DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yml"
-PROJECT_NAME="miauflix-dev"
+PROJECT_NAME="miauwatch-dev"
 
-echo "🛑 Stopping miauflix development environment..."
+echo "🛑 Stopping miauwatch development environment..."
 
 cd "$backend_e2e_dir"
 

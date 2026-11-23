@@ -1,5 +1,5 @@
 import { zValidator } from '@hono/zod-validator';
-import { isContractError } from '@miauflix/contract';
+import { isContractError } from '@miauwatch/contract';
 import { Hono } from 'hono';
 import { z } from 'zod';
 

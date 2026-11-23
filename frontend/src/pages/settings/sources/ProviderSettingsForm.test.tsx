@@ -1,4 +1,4 @@
-import type { ProviderView } from '@miauflix/backend';
+import type { ProviderView } from '@miauwatch/backend';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';

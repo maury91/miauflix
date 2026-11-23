@@ -1,4 +1,4 @@
-import { Language } from '@miauflix/source-metadata-extractor';
+import { Language } from '@miauwatch/source-metadata-extractor';
 
 import type { ContentSource } from '@entities/content-source.entity';
 

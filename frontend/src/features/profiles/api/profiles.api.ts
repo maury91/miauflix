@@ -5,7 +5,7 @@ import type {
   LoginResponse,
   UserDto,
   UserRole,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import {
   type ApiRequestResult,

@@ -2,7 +2,7 @@ import type {
   ClaimKind,
   EncryptedStorageLayout,
   PlaybackMatchKind,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 export type { ClaimKind, EncryptedStorageLayout };
 

@@ -2,7 +2,7 @@ import type {
   MediaLoadError,
   RemuxReadError,
   StorageImportError,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 /**
  * An engine failure with a machine-readable code, as the backend's `ErrorWithStatus`. The

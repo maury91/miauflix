@@ -8,7 +8,7 @@ const ports: Record<string, string> = {
   'media-load': process.env.MEDIA_LOAD_PORT || '3004',
 };
 
-const names = (await Bun.file('/tmp/miauflix-services').text()).split(/\s+/).filter(Boolean);
+const names = (await Bun.file('/tmp/miauwatch-services').text()).split(/\s+/).filter(Boolean);
 if (!names.length) throw new Error('No services recorded yet');
 await Promise.all(
   names.map(async name => {

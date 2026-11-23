@@ -1,4 +1,4 @@
-import type { SubtitleCandidateDto } from '@miauflix/backend';
+import type { SubtitleCandidateDto } from '@miauwatch/backend';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import type { ComponentProps } from 'react';
 import { describe, expect, it, vi } from 'vitest';

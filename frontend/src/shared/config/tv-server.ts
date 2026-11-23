@@ -1,5 +1,5 @@
 /** Where the TV app keeps the server it was connected to (the app's own storage). */
-const TV_SERVER_KEY = 'miauflix.tv.server';
+const TV_SERVER_KEY = 'miauwatch.tv.server';
 
 /** The server picked on the TV, or null before one is. */
 export function readTvServer(): string | null {

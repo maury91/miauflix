@@ -1,7 +1,7 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 import { logger } from '@logger';
-import { ConfigStore } from '@miauflix/service-configuration';
+import { ConfigStore } from '@miauwatch/service-configuration';
 import { mkdirSync } from 'fs';
 import path from 'path';
 

@@ -22,7 +22,7 @@ export const getIpSet = async (url: string): Promise<IPSet | null> => {
     loadIPSet(
       url,
       {
-        'user-agent': 'Miauflix/1.0.0',
+        'user-agent': 'Miauwatch/1.0.0',
       },
       (err, ipSet) => {
         if (err) {

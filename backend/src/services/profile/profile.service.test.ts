@@ -16,7 +16,7 @@ const USER_ID = '7f1c1a8e-6f3b-4c55-9a41-2b7c6c3f9d10';
 const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x01, 0x02]);
 
 const setupTest = async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'miauflix-profile-'));
+  const dataDir = await mkdtemp(join(tmpdir(), 'miauwatch-profile-'));
   const userRepository = {
     findById: jest.fn().mockResolvedValue({ id: USER_ID }),
     update: jest.fn().mockImplementation(async (id, changes) => ({ id, ...changes })),

@@ -1,4 +1,4 @@
-import { PLUSHIE_KINDS } from '@miauflix/service-contracts';
+import { PLUSHIE_KINDS } from '@miauwatch/service-contracts';
 import type { Context } from 'hono';
 import { jwtVerify } from 'jose';
 

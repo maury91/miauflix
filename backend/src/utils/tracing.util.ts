@@ -23,7 +23,7 @@ export function isTracingEnabled(): boolean {
  * Tracing utility for creating and managing spans throughout the application
  */
 export class TracingUtil {
-  private static readonly tracer = trace.getTracer('@miauflix/backend');
+  private static readonly tracer = trace.getTracer('@miauwatch/backend');
 
   /**
    * Create a span for a service method
@@ -434,7 +434,7 @@ export function createSpan(name: string, attributes: Attributes = {}): Span {
     return trace.getTracer('dummy').startSpan('dummy') as Span;
   }
 
-  return trace.getTracer('@miauflix/backend').startSpan(name, { attributes }, context.active());
+  return trace.getTracer('@miauwatch/backend').startSpan(name, { attributes }, context.active());
 }
 
 /**
@@ -462,7 +462,7 @@ export async function withClientSpan<T>(
     return result instanceof Promise ? result : Promise.resolve(result);
   }
   const span = trace
-    .getTracer('@miauflix/backend')
+    .getTracer('@miauwatch/backend')
     .startSpan(name, { attributes, kind: SpanKind.CLIENT }, context.active());
   return TracingUtil.executeInSpan(span, fn);
 }

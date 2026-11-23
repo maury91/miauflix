@@ -13,7 +13,7 @@ describe('Database Encryption E2E Tests', () => {
   let userCredentials: { email: string; password: string } | null = null;
 
   // Temp folder for copied DB files
-  const tmpDbDir = path.join(os.tmpdir(), 'miauflix-e2e-db');
+  const tmpDbDir = path.join(os.tmpdir(), 'miauwatch-e2e-db');
   if (!fs.existsSync(tmpDbDir)) {
     fs.mkdirSync(tmpDbDir, { recursive: true });
   }

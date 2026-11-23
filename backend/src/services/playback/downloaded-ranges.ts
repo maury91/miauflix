@@ -1,4 +1,4 @@
-import type { PiecesUpdate } from '@miauflix/service-contracts';
+import type { PiecesUpdate } from '@miauwatch/service-contracts';
 
 /** Downloaded stretches of a file, as `[start, end)` in `RANGE_SCALE`ths of the file. */
 export type DownloadedRanges = Array<[number, number]>;

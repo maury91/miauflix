@@ -1,4 +1,4 @@
-import type { ClaimRequest } from '@miauflix/service-contracts';
+import type { ClaimRequest } from '@miauwatch/service-contracts';
 
 import type { ClaimKind } from '../../storage/types';
 

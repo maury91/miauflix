@@ -1,4 +1,4 @@
-import type { RemuxStatus } from '@miauflix/service-contracts';
+import type { RemuxStatus } from '@miauwatch/service-contracts';
 
 import type { PlaybackDelivery, ProbeResult } from './audio-playback.service';
 import {

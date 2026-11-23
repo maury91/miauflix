@@ -1,4 +1,4 @@
-import type { CreatePlaybackSessionResponse } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse } from '@miauwatch/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import type { PropsWithChildren } from 'react';

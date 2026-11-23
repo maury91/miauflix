@@ -79,7 +79,7 @@ export class CatalogWorkerManager {
           concurrency: 1,
           lockTtlMs: 15 * 60_000,
           heartbeatIntervalS: 10,
-          name: 'miauflix-media-catalog',
+          name: 'miauwatch-media-catalog',
         }
       );
       worker.on('error', error => logger.error(SCOPE, `Bunqueue ${queueName} worker error`, error));

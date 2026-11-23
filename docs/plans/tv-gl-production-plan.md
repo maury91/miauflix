@@ -89,7 +89,7 @@ draw calls on a `Painter`. It doesn't know which renderer runs it.
 - **`*.metrics.ts` per component**: the numbers both forms need (ratios, insets, the scrim's stops
   as data, the progress bar's inset and height, the logo box, type roles). `*.css.ts` and
   `*.art.ts` import them; vanilla-extract evaluates them at build time, so the DOM costs nothing.
-  The logo box moves to `@miauflix/service-contracts` next to `CARD_IMAGE_LOGO_BOX`, so the server's
+  The logo box moves to `@miauwatch/service-contracts` next to `CARD_IMAGE_LOGO_BOX`, so the server's
   card images, the CSS and the art have one source. Tokens gain structured forms where the CSS
   string is all there is today (the tile scrim).
 - **Pure models for behaviour**: `resolveMediaTileVisual(props, statuses)` (which layers show,
@@ -438,20 +438,20 @@ with Phases 1–3 done that's mostly new `*.art.ts` files and views.
     page received: 3×Down's window used to vary from 2.8 to 7.1 s with DevTools' delivery.
 
 - **Phase 7 (not started).** With GL on by default, the DOM TV build is the fallback (no WebGL,
-  a lost context, or `miauflix:gl-rows` = `'0'`) rather than what most TVs run, so the case for
+  a lost context, or `miauwatch:gl-rows` = `'0'`) rather than what most TVs run, so the case for
   a tile bitmap in it is weaker than when the plan was written. Each of its items is a TV
   measurement first, and none has been run. Still worth trying, cheapest first: anchor paging
   and the static outline on the DOM TV rows (point 4 of [Shared with the DOM](#shared-with-the-dom);
   no new engine code), then the tile as one bitmap (`Canvas2DPainter`).
 
 - **Phase 8 (done, measured: first pass 48–51, back 49–51, held Right 19–34, 3×Down 39–46).**
-  - `VITE_TV_GL_ROWS` defaults to on (`scripts/package-tizen.sh`'s `MIAUFLIX_TV_GL_ROWS`, default
+  - `VITE_TV_GL_ROWS` defaults to on (`scripts/package-tizen.sh`'s `MIAUWATCH_TV_GL_ROWS`, default
     `true`; `false` packages the DOM rows). It applies to the Tizen build only.
   - Runtime override, read at start (`resolveGlRows` in `shared/config/constants.ts`):
-    `localStorage['miauflix:gl-rows']` `'0'` forces the DOM rows on any build, `'1'` turns GL on
+    `localStorage['miauwatch:gl-rows']` `'0'` forces the DOM rows on any build, `'1'` turns GL on
     in a Tizen build packaged without it, or in development.
   - `window.__glRows` is exposed in development, and on the TV only while
-    `miauflix:gl-tuning` is set (debugging).
+    `miauwatch:gl-tuning` is set (debugging).
   - Docs: the [GL rendering reference](../architecture/tv-gl-rendering.md) and the style guide's
     "Writing a component's picture"; the spike plan is marked done.
   - Not done from the plan: the parity stories (each component's DOM and GL forms compared). A

@@ -87,7 +87,7 @@ describe('TvPairingService', () => {
     await jest.advanceTimersByTimeAsync(0);
     expect(fetchMock).not.toHaveBeenCalled();
 
-    service.noteHost('miauflix.example.com', LAN_PEER);
+    service.noteHost('miauwatch.example.com', LAN_PEER);
     service.noteHost('127.0.0.1:3000', LAN_PEER);
     service.noteHost('192.168.1.20:3000', LAN_PEER);
     await jest.advanceTimersByTimeAsync(0);

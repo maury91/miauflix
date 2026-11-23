@@ -1,4 +1,4 @@
-import { call, contract } from '@miauflix/contract';
+import { call, contract } from '@miauwatch/contract';
 
 export type ListScope = 'public' | 'personal';
 

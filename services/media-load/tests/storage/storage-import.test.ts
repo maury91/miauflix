@@ -1,4 +1,4 @@
-import type { ImportedSource } from '@miauflix/service-contracts';
+import type { ImportedSource } from '@miauwatch/service-contracts';
 
 import { StorageImporter } from '../../src/storage/storage-import';
 import { testDatabase } from '../helpers/engine';

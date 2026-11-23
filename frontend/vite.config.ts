@@ -65,7 +65,7 @@ function rewriteSetCookieForDev(cookie: string): string {
 }
 
 /** Compose service names that can serve the backend (see docker-compose*.yml). */
-const DOCKER_BACKEND_HOSTS = new Set(['backend', 'miauflix', 'vpn']);
+const DOCKER_BACKEND_HOSTS = new Set(['backend', 'miauwatch', 'vpn']);
 
 function isLocalBackend(url: string): boolean {
   const { hostname } = new URL(url);
@@ -123,14 +123,14 @@ const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 // Local backends use self-signed development certificates; remote ones must present a valid one.
 const verifyDevBackendCertificate = !isLocalBackend(devBackendUrl);
 const verifyPreviewBackendCertificate = !isLocalBackend(previewBackendUrl);
-const devCertificateRootOverride = process.env.MIAUFLIX_DEV_CERT_DIR;
+const devCertificateRootOverride = process.env.MIAUWATCH_DEV_CERT_DIR;
 const devCertificateRoot = devCertificateRootOverride
   ? path.resolve(__dirname, '..', devCertificateRootOverride)
   : path.resolve(__dirname, '../.certs');
 const devCertificateDir = path.join(devCertificateRoot, 'server');
 const devCertificateKeyPath = path.join(devCertificateDir, 'localhost-key.pem');
 const devCertificatePath = path.join(devCertificateDir, 'localhost.pem');
-const testHttp = process.env['MIAUFLIX_TEST_HTTP'] === 'true';
+const testHttp = process.env['MIAUWATCH_TEST_HTTP'] === 'true';
 const trustedDevHttps =
   !testHttp && existsSync(devCertificateKeyPath) && existsSync(devCertificatePath)
     ? {
@@ -253,7 +253,7 @@ export default defineConfig({
       : [
           basicSsl({
             /** name of certification */
-            name: 'miauflix-vite',
+            name: 'miauwatch-vite',
           }),
         ]),
   ],
@@ -294,11 +294,11 @@ export default defineConfig({
       '@/__test-utils__': path.resolve(__dirname, './src/__test-utils__'),
       // The runtime-free contract modules the app imports, from source: tests and dev servers then
       // work without building the package first (a clean checkout running `vitest` directly)
-      '@miauflix/service-contracts/card-image/v1': path.resolve(
+      '@miauwatch/service-contracts/card-image/v1': path.resolve(
         __dirname,
         '../packages/service-contracts/src/card-image.ts'
       ),
-      '@miauflix/service-contracts/profiles/v1': path.resolve(
+      '@miauwatch/service-contracts/profiles/v1': path.resolve(
         __dirname,
         '../packages/service-contracts/src/profiles.ts'
       ),

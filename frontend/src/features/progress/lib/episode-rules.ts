@@ -1,4 +1,4 @@
-import type { PlayableRef, ProgressEntry } from '@miauflix/backend';
+import type { PlayableRef, ProgressEntry } from '@miauwatch/backend';
 
 import { preferredProgress } from './continue-watching';
 

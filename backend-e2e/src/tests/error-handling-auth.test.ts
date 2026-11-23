@@ -152,7 +152,7 @@ describe('Session Authentication Error Handling', () => {
 
         // Corrupt the refresh token cookie
         client.getCookies().forEach((value, name) => {
-          if (name.includes('__miauflix_rt_')) {
+          if (name.includes('__miauwatch_rt_')) {
             client.setCookie(name, 'corrupted-cookie-value');
           }
         });
@@ -411,7 +411,7 @@ describe('Session Authentication Error Handling', () => {
 
         // Set oversized cookie value (simulate cookie bomb)
         const largeValue = 'x'.repeat(10000);
-        client.setCookie(`__miauflix_rt_${sessionId}`, largeValue);
+        client.setCookie(`__miauwatch_rt_${sessionId}`, largeValue);
 
         // Should handle gracefully
         const refreshResponse = await client.refreshToken(sessionId);

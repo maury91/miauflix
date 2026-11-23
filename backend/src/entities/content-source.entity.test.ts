@@ -1,4 +1,4 @@
-import { Source } from '@miauflix/source-metadata-extractor';
+import { Source } from '@miauwatch/source-metadata-extractor';
 import { getMetadataArgsStorage, type ValueTransformer } from 'typeorm';
 
 import { ContentSource } from './content-source.entity';

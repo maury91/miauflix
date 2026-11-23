@@ -1,4 +1,4 @@
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { ConfigField } from '@pages/config/components/ConfigField';
 import {
   ActionGroup,

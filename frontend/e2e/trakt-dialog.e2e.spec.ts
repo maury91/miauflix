@@ -100,7 +100,7 @@ test('remembers Don’t ask again when the page reloads', async ({ page }) => {
   await dialog.getByRole('button', { name: 'Don’t ask again' }).click();
   await expect(dialog).toBeHidden();
   expect(
-    await page.evaluate(id => localStorage.getItem(`miauflix:trakt:dont-ask:${id}`), userId)
+    await page.evaluate(id => localStorage.getItem(`miauwatch:trakt:dont-ask:${id}`), userId)
   ).toBe('1');
 
   const association = page.waitForResponse(response =>

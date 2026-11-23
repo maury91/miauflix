@@ -4,11 +4,11 @@
 # npm run start:backend:docker:prod does this for you. Guide: docs/setup/docker-setup.md#building-from-source
 
 services:
-  miauflix:
+  miauwatch:
     build:
       context: .
       dockerfile: Dockerfile
-    image: miauflix
+    image: miauwatch
     environment:
       # Run as the owner of the checkout, so the mounted .env (readable only by its owner) works.
       # The start scripts set USER_ID / GROUP_ID to your user.
@@ -19,36 +19,36 @@ services:
       - ./.env:/usr/src/app/.env
 
   # Bunqueue, media catalog and lists
-  miauflix-catalog-services:
+  miauwatch-catalog-services:
     build:
       context: .
       dockerfile: services/Dockerfile
       target: catalog-services
-    image: miauflix-catalog-services
+    image: miauwatch-catalog-services
 
   # Source search (port 3003)
-  miauflix-sources:
+  miauwatch-sources:
     build:
       context: .
       dockerfile: services/Dockerfile
       target: sources
-    image: miauflix-sources
+    image: miauwatch-sources
 
   # Media load (port 3004)
-  miauflix-media-load:
+  miauwatch-media-load:
     build:
       context: .
       dockerfile: services/Dockerfile
       target: media-load
-    image: miauflix-media-load
+    image: miauwatch-media-load
 
   # Only with docker-compose.all-in-one.yml
-  miauflix-services:
+  miauwatch-services:
     build:
       context: .
       dockerfile: services/Dockerfile
       target: services
-    image: miauflix-services
+    image: miauwatch-services
 
   # Locally built images have nothing to pull: keep Watchtower off
   watchtower:

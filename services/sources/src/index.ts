@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import { serve } from '@miauflix/contract';
+import { serve } from '@miauwatch/contract';
 
 import { createSourcesService } from './service';
 

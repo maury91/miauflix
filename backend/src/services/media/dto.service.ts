@@ -3,7 +3,7 @@ import {
   type MediaSourceInternal,
   MediaSourceMapper,
 } from '@dto/media-source.dto';
-import { AudioCodec, Quality, type VideoCodec } from '@miauflix/source-metadata-extractor';
+import { AudioCodec, Quality, type VideoCodec } from '@miauwatch/source-metadata-extractor';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';

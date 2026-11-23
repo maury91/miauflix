@@ -31,7 +31,7 @@ export default defineConfig({
   },
   timeout: 90000,
   webServer: {
-    command: 'MIAUFLIX_TEST_HTTP=true npx vite --host localhost --port 4174',
+    command: 'MIAUWATCH_TEST_HTTP=true npx vite --host localhost --port 4174',
     url: 'http://localhost:4174',
     reuseExistingServer: !process.env['CI'],
     timeout: 120000,

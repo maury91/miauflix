@@ -1,5 +1,5 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
-import type { PlaybackDelivery } from '@miauflix/backend';
+import type { PlaybackDelivery } from '@miauwatch/backend';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 

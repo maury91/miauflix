@@ -2,7 +2,7 @@ import { mkdirSync } from 'node:fs';
 
 import { Database } from 'bun:sqlite';
 
-import { MIAUFLIX_SOURCE_KEY, PROWLARR_SOURCE_KEY } from '../providers/cardigann/sources';
+import { MIAUWATCH_SOURCE_KEY, PROWLARR_SOURCE_KEY } from '../providers/cardigann/sources';
 import { migrations, TORRENTIO_ID, TORRENTIO_MANIFEST } from './migrations';
 
 export function openDatabase(dataDir: string): Database {
@@ -28,7 +28,7 @@ export function openDatabase(dataDir: string): Database {
   ) =>
     db
       .query(
-        "INSERT OR IGNORE INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'cardigann','builtin:miauflix',?,?,?,?)"
+        "INSERT OR IGNORE INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'cardigann','builtin:miauwatch',?,?,?,?)"
       )
       .run(
         `${slug}-${definition}`,
@@ -37,15 +37,15 @@ export function openDatabase(dataDir: string): Database {
         enabled ? 1 : 0,
         priority
       );
-  builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'therarbg-imdb', 'TheRARBG (IMDb)', 10, true);
+  builtIn(MIAUWATCH_SOURCE_KEY, 'maury91', 'therarbg-imdb', 'TheRARBG (IMDb)', 10, true);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'yts', 'YTS', 20, true);
-  builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'eztv-api', 'EZTV (API)', 30, true);
-  builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'therarbg', 'TheRARBG', 40, true);
+  builtIn(MIAUWATCH_SOURCE_KEY, 'maury91', 'eztv-api', 'EZTV (API)', 30, true);
+  builtIn(MIAUWATCH_SOURCE_KEY, 'maury91', 'therarbg', 'TheRARBG', 40, true);
   db.query(
-    "INSERT OR IGNORE INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'stremio','builtin:miauflix','Torrentio',?,1,35)"
+    "INSERT OR IGNORE INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'stremio','builtin:miauwatch','Torrentio',?,1,35)"
   ).run(TORRENTIO_ID, JSON.stringify({ baseUrl: TORRENTIO_MANIFEST }));
   // Anime only (its definition offers no movie or TV search), by AniDB episode id.
-  builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'animetosho', 'AnimeTosho', 45, true);
+  builtIn(MIAUWATCH_SOURCE_KEY, 'maury91', 'animetosho', 'AnimeTosho', 45, true);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'nyaasi', 'Nyaa (Prowlarr)', 130, false);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'eztv', 'EZTV (Prowlarr)', 140, false);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'thepiratebay', 'The Pirate Bay (Prowlarr)', 150, false);

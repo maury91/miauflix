@@ -6,7 +6,7 @@ describe('normalizeServerAddress', () => {
   it('adds the scheme, and the default port to a bare IP', () => {
     expect(normalizeServerAddress(' 192.168.1.10 ')).toBe('http://192.168.1.10:3000');
     expect(normalizeServerAddress('192.168.1.10:8080')).toBe('http://192.168.1.10:8080');
-    expect(normalizeServerAddress('miauflix.lan')).toBe('http://miauflix.lan');
+    expect(normalizeServerAddress('miauwatch.lan')).toBe('http://miauwatch.lan');
   });
 
   it('keeps a port the user typed, even the scheme default', () => {
@@ -14,8 +14,8 @@ describe('normalizeServerAddress', () => {
   });
 
   it('keeps https and drops paths', () => {
-    expect(normalizeServerAddress('https://miauflix.example.com/home')).toBe(
-      'https://miauflix.example.com'
+    expect(normalizeServerAddress('https://miauwatch.example.com/home')).toBe(
+      'https://miauwatch.example.com'
     );
   });
 

@@ -1,9 +1,9 @@
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto } from '@miauwatch/backend';
 import {
   type CardImageFormat,
   cardImageSizeFor,
   cardImageVersion,
-} from '@miauflix/service-contracts/card-image/v1';
+} from '@miauwatch/service-contracts/card-image/v1';
 import { API_URL, builtForTizen } from '@shared/config/constants';
 import { getTvHeroBackdropSizes } from '@shared/config/tv-profile';
 

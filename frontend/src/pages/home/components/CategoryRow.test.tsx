@@ -1,4 +1,4 @@
-import type { ListResponse } from '@miauflix/backend';
+import type { ListResponse } from '@miauwatch/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';

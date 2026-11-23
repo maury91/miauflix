@@ -1,5 +1,5 @@
 import { readMediaSubtitles, saveMediaSubtitles } from '@features/player/lib/media-subtitles';
-import type { SubtitleCandidateDto } from '@miauflix/backend';
+import type { SubtitleCandidateDto } from '@miauwatch/backend';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 

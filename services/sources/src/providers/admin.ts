@@ -3,7 +3,7 @@ import type {
   CardigannCatalogQuery,
   CardigannDefinitionEntry,
   ProviderView,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { ProviderRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';

@@ -1,4 +1,4 @@
-import type { LoginResponse, SetupStatusResponse } from '@miauflix/backend';
+import type { LoginResponse, SetupStatusResponse } from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { backendClient } from '@shared/api/backend-client';
 import { t } from '@shared/i18n';

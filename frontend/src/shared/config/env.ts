@@ -34,7 +34,7 @@ const envSchema = z.object({
     .transform(val => val === 'true')
     .default(false),
   /** The pairing service the TV app looks servers up at; 'off' leaves it out. */
-  TV_PAIRING_URL: z.string().default('https://pair.miauflix.cat'),
+  TV_PAIRING_URL: z.string().default('https://pair.miau.watch'),
   /**
    * The TV's Home hero backdrop size while the selection moves, and once it rests: an image size
    * (`w780`, `w1280`, `original`) or `auto`, which picks it for the TV's model year.

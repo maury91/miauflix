@@ -98,7 +98,7 @@ describe('DownloadService with a shared season pack', () => {
   };
 
   beforeEach(async () => {
-    location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-pack-'));
+    location = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-pack-'));
   });
 
   afterEach(async () => {
@@ -232,7 +232,7 @@ describe('DownloadService reclaiming one file of a pack', () => {
   };
 
   beforeEach(async () => {
-    location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-reclaim-'));
+    location = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-reclaim-'));
   });
 
   afterEach(async () => {

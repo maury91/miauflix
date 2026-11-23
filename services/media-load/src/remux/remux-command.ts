@@ -3,7 +3,7 @@ import type {
   RemuxPlan,
   RemuxSidecar,
   RemuxSubtitleTrack,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 /** HLS segment length the muxer aims for; segments still cut on video keyframes. */
 export const SEGMENT_SECONDS = 6;

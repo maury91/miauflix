@@ -1,4 +1,4 @@
-import type { TransferState } from '@miauflix/service-contracts';
+import type { TransferState } from '@miauwatch/service-contracts';
 import type { Torrent } from 'webtorrent';
 
 import { logger } from '../lib/logger';

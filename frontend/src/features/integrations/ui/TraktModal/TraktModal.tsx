@@ -1,5 +1,5 @@
 import { beginTraktAssociation } from '@features/integrations/api/trakt.api';
-import type { ProviderAuthorization } from '@miauflix/service-contracts';
+import type { ProviderAuthorization } from '@miauwatch/service-contracts';
 import { Button, Dialog, Stack } from '@shared/design-system';
 import { useT } from '@shared/i18n';
 import { useOptionalNavigation } from '@shared/navigation';

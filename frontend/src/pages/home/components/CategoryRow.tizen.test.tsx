@@ -1,4 +1,4 @@
-import type { ListResponse } from '@miauflix/backend';
+import type { ListResponse } from '@miauwatch/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Button } from '@shared/design-system';
 import { FocusScope, NavigationProvider } from '@shared/navigation';

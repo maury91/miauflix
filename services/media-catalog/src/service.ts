@@ -1,4 +1,9 @@
-import { ContractError, defineService, type Service, type ServiceStatus } from '@miauflix/contract';
+import {
+  ContractError,
+  defineService,
+  type Service,
+  type ServiceStatus,
+} from '@miauwatch/contract';
 import {
   CARD_IMAGE_SIZES,
   cardImageVersion,
@@ -7,7 +12,7 @@ import {
   type CatalogStatusDetails,
   MAX_BATCH_ITEMS,
   SEARCH_GENRE_KEY_PATTERN,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 import { sql } from 'drizzle-orm';
 
 import type { CatalogDatabase } from './db/database';

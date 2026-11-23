@@ -1,4 +1,4 @@
-import type { UserRole } from '@miauflix/backend';
+import type { UserRole } from '@miauwatch/backend';
 import type { SessionInfo } from '@store/slices/auth';
 
 const profile = (

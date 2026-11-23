@@ -15,7 +15,7 @@ Docker images. You need Node.js 22 or newer (`.nvmrc` pins the tested version),
 `zip` (preinstalled on macOS; `sudo apt install zip` on Debian and Ubuntu). From the repository root:
 
 ```bash
-git clone https://github.com/maury91/miauflix.git && cd miauflix
+git clone https://github.com/maury91/miauwatch.git && cd miauwatch
 bun install
 npm run package:tizen
 ```
@@ -48,11 +48,11 @@ code (`23_…` is a 2023 TV) or, without it, its browser version:
 | 2023 and newer (measured on a QCQ80) | `w1280`      | `original` |
 | Older (measured on a 2020 TU8072)    | `w780`       | `w1280`    |
 
-To set them yourself, package with `MIAUFLIX_TV_HERO_BACKDROP` (while moving) and
-`MIAUFLIX_TV_HERO_BACKDROP_RESTING` set to `w300`, `w780`, `w1280`, `original` or `auto`:
+To set them yourself, package with `MIAUWATCH_TV_HERO_BACKDROP` (while moving) and
+`MIAUWATCH_TV_HERO_BACKDROP_RESTING` set to `w300`, `w780`, `w1280`, `original` or `auto`:
 
 ```bash
-MIAUFLIX_TV_HERO_BACKDROP=w780 MIAUFLIX_TV_HERO_BACKDROP_RESTING=original npm run package:tizen
+MIAUWATCH_TV_HERO_BACKDROP=w780 MIAUWATCH_TV_HERO_BACKDROP_RESTING=original npm run package:tizen
 ```
 
 ## Playback and controls
@@ -74,7 +74,7 @@ back):
 
 - **On your network.** Two searches, whose servers are listed as they answer:
   - Your server announces the addresses it can be reached at to the pairing service at
-    `pair.miauflix.cat` (`tv-pairing/`) every two minutes, and the TV asks it for the servers
+    `pair.miau.watch` (`tv-pairing/`) every two minutes, and the TV asks it for the servers
     announced from its own public IP, so from behind the same router. In Docker the server
     can't see its network address: it announces the private address you opened it at in a
     browser (so open it once from another device, e.g. `http://192.168.1.10:3000`), or set
@@ -126,7 +126,7 @@ before the TV app can sign in.
    npm run install:tizen -- 192.168.1.50
    ```
 
-   `install:tizen` (`scripts/install-tizen.sh`, or set `MIAUFLIX_TV_IP`) checks the TV,
+   `install:tizen` (`scripts/install-tizen.sh`, or set `MIAUWATCH_TV_IP`) checks the TV,
    installs `dist/miauwatch.wgt` signed with a Samsung certificate, and opens it. The first
    install for a TV opens a Samsung account sign-in in the browser to create that certificate;
    later installs reuse it (as does the Apps2Samsung desktop app on the same computer) for the

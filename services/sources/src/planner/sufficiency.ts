@@ -1,4 +1,4 @@
-import type { SourceCandidate, SourceSearchRequest } from '@miauflix/service-contracts';
+import type { SourceCandidate, SourceSearchRequest } from '@miauwatch/service-contracts';
 export function isSufficient(
   request: SourceSearchRequest,
   candidates: SourceCandidate[],

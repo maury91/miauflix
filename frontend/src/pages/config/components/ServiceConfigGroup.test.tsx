@@ -1,4 +1,4 @@
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -213,7 +213,7 @@ describe('ServiceConfigGroup', () => {
       <ServiceConfigGroup
         groupName="Trakt"
         entries={[redirect]}
-        values={{ TRAKT_REDIRECT_URI: 'https://miauflix.example' }}
+        values={{ TRAKT_REDIRECT_URI: 'https://miauwatch.example' }}
         onChange={vi.fn()}
         onTest={vi.fn()}
         onSave={vi.fn()}

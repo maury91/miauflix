@@ -1,4 +1,4 @@
-import type { SubtitleFontListResponse } from '@miauflix/backend';
+import type { SubtitleFontListResponse } from '@miauwatch/backend';
 import { API_CREDENTIALS } from '@shared/config/constants';
 import { useEffect, useRef, useState } from 'react';
 

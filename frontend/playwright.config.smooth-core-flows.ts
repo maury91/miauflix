@@ -23,8 +23,8 @@ export default defineConfig({
     ? undefined
     : {
         command: production
-          ? `MIAUFLIX_TEST_HTTP=true npm run build:ssr && MIAUFLIX_TEST_HTTP=true npx vite preview --host localhost --port ${port}`
-          : `MIAUFLIX_TEST_HTTP=true npx vite --host localhost --port ${port}`,
+          ? `MIAUWATCH_TEST_HTTP=true npm run build:ssr && MIAUWATCH_TEST_HTTP=true npx vite preview --host localhost --port ${port}`
+          : `MIAUWATCH_TEST_HTTP=true npx vite --host localhost --port ${port}`,
         url: `http://localhost:${port}`,
         reuseExistingServer: !process.env['CI'],
         timeout: 180000,

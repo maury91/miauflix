@@ -1,4 +1,4 @@
-import type { ListDto, MediaDto, MovieDto, TVShowDto } from '@miauflix/backend';
+import type { ListDto, MediaDto, MovieDto, TVShowDto } from '@miauwatch/backend';
 
 import tmdb83533 from '../../../../test-fixtures/providers/tmdb/3/movie/83533-append_to_response-translations,images-language-en.json';
 import tmdb299534 from '../../../../test-fixtures/providers/tmdb/3/movie/299534-append_to_response-translations,images-language-en.json';

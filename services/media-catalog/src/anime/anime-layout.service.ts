@@ -7,7 +7,7 @@ import {
   type ProviderEpisode,
   seasonName,
   toEntry,
-} from '@miauflix/anime-mapping';
+} from '@miauwatch/anime-mapping';
 
 import type { CatalogHydrator } from '../catalog/catalog.hydrator';
 import type { AnimeLayoutRepository } from '../db/anime-layout.repo';

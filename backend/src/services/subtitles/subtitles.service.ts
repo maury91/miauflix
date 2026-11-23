@@ -789,7 +789,7 @@ export class SubtitlesService {
   }
 
   private headers(apiKey: string): Record<string, string> {
-    return { 'api-key': apiKey, 'user-agent': 'Miauflix v1.0.0', accept: 'application/json' };
+    return { 'api-key': apiKey, 'user-agent': 'Miauwatch v1.0.0', accept: 'application/json' };
   }
 
   private apiKey(): string | undefined {

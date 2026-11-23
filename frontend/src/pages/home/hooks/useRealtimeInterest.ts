@@ -1,6 +1,6 @@
 import type { RealtimeMediaRef } from '@features/realtime/realtime.client';
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto } from '@miauwatch/backend';
 import type { AppDispatch } from '@store/store';
 import { type MutableRefObject, useCallback, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';

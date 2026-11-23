@@ -1,9 +1,9 @@
-import { createClient, isContractError, localTransport } from '@miauflix/contract';
+import { createClient, isContractError, localTransport } from '@miauwatch/contract';
 import {
   cardImageVersion,
   catalog as catalogContract,
   MAX_BATCH_ITEMS,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 import { describe, expect, it } from 'bun:test';
 
 import { CatalogConfigService } from '../src/config/config.service';

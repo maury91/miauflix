@@ -3,7 +3,7 @@ import type {
   RemuxPriority,
   RemuxSidecar,
   RemuxState,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 import type { Database } from 'bun:sqlite';
 
 import type { Encryption } from '../lib/encryption';

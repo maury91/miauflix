@@ -1,7 +1,7 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
 import { saveProgressWithRealtime } from '@features/realtime/realtime.middleware';
-import type { PlayableRef, PlaybackDelivery, ProgressRequest } from '@miauflix/backend';
+import type { PlayableRef, PlaybackDelivery, ProgressRequest } from '@miauwatch/backend';
 import type { AppDispatch } from '@store/store';
 import { type RefObject, useCallback, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';

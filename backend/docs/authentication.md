@@ -18,10 +18,10 @@ Defaults and configuration names are defined in [auth configuration](../src/serv
 
 Normal browser login, first-run setup, QR claim, and token refresh set **both access and refresh tokens as HttpOnly cookies**. The browser response does not return a top-level `accessToken` or `refreshToken` field.
 
-| Cookie  | Default name              | Path         | Use                                    |
-| ------- | ------------------------- | ------------ | -------------------------------------- |
-| Access  | `__miauflix_at_<session>` | `/`          | Authenticated application requests     |
-| Refresh | `__miauflix_rt_<session>` | `/api/auth/` | Refresh, logout, and session discovery |
+| Cookie  | Default name               | Path         | Use                                    |
+| ------- | -------------------------- | ------------ | -------------------------------------- |
+| Access  | `__miauwatch_at_<session>` | `/`          | Authenticated application requests     |
+| Refresh | `__miauwatch_rt_<session>` | `/api/auth/` | Refresh, logout, and session discovery |
 
 Both cookies use `SameSite=Strict`. `COOKIE_SECURE` controls the `Secure` attribute and defaults to `false`; the supplied HTTPS deployment enables it. `COOKIE_DOMAIN` is optional. Enabling `COOKIE_SECURE` does **not** automatically add a `__Secure-` prefix to cookie names.
 

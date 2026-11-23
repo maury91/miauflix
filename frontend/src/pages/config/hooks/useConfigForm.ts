@@ -1,4 +1,4 @@
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { webAppOrigin } from '@shared/config/constants';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 

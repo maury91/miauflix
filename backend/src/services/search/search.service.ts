@@ -5,7 +5,7 @@ import type {
   SearchGenre,
   SearchGenreKey,
   SearchResponse,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type {
   SearchGenreDto,

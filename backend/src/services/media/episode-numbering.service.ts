@@ -1,4 +1,4 @@
-import type { PlaybackRef } from '@miauflix/service-contracts';
+import type { PlaybackRef } from '@miauwatch/service-contracts';
 
 import type { Database } from '@database/database';
 import { TVShow } from '@entities/tvshow.entity';

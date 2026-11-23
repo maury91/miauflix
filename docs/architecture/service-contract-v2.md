@@ -6,11 +6,11 @@ See [System overview](system-overview.md) for ownership and deployment, and [Ext
 
 ## Runtime and contract packages
 
-| Package                           | Responsibility                                                                                                                                               |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `@miauflix/contract`              | Contract builders, typed clients and implementations, service dispatch, local and WebSocket transports, management operations, and signed byte-response URLs |
-| `@miauflix/service-contracts`     | Catalog, list, source and media-load procedure definitions, payload types, and catalog job names                                                             |
-| `@miauflix/service-configuration` | Service configuration storage and lifecycle support                                                                                                          |
+| Package                            | Responsibility                                                                                                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `@miauwatch/contract`              | Contract builders, typed clients and implementations, service dispatch, local and WebSocket transports, management operations, and signed byte-response URLs |
+| `@miauwatch/service-contracts`     | Catalog, list, source and media-load procedure definitions, payload types, and catalog job names                                                             |
+| `@miauwatch/service-configuration` | Service configuration storage and lifecycle support                                                                                                          |
 
 The application backend runs on Node.js. The catalog, list, source and media-load services run as separate Bun processes. Their clients use configured service URLs. The contract runtime also supports direct in-process transport; selecting that transport requires wiring a service instance explicitly, rather than leaving a service URL empty.
 

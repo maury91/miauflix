@@ -2,7 +2,7 @@ import { chmod, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { RemuxPlan, RemuxStatus } from '@miauflix/service-contracts';
+import type { RemuxPlan, RemuxStatus } from '@miauwatch/service-contracts';
 import { afterEach, describe, expect, it, jest } from 'bun:test';
 
 import { RemuxService } from '../../src/remux/remux.service';

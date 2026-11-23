@@ -1,4 +1,4 @@
-import { serve } from '@miauflix/contract';
+import { serve } from '@miauwatch/contract';
 
 import { CatalogRuntime } from './catalog/bootstrap';
 import { CatalogConfigService } from './config/config.service';

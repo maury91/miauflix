@@ -1,5 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { MediaRatingRef, MediaRatingResponse } from '@miauflix/backend';
+import type { MediaRatingRef, MediaRatingResponse } from '@miauwatch/backend';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 import { t } from '@shared/i18n';

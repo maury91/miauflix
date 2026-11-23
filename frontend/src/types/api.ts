@@ -1,5 +1,5 @@
 // Temporary API types - Phase 0 bootstrap
-// These types replace the @miauflix/types imports until proper integration
+// These types replace the @miauwatch/types imports until proper integration
 
 export type VideoQualityStr = '2160' | '1440' | '1080' | '720';
 

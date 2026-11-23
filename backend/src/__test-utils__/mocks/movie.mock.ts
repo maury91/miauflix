@@ -11,7 +11,7 @@ import {
   Quality,
   Source,
   VideoCodec,
-} from '@miauflix/source-metadata-extractor';
+} from '@miauwatch/source-metadata-extractor';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import type { Episode } from '@entities/episode.entity';

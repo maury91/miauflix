@@ -1,5 +1,5 @@
-import type { SwarmCounts, SwarmStatsError } from '@miauflix/service-contracts';
-import { redactSourceIdentifiers } from '@miauflix/service-contracts';
+import type { SwarmCounts, SwarmStatsError } from '@miauwatch/service-contracts';
+import { redactSourceIdentifiers } from '@miauwatch/service-contracts';
 import { Client as BTClient } from 'bittorrent-tracker';
 
 /** A scrape failure; `code` is the contract error code. */

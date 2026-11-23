@@ -2,7 +2,7 @@ import { startAudioPlayback } from '@features/player/lib/audio-playback';
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import type { PlaybackStatus } from '@features/player/lib/playback-copy';
 import { reportPlayerEvent } from '@features/realtime/realtime.middleware';
-import type { CreatePlaybackSessionResponse, PlaybackDelivery } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse, PlaybackDelivery } from '@miauwatch/backend';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 import { type ResumePoint, resumePosition } from './usePlaybackProgress';

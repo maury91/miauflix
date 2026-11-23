@@ -7,7 +7,7 @@ import type {
   MediaDto,
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import {
   realtimePlayableKey,
   selectPreparationByMediaId,

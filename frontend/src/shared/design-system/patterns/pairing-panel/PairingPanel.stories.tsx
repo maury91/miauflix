@@ -55,7 +55,7 @@ function FakeQr() {
 
 const shared = {
   title: 'Sign in with your phone',
-  instructions: 'Scan the code, or go to miauflix.tv/pair and type it.',
+  instructions: 'Scan the code, or go to miauwatch.tv/pair and type it.',
   loadingLabel: 'Getting a code',
   userCodeLabel: 'Code',
 };

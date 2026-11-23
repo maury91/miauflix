@@ -36,11 +36,11 @@ COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
 COPY packages/anime-mapping packages/anime-mapping
 COPY services/media-catalog services/media-catalog
-RUN npm run build --workspace @miauflix/source-metadata-extractor && \
-    npm run build --workspace @miauflix/contract && \
-    npm run build --workspace @miauflix/service-contracts && \
-    npm run build --workspace @miauflix/anime-mapping && \
-    npm run build --workspace @miauflix/service-configuration && \
+RUN npm run build --workspace @miauwatch/source-metadata-extractor && \
+    npm run build --workspace @miauwatch/contract && \
+    npm run build --workspace @miauwatch/service-contracts && \
+    npm run build --workspace @miauwatch/anime-mapping && \
+    npm run build --workspace @miauwatch/service-configuration && \
     bun build services/media-catalog/src/index.ts --target=bun --external sharp --outfile=/tmp/media-catalog.js
 
 FROM builder AS development

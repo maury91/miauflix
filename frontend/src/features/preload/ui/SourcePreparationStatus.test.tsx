@@ -1,4 +1,4 @@
-import type { PreloadPreparationSnapshot } from '@miauflix/backend';
+import type { PreloadPreparationSnapshot } from '@miauwatch/backend';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 

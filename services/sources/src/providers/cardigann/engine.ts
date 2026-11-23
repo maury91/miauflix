@@ -1,4 +1,4 @@
-import type { ProviderSetting } from '@miauflix/service-contracts';
+import type { ProviderSetting } from '@miauwatch/service-contracts';
 
 import { type HttpClient, HttpError } from '../../http/http-client';
 import { normalizeHash } from '../../normalize/magnet';

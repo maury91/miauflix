@@ -6,7 +6,7 @@ import type {
   RemuxStatus,
   RemuxSubtitleKind,
   RemuxSubtitleTrack,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { MediaProbeRepository } from '@repositories/media-probe.repository';
 import type { MediaVariantRepository, VariantCodecs } from '@repositories/media-variant.repository';

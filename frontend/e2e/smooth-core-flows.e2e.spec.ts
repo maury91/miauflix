@@ -85,10 +85,10 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
       tasks: [] as Array<{ at: number; duration: number }>,
     };
     Object.assign(window, { smoothMetrics: metrics });
-    window.addEventListener('miauflix:intro:animation:start', () =>
+    window.addEventListener('miauwatch:intro:animation:start', () =>
       Object.assign(metrics, { animationStart: performance.now() })
     );
-    window.addEventListener('miauflix:intro:animation:complete', () =>
+    window.addEventListener('miauwatch:intro:animation:complete', () =>
       Object.assign(metrics, { animationEnd: performance.now() })
     );
     let previous = performance.now();

@@ -1,4 +1,4 @@
-import { Quality, type VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Quality, type VideoCodec } from '@miauwatch/source-metadata-extractor';
 import { z } from 'zod';
 
 import { type PlayableRef, playableRefSchema } from '@mytypes/playable.types';

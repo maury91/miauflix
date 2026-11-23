@@ -2,7 +2,7 @@ import type {
   MediaDto,
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { realtimeActions, realtimeSlice } from '@store/slices/realtime';
 import { act, renderHook } from '@testing-library/react';

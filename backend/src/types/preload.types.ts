@@ -1,4 +1,4 @@
-import type { Quality, Source } from '@miauflix/source-metadata-extractor';
+import type { Quality, Source } from '@miauwatch/source-metadata-extractor';
 
 import type { PlayableRef } from './playable.types';
 

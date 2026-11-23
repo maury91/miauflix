@@ -12,7 +12,7 @@ these numbers feed is [tv-performance-plan.md](../plans/tv-performance-plan.md),
    debug mode over SDB (no Tizen SDK needed) and forwards the inspector until stopped. Quit the
    Apps2Samsung desktop app first: while it's open it holds the TV's only SDB connection, and
    installs and the debug launch get `Connection reset by peer`. A reinstall ends the debug
-   session; run the script again. `localStorage['miauflix:gl-tuning'] = '{}'`, then a reload
+   session; run the script again. `localStorage['miauwatch:gl-tuning'] = '{}'`, then a reload
    (it's read at start), exposes the GL stats as `window.__glRows` without changing anything else.
 2. Run the scenarios with [`scripts/tv-bench.mjs`](../../scripts/tv-bench.mjs). It finds the
    Miauwatch page, sends remote keys over the DevTools protocol, and records
@@ -369,7 +369,7 @@ browsers, which decode either quickly, ask for the quarter-smaller WebP.
 - **Device:** Samsung TV, Tizen 5.5, Chromium 69.0.3497, 1920×1080, device pixel ratio 1.
 - **Builds:** the same code twice, `3367216a` plus the uncommitted work of the sections above (per
   move React work, card images, row layers) plus the GL rows spike. **DOM** has the flag off
-  (`index-COZ0CHR2.js`); **GL** is packaged with `MIAUFLIX_TV_GL_ROWS=true` (`index-CuzzYiVn.js`):
+  (`index-COZ0CHR2.js`); **GL** is packaged with `MIAUWATCH_TV_GL_ROWS=true` (`index-CuzzYiVn.js`):
   Home's rows (titles, carousels, tiles, artwork, logos, progress, focus outline and scale, edge
   fades, the slides along and between rows) are drawn by the design-system components into one
   WebGL canvas, with React and the navigation layer driving them as before. The hero, rail and
@@ -420,7 +420,7 @@ about 11 MB.
 - **Device:** Samsung TV, Tizen 5.5, Chromium 69.0.3497, Mali-TDVX (WebGL 2), 1920×1080, device
   pixel ratio 1.
 - **Builds:** the GL spike above, extended to draw Home's hero (backdrops, shade, details) in the
-  same canvas, packaged with `MIAUFLIX_TV_GL_ROWS=true`. **Quad renderer + hero**
+  same canvas, packaged with `MIAUWATCH_TV_GL_ROWS=true`. **Quad renderer + hero**
   (`index-n1esONSB.js`): the spike's own renderer, everything redrawn every frame through its
   rounded-rectangle shader. **PixiJS + hero** (`index-CjNK5qvI.js`): the renderer rebuilt on
   PixiJS 8: a retained display tree (a node paints only when what it draws changes), Pixi's batched
@@ -567,7 +567,7 @@ over one-minute segments of the same moves, alternating:
 The swapped buffer is shown undrawn now and then (the compositor presents the canvas without a new
 frame); with the buffer copied there is nothing undrawn to show. It's now the default
 (`GlTuning.preserveDrawingBuffer`), at no measurable cost. Switches for testing on the TV:
-`localStorage['miauflix:gl-tuning']` as JSON (`textureBudget`, `antialias`, `frameBudgetMs`,
+`localStorage['miauwatch:gl-tuning']` as JSON (`textureBudget`, `antialias`, `frameBudgetMs`,
 `preserveDrawingBuffer`, `transparent`), read when the surface starts, in the Tizen and development builds only.
 
 ### Phase 2 (pictures and metrics)
@@ -663,7 +663,7 @@ still worked when coming back up and down after the hold. Holding Right fetches 
 ## 2026-11-20: GL on by default (Phase 8)
 
 Build `index-BLBQcG5U.js`, packaged with the defaults (`scripts/package-tizen.sh
-https://my.miauflix.cat`, GL on), installed with `scripts/install-tizen.sh` and measured through
+https://my.miau.watch`, GL on), installed with `scripts/install-tizen.sh` and measured through
 `scripts/tv-debug.mjs`. Same TV (TU8072), cold, 3×Down with `"settle": 800`. Phase 6's build with
 the flag's default flipped, so the numbers should match Phase 6's:
 
@@ -688,7 +688,7 @@ signing in again, before the fix was deployed.
 ### GL against DOM, and the card image on the DOM rows
 
 Same build and session, after the backend fix was deployed. DOM is the same package with
-`localStorage['miauflix:gl-rows'] = '0'`. Both use the server's card images (backdrop and logo in
+`localStorage['miauwatch:gl-rows'] = '0'`. Both use the server's card images (backdrop and logo in
 one picture). Cold, three runs each, Project Hail Mary focused on row 3 in every run:
 
 | Scenario         | GL         | DOM        |
@@ -726,8 +726,8 @@ three builds were measured the same evening, one after the other, on the same TV
 data and card images (live, cache on), cold, Project Hail Mary focused on row 3 in every run:
 
 - **GL build, DOM forced**: the Phase 8 package (`index-BLBQcG5U.js`) with
-  `localStorage['miauflix:gl-rows'] = '0'`, as in the section above.
-- **DOM package**: the same tree packaged with `MIAUFLIX_TV_GL_ROWS=false` (`index-xTYmuP0e.js`).
+  `localStorage['miauwatch:gl-rows'] = '0'`, as in the section above.
+- **DOM package**: the same tree packaged with `MIAUWATCH_TV_GL_ROWS=false` (`index-xTYmuP0e.js`).
 - **Spike, DOM**: the frozen spike (`tv-gl-spike`, `b00934df`) packaged with its default, the GL
   rows off (`index-BNx0rU_V.js`): the code the 2026-11-17 DOM numbers came from, before the DOM
   views were split from the GL ones.
@@ -773,7 +773,7 @@ builds need runs from the same session, as here.
 
 A Home row on the TV mounted 2 cards past each side of its page once it had been in view 400 ms
 (1 until then, the peeking card). The same package was measured with
-`localStorage['miauflix:tv-overscan']` (a temporary override, removed since) setting every row to
+`localStorage['miauwatch:tv-overscan']` (a temporary override, removed since) setting every row to
 2, 1 or 0, cold, Project Hail Mary focused on row 3. Cards mounted at the end of a standard run:
 54–57 with 2, 49–54 with 1, 38–45 with 0.
 
@@ -788,7 +788,7 @@ GL rows (the default), alternating 2 and 1, three rounds:
 
 3 × Down had 9–15 frames over 50 ms with 2 and 4–6 with 1.
 
-DOM rows (`localStorage['miauflix:gl-rows'] = '0'`), 2, then 1, then 0:
+DOM rows (`localStorage['miauwatch:gl-rows'] = '0'`), 2, then 1, then 0:
 
 | Scenario                   | 2 per side | 1 per side | 0 per side |
 | -------------------------- | ---------- | ---------- | ---------- |
@@ -832,7 +832,7 @@ rows), and what limits the GL rows lies elsewhere.
 Two suggestions (from a Reddit thread on the GL Home): check whether card images are decoded on the
 main thread during a move, and decode them ahead of time with `createImageBitmap`. Build
 `df658667` plus a tuning knob, `GlTuning.uploadsPerFrame` (default 2, set through
-`localStorage['miauflix:gl-tuning']`), same TV (TU8072), cold, row 3.
+`localStorage['miauwatch:gl-tuning']`), same TV (TU8072), cold, row 3.
 
 ### Where the time goes
 
@@ -875,7 +875,7 @@ elsewhere (Phase 6: mostly GPU and compositor time, not the frame's own draw).
 
 The Tizen bundle of the section above (`df658667` plus `uploadsPerFrame`), served from localhost
 by a small static server that forwards every other request to the server (it only allows CORS
-from known origins), with `localStorage['miauflix.tv.server']` pointing at it. Chrome 157.0.8103.79 on an
+from known origins), with `localStorage['miauwatch.tv.server']` pointing at it. Chrome 157.0.8103.79 on an
 Apple Silicon Mac, a separate profile started with `--remote-debugging-port=9223
 --disable-backgrounding-occluded-windows --disable-renderer-backgrounding
 --disable-background-timer-throttling` (a window behind others reports `visibilityState`

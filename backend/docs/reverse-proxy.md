@@ -25,7 +25,7 @@ Generate a value with `openssl rand -hex 32`, or let [`scripts/generate-proxy-se
 With another proxy, send the same header, for example in Caddy:
 
 ```caddyfile
-reverse_proxy miauflix:3000 {
+reverse_proxy miauwatch:3000 {
 	header_up X-Reverse-Proxy-Secret {$REVERSE_PROXY_SECRET}
 }
 ```

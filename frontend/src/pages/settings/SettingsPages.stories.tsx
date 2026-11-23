@@ -9,7 +9,7 @@ import {
   useGetStorageInventoryQuery,
   useRemoveStorageMutation,
 } from '@features/storage/api/storage.api';
-import type { ConfigEntryView, ProviderView, StorageItemView } from '@miauflix/backend';
+import type { ConfigEntryView, ProviderView, StorageItemView } from '@miauwatch/backend';
 import { storyImage } from '@shared/design-system/storyImage';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, mocked } from 'storybook/test';
@@ -32,7 +32,7 @@ const provider = (
     name,
     description: null,
     kind: 'cardigann',
-    repositoryId: 'builtin:miauflix',
+    repositoryId: 'builtin:miauwatch',
     version: null,
     enabled: true,
     priority,
@@ -65,8 +65,8 @@ const PROVIDERS = [
 
 const REPOSITORIES = [
   {
-    id: 'builtin:miauflix',
-    url: 'builtin:miauflix',
+    id: 'builtin:miauwatch',
+    url: 'builtin:miauwatch',
     name: 'Miauwatch',
     builtIn: true,
     lastFetchedAt: null,

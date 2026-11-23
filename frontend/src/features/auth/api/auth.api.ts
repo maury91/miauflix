@@ -4,7 +4,7 @@ import type {
   QrLoginClaimPending,
   QrLoginResponse,
   RefreshResponse,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { refreshSession, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';

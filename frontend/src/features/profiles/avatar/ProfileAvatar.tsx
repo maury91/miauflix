@@ -1,4 +1,4 @@
-import type { UserDto } from '@miauflix/backend';
+import type { UserDto } from '@miauwatch/backend';
 import { memo } from 'react';
 
 import * as styles from './avatar.css';

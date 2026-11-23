@@ -9,7 +9,7 @@ import {
   serve,
   type ServiceConfigSchema,
   type ServiceStatus,
-} from '@miauflix/contract';
+} from '@miauwatch/contract';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import { ServiceUnavailableError } from '@errors/service-unavailable.error';

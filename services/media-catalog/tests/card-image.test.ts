@@ -1,4 +1,4 @@
-import { CARD_IMAGE_SIZES } from '@miauflix/service-contracts';
+import { CARD_IMAGE_SIZES } from '@miauwatch/service-contracts';
 import { describe, expect, it } from 'bun:test';
 import sharp from 'sharp';
 

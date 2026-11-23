@@ -1,4 +1,4 @@
-import type { ConfigurationProbe } from '@miauflix/service-configuration';
+import type { ConfigurationProbe } from '@miauwatch/service-configuration';
 import { describe, expect, it } from 'bun:test';
 
 import { CatalogConfigService } from '../src/config/config.service';

@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 /** Idle time, without keyboard or pointer input, before the Trakt prompt opens. */
 export const TRAKT_PROMPT_IDLE_MS = 5_000;
 
-const dontAskKey = (userId: string) => `miauflix:trakt:dont-ask:${userId}`;
+const dontAskKey = (userId: string) => `miauwatch:trakt:dont-ask:${userId}`;
 
 /**
  * Offer Trakt once per session to an unconnected user, after a quiet moment while browsing.

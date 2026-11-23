@@ -14,7 +14,7 @@ import { getAvplay, type PlayerMedia } from '@features/player/lib/avplay-media';
 import { languageOptions, preferredAudioLanguage } from '@features/player/lib/language-options';
 import { mediaSubtitleKey } from '@features/player/lib/media-subtitles';
 import { languagePreferencesOf, titleLanguages } from '@features/profiles/lib/language-preferences';
-import type { PlayableRef } from '@miauflix/backend';
+import type { PlayableRef } from '@miauwatch/backend';
 import { builtForTizen } from '@shared/config/constants';
 import { Button } from '@shared/design-system';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
@@ -268,9 +268,9 @@ function PlayerScreen({
   })();
 
   useEffect(() => {
-    document.body.dataset['miauflixPlayer'] = 'true';
+    document.body.dataset['miauwatchPlayer'] = 'true';
     return () => {
-      delete document.body.dataset['miauflixPlayer'];
+      delete document.body.dataset['miauwatchPlayer'];
     };
   }, []);
 

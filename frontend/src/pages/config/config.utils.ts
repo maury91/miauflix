@@ -1,5 +1,5 @@
 import type { ServiceStatuses } from '@features/config/api/config.api';
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { t } from '@shared/i18n';
 
 /**

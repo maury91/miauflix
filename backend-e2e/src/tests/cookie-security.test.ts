@@ -62,7 +62,7 @@ describe('Cookie Security Validation', () => {
 
       if (setCookieHeader) {
         // Cookie name should include session information
-        expect(setCookieHeader).toMatch(new RegExp(`__miauflix_rt_${sessionId}`, 'i'));
+        expect(setCookieHeader).toMatch(new RegExp(`__miauwatch_rt_${sessionId}`, 'i'));
       }
     });
 
@@ -361,7 +361,7 @@ describe('Cookie Security Validation', () => {
 
       // Tamper with cookies by setting invalid values
       client.clearCookies();
-      client.setCookie(`__miauflix_rt_${sessionId}`, 'invalid-token-value');
+      client.setCookie(`__miauwatch_rt_${sessionId}`, 'invalid-token-value');
 
       // Try to refresh with tampered cookie
       const refreshResponse = await client.refreshToken(sessionId);

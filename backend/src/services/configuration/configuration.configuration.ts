@@ -68,7 +68,7 @@ export const serverConfigurationDefinition = serviceConfiguration({
         'Pairing service the server announces itself to and TV apps look servers up at (tv-pairing). Must match the one the TV app was packaged with',
       required: false,
       advanced: true,
-      defaultValue: 'https://pair.miauflix.cat',
+      defaultValue: 'https://pair.miau.watch',
       example: 'https://pair.example.com',
       transform: transforms.url(),
     }),

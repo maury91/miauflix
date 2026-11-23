@@ -1,5 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { UserDto } from '@miauflix/backend';
+import type { UserDto } from '@miauwatch/backend';
 import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export interface SessionInfo {
@@ -22,7 +22,7 @@ const initialState: AuthState = {
  * The profile chosen in this app run. sessionStorage survives reloads, returning from the
  * player and resuming the TV app, while a fresh start (new tab, app launch) asks again.
  */
-export const CURRENT_SESSION_STORAGE_KEY = 'miauflix.currentSession';
+export const CURRENT_SESSION_STORAGE_KEY = 'miauwatch.currentSession';
 
 export function readStoredSessionId(): string | null {
   try {

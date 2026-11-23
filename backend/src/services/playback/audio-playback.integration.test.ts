@@ -16,7 +16,7 @@ integration('audio conversion with a seekable, delayed range reader', () => {
   let directory: string;
   let fixture: Buffer;
   beforeAll(async () => {
-    directory = await mkdtemp(join(tmpdir(), 'miauflix-audio-test-'));
+    directory = await mkdtemp(join(tmpdir(), 'miauwatch-audio-test-'));
     const input = join(directory, 'fixture.mkv');
     execFileSync(
       'ffmpeg',

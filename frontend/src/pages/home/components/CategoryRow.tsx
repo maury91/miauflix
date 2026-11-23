@@ -3,7 +3,7 @@ import { ROW_PAGE_SIZE, rowPagesFor } from '@features/home-feed/row-pages';
 import { usePromoteListMediaMutation } from '@features/media/api/lists.api';
 import { useQueueBackdropFocusMutation } from '@features/media/api/media.api';
 import { progressByMedia, progressKey } from '@features/progress/lib/progress-lookup';
-import type { ListDto, MediaDto, ProgressEntry } from '@miauflix/backend';
+import type { ListDto, MediaDto, ProgressEntry } from '@miauwatch/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { builtForTizen, IS_TV } from '@shared/config/constants';
 import {

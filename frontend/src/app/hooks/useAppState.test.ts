@@ -1,4 +1,4 @@
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { describe, expect, it } from 'vitest';
 
 import { getConfigurationPageState, hasConfigurationIssue, resolveAppState } from './useAppState';

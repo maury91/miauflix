@@ -1,7 +1,7 @@
 import { lstatSync } from 'node:fs';
 import { basename, dirname, resolve } from 'node:path';
 
-import type { ImportedSource } from '@miauflix/service-contracts';
+import type { ImportedSource } from '@miauwatch/service-contracts';
 
 import type { MediaLoadDatabase } from '../db/database';
 import { ErrorWithStatus } from '../lib/errors';

@@ -49,7 +49,7 @@ function Login() {
         description="Use the account your server administrator created."
         onSubmit={() => {
           setAttempts(count => count + 1);
-          setFailed(password !== 'miauflix');
+          setFailed(password !== 'miauwatch');
         }}
         message={
           failed ? (
@@ -101,7 +101,7 @@ export const LoginForm: Story = {
     await expect(canvas.getByTestId('attempts')).toHaveTextContent('Attempts: 1');
     await expect(canvas.getByRole('alert')).toHaveTextContent('The email or password is wrong.');
     // Enter in a field submits too, without reloading the page
-    await userEvent.type(canvas.getByLabelText('Password'), 'miauflix{Enter}');
+    await userEvent.type(canvas.getByLabelText('Password'), 'miauwatch{Enter}');
     await expect(canvas.getByTestId('attempts')).toHaveTextContent('Attempts: 2');
     await expect(canvas.queryByRole('alert')).toBeNull();
   },

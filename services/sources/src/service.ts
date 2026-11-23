@@ -1,8 +1,8 @@
 import { join } from 'node:path';
 
-import { defineService, type Service } from '@miauflix/contract';
-import { sources } from '@miauflix/service-contracts';
-import { VpnGuard, vpnSettingsFrom } from '@miauflix/vpn-guard';
+import { defineService, type Service } from '@miauwatch/contract';
+import { sources } from '@miauwatch/service-contracts';
+import { VpnGuard, vpnSettingsFrom } from '@miauwatch/vpn-guard';
 import { z } from 'zod';
 
 import { AnimeLists } from './anime/anime-lists';

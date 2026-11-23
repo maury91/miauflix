@@ -1,5 +1,5 @@
 {
-  "name": "miauflix-backend-e2e",
+  "name": "miauwatch-backend-e2e",
   "version": "1.0.0",
   "description": "End-to-end integration tests for Miauwatch backend",
   "scripts": {
@@ -23,7 +23,7 @@
     "typescript": "5.9.3"
   },
   "dependencies": {
-    "@miauflix/backend": "file:../backend",
+    "@miauwatch/backend": "file:../backend",
     "hono": "4.13.18",
     "sqlite3": "5.1.7"
   },
@@ -75,11 +75,11 @@
     ],
     "testTimeout": 30000,
     "transformIgnorePatterns": [
-      "node_modules/(?!(@miauflix/backend|hono)/)",
+      "node_modules/(?!(@miauwatch/backend|hono)/)",
       "<rootDir>/../backend/dist/client/(?!index\\.js$)"
     ],
     "moduleNameMapper": {
-      "^@miauflix/backend$": "<rootDir>/../backend/dist/client/index.js"
+      "^@miauwatch/backend$": "<rootDir>/../backend/dist/client/index.js"
     }
   }
 }

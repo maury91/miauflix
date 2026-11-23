@@ -1,4 +1,4 @@
-import type { ProgressEntry, SeasonResponse } from '@miauflix/backend';
+import type { ProgressEntry, SeasonResponse } from '@miauwatch/backend';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 

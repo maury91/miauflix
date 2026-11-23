@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { UserRole } from '@miauflix/backend';
+import { UserRole } from '@miauwatch/backend';
 
 import { TestClient, testUtils } from './test-utils';
 

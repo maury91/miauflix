@@ -1,5 +1,5 @@
-import type { MediaDto, ProgressEntry } from '@miauflix/backend';
-import { cardTitleRenderable } from '@miauflix/service-contracts/card-image/v1';
+import type { MediaDto, ProgressEntry } from '@miauwatch/backend';
+import { cardTitleRenderable } from '@miauwatch/service-contracts/card-image/v1';
 import { MediaTile } from '@shared/design-system';
 import { artworkUrl, cardImageUrl, getMediaTitle } from '@shared/lib/media.utils';
 import type { RootState } from '@store/store';

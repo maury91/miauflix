@@ -1,4 +1,4 @@
-import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
+import type { ArtworkUpdate, MediaRef } from '@miauwatch/service-contracts';
 
 import type { ConfigService } from '@mytypes/configuration';
 import type { AuthService } from '@services/auth/auth.service';

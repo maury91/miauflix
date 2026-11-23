@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import { serve } from '@miauflix/contract';
+import { serve } from '@miauwatch/contract';
 
 import { ANILIST_URL, AniListLists, ANIME_LISTS_URL } from './anilist';
 import { createListService } from './service';

@@ -19,7 +19,7 @@ export type AppRoute =
   | { type: 'notFound'; pathname: string };
 
 const HOME: AppRoute = Object.freeze({ type: 'home' });
-const HISTORY_KEY = '__miauflixRoute';
+const HISTORY_KEY = '__miauwatchRoute';
 
 function positiveId(value: string | undefined): number | null {
   if (!value || !/^\d+$/.test(value)) return null;

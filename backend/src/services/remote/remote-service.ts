@@ -12,7 +12,7 @@ import {
   type ServiceConfigTestResult,
   type ServiceStatus,
   type Transport,
-} from '@miauflix/contract';
+} from '@miauwatch/contract';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import { ServiceUnavailableError } from '@errors/service-unavailable.error';

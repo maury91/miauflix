@@ -9,7 +9,7 @@ import type {
   RepositoryView,
   TestProviderResponse,
   UpdateProviderRequest,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';

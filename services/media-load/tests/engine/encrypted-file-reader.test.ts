@@ -9,7 +9,7 @@ describe('EncryptedFileReader', () => {
   it.each([1, 2] as const)(
     'reads encrypted byte ranges across file and piece boundaries (v%i)',
     async version => {
-      const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
+      const location = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-encrypted-reader-'));
       const key = 'reader-test-key';
       const storeName = 'torrent - abcdef12';
       const filenameSalt = 'download-a'.repeat(5);
@@ -73,7 +73,7 @@ describe('EncryptedFileReader', () => {
   );
 
   it('closes only file handles that were opened', async () => {
-    const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
+    const location = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-encrypted-reader-'));
     const storeName = 'partial - abcdef12';
     const files = [
       { path: 'movie.mkv', length: 4, offset: 0 },
@@ -104,7 +104,7 @@ describe('EncryptedFileReader', () => {
     expect(
       () =>
         new EncryptedFileReader(
-          '/tmp/miauflix-reader-missing',
+          '/tmp/miauwatch-reader-missing',
           {
             storeName: 'pack - abcdef12',
             filenameSalt: 'download-pack',
@@ -118,7 +118,7 @@ describe('EncryptedFileReader', () => {
   });
 
   it('reports a clear error when completed local media is missing', async () => {
-    const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
+    const location = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-encrypted-reader-'));
     const reader = new EncryptedFileReader(
       location,
       {
@@ -141,7 +141,7 @@ describe('EncryptedFileReader', () => {
   });
 
   it('reopens files only when the persisted filename salt matches the writer', async () => {
-    const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
+    const location = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-encrypted-reader-'));
     const key = 'reader-test-key';
     const sourceHash = 'ABCDEF1234';
     const files = [{ path: 'movie.mkv', length: 4, offset: 0 }];

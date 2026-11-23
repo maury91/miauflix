@@ -1,4 +1,4 @@
-# @miauflix/source-metadata-extractor
+# @miauwatch/source-metadata-extractor
 
 A library for extracting metadata from torrent information with optional tracker-specific enhancements.
 
@@ -13,13 +13,13 @@ A library for extracting metadata from torrent information with optional tracker
 ## Installation
 
 ```bash
-npm install @miauflix/source-metadata-extractor
+npm install @miauwatch/source-metadata-extractor
 ```
 
 ## Quick Start
 
 ```typescript
-import { extractSourceMetadata } from '@miauflix/source-metadata-extractor';
+import { extractSourceMetadata } from '@miauwatch/source-metadata-extractor';
 
 // Basic usage with torrent title
 const result = extractSourceMetadata({

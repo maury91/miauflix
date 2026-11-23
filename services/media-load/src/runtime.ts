@@ -9,7 +9,7 @@ import type {
   StorageInventory,
   StorageState,
   TargetRef,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import { MediaLoadDatabase, openDatabase } from './db/database';
 import { resolveDhtBootstrap } from './engine/dht-bootstrap';

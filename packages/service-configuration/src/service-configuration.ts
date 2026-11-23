@@ -3,7 +3,7 @@ import {
   type ServiceConfigSchema,
   type ServiceConfigTestResult,
   type ServiceLifecycleState,
-} from '@miauflix/contract';
+} from '@miauwatch/contract';
 
 export type ConfigurationProbeResult = { success: boolean; message: string };
 

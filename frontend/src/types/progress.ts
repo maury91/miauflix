@@ -1,3 +1,3 @@
-import type { ProgressRequest } from '@miauflix/backend';
+import type { ProgressRequest } from '@miauwatch/backend';
 
 export type TrackPlaybackRequest = ProgressRequest;

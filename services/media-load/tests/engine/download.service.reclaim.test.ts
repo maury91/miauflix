@@ -193,7 +193,7 @@ describe('reclaiming files of a pack', () => {
 
   beforeEach(async () => {
     database = await testDatabase();
-    downloads = await mkdtemp(path.join(os.tmpdir(), 'miauflix-reclaim-it-'));
+    downloads = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-reclaim-it-'));
   });
 
   afterEach(async () => {

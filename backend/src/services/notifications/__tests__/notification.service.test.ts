@@ -1,5 +1,5 @@
 import { configureFakerSeed } from '@__test-utils__/utils';
-import { Quality, Source } from '@miauflix/source-metadata-extractor';
+import { Quality, Source } from '@miauwatch/source-metadata-extractor';
 import { In, IsNull, LessThan, Not } from 'typeorm';
 
 import type { Database } from '@database/database';

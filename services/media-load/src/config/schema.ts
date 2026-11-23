@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 
-import type { ConfigVariable, ServiceConfigSchema } from '@miauflix/contract';
-import { vpnConfigVariables } from '@miauflix/vpn-guard';
+import type { ConfigVariable, ServiceConfigSchema } from '@miauwatch/contract';
+import { vpnConfigVariables } from '@miauwatch/vpn-guard';
 
 /** Scrape trackers: well-known UDP trackers that answer multi-hash scrapes. */
 export const DEFAULT_SCRAPE_TRACKERS = [
@@ -156,7 +156,7 @@ export const createMediaLoadConfigSchema = (
           key: 'DOWNLOAD_PATH',
           description:
             'Directory for storing downloaded and encrypted media files (must be writable)',
-          example: '/var/miauflix/cache',
+          example: '/var/miauwatch/cache',
           defaultValue: defaultDownloadPath,
           required: false,
           advanced: true,

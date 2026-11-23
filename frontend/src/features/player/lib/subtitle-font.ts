@@ -18,7 +18,7 @@ export function useSubtitleFont(url: string | null): string | undefined {
     fetch(url, { credentials: API_CREDENTIALS, signal: controller.signal })
       .then(async (response: Response) => {
         if (!response.ok) return;
-        const name = `miauflix-subtitle-${++nextFamily}`;
+        const name = `miauwatch-subtitle-${++nextFamily}`;
         // Every weight maps to this one face, so captions use it as shipped instead of faking bold.
         face = new FontFace(name, await response.arrayBuffer(), { weight: '100 900' });
         await face.load();

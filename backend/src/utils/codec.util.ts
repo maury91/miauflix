@@ -1,4 +1,4 @@
-import { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { AudioCodec, VideoCodec } from '@miauwatch/source-metadata-extractor';
 
 /**
  * Normalize string codec values to VideoCodec enum

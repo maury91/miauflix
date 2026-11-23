@@ -66,7 +66,7 @@ function createApiRoutes(services: Deps) {
       // This endpoint is not rate limited because a flood attack would mark the container as unhealthy and trigger the restart
       .get('/health', c => {
         // `service` lets the TV app tell a Miauwatch server apart when it scans the network
-        return c.json({ status: 'ok', service: 'miauflix' });
+        return c.json({ status: 'ok', service: 'miauwatch' });
       })
       .get('/stats', rateLimitGuard(10), authGuard(), c => {
         return c.json(deps.statsService.report());

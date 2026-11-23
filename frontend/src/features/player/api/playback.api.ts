@@ -4,7 +4,7 @@ import type {
   CreatePlaybackSessionResponse,
   PlayableRef,
   SubtitleSearchResponse,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
@@ -13,7 +13,7 @@ import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
 export type PlaybackPreferences =
-  import('@miauflix/backend').CreatePlaybackSessionRequest['preferences'];
+  import('@miauwatch/backend').CreatePlaybackSessionRequest['preferences'];
 
 export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;

@@ -31,7 +31,7 @@ describe('useSubtitleFont', () => {
     const { result, rerender } = renderHook(({ url }) => useSubtitleFont(url), {
       initialProps: { url: '/api/subtitles/tracks/abc/font?streamingKey=k' as string | null },
     });
-    await waitFor(() => expect(result.current).toMatch(/^miauflix-subtitle-\d+$/));
+    await waitFor(() => expect(result.current).toMatch(/^miauwatch-subtitle-\d+$/));
     const face = fonts.add.mock.calls[0][0] as FakeFontFace;
     expect(face.family).toBe(result.current);
     expect(face.descriptors).toEqual({ weight: '100 900' });

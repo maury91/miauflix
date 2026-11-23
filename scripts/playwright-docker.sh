@@ -10,7 +10,7 @@
 # checks the lockfile. The volumes are keyed by bun.lock's hash: checkouts with different
 # dependencies never share one. Installs take a lock in the shared bun cache volume, so runs
 # started together (two worktrees, the same lockfile) never install over each other.
-# Remove old volumes with: docker volume ls -q --filter name=miauflix-playwright | xargs docker volume rm
+# Remove old volumes with: docker volume ls -q --filter name=miauwatch-playwright | xargs docker volume rm
 
 set -euo pipefail
 
@@ -22,7 +22,7 @@ if command -v sha1sum >/dev/null; then
 else
   lock_hash=$(shasum <"$root_dir/bun.lock" | cut -c1-12)
 fi
-volume="miauflix-playwright-$lock_hash"
+volume="miauwatch-playwright-$lock_hash"
 
 docker_options=()
 while [[ $# -gt 0 && "$1" != "--" ]]; do
@@ -41,12 +41,12 @@ exec docker run --rm --ipc=host --network=host \
   -v "$root_dir:/workspace" \
   -v "$volume-node-modules:/workspace/node_modules" \
   -v "$volume-frontend-node-modules:/workspace/frontend/node_modules" \
-  -v miauflix-playwright-bun-cache:/root/.bun/install/cache \
+  -v miauwatch-playwright-bun-cache:/root/.bun/install/cache \
   -w /workspace \
   ${docker_options[@]+"${docker_options[@]}"} \
   "$image" \
   bash -lc "npm install -g bun@1.4.0 >/dev/null \
-    && flock /root/.bun/install/cache/.miauflix-install.lock bash -euo pipefail -c '
+    && flock /root/.bun/install/cache/.miauwatch-install.lock bash -euo pipefail -c '
       current_lock_hash=\$(sha1sum < bun.lock | cut -c1-12)
       if [[ \"\$current_lock_hash\" != \"\$1\" ]]; then
         echo \"bun.lock changed before dependency installation. Rerun the command.\" >&2

@@ -12,7 +12,7 @@ From the repository root:
 bun install
 npm run build:libs
 npm run start:media-load
-npm test --workspace @miauflix/media-load-service
+npm test --workspace @miauwatch/media-load-service
 ```
 
 Bootstrap environment: `MEDIA_LOAD_PORT` (3004; an empty or invalid value also means 3004), `MEDIA_LOAD_HOST` (0.0.0.0), `MEDIA_LOAD_DATA_DIR` (then `DATA_DIR`, then `./data`) for its database, `MEDIA_LOAD_DEFAULT_DOWNLOAD_PATH` (the download directory advertised while `DOWNLOAD_PATH` is unset) and `MEDIA_LOAD_LEGACY_DOWNLOAD_PATH` (an extra mount for importing downloads recorded under another path).

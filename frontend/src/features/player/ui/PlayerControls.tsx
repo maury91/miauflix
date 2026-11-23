@@ -1,6 +1,6 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import { downloadedBlocks, type DownloadedRanges } from '@features/player/lib/seek-track';
-import type { SubtitleCandidateDto } from '@miauflix/backend';
+import type { SubtitleCandidateDto } from '@miauwatch/backend';
 import { brandLogoUrl } from '@shared/brand/logo/brandLogo';
 import { builtForTizen } from '@shared/config/constants';
 import {

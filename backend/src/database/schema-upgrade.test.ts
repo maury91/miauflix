@@ -94,7 +94,7 @@ describe('upgradeSchema', () => {
   };
 
   beforeEach(async () => {
-    dir = await mkdtemp(path.join(os.tmpdir(), 'miauflix-schema-test-'));
+    dir = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-schema-test-'));
   });
 
   afterEach(async () => {

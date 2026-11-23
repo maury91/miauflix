@@ -1,6 +1,6 @@
-import { type CallContext, defineService, type Service } from '@miauflix/contract';
-import { mediaLoad } from '@miauflix/service-contracts';
-import { VpnGuard, vpnSettingsFrom } from '@miauflix/vpn-guard';
+import { type CallContext, defineService, type Service } from '@miauwatch/contract';
+import { mediaLoad } from '@miauwatch/service-contracts';
+import { VpnGuard, vpnSettingsFrom } from '@miauwatch/vpn-guard';
 
 import { MediaLoadConfigService } from './config/config.service';
 import { InvalidSettingsError } from './engine/engine-config';

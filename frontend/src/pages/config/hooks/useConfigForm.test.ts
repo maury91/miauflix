@@ -1,4 +1,4 @@
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 

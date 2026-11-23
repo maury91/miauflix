@@ -1,4 +1,4 @@
-import { redactLogArgument } from '@miauflix/service-contracts';
+import { redactLogArgument } from '@miauwatch/service-contracts';
 
 /**
  * The backend logger's interface (`logger.info(tag, ...args)`), on the console. Debug output is

@@ -1,4 +1,4 @@
-import type { ProgressEntry } from '@miauflix/backend';
+import type { ProgressEntry } from '@miauwatch/backend';
 import { describe, expect, it } from 'vitest';
 
 import {

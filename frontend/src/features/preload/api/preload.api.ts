@@ -1,5 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { MediaIntentRef, PreloadIntentResponse, ReachableIntent } from '@miauflix/backend';
+import type { MediaIntentRef, PreloadIntentResponse, ReachableIntent } from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';

@@ -19,7 +19,7 @@ async function openLoginForScreenshot(page: Page) {
       json: {
         requestId: 'readme-qr-request',
         claimToken: 'readme-qr-claim',
-        approvalPath: 'https://miauflix.example/auth/qr/readme-qr-approval',
+        approvalPath: 'https://miauwatch.example/auth/qr/readme-qr-approval',
         expiresAt: new Date(now.getTime() + 4 * 60_000 + 32_000).toISOString(),
         pollInterval: 5,
       },

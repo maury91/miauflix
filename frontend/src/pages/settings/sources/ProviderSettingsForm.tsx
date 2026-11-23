@@ -1,5 +1,5 @@
 import { useUpdateProviderMutation } from '@features/sources/api/sources.api';
-import type { ProviderView } from '@miauflix/backend';
+import type { ProviderView } from '@miauwatch/backend';
 import {
   Button,
   FormSection,

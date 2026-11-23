@@ -231,39 +231,39 @@ jobs:
       matrix:
         image:
           [
-            miauflix,
-            miauflix-services,
-            miauflix-catalog-services,
-            miauflix-media-catalog,
-            miauflix-list-service,
-            miauflix-sources,
-            miauflix-media-load,
-            miauflix-tv-pairing,
+            miauwatch,
+            miauwatch-services,
+            miauwatch-catalog-services,
+            miauwatch-media-catalog,
+            miauwatch-list-service,
+            miauwatch-sources,
+            miauwatch-media-load,
+            miauwatch-tv-pairing,
           ]
         platform: [linux/amd64, linux/arm64]
         include:
-          - image: miauflix
+          - image: miauwatch
             file: Dockerfile
             target: ''
-          - image: miauflix-services
+          - image: miauwatch-services
             file: services/Dockerfile
             target: services
-          - image: miauflix-catalog-services
+          - image: miauwatch-catalog-services
             file: services/Dockerfile
             target: catalog-services
-          - image: miauflix-media-catalog
+          - image: miauwatch-media-catalog
             file: services/media-catalog/Dockerfile
             target: production
-          - image: miauflix-list-service
+          - image: miauwatch-list-service
             file: services/list-service/Dockerfile
             target: production
-          - image: miauflix-sources
+          - image: miauwatch-sources
             file: services/Dockerfile
             target: sources
-          - image: miauflix-media-load
+          - image: miauwatch-media-load
             file: services/Dockerfile
             target: media-load
-          - image: miauflix-tv-pairing
+          - image: miauwatch-tv-pairing
             file: tv-pairing/Dockerfile
             target: production
           - platform: linux/amd64
@@ -328,22 +328,30 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image: miauflix
+          - image: miauwatch
             description: Miauwatch backend, serves the web frontend
-          - image: miauflix-services
+            legacy: miauflix
+          - image: miauwatch-services
             description: Miauwatch bunqueue, media catalog, lists, source search and torrent engine in one container
-          - image: miauflix-catalog-services
+            legacy: miauflix-services
+          - image: miauwatch-catalog-services
             description: Miauwatch bunqueue, media catalog and lists (no VPN needed)
-          - image: miauflix-media-catalog
+            legacy: miauflix-catalog-services
+          - image: miauwatch-media-catalog
             description: Miauwatch media catalog service
-          - image: miauflix-list-service
+            legacy: miauflix-media-catalog
+          - image: miauwatch-list-service
             description: Miauwatch list service
-          - image: miauflix-sources
+            legacy: miauflix-list-service
+          - image: miauwatch-sources
             description: Miauwatch source search service
-          - image: miauflix-media-load
+            legacy: miauflix-sources
+          - image: miauwatch-media-load
             description: Miauwatch torrent engine (downloads, encrypted storage, tracker scrapes)
-          - image: miauflix-tv-pairing
+            legacy: miauflix-media-load
+          - image: miauwatch-tv-pairing
             description: Miauwatch TV pairing service (hosted, pairs TV apps with servers)
+            legacy: miauflix-tv-pairing
 
     steps:
       - name: Download digests
@@ -364,13 +372,19 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Compute image name
-        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image }}" >> "$GITHUB_ENV"
+        run: |
+          echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image }}" >> "$GITHUB_ENV"
+          echo "LEGACY_IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.legacy }}" >> "$GITHUB_ENV"
 
       - name: Image metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE }}
+          # Also published under the name from before the rename to Miauwatch, which installs set up
+          # earlier (and their Watchtower) still pull
+          images: |
+            ${{ env.IMAGE }}
+            ${{ env.LEGACY_IMAGE }}
           flavor: latest=auto
           # A manual run on a branch tags the branch name (e.g. fix-buffer) and its commit, never
           # latest or edge. On a release tag (started by the Release workflow) it tags the version

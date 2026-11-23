@@ -1,8 +1,8 @@
 import { createHash, randomBytes } from 'node:crypto';
 
 import { logger } from '@logger';
-import type { RemuxStatus } from '@miauflix/service-contracts';
-import { type Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
+import type { RemuxStatus } from '@miauwatch/service-contracts';
+import { type Quality, VideoCodec } from '@miauwatch/source-metadata-extractor';
 
 import type { Database } from '@database/database';
 import type { PlaybackGrant } from '@entities/playback-grant.entity';

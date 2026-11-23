@@ -1,4 +1,4 @@
-import type { ConfigVariable, ServiceConfigSchema } from '@miauflix/contract';
+import type { ConfigVariable, ServiceConfigSchema } from '@miauwatch/contract';
 
 import type { VariableInfo } from '@mytypes/configuration';
 import { transforms, variable } from '@utils/config';

@@ -9,7 +9,7 @@ import type {
   RemuxPriority,
   RemuxSidecar,
   RemuxStatus,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { Encryption } from '../lib/encryption';
 import { ErrorWithStatus } from '../lib/errors';

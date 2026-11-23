@@ -1,4 +1,4 @@
-import type { ProviderView } from '@miauflix/backend';
+import type { ProviderView } from '@miauwatch/backend';
 import { type MessageKey, t } from '@shared/i18n';
 
 const BY_KIND: Record<ProviderView['kind'], MessageKey> = {

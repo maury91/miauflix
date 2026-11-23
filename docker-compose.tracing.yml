@@ -7,7 +7,7 @@ services:
   jaeger:
     profiles: !reset [] # Defined, but off, in docker-compose.yml
 
-  miauflix:
+  miauwatch:
     environment:
       ENABLE_TRACING: 'true'
     depends_on:

@@ -1,7 +1,7 @@
 # TV pairing service
 
 Lets the Miauwatch Samsung TV app find the Miauwatch servers on its network. It is hosted for
-everyone at `https://pair.miauflix.cat`; it is **not** part of a Miauwatch install. Run your own
+everyone at `https://pair.miau.watch`; it is **not** part of a Miauwatch install. Run your own
 and point both sides at it (`TV_PAIRING_URL` on the server,
 `npm run package:tizen -- --pairing-url <origin>` for the TV app) to keep away from the hosted one.
 
@@ -37,7 +37,7 @@ only lists the servers that answer as Miauwatch servers.
 ## Run it
 
 ```bash
-docker run -d -p 3003:3003 ghcr.io/maury91/miauflix-tv-pairing:latest
+docker run -d -p 3003:3003 ghcr.io/maury91/miauwatch-tv-pairing:latest
 ```
 
 A standalone Bun service, not one of the Miauwatch workspaces: it has no dependencies and shares no

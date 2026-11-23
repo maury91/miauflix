@@ -9,7 +9,7 @@ import type {
   MovieResponse,
   SeasonResponse,
   ShowResponse,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { type ApiRequestResult, authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';

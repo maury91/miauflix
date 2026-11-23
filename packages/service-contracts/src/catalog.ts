@@ -1,4 +1,4 @@
-import { bytes, call, contract, event } from '@miauflix/contract';
+import { bytes, call, contract, event } from '@miauwatch/contract';
 
 import type { CardImageFormat, CardImageSize } from './card-image.js';
 

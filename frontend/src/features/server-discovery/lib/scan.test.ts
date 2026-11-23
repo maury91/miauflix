@@ -15,7 +15,7 @@ describe('probeServer', () => {
     const fetchMock = vi.fn<typeof fetch>();
     vi.stubGlobal('fetch', fetchMock);
 
-    fetchMock.mockResolvedValueOnce(health({ status: 'ok', service: 'miauflix' }));
+    fetchMock.mockResolvedValueOnce(health({ status: 'ok', service: 'miauwatch' }));
     expect(await probeServer('http://a')).toBe(true);
     fetchMock.mockResolvedValueOnce(health({ status: 'ok' }));
     expect(await probeServer('http://a')).toBe(true);
@@ -56,7 +56,7 @@ describe('scanSubnet', () => {
         url.startsWith('http://192.168.1.10:3000/') ||
         url.startsWith('http://192.168.1.200:3000/')
       )
-        return health({ status: 'ok', service: 'miauflix' });
+        return health({ status: 'ok', service: 'miauwatch' });
       throw new TypeError('Failed to fetch');
     });
     vi.stubGlobal('fetch', fetchMock);

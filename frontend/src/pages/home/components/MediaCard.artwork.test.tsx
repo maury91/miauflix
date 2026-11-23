@@ -1,6 +1,6 @@
 import { RealtimeClient } from '@features/realtime/realtime.client';
-import type { MediaDto } from '@miauflix/backend';
-import { cardImageVersion } from '@miauflix/service-contracts/card-image/v1';
+import type { MediaDto } from '@miauwatch/backend';
+import { cardImageVersion } from '@miauwatch/service-contracts/card-image/v1';
 import { configureStore } from '@reduxjs/toolkit';
 import { visuallyHidden } from '@shared/design-system/a11y.css';
 import { label as visibleLabel } from '@shared/design-system/collection-tile/collectionTile.css';

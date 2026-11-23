@@ -1,5 +1,5 @@
 import { type AppRoute, getRouteParent, navigate, navigateBack } from '@app/router';
-import type { MediaDto, PlayableRef } from '@miauflix/backend';
+import type { MediaDto, PlayableRef } from '@miauwatch/backend';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';

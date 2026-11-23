@@ -45,4 +45,7 @@ export const migrations = [
   `DELETE FROM search_memory WHERE provider_id='${TORRENTIO_ID}';
    DELETE FROM query_cache WHERE provider_id='${TORRENTIO_ID}';`,
   `UPDATE repositories SET name='Miauwatch' WHERE id='builtin:miauflix' AND built_in=1;`,
+  // The built-in repository follows the rename to Miauwatch.
+  `UPDATE repositories SET id='builtin:miauwatch', url='builtin:miauwatch' WHERE id='builtin:miauflix';
+   UPDATE providers SET repository_id='builtin:miauwatch' WHERE repository_id='builtin:miauflix';`,
 ];

@@ -3,8 +3,8 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
-import { type ImportedSource, mediaLoad } from '@miauflix/service-contracts';
+import { createClient, isContractError, localTransport, management } from '@miauwatch/contract';
+import { type ImportedSource, mediaLoad } from '@miauwatch/service-contracts';
 import { afterAll, afterEach, beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { mockedTorrentInstance, mockEngineModules, TEST_SETTINGS } from './helpers/engine';

@@ -119,7 +119,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const pages = await (await fetch(`http://${host}/json`)).json();
 const page =
-  pages.find(entry => entry.type === 'page' && ['Miauwatch', 'Miauflix'].includes(entry.title)) ??
+  pages.find(entry => entry.type === 'page' && ['Miauwatch', 'Miauwatch'].includes(entry.title)) ??
   pages[0];
 if (!page) throw new Error(`No page to debug at ${host}`);
 

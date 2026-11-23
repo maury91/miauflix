@@ -1,4 +1,4 @@
-import { isContractError } from '@miauflix/contract';
+import { isContractError } from '@miauwatch/contract';
 import {
   type ArtworkPriority,
   type ArtworkUpdate,
@@ -15,7 +15,7 @@ import {
   type SearchResponse,
   type SeasonDetail,
   type TVShowDetail,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import { RemoteService } from '@services/remote/remote-service';

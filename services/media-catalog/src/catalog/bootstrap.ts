@@ -1,4 +1,4 @@
-import type { ConfigurationProbe } from '@miauflix/service-configuration';
+import type { ConfigurationProbe } from '@miauwatch/service-configuration';
 
 import { AnimeIndex } from '../anime/anime-index';
 import type { CatalogConfigService } from '../config/config.service';

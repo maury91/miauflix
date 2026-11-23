@@ -30,7 +30,7 @@ describe('intro controller', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
-    delete window._miauflixAnimationComplete;
+    delete window._miauwatchAnimationComplete;
   });
 
   it('waits for hydration and animation readiness, starts, and completes only once', () => {
@@ -50,19 +50,19 @@ describe('intro controller', () => {
     expect(start).toHaveBeenCalledOnce();
     expect(store.getState().appState.introPhase).toBe('playing');
     const completed = vi.fn();
-    window.addEventListener('miauflix:intro:animation:complete', completed);
+    window.addEventListener('miauwatch:intro:animation:complete', completed);
     try {
       act(() => {
         result.current.handleIntroComplete();
         result.current.handleIntroComplete();
       });
       expect(completed).toHaveBeenCalledOnce();
-      expect(window._miauflixAnimationComplete).toBe(true);
+      expect(window._miauwatchAnimationComplete).toBe(true);
       rerender({ page: 'login', eligible: false });
       rerender({ page: 'home', eligible: true });
       expect(store.getState().appState.introPhase).toBe('complete');
     } finally {
-      window.removeEventListener('miauflix:intro:animation:complete', completed);
+      window.removeEventListener('miauwatch:intro:animation:complete', completed);
     }
   });
 
@@ -80,7 +80,7 @@ describe('intro controller', () => {
     });
     expect(store.getState().appState.introPhase).toBe('pending');
     expect(result.current.introHasStarted).toBe(false);
-    expect(window._miauflixAnimationComplete).toBeUndefined();
+    expect(window._miauwatchAnimationComplete).toBeUndefined();
     rerender({ page: 'home', eligible: true });
     act(() => {
       result.current.handleHomeHydrated();

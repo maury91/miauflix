@@ -1,4 +1,4 @@
-import type { MediaDto, ProgressEntry } from '@miauflix/backend';
+import type { MediaDto, ProgressEntry } from '@miauwatch/backend';
 
 import { preferredProgress } from './continue-watching';
 

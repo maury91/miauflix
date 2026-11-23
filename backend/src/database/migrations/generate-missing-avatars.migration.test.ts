@@ -3,7 +3,7 @@ jest.unmock('@database/database');
 
 import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { logger } from '@logger';
-import { PLUSHIE_KINDS } from '@miauflix/service-contracts';
+import { PLUSHIE_KINDS } from '@miauwatch/service-contracts';
 
 import { User, UserRole } from '@entities/user.entity';
 

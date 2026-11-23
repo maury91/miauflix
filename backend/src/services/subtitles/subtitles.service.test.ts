@@ -64,7 +64,7 @@ const setupTest = (directory: string) => {
 describe('subtitle ranking and durable downloads', () => {
   let directory: string;
   beforeEach(async () => {
-    directory = await mkdtemp(join(tmpdir(), 'miauflix-subtitle-test-'));
+    directory = await mkdtemp(join(tmpdir(), 'miauwatch-subtitle-test-'));
     jest.mocked(parseTorrent).mockResolvedValue({
       files: [
         { name: 'sample.mkv', length: 1 },
@@ -155,7 +155,7 @@ describe('subtitle ranking and durable downloads', () => {
     config.get.mockReturnValue(undefined);
     const fonts = [
       { streamIndex: 4, names: ['sign display'], data: Buffer.from('sign'), format: 'ttf' },
-      { streamIndex: 5, names: ['miauflix sans'], data: Buffer.from('sans'), format: 'otf' },
+      { streamIndex: 5, names: ['miauwatch sans'], data: Buffer.from('sans'), format: 'otf' },
     ];
     sourceSubtitles.getFonts.mockResolvedValue({ fonts, complete: true });
     sourceSubtitles.discover.mockResolvedValue([
@@ -207,7 +207,7 @@ describe('subtitle ranking and durable downloads', () => {
     ]);
     expect(list).toEqual([
       { id: 4, names: ['sign display'] },
-      { id: 5, names: ['miauflix sans'] },
+      { id: 5, names: ['miauwatch sans'] },
     ]);
     expect(file).toEqual({ data: Buffer.from('sans'), format: 'otf' });
     expect(await service.getFontFile(styled.id, 'streaming-key', 9)).toBeNull();

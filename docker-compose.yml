@@ -12,26 +12,29 @@
 #   docker-compose.build.yml         build the images from a clone of the repository
 # e.g. COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml
 
+# MIAUFLIX_* variables (from before the rename to Miauwatch) are still read when the MIAUWATCH_* one
+# is unset; ./update.sh renames them in .env.
+
 services:
-  miauflix:
-    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix:${MIAUFLIX_VERSION:-latest}
+  miauwatch:
+    image: ghcr.io/${MIAUWATCH_IMAGE_NAMESPACE:-${MIAUFLIX_IMAGE_NAMESPACE:-maury91}}/miauwatch:${MIAUWATCH_VERSION:-${MIAUFLIX_VERSION:-latest}}
     ports:
-      # Only this computer can connect until you open it to your network (MIAUFLIX_LISTEN_ADDRESS), see
+      # Only this computer can connect until you open it to your network (MIAUWATCH_LISTEN_ADDRESS), see
       # docs/setup/docker-setup.md#open-it-to-your-local-network
-      - '${MIAUFLIX_LISTEN_ADDRESS:-127.0.0.1}:3000:3000'
+      - '${MIAUWATCH_LISTEN_ADDRESS:-${MIAUFLIX_LISTEN_ADDRESS:-127.0.0.1}}:3000:3000'
     environment:
       # Shared secret between the backend and the services (unset: no check), see docs
       SERVICE_TOKEN: ${SERVICE_TOKEN:-}
       DATA_DIR: /usr/src/app/data
       # Where media-load keeps downloads; the backend pushes it there.
       DOWNLOAD_PATH: /usr/src/app/downloads
-      BUNQUEUE_HOST: miauflix-catalog-services
+      BUNQUEUE_HOST: miauwatch-catalog-services
       BUNQUEUE_PORT: 6789
-      CATALOG_SERVICE_URL: http://miauflix-catalog-services:3001
-      LIST_SERVICE_URL: http://miauflix-catalog-services:3002
+      CATALOG_SERVICE_URL: http://miauwatch-catalog-services:3001
+      LIST_SERVICE_URL: http://miauwatch-catalog-services:3002
       # docker-compose.vpn.yml moves these two into the VPN's network: then they are vpn:3003/3004
-      SOURCES_SERVICE_URL: http://miauflix-sources:3003
-      MEDIA_LOAD_SERVICE_URL: http://miauflix-media-load:3004
+      SOURCES_SERVICE_URL: http://miauwatch-sources:3003
+      MEDIA_LOAD_SERVICE_URL: http://miauwatch-media-load:3004
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: ${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-true} # create the admin from the browser
       # Without a VPN, source search and media load refuse to work: they would reach sites, trackers
       # and peers from your real IP. Each checks its own connection; this is their default.
@@ -48,16 +51,16 @@ services:
       # Samsung TV discovery, see docs/setup/samsung-tv.md#how-the-tv-finds-your-server. In Docker the server
       # cannot see its network address, so set TV_PAIRING_ADDRESSES (e.g. http://192.168.1.10:3000) in .env.
       TV_PAIRING_ENABLED: ${TV_PAIRING_ENABLED:-true}
-      TV_PAIRING_URL: ${TV_PAIRING_URL:-https://pair.miauflix.cat}
+      TV_PAIRING_URL: ${TV_PAIRING_URL:-https://pair.miau.watch}
       TV_PAIRING_ADDRESSES: ${TV_PAIRING_ADDRESSES:-}
     volumes:
       - miauflix_data:/usr/src/app/data
     depends_on:
-      miauflix-catalog-services:
+      miauwatch-catalog-services:
         condition: service_healthy
-      miauflix-sources:
+      miauwatch-sources:
         condition: service_healthy
-      miauflix-media-load:
+      miauwatch-media-load:
         condition: service_healthy
     restart: unless-stopped
     labels:
@@ -65,8 +68,8 @@ services:
       autoheal: 'true'
 
   # Bunqueue, media catalog (TMDB) and lists (Trakt). Reaches only those APIs: never needs the VPN.
-  miauflix-catalog-services:
-    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-catalog-services:${MIAUFLIX_VERSION:-latest}
+  miauwatch-catalog-services:
+    image: ghcr.io/${MIAUWATCH_IMAGE_NAMESPACE:-${MIAUFLIX_IMAGE_NAMESPACE:-maury91}}/miauwatch-catalog-services:${MIAUWATCH_VERSION:-${MIAUFLIX_VERSION:-latest}}
     init: true
     environment:
       # Shared secret between the backend and the services (unset: no check), see docs
@@ -81,8 +84,8 @@ services:
       com.centurylinklabs.watchtower.enable: 'true'
 
   # Source search: reaches indexer websites. docker-compose.vpn.yml runs it inside the VPN.
-  miauflix-sources:
-    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-sources:${MIAUFLIX_VERSION:-latest}
+  miauwatch-sources:
+    image: ghcr.io/${MIAUWATCH_IMAGE_NAMESPACE:-${MIAUFLIX_IMAGE_NAMESPACE:-maury91}}/miauwatch-sources:${MIAUWATCH_VERSION:-${MIAUFLIX_VERSION:-latest}}
     init: true
     environment:
       # Shared secret between the backend and the services (unset: no check), see docs
@@ -96,8 +99,8 @@ services:
 
   # Media load, the torrent engine and its downloads: reaches trackers and peers.
   # docker-compose.vpn.yml runs it inside the VPN.
-  miauflix-media-load:
-    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-media-load:${MIAUFLIX_VERSION:-latest}
+  miauwatch-media-load:
+    image: ghcr.io/${MIAUWATCH_IMAGE_NAMESPACE:-${MIAUFLIX_IMAGE_NAMESPACE:-maury91}}/miauwatch-media-load:${MIAUWATCH_VERSION:-${MIAUFLIX_VERSION:-latest}}
     init: true
     environment:
       # Shared secret between the backend and the services (unset: no check), see docs
@@ -113,8 +116,8 @@ services:
 
   # Bunqueue, media catalog, lists, source search and media load in one container. Off until
   # docker-compose.all-in-one.yml turns it on (and the three containers above off).
-  miauflix-services:
-    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-services:${MIAUFLIX_VERSION:-latest}
+  miauwatch-services:
+    image: ghcr.io/${MIAUWATCH_IMAGE_NAMESPACE:-${MIAUFLIX_IMAGE_NAMESPACE:-maury91}}/miauwatch-services:${MIAUWATCH_VERSION:-${MIAUFLIX_VERSION:-latest}}
     profiles: [all-in-one]
     init: true
     environment:
@@ -181,6 +184,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  # Named before the rename to Miauwatch: renaming them would start from empty volumes
   miauflix_data:
   miauflix_services_data:
   flaresolverr_config:

@@ -1,11 +1,9 @@
 <p align="center">
-  <img src="./frontend/public/favicon.svg" alt="" width="144">
+  <img src="./frontend/public/assets/images/logo.svg" alt="Miauwatch logo" style="max-width: 720px; width: 90%;">
 </p>
 
-# Miauwatch
-
 [![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial-blue.svg)](LICENSE)
-[![CI Status](https://github.com/maury91/miauflix/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix/actions/workflows/ci.yml)
+[![CI Status](https://github.com/maury91/miauwatch/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauwatch/actions/workflows/ci.yml)
 
 Miauwatch is a self-hosted app for watching movies and TV shows in your browser or on your TV. While you’re looking at a title, Miauwatch can already find a source, check its audio and subtitles, and start downloading the first pieces. It does that in the background so playback can be ready by the time you press **Watch Now**.
 
@@ -24,7 +22,7 @@ You can also connect these services:
 In an empty folder, download the Compose file and start Miauwatch.
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/maury91/miauwatch/main/docker-compose.yml
 docker compose up -d
 ```
 

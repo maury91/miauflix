@@ -4,7 +4,7 @@
 # Used by env.sh and test-only.sh to avoid duplication
 
 # Default constants (can be overridden by function arguments)
-readonly DEFAULT_PROJECT_NAME="miauflix-dev"
+readonly DEFAULT_PROJECT_NAME="miauwatch-dev"
 readonly DEFAULT_DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yml"
 
 # Verbose logging helper

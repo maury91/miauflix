@@ -1,4 +1,4 @@
-import type { SourceCandidate } from '@miauflix/service-contracts';
+import type { SourceCandidate } from '@miauwatch/service-contracts';
 
 export type SourceMetadata = Omit<SourceCandidate, 'uploadDate'> & {
   uploadDate: Date;

@@ -1,5 +1,5 @@
 import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
-import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
+import type { MediaDto, PreloadPreparationSnapshot } from '@miauwatch/backend';
 import { builtForTizen } from '@shared/config/constants';
 import type { GlParent, GlRenderer } from '@shared/design-system/gl';
 import type { BackdropFocus } from '@shared/lib/backdrop-focus';

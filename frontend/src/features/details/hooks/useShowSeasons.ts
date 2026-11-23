@@ -1,5 +1,5 @@
 import { mediaApi } from '@features/media/api/media.api';
-import type { SeasonResponse } from '@miauflix/backend';
+import type { SeasonResponse } from '@miauwatch/backend';
 import type { AppDispatch, RootState } from '@store/store';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';

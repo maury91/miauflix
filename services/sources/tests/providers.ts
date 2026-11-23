@@ -115,7 +115,7 @@ export function useProviders(
       'INSERT INTO cardigann_definitions (source,id,yaml,sha,fetched_at) VALUES (?,?,?,NULL,0)'
     ).run(TEST_SOURCE, provider.id, provider.yaml);
     db.query(
-      "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'cardigann','builtin:miauflix',?,?,?,?)"
+      "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'cardigann','builtin:miauwatch',?,?,?,?)"
     ).run(
       `test-${provider.id}`,
       provider.id,

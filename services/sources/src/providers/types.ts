@@ -1,4 +1,4 @@
-import type { TrackerMetadata } from '@miauflix/source-metadata-extractor';
+import type { TrackerMetadata } from '@miauwatch/source-metadata-extractor';
 
 import type { HttpClient } from '../http/http-client';
 export type Param =
@@ -77,7 +77,7 @@ export interface Provider {
   /** Hosts this provider talks to; its own download links may point at them even if internal. */
   readonly hosts?: string[];
   /** Settings the admin can edit; absent means the registry's defaults. */
-  readonly settingsSchema?: import('@miauflix/service-contracts').ProviderSetting[];
+  readonly settingsSchema?: import('@miauwatch/service-contracts').ProviderSetting[];
   search(
     query: ProviderQuery,
     ctx: { signal: AbortSignal; http: HttpClient }

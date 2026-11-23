@@ -54,7 +54,7 @@
       "@utils/*": ["./src/utils/*"],
       "@/__test-utils__": ["./src/__test-utils__"],
       "@/__test-utils__/*": ["./src/__test-utils__/*"],
-      "@miauflix/types": ["./src/types/api"]
+      "@miauwatch/types": ["./src/types/api"]
     }
   },
   "include": [

@@ -7,7 +7,7 @@ This guide covers the development workflow, coding conventions, and best practic
 Miauwatch uses an npm workspace monorepo structure:
 
 ```text
-miauflix/
+miauwatch/
 ├── backend/                        # TypeScript backend on Bun (API, streaming, serves the frontend)
 │   ├── src/
 │   │   ├── services/               # Business logic services
@@ -75,7 +75,7 @@ The backend's Jest-style tests are deliberate rather than leftovers: they predat
 ```bash
 # Clone repository
 git clone <repository-url>
-cd miauflix
+cd miauwatch
 
 # Install all dependencies (Bun workspaces, bun.lock)
 bun install
@@ -144,9 +144,9 @@ npm test
 npm run build
 ```
 
-### Using the frontend with the Docker backend (miauflix container)
+### Using the frontend with the Docker backend (miauwatch container)
 
-When the backend runs in Docker via the **miauflix** container (not miauflix-dev), it is exposed on **host port 3000** (published by `miauflix`, or by `vpn` with `docker-compose.vpn.yml`). You can use the local frontend dev server against that backend:
+When the backend runs in Docker via the **miauwatch** container (not miauwatch-dev), it is exposed on **host port 3000** (published by `miauwatch`, or by `vpn` with `docker-compose.vpn.yml`). You can use the local frontend dev server against that backend:
 
 1. **Start the stack** so the backend is reachable on port 3000:
 
@@ -154,7 +154,7 @@ When the backend runs in Docker via the **miauflix** container (not miauflix-dev
    npm run start:backend:docker:prod
    ```
 
-   This builds and starts `miauflix` with its services (plus the VPN when `NORDVPN_PRIVATE_KEY` is set, see [Building from source](../setup/docker-setup.md#building-from-source)). The API is available at `http://localhost:3000`.
+   This builds and starts `miauwatch` with its services (plus the VPN when `NORDVPN_PRIVATE_KEY` is set, see [Building from source](../setup/docker-setup.md#building-from-source)). The API is available at `http://localhost:3000`.
 
 2. **Start the frontend** dev server, pointing it at that port:
 
@@ -162,7 +162,7 @@ When the backend runs in Docker via the **miauflix** container (not miauflix-dev
    BACKEND_URL=http://localhost:3000 npm run start:frontend
    ```
 
-3. **Open** [https://localhost:4173](https://localhost:4173). The Vite dev server proxies `/api` to `BACKEND_URL` (`http://localhost:5000`, the `miauflix-dev` backend, by default), so the app talks to the miauflix container.
+3. **Open** [https://localhost:4173](https://localhost:4173). The Vite dev server proxies `/api` to `BACKEND_URL` (`http://localhost:5000`, the `miauwatch-dev` backend, by default), so the app talks to the miauwatch container.
 
 To use a different backend URL (e.g. another host or port), set `BACKEND_URL` in the workspace-root `.env` (the single source of truth for this repo), not in a frontend-local `.env`; frontend-local `.env` files are ignored by the rest of the stack and can cause confusion (see [Environment Variables](../setup/environment-variables.md)).
 
@@ -422,7 +422,7 @@ Reuse the [shared API client](../../frontend/src/shared/api/backend-client.ts), 
 DEBUG=* npm run start:backend
 
 # Debug specific modules
-DEBUG=miauflix:auth npm run start:backend
+DEBUG=miauwatch:auth npm run start:backend
 ```
 
 ### Frontend Debugging
@@ -435,10 +435,10 @@ DEBUG=miauflix:auth npm run start:backend
 
 ```bash
 # View container logs
-docker compose logs -f miauflix
+docker compose logs -f miauwatch
 
 # Execute commands in containers
-docker compose exec miauflix bash
+docker compose exec miauwatch bash
 
 # Check container health
 docker compose ps

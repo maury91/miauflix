@@ -44,7 +44,7 @@ FROM deps-base AS prod-deps
 # Packages are hoisted to the root node_modules; the runtime stage also copies backend's own.
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     for attempt in 1 2 3; do \
-      bun install --frozen-lockfile --production --filter @miauflix/backend && break; \
+      bun install --frozen-lockfile --production --filter @miauwatch/backend && break; \
       [ "$attempt" = 3 ] && exit 1; \
       echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
     done && \

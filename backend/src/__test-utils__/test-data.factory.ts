@@ -1,4 +1,4 @@
-import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Quality, Source, VideoCodec } from '@miauwatch/source-metadata-extractor';
 
 import type { Database } from '@database/database';
 import type { ContentSource } from '@entities/content-source.entity';

@@ -44,18 +44,18 @@ COPY services/media-catalog services/media-catalog
 COPY services/list-service services/list-service
 COPY services/sources services/sources
 COPY services/media-load services/media-load
-RUN npm run build --workspace @miauflix/source-metadata-extractor && \
-    npm run build --workspace @miauflix/contract && \
-    npm run build --workspace @miauflix/service-contracts && \
-    npm run build --workspace @miauflix/service-configuration && \
-    npm run build --workspace @miauflix/anime-mapping && \
-    npm run build --workspace @miauflix/vpn-guard
+RUN npm run build --workspace @miauwatch/source-metadata-extractor && \
+    npm run build --workspace @miauwatch/contract && \
+    npm run build --workspace @miauwatch/service-contracts && \
+    npm run build --workspace @miauwatch/service-configuration && \
+    npm run build --workspace @miauwatch/anime-mapping && \
+    npm run build --workspace @miauwatch/vpn-guard
 # Bun cannot prune: reinstall the services' production dependencies alone.
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     rm -rf node_modules && \
     bun install --frozen-lockfile --production --ignore-scripts \
-      --filter @miauflix/media-catalog --filter @miauflix/list-service \
-      --filter @miauflix/sources-service --filter @miauflix/media-load-service
+      --filter @miauwatch/media-catalog --filter @miauwatch/list-service \
+      --filter @miauwatch/sources-service --filter @miauwatch/media-load-service
 # media-load's tracker client loads WebRTC; fetch node-datachannel's prebuilt (musl) binary.
 # The npm cache keeps the downloaded binary (_prebuilds), so it is fetched from GitHub once.
 RUN --mount=type=cache,target=/root/.npm \
@@ -84,9 +84,9 @@ COPY --from=builder --chown=1001:1001 /workspace/packages/service-configuration 
 COPY --from=builder --chown=1001:1001 /workspace/packages/vpn-guard ./packages/vpn-guard
 COPY --from=builder --chown=1001:1001 /workspace/packages/anime-mapping ./packages/anime-mapping
 
-COPY --chown=1001:1001 services/entrypoint.sh /app/miauflix-services-entrypoint.sh
+COPY --chown=1001:1001 services/entrypoint.sh /app/miauwatch-services-entrypoint.sh
 COPY --chown=1001:1001 services/healthcheck.ts /app/healthcheck.ts
-RUN chmod +x /app/miauflix-services-entrypoint.sh
+RUN chmod +x /app/miauwatch-services-entrypoint.sh
 
 ENV CATALOG_DATA_DIR=/app/data/catalog \
     CATALOG_PORT=3001 \
@@ -105,7 +105,7 @@ VOLUME /app/data
 HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=10 CMD bun /app/healthcheck.ts
 # The entrypoint starts as root only to hand its data (and the downloads volume) to bunqueue, then
 # drops to it. CMD names the services the container runs: override it to run any subset.
-ENTRYPOINT ["/bin/bash", "/app/miauflix-services-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/app/miauwatch-services-entrypoint.sh"]
 
 # --- Service code, one layer each, so every image copies only what it runs ---
 FROM runtime-base AS catalog-code
@@ -124,21 +124,21 @@ COPY --from=builder --chown=1001:1001 /workspace/node_modules/@tensorflow/tfjs-b
 ENV BACKDROP_FOCUS_MODEL_DIR=/app/models \
     BACKDROP_FOCUS_WASM_DIR=/app/wasm
 
-# --- miauflix-catalog-services: Bunqueue, media catalog and lists. Talks to TMDB and Trakt only,
+# --- miauwatch-catalog-services: Bunqueue, media catalog and lists. Talks to TMDB and Trakt only,
 # so it never needs the VPN. ---
 FROM catalog-code AS catalog-services
 EXPOSE 3001 3002 6789 6790
 CMD ["bunqueue", "media-catalog", "list-service"]
 
-# --- miauflix-sources: source search on its own. Runs its own VPN check. ---
+# --- miauwatch-sources: source search on its own. Runs its own VPN check. ---
 FROM runtime-base AS sources
 COPY --from=builder --chown=1001:1001 /workspace/services/sources ./services/sources
-# A standalone volume holds this service only, as in the earlier miauflix-sources image.
+# A standalone volume holds this service only, as in the earlier miauwatch-sources image.
 ENV SOURCES_DATA_DIR=/app/data
 EXPOSE 3003
 CMD ["sources"]
 
-# --- miauflix-media-load: the torrent engine on its own. Runs its own VPN check. ---
+# --- miauwatch-media-load: the torrent engine on its own. Runs its own VPN check. ---
 # Debian, not the Alpine base: FFmpeg on musl decodes TrueHD about 8 times slower (42 s against
 # 5 s for two minutes of 5.1), which held TV remuxes at about 3x real time instead of 20x. Its
 # production dependencies are installed here, so native packages get their glibc binaries; the
@@ -165,7 +165,7 @@ COPY services/sources/package.json services/sources/package.json
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     for attempt in 1 2 3; do \
       bun install --frozen-lockfile --production --ignore-scripts \
-        --filter @miauflix/media-load-service && break; \
+        --filter @miauwatch/media-load-service && break; \
       [ "$attempt" = 3 ] && exit 1; \
       echo "bun install failed (attempt $attempt), retrying"; sleep 20; \
     done
@@ -196,25 +196,25 @@ COPY --from=builder --chown=1001:1001 /workspace/packages/service-contracts ./pa
 COPY --from=builder --chown=1001:1001 /workspace/packages/service-configuration ./packages/service-configuration
 COPY --from=builder --chown=1001:1001 /workspace/packages/vpn-guard ./packages/vpn-guard
 COPY --from=builder --chown=1001:1001 /workspace/services/media-load ./services/media-load
-COPY --chown=1001:1001 services/entrypoint.sh /app/miauflix-services-entrypoint.sh
+COPY --chown=1001:1001 services/entrypoint.sh /app/miauwatch-services-entrypoint.sh
 COPY --chown=1001:1001 services/healthcheck.ts /app/healthcheck.ts
-RUN chmod +x /app/miauflix-services-entrypoint.sh
+RUN chmod +x /app/miauwatch-services-entrypoint.sh
 # A standalone volume holds this service and, by default, its downloads, as in the earlier
-# miauflix-media-load image.
+# miauwatch-media-load image.
 ENV MEDIA_LOAD_PORT=3004 \
     MEDIA_LOAD_DATA_DIR=/app/data \
     MEDIA_LOAD_DEFAULT_DOWNLOAD_PATH=/app/data/downloads
 VOLUME /app/data
 EXPOSE 3004
 HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=10 CMD bun /app/healthcheck.ts
-ENTRYPOINT ["/bin/bash", "/app/miauflix-services-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/app/miauwatch-services-entrypoint.sh"]
 CMD ["media-load"]
 
-# --- miauflix-services: every service in one container, to save resources. Also the default
+# --- miauwatch-services: every service in one container, to save resources. Also the default
 # target. Override CMD to run a subset. ---
 FROM catalog-code AS services
 # FFmpeg for media-load's TV remuxes. On Alpine it decodes TrueHD about 8 times slower than the
-# standalone miauflix-media-load image (Debian): remuxes still work, at about 3x real time.
+# standalone miauwatch-media-load image (Debian): remuxes still work, at about 3x real time.
 RUN apk add --no-cache ffmpeg
 COPY --from=builder --chown=1001:1001 /workspace/services/sources ./services/sources
 COPY --from=builder --chown=1001:1001 /workspace/services/media-load ./services/media-load

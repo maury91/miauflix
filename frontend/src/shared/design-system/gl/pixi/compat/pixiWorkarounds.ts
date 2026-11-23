@@ -10,7 +10,7 @@ export function quietPixiGlWarnings(pixi: WebGLRenderer) {
   deleteVertexArraysOnce(pixi);
 }
 
-const PATCHED = Symbol('miauflix.pixiPatched');
+const PATCHED = Symbol('miauwatch.pixiPatched');
 type Patchable = { [PATCHED]?: true };
 
 /**

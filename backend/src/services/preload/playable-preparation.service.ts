@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import type { Quality } from '@miauflix/source-metadata-extractor';
+import type { Quality } from '@miauwatch/source-metadata-extractor';
 import parseTorrent from 'parse-torrent';
 
 import type { ContentSource } from '@entities/content-source.entity';

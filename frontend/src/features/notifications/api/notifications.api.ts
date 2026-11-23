@@ -1,5 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { PlayableRef } from '@miauflix/backend';
+import type { PlayableRef } from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';

@@ -1,4 +1,4 @@
-import type { MediaDto, ProgressEntry } from '@miauflix/backend';
+import type { MediaDto, ProgressEntry } from '@miauwatch/backend';
 import { describe, expect, it } from 'vitest';
 
 import { progressByMedia, progressKey } from './progress-lookup';

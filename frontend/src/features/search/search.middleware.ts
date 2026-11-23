@@ -1,6 +1,6 @@
 import { catalogLanguage } from '@features/media/lib/catalog-language';
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
-import type { SearchClientMessage } from '@miauflix/backend';
+import type { SearchClientMessage } from '@miauwatch/backend';
 import type { Middleware } from '@reduxjs/toolkit';
 import { getActiveLanguage } from '@shared/i18n';
 import { reportApiError } from '@shared/lib/api-error';

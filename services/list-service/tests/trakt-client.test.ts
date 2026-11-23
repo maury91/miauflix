@@ -199,7 +199,7 @@ describe('TraktClient', () => {
     });
 
     globalThis.fetch = (async () =>
-      Response.json({ username: 'miauflix', ids: {} })) as typeof fetch;
+      Response.json({ username: 'miauwatch', ids: {} })) as typeof fetch;
 
     await expect(
       new TraktClient(

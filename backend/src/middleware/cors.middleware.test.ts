@@ -8,7 +8,7 @@ import { createCorsMiddleware } from './cors.middleware';
 const setupTest = (settings: TvAppOriginSettings = { allowTvApp: true }) => {
   const app = new Hono();
   app.use(
-    createCorsMiddleware(['https://miauflix.example'], origin => isTvAppOrigin(origin, settings))
+    createCorsMiddleware(['https://miauwatch.example'], origin => isTvAppOrigin(origin, settings))
   );
   app.get('/api/health', context => context.json({ status: 'ok' }));
   // Like the converted-audio stream, which exposes its own timeline header
@@ -39,9 +39,9 @@ describe('createCorsMiddleware', () => {
   it('allows configured browser origins with credentials', async () => {
     const { app } = setupTest();
     const response = await app.request('/api/health', {
-      headers: { Origin: 'https://miauflix.example' },
+      headers: { Origin: 'https://miauwatch.example' },
     });
-    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://miauflix.example');
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe('https://miauwatch.example');
     expect(response.headers.get('Access-Control-Allow-Credentials')).toBe('true');
   });
 

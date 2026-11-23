@@ -1,4 +1,4 @@
-import type { CreatePlaybackSessionResponse, ProgressEntry } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse, ProgressEntry } from '@miauwatch/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { act, fireEvent, render as rtlRender, screen, waitFor } from '@testing-library/react';
 import { type PropsWithChildren, type ReactElement, StrictMode } from 'react';
@@ -1128,7 +1128,7 @@ describe('PlayerView', () => {
         if (provider === 'embedded') expect(src).toContain('&start=60');
         else expect(src).not.toContain('?start=');
         expect(
-          JSON.parse(window.localStorage.getItem('miauflix.media-subtitles.anonymous.m:123')!)
+          JSON.parse(window.localStorage.getItem('miauwatch.media-subtitles.anonymous.m:123')!)
         ).toMatchObject({ selectedFileId: `9:${provider}:2` });
         view.unmount();
       } finally {
@@ -1206,7 +1206,7 @@ describe('PlayerView', () => {
       expect(textTrack.cues[0].endTime).toBe(17);
       expect(screen.getByText('Timing adjustment: +5s')).toBeInTheDocument();
       expect(
-        JSON.parse(window.localStorage.getItem('miauflix.media-subtitles.anonymous.m:123')!)
+        JSON.parse(window.localStorage.getItem('miauwatch.media-subtitles.anonymous.m:123')!)
       ).toMatchObject({
         selectedFileId: 42,
         offset: 5,
@@ -1221,7 +1221,7 @@ describe('PlayerView', () => {
 
   it('automatically restores a media subtitle list, selection and sync using stable candidate IDs', async () => {
     window.localStorage.setItem(
-      'miauflix.media-subtitles.anonymous.m:123',
+      'miauwatch.media-subtitles.anonymous.m:123',
       JSON.stringify({
         language: 'en',
         hearingImpaired: false,
@@ -1284,7 +1284,7 @@ describe('PlayerView', () => {
 
   it('restores another media only after its own playback grant is created', async () => {
     window.localStorage.setItem(
-      'miauflix.media-subtitles.anonymous.m:124',
+      'miauwatch.media-subtitles.anonymous.m:124',
       JSON.stringify({
         language: 'fr',
         hearingImpaired: false,

@@ -6,7 +6,7 @@
 set -e
 
 # Default values (can be overridden)
-PROJECT_NAME="miauflix-dev"
+PROJECT_NAME="miauwatch-dev"
 DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yml"
 
 # Function to extract credentials from logs

@@ -1,5 +1,5 @@
-import type { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor';
-import { Quality } from '@miauflix/source-metadata-extractor';
+import type { AudioCodec, VideoCodec } from '@miauwatch/source-metadata-extractor';
+import { Quality } from '@miauwatch/source-metadata-extractor';
 
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';
 

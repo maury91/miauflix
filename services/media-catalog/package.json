@@ -1,5 +1,5 @@
 {
-  "name": "@miauflix/media-catalog",
+  "name": "@miauwatch/media-catalog",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,10 +14,10 @@
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
-    "@miauflix/anime-mapping": "*",
-    "@miauflix/contract": "*",
-    "@miauflix/service-configuration": "*",
-    "@miauflix/service-contracts": "*",
+    "@miauwatch/anime-mapping": "*",
+    "@miauwatch/contract": "*",
+    "@miauwatch/service-configuration": "*",
+    "@miauwatch/service-contracts": "*",
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-converter": "^4.22.0",
     "@tensorflow/tfjs-core": "^4.22.0",

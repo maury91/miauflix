@@ -49,7 +49,7 @@ describe('ServerPicker', () => {
 
     expect(await screen.findByRole('button', { name: '192.168.1.10:3000' })).toBeTruthy();
     expect(screen.queryByRole('button', { name: '172.17.0.2:3000' })).toBeNull();
-    expect(lookupAnnouncedServers).toHaveBeenCalledWith('https://pair.miauflix.cat');
+    expect(lookupAnnouncedServers).toHaveBeenCalledWith('https://pair.miau.watch');
   });
 
   it('lists the servers the scan finds', async () => {

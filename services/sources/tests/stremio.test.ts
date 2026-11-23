@@ -2,8 +2,8 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
-import { sources } from '@miauflix/service-contracts';
+import { createClient, isContractError, localTransport, management } from '@miauwatch/contract';
+import { sources } from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 
@@ -396,7 +396,7 @@ it('moves the Cardigann Torrentio and its options to the Stremio addon', async (
   const { seal } = createSeal(join(dir, '.key'), 'test');
   old
     .query(
-      "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority,settings) VALUES (?,'cardigann','builtin:miauflix','Torrentio',?,1,12,?)"
+      "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority,settings) VALUES (?,'cardigann','builtin:miauwatch','Torrentio',?,1,12,?)"
     )
     .run(
       TORRENTIO_ID,

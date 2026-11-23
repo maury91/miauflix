@@ -1,4 +1,4 @@
-import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
+import type { MediaDto, PreloadPreparationSnapshot } from '@miauwatch/backend';
 import { formatRuntime, getMediaTitle } from '@shared/lib/media.utils';
 import { qualityLabel, type QualityState, sourceQualityState } from '@shared/lib/source-quality';
 

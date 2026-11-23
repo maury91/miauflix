@@ -1,4 +1,4 @@
-import type { ProviderView } from '@miauflix/backend';
+import type { ProviderView } from '@miauwatch/backend';
 import { Badge, IconButton, Menu, type MenuEntry, Switch } from '@shared/design-system';
 import { useT } from '@shared/i18n';
 import { FocusGroup } from '@shared/navigation';

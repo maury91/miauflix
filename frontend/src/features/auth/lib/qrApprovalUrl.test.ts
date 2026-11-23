@@ -8,8 +8,8 @@ describe('qrApprovalUrl', () => {
   });
 
   it("points at the backend's origin for the TV app", () => {
-    expect(qrApprovalUrl('/auth/qr/request-1', 'https://miauflix.example')).toBe(
-      'https://miauflix.example/auth/qr/request-1'
+    expect(qrApprovalUrl('/auth/qr/request-1', 'https://miauwatch.example')).toBe(
+      'https://miauwatch.example/auth/qr/request-1'
     );
   });
 });

@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import type { ServiceConfigSchema } from '@miauflix/contract';
+import type { ServiceConfigSchema } from '@miauwatch/contract';
 
 import { ConfigurationServiceError } from '@errors/configuration.errors';
 import type { ConfigurableService } from '@mytypes/configuration';

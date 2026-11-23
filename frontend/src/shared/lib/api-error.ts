@@ -1,4 +1,4 @@
-import type { ApiErrorBody } from '@miauflix/backend';
+import type { ApiErrorBody } from '@miauwatch/backend';
 
 /** What to show for a failed request, wherever it is shown. */
 export interface ErrorPresentation {

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-import type { RepositoryView } from '@miauflix/service-contracts';
+import type { RepositoryView } from '@miauwatch/service-contracts';
 
 import type { RepositoryRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
@@ -8,7 +8,7 @@ import { AdminError, LOCAL_REPOSITORY } from '../providers/admin';
 import type { ProviderDefinition } from '../providers/registry';
 import { type ManifestEntry, manifestSchema } from './manifest';
 
-export const BUILTIN_REPOSITORY = 'builtin:miauflix';
+export const BUILTIN_REPOSITORY = 'builtin:miauwatch';
 const MAX_MANIFEST_BYTES = 256 * 1024;
 const REFRESH_AFTER_MS = 24 * 3600_000;
 const definitionOf = (entry: ManifestEntry): ProviderDefinition => ({

@@ -158,7 +158,7 @@ function rewriteRule(rule: Rule): void {
 
 export function legacyChromiumPostcss(): Plugin {
   return {
-    postcssPlugin: 'miauflix-legacy-chromium',
+    postcssPlugin: 'miauwatch-legacy-chromium',
     Once(root) {
       // Rules first: they read the declarations (gap, aspect-ratio) as written
       const rules: Rule[] = [];

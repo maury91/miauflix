@@ -1,4 +1,4 @@
-# Run every Miauwatch service in one container (miauflix-services) instead of three, to save memory
+# Run every Miauwatch service in one container (miauwatch-services) instead of three, to save memory
 # and processes. Usage: add it to COMPOSE_FILE in .env, e.g.
 #   COMPOSE_FILE=docker-compose.yml:docker-compose.all-in-one.yml
 # Guide: docs/setup/docker-setup.md#one-container-for-all-services
@@ -8,24 +8,24 @@
 # can switch back and forth.
 
 services:
-  miauflix:
+  miauwatch:
     environment:
-      BUNQUEUE_HOST: miauflix-services
-      CATALOG_SERVICE_URL: http://miauflix-services:3001
-      LIST_SERVICE_URL: http://miauflix-services:3002
-      SOURCES_SERVICE_URL: http://miauflix-services:3003
-      MEDIA_LOAD_SERVICE_URL: http://miauflix-services:3004
+      BUNQUEUE_HOST: miauwatch-services
+      CATALOG_SERVICE_URL: http://miauwatch-services:3001
+      LIST_SERVICE_URL: http://miauwatch-services:3002
+      SOURCES_SERVICE_URL: http://miauwatch-services:3003
+      MEDIA_LOAD_SERVICE_URL: http://miauwatch-services:3004
     depends_on: !reset
-      miauflix-services:
+      miauwatch-services:
         condition: service_healthy
 
-  miauflix-services:
+  miauwatch-services:
     profiles: !reset [] # Defined, but off, in docker-compose.yml
 
-  # Replaced by miauflix-services
-  miauflix-catalog-services:
+  # Replaced by miauwatch-services
+  miauwatch-catalog-services:
     profiles: [split]
-  miauflix-sources:
+  miauwatch-sources:
     profiles: [split]
-  miauflix-media-load:
+  miauwatch-media-load:
     profiles: [split]

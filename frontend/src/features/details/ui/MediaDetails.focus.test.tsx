@@ -1,4 +1,4 @@
-import type { MediaDto, SeasonResponse, ShowResponse } from '@miauflix/backend';
+import type { MediaDto, SeasonResponse, ShowResponse } from '@miauwatch/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { detailsNavigationActions, detailsNavigationSlice } from '@store/slices/detailsNavigation';
 import { act, fireEvent, render, screen } from '@testing-library/react';

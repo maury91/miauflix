@@ -2,7 +2,7 @@ import { logger } from '@logger';
 import type {
   ListServiceDefinition,
   ListServiceDefinitionsPage,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { Database } from '@database/database';
 import type { MediaList, MediaListItemType } from '@entities/list.entity';

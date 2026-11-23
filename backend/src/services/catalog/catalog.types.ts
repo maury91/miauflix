@@ -4,7 +4,7 @@ export type {
   ConfigVariable as CatalogConfigVariableSchema,
   ServiceConfigApplyResult as CatalogConfigWriteResult,
   ServiceStatus as CatalogStatus,
-} from '@miauflix/contract';
+} from '@miauwatch/contract';
 export type {
   BatchResponse,
   EpisodeDetail,
@@ -19,7 +19,7 @@ export type {
   SeasonDetail,
   SeasonSummary,
   TVShowDetail,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 export class CatalogUnavailableError extends Error {
   constructor(message = 'Media catalog service is unreachable') {

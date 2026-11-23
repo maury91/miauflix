@@ -4,7 +4,7 @@ import type {
   StorageActivity,
   WarmupRangeProgress,
   WarmupResult,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 import type WebTorrent from 'webtorrent';
 
 import type { StorageService } from '../storage/storage.service';

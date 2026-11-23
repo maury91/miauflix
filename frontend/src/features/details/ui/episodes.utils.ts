@@ -1,4 +1,4 @@
-import type { ProgressEntry } from '@miauflix/backend';
+import type { ProgressEntry } from '@miauwatch/backend';
 import { t } from '@shared/i18n';
 
 type EpisodeProgress = Pick<ProgressEntry, 'state' | 'positionSeconds' | 'durationSeconds'>;

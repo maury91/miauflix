@@ -3,7 +3,7 @@ import {
   languagePreferencesOf,
   supportsAutoSubtitles,
 } from '@features/profiles/lib/language-preferences';
-import type { LanguagePreferences } from '@miauflix/backend';
+import type { LanguagePreferences } from '@miauwatch/backend';
 import { List, Message, Section, Select, SettingRow } from '@shared/design-system';
 import type { SelectItems } from '@shared/design-system/option-list/selectItems';
 import {

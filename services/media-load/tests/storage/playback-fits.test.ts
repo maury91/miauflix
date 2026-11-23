@@ -31,7 +31,7 @@ describe('StorageService.playbackFits', () => {
 
   beforeEach(async () => {
     // A real directory; the sizes below are small enough for its free disk space not to matter
-    downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauflix-fits-'));
+    downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauwatch-fits-'));
     database = await testDatabase();
   });
 

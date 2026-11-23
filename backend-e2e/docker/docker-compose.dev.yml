@@ -314,7 +314,7 @@ services:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://graphql.anilist.co
       # Public API: no key, but the mock always sends one header.
-      - API_AUTH_HEADER=x-miauflix-mock
+      - API_AUTH_HEADER=x-miauwatch-mock
       - API_KEY=none
       - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
       - KEY_POST_BY_BODY=true
@@ -338,7 +338,7 @@ services:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://api.ani.zip
       # Public API: no key, but the mock always sends one header.
-      - API_AUTH_HEADER=x-miauflix-mock
+      - API_AUTH_HEADER=x-miauwatch-mock
       - API_KEY=none
       - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
     healthcheck:
@@ -361,7 +361,7 @@ services:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://raw.githubusercontent.com
       # Public API: no key, but the mock always sends one header.
-      - API_AUTH_HEADER=x-miauflix-mock
+      - API_AUTH_HEADER=x-miauwatch-mock
       - API_KEY=none
       - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
     healthcheck:
@@ -377,7 +377,7 @@ services:
 
   # Indexer mock: fictional release data plus the Cardigann definitions that query it
   indexer-mock:
-    image: miauflix-e2e-indexer-mock:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-indexer-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: tmdb.Dockerfile

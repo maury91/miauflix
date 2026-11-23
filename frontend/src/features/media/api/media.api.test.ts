@@ -21,7 +21,7 @@ vi.mock('@features/auth/api/auth.api', () => ({
   authApi: { endpoints: { listSessions: { initiate: vi.fn() } } },
 }));
 
-import type { ProgressEntry } from '@miauflix/backend';
+import type { ProgressEntry } from '@miauwatch/backend';
 import { mediaFromProgress, progressTitle } from '@pages/home/media-mappers';
 
 import { mediaApi, type MediaBatchRef, resetMediaBatchSupport } from './media.api';

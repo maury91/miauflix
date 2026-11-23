@@ -1,5 +1,5 @@
 import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
-import type { ProviderAuthorization } from '@miauflix/service-contracts';
+import type { ProviderAuthorization } from '@miauwatch/service-contracts';
 import { Message, PairingPanel } from '@shared/design-system';
 import { visuallyHidden } from '@shared/design-system/a11y.css';
 import { useT } from '@shared/i18n';

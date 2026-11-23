@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 
-import { BUILT_IN_STATUS, ContractError } from '@miauflix/contract';
+import { BUILT_IN_STATUS, ContractError } from '@miauwatch/contract';
 import { HTTPException } from 'hono/http-exception';
 
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';

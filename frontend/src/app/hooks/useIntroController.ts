@@ -104,10 +104,10 @@ export function useIntroController(
     dispatch(completeIntro());
 
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new Event('miauflix:intro:animation:complete'));
+      window.dispatchEvent(new Event('miauwatch:intro:animation:complete'));
 
       // Expose a flag for automated tests that wait for the intro animation to finish
-      window._miauflixAnimationComplete = true;
+      window._miauwatchAnimationComplete = true;
     }
   }, [dispatch]);
 
@@ -171,7 +171,7 @@ export function useIntroController(
   const handleIntroStart = useCallback(() => {
     if (homeEligibleRef.current && introPhaseRef.current === 'playing') {
       setIntroHasStarted(true);
-      window.dispatchEvent(new Event('miauflix:intro:animation:start'));
+      window.dispatchEvent(new Event('miauwatch:intro:animation:start'));
     }
   }, []);
 

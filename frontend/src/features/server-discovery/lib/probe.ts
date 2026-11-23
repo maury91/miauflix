@@ -24,7 +24,7 @@ export async function probeServer(
     });
     if (!response.ok) return false;
     const body = (await response.json()) as { status?: unknown; service?: unknown };
-    return body.status === 'ok' && (body.service === undefined || body.service === 'miauflix');
+    return body.status === 'ok' && (body.service === undefined || body.service === 'miauwatch');
   } catch {
     return false;
   } finally {

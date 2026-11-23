@@ -1,4 +1,4 @@
-import type { ServiceConfigSchema } from '@miauflix/contract';
+import type { ServiceConfigSchema } from '@miauwatch/contract';
 
 export const createListConfigSchema = (): ServiceConfigSchema => ({
   groups: [
@@ -42,7 +42,7 @@ export const createListConfigSchema = (): ServiceConfigSchema => ({
           required: true,
           inputType: 'text',
           defaultValueSource: 'browser-origin',
-          example: 'https://miauflix.example',
+          example: 'https://miauwatch.example',
           link: 'https://trakt.tv/oauth/applications',
           linkLabel: 'Open Trakt application settings',
         },

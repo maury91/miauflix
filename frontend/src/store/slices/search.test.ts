@@ -1,4 +1,4 @@
-import type { SearchResultDto } from '@miauflix/backend';
+import type { SearchResultDto } from '@miauwatch/backend';
 import { describe, expect, it } from 'vitest';
 
 import { initialSearchState, searchActions, searchSlice, type SearchState } from './search';

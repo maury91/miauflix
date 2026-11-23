@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import type { WarmupRangeProgress, WarmupResult } from '@miauflix/service-contracts';
+import type { WarmupRangeProgress, WarmupResult } from '@miauwatch/service-contracts';
 
 import type { PlaybackTarget } from '@services/playback/playback-target';
 

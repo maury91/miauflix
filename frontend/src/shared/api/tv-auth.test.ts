@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const API = 'https://miauflix.example';
+const API = 'https://miauwatch.example';
 const tokens = { accessToken: 'access-1', refreshToken: 'refresh-1' };
 
 const jsonResponse = (status: number, body: unknown) =>
