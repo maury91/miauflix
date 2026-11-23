@@ -245,6 +245,62 @@ function DownloadingFlow() {
   );
 }
 
+/** Answers the player's thumbnail requests with a drawn frame showing its time, like the backend's. */
+function useFakeThumbnails() {
+  useEffect(() => {
+    const original = window.fetch;
+    window.fetch = async (input, init) => {
+      const url = new URL(String(input), window.location.href);
+      if (!url.pathname.endsWith('/thumbnail')) return original(input, init);
+      const seconds = Number(url.searchParams.get('t'));
+      // A moment to load, as FFmpeg takes
+      await new Promise(resolve => setTimeout(resolve, 250));
+      init?.signal?.throwIfAborted();
+      const label = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="384" height="216"><rect width="384" height="216" fill="hsl(${(seconds * 3) % 360} 45% 35%)"/><text x="192" y="120" font-size="48" font-family="sans-serif" fill="white" text-anchor="middle">${label}</text></svg>`;
+      return new Response(new Blob([svg], { type: 'image/svg+xml' }));
+    };
+    return () => {
+      window.fetch = original;
+    };
+  }, []);
+}
+
+/**
+ * Seek previews. `strip` (the TV): Left/Right on the video or play/pause opens five frames 10 s
+ * apart above the bar; Enter seeks there, Escape (Back) closes it. `hover` (the web): a mouse over
+ * the seek bar shows the frame there.
+ */
+function SeekPreviewFlow({ seekPreview }: { seekPreview: 'strip' | 'hover' }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useFakeThumbnails();
+  return (
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', background: 'black' }}>
+      <video ref={videoRef} aria-label="Seek preview fixture video" />
+      <PlayerScope>
+        <PlayerControls
+          videoRef={videoRef}
+          durationSeconds={1400}
+          onBack={() => {}}
+          subtitleCandidates={[]}
+          subtitleConfigured={false}
+          subtitleAvailable={false}
+          subtitleLoading={false}
+          subtitleMessage=""
+          selectedSubtitleId={null}
+          subtitleOffset={0}
+          onSearchSubtitles={() => {}}
+          onSelectSubtitle={() => {}}
+          onSubtitleOffsetChange={() => {}}
+          subtitlePreferencesKey={null}
+          thumbnailSource="/api/stream/fixture"
+          seekPreview={seekPreview}
+        />
+      </PlayerScope>
+    </div>
+  );
+}
+
 const meta = {
   title: 'Home/Player controls',
   component: RemoteSubtitleFlow,
@@ -255,3 +311,9 @@ type Story = StoryObj<typeof meta>;
 export const RemoteSubtitles: Story = {};
 export const DownloadedPieces: Story = { render: () => <DownloadingFlow /> };
 export const AudioPanel: Story = { render: () => <AudioFlow /> };
+export const SeekPreviewStrip: Story = {
+  render: () => <SeekPreviewFlow seekPreview="strip" />,
+};
+export const SeekPreviewHover: Story = {
+  render: () => <SeekPreviewFlow seekPreview="hover" />,
+};

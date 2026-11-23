@@ -2,6 +2,17 @@
 
 Implementation and upgrade notes. For a shorter overview, see the [release notes](CHANGELOG.md).
 
+## Unreleased
+
+### Playback
+
+- Seek previews: frames above the seek bar, and a single seek per remote scrub on the TV.
+  - `GET /api/stream/:token/thumbnail?t=<seconds>` returns a JPEG (at most 384×216) of the keyframe at or before `t`, snapped down to the 10-second grid. `SeekThumbnailService` runs FFmpeg with `-skip_frame nokey -ss <t> -noaccurate_seek`, so each frame needs one GOP's bytes and one decode. It reads the source through `openSourceInput` as a speculative read, which yields bandwidth to playback. It keeps 600 frames in memory, runs at most three FFmpeg processes across viewers and queues the rest. A finished capture hands its slot straight to the next queued request, and closing the service cancels queued ones. Requests for the same frame share one process, which stops once every request for it is aborted. A frame times out after 20 s (504), and a position past the last keyframe returns 404. The route allows 600 requests a minute and is cached `private, max-age=3600`.
+  - Frontend: `SeekThumbnailLoader` (`features/player/lib/seek-thumbnails`) fetches frames, keeps 80 as blob URLs and aborts requests for views that went away. `PlayerControls` takes `thumbnailSource` (the session's stream URL) and `seekPreview`, which defaults to `strip` on Tizen and `hover` elsewhere.
+  - `strip`: the first Left/Right (on the video, on play/pause, or with the controls hidden) pauses the video and opens `SeekThumbnailStrip` on the nearest grid moment in that direction. Each later press moves 10 s, and the seek bar shows the selected time. Confirm, Play or Play/Pause seeks once and plays; converted streams get `onSeek(position, true)`, and `seekConvertedAudio` accepts the same `play` flag. Back closes the strip without seeking and resumes playback if the video was playing. The player's capture-phase key listener consumes these keys while the strip is open, so Back does not leave the player. Five tiles sit 24% wide, the selected one centred and outlined, the outer two cut off at the edges. Tiles are keyed by time and slide on each step. While the strip is open, the controls stay visible.
+  - `hover`: `Slider` reports the hovered share through `onPointerPreviewChange`. `SeekControl` takes `hoverPreview(seconds)` and places it over the pointer, clamped within the bar. The player shows `SeekThumbnailBubble` with the frame and its time.
+  - Storybook: `Home/Player controls` has `SeekPreviewStrip` and `SeekPreviewHover`, with drawn stand-in frames.
+
 ## 2026-11-23 v0.4.0 Rename into Miauwatch
 
 ### Rename and upgrade

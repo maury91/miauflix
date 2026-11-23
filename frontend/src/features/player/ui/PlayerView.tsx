@@ -500,6 +500,7 @@ function PlayerScreen({
                 onOpenChange: audioSources.onPanelOpenChange,
               }}
               onSeek={audioDelivery ? audio.seekConvertedAudio : undefined}
+              thumbnailSource={session.streamUrl}
             />
             <p
               className={styles.videoStatus}

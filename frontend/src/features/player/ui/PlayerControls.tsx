@@ -1,4 +1,10 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
+import {
+  firstStripStop,
+  lastGridStop,
+  SeekThumbnailLoader,
+  THUMBNAIL_STEP_SECONDS,
+} from '@features/player/lib/seek-thumbnails';
 import { downloadedBlocks, type DownloadedRanges } from '@features/player/lib/seek-track';
 import type { SubtitleCandidateDto } from '@miauwatch/backend';
 import { brandLogoUrl } from '@shared/brand/logo/brandLogo';
@@ -23,12 +29,14 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 
 import { AudioMenu, type AudioMenuProps, type AudioTrack } from './AudioMenu';
 import * as styles from './playerControls.css';
+import { SeekThumbnailBubble, SeekThumbnailStrip } from './SeekThumbnails';
 import { SubtitleMenu } from './SubtitleMenu';
 import type { SubtitleTimingCue } from './SubtitleTiming';
 
@@ -127,6 +135,12 @@ function formatTime(seconds: number) {
  * wherever focus is; paused, they stay. While they are hidden, an arrow shows them with the focus
  * on play/pause (Left/Right also seek); Confirm on a hidden control only shows it (media keys and
  * Back still act).
+ *
+ * Seeking with the remote differs on the TV (`seekPreview="strip"`): the first Left/Right pauses
+ * the video and opens a strip of frames on the 10-second grid at the nearest moment that way, the
+ * next ones move along it, Confirm or Play seeks there and plays, and Back closes it where the video
+ * was. Nothing seeks until then, so a run of presses costs one seek. On the web a mouse hovering the
+ * seek bar previews the frame there instead.
  */
 export function PlayerControls({
   videoRef,
@@ -160,6 +174,8 @@ export function PlayerControls({
   onHeaderInsetChange,
   prompts,
   languageButtons,
+  thumbnailSource,
+  seekPreview = builtForTizen ? 'strip' : 'hover',
 }: {
   videoRef: RefObject<PlayerMedia | null>;
   preparing?: boolean;
@@ -184,7 +200,8 @@ export function PlayerControls({
   /** The player element the subtitle panel is drawn over (it is the full-screen element too). */
   overlayContainer?: HTMLElement | null;
   durationSeconds?: number;
-  onSeek?: (position: number) => void;
+  /** Seeks the converted stream; `play` asks for playback afterwards whatever it was before. */
+  onSeek?: (position: number, play?: boolean) => void;
   pendingPosition?: number;
   audioTracks?: AudioTrack[];
   selectedAudioTrackIndex?: number;
@@ -210,13 +227,30 @@ export function PlayerControls({
   prompts?: ReactNode;
   /** The ways to watch (LanguageButtons), at the start of the row under the seek bar. */
   languageButtons?: ReactNode;
+  /** The session's stream URL, whose seek thumbnails are shown; without it there are none. */
+  thumbnailSource?: string;
+  /** How seeking previews frames: the remote's strip (TV) or a frame over the hovered bar (web). */
+  seekPreview?: 'strip' | 'hover';
 }) {
   const t = useT();
   const [paused, setPaused] = useState(true);
   const [mediaReady, setMediaReady] = useState(false);
   const loading = preparing || !mediaReady;
   const [nativePosition, setPosition] = useState(0);
-  const position = pendingPosition ?? nativePosition;
+  /** The TV's seek preview while open: the selected moment, and whether to play on if cancelled. */
+  const [strip, setStrip] = useState<{ at: number; resume: boolean } | null>(null);
+  const stripRef = useRef(strip);
+  const updateStrip = (next: { at: number; resume: boolean } | null) => {
+    // Read again by the next key press before React renders
+    stripRef.current = next;
+    setStrip(next);
+  };
+  const position = strip?.at ?? pendingPosition ?? nativePosition;
+  const thumbnails = useMemo(
+    () => (thumbnailSource ? new SeekThumbnailLoader(thumbnailSource) : null),
+    [thumbnailSource]
+  );
+  useEffect(() => () => thumbnails?.dispose(), [thumbnails]);
   const requestedPosition = useRef(pendingPosition);
   useLayoutEffect(() => {
     requestedPosition.current = pendingPosition;
@@ -240,7 +274,7 @@ export function PlayerControls({
     setVisible(true);
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      if (!menuOpen.current) setVisible(false);
+      if (!menuOpen.current && !stripRef.current) setVisible(false);
     }, HIDE_AFTER_MS);
   }, []);
   const onMenuOpenChange = useCallback(
@@ -296,6 +330,11 @@ export function PlayerControls({
   const toggle = () => {
     const media = videoRef.current;
     if (!media) return;
+    // A pointer playing or pausing leaves the seek preview where the video is
+    if (stripRef.current) {
+      stripRef.current = null;
+      setStrip(null);
+    }
     if (media.paused) {
       void media
         .play()
@@ -333,6 +372,68 @@ export function PlayerControls({
     const base = requested ?? videoRef.current?.currentTime ?? 0;
     seek(base + delta);
   };
+  /** One remote step: along the strip (TV), else a seek by SEEK_STEP_SECONDS. */
+  const stepStrip = (direction: 1 | -1) => {
+    const media = videoRef.current;
+    if (!media || duration <= 0) return;
+    const open = stripRef.current;
+    if (open) {
+      const at = Math.min(
+        lastGridStop(duration),
+        Math.max(0, open.at + direction * THUMBNAIL_STEP_SECONDS)
+      );
+      updateStrip({ ...open, at });
+    } else {
+      const requested = onSeek ? requestedPosition.current : undefined;
+      const resume = !media.paused;
+      if (resume) media.pause();
+      updateStrip({
+        at: firstStripStop(requested ?? media.currentTime, direction, duration),
+        resume,
+      });
+    }
+    reveal();
+  };
+  /**
+   * Confirm or Play on the strip: close it, show the chosen moment on the bar, then seek there and
+   * play. AVPlay's seek blocks the page until the bytes there arrive (seconds, for a part not yet
+   * downloaded), so it waits until the closed strip is on screen instead of freezing it there.
+   */
+  const commitStrip = () => {
+    const open = stripRef.current;
+    if (!open) return;
+    updateStrip(null);
+    if (onSeek) requestedPosition.current = open.at;
+    setPosition(open.at);
+    reveal();
+    // After the next paint: the frame that already shows the strip closed
+    requestAnimationFrame(() =>
+      setTimeout(() => {
+        const media = videoRef.current;
+        if (!media) return;
+        if (onSeek) onSeek(open.at, true);
+        else {
+          media.currentTime = open.at;
+          void media
+            .play()
+            .then(() => setNotice(''))
+            .catch(() => setNotice(t('player.playFailed')));
+        }
+      }, 0)
+    );
+  };
+  /** Back on the strip: close it without seeking, playing on if it was playing. */
+  const cancelStrip = () => {
+    const open = stripRef.current;
+    if (!open) return;
+    updateStrip(null);
+    if (open.resume) void videoRef.current?.play().catch(() => setNotice(t('player.playFailed')));
+    reveal();
+  };
+  const stripMode = seekPreview === 'strip';
+  const step = (direction: 1 | -1) =>
+    stripMode ? stepStrip(direction) : seekBy(direction * SEEK_STEP_SECONDS);
+
   // Play/pause takes the focus once the controls it was hidden with are back (a hidden control
   // can't take DOM focus)
   const [focusPlayWhenShown, setFocusPlayWhenShown] = useState(false);
@@ -356,8 +457,8 @@ export function PlayerControls({
   }, [navigation, shown]);
 
   // The latest values, for the key listener below
-  const keys = useRef({ shown, seekBy, reveal });
-  keys.current = { shown, seekBy, reveal };
+  const keys = useRef({ shown, step, reveal, commitStrip, cancelStrip });
+  keys.current = { shown, step, reveal, commitStrip, cancelStrip };
 
   /**
    * Any key shows the controls again. On the video and on play/pause, Left and Right seek. While the
@@ -369,22 +470,42 @@ export function PlayerControls({
   useLayoutEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.isComposing) return;
-      const { shown: controlsShown, seekBy: seekStep, reveal: show } = keys.current;
+      const { shown: controlsShown, step: seekStep, reveal: show } = keys.current;
       const action = getKeyboardAction(event);
       const horizontal = action === 'left' || action === 'right';
       const vertical = action === 'up' || action === 'down';
+      // The open strip has the remote: nothing else (the focused control, Back) sees its keys
+      if (stripRef.current && action) {
+        const own =
+          horizontal ||
+          vertical ||
+          action === 'confirm' ||
+          action === 'play' ||
+          action === 'playPause' ||
+          action === 'back';
+        if (own) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+        if (horizontal) seekStep(action === 'left' ? -1 : 1);
+        else if (action === 'confirm' || action === 'play' || action === 'playPause')
+          keys.current.commitStrip();
+        else if (action === 'back') keys.current.cancelStrip();
+        else show();
+        return;
+      }
       if (!controlsShown && (horizontal || vertical)) {
         event.preventDefault();
         show();
         setFocusPlayWhenShown(true);
-        if (horizontal) seekStep(action === 'left' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
+        if (horizontal) seekStep(action === 'left' ? -1 : 1);
         return;
       }
       // Play/pause sits beside the seek bar, which the remote doesn't stop on: Left/Right on it seek
       const playFocused = navigation.getActiveId() === PLAYER_NAV.playPause;
       if (horizontal && (videoFocused.current || playFocused)) {
         event.preventDefault();
-        seekStep(action === 'left' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
+        seekStep(action === 'left' ? -1 : 1);
         return;
       }
       if (!controlsShown && action === 'confirm' && !videoFocused.current) {
@@ -439,6 +560,7 @@ export function PlayerControls({
   onInsetRef.current = onControlsInsetChange;
   const onHeaderInsetRef = useRef(onHeaderInsetChange);
   onHeaderInsetRef.current = onHeaderInsetChange;
+  const stripOpen = strip !== null;
   // From the bottom of the player to the top of the controls' content
   useLayoutEffect(() => {
     const measure = (): void => {
@@ -460,7 +582,7 @@ export function PlayerControls({
     if (!shown) return;
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
-  }, [shown, notice]);
+  }, [shown, notice, stripOpen]);
   // A layout cleanup, so a replaced (keyed) instance resets before its successor measures.
   useLayoutEffect(
     () => () => {
@@ -494,6 +616,9 @@ export function PlayerControls({
         </FocusGroup>
       </SurfaceContextProvider>
       <div ref={controls} className={styles.controls}>
+        {strip && thumbnails && (
+          <SeekThumbnailStrip loader={thumbnails} selected={strip.at} duration={duration} />
+        )}
         {notice && (
           <div className={styles.notice}>
             <Message tone="danger" toneLabel={t('common.error')} variant="banner" live="assertive">
@@ -520,6 +645,17 @@ export function PlayerControls({
               elapsedText={formatTime(position)}
               remainingText={formatTime(duration)}
               downloaded={downloadedBlocks(downloadedRanges)}
+              hoverPreview={
+                seekPreview === 'hover' && thumbnails
+                  ? seconds => (
+                      <SeekThumbnailBubble
+                        loader={thumbnails}
+                        seconds={seconds}
+                        time={formatTime(seconds)}
+                      />
+                    )
+                  : undefined
+              }
             />
           }
           primary={

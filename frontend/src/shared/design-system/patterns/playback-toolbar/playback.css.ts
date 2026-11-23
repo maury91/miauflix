@@ -108,8 +108,19 @@ export const time = style({
 });
 
 export const bar = style({
+  position: 'relative',
   flex: '1 1 auto',
   minWidth: 0,
+});
+
+/** What a mouse hovering the bar previews (a frame), above the bar, placed by translate. */
+export const hoverPreview = style({
+  position: 'absolute',
+  bottom: '100%',
+  left: 0,
+  marginBottom: space.sm,
+  pointerEvents: 'none',
+  zIndex: 1,
 });
 
 /** A downloaded stretch: light grey over the track, under the watched fill. */

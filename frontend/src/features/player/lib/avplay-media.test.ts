@@ -113,6 +113,47 @@ describe('AvplayMedia', () => {
     expect(events.slice(-3)).toEqual(['play', 'playing', 'pause']);
   });
 
+  it('pauses once a seek lands when AVPlay refuses to pause during it', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    let landed: (() => void) | undefined;
+    avplay.seekTo.mockImplementation((_milliseconds: number, onSuccess?: () => void) => {
+      landed = onSuccess;
+    });
+    media.open('https://miauwatch.example/stream', element);
+    prepare();
+    await media.play();
+    media.currentTime = 60;
+    avplay.pause.mockImplementationOnce(() => {
+      throw new Error('PLAYER_ERROR_INVALID_OPERATION');
+    });
+
+    media.pause();
+    expect(media.paused).toBe(true);
+    expect(avplay.pause).toHaveBeenCalledTimes(1);
+
+    landed?.();
+    expect(avplay.pause).toHaveBeenCalledTimes(2);
+    expect(media.paused).toBe(true);
+  });
+
+  it('still reports playing when AVPlay refuses a pause outside a seek', async () => {
+    const { avplay, media, element, prepare } = setupTest();
+    media.open('https://miauwatch.example/stream', element);
+    prepare();
+    await media.play();
+    avplay.pause.mockImplementationOnce(() => {
+      throw new Error('PLAYER_ERROR_INVALID_OPERATION');
+    });
+
+    media.pause();
+
+    expect(media.paused).toBe(false);
+    // A later pause is not skipped as already done
+    media.pause();
+    expect(avplay.pause).toHaveBeenCalledTimes(2);
+    expect(media.paused).toBe(true);
+  });
+
   it('applies a seek made before preparing once prepared', () => {
     const { avplay, media, element, prepare } = setupTest();
     media.open('https://miauwatch.example/stream', element);

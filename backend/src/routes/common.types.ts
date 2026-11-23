@@ -11,6 +11,7 @@ import type { NotificationService } from '@services/notifications/notification.s
 import type { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import type { AudioSourcesService } from '@services/playback/audio-sources.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
+import type { SeekThumbnailService } from '@services/playback/seek-thumbnail.service';
 import type { StreamService } from '@services/playback/stream.service';
 import type { TvRemuxService } from '@services/playback/tv-remux.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
@@ -52,6 +53,7 @@ export interface Deps {
   playbackSessionService: PlaybackSessionService;
   audioSourcesService: AudioSourcesService;
   audioPlaybackService: AudioPlaybackService;
+  seekThumbnailService: SeekThumbnailService;
   tvRemuxService: TvRemuxService;
   profileService: ProfileService;
   progressService: ProgressService;

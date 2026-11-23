@@ -400,8 +400,31 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
 
   pause(): void {
     if (this.isPaused) return;
+    if (this.prepared) {
+      try {
+        this.avplay.pause();
+      } catch {
+        // AVPlay refuses to pause while it is still answering a seek (Tizen 5.5, "invalid
+        // operation" in PLAYING): it pauses once the seek lands. Refused otherwise, it plays on,
+        // and so does what this reports, or the next pause would think it has nothing to do.
+        if (!this.seeking) return;
+        const generation = this.generation;
+        this.addEventListener(
+          'seeked',
+          () => {
+            if (generation !== this.generation || !this.isPaused) return;
+            try {
+              this.avplay.pause();
+            } catch {
+              this.isPaused = false;
+              this.emit('play');
+            }
+          },
+          { once: true }
+        );
+      }
+    }
     this.isPaused = true;
-    if (this.prepared) this.avplay.pause();
     this.emit('pause');
   }
 

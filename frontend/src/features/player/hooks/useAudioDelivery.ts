@@ -70,10 +70,14 @@ export function useAudioDelivery({
   const audioDeliveryRef = useRef(audioDelivery);
   audioDeliveryRef.current = audioDelivery;
 
-  /** Converted audio restarts the conversion at the new position; anything else seeks itself. */
+  /**
+   * Converted audio restarts the conversion at the new position; anything else seeks itself. It
+   * plays on as before unless `play` says otherwise (the TV's seek preview paused it to choose).
+   */
   const seekConvertedAudio = useCallback(
-    (position: number) => {
-      const autoplay = audioPreparing.current ? audioSeek.autoplay : !videoRef.current?.paused;
+    (position: number, play?: boolean) => {
+      const autoplay =
+        play ?? (audioPreparing.current ? audioSeek.autoplay : !videoRef.current?.paused);
       resumeApplied.current = true;
       audioPreparing.current = true;
       setPendingPosition(position);
