@@ -151,6 +151,12 @@ export function AppShell() {
   useEffect(() => {
     logoWasHiddenRef.current = logoPosition === 'none';
   }, [logoPosition]);
+  // The loading logo is an element of its own: when the app opens on a page, that page's logo
+  // takes its place rather than sliding there from the centre. From then on one logo moves between
+  // pages, and to the centre for Home's intro (after choosing a profile, say).
+  const leftLoadingLogoRef = useRef(false);
+  if (logoPosition !== 'intro') leftLoadingLogoRef.current = true;
+  const logoElement = leftLoadingLogoRef.current ? 'page' : 'loading';
   const logoMotionDisabled =
     (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);
@@ -255,6 +261,7 @@ export function AppShell() {
   return (
     <ErrorBoundary>
       <Logo
+        key={logoElement}
         position={logoPosition}
         homeLeft={homeLeft}
         disableMotion={logoMotionDisabled}
@@ -274,11 +281,10 @@ export function AppShell() {
       {homeEligible && introPhase !== 'complete' && (
         <IntroAnimation
           ref={logoRef}
-          autoStart={false}
-          // No blur or layer hints on the TV, as the legacy app did
+          // No blur on the TV
           lowResourceAnimation={builtForTizen}
-          // On the TV the letters show, under the identical settled logo, before the audio starts:
-          // painting them on the first beat stalled it for about 250 ms
+          // On the TV the wordmark shows, under the identical settled logo, before the intro
+          // starts: painting it on the first frame stalled it for about 250 ms
           logoVisible={introPhase === 'playing' || (builtForTizen && logoSettled)}
           onStart={handleIntroStart}
           onReady={handleIntroReady}

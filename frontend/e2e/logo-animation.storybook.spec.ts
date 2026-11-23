@@ -37,7 +37,7 @@ const PROGRESS_BAR_STYLES = `
 
 /**
  * Screenshot tests for logo animation at various progress points
- * Tests the IntroAnimation component through Storybook stories
+ * Tests the intro (collapse, blink, expand) through its Full Intro story
  */
 test.describe('Logo Animation - Storybook Visual Tests', () => {
   const STORYBOOK_BASE_URL = 'http://localhost:6006/iframe.html';
@@ -98,16 +98,16 @@ test.describe('Logo Animation - Storybook Visual Tests', () => {
         screenshotName: `logo-animation-composite-4x4${lowResourceAnimation ? '-low-resource' : ''}.png`,
         styles: PROGRESS_BAR_STYLES,
         async prepare() {
+          // Storybook reads booleans in the URL as `!true` / `!false`
           const args = {
-            seekPosition: testPoints[0],
-            showInfo: false,
-            backgroundImage: true,
-            lowResourceAnimation: lowResourceAnimation,
+            autoStart: '!false',
+            loop: '!false',
+            lowResourceAnimation: `!${lowResourceAnimation}`,
           };
 
           const url = buildStorybookUrl(
             STORYBOOK_BASE_URL,
-            'animations-intro-animation--interactive-controls',
+            'animations-intro-full-intro--full-intro',
             args
           );
 

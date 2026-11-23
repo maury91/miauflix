@@ -3,6 +3,9 @@ export interface ProbeOptions {
   signal?: AbortSignal;
 }
 
+/** The names a server's health check may give: servers from before the rename answer `miauflix`. */
+const SERVICE_NAMES: readonly unknown[] = ['miauwatch', 'miauflix'];
+
 /**
  * Whether a Miauwatch server answers at `url` (an origin), by its unauthenticated health check.
  * Servers from before the health check named the service only answer `status: 'ok'`.
@@ -24,7 +27,9 @@ export async function probeServer(
     });
     if (!response.ok) return false;
     const body = (await response.json()) as { status?: unknown; service?: unknown };
-    return body.status === 'ok' && (body.service === undefined || body.service === 'miauwatch');
+    return (
+      body.status === 'ok' && (body.service === undefined || SERVICE_NAMES.includes(body.service))
+    );
   } catch {
     return false;
   } finally {

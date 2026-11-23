@@ -6,6 +6,7 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 
 - Miauflix is now Miauwatch, with a new wordmark and icon for the web and Samsung TV apps. Existing installs can upgrade in place.
 - The rename now covers the Docker images (`miauwatch`, `miauwatch-sources`, …), the compose services, the `MIAUWATCH_*` settings and the `pair.miau.watch` pairing service. Existing installs keep updating: the old image names are still published and `MIAUFLIX_*` settings still work. To move over, download the new `update.sh` and run `./update.sh --files`. It renames the settings in `.env` and the services in your own compose files, and keeps your data. Signed-in TVs and saved preferences carry over.
+- The Samsung TV app connects to servers that haven't been updated to Miauwatch yet. Before, it didn't recognise them and showed the server picker.
 
 ### Languages
 
@@ -27,7 +28,8 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 - Moving through a number setting without changing it no longer rounds its saved value. On a TV, the approve-sign-in page selects Approve as soon as it appears, and copying the Trakt code no longer moves the selection. Closing the Trakt dialog with the keyboard gives control straight back to Home.
 - Clicking a text field in settings, the profile editor or search lets you type in it again; before, the field looked selected but ignored the keyboard.
 
-- The logo now stays in one place on each page: lined up with the cards on Home, with the title's information on details, and in the same spot on search, settings and profile pages. Sign-in, setup and the first-run configuration show a still logo that is always on screen, and the loading logo pulses from the moment the page appears.
+- The logo now stays in one place on each page: lined up with the cards on Home, with the title's information on details, and in the same spot on search, settings and profile pages. Sign-in, setup and the first-run configuration show a still logo that is always on screen, and the loading logo pulses from the moment the page appears. When the app opens on a page such as Who's watching, the logo appears in its corner instead of sliding there from the loading logo.
+- A new intro plays when Home opens: the wordmark folds into its cat-shaped M, the cat blinks on each beat of the intro sound, then the M flies towards you and Home appears through the cat's face.
 
 ### Self-hosting
 

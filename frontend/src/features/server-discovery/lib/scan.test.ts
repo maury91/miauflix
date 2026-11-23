@@ -11,13 +11,15 @@ afterEach(() => {
 });
 
 describe('probeServer', () => {
-  it('accepts Miauwatch servers, with or without the service name', async () => {
+  it('accepts Miauwatch servers, with or without the service name, and under the old name', async () => {
     const fetchMock = vi.fn<typeof fetch>();
     vi.stubGlobal('fetch', fetchMock);
 
     fetchMock.mockResolvedValueOnce(health({ status: 'ok', service: 'miauwatch' }));
     expect(await probeServer('http://a')).toBe(true);
     fetchMock.mockResolvedValueOnce(health({ status: 'ok' }));
+    expect(await probeServer('http://a')).toBe(true);
+    fetchMock.mockResolvedValueOnce(health({ status: 'ok', service: 'miauflix' }));
     expect(await probeServer('http://a')).toBe(true);
     fetchMock.mockResolvedValueOnce(health({ status: 'ok', service: 'other' }));
     expect(await probeServer('http://a')).toBe(false);
