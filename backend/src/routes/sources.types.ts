@@ -6,7 +6,7 @@ export type {
   ProviderSetting,
   ProviderView,
   RepositoryView,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 export type UpdateProviderRequest = {
   enabled?: boolean;

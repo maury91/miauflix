@@ -118,8 +118,11 @@ export class AuthService {
   private readonly userRepository: UserRepository;
   private readonly refreshTokenRepository: RefreshTokenRepository;
   private secretKey: Uint8Array;
-  private readonly issuer = 'miauflix-api';
-  private readonly audience = 'miauflix-client';
+  private readonly issuer = 'miauwatch-api';
+  private readonly audience = 'miauwatch-client';
+  // Access tokens signed before the rename to Miauwatch stay valid until they expire
+  private readonly acceptedIssuers = [this.issuer, 'miauflix-api'];
+  private readonly acceptedAudiences = [this.audience, 'miauflix-client'];
   private readonly sessionChecks = new Map<string, SessionCheck>();
   /**
    * Lookups that have not settled yet, by `userId:session`, kept apart from the cache (whose
@@ -473,8 +476,8 @@ export class AuthService {
   async verifyAccessToken(token: string) {
     try {
       const { payload } = await jwtVerify<JWTPayload & { userId: string }>(token, this.secretKey, {
-        issuer: this.issuer,
-        audience: this.audience,
+        issuer: this.acceptedIssuers,
+        audience: this.acceptedAudiences,
       });
 
       if (!validateTokenPayload(payload)) {

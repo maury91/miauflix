@@ -1,5 +1,5 @@
 import { mediaApi } from '@features/media/api/media.api';
-import type { MovieResponse, ProgressEntry, ShowResponse } from '@miauflix/backend';
+import type { MovieResponse, ProgressEntry, ShowResponse } from '@miauwatch/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { describe, expect, it } from 'vitest';
 

@@ -1,4 +1,4 @@
-import type { ProgressEntry } from '@miauflix/backend';
+import type { ProgressEntry } from '@miauwatch/backend';
 
 /**
  * Whether Continue watching offers `entry`: not completed, and past the first five seconds and

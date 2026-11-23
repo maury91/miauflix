@@ -1,4 +1,4 @@
-import type { PiecesUpdate } from '@miauflix/service-contracts';
+import type { PiecesUpdate } from '@miauwatch/service-contracts';
 
 import { logger } from '../lib/logger';
 import type { BitfieldChange, StorageRepository } from './storage.repository';

@@ -1,5 +1,5 @@
 import type { AppRoute } from '@app/router';
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto } from '@miauwatch/backend';
 import { describe, expect, it } from 'vitest';
 
 import { playableForRoute, routeTitle, selectedMediaFor, viewForRoute } from './useMediaRoute';

@@ -1,5 +1,5 @@
 {
-  "name": "@miauflix/list-service",
+  "name": "@miauwatch/list-service",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,9 +11,9 @@
     "test": "bun test --pass-with-no-tests"
   },
   "dependencies": {
-    "@miauflix/contract": "*",
-    "@miauflix/service-contracts": "*",
-    "@miauflix/service-configuration": "*",
+    "@miauwatch/contract": "*",
+    "@miauwatch/service-contracts": "*",
+    "@miauwatch/service-configuration": "*",
     "zod": "4.1.12"
   },
   "devDependencies": {

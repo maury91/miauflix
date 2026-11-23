@@ -7,7 +7,7 @@ import type {
   SearchResultDetailDto,
   SearchResultDto,
   SearchServerMessage,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { clearAuth, setSession } from '@store/slices/auth';
 

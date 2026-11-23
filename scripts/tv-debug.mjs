@@ -5,7 +5,7 @@
 // for Chrome's chrome://inspect and scripts/tv-bench.mjs.
 //
 // Usage: node scripts/tv-debug.mjs <tv-ip> [app id] [local port]
-//   tv-ip     the TV (or MIAUFLIX_TV_IP); `apps2samsung-cli scan` finds it. Developer Mode must
+//   tv-ip     the TV (or MIAUWATCH_TV_IP); `apps2samsung-cli scan` finds it. Developer Mode must
 //             point to this machine, and nothing else may hold the TV's SDB connection (the
 //             Apps2Samsung desktop app does while it's open: quit it first)
 //   app id    default 8nvJKZYaJb.Mauflix (frontend/tizen/config.xml)
@@ -16,7 +16,7 @@
 import net from 'node:net';
 
 const args = process.argv.slice(2);
-const tvIp = args[0] ?? process.env.MIAUFLIX_TV_IP;
+const tvIp = args[0] ?? process.env.MIAUWATCH_TV_IP;
 const appId = args[1] ?? '8nvJKZYaJb.Mauflix';
 const localPort = Number(args[2] ?? 9222);
 if (!tvIp) {

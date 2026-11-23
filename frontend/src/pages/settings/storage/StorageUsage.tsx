@@ -22,7 +22,7 @@ export function StorageUsage({ usage }: { usage: Usage }) {
   const { totalBytes, segments, usedBytes, freeBytes, limitBytes, reserveBytes, chargedBytes } =
     usage;
   const limitShare = limitBytes === null ? null : Math.min(1, limitBytes / totalBytes);
-  const miauflix = segments.filter(segment => segment.category !== 'other');
+  const miauwatch = segments.filter(segment => segment.category !== 'other');
   const other = segments.find(segment => segment.category === 'other');
   // The playback reserve is free space held back: drawn next to Miauwatch's data, so the rest of
   // the free space stays one stretch, with the limit marked in it
@@ -66,7 +66,7 @@ export function StorageUsage({ usage }: { usage: Usage }) {
       </div>
       <div className={styles.meter} aria-hidden="true">
         <div className={styles.track}>
-          {miauflix.map(bar)}
+          {miauwatch.map(bar)}
           {shownReserve > 0 && (
             <span
               className={`${styles.segment} ${styles.reserve}`}
@@ -86,7 +86,7 @@ export function StorageUsage({ usage }: { usage: Usage }) {
         )}
       </div>
       <ul className={styles.legend} aria-label={t('storage.spaceByKind')}>
-        {miauflix.map(legend)}
+        {miauwatch.map(legend)}
         {shownReserve > 0 && (
           <LegendItem
             swatch={styles.reserveSwatch}

@@ -1,4 +1,4 @@
-import { randomPlushieLook } from '@miauflix/service-contracts';
+import { randomPlushieLook } from '@miauwatch/service-contracts';
 
 import type { AvatarLook } from '@mytypes/avatar.types';
 

@@ -29,7 +29,7 @@ export const Intro: Story = {
           style={{
             width: '100vw',
             height: '100vh',
-            background: 'url(/src/assets/test-backgrounds/miauflix-interface.svg)',
+            background: 'url(/src/assets/test-backgrounds/miauwatch-interface.svg)',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
@@ -190,7 +190,7 @@ export const InteractiveControls: InteractiveControlsStory = {
             justifyContent: 'center',
             backgroundColor: args.backgroundImage ? 'rgb(35 43 57)' : args.backgroundColor,
             backgroundImage: args.backgroundImage
-              ? 'url(/src/assets/test-backgrounds/miauflix-interface.svg)'
+              ? 'url(/src/assets/test-backgrounds/miauwatch-interface.svg)'
               : 'none',
             backgroundSize: 'contain',
             backgroundPosition: 'center',

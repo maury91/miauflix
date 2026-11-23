@@ -1,3 +1,3 @@
-import type { MovieResponse, ShowResponse } from '@miauflix/backend';
+import type { MovieResponse, ShowResponse } from '@miauwatch/backend';
 
 export type MediaDto = MovieResponse | ShowResponse;

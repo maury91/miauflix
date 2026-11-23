@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Updates a prebuilt-image deployment to the newest images of the tag in use (MIAUFLIX_VERSION).
+# Updates a prebuilt-image deployment to the newest images of the tag in use (MIAUWATCH_VERSION).
 # Keep it next to docker-compose.yml and its .env, then run it from anywhere:
 #   ./update.sh            pull the images, recreate what changed, wait until healthy
 #   ./update.sh --files    also download the newest compose files from GitHub first
-# Guide: docs/setup/docker-setup.md#updating-miauflix
+# Guide: docs/setup/docker-setup.md#updating-miauwatch
 set -euo pipefail
 
-REPO_RAW="https://raw.githubusercontent.com/maury91/miauflix"
-FILES_REF="${MIAUFLIX_FILES_REF:-main}"
+REPO_RAW="https://raw.githubusercontent.com/maury91/miauwatch"
+FILES_REF="${MIAUWATCH_FILES_REF:-main}"
 # Compose files published in the repository; anything else in COMPOSE_FILE is yours and left alone
 UPSTREAM_FILES="docker-compose.yml docker-compose.vpn.yml docker-compose.all-in-one.yml docker-compose.https.yml docker-compose.flaresolverr.yml docker-compose.tracing.yml Caddyfile"
 HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-360}"
@@ -63,6 +63,28 @@ if $update_files; then
     chmod 644 "$file"
     echo "    updated ${file} (previous one in ${file}.${backup_suffix}, carry over any edits of yours)"
     if [ "$file" = Caddyfile ]; then : >"$CADDY_PENDING"; fi
+  done
+fi
+
+# Miauflix was renamed Miauwatch: once the compose files use the new service names, carry the
+# names over in .env (MIAUFLIX_* variables, service host names) and in your own compose files
+# (services you override), so they keep applying. Each changed file is backed up first.
+if grep -q '^  miauwatch:' docker-compose.yml && [ -f .env ]; then
+  service='miauflix(-catalog-services|-sources|-media-load|-services)?'
+  own_files="$(sed -n 's/^COMPOSE_FILE=//p' .env | tr -d "\"'" | tr ':;' '\n')"
+  for file in .env $own_files; do
+    case " $UPSTREAM_FILES " in *" $file "*) continue ;; esac
+    [ -f "$file" ] || continue
+    # Whole names only: volumes (miauflix_data), images and paths keep theirs
+    if grep -Eq "(^|[^A-Za-z0-9_./-]|//)${service}([^A-Za-z0-9_./-]|$)|^MIAUFLIX_" "$file"; then
+      cp "$file" "${file}.$(date +%Y%m%d-%H%M%S).before-rename.bak"
+      sed -E -i.tmp \
+        -e 's/^MIAUFLIX_/MIAUWATCH_/' \
+        -e "s#(^|[^A-Za-z0-9_./-]|//)${service}([^A-Za-z0-9_./-]|\$)#\\1miauwatch\\2\\3#g" \
+        "$file"
+      rm -f "${file}.tmp"
+      echo "    renamed Miauflix to Miauwatch in ${file}"
+    fi
   done
 fi
 

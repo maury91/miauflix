@@ -5,8 +5,8 @@ import {
   type ManagedConfiguration,
   type RunningServer,
   serve,
-} from '@miauflix/contract';
-import { type ArtworkUpdate, catalog, type MovieDetail } from '@miauflix/service-contracts';
+} from '@miauwatch/contract';
+import { type ArtworkUpdate, catalog, type MovieDetail } from '@miauwatch/service-contracts';
 
 import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';

@@ -1,4 +1,4 @@
-import { ContractError } from '@miauflix/contract';
+import { ContractError } from '@miauwatch/contract';
 import { HTTPException } from 'hono/http-exception';
 
 import { AuthError } from '@errors/auth.errors';

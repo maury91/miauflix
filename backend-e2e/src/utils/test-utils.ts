@@ -1,7 +1,7 @@
 /**
  * Test utilities for backend E2E tests
  */
-import { ApiErrorBody, Client, hcWithType } from '@miauflix/backend';
+import { ApiErrorBody, Client, hcWithType } from '@miauwatch/backend';
 import fs from 'fs';
 import path from 'path';
 

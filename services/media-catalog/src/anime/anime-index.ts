@@ -11,7 +11,7 @@ import {
   type FribbRow,
   indexCompact,
   toCompact,
-} from '@miauflix/anime-mapping';
+} from '@miauwatch/anime-mapping';
 
 import { logger } from '../logger';
 import type { ApiCache } from '../utils/api-cache';

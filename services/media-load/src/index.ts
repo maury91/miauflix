@@ -1,6 +1,6 @@
 import { setDefaultResultOrder } from 'node:dns';
 
-import { serve } from '@miauflix/contract';
+import { serve } from '@miauwatch/contract';
 
 import { createMediaLoadService } from './service';
 

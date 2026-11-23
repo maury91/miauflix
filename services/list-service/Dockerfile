@@ -33,10 +33,10 @@ COPY packages/contract packages/contract
 COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
 COPY services/list-service services/list-service
-RUN npm run build --workspace @miauflix/source-metadata-extractor && \
-    npm run build --workspace @miauflix/contract && \
-    npm run build --workspace @miauflix/service-contracts && \
-    npm run build --workspace @miauflix/service-configuration
+RUN npm run build --workspace @miauwatch/source-metadata-extractor && \
+    npm run build --workspace @miauwatch/contract && \
+    npm run build --workspace @miauwatch/service-contracts && \
+    npm run build --workspace @miauwatch/service-configuration
 
 FROM runtime AS development
 COPY --from=runtime /workspace /workspace
@@ -47,7 +47,7 @@ FROM runtime AS production-dependencies
 # Bun cannot prune: reinstall the production dependencies alone.
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     rm -rf node_modules && \
-    bun install --frozen-lockfile --production --ignore-scripts --filter @miauflix/list-service
+    bun install --frozen-lockfile --production --ignore-scripts --filter @miauwatch/list-service
 
 FROM bun-runtime AS production
 WORKDIR /app

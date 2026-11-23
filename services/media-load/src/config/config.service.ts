@@ -1,4 +1,4 @@
-import { ServiceConfiguration } from '@miauflix/service-configuration';
+import { ServiceConfiguration } from '@miauwatch/service-configuration';
 
 import { createMediaLoadConfigSchema } from './schema';
 

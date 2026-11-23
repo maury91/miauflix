@@ -68,7 +68,7 @@ change.
 - **Frontend layering:** `shared/` imports nothing from `features/`, `pages/` or `app/`;
   `features/` don't import from `pages/` or `app/`; features import each other only through
   `index.ts`.
-- **Services communicate only through `@miauflix/service-contracts`.** No service imports another's
+- **Services communicate only through `@miauwatch/service-contracts`.** No service imports another's
   source. Breaking changes bump the contract version
   ([service contract v2](../architecture/service-contract-v2.md)).
 - **A new boundary comes with its lint rule.** Architecture lives in `eslint.config.mjs`, not in

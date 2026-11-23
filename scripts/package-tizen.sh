@@ -5,19 +5,19 @@
 # certificate ("Force Samsung Certificate").
 #
 # Usage: scripts/package-tizen.sh [server] [--no-pairing | --pairing-url <url>]
-#   server         the backend's origin, e.g. https://miauflix.example.com (or set
-#                  MIAUFLIX_TV_API_URL). Without it, the TV finds its server on first start:
+#   server         the backend's origin, e.g. https://miauwatch.example.com (or set
+#                  MIAUWATCH_TV_API_URL). Without it, the TV finds its server on first start:
 #                  among the servers announced to the pairing service from its network or
 #                  found by scanning it, or by typing the address.
 #   --no-pairing   leave the pairing service out: the TV never contacts it
-#   --pairing-url  use another pairing service (tv-pairing) than pair.miauflix.cat
+#   --pairing-url  use another pairing service (tv-pairing) than pair.miau.watch
 #
 # The Home hero's backdrop size, while the selection moves and once it rests, is picked for the
-# TV's model year; MIAUFLIX_TV_HERO_BACKDROP and MIAUFLIX_TV_HERO_BACKDROP_RESTING set it instead
+# TV's model year; MIAUWATCH_TV_HERO_BACKDROP and MIAUWATCH_TV_HERO_BACKDROP_RESTING set it instead
 # (w300, w780, w1280 or original; auto picks it).
 #
-# Home's rows and hero are drawn with WebGL; MIAUFLIX_TV_GL_ROWS=false packages the DOM rows instead.
-# On the TV, localStorage['miauflix:gl-rows'] = '0' forces the DOM rows ('1' forces GL).
+# Home's rows and hero are drawn with WebGL; MIAUWATCH_TV_GL_ROWS=false packages the DOM rows instead.
+# On the TV, localStorage['miauwatch:gl-rows'] = '0' forces the DOM rows ('1' forces GL).
 
 set -e
 
@@ -28,8 +28,8 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 BUILD_DIR="${PROJECT_ROOT}/dist/frontend-tizen"
 WGT_PATH="${PROJECT_ROOT}/dist/miauwatch.wgt"
 
-API_URL="${MIAUFLIX_TV_API_URL}"
-PAIRING_URL="${MIAUFLIX_TV_PAIRING_URL:-https://pair.miauflix.cat}"
+API_URL="${MIAUWATCH_TV_API_URL}"
+PAIRING_URL="${MIAUWATCH_TV_PAIRING_URL:-https://pair.miau.watch}"
 PAIRING_URL="${PAIRING_URL%/}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -49,7 +49,7 @@ while [[ $# -gt 0 ]]; do
 done
 API_URL="${API_URL%/}"
 if [[ -n "${API_URL}" && ! "${API_URL}" =~ ^https?://[^/]+$ ]]; then
-  print_error "Pass the backend's origin, e.g. scripts/package-tizen.sh https://miauflix.example.com"
+  print_error "Pass the backend's origin, e.g. scripts/package-tizen.sh https://miauwatch.example.com"
   exit 1
 fi
 if [[ "${PAIRING_URL}" != "off" && ! "${PAIRING_URL}" =~ ^https?://[^/]+$ ]]; then
@@ -75,9 +75,9 @@ rm -rf "${BUILD_DIR}"
 # Without a server the build gets "/", which the TV app reads as none (an empty value would fall
 # back to the development default)
 VITE_TIZEN=true VITE_API_URL="${API_URL:-/}" VITE_TV_PAIRING_URL="${PAIRING_URL}" \
-  VITE_TV_HERO_BACKDROP="${MIAUFLIX_TV_HERO_BACKDROP:-auto}" \
-  VITE_TV_HERO_BACKDROP_RESTING="${MIAUFLIX_TV_HERO_BACKDROP_RESTING:-auto}" \
-  VITE_TV_GL_ROWS="${MIAUFLIX_TV_GL_ROWS:-true}" \
+  VITE_TV_HERO_BACKDROP="${MIAUWATCH_TV_HERO_BACKDROP:-auto}" \
+  VITE_TV_HERO_BACKDROP_RESTING="${MIAUWATCH_TV_HERO_BACKDROP_RESTING:-auto}" \
+  VITE_TV_GL_ROWS="${MIAUWATCH_TV_GL_ROWS:-true}" \
   npx turbo run build:tizen --filter='./frontend'
 
 sed "s/version=\"[^\"]*\" viewmodes/version=\"${VERSION}\" viewmodes/" \

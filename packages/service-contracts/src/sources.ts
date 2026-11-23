@@ -1,11 +1,11 @@
-import { call, contract, event, stream } from '@miauflix/contract';
+import { call, contract, event, stream } from '@miauwatch/contract';
 import type {
   AudioCodec,
   Language,
   Quality,
   Source,
   VideoCodec,
-} from '@miauflix/source-metadata-extractor';
+} from '@miauwatch/source-metadata-extractor';
 
 export interface SourceMediaRef {
   kind: 'movie' | 'show';

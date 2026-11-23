@@ -1,4 +1,4 @@
-import type { AvatarLook } from '@miauflix/backend';
+import type { AvatarLook } from '@miauwatch/backend';
 import {
   PLUSHIE_COLORS,
   PLUSHIE_EYES,
@@ -12,7 +12,7 @@ import {
   PLUSHIE_PINS,
   randomPlushieLook,
   seededRandom,
-} from '@miauflix/service-contracts/profiles/v1';
+} from '@miauwatch/service-contracts/profiles/v1';
 import { type MessageKey, t } from '@shared/i18n';
 import type {
   PlushieEyes,

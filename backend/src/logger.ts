@@ -1,4 +1,4 @@
-import { redactLogArgument, redactSourceIdentifiers } from '@miauflix/service-contracts';
+import { redactLogArgument, redactSourceIdentifiers } from '@miauwatch/service-contracts';
 import debugModule from 'debug';
 
 import { getTraceContextString } from '@utils/trace-context';

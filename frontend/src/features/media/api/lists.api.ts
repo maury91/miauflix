@@ -1,6 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
 import { catalogLanguage } from '@features/media/lib/catalog-language';
-import type { ListResponse, ListsPageResponse } from '@miauflix/backend';
+import type { ListResponse, ListsPageResponse } from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';

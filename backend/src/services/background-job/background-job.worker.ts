@@ -52,7 +52,7 @@ export class BackgroundJobWorker {
           // Worker registration has its own short TTL. Keep this cadence independent from the
           // potentially long job lease; job heartbeats renew active locks at the same cadence.
           heartbeatIntervalS: 10,
-          name: `miauflix-${process.pid}`,
+          name: `miauwatch-${process.pid}`,
         }
       );
       worker.on('error', error =>

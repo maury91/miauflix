@@ -28,7 +28,7 @@ import { initTracing } from '@utils/tracing.util';
 import { FileSpanExporter } from './instrumentation/file-exporter';
 import { redactUrlAttributes } from './instrumentation/redact-url-attributes';
 
-const SYNTHETIC_SCOPE = { name: '@miauflix/backend', version: '1.0.0' };
+const SYNTHETIC_SCOPE = { name: '@miauwatch/backend', version: '1.0.0' };
 
 let instrumentationInitialized = false;
 
@@ -226,7 +226,7 @@ export function initializeInstrumentation(configService: ConfigService): void {
 
     sdk = new NodeSDK({
       resource: resourceFromAttributes({
-        [ATTR_SERVICE_NAME]: '@miauflix/backend',
+        [ATTR_SERVICE_NAME]: '@miauwatch/backend',
         [ATTR_SERVICE_VERSION]: '1.0.0',
         [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: configService.get('NODE_ENV'),
       }),

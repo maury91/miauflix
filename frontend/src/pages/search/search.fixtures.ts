@@ -1,4 +1,4 @@
-import type { SearchGenreDto, SearchResultDto } from '@miauflix/backend';
+import type { SearchGenreDto, SearchResultDto } from '@miauwatch/backend';
 import { initialSearchState, type SearchState } from '@store/slices/search';
 
 import { homeFixtureAssets } from '@/__test-utils__/fixtures/home.assets';

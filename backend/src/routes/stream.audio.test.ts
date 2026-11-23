@@ -1,5 +1,5 @@
 import { noRateLimit } from '@__test-utils__/routes';
-import { ContractError } from '@miauflix/contract';
+import { ContractError } from '@miauwatch/contract';
 
 import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { handleError } from '@middleware/error-handler.middleware';

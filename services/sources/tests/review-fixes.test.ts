@@ -2,8 +2,8 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { createClient, localTransport, management } from '@miauflix/contract';
-import { sources } from '@miauflix/service-contracts';
+import { createClient, localTransport, management } from '@miauwatch/contract';
+import { sources } from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 import { expect, it, spyOn } from 'bun:test';
 
@@ -323,7 +323,7 @@ it('blocks internal hash-only downloads and public redirects to internal destina
   );
   const results = await resolveHashes(
     [
-      { title: 'Internal', torrentUrl: 'http://miauflix-services:3000/admin' },
+      { title: 'Internal', torrentUrl: 'http://miauwatch-services:3000/admin' },
       { title: 'Metadata', torrentUrl: 'http://169.254.169.254/latest' },
       { title: 'Redirect', torrentUrl: 'https://downloads.invalid/file.torrent' },
     ],
@@ -481,7 +481,7 @@ it.each([false, true])(
     try {
       s.db
         .query(
-          "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('old-indexer','cardigann','builtin:miauflix','Old',?,0,1)"
+          "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('old-indexer','cardigann','builtin:miauwatch','Old',?,0,1)"
         )
         .run(JSON.stringify({ cardigann: 'sample' }));
       if (cachedLegacy)
@@ -520,7 +520,7 @@ it('briefly caches failed definition downloads and retries after the cooldown', 
   try {
     s.db
       .query(
-        "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('missing','cardigann','builtin:miauflix','Missing',?,0,1)"
+        "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('missing','cardigann','builtin:miauwatch','Missing',?,0,1)"
       )
       .run(JSON.stringify({ cardigann: 'missing', source: PROWLARR_SOURCE_KEY }));
     expect((await s.client.testProvider({ id: 'missing' })).success).toBe(false);

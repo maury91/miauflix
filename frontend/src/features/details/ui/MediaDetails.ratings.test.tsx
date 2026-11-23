@@ -45,7 +45,7 @@ vi.mock('@features/progress/api/progress.api', () => ({
   useGetProgressQuery: () => ({ data: { progress: [] } }),
 }));
 
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto } from '@miauwatch/backend';
 
 import { MediaDetails } from './MediaDetails';
 

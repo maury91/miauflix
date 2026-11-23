@@ -2,8 +2,8 @@ jest.unmock('@database/database');
 
 import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { TestDataFactory } from '@__test-utils__/test-data.factory';
-import { F, MAX_FRAME_BYTES, methodName } from '@miauflix/contract';
-import { type ImportedSource, mediaLoad } from '@miauflix/service-contracts';
+import { F, MAX_FRAME_BYTES, methodName } from '@miauwatch/contract';
+import { type ImportedSource, mediaLoad } from '@miauwatch/service-contracts';
 
 import { Storage } from '@entities/storage.entity';
 import { StorageFile } from '@entities/storage-file.entity';

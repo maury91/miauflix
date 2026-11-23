@@ -56,8 +56,8 @@ RUN mkdir -p /usr/src/app/data && \
     touch /usr/src/app/.env
 
 # Create default user but we'll override this at runtime
-RUN groupadd -g 1000 miauflix 2>/dev/null || true && \
-    useradd -u 1000 -g 1000 -m -s /bin/bash miauflix 2>/dev/null || true
+RUN groupadd -g 1000 miauwatch 2>/dev/null || true && \
+    useradd -u 1000 -g 1000 -m -s /bin/bash miauwatch 2>/dev/null || true
 
 # Expose port
 EXPOSE 3000

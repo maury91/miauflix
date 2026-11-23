@@ -130,6 +130,6 @@ describe('useTraktPrompt', () => {
     await settle();
     act(() => vi.advanceTimersByTime(TRAKT_PROMPT_IDLE_MS * 2));
     expect(result.current.open).toBe(false);
-    expect(window.localStorage.getItem('miauflix:trakt:dont-ask:user-1')).toBe('1');
+    expect(window.localStorage.getItem('miauwatch:trakt:dont-ask:user-1')).toBe('1');
   });
 });

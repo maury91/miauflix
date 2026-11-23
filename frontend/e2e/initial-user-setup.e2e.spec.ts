@@ -31,7 +31,8 @@ const visualStylePath = path.resolve('e2e/visual-sanitization.css');
 const waitForIntro = async (page: Page) => {
   await page.waitForLoadState('networkidle');
   await page.waitForFunction(
-    () => (window as Window & { _miauflixAnimationComplete?: boolean })._miauflixAnimationComplete,
+    () =>
+      (window as Window & { _miauwatchAnimationComplete?: boolean })._miauwatchAnimationComplete,
     undefined,
     { timeout: 15_000 }
   );

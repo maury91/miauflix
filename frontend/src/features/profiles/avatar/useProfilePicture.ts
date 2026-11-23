@@ -1,4 +1,4 @@
-import type { UserDto } from '@miauflix/backend';
+import type { UserDto } from '@miauwatch/backend';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { loadAvatarImage } from '../api/profiles.api';

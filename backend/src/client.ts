@@ -18,7 +18,7 @@ export type {
   Quality,
   Source,
   VideoCodec,
-} from '@miauflix/source-metadata-extractor';
+} from '@miauwatch/source-metadata-extractor';
 
 // Re-export route DTOs for consumers
 export type * from './routes/auth.types';

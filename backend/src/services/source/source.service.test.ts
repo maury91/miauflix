@@ -13,7 +13,7 @@ import {
 } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed } from '@__test-utils__/utils';
 import { logger as mockLogger } from '@logger';
-import type { SourceSearchItem } from '@miauflix/service-contracts';
+import type { SourceSearchItem } from '@miauwatch/service-contracts';
 import parseTorrent from 'parse-torrent';
 
 import { Database } from '@database/database';

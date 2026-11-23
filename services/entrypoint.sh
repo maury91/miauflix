@@ -2,10 +2,10 @@
 set -Eeuo pipefail
 
 # Runs the services named in the arguments (the image's CMD) side by side, as the bunqueue user:
-#   bunqueue media-catalog list-service sources media-load   miauflix-services
-#   bunqueue media-catalog list-service                      miauflix-catalog-services
-#   sources                                                  miauflix-sources
-#   media-load                                               miauflix-media-load
+#   bunqueue media-catalog list-service sources media-load   miauwatch-services
+#   bunqueue media-catalog list-service                      miauwatch-catalog-services
+#   sources                                                  miauwatch-sources
+#   media-load                                               miauwatch-media-load
 # Any subset works, in any image that contains those services.
 if (($# == 0)); then
   echo 'Name the services to run: bunqueue, media-catalog, list-service, sources, media-load' >&2
@@ -80,7 +80,7 @@ if [[ $(id -u) -eq 0 ]]; then
 fi
 
 # For the image's healthcheck: the services to check.
-printf '%s\n' "$@" >/tmp/miauflix-services
+printf '%s\n' "$@" >/tmp/miauwatch-services
 
 children=()
 loggers=()

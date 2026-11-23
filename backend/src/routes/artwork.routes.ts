@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator';
-import { isContractError } from '@miauflix/contract';
-import type { CardImageFormat, CardImageSize } from '@miauflix/service-contracts';
+import { isContractError } from '@miauwatch/contract';
+import type { CardImageFormat, CardImageSize } from '@miauwatch/service-contracts';
 import { Hono } from 'hono';
 import { z } from 'zod';
 

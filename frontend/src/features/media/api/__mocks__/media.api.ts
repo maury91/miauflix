@@ -1,4 +1,4 @@
-import type { SeasonResponse } from '@miauflix/backend';
+import type { SeasonResponse } from '@miauwatch/backend';
 import { fn } from 'storybook/test';
 
 const emptySelector = () => () => ({ data: undefined });

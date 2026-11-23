@@ -1,6 +1,6 @@
-import type { BackdropFocus } from '@miauflix/service-contracts';
-import type { Source, VideoCodec } from '@miauflix/source-metadata-extractor';
-import type { Quality } from '@miauflix/source-metadata-extractor';
+import type { BackdropFocus } from '@miauwatch/service-contracts';
+import type { Source, VideoCodec } from '@miauwatch/source-metadata-extractor';
+import type { Quality } from '@miauwatch/source-metadata-extractor';
 
 import type { SourceAvailability } from '@services/source/source-availability.service';
 

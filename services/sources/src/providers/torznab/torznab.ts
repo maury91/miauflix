@@ -1,4 +1,4 @@
-import type { ProviderSetting } from '@miauflix/service-contracts';
+import type { ProviderSetting } from '@miauwatch/service-contracts';
 import * as cheerio from 'cheerio';
 
 import type { HttpClient } from '../../http/http-client';

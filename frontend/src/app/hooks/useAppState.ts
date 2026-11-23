@@ -5,7 +5,7 @@ import {
   useGetServiceStatusesQuery,
 } from '@features/config/api/config.api';
 import { useCheckSetupStatusQuery } from '@features/setup/api/setup.api';
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { useAppSelector } from '@store';
 import { selectConfigDismissed, selectSetupAvailable } from '@store/slices/appState';
 import { selectHasSessions, selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';

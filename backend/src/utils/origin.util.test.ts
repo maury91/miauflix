@@ -29,7 +29,7 @@ describe('isTvAppOrigin', () => {
     expect(isTvAppOrigin('file://', settings)).toBe(true);
     expect(isTvAppOrigin('null', settings)).toBe(false);
     expect(isTvAppOrigin(undefined, settings)).toBe(false);
-    expect(isTvAppOrigin('https://miauflix.example', settings)).toBe(false);
+    expect(isTvAppOrigin('https://miauwatch.example', settings)).toBe(false);
     expect(isTvAppOrigin('file://host', settings)).toBe(false);
   });
 

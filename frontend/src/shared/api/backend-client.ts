@@ -1,4 +1,4 @@
-import { hcWithType } from '@miauflix/backend';
+import { hcWithType } from '@miauwatch/backend';
 import { API_CREDENTIALS, API_URL, builtForTizen } from '@shared/config/constants';
 
 import { tvAuthFetch } from './tv-auth';

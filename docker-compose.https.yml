@@ -1,7 +1,7 @@
 # HTTPS for a domain: Caddy gets a Let's Encrypt certificate for your domain.
 # Usage: put these in a .env file next to the compose files, then run docker compose up -d
 #   COMPOSE_FILE=docker-compose.yml:docker-compose.https.yml
-#   MIAUFLIX_DOMAIN=miauflix.example.com
+#   MIAUWATCH_DOMAIN=miauwatch.example.com
 #   REVERSE_PROXY_SECRET=<a long random string, e.g. from openssl rand -hex 32>
 # Works the same with docker-compose.vpn.yml: the backend stays outside the VPN.
 # Guide: docs/setup/docker-setup.md#https-with-a-domain
@@ -14,24 +14,24 @@ services:
       # TCP only: the Caddyfile turns HTTP/3 (UDP) off
       - '443:443'
     environment:
-      MIAUFLIX_DOMAIN: ${MIAUFLIX_DOMAIN:?Set MIAUFLIX_DOMAIN in .env}
+      MIAUWATCH_DOMAIN: ${MIAUWATCH_DOMAIN:-${MIAUFLIX_DOMAIN:?Set MIAUWATCH_DOMAIN in .env}}
       REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
       # Fixed: an older .env may still say vpn:3000, from when the backend ran inside the VPN.
-      MIAUFLIX_UPSTREAM: miauflix:3000
+      MIAUWATCH_UPSTREAM: miauwatch:3000
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - miauflix
+      - miauwatch
     restart: unless-stopped
 
-  miauflix:
+  miauwatch:
     environment:
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: 'false'
       COOKIE_SECURE: 'true'
       # The realtime WebSocket only accepts these origins; the default lists localhost only
-      CORS_ORIGIN: https://${MIAUFLIX_DOMAIN:?Set MIAUFLIX_DOMAIN in .env}
+      CORS_ORIGIN: https://${MIAUWATCH_DOMAIN:-${MIAUFLIX_DOMAIN:?Set MIAUWATCH_DOMAIN in .env}}
       REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
 
 volumes:

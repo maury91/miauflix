@@ -1,4 +1,4 @@
-import { Source } from '@miauflix/source-metadata-extractor';
+import { Source } from '@miauwatch/source-metadata-extractor';
 
 import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
 

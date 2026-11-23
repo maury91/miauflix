@@ -1,4 +1,4 @@
-import type { ClaimRequest, WarmupResult } from '@miauflix/service-contracts';
+import type { ClaimRequest, WarmupResult } from '@miauwatch/service-contracts';
 
 import type { StorageService } from '../../storage/storage.service';
 import { type PlaybackTarget, withFile } from '../../storage/types';

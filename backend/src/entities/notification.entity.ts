@@ -1,4 +1,4 @@
-import type { Source } from '@miauflix/source-metadata-extractor';
+import type { Source } from '@miauwatch/source-metadata-extractor';
 import {
   Column,
   CreateDateColumn,

@@ -1,5 +1,5 @@
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
-import type { SearchClientMessage } from '@miauflix/backend';
+import type { SearchClientMessage } from '@miauwatch/backend';
 import { configureStore, type Middleware } from '@reduxjs/toolkit';
 import { setActiveLanguage } from '@shared/i18n/translate';
 import { searchActions, searchSlice } from '@store/slices/search';

@@ -1,5 +1,5 @@
 {
-  "name": "@miauflix/sources-service",
+  "name": "@miauwatch/sources-service",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,12 +12,12 @@
     "lint": "eslint \"{src,tests}/**/*.ts\""
   },
   "dependencies": {
-    "@miauflix/anime-mapping": "*",
-    "@miauflix/contract": "*",
-    "@miauflix/service-configuration": "*",
-    "@miauflix/service-contracts": "*",
-    "@miauflix/source-metadata-extractor": "*",
-    "@miauflix/vpn-guard": "*",
+    "@miauwatch/anime-mapping": "*",
+    "@miauwatch/contract": "*",
+    "@miauwatch/service-configuration": "*",
+    "@miauwatch/service-contracts": "*",
+    "@miauwatch/source-metadata-extractor": "*",
+    "@miauwatch/vpn-guard": "*",
     "cheerio": "^1.2.0",
     "yaml": "^2.9.1",
     "zod": "4.1.12"

@@ -9,7 +9,7 @@ import type {
   CreatePlaybackSessionResponse,
   PlayableRef,
   PlaybackDelivery,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { t } from '@shared/i18n';
 import {
   realtimeActions,

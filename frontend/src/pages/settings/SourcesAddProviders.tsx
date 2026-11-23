@@ -6,7 +6,7 @@ import {
   useLoadDefinitionsMutation,
   useSyncDefinitionsMutation,
 } from '@features/sources/api/sources.api';
-import type { CardigannDefinitionEntry, CardigannSyncStatus } from '@miauflix/backend';
+import type { CardigannDefinitionEntry, CardigannSyncStatus } from '@miauwatch/backend';
 import {
   ActionGroup,
   Badge,

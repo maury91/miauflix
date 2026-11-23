@@ -36,17 +36,17 @@
       },
     },
     "backend": {
-      "name": "@miauflix/backend",
+      "name": "@miauwatch/backend",
       "version": "1.0.0",
       "dependencies": {
         "@hono/otel": "1.0.1",
         "@hono/zod-validator": "0.7.4",
         "@inquirer/prompts": "7.8.2",
         "@keyv/sqlite": "4.0.6",
-        "@miauflix/contract": "*",
-        "@miauflix/service-configuration": "*",
-        "@miauflix/service-contracts": "*",
-        "@miauflix/source-metadata-extractor": "*",
+        "@miauwatch/contract": "*",
+        "@miauwatch/service-configuration": "*",
+        "@miauwatch/service-contracts": "*",
+        "@miauwatch/source-metadata-extractor": "*",
         "@opentelemetry/api": "1.9.0",
         "@opentelemetry/auto-instrumentations-node": "0.67.0",
         "@opentelemetry/exporter-trace-otlp-http": "^0.212.0",
@@ -82,10 +82,10 @@
       },
     },
     "backend-e2e": {
-      "name": "miauflix-backend-e2e",
+      "name": "miauwatch-backend-e2e",
       "version": "1.0.0",
       "dependencies": {
-        "@miauflix/backend": "file:../backend",
+        "@miauwatch/backend": "file:../backend",
         "hono": "4.13.18",
         "sqlite3": "5.1.7",
       },
@@ -99,13 +99,13 @@
       },
     },
     "frontend": {
-      "name": "@miauflix/frontend",
+      "name": "@miauwatch/frontend",
       "version": "0.0.0",
       "dependencies": {
         "@dicebear/collection": "9.2.4",
         "@dicebear/core": "9.2.4",
-        "@miauflix/backend": "*",
-        "@miauflix/service-contracts": "*",
+        "@miauwatch/backend": "*",
+        "@miauwatch/service-contracts": "*",
         "@reduxjs/toolkit": "2.10.1",
         "@vanilla-extract/css": "1.21.3",
         "framer-motion": "12.23.24",
@@ -166,14 +166,14 @@
       },
     },
     "packages/anime-mapping": {
-      "name": "@miauflix/anime-mapping",
+      "name": "@miauwatch/anime-mapping",
       "version": "1.0.0",
       "devDependencies": {
         "typescript": "^5.9.3",
       },
     },
     "packages/contract": {
-      "name": "@miauflix/contract",
+      "name": "@miauwatch/contract",
       "version": "1.0.0",
       "devDependencies": {
         "@types/ws": "^8.18.1",
@@ -188,28 +188,28 @@
       ],
     },
     "packages/service-configuration": {
-      "name": "@miauflix/service-configuration",
+      "name": "@miauwatch/service-configuration",
       "version": "1.0.0",
       "dependencies": {
-        "@miauflix/contract": "*",
+        "@miauwatch/contract": "*",
       },
       "devDependencies": {
         "typescript": "^5.9.3",
       },
     },
     "packages/service-contracts": {
-      "name": "@miauflix/service-contracts",
+      "name": "@miauwatch/service-contracts",
       "version": "1.0.0",
       "dependencies": {
-        "@miauflix/contract": "*",
-        "@miauflix/source-metadata-extractor": "*",
+        "@miauwatch/contract": "*",
+        "@miauwatch/source-metadata-extractor": "*",
       },
       "devDependencies": {
         "typescript": "^5.9.3",
       },
     },
     "packages/source-metadata-extractor": {
-      "name": "@miauflix/source-metadata-extractor",
+      "name": "@miauwatch/source-metadata-extractor",
       "version": "1.0.0",
       "dependencies": {
         "@faker-js/faker": "10.1.0",
@@ -220,22 +220,22 @@
       },
     },
     "packages/vpn-guard": {
-      "name": "@miauflix/vpn-guard",
+      "name": "@miauwatch/vpn-guard",
       "version": "1.0.0",
       "dependencies": {
-        "@miauflix/contract": "*",
+        "@miauwatch/contract": "*",
       },
       "devDependencies": {
         "typescript": "^5.9.3",
       },
     },
     "services/list-service": {
-      "name": "@miauflix/list-service",
+      "name": "@miauwatch/list-service",
       "version": "0.1.0",
       "dependencies": {
-        "@miauflix/contract": "*",
-        "@miauflix/service-configuration": "*",
-        "@miauflix/service-contracts": "*",
+        "@miauwatch/contract": "*",
+        "@miauwatch/service-configuration": "*",
+        "@miauwatch/service-contracts": "*",
         "zod": "4.1.12",
       },
       "devDependencies": {
@@ -244,13 +244,13 @@
       },
     },
     "services/media-catalog": {
-      "name": "@miauflix/media-catalog",
+      "name": "@miauwatch/media-catalog",
       "version": "0.1.0",
       "dependencies": {
-        "@miauflix/anime-mapping": "*",
-        "@miauflix/contract": "*",
-        "@miauflix/service-configuration": "*",
-        "@miauflix/service-contracts": "*",
+        "@miauwatch/anime-mapping": "*",
+        "@miauwatch/contract": "*",
+        "@miauwatch/service-configuration": "*",
+        "@miauwatch/service-contracts": "*",
         "@tensorflow/tfjs-backend-wasm": "^4.22.0",
         "@tensorflow/tfjs-converter": "^4.22.0",
         "@tensorflow/tfjs-core": "^4.22.0",
@@ -267,13 +267,13 @@
       },
     },
     "services/media-load": {
-      "name": "@miauflix/media-load-service",
+      "name": "@miauwatch/media-load-service",
       "version": "0.2.0",
       "dependencies": {
-        "@miauflix/contract": "*",
-        "@miauflix/service-configuration": "*",
-        "@miauflix/service-contracts": "*",
-        "@miauflix/vpn-guard": "*",
+        "@miauwatch/contract": "*",
+        "@miauwatch/service-configuration": "*",
+        "@miauwatch/service-contracts": "*",
+        "@miauwatch/vpn-guard": "*",
         "bittorrent-tracker": "^11.2.3",
         "filename-reserved-regex": "3.0.0",
         "load-ip-set": "3.0.1",
@@ -293,15 +293,15 @@
       },
     },
     "services/sources": {
-      "name": "@miauflix/sources-service",
+      "name": "@miauwatch/sources-service",
       "version": "0.1.0",
       "dependencies": {
-        "@miauflix/anime-mapping": "*",
-        "@miauflix/contract": "*",
-        "@miauflix/service-configuration": "*",
-        "@miauflix/service-contracts": "*",
-        "@miauflix/source-metadata-extractor": "*",
-        "@miauflix/vpn-guard": "*",
+        "@miauwatch/anime-mapping": "*",
+        "@miauwatch/contract": "*",
+        "@miauwatch/service-configuration": "*",
+        "@miauwatch/service-contracts": "*",
+        "@miauwatch/source-metadata-extractor": "*",
+        "@miauwatch/vpn-guard": "*",
         "cheerio": "^1.2.0",
         "yaml": "^2.9.1",
         "zod": "4.1.12",
@@ -932,29 +932,29 @@
 
     "@mdx-js/react": ["@mdx-js/react@3.1.1", "", { "dependencies": { "@types/mdx": "^2.0.0" }, "peerDependencies": { "@types/react": ">=16", "react": ">=16" } }, "sha512-f++rKLQgUVYDAtECQ6fn/is15GkEH9+nZPM3MS0RcxVqoTfawHvDlSCH7JbMhAM6uJ32v3eXLvLmLvjGu7PTQw=="],
 
-    "@miauflix/anime-mapping": ["@miauflix/anime-mapping@workspace:packages/anime-mapping"],
+    "@miauwatch/anime-mapping": ["@miauwatch/anime-mapping@workspace:packages/anime-mapping"],
 
-    "@miauflix/backend": ["@miauflix/backend@workspace:backend"],
+    "@miauwatch/backend": ["@miauwatch/backend@workspace:backend"],
 
-    "@miauflix/contract": ["@miauflix/contract@workspace:packages/contract"],
+    "@miauwatch/contract": ["@miauwatch/contract@workspace:packages/contract"],
 
-    "@miauflix/frontend": ["@miauflix/frontend@workspace:frontend"],
+    "@miauwatch/frontend": ["@miauwatch/frontend@workspace:frontend"],
 
-    "@miauflix/list-service": ["@miauflix/list-service@workspace:services/list-service"],
+    "@miauwatch/list-service": ["@miauwatch/list-service@workspace:services/list-service"],
 
-    "@miauflix/media-catalog": ["@miauflix/media-catalog@workspace:services/media-catalog"],
+    "@miauwatch/media-catalog": ["@miauwatch/media-catalog@workspace:services/media-catalog"],
 
-    "@miauflix/media-load-service": ["@miauflix/media-load-service@workspace:services/media-load"],
+    "@miauwatch/media-load-service": ["@miauwatch/media-load-service@workspace:services/media-load"],
 
-    "@miauflix/service-configuration": ["@miauflix/service-configuration@workspace:packages/service-configuration"],
+    "@miauwatch/service-configuration": ["@miauwatch/service-configuration@workspace:packages/service-configuration"],
 
-    "@miauflix/service-contracts": ["@miauflix/service-contracts@workspace:packages/service-contracts"],
+    "@miauwatch/service-contracts": ["@miauwatch/service-contracts@workspace:packages/service-contracts"],
 
-    "@miauflix/source-metadata-extractor": ["@miauflix/source-metadata-extractor@workspace:packages/source-metadata-extractor"],
+    "@miauwatch/source-metadata-extractor": ["@miauwatch/source-metadata-extractor@workspace:packages/source-metadata-extractor"],
 
-    "@miauflix/sources-service": ["@miauflix/sources-service@workspace:services/sources"],
+    "@miauwatch/sources-service": ["@miauwatch/sources-service@workspace:services/sources"],
 
-    "@miauflix/vpn-guard": ["@miauflix/vpn-guard@workspace:packages/vpn-guard"],
+    "@miauwatch/vpn-guard": ["@miauwatch/vpn-guard@workspace:packages/vpn-guard"],
 
     "@msgpackr-extract/msgpackr-extract-darwin-arm64": ["@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.4", "", { "os": "darwin", "cpu": "arm64" }, "sha512-LCkGo6JDfaBhgST7UpPWgNgLINpcpabaHfyz5OBx75nUYxBsaEPxjnyNjWpeb/xBup/682QnBfRBy2/LvPutZQ=="],
 
@@ -2624,7 +2624,7 @@
 
     "meshoptimizer": ["meshoptimizer@1.1.1", "", {}, "sha512-oRFNWJRDA/WTrVj7NWvqa5HqE1t9MYDj2VaWirQCzCCrAd2GHrqR/sQezCxiWATPNlKTcRaPRHPJwIRoPBAp5g=="],
 
-    "miauflix-backend-e2e": ["miauflix-backend-e2e@workspace:backend-e2e"],
+    "miauwatch-backend-e2e": ["miauwatch-backend-e2e@workspace:backend-e2e"],
 
     "micromatch": ["micromatch@4.0.8", "", { "dependencies": { "braces": "^3.0.3", "picomatch": "^2.3.1" } }, "sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA=="],
 
@@ -3974,7 +3974,7 @@
 
     "make-fetch-happen/minipass": ["minipass@3.3.6", "", { "dependencies": { "yallist": "^4.0.0" } }, "sha512-DxiNidxSEK+tHG6zOIklvNOwm3hvCrbUrdtzY74U6HKTJxvIDfOUL5W5P2Ghd3DTkhhKPYGqeNUIh5qcM4YBfw=="],
 
-    "miauflix-backend-e2e/@miauflix/backend": ["@miauflix/backend@file:backend", { "dependencies": { "@hono/otel": "1.0.1", "@hono/zod-validator": "0.7.4", "@inquirer/prompts": "7.8.2", "@keyv/sqlite": "4.0.6", "@miauflix/contract": "*", "@miauflix/service-configuration": "*", "@miauflix/service-contracts": "*", "@miauflix/source-metadata-extractor": "*", "@opentelemetry/api": "1.9.0", "@opentelemetry/auto-instrumentations-node": "0.67.0", "@opentelemetry/exporter-trace-otlp-http": "^0.212.0", "@opentelemetry/resources": "2.2.0", "@opentelemetry/sdk-metrics": "2.2.0", "@opentelemetry/sdk-node": "0.208.0", "@opentelemetry/sdk-trace-node": "2.2.0", "@opentelemetry/semantic-conventions": "1.38.0", "bunqueue-client": "0.1.9", "cache-manager": "7.2.9", "cacheable": "2.5.0", "chalk": "5.6.0", "debug": "4.4.3", "dotenv": "17.2.3", "jose": "6.1.2", "keyv": "5.6.0", "node-fetch": "3.3.2", "node-html-parser": "^7.0.1", "parse-torrent": "11.0.18", "reflect-metadata": "0.2.2", "sqlite3": "5.1.7", "streamx": "2.22.1", "typeorm": "0.3.31", "uuid": "13.0.0", "whatwg-url": "14.2.0", "zod": "4.1.12" }, "devDependencies": { "@faker-js/faker": "10.1.0", "@sinonjs/fake-timers": "13.0.5", "@types/debug": "4.1.12", "@types/jest": "30.0.0", "@types/sinonjs__fake-timers": "15.0.1", "@types/streamx": "2.9.5", "bun-types": "^1.4.0", "dts-bundle-generator": "9.5.1" }, "peerDependencies": { "hono": "4.13.18" } }],
+    "miauwatch-backend-e2e/@miauwatch/backend": ["@miauwatch/backend@file:backend", { "dependencies": { "@hono/otel": "1.0.1", "@hono/zod-validator": "0.7.4", "@inquirer/prompts": "7.8.2", "@keyv/sqlite": "4.0.6", "@miauwatch/contract": "*", "@miauwatch/service-configuration": "*", "@miauwatch/service-contracts": "*", "@miauwatch/source-metadata-extractor": "*", "@opentelemetry/api": "1.9.0", "@opentelemetry/auto-instrumentations-node": "0.67.0", "@opentelemetry/exporter-trace-otlp-http": "^0.212.0", "@opentelemetry/resources": "2.2.0", "@opentelemetry/sdk-metrics": "2.2.0", "@opentelemetry/sdk-node": "0.208.0", "@opentelemetry/sdk-trace-node": "2.2.0", "@opentelemetry/semantic-conventions": "1.38.0", "bunqueue-client": "0.1.9", "cache-manager": "7.2.9", "cacheable": "2.5.0", "chalk": "5.6.0", "debug": "4.4.3", "dotenv": "17.2.3", "jose": "6.1.2", "keyv": "5.6.0", "node-fetch": "3.3.2", "node-html-parser": "^7.0.1", "parse-torrent": "11.0.18", "reflect-metadata": "0.2.2", "sqlite3": "5.1.7", "streamx": "2.22.1", "typeorm": "0.3.31", "uuid": "13.0.0", "whatwg-url": "14.2.0", "zod": "4.1.12" }, "devDependencies": { "@faker-js/faker": "10.1.0", "@sinonjs/fake-timers": "13.0.5", "@types/debug": "4.1.12", "@types/jest": "30.0.0", "@types/sinonjs__fake-timers": "15.0.1", "@types/streamx": "2.9.5", "bun-types": "^1.4.0", "dts-bundle-generator": "9.5.1" }, "peerDependencies": { "hono": "4.13.18" } }],
 
     "micromatch/picomatch": ["picomatch@2.3.1", "", {}, "sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA=="],
 
@@ -4528,11 +4528,11 @@
 
     "make-fetch-happen/https-proxy-agent/agent-base": ["agent-base@6.0.2", "", { "dependencies": { "debug": "4" } }, "sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ=="],
 
-    "miauflix-backend-e2e/@miauflix/backend/node-fetch": ["node-fetch@3.3.2", "", { "dependencies": { "data-uri-to-buffer": "^4.0.0", "fetch-blob": "^3.1.4", "formdata-polyfill": "^4.0.10" } }, "sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA=="],
+    "miauwatch-backend-e2e/@miauwatch/backend/node-fetch": ["node-fetch@3.3.2", "", { "dependencies": { "data-uri-to-buffer": "^4.0.0", "fetch-blob": "^3.1.4", "formdata-polyfill": "^4.0.10" } }, "sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA=="],
 
-    "miauflix-backend-e2e/@miauflix/backend/streamx": ["streamx@2.22.1", "", { "dependencies": { "fast-fifo": "^1.3.2", "text-decoder": "^1.1.0" }, "optionalDependencies": { "bare-events": "^2.2.0" } }, "sha512-znKXEBxfatz2GBNK02kRnCXjV+AA4kjZIUxeWSr3UGirZMJfTE9uiwKHobnbgxWyL/JWro8tTq+vOqAK1/qbSA=="],
+    "miauwatch-backend-e2e/@miauwatch/backend/streamx": ["streamx@2.22.1", "", { "dependencies": { "fast-fifo": "^1.3.2", "text-decoder": "^1.1.0" }, "optionalDependencies": { "bare-events": "^2.2.0" } }, "sha512-znKXEBxfatz2GBNK02kRnCXjV+AA4kjZIUxeWSr3UGirZMJfTE9uiwKHobnbgxWyL/JWro8tTq+vOqAK1/qbSA=="],
 
-    "miauflix-backend-e2e/@miauflix/backend/whatwg-url": ["whatwg-url@14.2.0", "", { "dependencies": { "tr46": "^5.1.0", "webidl-conversions": "^7.0.0" } }, "sha512-De72GdQZzNTUBBChsXueQUnPKDkg/5A5zp7pFDuQAj5UFoENpiACU0wlCvzpAGnTkj++ihpKwKyYewn/XNUbKw=="],
+    "miauwatch-backend-e2e/@miauwatch/backend/whatwg-url": ["whatwg-url@14.2.0", "", { "dependencies": { "tr46": "^5.1.0", "webidl-conversions": "^7.0.0" } }, "sha512-De72GdQZzNTUBBChsXueQUnPKDkg/5A5zp7pFDuQAj5UFoENpiACU0wlCvzpAGnTkj++ihpKwKyYewn/XNUbKw=="],
 
     "mlly/pkg-types/confbox": ["confbox@0.1.8", "", {}, "sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w=="],
 
@@ -4696,9 +4696,9 @@
 
     "gaxios/node-fetch/whatwg-url/webidl-conversions": ["webidl-conversions@3.0.1", "", {}, "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="],
 
-    "miauflix-backend-e2e/@miauflix/backend/whatwg-url/tr46": ["tr46@5.1.1", "", { "dependencies": { "punycode": "^2.3.1" } }, "sha512-hdF5ZgjTqgAntKkklYw0R03MG2x/bSzTtkxmIRw/sTNV8YXsCJ1tfLAX23lhxhHJlEf3CRCOCGGWw3vI3GaSPw=="],
+    "miauwatch-backend-e2e/@miauwatch/backend/whatwg-url/tr46": ["tr46@5.1.1", "", { "dependencies": { "punycode": "^2.3.1" } }, "sha512-hdF5ZgjTqgAntKkklYw0R03MG2x/bSzTtkxmIRw/sTNV8YXsCJ1tfLAX23lhxhHJlEf3CRCOCGGWw3vI3GaSPw=="],
 
-    "miauflix-backend-e2e/@miauflix/backend/whatwg-url/webidl-conversions": ["webidl-conversions@7.0.0", "", {}, "sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g=="],
+    "miauwatch-backend-e2e/@miauwatch/backend/whatwg-url/webidl-conversions": ["webidl-conversions@7.0.0", "", {}, "sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g=="],
 
     "pkg-dir/find-up/locate-path/p-locate": ["p-locate@4.1.0", "", { "dependencies": { "p-limit": "^2.2.0" } }, "sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A=="],
 

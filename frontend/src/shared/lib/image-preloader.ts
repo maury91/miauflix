@@ -259,7 +259,7 @@ if (typeof window !== 'undefined') {
       capture: true,
       passive: true,
     });
-  window.addEventListener('miauflix:intro:animation:complete', () => (introDone = true), {
+  window.addEventListener('miauwatch:intro:animation:complete', () => (introDone = true), {
     once: true,
   });
   setTimeout(() => (introDone = true), INTRO_FALLBACK_MS);

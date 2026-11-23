@@ -1,4 +1,4 @@
-import type { PlayableRef } from '@miauflix/backend';
+import type { PlayableRef } from '@miauwatch/backend';
 
 export interface MediaSubtitles {
   language: string;
@@ -12,7 +12,7 @@ export function mediaSubtitleKey(userId: string | undefined, playable: PlayableR
     playable.kind === 'movie'
       ? `m:${playable.mediaId}`
       : `e:${playable.showMediaId}:${playable.seasonNumber}:${playable.episodeNumber}`;
-  return `miauflix.media-subtitles.${userId ?? 'anonymous'}.${media}`;
+  return `miauwatch.media-subtitles.${userId ?? 'anonymous'}.${media}`;
 }
 
 export function readMediaSubtitles(key: string): MediaSubtitles | null {

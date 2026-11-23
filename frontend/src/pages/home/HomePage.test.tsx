@@ -643,8 +643,8 @@ describe('HomePage focus transitions', () => {
         expect(getAssociation).toHaveBeenCalledWith('test-session');
         fireEvent.click(screen.getByRole('button', { name: label }));
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-        expect(window.sessionStorage.getItem('miauflix:trakt:not-now:test-session')).toBe(null);
-        expect(window.localStorage.getItem('miauflix:trakt:dont-ask:test-user')).toBe(
+        expect(window.sessionStorage.getItem('miauwatch:trakt:not-now:test-session')).toBe(null);
+        expect(window.localStorage.getItem('miauwatch:trakt:dont-ask:test-user')).toBe(
           permanent ? '1' : null
         );
         // Reloading the page keeps the same authenticated session.

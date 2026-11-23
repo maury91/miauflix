@@ -113,7 +113,7 @@ describe('ConfigurationStore', () => {
     let dataDir: string;
 
     beforeEach(() => {
-      dataDir = mkdtempSync(path.join(tmpdir(), 'miauflix-config-store-'));
+      dataDir = mkdtempSync(path.join(tmpdir(), 'miauwatch-config-store-'));
       for (const name of ['DATA_DIR', 'SOURCE_SECURITY_KEY', 'PORT', 'OPENSUBTITLES_API_KEY'])
         restoreEnvironment.push(clearEnvironmentVariable(name));
       process.env.DATA_DIR = dataDir;

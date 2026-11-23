@@ -7,7 +7,7 @@ import type { NotificationItem } from '@features/notifications/api/notifications
 import { notificationPlayable } from '@features/notifications/lib/notification-copy';
 import { subtitleLanguageForMedia } from '@features/player/lib/subtitle-language';
 import { PlayerView } from '@features/player/ui/PlayerView';
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto } from '@miauwatch/backend';
 import { ErrorNotice } from '@shared/components';
 import { builtForTizen, glRowsEnabled, glTuningOverride } from '@shared/config/constants';
 import { getTvGlTextureBudget } from '@shared/config/tv-profile';

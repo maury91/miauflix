@@ -14,7 +14,7 @@ cd "$(dirname "$0")/.."
 source "scripts/docker-utils.sh"
 
 # Define Docker configuration (defaults to dev environment)
-PROJECT_NAME="miauflix-dev"
+PROJECT_NAME="miauwatch-dev"
 DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yml"
 
 # Check if backend service is running and healthy

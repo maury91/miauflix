@@ -174,7 +174,7 @@ async function assertMatchesBaseline(
   dataSource: DataSource,
   baseline: MigrationInterface
 ): Promise<void> {
-  const dir = await mkdtemp(path.join(os.tmpdir(), 'miauflix-baseline-'));
+  const dir = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-baseline-'));
   const reference = new DataSource({
     type: 'sqlite',
     database: path.join(dir, 'database.sqlite'),

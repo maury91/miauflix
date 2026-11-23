@@ -8,7 +8,7 @@ import test from 'node:test';
 import { ConfigStore, ServiceSecretCodec } from './config-store.js';
 
 const fixture = async () => {
-  const directory = await mkdtemp(join(tmpdir(), 'miauflix-config-store-'));
+  const directory = await mkdtemp(join(tmpdir(), 'miauwatch-config-store-'));
   return {
     directory,
     filePath: join(directory, 'config.json'),

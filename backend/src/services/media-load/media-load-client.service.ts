@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import { ContractError } from '@miauflix/contract';
+import { ContractError } from '@miauwatch/contract';
 import {
   type ClaimKind,
   type ClaimRequest,
@@ -20,7 +20,7 @@ import {
   type TargetRef,
   type WarmupRangeProgress,
   type WarmupResult,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import { ErrorWithStatus } from '@errors/error-with-status.error';

@@ -9,7 +9,7 @@ import {
   type FribbRow,
   indexCompact,
   toCompact,
-} from '@miauflix/anime-mapping';
+} from '@miauwatch/anime-mapping';
 
 import type { HttpClient } from '../http/http-client';
 import { SingleFlight, withAbort } from '../util/single-flight';

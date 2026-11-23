@@ -2,7 +2,7 @@ import {
   useGetStorageInventoryQuery,
   useRemoveStorageMutation,
 } from '@features/storage/api/storage.api';
-import type { StorageItemView } from '@miauflix/backend';
+import type { StorageItemView } from '@miauwatch/backend';
 import {
   ActionGroup,
   Artwork,

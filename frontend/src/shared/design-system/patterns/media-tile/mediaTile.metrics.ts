@@ -1,4 +1,4 @@
-import { CARD_IMAGE_LOGO_BOX } from '@miauflix/service-contracts/card-image/v1';
+import { CARD_IMAGE_LOGO_BOX } from '@miauwatch/service-contracts/card-image/v1';
 
 const exact = (value: number) => Math.round(value * 1e6) / 1e6;
 

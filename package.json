@@ -4,7 +4,7 @@
   "packageManager": "bun@1.4.0",
   "cache": true,
   "scripts": {
-    "build:backend": "turbo run build build:client --filter=@miauflix/backend...",
+    "build:backend": "turbo run build build:client --filter=@miauwatch/backend...",
     "build:frontend": "turbo run build --filter='./frontend'",
     "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/service-configuration' --filter='./packages/contract' --filter='./packages/service-contracts' --filter='./packages/vpn-guard' --filter='./packages/anime-mapping'",
     "build": "turbo run build",
@@ -31,7 +31,7 @@
     "start:backend:docker:dev:allow-initial-user": "ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true npm run start:backend:docker:dev",
     "start:backend:docker:dev": "./scripts/start-docker-dev.sh",
     "start:backend:docker:prod:allow-initial-user": "ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true npm run start:backend:docker:prod",
-    "start:backend:docker:prod": "./scripts/start-docker-prod.sh up -d --build miauflix",
+    "start:backend:docker:prod": "./scripts/start-docker-prod.sh up -d --build miauwatch",
     "start:backend:e2e": "backend-e2e/scripts/env.sh dev",
     "start:catalog": "bun run --cwd services/media-catalog src/index.ts",
     "start:catalog:watch": "bun --watch --cwd services/media-catalog src/index.ts",

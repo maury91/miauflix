@@ -190,7 +190,7 @@ describe('AppShell intro sequence', () => {
     };
     idleWindow.cancelIdleCallback = () => {};
     window.dispatchEvent = vi.fn();
-    window._miauflixAnimationComplete = undefined;
+    window._miauwatchAnimationComplete = undefined;
   });
 
   afterEach(() => {
@@ -226,7 +226,7 @@ describe('AppShell intro sequence', () => {
       expect(logo).toHaveAttribute('data-disable-motion', 'false');
       expect(screen.getByTestId(testId)).toBeInTheDocument();
       expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
-      expect(window._miauflixAnimationComplete).toBeUndefined();
+      expect(window._miauwatchAnimationComplete).toBeUndefined();
     }
   );
 
@@ -265,12 +265,12 @@ describe('AppShell intro sequence', () => {
     expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
     act(() => introControls.complete?.());
 
-    expect(window._miauflixAnimationComplete).toBe(true);
+    expect(window._miauwatchAnimationComplete).toBe(true);
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'true');
     expect(screen.getByTestId('home-page').parentElement).toHaveAttribute('aria-hidden', 'false');
     expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
     expect(dispatchEventSpy).toHaveBeenCalledWith(
-      expect.objectContaining({ type: 'miauflix:intro:animation:complete' })
+      expect.objectContaining({ type: 'miauwatch:intro:animation:complete' })
     );
   });
 
@@ -300,7 +300,7 @@ describe('AppShell intro sequence', () => {
     expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
     act(() => introControls.complete?.());
     expect(screen.getByTestId('logo')).toHaveAttribute('data-position', 'home');
-    expect(window._miauflixAnimationComplete).toBe(true);
+    expect(window._miauwatchAnimationComplete).toBe(true);
     expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'true');
   });
 
@@ -433,7 +433,7 @@ describe('AppShell intro sequence', () => {
     appPage.value = 'login';
     act(() => view.rerender(<AppShell />));
     act(() => interruptedCompletion?.());
-    expect(window._miauflixAnimationComplete).toBeUndefined();
+    expect(window._miauwatchAnimationComplete).toBeUndefined();
 
     appPage.value = 'home';
     act(() => view.rerender(<AppShell />));
@@ -443,6 +443,6 @@ describe('AppShell intro sequence', () => {
     act(() => idleControls.callback?.());
     expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
     act(() => introControls.complete?.());
-    expect(window._miauflixAnimationComplete).toBe(true);
+    expect(window._miauwatchAnimationComplete).toBe(true);
   });
 });

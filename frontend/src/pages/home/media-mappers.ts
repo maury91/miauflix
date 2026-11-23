@@ -1,5 +1,5 @@
 import { mediaApi } from '@features/media/api/media.api';
-import type { MediaDto, ProgressEntry } from '@miauflix/backend';
+import type { MediaDto, ProgressEntry } from '@miauwatch/backend';
 import type { RootState } from '@store/store';
 
 export { mediaFromMovie, mediaFromShow } from '@features/media/lib/media-cards';

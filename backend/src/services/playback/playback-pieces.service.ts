@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import type { EncryptedStorageLayout } from '@miauflix/service-contracts';
+import type { EncryptedStorageLayout } from '@miauwatch/service-contracts';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';

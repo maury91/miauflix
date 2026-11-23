@@ -1,4 +1,4 @@
-import type { SubtitleCandidateDto } from '@miauflix/backend';
+import type { SubtitleCandidateDto } from '@miauwatch/backend';
 import { mediaLanguage } from '@shared/i18n';
 import { useCallback } from 'react';
 

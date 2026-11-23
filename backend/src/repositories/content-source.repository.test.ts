@@ -2,7 +2,7 @@ jest.unmock('@database/database');
 
 import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { TestDataFactory } from '@__test-utils__/test-data.factory';
-import { Quality } from '@miauflix/source-metadata-extractor';
+import { Quality } from '@miauwatch/source-metadata-extractor';
 
 import { ContentSource } from '@entities/content-source.entity';
 import { Episode } from '@entities/episode.entity';

@@ -7,7 +7,7 @@ const header = [
   '',
   '[V4+ Styles]',
   'Format: Name, Fontname, Fontsize',
-  'Style: Default,Miauflix Sans,52',
+  'Style: Default,Miauwatch Sans,52',
   '',
   '[Events]',
   'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text',
@@ -25,7 +25,7 @@ describe('ASS delivery', () => {
       180
     );
     expect(body.startsWith('[Script Info]\n')).toBe(true);
-    expect(body).toContain('Style: Default,Miauflix Sans,52');
+    expect(body).toContain('Style: Default,Miauwatch Sans,52');
     expect(body).toContain('Straddles the start');
     expect(body).toContain('{\\pos(10,20)}Sign, with comma');
     expect(body).not.toContain('Note');

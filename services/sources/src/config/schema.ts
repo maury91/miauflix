@@ -1,5 +1,5 @@
-import type { ServiceConfigSchema } from '@miauflix/contract';
-import { vpnConfigVariables } from '@miauflix/vpn-guard';
+import type { ServiceConfigSchema } from '@miauwatch/contract';
+import { vpnConfigVariables } from '@miauwatch/vpn-guard';
 
 import { DEFAULT_SOURCES } from '../providers/cardigann/sources';
 

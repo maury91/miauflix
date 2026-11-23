@@ -19,7 +19,7 @@ integration('torrent and embedded subtitle delivery', () => {
   let media: Buffer;
   let sidecar: Buffer;
   beforeAll(async () => {
-    directory = await mkdtemp(join(tmpdir(), 'miauflix-local-subs-'));
+    directory = await mkdtemp(join(tmpdir(), 'miauwatch-local-subs-'));
     const srt = join(directory, 'fixture.srt');
     await writeFile(
       srt,
@@ -158,24 +158,24 @@ integration('fonts attached to a release', () => {
   let media: Buffer;
   const fonts = {
     other: buildTestFont({ family: 'Sign Display' }),
-    regular: buildTestFont({ family: 'Miauflix Sans' }),
-    bold: buildTestFont({ family: 'Miauflix Sans', subfamily: 'Bold', bold: true }),
+    regular: buildTestFont({ family: 'Miauwatch Sans' }),
+    bold: buildTestFont({ family: 'Miauwatch Sans', subfamily: 'Bold', bold: true }),
   };
   beforeAll(async () => {
-    directory = await mkdtemp(join(tmpdir(), 'miauflix-sub-fonts-'));
+    directory = await mkdtemp(join(tmpdir(), 'miauwatch-sub-fonts-'));
     const ass = join(directory, 'subs.ass');
     await writeFile(
       ass,
       `${testAssHeader([
         { name: 'Sign', font: 'Sign Display' },
-        { name: 'Default', font: 'Miauflix Sans', bold: true },
+        { name: 'Default', font: 'Miauwatch Sans', bold: true },
       ])}Dialogue: 0,0:00:01.00,0:00:03.00,Default,,0,0,0,,First cue\n`
     );
     const attach: string[] = [];
     for (const [index, [name, data]] of Object.entries(fonts).entries()) {
       const path = join(
         directory,
-        `${name === 'other' ? 'SignDisplay' : `MiauflixSans-${name}`}.ttf`
+        `${name === 'other' ? 'SignDisplay' : `MiauwatchSans-${name}`}.ttf`
       );
       await writeFile(path, data);
       attach.push(
@@ -251,8 +251,8 @@ integration('fonts attached to a release', () => {
       const [track] = await service.discover(target);
       expect(track.fonts?.map(font => font.filename)).toEqual([
         'SignDisplay.ttf',
-        'MiauflixSans-regular.ttf',
-        'MiauflixSans-bold.ttf',
+        'MiauwatchSans-regular.ttf',
+        'MiauwatchSans-bold.ttf',
       ]);
       const { font } = await service.getFont(target, track);
       expect(font?.format).toBe('ttf');
@@ -267,8 +267,8 @@ integration('fonts attached to a release', () => {
       expect(complete).toBe(true);
       expect(all.map(font => font.names[0])).toEqual([
         'sign display',
-        'miauflix sans',
-        'miauflix sans',
+        'miauwatch sans',
+        'miauwatch sans',
       ]);
       expect(all[2].data.equals(fonts.bold)).toBe(true);
     } finally {

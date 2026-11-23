@@ -1,8 +1,8 @@
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 
-import { defineService, type Service } from '@miauflix/contract';
-import { ServiceSecretCodec } from '@miauflix/service-configuration';
+import { defineService, type Service } from '@miauwatch/contract';
+import { ServiceSecretCodec } from '@miauwatch/service-configuration';
 import {
   type ConnectionResult,
   lists,
@@ -12,7 +12,7 @@ import {
   MAX_POPULAR_PAGE_SIZE,
   type ProviderAssociation,
   type ProviderAuthorization,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 
 import { ListConfigService } from './config/config.service';

@@ -1,4 +1,4 @@
-import type { UserDto } from '@miauflix/backend';
+import type { UserDto } from '@miauwatch/backend';
 import { ProfileTile } from '@shared/design-system';
 import { useT } from '@shared/i18n';
 import { useCallback, useEffect, useState } from 'react';

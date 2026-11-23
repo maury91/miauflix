@@ -119,4 +119,4 @@ for (const position of ['home', 'inner', 'details']) {
   });
 }
 
-globalStyle(`body[data-miauflix-player='true'] ${image}`, { display: 'none' });
+globalStyle(`body[data-miauwatch-player='true'] ${image}`, { display: 'none' });

@@ -20,7 +20,7 @@ echo "-------------------------------------"
 # Create group if it doesn't exist
 if ! getent group $PGID > /dev/null 2>&1; then
     echo "Creating group with GID: $PGID"
-    groupadd -g $PGID miauflix-runtime
+    groupadd -g $PGID miauwatch-runtime
 else
     GROUP_NAME=$(getent group $PGID | cut -d: -f1)
     echo "Using existing group: $GROUP_NAME (GID: $PGID)"
@@ -29,7 +29,7 @@ fi
 # Create user if it doesn't exist
 if ! getent passwd $PUID > /dev/null 2>&1; then
     echo "Creating user with UID: $PUID"
-    useradd -u $PUID -g $PGID -M -s /bin/bash miauflix-runtime
+    useradd -u $PUID -g $PGID -M -s /bin/bash miauwatch-runtime
 else
     USER_NAME=$(getent passwd $PUID | cut -d: -f1)
     echo "Using existing user: $USER_NAME (UID: $PUID)"

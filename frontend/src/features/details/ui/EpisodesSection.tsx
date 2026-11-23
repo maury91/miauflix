@@ -1,5 +1,5 @@
 import { progressForPlayable } from '@features/progress/api/progress.api';
-import type { ProgressEntry, SeasonResponse } from '@miauflix/backend';
+import type { ProgressEntry, SeasonResponse } from '@miauwatch/backend';
 import {
   Badge,
   Button,

@@ -1,4 +1,4 @@
-# Development image (docker-compose.dev.yml). The published miauflix-sources image is the
+# Development image (docker-compose.dev.yml). The published miauwatch-sources image is the
 # `sources` target of services/Dockerfile.
 FROM oven/bun:1.4.0 AS bun-runtime
 
@@ -37,12 +37,12 @@ COPY packages/service-configuration packages/service-configuration
 COPY packages/vpn-guard packages/vpn-guard
 COPY packages/anime-mapping packages/anime-mapping
 COPY services/sources services/sources
-RUN npm run build --workspace @miauflix/source-metadata-extractor && \
-    npm run build --workspace @miauflix/contract && \
-    npm run build --workspace @miauflix/service-contracts && \
-    npm run build --workspace @miauflix/service-configuration && \
-    npm run build --workspace @miauflix/anime-mapping && \
-    npm run build --workspace @miauflix/vpn-guard
+RUN npm run build --workspace @miauwatch/source-metadata-extractor && \
+    npm run build --workspace @miauwatch/contract && \
+    npm run build --workspace @miauwatch/service-contracts && \
+    npm run build --workspace @miauwatch/service-configuration && \
+    npm run build --workspace @miauwatch/anime-mapping && \
+    npm run build --workspace @miauwatch/vpn-guard
 
 FROM runtime AS development
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \

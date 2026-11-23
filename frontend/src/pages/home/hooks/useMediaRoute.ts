@@ -9,7 +9,7 @@ import {
   nextEpisodeInSeason,
   nextSeasonNumber,
 } from '@features/progress/lib/episode-rules';
-import type { MediaDto, PlayableRef } from '@miauflix/backend';
+import type { MediaDto, PlayableRef } from '@miauwatch/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 

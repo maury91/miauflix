@@ -1,4 +1,4 @@
-# Development image (docker-compose.dev.yml). The published miauflix-media-load image is the
+# Development image (docker-compose.dev.yml). The published miauwatch-media-load image is the
 # `media-load` target of services/Dockerfile.
 FROM oven/bun:1.4.0 AS bun-runtime
 
@@ -44,11 +44,11 @@ COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
 COPY packages/vpn-guard packages/vpn-guard
 COPY services/media-load services/media-load
-RUN npm run build --workspace @miauflix/source-metadata-extractor && \
-    npm run build --workspace @miauflix/contract && \
-    npm run build --workspace @miauflix/service-contracts && \
-    npm run build --workspace @miauflix/service-configuration && \
-    npm run build --workspace @miauflix/vpn-guard
+RUN npm run build --workspace @miauwatch/source-metadata-extractor && \
+    npm run build --workspace @miauwatch/contract && \
+    npm run build --workspace @miauwatch/service-contracts && \
+    npm run build --workspace @miauwatch/service-configuration && \
+    npm run build --workspace @miauwatch/vpn-guard
 
 FROM runtime AS development
 WORKDIR /workspace/services/media-load

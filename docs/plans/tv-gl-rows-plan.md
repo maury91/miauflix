@@ -2,7 +2,7 @@
 
 Status: done (2026-11-20). The spike was taken to production by the
 [TV GL production plan](tv-gl-production-plan.md): GL is on by default in the Tizen build
-(`MIAUFLIX_TV_GL_ROWS=false` packages the DOM rows). How it works now is in the
+(`MIAUWATCH_TV_GL_ROWS=false` packages the DOM rows). How it works now is in the
 [GL rendering reference](../architecture/tv-gl-rendering.md); this plan is kept as the spike's record.
 
 ## Why

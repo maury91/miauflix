@@ -18,8 +18,8 @@ import { mkdtempSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { connect, createClient, management, serve } from '@miauflix/contract';
-import { mediaLoad, type TargetRef } from '@miauflix/service-contracts';
+import { connect, createClient, management, serve } from '@miauwatch/contract';
+import { mediaLoad, type TargetRef } from '@miauwatch/service-contracts';
 import parseTorrent from 'parse-torrent';
 
 import { MediaLoadConfigService } from '../src/config/config.service';

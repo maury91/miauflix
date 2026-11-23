@@ -1,4 +1,4 @@
-import { VideoCodec } from '@miauflix/source-metadata-extractor';
+import { VideoCodec } from '@miauwatch/source-metadata-extractor';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import { byPlaybackRank } from '@utils/streaming-score.util';

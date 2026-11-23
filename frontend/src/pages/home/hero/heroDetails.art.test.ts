@@ -1,4 +1,4 @@
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto } from '@miauwatch/backend';
 import { RecordingPainter } from '@shared/design-system/gl/testing';
 import { t } from '@shared/i18n';
 

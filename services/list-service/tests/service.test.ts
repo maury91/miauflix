@@ -2,8 +2,8 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
-import { lists } from '@miauflix/service-contracts';
+import { createClient, isContractError, localTransport, management } from '@miauwatch/contract';
+import { lists } from '@miauwatch/service-contracts';
 import { afterEach, describe, expect, it } from 'bun:test';
 
 import { createListService } from '../src/service';
@@ -32,7 +32,7 @@ const values = {
   TRAKT_API_URL: 'https://trakt.invalid',
   TRAKT_AUTH_URL: 'https://auth.trakt.invalid',
   TRAKT_CLIENT_ID: 'client-id',
-  TRAKT_REDIRECT_URI: 'https://miauflix.example/callback',
+  TRAKT_REDIRECT_URI: 'https://miauwatch.example/callback',
 };
 
 const makeReady = async (admin: ReturnType<typeof setup>['admin']) => {

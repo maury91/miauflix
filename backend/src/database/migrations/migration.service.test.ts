@@ -4,7 +4,7 @@ jest.unmock('@database/database');
 import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { createMockContentSource } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed } from '@__test-utils__/utils';
-import { Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Quality, VideoCodec } from '@miauwatch/source-metadata-extractor';
 
 import { ContentSource } from '@entities/content-source.entity';
 import { MigrationVersion } from '@entities/migration-version.entity';

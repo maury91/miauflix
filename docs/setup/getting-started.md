@@ -5,7 +5,7 @@
 > **Build from source:** clone the repository and start the Docker stack:
 
 ```bash
-git clone https://github.com/maury91/miauflix.git && cd miauflix
+git clone https://github.com/maury91/miauwatch.git && cd miauwatch
 ./scripts/start-docker-prod.sh up -d --build
 ```
 
@@ -27,8 +27,8 @@ The first command clones the repository, the second builds and starts the full s
 #### 1. Clone and Configure
 
 ```bash
-git clone https://github.com/maury91/miauflix.git
-cd miauflix
+git clone https://github.com/maury91/miauwatch.git
+cd miauwatch
 
 # Optional: interactive configuration wizard (builds the image from this checkout)
 npm run config-only:docker
@@ -36,11 +36,11 @@ npm run config-only:docker
 
 The wizard detects missing settings, offers connection tests, and saves application configuration in the persistent data directory. You can skip it and enter settings from the browser after the first start. With the [prebuilt images](docker-setup.md#prebuilt-images), browser setup is the simplest path. Keep the application and services data volumes across container recreation.
 
-The default production Compose topology runs the List Service inside the `miauflix-catalog-services` container (or `miauflix-services` with `docker-compose.all-in-one.yml`). The development topology uses a separate `list-service` container. Configure Trakt credentials to use its lists and synchronization, or dismiss the optional setup prompt to continue browsing without them. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
+The default production Compose topology runs the List Service inside the `miauwatch-catalog-services` container (or `miauwatch-services` with `docker-compose.all-in-one.yml`). The development topology uses a separate `list-service` container. Configure Trakt credentials to use its lists and synchronization, or dismiss the optional setup prompt to continue browsing without them. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
 
 #### 2. Set up the VPN
 
-The optional VPN Compose file routes source search (`miauflix-sources`), the torrent engine (`miauflix-media-load`) and FlareSolverr through NordVPN with [gluetun](https://github.com/qdm12/gluetun), whose firewall also acts as a kill switch. The backend and the catalog services stay on your normal connection. Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then save your private key to `.env`:
+The optional VPN Compose file routes source search (`miauwatch-sources`), the torrent engine (`miauwatch-media-load`) and FlareSolverr through NordVPN with [gluetun](https://github.com/qdm12/gluetun), whose firewall also acts as a kill switch. The backend and the catalog services stay on your normal connection. Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then save your private key to `.env`:
 
 ```bash
 scripts/nordvpn-key.sh
@@ -102,7 +102,7 @@ npm run start:backend:e2e
 ## Configuration System
 
 <p align="center">
-  <img src="../assets/miauflix%20env%20wizard.gif" alt="Miauwatch Environment Setup Wizard" width="800">
+  <img src="../assets/miauwatch%20env%20wizard.gif" alt="Miauwatch Environment Setup Wizard" width="800">
 </p>
 
 Miauwatch includes an intelligent configuration wizard that:

@@ -1,4 +1,4 @@
-import type { StorageInventoryResponse, StorageItemView } from '@miauflix/backend';
+import type { StorageInventoryResponse, StorageItemView } from '@miauwatch/backend';
 import { t, type Translate } from '@shared/i18n';
 
 export type UsageCategory = 'movie' | 'episode' | 'anime' | 'unknown' | 'remux' | 'other';
@@ -85,12 +85,12 @@ export function computeUsage(
     add(kindOf(item), videoBytes(item));
     add('remux', remuxBytesOf(item));
   }
-  const miauflixBytes = [...byCategory.values()].reduce((sum, bytes) => sum + bytes, 0);
+  const miauwatchBytes = [...byCategory.values()].reduce((sum, bytes) => sum + bytes, 0);
   const { filesystem } = summary;
   if (filesystem) {
     const diskUsed = Math.max(0, filesystem.totalBytes - filesystem.freeBytes);
     // Everything on the disk that isn't Miauwatch's: the system, other apps, their files
-    add('other', Math.max(0, diskUsed - miauflixBytes));
+    add('other', Math.max(0, diskUsed - miauwatchBytes));
   }
   const order: UsageCategory[] = ['movie', 'episode', 'anime', 'unknown', 'remux', 'other'];
   const segments = order
@@ -122,7 +122,7 @@ export function computeUsage(
     limitBytes,
     limitDraft: draftLimit !== null && draftLimit !== savedLimit,
     reserveBytes,
-    capacityBytes: filesystem ? filesystem.freeBytes + miauflixBytes : null,
+    capacityBytes: filesystem ? filesystem.freeBytes + miauwatchBytes : null,
     chargedBytes: summary.chargedBytes,
   };
 }

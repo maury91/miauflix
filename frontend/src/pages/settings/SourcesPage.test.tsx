@@ -59,7 +59,7 @@ const provider = (id: string, priority: number, overrides: Record<string, unknow
   name: id.toUpperCase(),
   description: null,
   kind: 'cardigann',
-  repositoryId: 'builtin:miauflix',
+  repositoryId: 'builtin:miauwatch',
   version: null,
   enabled: true,
   priority,
@@ -76,8 +76,8 @@ beforeEach(() => {
   api.providers = [provider('indexer-a', 20), provider('indexer-b', 10), provider('tv-index', 30)];
   api.repositories = [
     {
-      id: 'builtin:miauflix',
-      url: 'builtin:miauflix',
+      id: 'builtin:miauwatch',
+      url: 'builtin:miauwatch',
       name: 'Miauwatch',
       builtIn: true,
       lastFetchedAt: null,

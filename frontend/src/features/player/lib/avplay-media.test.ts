@@ -84,9 +84,9 @@ describe('AvplayMedia', () => {
   it('opens full screen, prepares and autoplays', () => {
     const { avplay, media, events, element, prepare } = setupTest();
     media.autoplay = true;
-    media.open('https://miauflix.example/api/stream/key', element);
+    media.open('https://miauwatch.example/api/stream/key', element);
 
-    expect(avplay.open).toHaveBeenCalledWith('https://miauflix.example/api/stream/key');
+    expect(avplay.open).toHaveBeenCalledWith('https://miauwatch.example/api/stream/key');
     expect(avplay.setDisplayRect).toHaveBeenCalledWith(0, 0, 1920, 1080);
     expect(media.readyState).toBe(0);
     expect(Number.isNaN(media.duration)).toBe(true);
@@ -101,7 +101,7 @@ describe('AvplayMedia', () => {
 
   it('waits for play() without autoplay, and pauses', async () => {
     const { avplay, media, events, element, prepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     expect(avplay.play).not.toHaveBeenCalled();
     expect(media.paused).toBe(true);
@@ -115,7 +115,7 @@ describe('AvplayMedia', () => {
 
   it('applies a seek made before preparing once prepared', () => {
     const { avplay, media, element, prepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     media.currentTime = 42.5;
     expect(avplay.seekTo).not.toHaveBeenCalled();
     prepare();
@@ -127,7 +127,7 @@ describe('AvplayMedia', () => {
     const { avplay, media, element, prepare } = setupTest();
     // AVPlay plays an HLS playlist without its end as live: no length, starting near its end.
     avplay.getDuration.mockReturnValue(0);
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5);
     prepare();
     expect(media.duration).toBe(3539.5);
     expect(avplay.seekTo).toHaveBeenCalledWith(0, expect.any(Function), expect.any(Function));
@@ -136,7 +136,7 @@ describe('AvplayMedia', () => {
   it('resumes a playlist still being written where it was asked to', () => {
     const { avplay, media, element, prepare } = setupTest();
     avplay.getDuration.mockReturnValue(0);
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5);
     media.currentTime = 409.3;
     prepare();
     expect(avplay.seekTo).toHaveBeenCalledTimes(1);
@@ -155,7 +155,7 @@ describe('AvplayMedia', () => {
     media.addEventListener('loadedmetadata', () => {
       media.currentTime = 851.5;
     });
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5);
     prepare();
     expect(avplay.seekTo).toHaveBeenCalledTimes(1);
     expect(avplay.seekTo).toHaveBeenCalledWith(851_500, expect.any(Function), expect.any(Function));
@@ -172,7 +172,7 @@ describe('AvplayMedia', () => {
     media.addEventListener('loadedmetadata', () => {
       media.currentTime = 851.5;
     });
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
     expect(avplay.seekTo).toHaveBeenCalledWith(851_200, expect.any(Function), expect.any(Function));
     expect(avplay.seekTo.mock.invocationCallOrder[0]).toBeLessThan(
       avplay.prepareAsync.mock.invocationCallOrder[0]
@@ -188,7 +188,7 @@ describe('AvplayMedia', () => {
 
   it('seeks back to where it opened after moving elsewhere before preparing', () => {
     const { avplay, media, element, prepare } = setupTest();
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5, 851.2);
     media.currentTime = 100;
     media.currentTime = 851.2;
     expect(media.currentTime).toBe(851.2);
@@ -206,7 +206,7 @@ describe('AvplayMedia', () => {
     avplay.seekTo.mockImplementationOnce(() => {
       throw new Error('InvalidStateError');
     });
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
     prepare();
     expect(avplay.seekTo).toHaveBeenLastCalledWith(
       600_000,
@@ -224,7 +224,7 @@ describe('AvplayMedia', () => {
         refused = onError;
       }
     );
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
     refused?.();
     prepare();
     expect(avplay.seekTo).toHaveBeenLastCalledWith(
@@ -244,7 +244,7 @@ describe('AvplayMedia', () => {
     avplay.prepareAsync.mockImplementationOnce(() => {
       throw new Error('InvalidStateError');
     });
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
     expect(avplay.prepareAsync).toHaveBeenCalledTimes(1);
     expect(events).not.toContain('error');
     landed?.();
@@ -258,7 +258,7 @@ describe('AvplayMedia', () => {
   it('keeps the file length when AVPlay reports only the part built so far', () => {
     const { avplay, media, element, prepare } = setupTest();
     avplay.getDuration.mockReturnValue(2_000_000);
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3600, 1800);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3600, 1800);
     prepare();
     expect(media.duration).toBe(3600);
   });
@@ -272,7 +272,7 @@ describe('AvplayMedia', () => {
         refused = onError;
       }
     );
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8', element, 3539.5, 600);
     media.currentTime = 900;
     refused?.();
     prepare();
@@ -285,7 +285,7 @@ describe('AvplayMedia', () => {
 
   it('keeps the length AVPlay reports, and its start, for a finished file', () => {
     const { avplay, media, element, prepare } = setupTest();
-    media.open('https://miauflix.example/api/stream/key', element, 3539.5);
+    media.open('https://miauwatch.example/api/stream/key', element, 3539.5);
     prepare();
     expect(media.duration).toBe(120);
     expect(avplay.seekTo).not.toHaveBeenCalled();
@@ -293,7 +293,7 @@ describe('AvplayMedia', () => {
 
   it('buffers a second before playing a TV version, and the default for other streams', () => {
     const { avplay, media, element } = setupTest();
-    media.open('https://miauflix.example/api/stream/key/remux/index.m3u8?start=1355', element);
+    media.open('https://miauwatch.example/api/stream/key/remux/index.m3u8?start=1355', element);
     expect(avplay.setBufferingParam).toHaveBeenCalledWith(
       'PLAYER_BUFFER_FOR_PLAY',
       'PLAYER_BUFFER_SIZE_IN_SECOND',
@@ -305,7 +305,7 @@ describe('AvplayMedia', () => {
       1
     );
     avplay.setBufferingParam.mockClear();
-    media.open('https://miauflix.example/api/stream/key', element);
+    media.open('https://miauwatch.example/api/stream/key', element);
     expect(avplay.setBufferingParam).not.toHaveBeenCalled();
   });
 
@@ -315,7 +315,7 @@ describe('AvplayMedia', () => {
     avplay.seekTo.mockImplementation((_milliseconds: number, onSuccess?: () => void) => {
       finishSeek = onSuccess;
     });
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     media.currentTime = 60;
     vi.advanceTimersByTime(1000);
@@ -329,7 +329,7 @@ describe('AvplayMedia', () => {
 
   it('throttles timeupdate like a video element', () => {
     const { media, events, element, prepare, listener } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     vi.advanceTimersByTime(1000);
     listener().oncurrentplaytime?.(1_000);
@@ -343,7 +343,7 @@ describe('AvplayMedia', () => {
 
   it('ends at the end of the file', async () => {
     const { media, events, element, prepare, listener } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     await media.play();
     vi.advanceTimersByTime(1000);
@@ -356,7 +356,7 @@ describe('AvplayMedia', () => {
 
   it('reloads a stream that ends early, when the source ran dry', async () => {
     const { avplay, media, events, element, prepare, listener } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     await media.play();
     vi.advanceTimersByTime(1000);
@@ -369,7 +369,7 @@ describe('AvplayMedia', () => {
 
   it('switches to an audio track by its AVPlay index', () => {
     const { avplay, media, element, prepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     expect(media.audioTracks).toHaveLength(2);
     media.audioTracks[0].enabled = false;
@@ -380,7 +380,7 @@ describe('AvplayMedia', () => {
 
   it('switches audio chosen while paused once playback starts', async () => {
     const { avplay, media, element, prepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     // AVPlay switches audio tracks only while playing.
     avplay.setSelectTrack.mockImplementationOnce(() => {
@@ -396,7 +396,7 @@ describe('AvplayMedia', () => {
 
   it('drops audio chosen while paused when it is turned off before playback starts', async () => {
     const { avplay, media, element, prepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     avplay.setSelectTrack.mockImplementationOnce(() => {
       throw new Error('InvalidStateError');
@@ -409,7 +409,7 @@ describe('AvplayMedia', () => {
 
   it('lets an audio track be asked for again when switching to it on play fails', async () => {
     const { avplay, media, element, prepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     prepare();
     avplay.setSelectTrack
       .mockImplementationOnce(() => {
@@ -428,7 +428,7 @@ describe('AvplayMedia', () => {
 
   it('reports a file AVPlay cannot prepare', () => {
     const { media, events, element, failPrepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     failPrepare();
     expect(events).toContain('error');
   });
@@ -438,13 +438,13 @@ describe('AvplayMedia', () => {
     avplay.prepareAsync.mockImplementationOnce(() => {
       throw new Error('InvalidStateError');
     });
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     expect(events).toContain('error');
   });
 
   it('ignores the callbacks of a closed file', () => {
     const { avplay, media, events, element, prepare } = setupTest();
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     media.close();
     prepare();
     expect(avplay.stop).toHaveBeenCalled();
@@ -456,7 +456,7 @@ describe('AvplayMedia', () => {
   it('plays 4K on a UHD panel', () => {
     const { avplay, media, element } = setupTest();
     window.webapis = { avplay, productinfo: { isUdPanelSupported: () => true } };
-    media.open('https://miauflix.example/stream', element);
+    media.open('https://miauwatch.example/stream', element);
     expect(avplay.setStreamingProperty).toHaveBeenCalledWith('SET_MODE_4K', 'TRUE');
   });
 });

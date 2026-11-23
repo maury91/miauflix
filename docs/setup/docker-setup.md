@@ -7,15 +7,15 @@ This guide covers Docker-based deployment and development setup for Miauwatch.
 The quickest way to run Miauwatch needs no clone and no build. Download [`docker-compose.yml`](../../docker-compose.yml) into an empty folder and start it:
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.yml
+curl -fsSLO https://raw.githubusercontent.com/maury91/miauwatch/main/docker-compose.yml
 docker compose up -d
 ```
 
 Open <http://localhost:3000>, create the admin account, then add your [TMDB access token](https://developer.themoviedb.org/docs) (and optionally Trakt credentials) from the setup screens.
 
-On first boot the `miauflix` logs show `Starting in degraded mode`: that's expected until you complete the setup screens.
+On first boot the `miauwatch` logs show `Starting in degraded mode`: that's expected until you complete the setup screens.
 
-> **Image tags:** `docker-compose.yml` uses `latest`, the newest release. Set `MIAUFLIX_VERSION` in `.env` to a version such as `0.0.1` to upgrade only when you choose, or to `edge` to follow `main`.
+> **Image tags:** `docker-compose.yml` uses `latest`, the newest release. Set `MIAUWATCH_VERSION` in `.env` to a version such as `0.0.1` to upgrade only when you choose, or to `edge` to follow `main`.
 
 > **Automatic updates:** `docker-compose.yml` runs [Watchtower](https://watchtower.nickfedor.com/), which pulls the image tag you chose every day at 4:00 (UTC unless you set `TZ`) and recreates the Miauwatch containers when it changed. Set `WATCHTOWER_SCHEDULE` in `.env` to change the time (a cron expression with seconds first, e.g. `0 30 3 * * *`), or remove the `watchtower` service to update by hand with `docker compose pull && docker compose up -d`. With a pinned version tag it only picks up rebuilds of that tag.
 
@@ -51,7 +51,7 @@ To watch from a TV, phone or another computer at home, open Miauwatch to your ne
 1. In the `.env` next to `docker-compose.yml`, publish the port on every network interface instead of this computer only:
 
    ```bash
-   MIAUFLIX_LISTEN_ADDRESS=0.0.0.0
+   MIAUWATCH_LISTEN_ADDRESS=0.0.0.0
    ```
 
    Setting it in `.env` rather than editing the port mapping keeps the change when `./update.sh --files` replaces the compose files (see [Updating Miauwatch](#updating-miauwatch)).
@@ -74,19 +74,19 @@ To reach Miauwatch from the internet (for example on a VPS), add [`docker-compos
 2. Download both files next to `docker-compose.yml`:
 
    ```bash
-   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.https.yml
-   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/Caddyfile
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauwatch/main/docker-compose.https.yml
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauwatch/main/Caddyfile
    ```
 
 3. Create a `.env` file in the same folder:
 
    ```bash
    COMPOSE_FILE=docker-compose.yml:docker-compose.https.yml
-   MIAUFLIX_DOMAIN=miauwatch.example.com
+   MIAUWATCH_DOMAIN=miauwatch.example.com
    REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
    ```
 
-   `COMPOSE_FILE` lets plain `docker compose` commands use both files (see [Combining compose files](#combining-compose-files)). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauwatch only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files. The backend stays outside the VPN, so nothing else changes (a `MIAUFLIX_UPSTREAM=vpn:3000` line left from older instructions is ignored and can be removed):
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files (see [Combining compose files](#combining-compose-files)). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauwatch only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files. The backend stays outside the VPN, so nothing else changes (a `MIAUWATCH_UPSTREAM=vpn:3000` line left from older instructions is ignored and can be removed):
 
    ```bash
    COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml
@@ -96,7 +96,7 @@ To reach Miauwatch from the internet (for example on a VPS), add [`docker-compos
 
    ```bash
    docker compose up -d
-   docker compose logs miauflix --since=15m
+   docker compose logs miauwatch --since=15m
    ```
 
 Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauwatch prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS, and `CORS_ORIGIN=https://<your domain>`: the realtime connection (live playback updates, notifications, search) only accepts that origin, and the default allows only `localhost`. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
@@ -105,20 +105,20 @@ The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a
 
 ### Published images
 
-| Image                                       | Contents                                                                                                 |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `ghcr.io/maury91/miauflix`                  | Main backend, also serves the web frontend                                                               |
-| `ghcr.io/maury91/miauflix-catalog-services` | Bunqueue, media catalog, and lists: talks to TMDB and Trakt only, no VPN needed                          |
-| `ghcr.io/maury91/miauflix-sources`          | Source search on its own; checks its own VPN connection                                                  |
-| `ghcr.io/maury91/miauflix-media-load`       | Torrent engine (downloads, encrypted storage, tracker scrapes) on its own; checks its own VPN connection |
-| `ghcr.io/maury91/miauflix-services`         | All of the above but the backend in one container, to save resources                                     |
-| `ghcr.io/maury91/miauflix-media-catalog`    | Media catalog service on its own                                                                         |
-| `ghcr.io/maury91/miauflix-list-service`     | List (Trakt) service on its own                                                                          |
-| `ghcr.io/maury91/miauflix-tv-pairing`       | TV server-discovery pairing service                                                                      |
+| Image                                        | Contents                                                                                                 |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `ghcr.io/maury91/miauwatch`                  | Main backend, also serves the web frontend                                                               |
+| `ghcr.io/maury91/miauwatch-catalog-services` | Bunqueue, media catalog, and lists: talks to TMDB and Trakt only, no VPN needed                          |
+| `ghcr.io/maury91/miauwatch-sources`          | Source search on its own; checks its own VPN connection                                                  |
+| `ghcr.io/maury91/miauwatch-media-load`       | Torrent engine (downloads, encrypted storage, tracker scrapes) on its own; checks its own VPN connection |
+| `ghcr.io/maury91/miauwatch-services`         | All of the above but the backend in one container, to save resources                                     |
+| `ghcr.io/maury91/miauwatch-media-catalog`    | Media catalog service on its own                                                                         |
+| `ghcr.io/maury91/miauwatch-list-service`     | List (Trakt) service on its own                                                                          |
+| `ghcr.io/maury91/miauwatch-tv-pairing`       | TV server-discovery pairing service                                                                      |
 
-`miauflix-services`, `miauflix-catalog-services`, `miauflix-sources` and `miauflix-media-load` are built from the same base (`services/Dockerfile`) and differ only in the services they contain. Each runs the services its command names, so any container of them can run any subset it contains, for example `command: [sources, media-load]` on `miauflix-services`. They keep each service's data in its own directory (`SOURCES_DATA_DIR`, `MEDIA_LOAD_DATA_DIR`, ...), so containers on one host can share a data volume, and the healthcheck covers just the services the container runs. Source search and media load each check their own connection against NordVPN, so they can run on different hosts, each behind its own VPN; point the backend at them with `SOURCES_SERVICE_URL` and `MEDIA_LOAD_SERVICE_URL`.
+`miauwatch-services`, `miauwatch-catalog-services`, `miauwatch-sources` and `miauwatch-media-load` are built from the same base (`services/Dockerfile`) and differ only in the services they contain. Each runs the services its command names, so any container of them can run any subset it contains, for example `command: [sources, media-load]` on `miauwatch-services`. They keep each service's data in its own directory (`SOURCES_DATA_DIR`, `MEDIA_LOAD_DATA_DIR`, ...), so containers on one host can share a data volume, and the healthcheck covers just the services the container runs. Source search and media load each check their own connection against NordVPN, so they can run on different hosts, each behind its own VPN; point the backend at them with `SOURCES_SERVICE_URL` and `MEDIA_LOAD_SERVICE_URL`.
 
-All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauflix/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
+All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauwatch/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 
 To test a branch before merging, open **Actions → CI Pipeline → Run workflow**, pick the branch and run it. After the tests pass it publishes every image tagged with the branch name (`/` becomes `-`, so `fix/buffer` is `fix-buffer`) and `sha-<commit>`; `latest` and `edge` are left alone. Only collaborators with write access to the repository can start a run.
 
@@ -126,14 +126,14 @@ To test a branch before merging, open **Actions → CI Pipeline → Run workflow
 
 Miauwatch finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default source search and media load refuse to work until each detects a NordVPN connection, or finds itself behind a healthy gluetun (the setup below): gluetun's firewall is the kill switch, so with it the check needs no NordVPN and no configuration.
 
-[`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes everything that reaches indexers, trackers and peers through NordVPN with [gluetun](https://github.com/qdm12/gluetun): the `miauflix-sources` and `miauflix-media-load` containers and FlareSolverr. Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP. The backend and `miauflix-catalog-services` only talk to your browser, TMDB and Trakt, so they stay on the normal network.
+[`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes everything that reaches indexers, trackers and peers through NordVPN with [gluetun](https://github.com/qdm12/gluetun): the `miauwatch-sources` and `miauwatch-media-load` containers and FlareSolverr. Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP. The backend and `miauwatch-catalog-services` only talk to your browser, TMDB and Trakt, so they stay on the normal network.
 
 1. Get a NordVPN access token: sign in at [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard), pick **NordVPN** in the left sidebar, then **Get Access Token** → **Generate New Token**. (It is not under "Manual setup".)
 2. Download the VPN file and the key helper next to `docker-compose.yml`:
 
    ```bash
-   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.vpn.yml
-   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/scripts/nordvpn-key.sh
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauwatch/main/docker-compose.vpn.yml
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauwatch/main/scripts/nordvpn-key.sh
    ```
 
 3. Turn the token into your NordLynx (WireGuard) private key. The script asks for the token without echoing it, fetches the key from NordVPN, and saves it as `NORDVPN_PRIVATE_KEY` in `.env` (readable only by you) without printing either value:
@@ -157,7 +157,7 @@ Miauwatch finds and streams content over BitTorrent, so every peer sees the IP a
    docker compose up -d
    ```
 
-The `vpn` service owns the network of source search and media load; the backend reaches them through it (`vpn:3003` and `vpn:3004`), and Miauwatch's port stays published by the `miauflix` container as without the VPN. FlareSolverr, when its file is listed, shares the VPN's network too. Gluetun connects to NordVPN's P2P servers. Source search and media load each check that their own connection is NordVPN-protected, and refuse searches, tracker scrapes and downloads until it is. `http://localhost:3000/api/status` shows each one's check as `vpn` (`protected`, `unprotected` or `disabled`) under `services.SOURCES` and `services.MEDIA_LOAD`.
+The `vpn` service owns the network of source search and media load; the backend reaches them through it (`vpn:3003` and `vpn:3004`), and Miauwatch's port stays published by the `miauwatch` container as without the VPN. FlareSolverr, when its file is listed, shares the VPN's network too. Gluetun connects to NordVPN's P2P servers. Source search and media load each check that their own connection is NordVPN-protected, and refuse searches, tracker scrapes and downloads until it is. `http://localhost:3000/api/status` shows each one's check as `vpn` (`protected`, `unprotected` or `disabled`) under `services.SOURCES` and `services.MEDIA_LOAD`.
 
 To check the connection, compare the address source search and media load use with your own:
 
@@ -171,7 +171,7 @@ If you accept that peers see your real IP (for example while trying Miauwatch on
 
 ### One container for all services
 
-By default the catalog, source search and media load run in three containers, so that only the last two need the VPN. Without a VPN you can run them all in one `miauflix-services` container instead, which saves memory and processes. Add the file to `COMPOSE_FILE` in `.env`:
+By default the catalog, source search and media load run in three containers, so that only the last two need the VPN. Without a VPN you can run them all in one `miauwatch-services` container instead, which saves memory and processes. Add the file to `COMPOSE_FILE` in `.env`:
 
 ```bash
 COMPOSE_FILE=docker-compose.yml:docker-compose.all-in-one.yml
@@ -181,16 +181,16 @@ It uses the same data volume, so you can switch either way and run `docker compo
 
 ## Building From Source
 
-`docker-compose.build.yml` builds the `miauflix`, `miauflix-catalog-services`, `miauflix-sources` and `miauflix-media-load` images (and `miauflix-services` with `docker-compose.all-in-one.yml`) from a clone of the repository instead of pulling them. Everything else works as with the prebuilt images, including the other files in [Combining compose files](#combining-compose-files).
+`docker-compose.build.yml` builds the `miauwatch`, `miauwatch-catalog-services`, `miauwatch-sources` and `miauwatch-media-load` images (and `miauwatch-services` with `docker-compose.all-in-one.yml`) from a clone of the repository instead of pulling them. Everything else works as with the prebuilt images, including the other files in [Combining compose files](#combining-compose-files).
 
 ```bash
-git clone https://github.com/maury91/miauflix.git && cd miauflix
+git clone https://github.com/maury91/miauwatch.git && cd miauwatch
 npm run start:backend:docker:prod
 ```
 
 `npm run start:backend:docker:prod` (and `stop:` / `restart:`) use the `COMPOSE_FILE` from `.env` when it's set. Otherwise they pick `docker-compose.yml`, `docker-compose.build.yml`, `docker-compose.flaresolverr.yml` and `docker-compose.tracing.yml`, plus `docker-compose.vpn.yml` once `NORDVPN_PRIVATE_KEY` is in `.env`. With your own `COMPOSE_FILE`, run `docker compose up -d --build` after a `git pull` to rebuild.
 
-The build file also mounts `.env` into the `miauflix` container for bootstrap environment values. The configuration wizard (`npm run config-only:docker`) saves application settings in the persistent data directory. It runs Miauwatch as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauwatch up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
+The build file also mounts `.env` into the `miauwatch` container for bootstrap environment values. The configuration wizard (`npm run config-only:docker`) saves application settings in the persistent data directory. It runs Miauwatch as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauwatch up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
 
 ### Importing an existing data directory
 
@@ -199,10 +199,10 @@ If application data is stored in `./data`, copy it into the deployment's persist
 ```bash
 docker compose down --remove-orphans
 # Backend database and settings
-docker compose -f docker-compose.yml run --rm --no-deps --entrypoint sh -v ./data:/source-data:ro miauflix \
+docker compose -f docker-compose.yml run --rm --no-deps --entrypoint sh -v ./data:/source-data:ro miauwatch \
   -c 'cp -a /source-data/. /usr/src/app/data/'
 # List service (Trakt) and catalog data
-docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/source-data:ro miauflix-catalog-services \
+docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/source-data:ro miauwatch-catalog-services \
   -c 'set -e; mkdir -p /app/data/list-service /app/data/catalog
       cp -a /source-data/list-service/. /app/data/list-service/
       if [ -d /source-data/media-catalog ]; then cp -a /source-data/media-catalog/. /app/data/catalog/; else cp -a /source-data/catalog.db* /app/data/catalog/; fi
@@ -218,7 +218,7 @@ Miauwatch generates `JWT_SECRET` and `SOURCE_SECURITY_KEY` on first start and sa
 The base Compose file does not pass these variables; `docker-compose.build.yml` mounts `.env`. When deployment environment variables supply active keys, preserve their exact values. To inspect which generated-key names are persisted without printing their values:
 
 ```bash
-docker compose run --rm --no-deps --entrypoint node miauflix \
+docker compose run --rm --no-deps --entrypoint node miauwatch \
   -e 'console.log(Object.keys(require("/usr/src/app/data/config.json")))'
 ```
 
@@ -226,7 +226,7 @@ Environment-supplied generated secrets take precedence over saved values. Contin
 
 ```yaml
 services:
-  miauflix:
+  miauwatch:
     environment:
       JWT_SECRET: ${JWT_SECRET:?}
       SOURCE_SECURITY_KEY: ${SOURCE_SECURITY_KEY:?}
@@ -236,14 +236,14 @@ services:
 
 ### Main Services
 
-- **miauflix**: Node.js API server and static-asset frontend host
-- **miauflix-catalog-services**: Bunqueue, media catalog, and list service; never behind the VPN
-- **miauflix-sources**: Source search; behind the VPN with `docker-compose.vpn.yml`
-- **miauflix-media-load**: Torrent engine and downloads; behind the VPN with `docker-compose.vpn.yml`
-- **miauflix-services** (`docker-compose.all-in-one.yml`): the three above in one container
+- **miauwatch**: Node.js API server and static-asset frontend host
+- **miauwatch-catalog-services**: Bunqueue, media catalog, and list service; never behind the VPN
+- **miauwatch-sources**: Source search; behind the VPN with `docker-compose.vpn.yml`
+- **miauwatch-media-load**: Torrent engine and downloads; behind the VPN with `docker-compose.vpn.yml`
+- **miauwatch-services** (`docker-compose.all-in-one.yml`): the three above in one container
 - **autoheal**: Restarts the backend when its healthcheck fails (see [Health checks and automatic restarts](#health-checks-and-automatic-restarts))
 - **watchtower**: Updates the Miauwatch containers when a new image is published (not with `docker-compose.build.yml`)
-- **vpn** (`docker-compose.vpn.yml`): [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN; `miauflix-sources`, `miauflix-media-load` and FlareSolverr share its network
+- **vpn** (`docker-compose.vpn.yml`): [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN; `miauwatch-sources`, `miauwatch-media-load` and FlareSolverr share its network
 - **caddy** (`docker-compose.https.yml`): HTTPS reverse proxy with automatic Let's Encrypt certificates
 - **flaresolverr** (`docker-compose.flaresolverr.yml`): Cloudflare bypass proxy for protected content sources, see the [FlareSolverr Configuration Guide](flaresolverr.md)
 - **jaeger** (`docker-compose.tracing.yml`): Collects OpenTelemetry traces, see [Tracing](../development/tracing.md)
@@ -255,7 +255,7 @@ The image's healthcheck calls `GET /api/health` every 30 s and marks the contain
 Docker only marks a container unhealthy: `restart: unless-stopped` restarts it when the process exits, not when it hangs. `docker-compose.yml` therefore runs [autoheal](https://github.com/willfarrell/docker-autoheal), which restarts the containers labelled `autoheal=true` (the backend) once they turn unhealthy. It needs the Docker socket, mounted at `/var/run/docker.sock`, and has no network. Check the state with:
 
 ```bash
-docker compose ps miauflix
+docker compose ps miauwatch
 docker compose logs autoheal
 ```
 
@@ -282,11 +282,11 @@ On macOS, create and trust the local development certificate before starting the
 npm run start:backend:docker:dev
 ```
 
-To store certificates outside the default `.certs` directory, set `MIAUFLIX_DEV_CERT_DIR` for both commands. Relative paths are resolved from the repository root; absolute paths are used as provided.
+To store certificates outside the default `.certs` directory, set `MIAUWATCH_DEV_CERT_DIR` for both commands. Relative paths are resolved from the repository root; absolute paths are used as provided.
 
 ```bash
-MIAUFLIX_DEV_CERT_DIR=./dev-certs ./scripts/setup-dev-certificate.sh
-MIAUFLIX_DEV_CERT_DIR=./dev-certs npm run start:backend:docker:dev
+MIAUWATCH_DEV_CERT_DIR=./dev-certs ./scripts/setup-dev-certificate.sh
+MIAUWATCH_DEV_CERT_DIR=./dev-certs npm run start:backend:docker:dev
 ```
 
 ### Testing Environment
@@ -337,12 +337,12 @@ Docker prefixes volume names with the project name, by default the folder name: 
 
 ```bash
 # Backup essential data (with Miauwatch stopped)
-docker compose stop miauflix miauflix-catalog-services miauflix-sources miauflix-media-load
-docker compose run --rm --no-deps --entrypoint tar -v "$PWD":/backup miauflix \
-  -czf /backup/miauflix-data.tar.gz -C /usr/src/app/data .
-docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup miauflix-catalog-services \
-  -czf /backup/miauflix-services-data.tar.gz -C /app/data .
-docker compose start miauflix-catalog-services miauflix-sources miauflix-media-load miauflix
+docker compose stop miauwatch miauwatch-catalog-services miauwatch-sources miauwatch-media-load
+docker compose run --rm --no-deps --entrypoint tar -v "$PWD":/backup miauwatch \
+  -czf /backup/miauwatch-data.tar.gz -C /usr/src/app/data .
+docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup miauwatch-catalog-services \
+  -czf /backup/miauwatch-services-data.tar.gz -C /app/data .
+docker compose start miauwatch-catalog-services miauwatch-sources miauwatch-media-load miauwatch
 ```
 
 Keep `.env` with the backups for deployment settings and any explicitly supplied secrets. The data volumes contain saved application configuration and generated encryption keys; retain them together. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauwatch can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).
@@ -355,10 +355,10 @@ Keep `.env` with the backups for deployment settings and any explicitly supplied
 
 ```bash
 # Check logs
-docker compose logs miauflix
+docker compose logs miauwatch
 
 # Restart specific service
-docker compose restart miauflix
+docker compose restart miauwatch
 ```
 
 **Permission issues**:
@@ -372,7 +372,7 @@ sudo chown -R $USER:$USER .
 
 ```bash
 # Check container networking
-docker compose exec miauflix curl -I https://www.google.com
+docker compose exec miauwatch curl -I https://www.google.com
 
 # Check VPN status (if using VPN)
 docker compose exec vpn wget -qO- https://ipinfo.io/ip
@@ -404,7 +404,7 @@ docker compose logs caddy
 
 ```yaml
 services:
-  miauflix:
+  miauwatch:
     mem_limit: 1g
     cpus: '0.50'
 ```
@@ -431,10 +431,10 @@ Docker builds use BuildKit cache mounts to significantly speed up rebuilds:
 
 ```bash
 # Build with BuildKit (automatic in Docker Compose v2+)
-DOCKER_BUILDKIT=1 docker build -t miauflix .
+DOCKER_BUILDKIT=1 docker build -t miauwatch .
 
 # Or use buildx
-docker buildx build -t miauflix .
+docker buildx build -t miauwatch .
 
 # Using docker-compose (BuildKit enabled by default in v2+)
 docker compose build
@@ -469,7 +469,7 @@ logging:
 docker stats
 
 # Specific service stats
-docker compose top miauflix
+docker compose top miauwatch
 ```
 
 ## Updates and Maintenance
@@ -479,7 +479,7 @@ docker compose top miauflix
 With the prebuilt images, Watchtower updates them every night. To update right away, download [`scripts/update.sh`](../../scripts/update.sh) next to `docker-compose.yml` once:
 
 ```bash
-curl -fsSLo update.sh https://raw.githubusercontent.com/maury91/miauflix/main/scripts/update.sh && chmod +x update.sh
+curl -fsSLo update.sh https://raw.githubusercontent.com/maury91/miauwatch/main/scripts/update.sh && chmod +x update.sh
 ```
 
 Then run it whenever you want the newest images of your tag:
@@ -488,7 +488,7 @@ Then run it whenever you want the newest images of your tag:
 ./update.sh
 ```
 
-It pulls the images of the files in `COMPOSE_FILE`, recreates the containers that changed (removing ones no longer in the files), deletes the replaced images and waits until every container is running and every one with a healthcheck is healthy, failing after 6 minutes (`HEALTH_TIMEOUT`, in seconds). `./update.sh --files` first downloads the newest version of the compose files and `Caddyfile` you already have from `main` (`MIAUFLIX_FILES_REF` picks another branch or tag), keeping each replaced one as `<file>.<date>-<time>.bak`; files of your own, such as an extra override, are left alone, so put your changes there or in `.env` rather than in the downloaded files. If any download fails, it stops without changing any file. When the `Caddyfile` changed, it also recreates Caddy so that it reads the new one (on the next run, if this one stops before that). Without the script, `docker compose pull && docker compose up -d` does the same update. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
+It pulls the images of the files in `COMPOSE_FILE`, recreates the containers that changed (removing ones no longer in the files), deletes the replaced images and waits until every container is running and every one with a healthcheck is healthy, failing after 6 minutes (`HEALTH_TIMEOUT`, in seconds). `./update.sh --files` first downloads the newest version of the compose files and `Caddyfile` you already have from `main` (`MIAUWATCH_FILES_REF` picks another branch or tag), keeping each replaced one as `<file>.<date>-<time>.bak`; files of your own, such as an extra override, are left alone, so put your changes there or in `.env` rather than in the downloaded files. If any download fails, it stops without changing any file. When the `Caddyfile` changed, it also recreates Caddy so that it reads the new one (on the next run, if this one stops before that). Without the script, `docker compose pull && docker compose up -d` does the same update. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
 
 ```bash
 git pull

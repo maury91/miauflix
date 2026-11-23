@@ -5,7 +5,7 @@ import {
   useTestServiceConfigMutation,
   useUpdateConfigMutation,
 } from '@features/config/api/config.api';
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, mocked } from 'storybook/test';
 

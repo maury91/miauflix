@@ -101,11 +101,11 @@ fi
 # Set configuration based on mode
 if [[ "$MODE" == "dev" ]]; then
     DOCKER_COMPOSE_FILE="docker/docker-compose.dev.yml"
-    PROJECT_NAME="miauflix-dev"
+    PROJECT_NAME="miauwatch-dev"
     DESCRIPTION="Development Environment with Hot Reloading"
 else
     DOCKER_COMPOSE_FILE="docker/docker-compose.test.yml"
-    PROJECT_NAME="miauflix-tests"
+    PROJECT_NAME="miauwatch-tests"
     DESCRIPTION="Docker-based Integration Test Environment"
 fi
 

@@ -4,8 +4,8 @@ import type {
   ProgressRequest,
   SearchClientMessage,
   SearchServerMessage,
-} from '@miauflix/backend';
-import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
+} from '@miauwatch/backend';
+import type { ArtworkUpdate, MediaRef } from '@miauwatch/service-contracts/catalog/v1';
 import { getTvAccessToken } from '@shared/api/tv-auth';
 import { API_URL, builtForTizen } from '@shared/config/constants';
 import { z } from 'zod';

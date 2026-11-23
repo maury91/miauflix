@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 
-import type { ConfigVariable } from '@miauflix/contract';
+import type { ConfigVariable } from '@miauwatch/contract';
 
 /**
  * What a service reports in its status (`details.vpn`): `disabled` when its check is turned off,

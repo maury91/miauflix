@@ -14,12 +14,12 @@ updating about 1,000 paint layers, whatever React does. A canvas is one layer.
 `glRowsEnabled` (`frontend/src/shared/config/constants.ts`, `resolveGlRows`) decides it once at
 start:
 
-| Build                                  | Default | `localStorage['miauflix:gl-rows']` |
-| -------------------------------------- | ------- | ---------------------------------- |
-| Tizen (`scripts/package-tizen.sh`)     | on      | `'0'` forces the DOM rows          |
-| Tizen with `MIAUFLIX_TV_GL_ROWS=false` | off     | `'1'` turns GL on                  |
-| Web, production                        | off     | ignored (`'0'` is a no-op)         |
-| Web, development (`npm run dev`)       | off     | `'1'` turns GL on (keys only)      |
+| Build                                   | Default | `localStorage['miauwatch:gl-rows']` |
+| --------------------------------------- | ------- | ----------------------------------- |
+| Tizen (`scripts/package-tizen.sh`)      | on      | `'0'` forces the DOM rows           |
+| Tizen with `MIAUWATCH_TV_GL_ROWS=false` | off     | `'1'` turns GL on                   |
+| Web, production                         | off     | ignored (`'0'` is a no-op)          |
+| Web, development (`npm run dev`)        | off     | `'1'` turns GL on (keys only)       |
 
 Then, at runtime:
 
@@ -29,7 +29,7 @@ Then, at runtime:
   `reportGlFailure()`; `useGlAvailable()` turns Home's GL rows off for the session. Home's state
   is in Redux, so focus survives the remount.
 
-Debugging on the TV: `localStorage['miauflix:gl-tuning']` as JSON overrides the engine's
+Debugging on the TV: `localStorage['miauwatch:gl-tuning']` as JSON overrides the engine's
 defaults (`textureBudget`, `antialias`, `frameBudgetMs`, `preserveDrawingBuffer`,
 `transparent`), read when the surface starts, on the Tizen and development builds only. While
 it's set, the surface's backend (stats, last error) is `window.__glRows`; in development always.

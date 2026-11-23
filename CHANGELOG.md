@@ -5,6 +5,7 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 ## Unreleased
 
 - Miauflix is now Miauwatch, with a new wordmark and icon for the web and Samsung TV apps. Existing installs can upgrade in place.
+- The rename now covers the Docker images (`miauwatch`, `miauwatch-sources`, …), the compose services, the `MIAUWATCH_*` settings and the `pair.miau.watch` pairing service. Existing installs keep updating: the old image names are still published and `MIAUFLIX_*` settings still work. To move over, download the new `update.sh` and run `./update.sh --files`. It renames the settings in `.env` and the services in your own compose files, and keeps your data. Signed-in TVs and saved preferences carry over.
 
 ### Languages
 

@@ -5,7 +5,7 @@ import {
   useTestServiceConfigMutation,
   useUpdateConfigMutation,
 } from '@features/config/api/config.api';
-import type { ConfigServiceActionResult } from '@miauflix/backend';
+import type { ConfigServiceActionResult } from '@miauwatch/backend';
 import { SettingsLayout } from '@pages/settings/SettingsLayout';
 import { ActionGroup, Button, Message, ProgressSpinner, Stack } from '@shared/design-system';
 import { useT } from '@shared/i18n';

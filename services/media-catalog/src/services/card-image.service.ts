@@ -9,7 +9,7 @@ import {
   type CardImageFormat,
   type CardImageSize,
   cardTitleRenderable,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 import sharp, { type OverlayOptions } from 'sharp';
 
 import { logger } from '../logger';

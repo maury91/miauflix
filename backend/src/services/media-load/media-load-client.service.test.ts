@@ -4,8 +4,8 @@ import {
   type ManagedConfiguration,
   type RunningServer,
   serve,
-} from '@miauflix/contract';
-import { mediaLoad, type SourceDescriptor } from '@miauflix/service-contracts';
+} from '@miauwatch/contract';
+import { mediaLoad, type SourceDescriptor } from '@miauwatch/service-contracts';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import { ErrorWithStatus } from '@errors/error-with-status.error';

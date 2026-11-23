@@ -1,5 +1,5 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
-import type { PlaybackDelivery, ProgressEntry } from '@miauflix/backend';
+import type { PlaybackDelivery, ProgressEntry } from '@miauwatch/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { act, renderHook } from '@testing-library/react';
 import type { PropsWithChildren } from 'react';

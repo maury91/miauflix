@@ -1,4 +1,4 @@
-import type { ClaimRequest } from '@miauflix/service-contracts';
+import type { ClaimRequest } from '@miauwatch/service-contracts';
 import type { Torrent } from 'webtorrent';
 
 import { paddedLength } from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';

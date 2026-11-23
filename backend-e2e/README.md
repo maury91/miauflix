@@ -187,11 +187,11 @@ The E2E test suite includes an automated credential extraction system that simpl
 The credential extraction script is modular and can be used in different contexts:
 
 ```bash
-# Used by env.sh dev - monitors miauflix-dev project
-./scripts/extract-credentials.sh 60 "miauflix-dev" "docker/docker-compose.dev.yml"
+# Used by env.sh dev - monitors miauwatch-dev project
+./scripts/extract-credentials.sh 60 "miauwatch-dev" "docker/docker-compose.dev.yml"
 
-# Used by env.sh test - monitors miauflix-tests project
-./scripts/extract-credentials.sh 60 "miauflix-tests" "docker/docker-compose.test.yml"
+# Used by env.sh test - monitors miauwatch-tests project
+./scripts/extract-credentials.sh 60 "miauwatch-tests" "docker/docker-compose.test.yml"
 
 # Direct usage with custom parameters
 ./scripts/extract-credentials.sh [timeout] [project-name] [compose-file]

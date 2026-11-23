@@ -4,7 +4,7 @@ export type {
   ServiceConfigApplyResult as CatalogConfigWriteResult,
   ServiceLifecycleState as CatalogState,
   ConfigVariable as ConfigVariableSchema,
-} from '@miauflix/contract';
+} from '@miauwatch/contract';
 export type {
   BackdropFocus,
   BatchResponse,
@@ -20,4 +20,4 @@ export type {
   SeasonDetail,
   SeasonSummary,
   TVShowDetail,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';

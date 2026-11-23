@@ -1,4 +1,4 @@
-import type { RemuxPlan } from '@miauflix/service-contracts';
+import type { RemuxPlan } from '@miauwatch/service-contracts';
 import { describe, expect, it } from 'bun:test';
 
 import { buildPlaylist, parsePlaylist, remuxArgs, sidecarFor } from '../../src/remux/remux-command';

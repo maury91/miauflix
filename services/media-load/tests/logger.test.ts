@@ -1,4 +1,4 @@
-import { redactLogArgument, redactSourceIdentifiers } from '@miauflix/service-contracts';
+import { redactLogArgument, redactSourceIdentifiers } from '@miauwatch/service-contracts';
 
 import { logger } from '../src/lib/logger';
 

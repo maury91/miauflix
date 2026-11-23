@@ -17,7 +17,7 @@ esac
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 backend_e2e_dir=$(dirname "$script_dir")
 root_dir=$(dirname "$backend_e2e_dir")
-project_name="miauflix-tests"
+project_name="miauwatch-tests"
 compose_file="docker/docker-compose.test.yml"
 playwright_image="mcr.microsoft.com/playwright:v1.56.1-jammy"
 

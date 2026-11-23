@@ -2,7 +2,7 @@ import {
   useGetAudioSourcesQuery,
   useSearchAudioSourcesMutation,
 } from '@features/player/api/playback.api';
-import type { PlayableRef } from '@miauflix/backend';
+import type { PlayableRef } from '@miauwatch/backend';
 import { useCallback, useState } from 'react';
 
 /**

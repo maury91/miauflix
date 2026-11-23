@@ -1,4 +1,4 @@
-import type { AuthTokens } from '@miauflix/backend';
+import type { AuthTokens } from '@miauwatch/backend';
 
 /**
  * Session tokens for the Samsung TV build. The TV app runs from local files, so the backend is
@@ -8,7 +8,7 @@ import type { AuthTokens } from '@miauflix/backend';
  * headers. The existing refresh-on-401 flow restores an access token after a restart.
  */
 
-const REFRESH_TOKENS_KEY = 'miauflix.tv.refreshTokens';
+const REFRESH_TOKENS_KEY = 'miauwatch.tv.refreshTokens';
 /** `GET /api/auth/sessions` checks at most this many refresh tokens (see AuthService). */
 const MAX_LISTED_SESSIONS = 8;
 const accessTokens = new Map<string, string>();

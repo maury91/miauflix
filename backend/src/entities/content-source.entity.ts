@@ -1,4 +1,4 @@
-import { Language, Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Language, Quality, Source, VideoCodec } from '@miauwatch/source-metadata-extractor';
 import {
   Column,
   CreateDateColumn,

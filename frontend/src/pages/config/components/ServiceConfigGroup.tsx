@@ -1,4 +1,4 @@
-import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
+import type { ConfigEntryView, ConfigServiceActionResult } from '@miauwatch/backend';
 import {
   ActionGroup,
   Badge,

@@ -2,7 +2,7 @@ import type {
   PlaybackHealth,
   StorageActivity,
   WarmupRangeProgress,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import { logger } from '../../lib/logger';
 import type { StorageService } from '../../storage/storage.service';

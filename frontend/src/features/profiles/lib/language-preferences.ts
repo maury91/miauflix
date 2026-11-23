@@ -1,4 +1,4 @@
-import type { LanguagePreferences, UserDto } from '@miauflix/backend';
+import type { LanguagePreferences, UserDto } from '@miauwatch/backend';
 
 /** Nothing chosen yet: everything follows the device's language. */
 export const DEFAULT_LANGUAGE_PREFERENCES: LanguagePreferences = {

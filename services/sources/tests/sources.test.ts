@@ -10,7 +10,7 @@ import { migrations, TORRENTIO_MANIFEST } from '../src/db/migrations';
 import {
   DEFAULT_SOURCES,
   LEGACY_SOURCE_KEY,
-  MIAUFLIX_SOURCE_KEY,
+  MIAUWATCH_SOURCE_KEY,
   parseSource,
   parseSources,
   PROWLARR_SOURCE_KEY,
@@ -130,7 +130,7 @@ it('keeps cached definitions and the catalog when migrating to configurable sour
 it('defaults to Prowlarr plus the Miauwatch folder, with none of the blocked trackers listed here', () => {
   expect(parseSources(DEFAULT_SOURCES).sources.map(source => source.key)).toEqual([
     PROWLARR_SOURCE_KEY,
-    MIAUFLIX_SOURCE_KEY,
+    MIAUWATCH_SOURCE_KEY,
   ]);
 });
 
@@ -141,7 +141,7 @@ it('drops the untouched Jackett built-ins left by earlier versions, and keeps on
     for (const migration of migrations.slice(0, 5)) old.run(migration);
     old.run('PRAGMA user_version = 5');
     const insert = old.query(
-      "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'cardigann','builtin:miauflix',?,?,?,100)"
+      "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,'cardigann','builtin:miauwatch',?,?,?,100)"
     );
     insert.run('jackett-therarbg', 'TheRARBG (Jackett)', '{"cardigann":"therarbg"}', 0);
     insert.run('jackett-nyaasi', 'Nyaa (Jackett)', '{"cardigann":"nyaasi"}', 1);
@@ -186,7 +186,7 @@ it('removes the site-specific providers earlier versions shipped, with what was 
     old.run('PRAGMA user_version = 6');
     old
       .query(
-        "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('yts','native','builtin:miauflix','YTS','{\"native\":\"yts\"}',1,20)"
+        "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('yts','native','builtin:miauwatch','YTS','{\"native\":\"yts\"}',1,20)"
       )
       .run();
     old.query("INSERT INTO provider_usage VALUES ('yts','2026-11-01',5)").run();

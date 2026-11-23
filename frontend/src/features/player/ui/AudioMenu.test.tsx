@@ -1,4 +1,4 @@
-import type { AudioSourceDto } from '@miauflix/backend';
+import type { AudioSourceDto } from '@miauwatch/backend';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import type { ComponentProps } from 'react';
 import { describe, expect, it, vi } from 'vitest';

@@ -1,4 +1,4 @@
-import type { ConfigEntryView } from '@miauflix/backend';
+import type { ConfigEntryView } from '@miauwatch/backend';
 import { type MessageKey, t } from '@shared/i18n';
 
 /** The configuration group that holds media-load's storage settings. */

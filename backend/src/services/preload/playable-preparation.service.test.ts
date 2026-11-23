@@ -3,7 +3,7 @@ jest.mock('parse-torrent', () =>
   jest.fn(async (file: Buffer) => ({ files: JSON.parse(file.toString()) }))
 );
 
-import { Language, Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Language, Quality, Source, VideoCodec } from '@miauwatch/source-metadata-extractor';
 
 import type { PlayableRef } from '@mytypes/playable.types';
 import { SourceHealthService } from '@services/source/source-health.service';

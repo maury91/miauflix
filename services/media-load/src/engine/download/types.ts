@@ -1,4 +1,4 @@
-import type { StorageActivity } from '@miauflix/service-contracts';
+import type { StorageActivity } from '@miauwatch/service-contracts';
 import type { Torrent } from 'webtorrent';
 
 import type { EncryptedStorageLayout, Storage } from '../../storage/types';

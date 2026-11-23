@@ -11,7 +11,7 @@ import type {
   PlayableRef,
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type PlaybackDeliveredUpdate = Extract<RealtimePlaybackDelivery['update'], { type: 'delivery' }>;

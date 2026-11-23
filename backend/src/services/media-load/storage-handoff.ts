@@ -1,6 +1,6 @@
 import { logger } from '@logger';
-import { F, MAX_FRAME_BYTES, methodName } from '@miauflix/contract';
-import { type ImportedSource, mediaLoad } from '@miauflix/service-contracts';
+import { F, MAX_FRAME_BYTES, methodName } from '@miauwatch/contract';
+import { type ImportedSource, mediaLoad } from '@miauwatch/service-contracts';
 import { In, MoreThan } from 'typeorm';
 
 import type { Database } from '@database/database';

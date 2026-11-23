@@ -1,4 +1,4 @@
-import type { PreloadPreparationSnapshot } from '@miauflix/backend';
+import type { PreloadPreparationSnapshot } from '@miauwatch/backend';
 import { Badge, ProgressSpinner } from '@shared/design-system';
 import { visuallyHidden } from '@shared/design-system/a11y.css';
 import { useT } from '@shared/i18n';

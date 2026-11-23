@@ -1,4 +1,4 @@
-import { parseAnimeRelease } from '@miauflix/source-metadata-extractor';
+import { parseAnimeRelease } from '@miauwatch/source-metadata-extractor';
 
 import type { SourceMetadata } from '@services/sources-client/source-candidate';
 

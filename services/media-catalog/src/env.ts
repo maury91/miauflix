@@ -6,7 +6,7 @@
  * precedence chain (push > env > file > default) — see src/config/config.service.ts.
  */
 
-import { ANI_ZIP_URL, ANIME_LISTS_URL } from '@miauflix/anime-mapping';
+import { ANI_ZIP_URL, ANIME_LISTS_URL } from '@miauwatch/anime-mapping';
 
 export interface ServiceEnv {
   host: string;

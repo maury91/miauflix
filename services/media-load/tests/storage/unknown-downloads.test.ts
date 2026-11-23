@@ -19,7 +19,7 @@ describe('StorageService.removeUnknownDownloads', () => {
   let downloadPath: string;
 
   beforeEach(() => {
-    downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauflix-downloads-'));
+    downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauwatch-downloads-'));
   });
 
   afterEach(() => {
@@ -75,7 +75,7 @@ describe('StorageService.removeUnknownDownloads', () => {
 
 describe('StorageService.removeUnknownDownloads with the database in the download directory', () => {
   it('keeps the directory holding the database', async () => {
-    const downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauflix-downloads-'));
+    const downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauwatch-downloads-'));
     try {
       const dataDir = path.join(downloadPath, 'data');
       fs.mkdirSync(dataDir);
@@ -103,7 +103,7 @@ describe('StorageService.removeUnknownDownloads with the database in the downloa
   });
 
   it('keeps the database and its SQLite sidecars when it sits in the download directory', async () => {
-    const downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauflix-downloads-'));
+    const downloadPath = fs.mkdtempSync(path.join(os.tmpdir(), 'miauwatch-downloads-'));
     try {
       const [{ MediaLoadDatabase, openDatabase }, { Encryption }] = await Promise.all([
         import('../../src/db/database'),

@@ -2,8 +2,8 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { createClient, localTransport, management } from '@miauflix/contract';
-import { sources } from '@miauflix/service-contracts';
+import { createClient, localTransport, management } from '@miauwatch/contract';
+import { sources } from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 

@@ -3,8 +3,8 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
-import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
-import { sources } from '@miauflix/service-contracts';
+import { createClient, isContractError, localTransport, management } from '@miauwatch/contract';
+import { sources } from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it, spyOn } from 'bun:test';
 import { parse } from 'yaml';
@@ -709,7 +709,7 @@ it('discovers fixture sources for movies 550 and 120 through the E2E provider co
       })
     );
   const backend = environment('backend');
-  const service = environment('miauflix-services');
+  const service = environment('miauwatch-services');
   const definitionsHost = new URL(backend.CARDIGANN_DEFINITION_SOURCES).host;
   const moviesDefinition = parse(
     readFileSync(join(e2e, 'indexer/definitions/movies-api.yml'), 'utf8')

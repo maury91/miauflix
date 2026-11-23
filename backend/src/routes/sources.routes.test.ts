@@ -1,5 +1,5 @@
 import { noRateLimit } from '@__test-utils__/routes';
-import { ContractError } from '@miauflix/contract';
+import { ContractError } from '@miauwatch/contract';
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';

@@ -1,4 +1,4 @@
-import type { MatchedBy, SourceSearchRequest } from '@miauflix/service-contracts';
+import type { MatchedBy, SourceSearchRequest } from '@miauwatch/service-contracts';
 
 import type { AnimeContext } from '../anime/resolver';
 import type { Param, Provider, ProviderQuery } from '../providers/types';

@@ -1,4 +1,4 @@
-import type { PreloadPreparationSnapshot } from '@miauflix/backend';
+import type { PreloadPreparationSnapshot } from '@miauwatch/backend';
 
 type SourceMetadata = NonNullable<PreloadPreparationSnapshot['source']>;
 // Plain string unions: the backend's enums are assignable to them, and fixtures can use literals.

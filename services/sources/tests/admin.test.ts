@@ -2,8 +2,8 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
-import { sources } from '@miauflix/service-contracts';
+import { createClient, isContractError, localTransport, management } from '@miauwatch/contract';
+import { sources } from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 
@@ -72,10 +72,10 @@ it('lists the built-in providers in priority order', async () => {
   await ready();
   const providers = await client.providers();
   expect(providers.map(p => [p.id, p.priority, p.repositoryId, p.enabled]).slice(0, 4)).toEqual([
-    ['maury91-therarbg-imdb', 10, 'builtin:miauflix', true],
-    ['prowlarr-yts', 20, 'builtin:miauflix', true],
-    ['maury91-eztv-api', 30, 'builtin:miauflix', true],
-    ['maury91-torrentio', 35, 'builtin:miauflix', true],
+    ['maury91-therarbg-imdb', 10, 'builtin:miauwatch', true],
+    ['prowlarr-yts', 20, 'builtin:miauwatch', true],
+    ['maury91-eztv-api', 30, 'builtin:miauwatch', true],
+    ['maury91-torrentio', 35, 'builtin:miauwatch', true],
   ]);
   expect(providers.find(p => p.id === 'maury91-animetosho')).toMatchObject({
     priority: 45,
@@ -83,7 +83,7 @@ it('lists the built-in providers in priority order', async () => {
   });
   expect(providers.slice(6).every(p => !p.enabled)).toBe(true);
   expect(await client.repositories()).toMatchObject([
-    { id: 'builtin:miauflix', name: 'Miauwatch', builtIn: true, providerCount: 9 },
+    { id: 'builtin:miauwatch', name: 'Miauwatch', builtIn: true, providerCount: 9 },
   ]);
 });
 
@@ -128,7 +128,7 @@ it('does not overwrite a provider owned by another repository', async () => {
   const repo = await client.addRepository({ url: 'https://repo.invalid/a' });
   expect(repo.lastError).toContain('prowlarr-yts');
   const yts = (await client.providers()).find(p => p.id === 'prowlarr-yts')!;
-  expect(yts).toMatchObject({ name: 'YTS', repositoryId: 'builtin:miauflix' });
+  expect(yts).toMatchObject({ name: 'YTS', repositoryId: 'builtin:miauwatch' });
 });
 
 it('refresh updates the definition but keeps enabled, priority and settings', async () => {
@@ -156,7 +156,7 @@ it('removes repositories with their providers but never the built-in one', async
   const repo = await client.addRepository({ url: 'https://repo.invalid/a' });
   await client.removeRepository({ id: repo.id });
   expect((await client.providers()).some(p => p.id === 'mytorznab')).toBe(false);
-  await rejectsWith(client.removeRepository({ id: 'builtin:miauflix' }), 'bad_request');
+  await rejectsWith(client.removeRepository({ id: 'builtin:miauwatch' }), 'bad_request');
   await rejectsWith(client.removeRepository({ id: 'repo:missing' }), 'not_found');
 });
 

@@ -1,5 +1,5 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
-import type { PlayableRef } from '@miauflix/backend';
+import type { PlayableRef } from '@miauwatch/backend';
 import { t } from '@shared/i18n';
 import { qualityLabel, sourceLabel } from '@shared/lib/source-quality';
 

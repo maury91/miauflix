@@ -9,8 +9,8 @@ import {
   namesOf,
   pickEpisode,
   toEntry,
-} from '@miauflix/anime-mapping';
-import type { SourceSearchRequest } from '@miauflix/service-contracts';
+} from '@miauwatch/anime-mapping';
+import type { SourceSearchRequest } from '@miauwatch/service-contracts';
 
 import type { Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';

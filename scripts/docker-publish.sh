@@ -88,7 +88,7 @@ push_images() {
 # List images
 list_images() {
     print_status "Local Miauwatch Docker image:"
-    docker images | grep -E "(${REPOSITORY}|miauflix)" || echo "No Miauwatch images found locally"
+    docker images | grep -E "(${REPOSITORY}|miauwatch)" || echo "No Miauwatch images found locally"
 }
 
 # Clean up old images

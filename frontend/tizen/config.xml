@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Packaged into dist/miauwatch.wgt by scripts/package-tizen.sh, which sets the version. -->
-<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="http://miauflix/tv"
+<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="http://miauwatch/tv"
         version="0.0.0" viewmodes="maximized">
   <access origin="*" subdomains="true"></access>
   <tizen:application id="8nvJKZYaJb.Mauflix" package="8nvJKZYaJb" required_version="2.3"/>

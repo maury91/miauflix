@@ -23,7 +23,7 @@ if (!name || !/^[A-Z][A-Za-z0-9]*$/.test(name)) {
   process.exit(1);
 }
 
-const dir = await mkdtemp(path.join(os.tmpdir(), 'miauflix-schema-'));
+const dir = await mkdtemp(path.join(os.tmpdir(), 'miauwatch-schema-'));
 const dataSource = new DataSource({
   type: 'sqlite',
   database: path.join(dir, 'database.sqlite'),

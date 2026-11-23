@@ -2,62 +2,62 @@ services:
   backend:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-backend
+        - type=gha,scope=miauwatch-e2e-backend
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-backend
+        - type=gha,mode=max,scope=miauwatch-e2e-backend
 
-  miauflix-services:
+  miauwatch-services:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-miauflix-services
+        - type=gha,scope=miauwatch-e2e-miauwatch-services
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-miauflix-services
+        - type=gha,mode=max,scope=miauwatch-e2e-miauwatch-services
 
   tmdb-images:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-tmdb-images
+        - type=gha,scope=miauwatch-e2e-tmdb-images
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-tmdb-images
+        - type=gha,mode=max,scope=miauwatch-e2e-tmdb-images
 
   tmdb-mock:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-tmdb-mock
+        - type=gha,scope=miauwatch-e2e-tmdb-mock
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-tmdb-mock
+        - type=gha,mode=max,scope=miauwatch-e2e-tmdb-mock
 
   trakt-mock:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-trakt-mock
+        - type=gha,scope=miauwatch-e2e-trakt-mock
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-trakt-mock
+        - type=gha,mode=max,scope=miauwatch-e2e-trakt-mock
 
   indexer-mock:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-indexer-mock
+        - type=gha,scope=miauwatch-e2e-indexer-mock
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-indexer-mock
+        - type=gha,mode=max,scope=miauwatch-e2e-indexer-mock
 
   anilist-mock:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-anilist-mock
+        - type=gha,scope=miauwatch-e2e-anilist-mock
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-anilist-mock
+        - type=gha,mode=max,scope=miauwatch-e2e-anilist-mock
 
   anizip-mock:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-anizip-mock
+        - type=gha,scope=miauwatch-e2e-anizip-mock
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-anizip-mock
+        - type=gha,mode=max,scope=miauwatch-e2e-anizip-mock
 
   anime-lists-mock:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-anime-lists-mock
+        - type=gha,scope=miauwatch-e2e-anime-lists-mock
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-anime-lists-mock
+        - type=gha,mode=max,scope=miauwatch-e2e-anime-lists-mock

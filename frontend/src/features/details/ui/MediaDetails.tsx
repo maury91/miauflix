@@ -19,7 +19,7 @@ import type {
   PlayableRef,
   PreloadPreparationSnapshot,
   SeasonResponse,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import { createSelector } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
 import {
@@ -273,9 +273,9 @@ function DetailsScreen({ media, onBack, onWatch, preparation = null }: MediaDeta
 
   // The app logo moves aside on this screen
   useEffect(() => {
-    document.body.dataset['miauflixDetails'] = 'true';
+    document.body.dataset['miauwatchDetails'] = 'true';
     return () => {
-      delete document.body.dataset['miauflixDetails'];
+      delete document.body.dataset['miauwatchDetails'];
     };
   }, []);
 

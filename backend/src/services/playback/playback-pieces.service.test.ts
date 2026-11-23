@@ -1,4 +1,4 @@
-import type { PiecesUpdate, StorageBitfield } from '@miauflix/service-contracts';
+import type { PiecesUpdate, StorageBitfield } from '@miauwatch/service-contracts';
 
 import type { ContentSource } from '@entities/content-source.entity';
 

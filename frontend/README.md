@@ -6,8 +6,8 @@ Modern React + Vite client that powers the TV experience. The source tree keeps 
 
 - Install dependencies from the repo root: `bun install`
 - Start the full stack dev environment: `npm run dev`
-- Frontend-only build: `npm run --workspace @miauflix/frontend build`
-- Unit tests: `npm run --workspace @miauflix/frontend test`
+- Frontend-only build: `npm run --workspace @miauwatch/frontend build`
+- Unit tests: `npm run --workspace @miauwatch/frontend test`
 
 ## Key Entry Points
 
@@ -62,6 +62,6 @@ Use aliases in new imports to keep references stable when files move.
 - Co-locate tests (`*.test.ts[x]`) and stories with the component or utility they cover.
 - Keep feature folders domain-focused; shared code should live under `src/shared/` or `src/utils/`.
 - Prefer RTK Query for API access inside `features/*/api`, and surface hooks through feature modules rather than importing the slice directly.
-- Run `npm run --workspace @miauflix/frontend format` (if available) before committing to maintain consistent styling.
+- Run `npm run --workspace @miauwatch/frontend format` (if available) before committing to maintain consistent styling.
 
 This structure keeps login and intro animation code active while isolating reusable primitives for future pages. As additional features move from `frontend-legacy`, follow the same module boundaries to keep the tree predictable.

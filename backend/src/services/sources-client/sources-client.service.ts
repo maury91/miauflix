@@ -7,7 +7,7 @@ import {
   sources,
   type SourceSearchItem,
   type SourceSearchRequest,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import { RemoteService } from '@services/remote/remote-service';

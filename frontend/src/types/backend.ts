@@ -20,7 +20,7 @@ export type {
   Source,
   TVShowDto,
   UserDto,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 
-import type { ListDto } from '@miauflix/backend';
+import type { ListDto } from '@miauwatch/backend';
 export type CategoryDto = ListDto;

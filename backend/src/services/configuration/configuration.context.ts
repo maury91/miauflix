@@ -1,4 +1,4 @@
-import type { ServiceConfigSchema } from '@miauflix/contract';
+import type { ServiceConfigSchema } from '@miauwatch/contract';
 
 import type { ConfigurableService } from '@mytypes/configuration';
 

@@ -1,4 +1,4 @@
-import type { ApiErrorBody, RefreshResponse } from '@miauflix/backend';
+import type { ApiErrorBody, RefreshResponse } from '@miauwatch/backend';
 import { isApiErrorBody, reportApiError } from '@shared/lib/api-error';
 
 import { t } from '../i18n';

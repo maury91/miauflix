@@ -1,4 +1,4 @@
-import { UserRole } from '@miauflix/backend';
+import { UserRole } from '@miauwatch/backend';
 
 import {
   extractUserCredentialsFromLogs,

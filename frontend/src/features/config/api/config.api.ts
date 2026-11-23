@@ -1,5 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { ConfigEntryView, SaveConfigsResult, TestConfigsResult } from '@miauflix/backend';
+import type { ConfigEntryView, SaveConfigsResult, TestConfigsResult } from '@miauwatch/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';

@@ -5,7 +5,7 @@
 # for a TV asks for a Samsung account sign-in in the browser to create that certificate.
 #
 # Usage: scripts/install-tizen.sh <tv-ip> [apps2samsung-cli install options]
-#        (or set MIAUFLIX_TV_IP; `apps2samsung-cli scan` finds the TV)
+#        (or set MIAUWATCH_TV_IP; `apps2samsung-cli scan` finds the TV)
 
 set -e
 
@@ -16,7 +16,7 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WGT_PATH="${PROJECT_ROOT}/dist/miauwatch.wgt"
 CLI="${APPS2SAMSUNG_CLI:-apps2samsung-cli}"
 
-TV_IP="${MIAUFLIX_TV_IP}"
+TV_IP="${MIAUWATCH_TV_IP}"
 if [[ $# -gt 0 && "$1" != -* ]]; then
   TV_IP="$1"
   shift

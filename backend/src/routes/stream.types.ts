@@ -1,5 +1,5 @@
-import type { VideoCodec } from '@miauflix/source-metadata-extractor';
-import type { Quality } from '@miauflix/source-metadata-extractor';
+import type { VideoCodec } from '@miauwatch/source-metadata-extractor';
+import type { Quality } from '@miauwatch/source-metadata-extractor';
 
 export interface StreamParams {
   token: string;

@@ -1,4 +1,4 @@
-import type { CreatePlaybackSessionResponse } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse } from '@miauwatch/backend';
 
 export function audioLanguage(code: string | null): string | undefined {
   if (!code) return undefined;
@@ -27,7 +27,7 @@ export function preferredAudioTrack(
 export function playbackAudioCapabilities(
   video: HTMLVideoElement
 ): Pick<
-  import('@miauflix/backend').CreatePlaybackSessionRequest['preferences'],
+  import('@miauwatch/backend').CreatePlaybackSessionRequest['preferences'],
   | 'audioLanguages'
   | 'supportedAudioCodecs'
   | 'supportedMseAudioCodecs'

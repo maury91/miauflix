@@ -1,4 +1,4 @@
-import type { SearchResultDetailDto, SearchResultDto } from '@miauflix/backend';
+import type { SearchResultDetailDto, SearchResultDto } from '@miauwatch/backend';
 import { ErrorNotice } from '@shared/components';
 import { Heading, MediaTile, Message, Text } from '@shared/design-system';
 import { useT } from '@shared/i18n';

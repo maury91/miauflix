@@ -12,7 +12,7 @@ From the repository root:
 bun install
 npm run build:libs
 npm run start:sources
-npm test --workspace @miauflix/sources-service
+npm test --workspace @miauwatch/sources-service
 ```
 
 Bootstrap environment: `SOURCES_PORT` (3003), `SOURCES_HOST` (0.0.0.0), `SOURCES_DATA_DIR` (or `DATA_DIR`, otherwise ./data), `SOURCES_KEY_FILE` (defaults inside the data directory), and optional `SOURCES_ENCRYPTION_KEY`. Retain the data directory and key across restarts; replacing the key prevents decrypting existing settings/cache/references.
@@ -26,7 +26,7 @@ Tests inject an offline fetch implementation; unexpected URLs fail. Provider beh
 ## Provider management
 
 Providers live in the `providers` table, owned by a repository (`repositories` table). The built-in
-repository `builtin:miauflix` holds the default providers. Admins manage them through the contract
+repository `builtin:miauwatch` holds the default providers. Admins manage them through the contract
 (`providers`, `updateProvider`, `reorderProviders`, `testProvider`, `repositories`, `addRepository`,
 `removeRepository`, `refreshRepository`). The backend exposes them under `/api/sources`.
 

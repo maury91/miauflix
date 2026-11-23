@@ -1,4 +1,4 @@
-import type { AudioSourceDto } from '@miauflix/backend';
+import type { AudioSourceDto } from '@miauwatch/backend';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { type ReactNode, useEffect, useRef, useState } from 'react';

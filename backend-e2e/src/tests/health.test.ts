@@ -22,7 +22,7 @@ describe('Health Endpoint', () => {
     expect(response).toBeHttpStatus(200);
     expect(response.data).toEqual({
       status: 'ok',
-      service: 'miauflix',
+      service: 'miauwatch',
     });
 
     // Verify request ID is present for tracing

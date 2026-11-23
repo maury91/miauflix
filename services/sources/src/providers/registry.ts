@@ -1,4 +1,4 @@
-import type { ProviderSetting } from '@miauflix/service-contracts';
+import type { ProviderSetting } from '@miauwatch/service-contracts';
 
 import type { SourcesConfigService } from '../config/config.service';
 import type { ProviderRow, Store } from '../db/store';

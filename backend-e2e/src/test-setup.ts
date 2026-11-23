@@ -19,7 +19,7 @@ const BACKEND_URL = ensureSlash(
 
 // Make backend URL available globally
 global.BACKEND_URL = BACKEND_URL;
-global.E2E_COMPOSE_PROJECT = process.env.E2E_COMPOSE_PROJECT || 'miauflix-tests';
+global.E2E_COMPOSE_PROJECT = process.env.E2E_COMPOSE_PROJECT || 'miauwatch-tests';
 
 // Import custom matchers
 import { clearFailedRequests } from './utils/failed-requests-collector';

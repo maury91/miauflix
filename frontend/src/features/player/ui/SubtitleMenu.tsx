@@ -1,5 +1,5 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
-import type { SubtitleCandidateDto } from '@miauflix/backend';
+import type { SubtitleCandidateDto } from '@miauwatch/backend';
 import {
   Badge,
   Button,
@@ -88,7 +88,7 @@ function readPreferences(key: string | null): Preferences {
   if (!key || typeof window === 'undefined') return defaults;
   try {
     const stored = JSON.parse(
-      window.localStorage.getItem(`miauflix.subtitle.${key}`) ?? 'null'
+      window.localStorage.getItem(`miauwatch.subtitle.${key}`) ?? 'null'
     ) as Partial<Preferences> | null;
     if (!stored) return defaults;
     return {
@@ -103,7 +103,7 @@ function readPreferences(key: string | null): Preferences {
 function savePreferences(key: string | null, preferences: Preferences): void {
   if (!key || typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(`miauflix.subtitle.${key}`, JSON.stringify(preferences));
+    window.localStorage.setItem(`miauwatch.subtitle.${key}`, JSON.stringify(preferences));
   } catch {
     // Browser storage may be unavailable; subtitle selection still works for this playback.
   }

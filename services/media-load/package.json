@@ -1,5 +1,5 @@
 {
-  "name": "@miauflix/media-load-service",
+  "name": "@miauwatch/media-load-service",
   "version": "0.2.0",
   "private": true,
   "type": "module",
@@ -12,10 +12,10 @@
     "lint": "eslint \"{src,tests}/**/*.ts\""
   },
   "dependencies": {
-    "@miauflix/contract": "*",
-    "@miauflix/service-configuration": "*",
-    "@miauflix/vpn-guard": "*",
-    "@miauflix/service-contracts": "*",
+    "@miauwatch/contract": "*",
+    "@miauwatch/service-configuration": "*",
+    "@miauwatch/vpn-guard": "*",
+    "@miauwatch/service-contracts": "*",
     "bittorrent-tracker": "^11.2.3",
     "filename-reserved-regex": "3.0.0",
     "load-ip-set": "3.0.1",

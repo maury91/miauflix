@@ -3,12 +3,12 @@ import { readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { createClient, localTransport, management } from '@miauflix/contract';
+import { createClient, localTransport, management } from '@miauwatch/contract';
 import {
   sources,
   type SourceSearchItem,
   type SourceSearchRequest,
-} from '@miauflix/service-contracts';
+} from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 

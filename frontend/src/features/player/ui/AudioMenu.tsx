@@ -2,7 +2,7 @@ import type {
   AudioSourceDto,
   AudioSourceTrack,
   CreatePlaybackSessionResponse,
-} from '@miauflix/backend';
+} from '@miauwatch/backend';
 import {
   Badge,
   Button,

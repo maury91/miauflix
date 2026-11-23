@@ -1,7 +1,7 @@
 import { useCreateSessionMutation } from '@features/player/api/playback.api';
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import { backendUrl, playbackPreferences } from '@features/player/lib/playback-request';
-import type { CreatePlaybackSessionResponse, PlayableRef } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse, PlayableRef } from '@miauwatch/backend';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 import type { PlaybackSource } from './usePlaybackSource';

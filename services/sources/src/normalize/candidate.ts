@@ -1,8 +1,8 @@
-import type { MatchedBy, SourceCandidate, SourceSearchRequest } from '@miauflix/service-contracts';
+import type { MatchedBy, SourceCandidate, SourceSearchRequest } from '@miauwatch/service-contracts';
 import {
   calculateApproximateBitrate,
   extractSourceMetadata,
-} from '@miauflix/source-metadata-extractor';
+} from '@miauwatch/source-metadata-extractor';
 
 import { type AnimeMatch, episodeAliases, matchAnimeRelease } from '../anime/release';
 import type { AnimeContext } from '../anime/resolver';

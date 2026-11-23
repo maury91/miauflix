@@ -1,4 +1,4 @@
-import type { CreatePlaybackSessionResponse, ProgressEntry } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse, ProgressEntry } from '@miauwatch/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { act, fireEvent, render as rtlRender, screen, waitFor } from '@testing-library/react';
 import { type PropsWithChildren, type ReactElement } from 'react';
@@ -95,7 +95,7 @@ vi.mock('@shared/config/constants', async importOriginal => ({
   ...(await importOriginal<typeof import('@shared/config/constants')>()),
   builtForTizen: true,
   API_CREDENTIALS: 'omit',
-  API_URL: 'https://miauflix.example',
+  API_URL: 'https://miauwatch.example',
 }));
 
 import { realtimeActions, realtimeSlice } from '@store/slices/realtime';
@@ -198,7 +198,7 @@ describe('PlayerView on a Samsung TV', () => {
       })
     );
     await waitFor(() =>
-      expect(avplay.open).toHaveBeenCalledWith('https://miauflix.example/api/stream/streaming-key')
+      expect(avplay.open).toHaveBeenCalledWith('https://miauwatch.example/api/stream/streaming-key')
     );
     expect(avplay.play).toHaveBeenCalled();
     expect(view.container.querySelector('object[type="application/avplayer"]')).not.toBeNull();
@@ -249,7 +249,7 @@ describe('PlayerView on a Samsung TV', () => {
 
     await waitFor(() =>
       expect(fetchMock).toHaveBeenCalledWith(
-        'https://miauflix.example/api/subtitles/tracks/candidate-1?streamingKey=streaming-key',
+        'https://miauwatch.example/api/subtitles/tracks/candidate-1?streamingKey=streaming-key',
         expect.objectContaining({ credentials: 'omit' })
       )
     );
@@ -284,7 +284,7 @@ describe('PlayerView on a Samsung TV', () => {
     const view = render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
     await waitFor(() => expect(startAudioPlayback).toHaveBeenCalled());
     expect(startAudioPlayback).toHaveBeenCalledWith(
-      expect.objectContaining({ url: 'https://miauflix.example/api/stream/streaming-key/audio' })
+      expect.objectContaining({ url: 'https://miauwatch.example/api/stream/streaming-key/audio' })
     );
     expect(view.container.querySelector('video')).not.toBeNull();
     expect(avplay.open).not.toHaveBeenCalled();
@@ -318,7 +318,7 @@ describe('PlayerView on a Samsung TV', () => {
     render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
     await waitFor(() =>
       expect(avplay.open).toHaveBeenCalledWith(
-        'https://miauflix.example/api/stream/streaming-key/remux/index.m3u8?start=1200'
+        'https://miauwatch.example/api/stream/streaming-key/remux/index.m3u8?start=1200'
       )
     );
   });
@@ -358,7 +358,7 @@ describe('PlayerView on a Samsung TV', () => {
     view.rerender(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
     await waitFor(() =>
       expect(avplay.open).toHaveBeenCalledWith(
-        'https://miauflix.example/api/stream/streaming-key/remux/index.m3u8?start=1200'
+        'https://miauwatch.example/api/stream/streaming-key/remux/index.m3u8?start=1200'
       )
     );
     expect(avplay.open).toHaveBeenCalledTimes(1);
@@ -434,7 +434,7 @@ describe('PlayerView on a Samsung TV', () => {
       });
       await waitFor(() =>
         expect(avplay.open).toHaveBeenCalledWith(
-          'https://miauflix.example/api/stream/streaming-key-2/remux/index.m3u8?start=851'
+          'https://miauwatch.example/api/stream/streaming-key-2/remux/index.m3u8?start=851'
         )
       );
       // Converted audio stopped, its last frame still on screen above AVPlay.

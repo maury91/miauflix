@@ -23,12 +23,12 @@ describe('SubtitleCaption', () => {
       <SubtitleCaption
         text="Hello"
         raise={0}
-        fontFamily="miauflix-subtitle-1"
+        fontFamily="miauwatch-subtitle-1"
         data-testid="caption"
       />
     );
     expect(getComputedStyle(screen.getByTestId('caption')).fontFamily).toContain(
-      'miauflix-subtitle-1'
+      'miauwatch-subtitle-1'
     );
   });
 });

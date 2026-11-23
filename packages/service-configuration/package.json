@@ -1,5 +1,5 @@
 {
-  "name": "@miauflix/service-configuration",
+  "name": "@miauwatch/service-configuration",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -18,7 +18,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@miauflix/contract": "*"
+    "@miauwatch/contract": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

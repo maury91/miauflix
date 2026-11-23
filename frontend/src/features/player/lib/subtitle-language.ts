@@ -1,6 +1,6 @@
 import { mediaSubtitleKey, readMediaSubtitles } from '@features/player/lib/media-subtitles';
 import { latestEpisodeProgress } from '@features/progress/lib/episode-rules';
-import type { MediaDto, ProgressEntry } from '@miauflix/backend';
+import type { MediaDto, ProgressEntry } from '@miauwatch/backend';
 
 /**
  * The subtitle language to prepare for a title: the one last chosen for it (for a show, for

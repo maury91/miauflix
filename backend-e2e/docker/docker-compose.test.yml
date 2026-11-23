@@ -25,7 +25,7 @@ services:
 
   # Backend service
   backend:
-    image: miauflix-e2e-backend:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-backend:${E2E_IMAGE_TAG:-local}
     build:
       context: ../../
       dockerfile: Dockerfile
@@ -41,12 +41,12 @@ services:
       # The web app loads artwork from the TMDB image mock; the CSP must allow it
       - CSP_IMAGE_ORIGINS=http://127.0.0.1:${TMDB_IMAGE_PORT:-3001}
       - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
-      - BUNQUEUE_HOST=miauflix-services
+      - BUNQUEUE_HOST=miauwatch-services
       - BUNQUEUE_PORT=6789
-      - CATALOG_SERVICE_URL=http://miauflix-services:3001
-      - LIST_SERVICE_URL=http://miauflix-services:3002
-      - SOURCES_SERVICE_URL=http://miauflix-services:3003
-      - MEDIA_LOAD_SERVICE_URL=http://miauflix-services:3004
+      - CATALOG_SERVICE_URL=http://miauwatch-services:3001
+      - LIST_SERVICE_URL=http://miauwatch-services:3002
+      - SOURCES_SERVICE_URL=http://miauwatch-services:3003
+      - MEDIA_LOAD_SERVICE_URL=http://miauwatch-services:3004
       - SOURCES_DISABLE_VPN_CHECK=true
       - MEDIA_LOAD_DISABLE_VPN_CHECK=true
       - TMDB_API_URL=http://tmdb-mock/3
@@ -80,7 +80,7 @@ services:
       retries: 30
       start_period: 10s
     depends_on:
-      miauflix-services:
+      miauwatch-services:
         condition: service_healthy
       tmdb-mock:
         condition: service_healthy
@@ -93,8 +93,8 @@ services:
 
   # Bunqueue, media catalog, lists, source search and media load (the torrent engine) share one
   # runtime image while retaining their own ports and data directories.
-  miauflix-services:
-    image: miauflix-e2e-miauflix-services:${E2E_IMAGE_TAG:-local}
+  miauwatch-services:
+    image: miauwatch-e2e-miauwatch-services:${E2E_IMAGE_TAG:-local}
     build:
       context: ../../
       dockerfile: services/Dockerfile
@@ -168,7 +168,7 @@ services:
 
   # TMDB Image Mock Service
   tmdb-images:
-    image: miauflix-e2e-tmdb-images:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-tmdb-images:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: tmdb-images.Dockerfile
@@ -189,7 +189,7 @@ services:
 
   # TMDB API Mock Service
   tmdb-mock:
-    image: miauflix-e2e-tmdb-mock:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-tmdb-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: tmdb.Dockerfile
@@ -217,7 +217,7 @@ services:
 
   # Trakt Mock Service
   trakt-mock:
-    image: miauflix-e2e-trakt-mock:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-trakt-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: mock.Dockerfile
@@ -245,7 +245,7 @@ services:
   # Anime: AniList rankings (GraphQL, recorded by request body), ani.zip episode mappings and
   # Fribb's AniList/AniDB → TMDB list (trimmed to what the tests use).
   anilist-mock:
-    image: miauflix-e2e-anilist-mock:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-anilist-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: mock.Dockerfile
@@ -254,7 +254,7 @@ services:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://graphql.anilist.co
       # Public API: no key, but the mock always sends one header.
-      - API_AUTH_HEADER=x-miauflix-mock
+      - API_AUTH_HEADER=x-miauwatch-mock
       - API_KEY=none
       - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
       - KEY_POST_BY_BODY=true
@@ -270,7 +270,7 @@ services:
       - test-network
 
   anizip-mock:
-    image: miauflix-e2e-anizip-mock:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-anizip-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: mock.Dockerfile
@@ -279,7 +279,7 @@ services:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://api.ani.zip
       # Public API: no key, but the mock always sends one header.
-      - API_AUTH_HEADER=x-miauflix-mock
+      - API_AUTH_HEADER=x-miauwatch-mock
       - API_KEY=none
       - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
     healthcheck:
@@ -294,7 +294,7 @@ services:
       - test-network
 
   anime-lists-mock:
-    image: miauflix-e2e-anime-lists-mock:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-anime-lists-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: mock.Dockerfile
@@ -303,7 +303,7 @@ services:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://raw.githubusercontent.com
       # Public API: no key, but the mock always sends one header.
-      - API_AUTH_HEADER=x-miauflix-mock
+      - API_AUTH_HEADER=x-miauwatch-mock
       - API_KEY=none
       - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
     healthcheck:
@@ -319,7 +319,7 @@ services:
 
   # Indexer mock: fictional release data plus the Cardigann definitions that query it
   indexer-mock:
-    image: miauflix-e2e-indexer-mock:${E2E_IMAGE_TAG:-local}
+    image: miauwatch-e2e-indexer-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: tmdb.Dockerfile
@@ -371,10 +371,10 @@ networks:
 
 volumes:
   test_bunqueue_data:
-    name: miauflix_test_bunqueue_data
+    name: miauwatch_test_bunqueue_data
   test_downloads:
-    name: miauflix_test_downloads
+    name: miauwatch_test_downloads
   list_service_data:
-    name: miauflix_test_list_service_data
+    name: miauwatch_test_list_service_data
   sources_data:
-    name: miauflix_test_sources_data
+    name: miauwatch_test_sources_data

@@ -9,7 +9,7 @@ import {
 import { useSubtitleFont } from '@features/player/lib/subtitle-font';
 import { parseVtt, type SubtitleCue } from '@features/player/lib/vtt';
 import type { SubtitleTimingCue } from '@features/player/ui/SubtitleTiming';
-import type { SubtitleCandidateDto } from '@miauflix/backend';
+import type { SubtitleCandidateDto } from '@miauwatch/backend';
 import { API_CREDENTIALS, API_URL } from '@shared/config/constants';
 import { t } from '@shared/i18n';
 import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';

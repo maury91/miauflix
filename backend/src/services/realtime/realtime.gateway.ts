@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
+import type { ArtworkUpdate, MediaRef } from '@miauwatch/service-contracts';
 import type { Server, ServerWebSocket, WebSocketHandler } from 'bun';
 
 import { UserRole } from '@entities/user.entity';

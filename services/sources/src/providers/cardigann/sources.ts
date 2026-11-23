@@ -18,7 +18,7 @@ export interface DefinitionSource {
 /** Definitions installed before sources were configurable came from this repository. */
 export const LEGACY_SOURCE_KEY = 'Jackett/Jackett@master:src/Jackett.Common/Definitions';
 export const PROWLARR_SOURCE_KEY = 'Prowlarr/Indexers@master:definitions/v11';
-export const MIAUFLIX_SOURCE_KEY = 'maury91/miauflix-indexers@main:definitions';
+export const MIAUWATCH_SOURCE_KEY = 'maury91/miauflix-indexers@main:definitions';
 /**
  * Prowlarr's definitions mirror Jackett's, minus the trackers it blocks, and Miauwatch's own
  * folder adds what those lack (ID-based search through the sites' JSON APIs). Jackett's folder

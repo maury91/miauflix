@@ -375,7 +375,7 @@ export class SourceSubtitlesService {
       return true;
     });
     if (!selected.length) return { fonts: [], complete: true };
-    const directory = await mkdtemp(join(tmpdir(), 'miauflix-fonts-'));
+    const directory = await mkdtemp(join(tmpdir(), 'miauwatch-fonts-'));
     try {
       let complete = true;
       try {

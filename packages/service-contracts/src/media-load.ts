@@ -1,4 +1,4 @@
-import { bytes, call, contract, event } from '@miauflix/contract';
+import { bytes, call, contract, event } from '@miauwatch/contract';
 
 /** Swarm size reported by trackers; each value is the highest any tracker gave. */
 export interface SwarmCounts {

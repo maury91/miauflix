@@ -1,4 +1,4 @@
-import type { MediaDto, MovieResponse, ShowResponse } from '@miauflix/backend';
+import type { MediaDto, MovieResponse, ShowResponse } from '@miauwatch/backend';
 
 /** Build a movie card from a movie details response. */
 export function mediaFromMovie(response: MovieResponse): MediaDto {

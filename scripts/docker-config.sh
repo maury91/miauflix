@@ -19,4 +19,4 @@ if [ ! -e .env ]; then
 fi
 
 use_source_compose_files .env
-docker compose run --rm --build miauflix node --env-file-if-exists .env ./backend/app.js --only-config
+docker compose run --rm --build miauwatch node --env-file-if-exists .env ./backend/app.js --only-config

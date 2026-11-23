@@ -1,4 +1,4 @@
-import type { SearchGenreKey } from '@miauflix/service-contracts';
+import type { SearchGenreKey } from '@miauwatch/service-contracts';
 
 import type { ApiErrorBody } from './error.types';
 

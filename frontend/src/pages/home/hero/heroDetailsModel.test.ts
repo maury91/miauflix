@@ -1,4 +1,4 @@
-import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
+import type { MediaDto, PreloadPreparationSnapshot } from '@miauwatch/backend';
 
 import { heroDetailsModel } from './heroDetailsModel';
 

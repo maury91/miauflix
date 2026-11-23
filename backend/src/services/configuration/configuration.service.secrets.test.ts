@@ -1,4 +1,4 @@
-import { ConfigStore } from '@miauflix/service-configuration';
+import { ConfigStore } from '@miauwatch/service-configuration';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import path from 'path';
@@ -14,7 +14,7 @@ const restoreEnvironment: Array<() => void> = [];
 let dataDir: string;
 
 beforeEach(() => {
-  dataDir = mkdtempSync(path.join(tmpdir(), 'miauflix-config-secrets-'));
+  dataDir = mkdtempSync(path.join(tmpdir(), 'miauwatch-config-secrets-'));
   for (const name of [...GENERATED_SECRETS, 'DATA_DIR', 'OPENSUBTITLES_API_KEY']) {
     restoreEnvironment.push(clearEnvironmentVariable(name));
   }

@@ -1,4 +1,4 @@
-import type { MovieDetail, TVShowDetail } from '@miauflix/service-contracts';
+import type { MovieDetail, TVShowDetail } from '@miauwatch/service-contracts';
 
 import { isAnimeDetail } from './media-language.util';
 

@@ -8,7 +8,7 @@ npm run test:frontend:e2e:initial-setup:update
 
 This command uses the pinned Playwright `v1.56.1-jammy` image, starts a fresh backend E2E Compose project, and updates the initial-setup snapshots. Its fixture leaves the TMDB token and all three required Trakt values empty, matching `.github/workflows/ci.yml`. Keep these values explicit in `backend-e2e/scripts/update-initial-user-snapshots.sh`; inheriting credentials from a developer's environment can change which setup steps appear and produce misleading baselines.
 
-Docker must be available with host networking enabled so the Playwright container can reach the E2E backend. The browser runs in a Linux container on the pinned Playwright image, so the generated baselines use the same platform and browser version as CI. The script tears down the `miauflix-tests` Compose project and its test volumes when it finishes.
+Docker must be available with host networking enabled so the Playwright container can reach the E2E backend. The browser runs in a Linux container on the pinned Playwright image, so the generated baselines use the same platform and browser version as CI. The script tears down the `miauwatch-tests` Compose project and its test volumes when it finishes.
 
 After regeneration, review the changed images and run the setup flow against the new baselines without updating them:
 

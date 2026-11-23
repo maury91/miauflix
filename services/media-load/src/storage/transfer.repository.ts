@@ -1,4 +1,4 @@
-import type { TransferSample } from '@miauflix/service-contracts';
+import type { TransferSample } from '@miauwatch/service-contracts';
 import type { Database } from 'bun:sqlite';
 
 /** One source's 5-second window: the sample, and the bytes to add to its totals. */
