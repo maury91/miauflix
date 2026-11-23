@@ -4,40 +4,37 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 
 ## Unreleased
 
-- Miauflix is now Miauwatch, with a new wordmark and icon for the web and Samsung TV apps. Existing installs can upgrade in place.
-- The rename now covers the Docker images (`miauwatch`, `miauwatch-sources`, …), the compose services, the `MIAUWATCH_*` settings and the `pair.miau.watch` pairing service. Existing installs keep updating: the old image names are still published and `MIAUFLIX_*` settings still work. To move over, download the new `update.sh` and run `./update.sh --files`. It renames the settings in `.env` and the services in your own compose files, and keeps your data. Signed-in TVs and saved preferences carry over.
+Miauflix is now Miauwatch. The web and Samsung TV apps have a new wordmark and icon. In the new Home intro, the letters fold into the cat-shaped M, the cat blinks to the beat, and Home appears through its face.
 
-### Languages
+### Upgrading from Miauflix
 
-- Miauwatch is now available in Italian and Lithuanian. A new Preferences page in the profile menu sets each profile's interface language, its preferred audio and subtitle languages, and separate audio and subtitle choices for anime. Audio can also be set to the title's original language. Titles, descriptions and genres on Home, in details, in search and in season episode lists follow the interface language.
-- Source search also looks for releases under the title's name in every language the server's profiles use (their interface and audio languages), so Italian or Lithuanian releases are found too. Stored titles stay in English, whichever language a profile browses in.
-- Releases dubbed or subtitled in Polish, Russian, Ukrainian, Hungarian, Turkish, Hindi, Greek or a Nordic language are now recognized, and more Czech, Slovak, Spanish, Portuguese and Dutch releases are, so they rank after releases in your own language.
-- A new Automatic subtitles preference turns on subtitles in your subtitle language when you start a title, unless you changed the subtitles for that title before.
-- Under the player's seek bar, up to three buttons switch between your audio language, the original language with subtitles, and your audio language with subtitles.
-- A new Audio panel (the headphones button in the player) lists the playing file's audio tracks, each marked Original or Dubbed with its channel layout, and your audio language marked Default. It can also search for sources of the title in another language. Languages the title already has sources in are listed first with their count, and the sources in the chosen language can be played from the panel. The player switches to the chosen source and asks for audio in that language. The audio track moved here from the subtitle panel.
-- Notifications about a movie no longer repeat its title.
+- Existing Docker installs can upgrade in place. The old image names and `MIAUFLIX_*` settings still work. The new names include the `miauwatch` images and Compose services, the `MIAUWATCH_*` settings, and the TV pairing service at `pair.miau.watch`.
+- To switch to the new names, download the latest `update.sh` and run `./update.sh --files`. It updates the keys in `.env` and the service names in your Compose overrides. Your data, TV sign-ins and saved preferences carry over.
+- The Samsung TV app can connect to servers that still run Miauflix.
 
-### App and navigation
+### Languages and playback
 
-- Configuration, Sources, Storage, the Trakt dialog and the page that approves a TV's QR sign-in now match the rest of the app and work with the remote. Back leaves a text field before it leaves the page. Opening a source's settings takes you to its first field, and on a phone each source's buttons sit under its description.
-- Storage shows a bar of the server's disk split into movies, episodes, anime, TV copies, free space and, last, other files, with Miauwatch's limit marked. Downloads show their artwork, size, progress and status, and you can sort them by size, name, type, progress or status. Admins can change the storage limit, the space kept free for playback, how long finished downloads keep sharing, and the download folder there; the bar previews a new limit before you save it.
-- On settings and profile pages, the page now scrolls under a solid strip behind the logo instead of running through it.
-- The player's closed-captions panel is now a side panel over the player, its full height, also in full screen. It lists your default subtitle language first, then languages with tracks, with the rest under More languages. Hearing-impaired subtitles, the subtitle sources (from the video file, from files in the same folder, or online) and the timing each have their own row.
-- The server picker, the player's subtitle panel, error and not-found pages, and the quality badge on titles now match the rest of the app. The subtitle panel opens above the controls, with audio, language and tracks as lists you move through with the remote, and Back from subtitle timing returns to the panel first, and Back now works while a slider is selected in a panel or dialog. On a TV, the server picker now scrolls to keep the selected server or field in view when the list is long. Screens no longer generate styles while you use them, which helps the TV.
-- Moving through a number setting without changing it no longer rounds its saved value. On a TV, the approve-sign-in page selects Approve as soon as it appears, and copying the Trakt code no longer moves the selection. Closing the Trakt dialog with the keyboard gives control straight back to Home.
-- Clicking a text field in settings, the profile editor or search lets you type in it again; before, the field looked selected but ignored the keyboard.
+- The app is available in Italian and Lithuanian. Open Preferences from the profile menu to choose your interface, audio and subtitle languages. You can use a title's original audio and set separate audio and subtitle preferences for anime. Home, title details, search and season episode lists show translated titles, descriptions and genres where available.
+- Source search can also look up a title under names in the interface and audio languages people use on your server. The server keeps an English copy of the catalog details. It recognizes more language tags in release names, including Polish, Russian, Ukrainian, Hungarian, Turkish, Hindi, Greek and several Nordic languages. It also picks up more Czech, Slovak, Spanish, Portuguese and Dutch releases. This helps it rank releases in your preferred language first.
+- Turn on Automatic subtitles in Preferences to start with subtitles in your chosen language. The player remembers any subtitle choice you made for that title, including Off. Up to three buttons under the seek bar let you switch between your preferred audio, original audio with subtitles, and preferred audio with subtitles.
+- Use the headphones button to see the current file's audio tracks. The panel shows Original or Dubbed labels and channel layouts where known, and marks your preferred language as Default. You can also search for and play a different source in another language. Languages with sources already found appear first, with a count.
+- The closed-captions panel opens at the side of the player, including in full screen. It puts your default subtitle language first and groups the other choices under More languages as needed. You can turn on hearing-impaired subtitles, pick tracks from the video or the download, search online, and adjust timing. Back returns from timing to the panel before closing it.
+- A movie's progress bar shows how much you've watched. Torrent preparation appears separately under the watch button, for example "Preparing torrent (65%)". Movies played for five seconds or less still show Watch now, in line with Continue watching.
+- Playback tries releases with seeders first, so a higher-quality release with no seeders won't stall playback when a shared copy is available. Movie notifications show the title once.
 
-- The logo now stays in one place on each page: lined up with the cards on Home, with the title's information on details, and in the same spot on search, settings and profile pages. Sign-in, setup and the first-run configuration show a still logo that is always on screen, and the loading logo pulses from the moment the page appears.
+### App and remote navigation
 
-### Self-hosting
+- Configuration, Sources, Storage, the Trakt dialog and TV sign-in approval now use the same controls as the rest of the app. Back exits text editing first. Source settings open on the first field, and on phones the source actions sit below the description.
+- Storage breaks down disk usage by movies, episodes, anime, TV copies, free space and other files, with the Miauwatch limit marked. Downloads show artwork, size, progress and status. You can sort by size, name, type, progress or status. Admins can change the storage limit, space reserved for playback, how long finished downloads keep sharing, and the download folder. The bar previews a new limit before you save it.
+- The server picker, error pages and title quality badges now match the rest of the app. The TV server picker scrolls to keep the selected server or field visible. The app also builds its styles ahead of time to reduce work on the TV.
+- The logo lines up with the content on Home, title details, search, settings and profile pages. On settings and profile pages, content scrolls under a strip behind the logo. Sign-in and setup use a static logo. The loading logo pulses from the first frame, and pages such as Who's watching open with the logo already in its corner.
+- Leaving a number field without editing it preserves its value. Clicking a text field in settings, the profile editor or search lets you type again. Back works when a slider has focus.
+- On TV, the sign-in approval page focuses Approve as soon as it's ready. Copying the Trakt code keeps the selection in place, and closing the Trakt dialog with the keyboard returns focus to Home.
 
-- Admins can add Stremio addons that find torrents (Torrentio, Comet, MediaFusion and similar) under Sources → Advanced setup, by pasting the addon's install link. Configure the addon on its own page first: its settings are part of the link, which Miauwatch keeps hidden. Streams from debrid services or direct links are skipped for now. The built-in Torrentio now runs this way too, keeping its options.
-- Source search and downloads recognise the VPN setup (gluetun) on their own and trust its kill switch, so they work as soon as its tunnel is up, with any VPN provider gluetun supports, not only NordVPN.
+### Sources and VPN
 
-### Playback fixes
-
-- On a movie's page, the bar under Resume watching now shows how much you've watched, like the title's card. It used to show how much of the torrent was prepared, which looked like watch progress; preparation is now written out under the button ("Preparing torrent (65%)"). A movie that never played past its first seconds offers Watch now instead of Resume watching, matching Continue watching.
-- Playback no longer starts on a release that nobody is sharing when a shared one exists. Such releases could rank first on picture quality alone, and the title then stayed stuck on its first second and never reached Continue watching.
+- Admins can add torrent-based Stremio addons such as Torrentio, Comet and MediaFusion under Sources → Advanced setup. Configure the addon on its own page, then paste its install link and enable the new source. Miauwatch keeps the link hidden because it contains the addon's settings. The built-in Torrentio provider switches to the same integration and keeps its settings. Support currently covers torrent streams.
+- Source search and downloads detect gluetun and use its health check to tell when the VPN tunnel is up. This works with any VPN provider gluetun supports.
 
 ## 2026-11-20 v0.3.0 Samsung TV playback and a faster Home
 

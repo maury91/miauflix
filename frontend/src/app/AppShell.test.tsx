@@ -221,9 +221,12 @@ describe('AppShell intro sequence', () => {
       expect(screen.queryByTestId(testId)).not.toBeInTheDocument();
 
       await finishBoot();
-      expect(logo).toHaveAttribute('data-position', 'none');
-      expect(logo).toHaveAttribute('data-pulsing', 'false');
-      expect(logo).toHaveAttribute('data-disable-motion', 'false');
+      // Not the centred logo moved away: an element of its own, so nothing slides
+      const pageLogo = screen.getByTestId('logo');
+      expect(pageLogo).not.toBe(logo);
+      expect(pageLogo).toHaveAttribute('data-position', 'none');
+      expect(pageLogo).toHaveAttribute('data-pulsing', 'false');
+      expect(pageLogo).toHaveAttribute('data-disable-motion', 'false');
       expect(screen.getByTestId(testId)).toBeInTheDocument();
       expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
       expect(window._miauwatchAnimationComplete).toBeUndefined();
