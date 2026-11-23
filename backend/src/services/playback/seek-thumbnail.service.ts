@@ -46,6 +46,9 @@ export function seekThumbnailArgs(input: string, seconds: number): string[] {
     'http,tcp',
     '-format_whitelist',
     'matroska,webm,mov,avi,asf,flv,ogg,mpegts',
+    // One picture: a decoder thread per core would only cost memory and start-up
+    '-threads',
+    '1',
     '-skip_frame',
     'nokey',
     '-ss',

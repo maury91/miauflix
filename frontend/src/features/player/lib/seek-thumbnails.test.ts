@@ -15,6 +15,11 @@ describe('seek thumbnails', () => {
     expect(firstStripStop(3, -1, 600)).toBe(0);
     expect(firstStripStop(597, 1, 600)).toBe(lastGridStop(600));
     expect(lastGridStop(600)).toBe(590);
+    // Just past a grid moment, that moment is inside the video
+    expect(lastGridStop(600.05)).toBe(600);
+    expect(lastGridStop(595)).toBe(590);
+    expect(lastGridStop(4)).toBe(0);
+    expect(lastGridStop(0)).toBe(0);
   });
 
   it('keeps no frame whose body arrives after it was disposed', async () => {

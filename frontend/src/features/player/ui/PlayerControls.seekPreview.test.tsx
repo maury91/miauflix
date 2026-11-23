@@ -1,6 +1,7 @@
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { FocusScope, NavigationProvider } from '@shared/navigation';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { useRef } from 'react';
+import { StrictMode, useRef } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PlayerControls } from './PlayerControls';
@@ -15,15 +16,22 @@ function Player({
   onSeek?: (position: number, play?: boolean) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  // Back leaves the player through an element scope, as in PlayerView
+  const keyboardRef = useKeyboardNavigation({
+    onBack: () => {
+      onBack();
+      return true;
+    },
+  });
   return (
-    <div>
+    <main ref={keyboardRef}>
       <video ref={videoRef} aria-label="Fixture video" />
       <NavigationProvider>
         <FocusScope id="player">
           <PlayerControls
             videoRef={videoRef}
             durationSeconds={600}
-            onBack={onBack}
+            onBack={() => undefined}
             onSeek={onSeek}
             subtitleCandidates={[]}
             subtitleConfigured={false}
@@ -41,7 +49,7 @@ function Player({
           />
         </FocusScope>
       </NavigationProvider>
-    </div>
+    </main>
   );
 }
 
@@ -130,6 +138,76 @@ describe('PlayerControls seek preview', () => {
     expect(video.play).toHaveBeenCalled();
     expect(onBack).not.toHaveBeenCalled();
     expect(screen.queryByTestId('seek-thumbnail-strip')).not.toBeInTheDocument();
+  });
+
+  it('on the TV, Back with no strip open still leaves the player', () => {
+    const onBack = vi.fn();
+    render(<Player seekPreview="strip" onBack={onBack} />);
+    playingAt(screen.getByLabelText('Fixture video') as HTMLVideoElement, 64);
+    act(() => screen.getByLabelText('Playback controls').focus());
+
+    press('Escape');
+
+    expect(onBack).toHaveBeenCalled();
+  });
+
+  it('on the TV, a strip opened before a chosen seek runs replaces it, starting from it', async () => {
+    render(<Player seekPreview="strip" />);
+    const video = screen.getByLabelText('Fixture video') as HTMLVideoElement;
+    playingAt(video, 64);
+    act(() => screen.getByLabelText('Playback controls').focus());
+
+    press('ArrowRight');
+    press('Enter');
+    // Before the next paint runs the seek to 1:10
+    press('ArrowRight');
+    expect(screen.getByText('01:20')).toBeInTheDocument();
+    await new Promise(resolve => setTimeout(resolve, 50));
+    expect(video.currentTime).toBe(64);
+    expect(video.play).not.toHaveBeenCalled();
+
+    // Back still plays on: the replaced choice was going to
+    press('Escape');
+    expect(video.play).toHaveBeenCalled();
+    expect(video.currentTime).toBe(64);
+  });
+
+  it('on the TV, keeps the video paused when playback starts while the strip is open', () => {
+    render(<Player seekPreview="strip" />);
+    const video = screen.getByLabelText('Fixture video') as HTMLVideoElement;
+    playingAt(video, 64);
+    act(() => video.pause());
+    act(() => screen.getByLabelText('Playback controls').focus());
+    press('ArrowRight');
+    vi.mocked(video.pause).mockClear();
+
+    // Converted audio finishing its preparation autoplays
+    act(() => void video.play());
+
+    expect(video.pause).toHaveBeenCalled();
+    expect(screen.getByTestId('seek-thumbnail-strip')).toBeInTheDocument();
+    // Playback was asked for: Back plays on
+    vi.mocked(video.play).mockClear();
+    press('Escape');
+    expect(video.play).toHaveBeenCalled();
+  });
+
+  it('loads thumbnails under StrictMode, whose effects run twice', async () => {
+    render(
+      <StrictMode>
+        <Player seekPreview="strip" />
+      </StrictMode>
+    );
+    const video = screen.getByLabelText('Fixture video') as HTMLVideoElement;
+    playingAt(video, 64);
+    act(() => screen.getByLabelText('Playback controls').focus());
+
+    press('ArrowRight');
+
+    await waitFor(() => expect(URL.createObjectURL).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(screen.getByTestId('seek-thumbnail-strip').querySelector('img')).not.toBeNull()
+    );
   });
 
   it('on the TV, seeks a converted stream once, asking it to play', async () => {

@@ -29,7 +29,6 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -246,11 +245,21 @@ export function PlayerControls({
     setStrip(next);
   };
   const position = strip?.at ?? pendingPosition ?? nativePosition;
-  const thumbnails = useMemo(
-    () => (thumbnailSource ? new SeekThumbnailLoader(thumbnailSource) : null),
-    [thumbnailSource]
-  );
-  useEffect(() => () => thumbnails?.dispose(), [thumbnails]);
+  // Made by the effect that disposes it: a loader is unusable once disposed, so each setup
+  // (StrictMode runs two) gets its own
+  const [thumbnails, setThumbnails] = useState<SeekThumbnailLoader | null>(null);
+  useEffect(() => {
+    if (!thumbnailSource) {
+      setThumbnails(null);
+      return;
+    }
+    const loader = new SeekThumbnailLoader(thumbnailSource);
+    setThumbnails(loader);
+    return () => loader.dispose();
+  }, [thumbnailSource]);
+  /** A chosen moment whose seek waits for the next paint (see commitStrip). */
+  const pendingCommit = useRef<{ at: number; cancel: () => void } | null>(null);
+  useEffect(() => () => pendingCommit.current?.cancel(), []);
   const requestedPosition = useRef(pendingPosition);
   useLayoutEffect(() => {
     requestedPosition.current = pendingPosition;
@@ -311,10 +320,24 @@ export function PlayerControls({
     events.forEach(event => media.addEventListener(event, sync));
     sync();
     media.addEventListener('play', reveal);
+    // Playback starting while the strip is open was asked for before it opened (converted audio
+    // still preparing autoplays once ready): it waits until a moment is chosen, which plays anyway,
+    // or Back, which then plays on
+    const holdForStrip = () => {
+      const open = stripRef.current;
+      if (!open) return;
+      media.pause();
+      if (!open.resume) {
+        stripRef.current = { ...open, resume: true };
+        setStrip(stripRef.current);
+      }
+    };
+    media.addEventListener('play', holdForStrip);
     reveal();
     return () => {
       events.forEach(event => media.removeEventListener(event, sync));
       media.removeEventListener('play', reveal);
+      media.removeEventListener('play', holdForStrip);
       clearTimeout(timer.current);
     };
   }, [videoRef, reveal, durationSeconds]);
@@ -384,11 +407,16 @@ export function PlayerControls({
       );
       updateStrip({ ...open, at });
     } else {
+      // A moment chosen a frame ago and not sought yet: this strip starts from it instead, and its
+      // playback is still wanted
+      const superseded = pendingCommit.current;
+      superseded?.cancel();
+      pendingCommit.current = null;
       const requested = onSeek ? requestedPosition.current : undefined;
-      const resume = !media.paused;
-      if (resume) media.pause();
+      const resume = superseded !== null || !media.paused;
+      if (!media.paused) media.pause();
       updateStrip({
-        at: firstStripStop(requested ?? media.currentTime, direction, duration),
+        at: firstStripStop(superseded?.at ?? requested ?? media.currentTime, direction, duration),
         resume,
       });
     }
@@ -406,9 +434,12 @@ export function PlayerControls({
     if (onSeek) requestedPosition.current = open.at;
     setPosition(open.at);
     reveal();
-    // After the next paint: the frame that already shows the strip closed
-    requestAnimationFrame(() =>
-      setTimeout(() => {
+    // After the next paint: the frame that already shows the strip closed. A strip opened before
+    // then, or leaving the player, cancels it.
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    const frame = requestAnimationFrame(() => {
+      timeout = setTimeout(() => {
+        pendingCommit.current = null;
         const media = videoRef.current;
         if (!media) return;
         if (onSeek) onSeek(open.at, true);
@@ -419,8 +450,15 @@ export function PlayerControls({
             .then(() => setNotice(''))
             .catch(() => setNotice(t('player.playFailed')));
         }
-      }, 0)
-    );
+      }, 0);
+    });
+    pendingCommit.current = {
+      at: open.at,
+      cancel: () => {
+        cancelAnimationFrame(frame);
+        clearTimeout(timeout);
+      },
+    };
   };
   /** Back on the strip: close it without seeking, playing on if it was playing. */
   const cancelStrip = () => {

@@ -56,7 +56,7 @@ const setupTest = (maxProcesses: number, ...processes: ReturnType<typeof fakePro
 describe('SeekThumbnailService', () => {
   it('decodes only the keyframe at the requested moment into a small JPEG', () => {
     const args = seekThumbnailArgs('http://127.0.0.1:1/input', 120);
-    expect(args.join(' ')).toContain('-skip_frame nokey -ss 120 -noaccurate_seek -i');
+    expect(args.join(' ')).toContain('-threads 1 -skip_frame nokey -ss 120 -noaccurate_seek -i');
     expect(args.join(' ')).toContain('-frames:v 1');
     expect(args).toContain('mjpeg');
   });

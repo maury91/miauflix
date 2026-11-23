@@ -9,9 +9,9 @@ const CACHE_ENTRIES = 80;
 export const snapToGrid = (seconds: number) =>
   Math.max(0, Math.floor(seconds / THUMBNAIL_STEP_SECONDS) * THUMBNAIL_STEP_SECONDS);
 
-/** The last grid moment that is still inside a video of `duration` seconds. */
+/** The last grid moment strictly before the end of a video of `duration` seconds. */
 export const lastGridStop = (duration: number) =>
-  duration > 0 ? snapToGrid(Math.max(0, duration - 0.1)) : 0;
+  duration > 0 ? (Math.ceil(duration / THUMBNAIL_STEP_SECONDS) - 1) * THUMBNAIL_STEP_SECONDS : 0;
 
 /**
  * Where the strip opens from `position`: the nearest grid moment in the direction pressed, so the
