@@ -154,9 +154,12 @@ export function AppShell() {
   // The loading logo is an element of its own: when the app opens on a page, that page's logo
   // takes its place rather than sliding there from the centre. From then on one logo moves between
   // pages, and to the centre for Home's intro (after choosing a profile, say).
-  const leftLoadingLogoRef = useRef(false);
-  if (logoPosition !== 'intro') leftLoadingLogoRef.current = true;
-  const logoElement = leftLoadingLogoRef.current ? 'page' : 'loading';
+  // Recorded once committed: a discarded render must not retire the loading logo
+  const [leftLoadingLogo, setLeftLoadingLogo] = useState(false);
+  useEffect(() => {
+    if (logoPosition !== 'intro') setLeftLoadingLogo(true);
+  }, [logoPosition]);
+  const logoElement = leftLoadingLogo || logoPosition !== 'intro' ? 'page' : 'loading';
   const logoMotionDisabled =
     (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);

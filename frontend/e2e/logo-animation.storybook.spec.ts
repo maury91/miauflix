@@ -103,6 +103,7 @@ test.describe('Logo Animation - Storybook Visual Tests', () => {
             autoStart: '!false',
             loop: '!false',
             lowResourceAnimation: `!${lowResourceAnimation}`,
+            showControls: '!false',
           };
 
           const url = buildStorybookUrl(

@@ -27,7 +27,7 @@ interface IntroStageProps {
   lowResourceAnimation?: boolean;
   onComplete?: () => void;
   onProgress?: (progress: number) => void;
-  /** The phases' timeline is built (again, when they change); the handle can seek it. */
+  /** The phases' timeline is built (again, when they change); the handle can already seek it. */
   onReady?: (durationSeconds: number) => void;
   /** A phase begins playing (not when seeking past it). */
   onPhaseStart?: (phase: IntroPhase) => void;
@@ -101,15 +101,6 @@ export const IntroStage = forwardRef<IntroStageHandle, IntroStageProps>(
       };
     }, [phases, lowResourceAnimation, audio]);
 
-    useLayoutEffect(() => {
-      if (!timeline) return;
-      callbacksRef.current.onReady?.(timeline.duration());
-      if (autoStart) {
-        audio.stop();
-        timeline.play(0);
-      }
-    }, [autoStart, timeline, audio]);
-
     useImperativeHandle(
       ref,
       () => ({
@@ -138,6 +129,16 @@ export const IntroStage = forwardRef<IntroStageHandle, IntroStageProps>(
       }),
       [timeline, audio]
     );
+
+    // After the handle above: onReady may restart or seek through it at once
+    useLayoutEffect(() => {
+      if (!timeline) return;
+      callbacksRef.current.onReady?.(timeline.duration());
+      if (autoStart) {
+        audio.stop();
+        timeline.play(0);
+      }
+    }, [autoStart, timeline, audio]);
 
     return (
       <div className={styles.stage}>

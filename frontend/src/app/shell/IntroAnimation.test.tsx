@@ -69,7 +69,8 @@ describe('IntroAnimation', () => {
     const { intro, logo, letters } = await renderIntro();
 
     intro.seek(JUST_COLLAPSED);
-    expect(letters.every(letter => Number(letter.style.opacity) === 0)).toBe(true);
+    // Set explicitly: an untouched (empty) opacity would read as 0 too
+    expect(letters.map(letter => letter.style.opacity)).toEqual(letters.map(() => '0'));
     expect(shift(logo)).toBeCloseTo(M_CENTERED_X_PERCENT, 1);
 
     intro.reset();
