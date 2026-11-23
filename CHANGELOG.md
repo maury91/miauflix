@@ -2,7 +2,7 @@
 
 Release notes for viewers and self-hosters. See the [detailed changelog](DETAILED_CHANGELOG.md) for implementation and upgrade notes.
 
-## Unreleased
+## 2026-11-23 v0.4.0 Rename into Miauwatch
 
 Miauflix is now Miauwatch. The web and Samsung TV apps have a new wordmark and icon. In the new Home intro, the letters fold into the cat-shaped M, the cat blinks to the beat, and Home appears through its face.
 

@@ -2,7 +2,7 @@
 
 Implementation and upgrade notes. For a shorter overview, see the [release notes](CHANGELOG.md).
 
-## Unreleased
+## 2026-11-23 v0.4.0 Rename into Miauwatch
 
 ### Rename and upgrade
 
