@@ -3,6 +3,7 @@ import { ContractError } from '@miauwatch/contract';
 
 import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { handleError } from '@middleware/error-handler.middleware';
+import { SeekThumbnailError } from '@services/playback/seek-thumbnail.service';
 
 import { createStreamRoutes } from './stream.routes';
 
@@ -30,7 +31,11 @@ const setupTest = () => {
       .mockResolvedValue(new Response('fixture', { headers: { 'Content-Type': 'video/mp4' } })),
   };
   const tvRemuxService = { requestWhenDownloaded: jest.fn() };
+  const seekThumbnailService = {
+    thumbnail: jest.fn().mockResolvedValue(new Uint8Array([0xff, 0xd8])),
+  };
   const app = createStreamRoutes({
+    seekThumbnailService,
     rateLimitGuard: noRateLimit,
     playbackSessionService,
     streamService,
@@ -39,6 +44,7 @@ const setupTest = () => {
     tvRemuxService,
   } as never).onError(handleError);
   return {
+    seekThumbnailService,
     tvRemuxService,
     app,
     playbackSessionService,
@@ -283,5 +289,33 @@ describe('TV remux files', () => {
       202
     );
     expect(tvRemuxService.requestWhenDownloaded).toHaveBeenCalledWith(source);
+  });
+});
+
+describe('seek thumbnails', () => {
+  it('serves a JPEG of the pinned source at the asked moment', async () => {
+    const { app, seekThumbnailService, source } = setupTest();
+    const response = await app.request(`/${token}/thumbnail?t=125.5`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('content-type')).toBe('image/jpeg');
+    expect(new Uint8Array(await response.arrayBuffer())).toEqual(new Uint8Array([0xff, 0xd8]));
+    expect(seekThumbnailService.thumbnail).toHaveBeenCalledWith(
+      source,
+      125.5,
+      expect.any(AbortSignal)
+    );
+  });
+
+  it('refuses a key that is not an active playback grant', async () => {
+    const { app, playbackSessionService, seekThumbnailService } = setupTest();
+    playbackSessionService.verify.mockResolvedValue(null);
+    expect((await app.request(`/${token}/thumbnail?t=10`)).status).toBe(401);
+    expect(seekThumbnailService.thumbnail).not.toHaveBeenCalled();
+  });
+
+  it("answers with the thumbnailer's own status when there is no frame", async () => {
+    const { app, seekThumbnailService } = setupTest();
+    seekThumbnailService.thumbnail.mockRejectedValue(new SeekThumbnailError('No frame', 404));
+    expect((await app.request(`/${token}/thumbnail?t=99999`)).status).toBe(404);
   });
 });

@@ -29,6 +29,7 @@ import { AudioSourcesService } from '@services/playback/audio-sources.service';
 import { PlaybackPiecesService } from '@services/playback/playback-pieces.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlaybackTargetService } from '@services/playback/playback-target.service';
+import { SeekThumbnailService } from '@services/playback/seek-thumbnail.service';
 import { StreamService } from '@services/playback/stream.service';
 import { TvRemuxService } from '@services/playback/tv-remux.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
@@ -158,6 +159,7 @@ try {
     configurationService,
     db.getMediaProbeRepository()
   );
+  const seekThumbnailService = new SeekThumbnailService(mediaLoadClient);
   const tvRemuxService = new TvRemuxService(
     mediaLoadClient,
     audioPlaybackService,
@@ -338,6 +340,7 @@ try {
       sourceSubtitlesService.close();
       tvRemuxService.close();
       await audioPlaybackService.close();
+      seekThumbnailService.close();
       // After the drain: open streams read through it.
       mediaLoadClient.stop();
       await auditLogService.close();
@@ -377,6 +380,7 @@ try {
     playbackSessionService,
     audioSourcesService,
     audioPlaybackService,
+    seekThumbnailService,
     tvRemuxService,
     progressService,
     notificationService,

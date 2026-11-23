@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { ErrorWithStatus } from '@errors/error-with-status.error';
 import { HttpError } from '@errors/http.error';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
+import { SeekThumbnailError } from '@services/playback/seek-thumbnail.service';
 import { OpenedPlaylists, playlistStartingAt } from '@services/playback/tv-remux.service';
 
 import type { RouteDeps } from './common.types';
@@ -16,6 +17,7 @@ export const createStreamRoutes = ({
   audioPlaybackService,
   mediaLoadClient,
   playbackSessionService,
+  seekThumbnailService,
   streamService,
   tvRemuxService,
 }: RouteDeps) => {
@@ -151,6 +153,37 @@ export const createStreamRoutes = ({
           throw new HttpError(503, 'Audio conversion could not start. Retry playback.', {
             cause: error,
           });
+        }
+      }
+    )
+    .get(
+      '/:token/thumbnail',
+      // Scrubbing asks for a frame each time it stops; the player waits a moment between them.
+      rateLimitGuard(600),
+      zValidator('param', z.object({ token: z.string().regex(/^[A-Za-z0-9_-]{43}$/) })),
+      zValidator('query', z.object({ t: z.coerce.number().finite().min(0) })),
+      async c => {
+        const { token } = c.req.valid('param');
+        const grant = await playbackSessionService.verify(token);
+        if (!grant) throw new HttpError(401, 'Invalid or expired streaming key');
+        const { resolved, unavailable } = await resolveTarget(grant);
+        if (unavailable) throw new HttpError(404, unavailable);
+        if (!resolved) throw new HttpError(403, 'Playback grant does not match source');
+        try {
+          const image = await seekThumbnailService.thumbnail(
+            resolved.target,
+            c.req.valid('query').t,
+            c.req.raw.signal
+          );
+          return c.body(new Uint8Array(image), 200, {
+            'Content-Type': 'image/jpeg',
+            // The key is the grant's own: the frame is the viewer's while the session lasts
+            'Cache-Control': 'private, max-age=3600',
+            'X-Content-Type-Options': 'nosniff',
+          });
+        } catch (error) {
+          if (error instanceof SeekThumbnailError) throw new HttpError(error.status, error.message);
+          throw error;
         }
       }
     )

@@ -29,9 +29,9 @@ See [TV source support plan](docs/architecture/tv-source-support.md).
 
 ## Player
 
-- [ ] Debounce seek in TV player
-- [ ] When seeking pause the video
-- [ ] When seeking show thumbnails above the progress bar
+- [x] Debounce seek in TV player
+- [x] When seeking pause the video
+- [x] When seeking show thumbnails above the progress bar
 
 ## Storage page
 

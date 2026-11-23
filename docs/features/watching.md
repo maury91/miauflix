@@ -24,6 +24,8 @@ While you focus on a title, Miauwatch can begin fetching the information and ini
 
 The player supports play and pause, seeking to another point, volume controls where supported, and fullscreen. Keyboard and remote-control navigation let you reach player controls without a mouse. On Samsung TVs, the remote controls the TV's volume.
 
+Hover over the seek bar with a mouse to preview the frame at that point. On Samsung TVs, Left or Right pauses the video and shows a strip of frames 10 seconds apart above the seek bar. Further presses move along the strip. OK or Play jumps to the selected frame and plays, and Back closes the strip without seeking. Frames from parts that have not downloaded yet take longer to appear.
+
 Seeking to a part that has not downloaded yet can require more waiting. Sources that need sound or video conversion may restart that conversion at the requested position.
 
 ## Resume and Continue watching

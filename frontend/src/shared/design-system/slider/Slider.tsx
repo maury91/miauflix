@@ -62,6 +62,8 @@ interface SliderBaseProps extends NavigableProps {
    * the pointer (the seek bar). Remote and touch see nothing of it.
    */
   pointerPreview?: boolean;
+  /** With `pointerPreview`: the share of the range under the mouse, null once it leaves. */
+  onPointerPreviewChange?: (share: number | null) => void;
 }
 
 /** Labelled by its own label above the track… */
@@ -127,6 +129,7 @@ export function Slider({
   trackLayers,
   thumb,
   pointerPreview = false,
+  onPointerPreviewChange,
   navId,
   label,
   description,
@@ -161,7 +164,9 @@ export function Slider({
       styles.thumbSize * parseFloat(getComputedStyle(document.documentElement).fontSize);
     const along = (event.clientX - box.left - thumbPixels / 2) / (box.width - thumbPixels);
     const rtl = getComputedStyle(event.currentTarget).direction === 'rtl';
-    setHoverShare(Math.min(1, Math.max(0, rtl ? 1 - along : along)));
+    const next = Math.min(1, Math.max(0, rtl ? 1 - along : along));
+    setHoverShare(next);
+    onPointerPreviewChange?.(next);
   };
 
   const latest = useRef({ current, range, keyStep, onChange });
@@ -244,7 +249,10 @@ export function Slider({
           onPointerFocus?.();
         }}
         onPointerMove={onPreviewMove}
-        onPointerLeave={() => setHoverShare(null)}
+        onPointerLeave={() => {
+          setHoverShare(null);
+          onPointerPreviewChange?.(null);
+        }}
       >
         <div className={styles.drawing} aria-hidden="true">
           <span className={styles.track}>

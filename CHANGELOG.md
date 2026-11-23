@@ -2,6 +2,12 @@
 
 Release notes for viewers and self-hosters. See the [detailed changelog](DETAILED_CHANGELOG.md) for implementation and upgrade notes.
 
+## Unreleased
+
+### Playback
+
+- Hover over the seek bar to preview the frame at that point. On Samsung TVs, Left and Right pause the video and show a strip of frames 10 seconds apart. OK or Play jumps to the selected frame, and Back returns to where you were.
+
 ## 2026-11-23 v0.4.0 Rename into Miauwatch
 
 Miauflix is now Miauwatch. The web and Samsung TV apps have a new wordmark and icon. In the new Home intro, the letters fold into the cat-shaped M, the cat blinks to the beat, and Home appears through its face.

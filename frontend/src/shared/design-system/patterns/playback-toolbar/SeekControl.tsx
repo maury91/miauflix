@@ -1,7 +1,8 @@
-import { useId } from 'react';
+import { type ReactNode, useId, useLayoutEffect, useRef, useState } from 'react';
 
 import { visuallyHidden } from '../../a11y.css';
 import { Slider } from '../../slider/Slider';
+import { thumbSize } from '../../slider/slider.css';
 import * as styles from './playback.css';
 import type { SeekRange } from './seekRanges';
 
@@ -26,6 +27,11 @@ export interface SeekControlProps {
   remainingText?: string;
   /** The downloaded stretches of the playing file (see `piecesToRanges`), drawn as light blocks. */
   downloaded?: readonly SeekRange[];
+  /**
+   * Drawn above the bar over the point a mouse hovers, with that point's time in seconds (a frame
+   * of the video there). Remote and touch see nothing of it.
+   */
+  hoverPreview?: (seconds: number) => ReactNode;
   disabled?: boolean;
 }
 
@@ -48,10 +54,30 @@ export function SeekControl({
   elapsedText,
   remainingText,
   downloaded,
+  hoverPreview,
   disabled = false,
 }: SeekControlProps) {
   const id = useId();
   const known = duration > 0;
+  const bar = useRef<HTMLDivElement>(null);
+  const previewBox = useRef<HTMLDivElement>(null);
+  // The share a mouse hovers, null while none does
+  const [hoverShare, setHoverShare] = useState<number | null>(null);
+  const showPreview = hoverPreview && known && hoverShare !== null;
+  // Placed once mounted, before paint: its width is only known then
+  useLayoutEffect(() => {
+    const box = previewBox.current;
+    const width = bar.current?.clientWidth ?? 0;
+    if (!box || hoverShare === null || !width) return;
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const thumb = thumbSize * rem;
+    const half = box.offsetWidth / 2;
+    // Over the hovered point on the thumb's rail, kept within the bar
+    const point = thumb / 2 + hoverShare * (width - thumb);
+    const rtl = getComputedStyle(bar.current!).direction === 'rtl';
+    const fromStart = Math.min(width - half, Math.max(half, rtl ? width - point : point));
+    box.style.transform = `translateX(${fromStart - half}px)`;
+  }, [hoverShare, showPreview]);
   return (
     <div className={styles.seek}>
       {elapsedText !== undefined && (
@@ -59,7 +85,12 @@ export function SeekControl({
           {elapsedText}
         </span>
       )}
-      <div className={styles.bar}>
+      <div ref={bar} className={styles.bar}>
+        {showPreview && (
+          <div ref={previewBox} className={styles.hoverPreview} aria-hidden="true">
+            {hoverPreview(hoverShare * duration)}
+          </div>
+        )}
         <span id={`${id}-label`} className={visuallyHidden}>
           {label}
         </span>
@@ -78,6 +109,7 @@ export function SeekControl({
           tone="brand"
           disabled={disabled || !known}
           pointerPreview
+          onPointerPreviewChange={hoverPreview ? setHoverShare : undefined}
           thumb={<PawIcon className={styles.paw} />}
           trackLayers={downloaded?.map(range => (
             <span
