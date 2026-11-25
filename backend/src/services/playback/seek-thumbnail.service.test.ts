@@ -1,6 +1,9 @@
 import { EventEmitter } from 'node:events';
+import { renameSync, writeFileSync } from 'node:fs';
+import { createServer, type Server } from 'node:net';
 import { PassThrough } from 'node:stream';
 
+import { mpvThumbnailArgs } from './mpv-frame-worker';
 import type { PlaybackTarget } from './playback-target';
 import {
   seekThumbnailArgs,
@@ -48,7 +51,13 @@ const setupTest = (maxProcesses: number, ...processes: ReturnType<typeof fakePro
   };
   const spawn = jest.fn();
   for (const process of processes) spawn.mockImplementationOnce(() => process.start());
-  const service = new SeekThumbnailService(mediaLoad as never, spawn as never, 1_000, maxProcesses);
+  const service = new SeekThumbnailService(
+    mediaLoad as never,
+    spawn as never,
+    1_000,
+    maxProcesses,
+    'ffmpeg'
+  );
   const target = { source: { id: 4 }, filePath: 'movie.mkv' } as unknown as PlaybackTarget;
   return { service, spawn, target };
 };
@@ -167,5 +176,227 @@ describe('SeekThumbnailService', () => {
     await expect(service.thumbnail(target, 30, new AbortController().signal)).rejects.toMatchObject(
       { status: 504 }
     );
+  });
+});
+
+/**
+ * A fake mpv: shows `frame:<start>` once up, then a new frame for each seek on its IPC socket
+ * (written to a temporary file renamed into place, as mpv's atomic writes do) and says so with
+ * `playback-restart`. Seeks to a moment in `sameFrameAt` show nothing new, like a seek to the
+ * keyframe already shown.
+ */
+const fakeMpv = (options: { sameFrameAt?: number[]; failToOpen?: boolean } = {}) => {
+  const seeks: number[] = [];
+  let server: Server | undefined;
+  const child = Object.assign(new EventEmitter(), {
+    stderr: new PassThrough(),
+    exitCode: null as number | null,
+    signalCode: null as string | null,
+    seeks,
+    kill: jest.fn(() => {
+      if (child.exitCode !== null || child.signalCode !== null) return true;
+      child.signalCode = 'SIGKILL';
+      server?.close();
+      queueMicrotask(() => child.emit('exit', null));
+      return true;
+    }),
+    /** mpv quits by itself (it crashed). */
+    crash: () => child.kill(),
+  });
+  const start = (args: string[]) => {
+    const arg = (name: string) =>
+      args.find(value => value.startsWith(`--${name}=`))!.slice(name.length + 3);
+    const output = arg('o');
+    const show = (seconds: number) => {
+      writeFileSync(`${output}.tmp`, `frame:${seconds}`);
+      renameSync(`${output}.tmp`, output);
+    };
+    queueMicrotask(() => child.emit('spawn'));
+    if (options.failToOpen) {
+      setTimeout(() => {
+        child.exitCode = 2;
+        child.emit('exit', 2);
+      }, 5);
+      return child;
+    }
+    server = createServer(connection => {
+      let received = '';
+      connection.on('data', chunk => {
+        received += chunk.toString();
+        for (let end = received.indexOf('\n'); end !== -1; end = received.indexOf('\n')) {
+          const { command } = JSON.parse(received.slice(0, end)) as { command: [string, number] };
+          received = received.slice(end + 1);
+          if (command[0] !== 'seek') continue;
+          seeks.push(command[1]);
+          setTimeout(() => {
+            if (!options.sameFrameAt?.includes(command[1])) show(command[1]);
+            connection.write(`${JSON.stringify({ event: 'playback-restart' })}\n`);
+          }, 5);
+        }
+      });
+    });
+    server.listen(arg('input-ipc-server'), () => show(Number(arg('start'))));
+    return child;
+  };
+  return Object.assign(child, { start });
+};
+
+/** A spawn that is missing mpv, as on a machine without it installed. */
+const missingMpv = () => {
+  const child = Object.assign(new EventEmitter(), { stderr: new PassThrough() });
+  queueMicrotask(() =>
+    child.emit('error', Object.assign(new Error('spawn mpv ENOENT'), { code: 'ENOENT' }))
+  );
+  return child;
+};
+
+const setupMpv = (
+  mpvs: Array<ReturnType<typeof fakeMpv> | 'missing'>,
+  ffmpegs: ReturnType<typeof fakeProcess>[] = [],
+  idleMs = 60_000
+) => {
+  const mediaLoad = { streamFile: jest.fn().mockResolvedValue(new Response('bytes')) };
+  const spawn = jest.fn((command: string, args: string[]) => {
+    if (command === 'mpv') {
+      const next = mpvs.shift()!;
+      return next === 'missing' ? missingMpv() : next.start(args);
+    }
+    return ffmpegs.shift()!.start();
+  });
+  const service = new SeekThumbnailService(
+    mediaLoad as never,
+    spawn as never,
+    1_000,
+    3,
+    'mpv',
+    idleMs
+  );
+  const target = { source: { id: 7 }, filePath: 'movie.mp4' } as unknown as PlaybackTarget;
+  const frame = async (seconds: number) =>
+    Buffer.from(await service.thumbnail(target, seconds, new AbortController().signal)).toString();
+  return { service, spawn, target, frame };
+};
+
+describe('SeekThumbnailService with mpv', () => {
+  it('runs mpv paused, writing keyframe seeks as small JPEGs replaced atomically', () => {
+    const args = mpvThumbnailArgs(
+      'http://127.0.0.1:1/input',
+      120,
+      '/tmp/s',
+      '/tmp/f.jpg',
+      384,
+      216
+    );
+    expect(args).toEqual(
+      expect.arrayContaining([
+        '--pause',
+        '--hr-seek=no',
+        '--no-audio',
+        '--ovc=mjpeg',
+        '--ofopts=update=1,atomic_writing=1',
+        '--o=/tmp/f.jpg',
+        '--input-ipc-server=/tmp/s',
+        '--start=120',
+      ])
+    );
+    // The input comes last, after `--`, so a URL can't be read as an option
+    expect(args.slice(-2)).toEqual(['--', 'http://127.0.0.1:1/input']);
+  });
+
+  it('keeps one mpv open on the file and seeks it for each frame', async () => {
+    const mpv = fakeMpv();
+    const { service, spawn, frame } = setupMpv([mpv]);
+    try {
+      expect(await frame(125)).toBe('frame:120');
+      expect(await frame(3_600)).toBe('frame:3600');
+      expect(await frame(40)).toBe('frame:40');
+
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(spawn.mock.calls[0][1]).toContain('--start=120');
+      expect(mpv.seeks).toEqual([3_600, 40]);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('answers with the frame shown when a seek lands on the same keyframe', async () => {
+    const mpv = fakeMpv({ sameFrameAt: [130] });
+    const { service, frame } = setupMpv([mpv]);
+    try {
+      expect(await frame(120)).toBe('frame:120');
+      expect(await frame(130)).toBe('frame:120');
+    } finally {
+      service.close();
+    }
+  });
+
+  it('starts a fresh mpv when the open one died', async () => {
+    const first = fakeMpv();
+    const second = fakeMpv();
+    const { service, spawn, frame } = setupMpv([first, second]);
+    try {
+      expect(await frame(10)).toBe('frame:10');
+      first.crash();
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(await frame(20)).toBe('frame:20');
+      expect(spawn).toHaveBeenCalledTimes(2);
+      expect(spawn.mock.calls[1][1]).toContain('--start=20');
+    } finally {
+      service.close();
+    }
+  });
+
+  it('closes an mpv left idle and starts another for the next frame', async () => {
+    const first = fakeMpv();
+    const second = fakeMpv();
+    const { service, spawn, frame } = setupMpv([first, second], [], 30);
+    try {
+      await frame(10);
+      await new Promise(resolve => setTimeout(resolve, 60));
+      expect(first.kill).toHaveBeenCalled();
+
+      expect(await frame(20)).toBe('frame:20');
+      expect(spawn).toHaveBeenCalledTimes(2);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('fails the frame when mpv cannot open the file', async () => {
+    const { service, target } = setupMpv([fakeMpv({ failToOpen: true })]);
+    try {
+      await expect(
+        service.thumbnail(target, 10, new AbortController().signal)
+      ).rejects.toBeInstanceOf(SeekThumbnailError);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('takes frames with FFmpeg runs when mpv is not installed', async () => {
+    const { service, spawn, frame } = setupMpv(
+      ['missing'],
+      [fakeProcess(Buffer.from('ffmpeg:10')), fakeProcess(Buffer.from('ffmpeg:20'))]
+    );
+    try {
+      expect(await frame(10)).toBe('ffmpeg:10');
+      expect(await frame(20)).toBe('ffmpeg:20');
+      // mpv is not tried again
+      expect(spawn.mock.calls.map(([command]) => command)).toEqual(['mpv', 'ffmpeg', 'ffmpeg']);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('closes its mpvs when closed', async () => {
+    const mpv = fakeMpv();
+    const { service, frame } = setupMpv([mpv]);
+    await frame(10);
+
+    service.close();
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    expect(mpv.kill).toHaveBeenCalled();
   });
 });

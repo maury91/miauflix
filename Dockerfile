@@ -88,9 +88,10 @@ RUN touch .env
 FROM bun-runtime
 WORKDIR /usr/src/app
 
-# Install gosu and curl for entrypoint/healthcheck
+# gosu and curl for the entrypoint and healthcheck; FFmpeg for audio and remuxing; mpv for the
+# seek bar's thumbnails (kept open on a file, it seeks instead of starting again per frame)
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gosu curl ffmpeg && \
+    apt-get install -y --no-install-recommends gosu curl ffmpeg mpv && \
     rm -rf /var/lib/apt/lists/*
 
 # Bun runs the backend's TypeScript sources: `bun build` would emit the wrong decorators for
