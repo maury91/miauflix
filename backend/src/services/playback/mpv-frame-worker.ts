@@ -27,6 +27,14 @@ export class MpvFrameError extends Error {
   }
 }
 
+/** The moment asked for is at or past the end of the file: there is no frame there */
+export class MpvPastEndError extends MpvFrameError {
+  constructor(seconds: number, duration: number) {
+    super(`${seconds}s is past the end of the file (${duration}s)`);
+    this.name = 'MpvPastEndError';
+  }
+}
+
 /** mpv arguments for a paused player that writes the frame it shows as a small JPEG */
 export function mpvThumbnailArgs(
   input: string,
@@ -89,6 +97,8 @@ const RESTART_WAIT_MS = 250;
  * the frames queued behind it go to a fresh one.
  */
 const ABANDONED_SEEK_MS = 1_000;
+/** The `request_id` of the duration query (seeks count up from 1). */
+const DURATION_REQUEST = -1;
 
 interface Options {
   spawn: typeof spawnProcess;
@@ -119,6 +129,9 @@ export class MpvFrameWorker {
   private shownAt: number | undefined;
   /** The `request_id` of the latest seek sent. */
   private seekRequest = 0;
+  /** The file's length, as mpv reported it once open (unknown for some streams). */
+  private duration: number | undefined;
+  private durationReply: ((value: number | undefined) => void) | undefined;
   /** mpv answered the latest seek: a `seek` event from now on is that seek's. */
   private seekAnswered = false;
   /** mpv started the latest seek (its `seek` event): a `playback-restart` from now on ends it. */
@@ -173,6 +186,8 @@ export class MpvFrameWorker {
       signal.throwIfAborted();
       if (this.stopped || !this.ipc)
         throw new MpvFrameError(`mpv stopped first: ${this.stopError.message}`, false, true);
+      if (this.duration !== undefined && seconds >= this.duration)
+        throw new MpvPastEndError(seconds, this.duration);
       onTurn?.();
       return this.seek(seconds, signal);
     });
@@ -216,8 +231,27 @@ export class MpvFrameWorker {
     const frame = await this.waitForFrame(undefined);
     this.shownAt = seconds;
     this.ipc = await this.connect(socket);
+    this.duration = await this.askDuration();
     if (this.stopped) throw this.stopError;
+    if (this.duration !== undefined && seconds >= this.duration)
+      throw new MpvPastEndError(seconds, this.duration);
     return frame;
+  }
+
+  /** The file's duration from mpv (undefined when it doesn't know it, or stopped meanwhile). */
+  private askDuration(): Promise<number | undefined> {
+    return new Promise(resolve => {
+      if (this.stopped) return resolve(undefined);
+      const onStop = () => resolve(undefined);
+      this.stopListeners.add(onStop);
+      this.durationReply = value => {
+        this.stopListeners.delete(onStop);
+        this.durationReply = undefined;
+        resolve(value);
+      };
+      const command = { command: ['get_property', 'duration'], request_id: DURATION_REQUEST };
+      this.ipc!.write(`${JSON.stringify(command)}\n`);
+    });
   }
 
   /** Connect to mpv's IPC socket (it exists once mpv is up, which its first frame proves). */
@@ -232,8 +266,16 @@ export class MpvFrameWorker {
           const line = received.slice(0, end);
           received = received.slice(end + 1);
           try {
-            const message = JSON.parse(line) as { event?: string; request_id?: number };
-            if (message.request_id === this.seekRequest) this.seekAnswered = true;
+            const message = JSON.parse(line) as {
+              event?: string;
+              request_id?: number;
+              data?: unknown;
+            };
+            if (message.request_id === DURATION_REQUEST)
+              this.durationReply?.(
+                typeof message.data === 'number' && message.data > 0 ? message.data : undefined
+              );
+            else if (message.request_id === this.seekRequest) this.seekAnswered = true;
             else if (message.event === 'seek' && this.seekAnswered) this.seekStarted = true;
             else if (message.event === 'playback-restart' && this.seekStarted) this.seekDone = true;
           } catch {
@@ -254,6 +296,12 @@ export class MpvFrameWorker {
     const output = join(this.dir, 'frame.jpg');
     if (this.shownAt === seconds) return readFile(output);
     const before = await identity(output);
+    // Without the shown frame's identity, any file on disk would pass for the new one
+    if (before === undefined) {
+      const error = new MpvFrameError('the frame shown is missing');
+      this.stop(error);
+      throw error;
+    }
     this.seekRequest += 1;
     this.seekAnswered = false;
     this.seekStarted = false;

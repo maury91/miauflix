@@ -4,7 +4,12 @@ import { logger } from '@logger';
 
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
-import { MpvFrameError, MpvFrameWorker, MpvUnavailableError } from './mpv-frame-worker';
+import {
+  MpvFrameError,
+  MpvFrameWorker,
+  MpvPastEndError,
+  MpvUnavailableError,
+} from './mpv-frame-worker';
 import type { PlaybackTarget } from './playback-target';
 import { openSourceInput } from './source-input';
 import { collectStderr } from './stderr-tail';
@@ -167,6 +172,7 @@ function countedReads(
 
 /** An mpv kept open on one file, with the loopback input it reads. */
 interface WorkerSlot {
+  file: string;
   /** Resolves once mpv showed its first frame; rejects if it couldn't start. */
   ready: Promise<MpvFrameWorker>;
   /** That first frame (of the moment mpv was started at). */
@@ -175,7 +181,10 @@ interface WorkerSlot {
   reads: { bytes: number };
   /** Whether mpv is still starting (it has not shown its first frame yet). */
   readonly starting: boolean;
-  /** Requests waiting on it; a start the last of them gave up on is stopped. */
+  /**
+   * Requests using it (waiting for its start, or for a frame from it). A start the last of them
+   * left is stopped; a started mpv with none is idle: its idle timer runs, and it may be evicted.
+   */
   waiters: number;
   idle?: ReturnType<typeof setTimeout>;
   close: () => Promise<void>;
@@ -207,6 +216,8 @@ export class SeekThumbnailService {
   private readonly queue: Array<() => void> = [];
   /** mpvs by file, least recently used first. */
   private readonly workers = new Map<string, WorkerSlot>();
+  /** Requests for a new file waiting for an mpv to go idle, all being busy. */
+  private readonly roomWaiters = new Set<() => void>();
   private closed = false;
 
   constructor(
@@ -231,6 +242,8 @@ export class SeekThumbnailService {
     signal: AbortSignal
   ): Promise<Uint8Array> {
     const at = SeekThumbnailService.snap(seconds);
+    if (target.durationSeconds !== undefined && at >= target.durationSeconds)
+      throw new SeekThumbnailError('There is no frame at this position.', 404);
     const key = `${target.source.id}:${target.filePath}:${at}`;
     const cached = this.cache.get(key);
     if (cached) {
@@ -306,8 +319,9 @@ export class SeekThumbnailService {
   }
 
   /**
-   * The frame from the file's mpv, started (at this frame) if none is open. A frame whose mpv failed
-   * for another frame's sake (it stopped before this frame's turn, or the start this request only
+   * The frame from the file's mpv, started (at this frame) if none is open; with `MAX_WORKERS`
+   * busy on other files, the request waits for one to go idle. A frame whose mpv failed for
+   * another frame's sake (it stopped before this frame's turn, or the start this request only
    * waited on failed) is tried once more, on the mpv open by then or a fresh one. A failure during
    * this frame's own seek (or its own start) is the answer: a timeout stays a 504.
    */
@@ -319,13 +333,19 @@ export class SeekThumbnailService {
     const started = performance.now();
     const file = `${target.source.id}:${target.filePath}`;
     let startedWorker = false;
-    /** Bytes read from the file during this frame's turn (or its mpv's start). */
-    let turnReadBytes = 0;
+    /** Where this frame's turn (or its mpv's start) read from, and its byte count then. */
+    let turn: { slot: WorkerSlot; bytesAtStart: number } | undefined;
     let result = 'failed';
     try {
       for (let attempt = 0; ; attempt += 1) {
-        const existing = this.workers.get(file);
+        let existing = this.workers.get(file);
+        while (!existing && this.workers.size >= MAX_WORKERS) {
+          await this.makeRoom(signal);
+          existing = this.workers.get(file);
+        }
         const slot = existing ?? this.openWorker(file, target, at);
+        // Held from here, with no wait between: nobody can evict or idle-close it meanwhile
+        const release = this.hold(slot);
         /** Whether mpv worked on this frame (its turn came, or it started for it). */
         let ownCapture = !existing;
         try {
@@ -334,39 +354,47 @@ export class SeekThumbnailService {
             // Most recently used last
             this.workers.delete(file);
             this.workers.set(file, existing);
-            const worker = await this.waitOn(existing, existing.ready, signal);
-            let bytesAtTurn = 0;
+            const worker = await this.waitOn(existing, existing.ready, signal, release);
             image = await this.waitOn(
               existing,
               worker.frame(at, signal, () => {
                 ownCapture = true;
-                bytesAtTurn = existing.reads.bytes;
+                turn = { slot: existing, bytesAtStart: existing.reads.bytes };
               }),
-              signal
+              signal,
+              release
             );
-            turnReadBytes = existing.reads.bytes - bytesAtTurn;
           } else {
             startedWorker = true;
-            image = await this.waitOn(slot, slot.first, signal);
-            turnReadBytes = slot.reads.bytes;
+            turn = { slot, bytesAtStart: 0 };
+            image = await this.waitOn(slot, slot.first, signal, release);
           }
-          this.keepAlive(file, slot);
           result = 'ok';
           return image;
         } catch (error) {
           const retry =
-            attempt === 0 && !signal.aborted && error instanceof MpvFrameError && !ownCapture;
+            attempt === 0 &&
+            !signal.aborted &&
+            error instanceof MpvFrameError &&
+            !(error instanceof MpvPastEndError) &&
+            !ownCapture;
           if (!retry) throw error;
           // The failed mpv may still be listed for a moment: nobody can use it
           if (this.workers.get(file) === slot) {
             this.workers.delete(file);
             void slot.close();
           }
+        } finally {
+          release();
         }
       }
     } catch (error) {
       if (signal.aborted) result = 'aborted';
       if (error instanceof MpvUnavailableError) throw error;
+      if (error instanceof MpvPastEndError) {
+        result = 'past-end';
+        throw new SeekThumbnailError('There is no frame at this position.', 404);
+      }
       if (error instanceof MpvFrameError) {
         if (error.timedOut) {
           result = 'timeout';
@@ -382,26 +410,41 @@ export class SeekThumbnailService {
         seconds: at,
         totalMs: elapsed(started),
         startedWorker,
-        turnReadBytes,
+        // Until this request ended, however it did (0 if its turn never came)
+        turnReadBytes: turn ? turn.slot.reads.bytes - turn.bytesAtStart : 0,
         result,
       });
     }
   }
 
   /**
-   * Wait for `value` from the file's mpv until `signal` gives up on it. A start the last request
-   * waiting on it gave up on is stopped: nobody would use it, and the requests that come next try
-   * their own moments on a fresh one instead of waiting out its timeout. A started mpv is kept.
+   * Count a request as using `slot` until the returned release: its idle timer is off meanwhile.
+   * The last one out arms it, or stops a start nobody waits on any more (the requests that come
+   * next try their own moments on a fresh one instead of waiting out its timeout).
    */
-  private async waitOn<T>(slot: WorkerSlot, value: Promise<T>, signal: AbortSignal): Promise<T> {
-    signal.throwIfAborted();
+  private hold(slot: WorkerSlot): () => void {
     slot.waiters += 1;
+    clearTimeout(slot.idle);
     let released = false;
-    const release = () => {
+    return () => {
       if (released) return;
       released = true;
       slot.waiters -= 1;
+      if (slot.waiters > 0) return;
+      if (slot.starting) void slot.close();
+      else this.keepAlive(slot);
+      this.notifyRoom();
     };
+  }
+
+  /** Wait for `value` from the slot's mpv until `signal` gives up on it, then `release`. */
+  private async waitOn<T>(
+    slot: WorkerSlot,
+    value: Promise<T>,
+    signal: AbortSignal,
+    release: () => void
+  ): Promise<T> {
+    signal.throwIfAborted();
     let onAbort: (() => void) | undefined;
     try {
       return await Promise.race([
@@ -411,20 +454,52 @@ export class SeekThumbnailService {
             reject(signal.reason);
             // Released here, not later: several aborting in one turn each see the others gone
             release();
-            if (slot.waiters === 0 && slot.starting) void slot.close();
           };
           signal.addEventListener('abort', onAbort, { once: true });
         }),
       ]);
     } finally {
       if (onAbort) signal.removeEventListener('abort', onAbort);
-      release();
     }
   }
 
   /**
+   * Make room for one more mpv: close the least recently used idle one, or (all busy) wait until
+   * one goes idle or closes. The caller checks again: the file may have an mpv by then.
+   */
+  private async makeRoom(signal: AbortSignal): Promise<void> {
+    signal.throwIfAborted();
+    if (this.closed) throw new SeekThumbnailError('Thumbnails are unavailable.');
+    for (const [file, slot] of this.workers) {
+      if (slot.waiters > 0) continue;
+      this.workers.delete(file);
+      void slot.close();
+      return;
+    }
+    await new Promise<void>((resolve, reject) => {
+      const go = () => {
+        signal.removeEventListener('abort', leave);
+        resolve();
+      };
+      const leave = () => {
+        this.roomWaiters.delete(go);
+        reject(signal.reason);
+      };
+      signal.addEventListener('abort', leave, { once: true });
+      this.roomWaiters.add(go);
+    });
+  }
+
+  /** An mpv went idle or closed: the requests waiting for room look again. */
+  private notifyRoom(): void {
+    const waiting = [...this.roomWaiters];
+    this.roomWaiters.clear();
+    for (const go of waiting) go();
+  }
+
+  /**
    * Start an mpv on the file at `at`; its first frame is that one. Closing the slot stops it,
-   * starting or not, so no more than `MAX_WORKERS` mpvs run.
+   * starting or not, so no more than `MAX_WORKERS` mpvs run (the caller made room for it).
    */
   private openWorker(file: string, target: PlaybackTarget, at: number): WorkerSlot {
     // One mpv per file: one still listed for it is closed, never left running untracked
@@ -465,6 +540,7 @@ export class SeekThumbnailService {
       return opened;
     })();
     const slot: WorkerSlot = {
+      file,
       ready: starting.then(opened => opened.worker),
       first: Promise.resolve(new Uint8Array()),
       reads,
@@ -475,7 +551,10 @@ export class SeekThumbnailService {
       close: async () => {
         closing.abort();
         clearTimeout(slot.idle);
-        if (this.workers.get(file) === slot) this.workers.delete(file);
+        if (this.workers.get(file) === slot) {
+          this.workers.delete(file);
+          this.notifyRoom();
+        }
         await worker?.close();
         await closeInput();
       },
@@ -498,10 +577,10 @@ export class SeekThumbnailService {
     return slot;
   }
 
-  /** Close the file's mpv once nobody asked it for a frame for a while. */
-  private keepAlive(file: string, slot: WorkerSlot): void {
+  /** Close an mpv once nobody asked it for a frame for a while. */
+  private keepAlive(slot: WorkerSlot): void {
     clearTimeout(slot.idle);
-    if (this.workers.get(file) !== slot) return;
+    if (this.workers.get(slot.file) !== slot) return;
     slot.idle = setTimeout(() => void slot.close(), this.workerIdleMs);
     slot.idle.unref?.();
   }
@@ -666,6 +745,8 @@ export class SeekThumbnailService {
     for (const child of this.processes) child.kill('SIGKILL');
     for (const slot of [...this.workers.values()]) void slot.close();
     this.workers.clear();
+    // Their requests were aborted above; any left look again and find the service closed
+    this.notifyRoom();
     this.cache.clear();
   }
 }

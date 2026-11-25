@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { renameSync, writeFileSync } from 'node:fs';
+import { renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { createServer, type Server } from 'node:net';
 import { PassThrough } from 'node:stream';
 
@@ -180,9 +180,10 @@ describe('SeekThumbnailService', () => {
 });
 
 /**
- * A fake mpv, speaking mpv's IPC: shows `frame:<start>` once up; for each seek it answers the
- * command (its `request_id`), sends `seek`, then after `seekMs` (5 ms, or `slowSeekMs` for a moment
- * in it) writes the new frame (a temporary file renamed into place, as mpv's atomic writes do) and,
+ * A fake mpv, speaking mpv's IPC: shows `frame:<start>` once up and answers a `duration` query
+ * with `duration`; for each seek it answers the command (its `request_id`), sends `seek` (after
+ * `seekEventLagMs` for a moment in it), then 5 ms after the command (`slowSeekMs` for a moment in
+ * it) writes the new frame (a temporary file renamed into place, as mpv's atomic writes do) and,
  * `restartLagMs` later, `playback-restart`. A moment in `sameFrameAt` writes nothing new (the
  * keyframe already shown); one in `stuckAt` never finishes (bytes that don't come).
  */
@@ -191,7 +192,9 @@ const fakeMpv = (
     sameFrameAt?: number[];
     stuckAt?: number[];
     slowSeekMs?: Record<number, number>;
-    restartLagMs?: number;
+    seekEventLagMs?: Record<number, number>;
+    restartLagMs?: Record<number, number>;
+    duration?: number;
     failToOpen?: boolean;
     startDelayMs?: number;
     /** mpvs running, and the most at once, across the fakes sharing it. */
@@ -252,15 +255,21 @@ const fakeMpv = (
             request_id?: number;
           };
           received = received.slice(end + 1);
-          send({ request_id, error: 'success', data: null });
+          const data = command[0] === 'get_property' ? (options.duration ?? null) : null;
+          send({ request_id, error: 'success', data });
           if (command[0] !== 'seek') continue;
           const seconds = command[1];
           seeks.push(seconds);
-          send({ event: 'seek' });
+          const seekEventLag = options.seekEventLagMs?.[seconds];
+          if (seekEventLag === undefined) send({ event: 'seek' });
+          else setTimeout(() => send({ event: 'seek' }), seekEventLag);
           if (options.stuckAt?.includes(seconds)) continue;
           setTimeout(() => {
             if (!options.sameFrameAt?.includes(seconds)) show(seconds);
-            setTimeout(() => send({ event: 'playback-restart' }), options.restartLagMs ?? 0);
+            setTimeout(
+              () => send({ event: 'playback-restart' }),
+              options.restartLagMs?.[seconds] ?? 0
+            );
           }, options.slowSeekMs?.[seconds] ?? 5);
         }
       });
@@ -285,7 +294,8 @@ const missingMpv = () => {
 const setupMpv = (
   mpvs: Array<ReturnType<typeof fakeMpv> | 'missing'>,
   ffmpegs: ReturnType<typeof fakeProcess>[] = [],
-  idleMs = 60_000
+  idleMs = 60_000,
+  timeoutMs = 1_000
 ) => {
   const mediaLoad = { streamFile: jest.fn().mockResolvedValue(new Response('bytes')) };
   const spawn = jest.fn((command: string, args: string[]) => {
@@ -298,7 +308,7 @@ const setupMpv = (
   const service = new SeekThumbnailService(
     mediaLoad as never,
     spawn as never,
-    1_000,
+    timeoutMs,
     3,
     'mpv',
     idleMs
@@ -472,9 +482,9 @@ describe('SeekThumbnailService with mpv', () => {
     }
   });
 
-  it('stops a starting mpv it evicts, so no more than three run', async () => {
+  it('waits for an mpv to go idle when three are busy, then replaces the oldest idle one', async () => {
     const live = { running: 0, peak: 0 };
-    const mpvs = [0, 1, 2, 3].map(() => fakeMpv({ startDelayMs: 300, live }));
+    const mpvs = [0, 1, 2, 3].map(() => fakeMpv({ startDelayMs: 200, live }));
     const { service, spawn } = setupMpv([...mpvs]);
     try {
       const requests: Array<Promise<string>> = [];
@@ -485,21 +495,28 @@ describe('SeekThumbnailService with mpv', () => {
         await new Promise(resolve => setTimeout(resolve, 20));
       }
 
+      // Three are busy starting: the fourth file waits instead of interrupting one
+      expect(spawn).toHaveBeenCalledTimes(3);
+      expect(await Promise.all(requests)).toEqual(['resolved', 'resolved', 'resolved', 'resolved']);
       expect(spawn).toHaveBeenCalledTimes(4);
-      // Never four at once: the first was stopped before the fourth started
       expect(live.peak).toBe(3);
+      // The least recently used, idle by then, made room
       expect(mpvs[0].kill).toHaveBeenCalled();
       expect(mpvs.slice(1).every(mpv => !mpv.kill.mock.calls.length)).toBe(true);
-      expect(await requests[0]).toBe('rejected');
-      expect(await Promise.all(requests.slice(1))).toEqual(['resolved', 'resolved', 'resolved']);
     } finally {
       service.close();
     }
   });
 
   it("does not take an earlier seek's late report for the next seek's frame", async () => {
-    // Seek 40 reports done 100 ms after its frame; seek 50 lands on another keyframe, slowly
-    const mpv = fakeMpv({ restartLagMs: 100, slowSeekMs: { 50: 400 } });
+    // Seek 40's turn ends on its frame alone (its report comes 300 ms later): that report arrives
+    // after seek 50 was sent, before seek 50 starts (its `seek` event, 100 ms in), and 400 ms
+    // before seek 50's frame. Taken for seek 50's, it would answer with frame 40 after the grace.
+    const mpv = fakeMpv({
+      restartLagMs: { 40: 300 },
+      seekEventLagMs: { 50: 100 },
+      slowSeekMs: { 50: 500 },
+    });
     const { service, frame } = setupMpv([mpv]);
     try {
       await frame(10);
@@ -557,17 +574,20 @@ describe('SeekThumbnailService with mpv', () => {
   it('stops mpv when a seek nobody waits for is stuck, and serves the queue on a fresh one', async () => {
     const stuck = fakeMpv({ stuckAt: [20] });
     const fresh = fakeMpv();
-    const { service, spawn, target, frame } = setupMpv([stuck, fresh]);
+    // A frame's own timeout well past the watchdog's second: only the watchdog can free the queue
+    const { service, spawn, target, frame } = setupMpv([stuck, fresh], [], 60_000, 10_000);
     try {
       await frame(10);
       const giveUp = new AbortController();
       const abandoned = outcome(service.thumbnail(target, 20, giveUp.signal));
       const queued = frame(30);
       await new Promise(resolve => setTimeout(resolve, 20));
+      const abortedAt = performance.now();
       giveUp.abort();
 
       expect(await abandoned).toBe('rejected');
       expect(await queued).toBe('frame:30');
+      expect(performance.now() - abortedAt).toBeLessThan(3_000);
       expect(stuck.kill).toHaveBeenCalled();
       expect(spawn).toHaveBeenCalledTimes(2);
     } finally {
@@ -608,6 +628,73 @@ describe('SeekThumbnailService with mpv', () => {
       expect(await Promise.all([first, second])).toEqual(['rejected', 'rejected']);
       await new Promise(resolve => setTimeout(resolve, 10));
       expect(slow.kill).toHaveBeenCalled();
+    } finally {
+      service.close();
+    }
+  });
+
+  it('answers 404 past the end of the file, without seeking', async () => {
+    const mpv = fakeMpv({ duration: 95 });
+    const { service, target, frame } = setupMpv([mpv]);
+    try {
+      expect(await frame(10)).toBe('frame:10');
+      await expect(
+        service.thumbnail(target, 100, new AbortController().signal)
+      ).rejects.toMatchObject({ status: 404 });
+      expect(mpv.seeks).toEqual([]);
+      // mpv is kept for the next frame
+      expect(await frame(90)).toBe('frame:90');
+      expect(mpv.kill).not.toHaveBeenCalled();
+    } finally {
+      service.close();
+    }
+  });
+
+  it('answers 404 past a known runtime without starting mpv', async () => {
+    const { service, spawn, target } = setupMpv([fakeMpv()]);
+    try {
+      const known = { ...target, durationSeconds: 60 } as PlaybackTarget;
+      await expect(
+        service.thumbnail(known, 60, new AbortController().signal)
+      ).rejects.toMatchObject({ status: 404 });
+      expect(spawn).not.toHaveBeenCalled();
+    } finally {
+      service.close();
+    }
+  });
+
+  it('fails a seek, never answering with an old file, when the frame shown is missing', async () => {
+    const first = fakeMpv();
+    const fresh = fakeMpv();
+    const { service, spawn, target, frame } = setupMpv([first, fresh]);
+    try {
+      await frame(10);
+      const output = (spawn.mock.calls[0][1] as string[])
+        .find(arg => arg.startsWith('--o='))!
+        .slice(4);
+      unlinkSync(output);
+
+      await expect(
+        service.thumbnail(target, 20, new AbortController().signal)
+      ).rejects.toMatchObject({ status: 503 });
+      expect(first.seeks).toEqual([]);
+      expect(await frame(30)).toBe('frame:30');
+    } finally {
+      service.close();
+    }
+  });
+
+  it('does not close an mpv for being idle while it takes a frame', async () => {
+    const mpv = fakeMpv({ slowSeekMs: { 20: 120 } });
+    const { service, spawn, frame } = setupMpv([mpv], [], 40);
+    try {
+      await frame(10);
+      expect(await frame(20)).toBe('frame:20');
+      expect(spawn).toHaveBeenCalledTimes(1);
+      expect(mpv.kill).not.toHaveBeenCalled();
+      // Idle again afterwards: closed once the time passes
+      await new Promise(resolve => setTimeout(resolve, 80));
+      expect(mpv.kill).toHaveBeenCalled();
     } finally {
       service.close();
     }
