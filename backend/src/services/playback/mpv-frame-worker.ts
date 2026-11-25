@@ -6,7 +6,7 @@ import { join } from 'node:path';
 
 import { collectStderr } from './stderr-tail';
 
-/** mpv could not be started at all (not installed): the caller takes frames another way. */
+/** mpv could not be started at all (not installed) */
 export class MpvUnavailableError extends Error {
   constructor() {
     super('mpv is not installed');
@@ -14,24 +14,20 @@ export class MpvUnavailableError extends Error {
   }
 }
 
-/** A frame mpv did not deliver: it stopped, failed to open the file or took too long. */
+/** A frame mpv did not deliver */
 export class MpvFrameError extends Error {
   constructor(
     message: string,
-    readonly timedOut = false
+    readonly timedOut = false,
+    // When true, mpv had stopped before this frame's turn (another frame's failure)
+    readonly beforeTurn = false
   ) {
     super(message);
     this.name = 'MpvFrameError';
   }
 }
 
-/**
- * mpv arguments for a paused player that writes the frame it shows as a small JPEG, replacing
- * `output` on each seek: thumbfast's settings. It reads as little as it can (no readahead, a tiny
- * demuxer cache, no audio or subtitles) and decodes cheaply (no loop filter, fast scaling); keyframe
- * seeks decode one picture. The frame is written atomically (a temporary file renamed over it), so a
- * reader never sees half of one. Without `--idle`, a file mpv can't open ends the process.
- */
+/** mpv arguments for a paused player that writes the frame it shows as a small JPEG */
 export function mpvThumbnailArgs(
   input: string,
   seconds: number,
@@ -48,6 +44,8 @@ export function mpvThumbnailArgs(
     '--load-scripts=no',
     '--osc=no',
     '--ytdl=no',
+    // Only this file: no references it names (other tracks, chapters, playlist entries)
+    '--access-references=no',
     '--no-sub',
     '--no-audio',
     '--hr-seek=no',
@@ -76,21 +74,33 @@ export function mpvThumbnailArgs(
 /** How often the frame file is checked while a seek is under way. */
 const POLL_MS = 3;
 /**
- * A seek to the keyframe already shown may write no new frame: once mpv says it is ready
- * (`playback-restart`) and nothing came for this long, the frame on disk is the answer.
+ * A seek to the keyframe already shown may write no new frame: once mpv says this seek is done
+ * (its `playback-restart`) and nothing came for this long, the frame on disk is the answer.
  */
 const SAME_FRAME_GRACE_MS = 150;
+/**
+ * mpv may write a seek's frame before it reports the seek done: the turn waits this long for that
+ * report, so it can't arrive during the next seek and pass for that one's.
+ */
+const RESTART_WAIT_MS = 250;
+/**
+ * A seek nobody waits for any more is let finish if it is quick (most take under 100 ms, and the
+ * warm mpv is worth keeping); one still running after this is stuck on bytes, so mpv is stopped and
+ * the frames queued behind it go to a fresh one.
+ */
+const ABANDONED_SEEK_MS = 1_000;
 
 interface Options {
   spawn: typeof spawnProcess;
-  /** The file, as a URL mpv can read (a loopback capability). */
   input: string;
-  /** The first frame: mpv opens the file there, so starting costs no extra seek. */
+  /** The first frame: mpv opens the file there ( initial seek ) */
   seconds: number;
   width: number;
   height: number;
-  /** A frame taking longer than this (the bytes still downloading) is given up on. */
+  /** A frame taking longer than this (the bytes still downloading) is given up on */
   timeoutMs: number;
+  /** Aborting it while mpv starts stops mpv at once */
+  signal?: AbortSignal;
 }
 
 /**
@@ -107,7 +117,17 @@ export class MpvFrameWorker {
   private chain: Promise<unknown> = Promise.resolve();
   /** The grid moment the frame on disk shows. */
   private shownAt: number | undefined;
-  private playbackRestarts = 0;
+  /** The `request_id` of the latest seek sent. */
+  private seekRequest = 0;
+  /** mpv answered the latest seek: a `seek` event from now on is that seek's. */
+  private seekAnswered = false;
+  /** mpv started the latest seek (its `seek` event): a `playback-restart` from now on ends it. */
+  private seekStarted = false;
+  /**
+   * mpv reported the latest seek done. An earlier seek's late report comes before this one
+   * started, so it can't pass for this one's.
+   */
+  private seekDone = false;
   private stopped = false;
   private stopError: Error = new MpvFrameError('mpv is not running');
   private readonly stopListeners = new Set<(error: Error) => void>();
@@ -118,12 +138,17 @@ export class MpvFrameWorker {
   /** Start mpv on `options.input` and wait for its first frame (at `options.seconds`). */
   static async start(options: Options): Promise<{ worker: MpvFrameWorker; frame: Uint8Array }> {
     const worker = new MpvFrameWorker(options);
+    const onAbort = () => worker.stop(new MpvFrameError('mpv was closed'));
+    options.signal?.addEventListener('abort', onAbort, { once: true });
     try {
+      if (options.signal?.aborted) onAbort();
       const frame = await worker.launch();
       return { worker, frame };
     } catch (error) {
       await worker.close();
       throw error;
+    } finally {
+      options.signal?.removeEventListener('abort', onAbort);
     }
   }
 
@@ -138,11 +163,18 @@ export class MpvFrameWorker {
     else this.exitListeners.add(listener);
   }
 
-  /** The JPEG for `seconds`, after the frames asked for before it. */
-  frame(seconds: number, signal: AbortSignal): Promise<Uint8Array> {
+  /**
+   * The JPEG for `seconds`, after the frames asked for before it. Aborting `signal` before its
+   * turn drops it; during its turn, a seek still running after `ABANDONED_SEEK_MS` stops mpv.
+   * `onTurn` is called as its turn starts.
+   */
+  frame(seconds: number, signal: AbortSignal, onTurn?: () => void): Promise<Uint8Array> {
     const turn = this.chain.then(() => {
       signal.throwIfAborted();
-      return this.seek(seconds);
+      if (this.stopped || !this.ipc)
+        throw new MpvFrameError(`mpv stopped first: ${this.stopError.message}`, false, true);
+      onTurn?.();
+      return this.seek(seconds, signal);
     });
     this.chain = turn.catch(() => undefined);
     return turn;
@@ -158,6 +190,8 @@ export class MpvFrameWorker {
     this.dir = await mkdtemp(join(tmpdir(), 'miauwatch-thumbs-'));
     const socket = join(this.dir, 'mpv.sock');
     const output = join(this.dir, 'frame.jpg');
+    // Stopped while the directory was made: no mpv is started
+    if (this.stopped) throw this.stopError;
     const child = spawn('mpv', mpvThumbnailArgs(input, seconds, socket, output, width, height), {
       stdio: ['ignore', 'ignore', 'pipe'],
     });
@@ -179,9 +213,10 @@ export class MpvFrameWorker {
       )
     );
     await started;
-    const frame = await this.waitForFrame(undefined, () => false);
+    const frame = await this.waitForFrame(undefined);
     this.shownAt = seconds;
     this.ipc = await this.connect(socket);
+    if (this.stopped) throw this.stopError;
     return frame;
   }
 
@@ -197,8 +232,10 @@ export class MpvFrameWorker {
           const line = received.slice(0, end);
           received = received.slice(end + 1);
           try {
-            const message = JSON.parse(line) as { event?: string };
-            if (message.event === 'playback-restart') this.playbackRestarts += 1;
+            const message = JSON.parse(line) as { event?: string; request_id?: number };
+            if (message.request_id === this.seekRequest) this.seekAnswered = true;
+            else if (message.event === 'seek' && this.seekAnswered) this.seekStarted = true;
+            else if (message.event === 'playback-restart' && this.seekStarted) this.seekDone = true;
           } catch {
             // Not a message: ignored
           }
@@ -213,40 +250,57 @@ export class MpvFrameWorker {
     });
   }
 
-  private async seek(seconds: number): Promise<Uint8Array> {
-    if (this.stopped || !this.ipc) throw this.stopError;
+  private async seek(seconds: number, signal: AbortSignal): Promise<Uint8Array> {
     const output = join(this.dir, 'frame.jpg');
     if (this.shownAt === seconds) return readFile(output);
     const before = await identity(output);
-    const restartsBefore = this.playbackRestarts;
-    this.ipc.write(`${JSON.stringify({ command: ['seek', seconds, 'absolute+keyframes'] })}\n`);
-    let readySince: number | undefined;
-    const frame = await this.waitForFrame(before, () => {
-      if (this.playbackRestarts === restartsBefore) return false;
-      readySince ??= performance.now();
-      return performance.now() - readySince >= SAME_FRAME_GRACE_MS;
-    });
+    this.seekRequest += 1;
+    this.seekAnswered = false;
+    this.seekStarted = false;
+    this.seekDone = false;
+    const command = {
+      command: ['seek', seconds, 'absolute+keyframes'],
+      request_id: this.seekRequest,
+    };
+    this.ipc!.write(`${JSON.stringify(command)}\n`);
+    const frame = await this.waitForFrame(before, signal);
     this.shownAt = seconds;
     return frame;
   }
 
   /**
-   * Wait until the frame file differs from `before` (a new one was renamed into place), or
-   * `settled` says the one on disk is the answer; fails when mpv stops or the timeout passes.
+   * Wait for the frame: mpv's first one (no `signal`), or the one a seek shows (with it). A seek's
+   * frame is a new file renamed into place, kept once mpv reports the seek done (or after
+   * `RESTART_WAIT_MS`); a seek reported done with no new file for `SAME_FRAME_GRACE_MS` landed on
+   * the keyframe on disk. Fails when mpv stops or the timeout passes.
    */
-  private waitForFrame(before: string | undefined, settled: () => boolean): Promise<Uint8Array> {
+  private waitForFrame(before: string | undefined, signal?: AbortSignal): Promise<Uint8Array> {
     const output = join(this.dir, 'frame.jpg');
     if (this.stopped) return Promise.reject(this.stopError);
     return new Promise<Uint8Array>((resolve, reject) => {
       let poll: ReturnType<typeof setTimeout> | undefined;
+      let abandoned: ReturnType<typeof setTimeout> | undefined;
+      let changed: { at: number; frame: Uint8Array } | undefined;
+      let doneAt: number | undefined;
       const finish = (error?: Error, frame?: Uint8Array) => {
         clearTimeout(timeout);
         clearTimeout(poll);
+        clearTimeout(abandoned);
+        signal?.removeEventListener('abort', onAbort);
         this.stopListeners.delete(onStop);
         if (error) reject(error);
         else resolve(frame!);
       };
       const onStop = (error: Error) => finish(error);
+      const onAbort = () => {
+        abandoned = setTimeout(
+          () => this.stop(new MpvFrameError('a frame nobody waits for any more is stuck', true)),
+          ABANDONED_SEEK_MS
+        );
+        abandoned.unref?.();
+      };
+      if (signal?.aborted) onAbort();
+      else signal?.addEventListener('abort', onAbort, { once: true });
       const timeout = setTimeout(() => {
         const error = new MpvFrameError('mpv took too long to show the frame', true);
         finish(error);
@@ -257,15 +311,29 @@ export class MpvFrameWorker {
       this.stopListeners.add(onStop);
       const check = async () => {
         if (this.stopped) return;
-        const now = await identity(output);
-        if (now !== undefined && (now !== before || settled())) {
-          // Read what was renamed into place; a rename meanwhile replaces it whole, never in part
-          readFile(output).then(
-            frame => finish(undefined, frame),
-            (error: Error) => finish(error)
-          );
-          return;
+        const now = Date.now();
+        try {
+          if (!changed) {
+            const current = await identity(output);
+            if (current !== undefined && current !== before) {
+              // Read what was renamed into place; a rename meanwhile replaces it whole, never in part
+              changed = { at: now, frame: await readFile(output) };
+            }
+          }
+          if (!signal) {
+            if (changed) return finish(undefined, changed.frame);
+          } else if (changed) {
+            if (this.seekDone || now - changed.at >= RESTART_WAIT_MS)
+              return finish(undefined, changed.frame);
+          } else if (this.seekDone) {
+            doneAt ??= now;
+            if (now - doneAt >= SAME_FRAME_GRACE_MS)
+              return finish(undefined, await readFile(output));
+          }
+        } catch (error) {
+          return finish(error as Error);
         }
+        if (this.stopped) return;
         poll = setTimeout(() => void check(), POLL_MS);
       };
       void check();
