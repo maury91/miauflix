@@ -43,7 +43,7 @@ export class RepositoryService {
     return this.store
       .repositories()
       .map(r => this.view(r))
-      .filter(r => r.id !== LOCAL_REPOSITORY || r.providerCount > 0);
+      .filter(r => r.providerCount > 0 || (r.id !== LOCAL_REPOSITORY && !r.builtIn));
   }
   private async fetchManifest(url: string, signal: AbortSignal): Promise<ManifestEntry[]> {
     let response: Response;

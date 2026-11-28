@@ -3,7 +3,7 @@ name: Release
 # Run from the Actions tab on main. Moves the Unreleased section of both changelogs under the
 # new version, bumps the root package.json, commits and tags `v<version>` on main, publishes the
 # GitHub release with the short CHANGELOG.md section as its notes (marked latest unless it is a
-# prerelease) and runs the CI Pipeline on the tag, which tests it and publishes the images
+# prerelease) and the Samsung TV app (miauwatch.wgt) attached, and runs the CI Pipeline on the tag, which tests it and publishes the images
 # tagged with the version and `latest`.
 #
 # Pushes made with the default GITHUB_TOKEN start no other workflow, so the CI Pipeline is
@@ -114,6 +114,15 @@ jobs:
           '
           git diff --stat
 
+      - name: Setup build environment
+        uses: ./.github/actions/setup-test-environment
+
+      # The Samsung TV app, attached to the release (Apps2Samsung's community list downloads it
+      # from there). Packaged without a server: the TV finds one on first start, or the installer
+      # writes it into index.html. Built before tagging, so a failed build releases nothing.
+      - name: Package the TV app
+        run: scripts/package-tizen.sh
+
       - name: Commit and tag
         env:
           TAG: ${{ steps.version.outputs.tag }}
@@ -139,7 +148,8 @@ jobs:
             --verify-tag \
             --title "$TAG $TITLE" \
             --notes-file "$RUNNER_TEMP/release-notes.md" \
-            "${flags[@]}"
+            "${flags[@]}" \
+            dist/miauwatch.wgt
 
       - name: Run the CI Pipeline on the tag
         # A push with RELEASE_TOKEN already started it.

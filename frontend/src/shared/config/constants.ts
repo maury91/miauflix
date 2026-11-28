@@ -1,5 +1,5 @@
 import { computedEnv, env } from './env';
-import { readTvServer } from './tv-server';
+import { packagedTvServer, readTvServer } from './tv-server';
 
 export const builtForTizen = env.TIZEN;
 /** localStorage[key], or null when storage is missing or blocked (reading it can throw). */
@@ -53,7 +53,7 @@ export const glTuningOverride: Record<string, unknown> | undefined = (() => {
  * the one it was packaged with; '' until one is picked.
  */
 export const API_URL = builtForTizen
-  ? (readTvServer() ?? (/^https?:\/\//.test(env.API_URL) ? env.API_URL : ''))
+  ? (readTvServer() ?? packagedTvServer(env.API_URL))
   : env.API_URL;
 /** The pairing service the TV app looks servers up at, '' when packaged without it ('off'). */
 export const TV_PAIRING_URL =

@@ -4,6 +4,7 @@ import {
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
 } from '@features/config/api/config.api';
+import { useGetProvidersQuery } from '@features/sources/api/sources.api';
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauwatch/backend';
 import { SettingsLayout } from '@pages/settings/SettingsLayout';
 import {
@@ -23,6 +24,8 @@ import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ServiceConfigGroup } from './components/ServiceConfigGroup';
+import { SourcesSetup } from './components/SourcesSetup';
+import { SOURCES_SETUP_NAV } from './components/sourcesSetupNav';
 import { useConfigForm } from './hooks/useConfigForm';
 import { formatServiceName, sortServiceGroups } from './config.utils';
 import * as styles from './configurationWizardPage.css';
@@ -61,6 +64,8 @@ function FocusOnStep({ step, id }: { step: string; id: string }) {
 
 interface Props {
   onDismiss: () => void;
+  /** Moved on from the Sources step: no separate sources prompt once the wizard closes. */
+  onSourcesChosen?: () => void;
 }
 
 const SERVICE_SUMMARIES: Record<string, MessageKey> = {
@@ -92,8 +97,12 @@ function isReady(entries: ConfigEntryView[]): boolean {
 
 const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, duration));
 
-/** Guide required service configuration step by step, then offer optional settings before dismissal. */
-export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
+/**
+ * Guide required service configuration step by step, then the sources to search (when none is on
+ * yet: a fresh install starts with every source off), then offer optional settings before
+ * dismissal.
+ */
+export const ConfigurationWizardPage: FC<Props> = ({ onDismiss, onSourcesChosen }) => {
   const t = useT();
   const { data: entries = [], isLoading } = useGetConfigQuery(undefined);
   const { data: serviceStatuses = {} } = useGetServiceStatusesQuery(undefined);
@@ -109,6 +118,14 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const [initialRequiredServiceNames, setInitialRequiredServiceNames] = useState<string[] | null>(
     null
   );
+  const providers = useGetProvidersQuery(undefined);
+  // Decided once, when the wizard opens: with no source on (or the sources service not running
+  // yet), the step after the required settings is choosing them.
+  const [includeSources, setIncludeSources] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (includeSources !== null || providers.isLoading) return;
+    setIncludeSources(!providers.data?.some(provider => provider.enabled));
+  }, [includeSources, providers.data, providers.isLoading]);
 
   const groups = useMemo(() => {
     const grouped: Record<string, typeof entries> = {};
@@ -157,6 +174,8 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     [groups, initialRequiredServiceNames, serviceStatuses]
   );
   const currentRequired = requiredGroups[step];
+  const sourcesStep = includeSources ? requiredGroups.length : null;
+  const onSourcesStep = !optionalService && step === sourcesStep;
   const currentOptional = optionalService ? groups[optionalService] : undefined;
   const current = currentOptional ?? currentRequired?.[1];
   const currentName = optionalService ?? currentRequired?.[0];
@@ -268,7 +287,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     [getServiceEntries, markServiceSaved, optionalService, saveServiceConfig, t, testServiceConfig]
   );
 
-  if (isLoading)
+  if (isLoading || includeSources === null)
     return (
       <SettingsLayout title={t('config.setUp')} staticLogo>
         {null}
@@ -276,6 +295,88 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     );
 
   const isOptionalStep = Boolean(optionalService);
+  const lastStepBeforeOptional = sourcesStep ?? requiredGroups.length - 1;
+  const timeline = (
+    <ol className={styles.timeline} aria-label={t('config.requiredSteps')}>
+      {requiredGroups.map(([name], index) => {
+        const state = savedServices.has(name)
+          ? 'complete'
+          : index === step
+            ? 'current'
+            : 'upcoming';
+        return (
+          <li
+            key={name}
+            className={styles.timelineItem}
+            data-state={state}
+            aria-current={state === 'current' ? 'step' : undefined}
+          >
+            <span className={styles.timelineMarker} aria-hidden="true">
+              {state === 'complete' ? <CheckIcon /> : index + 1}
+            </span>
+            <span className={styles.timelineName}>{formatServiceName(name)}</span>
+          </li>
+        );
+      })}
+      {sourcesStep !== null && (
+        <li
+          className={styles.timelineItem}
+          data-state={onSourcesStep ? 'current' : step > sourcesStep ? 'complete' : 'upcoming'}
+          aria-current={onSourcesStep ? 'step' : undefined}
+        >
+          <span className={styles.timelineMarker} aria-hidden="true">
+            {step > sourcesStep ? <CheckIcon /> : sourcesStep + 1}
+          </span>
+          <span className={styles.timelineName}>{t('sources.title')}</span>
+        </li>
+      )}
+      {optionalGroups.length > 0 && (
+        <li className={styles.timelineItem} data-state="upcoming">
+          <span className={styles.timelineMarker} aria-hidden="true">
+            {lastStepBeforeOptional + 2}
+          </span>
+          <span className={styles.timelineName}>{t('config.optionalServices')}</span>
+        </li>
+      )}
+    </ol>
+  );
+
+  if (onSourcesStep) {
+    return (
+      <SourcesSetup
+        header={timeline}
+        actions={({ enabledCount }) => (
+          <FocusGroup id={NAV.stepActions} layout="horizontal">
+            <div className={styles.stepActions}>
+              {step > 0 ? (
+                <Button
+                  navId={NAV.previous}
+                  icon={<ArrowLeftIcon />}
+                  onClick={() => setStep(step - 1)}
+                >
+                  {t('config.previousStep')}
+                </Button>
+              ) : (
+                <span />
+              )}
+              <Button
+                navId={NAV.next}
+                onClick={() => {
+                  onSourcesChosen?.();
+                  setStep(step + 1);
+                }}
+              >
+                {enabledCount === 0 ? t('config.sources.later') : t('config.nextStep')}
+              </Button>
+            </div>
+          </FocusGroup>
+        )}
+      >
+        <FocusOnStep step="sources" id={SOURCES_SETUP_NAV.option('stremio')} />
+      </SourcesSetup>
+    );
+  }
+
   if (!current || !currentName) {
     const firstOptional = primaryOptionalGroups[0]?.[0];
     return (
@@ -297,11 +398,11 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             <Button navId={NAV.finish} onClick={onDismiss}>
               {t('config.finish')}
             </Button>
-            {requiredGroups.length > 0 && (
+            {lastStepBeforeOptional >= 0 && (
               <Button
                 navId={NAV.previous}
                 icon={<ArrowLeftIcon />}
-                onClick={() => setStep(Math.max(0, requiredGroups.length - 1))}
+                onClick={() => setStep(lastStepBeforeOptional)}
               >
                 {t('config.previousStep')}
               </Button>
@@ -351,38 +452,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     >
       <FocusOnStep step={currentName} id={groupNav.group} />
       <Stack gap="lg">
-        {!isOptionalStep && (
-          <ol className={styles.timeline} aria-label={t('config.requiredSteps')}>
-            {requiredGroups.map(([name], index) => {
-              const state = savedServices.has(name)
-                ? 'complete'
-                : index === step
-                  ? 'current'
-                  : 'upcoming';
-              return (
-                <li
-                  key={name}
-                  className={styles.timelineItem}
-                  data-state={state}
-                  aria-current={state === 'current' ? 'step' : undefined}
-                >
-                  <span className={styles.timelineMarker} aria-hidden="true">
-                    {state === 'complete' ? <CheckIcon /> : index + 1}
-                  </span>
-                  <span className={styles.timelineName}>{formatServiceName(name)}</span>
-                </li>
-              );
-            })}
-            {optionalGroups.length > 0 && (
-              <li className={styles.timelineItem} data-state="upcoming">
-                <span className={styles.timelineMarker} aria-hidden="true">
-                  {requiredGroups.length + 1}
-                </span>
-                <span className={styles.timelineName}>{t('config.optionalServices')}</span>
-              </li>
-            )}
-          </ol>
-        )}
+        {!isOptionalStep && timeline}
         <ServiceConfigGroup
           groupName={groupName}
           entries={current}

@@ -6,12 +6,15 @@ interface AppStateSlice {
   setupAvailable: boolean | null; // null = not yet checked
   /** Admin chose "continue anyway" while required config is still missing */
   configDismissed: boolean;
+  /** Admin moved on from choosing sources while none is on (this session). */
+  sourcesDismissed: boolean;
   introPhase: 'pending' | 'centering' | 'playing' | 'complete';
 }
 
 const initialState: AppStateSlice = {
   setupAvailable: null,
   configDismissed: false,
+  sourcesDismissed: false,
   introPhase: 'pending',
 };
 
@@ -21,6 +24,9 @@ export const appStateSlice = createSlice({
   reducers: {
     dismissConfigWizard(state) {
       state.configDismissed = true;
+    },
+    dismissSourcesPrompt(state) {
+      state.sourcesDismissed = true;
     },
     resetConfigDismissed(state) {
       state.configDismissed = false;
@@ -43,10 +49,12 @@ export const appStateSlice = createSlice({
     // configuration again after the next successful login.
     builder.addMatcher(authApi.endpoints.login.matchFulfilled, state => {
       state.configDismissed = false;
+      state.sourcesDismissed = false;
     });
     builder.addMatcher(authApi.endpoints.claimQrLogin.matchFulfilled, (state, action) => {
       if ('session' in action.payload) {
         state.configDismissed = false;
+        state.sourcesDismissed = false;
       }
     });
     builder.addMatcher(setupApi.endpoints.checkSetupStatus.matchFulfilled, (state, action) => {
@@ -67,6 +75,7 @@ export const {
   beginIntroPlayback,
   completeIntro,
   dismissConfigWizard,
+  dismissSourcesPrompt,
   resetConfigDismissed,
   setIntroEligible,
 } = appStateSlice.actions;
@@ -76,5 +85,8 @@ export const selectSetupAvailable = (state: { appState: AppStateSlice }) =>
 
 export const selectConfigDismissed = (state: { appState: AppStateSlice }) =>
   state.appState.configDismissed;
+
+export const selectSourcesDismissed = (state: { appState: AppStateSlice }) =>
+  state.appState.sourcesDismissed;
 
 export const selectIntroPhase = (state: { appState: AppStateSlice }) => state.appState.introPhase;

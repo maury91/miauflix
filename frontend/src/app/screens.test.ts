@@ -87,4 +87,17 @@ describe('resolveScreen', () => {
     expect(resolve('search', 'home', { booted: false }).kind).toBe('loading');
     expect(resolve('home', 'home', { booted: false, homeEligible: true }).kind).toBe('media');
   });
+
+  it('keeps choosing sources open until dismissed, behind the required wizard', () => {
+    expect(resolve('home', 'sources_setup', { sourcesSetupActive: true }).kind).toBe(
+      'sourcesSetup'
+    );
+    // Turning a source on can surface optional settings: the page stays
+    expect(resolve('home', 'config', { sourcesSetupActive: true }).kind).toBe('sourcesSetup');
+    expect(resolve('home', 'config').kind).toBe('optionalConfig');
+    expect(
+      resolve('home', 'sources_setup', { sourcesSetupActive: true, requiredConfigActive: true })
+        .kind
+    ).toBe('requiredConfig');
+  });
 });

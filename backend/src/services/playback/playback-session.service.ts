@@ -146,6 +146,12 @@ interface LiveSession {
   filePath?: string;
   durationSeconds?: number;
   samples: SwarmSample[];
+  /**
+   * When its source was first observed with the viewer waiting on it (a torrent fetching the file
+   * list, or an open stream). Startup starvation counts from here, not from `createdAt`: time
+   * spent preparing the source on the server is not the swarm's fault.
+   */
+  watchedSince?: number;
   healthySince?: number;
   /**
    * When the current unstarved, delivering stretch began; cleared when the stream starves,
@@ -544,9 +550,10 @@ export class PlaybackSessionService {
           live.provenSince = undefined;
           continue;
         }
+        live.watchedSince ??= now;
         live.samples.push({ at: now, peers: health.peers, downloadSpeed: health.downloadSpeed });
         if (live.samples.length > SAMPLE_HISTORY) live.samples.shift();
-        const starvedSince = startup ? live.createdAt : health.blockedSince;
+        const starvedSince = startup ? live.watchedSince : health.blockedSince;
         if (starvedSince === null) {
           live.healthySince ??= now;
           this.trackProvenPlay(live, health.lastDeliveryAt, now);

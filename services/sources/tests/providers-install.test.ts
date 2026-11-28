@@ -10,6 +10,7 @@ import { afterEach, expect, it, spyOn } from 'bun:test';
 import { parse } from 'yaml';
 
 import { createSourcesService } from '../src/service';
+import { seedEarlierBuiltIns } from './providers';
 
 const dirs: string[] = [];
 const stops: Array<() => Promise<void>> = [];
@@ -21,6 +22,7 @@ const setup = (
 ) => {
   const dir = mkdtempSync(join(tmpdir(), 'sources-install-'));
   dirs.push(dir);
+  seedEarlierBuiltIns(dir);
   const created = createSourcesService({
     animeListsUrl: '',
     dataDir: dir,

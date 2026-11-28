@@ -9,6 +9,12 @@ to your Miauwatch backend over HTTPS. It targets 2020 TVs (Tizen 5.5, Chromium 6
 
 ## Build the package
 
+Each [release](https://github.com/maury91/miauwatch/releases/latest) has the package attached
+as `miauwatch.wgt`, built without a server. To use it, skip to
+[Install it on the TV](#install-it-on-the-tv). When you install it with Apps2Samsung, you can
+also enter your server's address. To pack the server address or other options into the package
+itself, build it:
+
 The package is built from a checkout of the repository, even if your server runs the prebuilt
 Docker images. You need Node.js 22 or newer (`.nvmrc` pins the tested version),
 [Bun](https://bun.sh/docs/installation) (the version in `package.json`'s `packageManager`) and

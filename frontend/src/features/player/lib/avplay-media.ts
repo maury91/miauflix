@@ -199,6 +199,8 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
   muted = false;
   parentElement: HTMLElement | null = null;
   audioTracks: AvplayAudioTrack[] = [];
+  /** What AVPlay said about its last error (its event type, and message when it gave one). */
+  errorDetail: string | null = null;
 
   private position = 0;
   private length = Number.NaN;
@@ -532,8 +534,13 @@ export class AvplayMedia extends EventTarget implements PlayerMedia {
         }
         this.emit('ended');
       },
-      onerror: () => {
-        if (current()) this.emit('error');
+      onerrormsg: (eventType: string, eventMsg: string) => {
+        if (current()) this.errorDetail = `${eventType}: ${eventMsg}`;
+      },
+      onerror: (eventType: string) => {
+        if (!current()) return;
+        if (!this.errorDetail?.startsWith(eventType)) this.errorDetail = eventType;
+        this.emit('error');
       },
     };
   }

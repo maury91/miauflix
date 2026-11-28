@@ -6,7 +6,11 @@ import {
   useLoadDefinitionsMutation,
   useSyncDefinitionsMutation,
 } from '@features/sources/api/sources.api';
-import type { CardigannDefinitionEntry, CardigannSyncStatus } from '@miauwatch/backend';
+import type {
+  CardigannDefinitionEntry,
+  CardigannSyncStatus,
+  ProviderView,
+} from '@miauwatch/backend';
 import {
   ActionGroup,
   Badge,
@@ -28,26 +32,8 @@ import { FocusGroup } from '@shared/navigation';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { errorMessage } from './sources/errors';
+import { ADD_SOURCE_NAV as NAV } from './sources/navIds';
 import * as styles from './sources/sources.css';
-
-/** Navigation IDs of the indexer catalog, the Stremio form and the Torznab form. */
-const NAV = {
-  browse: 'indexers-browse',
-  search: 'indexers-search',
-  source: 'indexers-source',
-  filters: 'indexers-filters',
-  filter: (flag: string) => `indexers-filter:${flag}`,
-  check: 'indexers-check',
-  results: 'indexers-results',
-  add: (entry: { source: string; id: string }) => `indexer-add:${entry.source}|${entry.id}`,
-  more: 'indexers-more',
-  stremioUrl: 'stremio-url',
-  stremioSubmit: 'stremio-submit',
-  torznabName: 'torznab-name',
-  torznabUrl: 'torznab-url',
-  torznabKey: 'torznab-key',
-  torznabSubmit: 'torznab-submit',
-} as const;
 
 const PAGE_SIZE = 40;
 const POLL_MS = 4000;
@@ -146,13 +132,31 @@ function Supports({ entry, showSource }: { entry: CardigannDefinitionEntry; show
   );
 }
 
-interface SourcesAddProvidersProps {
-  onNotice: (message: string) => void;
+/** Called with each source once it is added (switched off). */
+type OnAdded = (view: ProviderView) => void;
+
+function ErrorMessage({ error }: { error: string }) {
+  const t = useT();
+  return error ? (
+    <Message tone="danger" toneLabel={t('common.error')} live="assertive">
+      {error}
+    </Message>
+  ) : null;
 }
 
-export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersProps) {
+/**
+ * The catalog of public indexer definitions: search and filters, the matching definitions with
+ * what each supports, and Add. Mounted when the admin opens it: it loads the list at once.
+ */
+export function IndexerCatalog({
+  onAdded,
+  entryHeadingLevel = 4,
+}: {
+  onAdded: OnAdded;
+  /** Each indexer's name: one level under the heading the catalog sits in. */
+  entryHeadingLevel?: 2 | 4;
+}) {
   const t = useT();
-  const [browsing, setBrowsing] = useState(false);
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
   const [source, setSource] = useState('');
@@ -165,10 +169,6 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
   const [loadPage] = useLoadDefinitionsMutation();
   const [syncNow, syncing] = useSyncDefinitionsMutation();
   const [addCardigann, cardigann] = useAddCardigannProviderMutation();
-  const [addTorznab, torznab] = useAddTorznabProviderMutation();
-  const [form, setForm] = useState({ name: '', baseUrl: '', apiKey: '' });
-  const [addStremio, stremio] = useAddStremioProviderMutation();
-  const [addonUrl, setAddonUrl] = useState('');
   const resultsRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestId = useRef(0);
@@ -208,13 +208,13 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
 
   const filterKey = JSON.stringify([query, source, filters]);
   useEffect(() => {
-    if (browsing) void load(0);
-  }, [browsing, filterKey, load]);
+    void load(0);
+  }, [filterKey, load]);
 
   // While the list is being synced, follow its progress; reload the list once it is done.
   const isSyncing = sync?.syncing ?? false;
   useEffect(() => {
-    if (!browsing || !isSyncing) return;
+    if (!isSyncing) return;
     const timer = setTimeout(() => {
       loadPage({ ...args.current, offset: 0, limit: 0 })
         .unwrap()
@@ -225,14 +225,14 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
         .catch(() => undefined);
     }, POLL_MS);
     return () => clearTimeout(timer);
-  }, [browsing, isSyncing, sync, load, loadPage]);
+  }, [isSyncing, sync, load, loadPage]);
 
   // Infinite scroll: ask for the next page when the end of the list comes into view.
   const more = entries.length < total;
   const manySources = (sync?.sources.length ?? 0) > 1;
   useEffect(() => {
     const target = sentinelRef.current;
-    if (!browsing || !more || loading || error || !target || !hasObserver) return;
+    if (!more || loading || error || !target || !hasObserver) return;
     const observer = new IntersectionObserver(
       seen => {
         if (seen.some(item => item.isIntersecting)) void load(entries.length);
@@ -241,7 +241,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, [browsing, more, loading, error, hasObserver, entries.length, load]);
+  }, [more, loading, error, hasObserver, entries.length, load]);
 
   const install = async (target: CardigannDefinitionEntry) => {
     setError('');
@@ -254,7 +254,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
             : entry
         )
       );
-      onNotice(t('indexers.addedNotice', { name: view.name }));
+      onAdded(view);
     } catch (requestError) {
       setError(errorMessage(requestError, t('indexers.addFailed')));
     }
@@ -269,6 +269,180 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
     }
   };
 
+  return (
+    <>
+      <ErrorMessage error={error} />
+      <FocusGroup layout="vertical">
+        <div className={styles.setupFields}>
+          <TextField
+            navId={NAV.search}
+            id="definition-search"
+            label={t('indexers.search')}
+            value={search}
+            onChange={event => setSearch(event.target.value)}
+          />
+          {sync && manySources && (
+            <Select
+              navId={NAV.source}
+              id="definition-source"
+              label={t('indexers.source')}
+              fullWidth
+              value={source}
+              onChange={setSource}
+              items={[
+                { value: '', label: t('indexers.allSources') },
+                ...sync.sources.map(item => ({
+                  value: item.key,
+                  label: `${item.label}${item.total ? ` (${item.total})` : ''}`,
+                })),
+              ]}
+            />
+          )}
+          <FocusGroup id={NAV.filters} layout="horizontal">
+            <div className={styles.filters} role="group" aria-label={t('indexers.filters')}>
+              {FILTERS.map(flag => (
+                <FilterChip
+                  key={flag}
+                  navId={NAV.filter(flag)}
+                  selected={filters[flag]}
+                  onSelectedChange={selected =>
+                    setFilters(current => ({ ...current, [flag]: selected }))
+                  }
+                >
+                  {t(`indexers.filter.${flag}`)}
+                </FilterChip>
+              ))}
+            </div>
+          </FocusGroup>
+          {sync && (
+            <div className={styles.statusLine}>
+              <span role="status">
+                <Text variant="caption" tone="secondary">
+                  {updatedText(sync)}
+                </Text>
+              </span>
+              <Button
+                navId={NAV.check}
+                size="sm"
+                disabled={sync.syncing || syncing.isLoading}
+                onClick={() => void checkNow()}
+              >
+                {t('indexers.check')}
+              </Button>
+            </div>
+          )}
+          {sync?.sources
+            .filter(item => item.lastError)
+            .map(item => (
+              <Message key={item.key} tone="danger" toneLabel={t('common.error')} live="assertive">
+                {t('indexers.sourceFailed', {
+                  source: item.label,
+                  error: item.lastError ?? '',
+                })}
+              </Message>
+            ))}
+          {sync && sync.failed > 0 && !sync.syncing && (
+            <Message tone="warning" toneLabel={t('common.warning')}>
+              {t('indexers.retrying', { count: sync.failed })}
+            </Message>
+          )}
+          <FocusGroup id={NAV.results} layout="vertical">
+            <div
+              ref={resultsRef}
+              className={styles.results}
+              role="list"
+              aria-label={t('indexers.available')}
+            >
+              {entries.map(entry => {
+                const unusable = entry.status === 'ready' && !entry.supported;
+                return (
+                  <div key={`${entry.source}|${entry.id}`} role="listitem" className={styles.entry}>
+                    <div className={styles.entryText}>
+                      <Heading level={entryHeadingLevel} variant="label">
+                        {entry.name ?? entry.id}
+                        {entry.name && entry.name.toLowerCase() !== entry.id && (
+                          <Text as="span" variant="caption" tone="secondary">
+                            {' '}
+                            {entry.id}
+                          </Text>
+                        )}
+                      </Heading>
+                      <Supports entry={entry} showSource={manySources} />
+                    </div>
+                    <Button
+                      navId={NAV.add(entry)}
+                      size="sm"
+                      disabled={entry.installed || unusable || cardigann.isLoading}
+                      aria-label={
+                        manySources
+                          ? t('indexers.addFrom', { id: entry.id, source: entry.sourceLabel })
+                          : t('indexers.addId', { id: entry.id })
+                      }
+                      onClick={() => void install(entry)}
+                    >
+                      {entry.installed ? t('indexers.addedButton') : t('indexers.add')}
+                    </Button>
+                  </div>
+                );
+              })}
+              {loading && entries.length === 0 && (
+                <div role="listitem" className={styles.empty}>
+                  <ProgressSpinner label={t('indexers.loading')} />
+                </div>
+              )}
+              {more && hasObserver && (
+                <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
+              )}
+              {more && (!hasObserver || error) && (
+                <div role="listitem" className={styles.entry}>
+                  <Button
+                    navId={NAV.more}
+                    size="sm"
+                    disabled={loading}
+                    onClick={() => void load(entries.length)}
+                  >
+                    {t('indexers.more')}
+                  </Button>
+                </div>
+              )}
+              {!loading && entries.length === 0 && !error && (
+                <div role="listitem" className={styles.empty}>
+                  <Text tone="secondary">
+                    {sync && sync.total === 0 ? t('indexers.none') : t('indexers.noMatch')}
+                  </Text>
+                </div>
+              )}
+            </div>
+          </FocusGroup>
+          {sync && (
+            <span role="status">
+              <Text variant="caption" tone="secondary">
+                {t('indexers.showing', { shown: entries.length, total })}
+                {sync.total ? t('indexers.inTotal', { count: sync.total }) : ''}
+              </Text>
+            </span>
+          )}
+        </div>
+      </FocusGroup>
+    </>
+  );
+}
+
+interface FormProps {
+  onAdded: OnAdded;
+  /** The form's heading; hidden where the page's own title already names it. */
+  title: string;
+  titleHidden?: boolean;
+  description?: string;
+}
+
+/** Adds a Stremio addon from its install link. */
+export function StremioAddonForm({ onAdded, title, titleHidden, description }: FormProps) {
+  const t = useT();
+  const [addStremio, stremio] = useAddStremioProviderMutation();
+  const [addonUrl, setAddonUrl] = useState('');
+  const [error, setError] = useState('');
+
   const submitStremio = async () => {
     if (stremio.isLoading || !addonUrl.trim()) return;
     setError('');
@@ -277,11 +451,54 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
       const view = await addStremio({ url: submitted.trim() }).unwrap();
       // A link typed while the request ran is the user's next one: keep it.
       setAddonUrl(current => (current === submitted ? '' : current));
-      onNotice(t('indexers.addedNotice', { name: view.name }));
+      onAdded(view);
     } catch (requestError) {
       setError(errorMessage(requestError, t('indexers.addonFailed')));
     }
   };
+
+  return (
+    <FormSection
+      title={title}
+      titleHidden={titleHidden}
+      description={description}
+      headingLevel={titleHidden ? 2 : 3}
+      onSubmit={() => void submitStremio()}
+      busy={stremio.isLoading}
+      message={error ? <ErrorMessage error={error} /> : undefined}
+      actions={
+        <Button
+          type="submit"
+          navId={NAV.stremioSubmit}
+          loading={stremio.isLoading}
+          disabled={!addonUrl.trim()}
+        >
+          {t('indexers.addAddon')}
+        </Button>
+      }
+    >
+      {/* The link can hold the addon's settings and keys: keep it hidden like a password. */}
+      <PasswordField
+        navId={NAV.stremioUrl}
+        id="stremio-url"
+        label={t('indexers.stremioUrl')}
+        showLabel={t('indexers.showLink')}
+        hideLabel={t('indexers.hideLink')}
+        autoComplete="off"
+        placeholder="https://addon.example.com/manifest.json"
+        value={addonUrl}
+        onChange={event => setAddonUrl(event.target.value)}
+      />
+    </FormSection>
+  );
+}
+
+/** Adds a Torznab endpoint: an indexer from the admin's own Jackett or Prowlarr. */
+export function TorznabForm({ onAdded, title, titleHidden, description }: FormProps) {
+  const t = useT();
+  const [addTorznab, torznab] = useAddTorznabProviderMutation();
+  const [form, setForm] = useState({ name: '', baseUrl: '', apiKey: '' });
+  const [error, setError] = useState('');
 
   const submitTorznab = async () => {
     if (torznab.isLoading || !form.name.trim() || !form.baseUrl.trim()) return;
@@ -293,19 +510,73 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
         ...(form.apiKey ? { apiKey: form.apiKey } : {}),
       }).unwrap();
       setForm({ name: '', baseUrl: '', apiKey: '' });
-      onNotice(t('indexers.addedNotice', { name: view.name }));
+      onAdded(view);
     } catch (requestError) {
       setError(errorMessage(requestError, t('indexers.endpointFailed')));
     }
   };
 
   return (
+    <FormSection
+      title={title}
+      titleHidden={titleHidden}
+      description={description}
+      headingLevel={titleHidden ? 2 : 3}
+      onSubmit={() => void submitTorznab()}
+      busy={torznab.isLoading}
+      message={error ? <ErrorMessage error={error} /> : undefined}
+      actions={
+        <Button
+          type="submit"
+          navId={NAV.torznabSubmit}
+          loading={torznab.isLoading}
+          disabled={!form.name.trim() || !form.baseUrl.trim()}
+        >
+          {t('indexers.addEndpoint')}
+        </Button>
+      }
+    >
+      <TextField
+        navId={NAV.torznabName}
+        id="torznab-name"
+        label={t('indexers.name')}
+        value={form.name}
+        onChange={event => setForm({ ...form, name: event.target.value })}
+      />
+      <TextField
+        navId={NAV.torznabUrl}
+        id="torznab-url"
+        label={t('indexers.url')}
+        type="url"
+        placeholder="http://jackett:9117/api/v2.0/indexers/all/results/torznab/"
+        value={form.baseUrl}
+        onChange={event => setForm({ ...form, baseUrl: event.target.value })}
+      />
+      <PasswordField
+        navId={NAV.torznabKey}
+        id="torznab-key"
+        label={t('indexers.apiKey')}
+        showLabel={t('indexers.showKey')}
+        hideLabel={t('indexers.hideKey')}
+        autoComplete="off"
+        value={form.apiKey}
+        onChange={event => setForm({ ...form, apiKey: event.target.value })}
+      />
+    </FormSection>
+  );
+}
+
+interface SourcesAddProvidersProps {
+  onNotice: (message: string) => void;
+}
+
+/** Settings → Sources → Advanced setup: the three ways to add a source, one after the other. */
+export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersProps) {
+  const t = useT();
+  const [browsing, setBrowsing] = useState(false);
+  const added = (view: ProviderView) => onNotice(t('indexers.addedNotice', { name: view.name }));
+  return (
     <>
-      {error && (
-        <Message tone="danger" toneLabel={t('common.error')} live="assertive">
-          {error}
-        </Message>
-      )}
       <div className={styles.setupPart}>
         <Section
           title={t('indexers.jackettTitle')}
@@ -319,250 +590,25 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
               </Button>
             </ActionGroup>
           ) : (
-            <FocusGroup layout="vertical">
-              <div className={styles.setupFields}>
-                <TextField
-                  navId={NAV.search}
-                  id="definition-search"
-                  label={t('indexers.search')}
-                  value={search}
-                  onChange={event => setSearch(event.target.value)}
-                  placeholder="nyaa"
-                />
-                {sync && manySources && (
-                  <Select
-                    navId={NAV.source}
-                    id="definition-source"
-                    label={t('indexers.source')}
-                    fullWidth
-                    value={source}
-                    onChange={setSource}
-                    items={[
-                      { value: '', label: t('indexers.allSources') },
-                      ...sync.sources.map(item => ({
-                        value: item.key,
-                        label: `${item.label}${item.total ? ` (${item.total})` : ''}`,
-                      })),
-                    ]}
-                  />
-                )}
-                <FocusGroup id={NAV.filters} layout="horizontal">
-                  <div className={styles.filters} role="group" aria-label={t('indexers.filters')}>
-                    {FILTERS.map(flag => (
-                      <FilterChip
-                        key={flag}
-                        navId={NAV.filter(flag)}
-                        selected={filters[flag]}
-                        onSelectedChange={selected =>
-                          setFilters(current => ({ ...current, [flag]: selected }))
-                        }
-                      >
-                        {t(`indexers.filter.${flag}`)}
-                      </FilterChip>
-                    ))}
-                  </div>
-                </FocusGroup>
-                {sync && (
-                  <div className={styles.statusLine}>
-                    <span role="status">
-                      <Text variant="caption" tone="secondary">
-                        {updatedText(sync)}
-                      </Text>
-                    </span>
-                    <Button
-                      navId={NAV.check}
-                      size="sm"
-                      disabled={sync.syncing || syncing.isLoading}
-                      onClick={() => void checkNow()}
-                    >
-                      {t('indexers.check')}
-                    </Button>
-                  </div>
-                )}
-                {sync?.sources
-                  .filter(item => item.lastError)
-                  .map(item => (
-                    <Message
-                      key={item.key}
-                      tone="danger"
-                      toneLabel={t('common.error')}
-                      live="assertive"
-                    >
-                      {t('indexers.sourceFailed', {
-                        source: item.label,
-                        error: item.lastError ?? '',
-                      })}
-                    </Message>
-                  ))}
-                {sync && sync.failed > 0 && !sync.syncing && (
-                  <Message tone="warning" toneLabel={t('common.warning')}>
-                    {t('indexers.retrying', { count: sync.failed })}
-                  </Message>
-                )}
-                <FocusGroup id={NAV.results} layout="vertical">
-                  <div
-                    ref={resultsRef}
-                    className={styles.results}
-                    role="list"
-                    aria-label={t('indexers.available')}
-                  >
-                    {entries.map(entry => {
-                      const unusable = entry.status === 'ready' && !entry.supported;
-                      return (
-                        <div
-                          key={`${entry.source}|${entry.id}`}
-                          role="listitem"
-                          className={styles.entry}
-                        >
-                          <div className={styles.entryText}>
-                            <Heading level={4} variant="label">
-                              {entry.name ?? entry.id}
-                              {entry.name && entry.name.toLowerCase() !== entry.id && (
-                                <Text as="span" variant="caption" tone="secondary">
-                                  {' '}
-                                  {entry.id}
-                                </Text>
-                              )}
-                            </Heading>
-                            <Supports entry={entry} showSource={manySources} />
-                          </div>
-                          <Button
-                            navId={NAV.add(entry)}
-                            size="sm"
-                            disabled={entry.installed || unusable || cardigann.isLoading}
-                            aria-label={
-                              manySources
-                                ? t('indexers.addFrom', { id: entry.id, source: entry.sourceLabel })
-                                : t('indexers.addId', { id: entry.id })
-                            }
-                            onClick={() => void install(entry)}
-                          >
-                            {entry.installed ? t('indexers.addedButton') : t('indexers.add')}
-                          </Button>
-                        </div>
-                      );
-                    })}
-                    {loading && entries.length === 0 && (
-                      <div className={styles.empty}>
-                        <ProgressSpinner label={t('indexers.loading')} />
-                      </div>
-                    )}
-                    {more && hasObserver && (
-                      <div ref={sentinelRef} className={styles.sentinel} aria-hidden="true" />
-                    )}
-                    {more && (!hasObserver || error) && (
-                      <div role="listitem" className={styles.entry}>
-                        <Button
-                          navId={NAV.more}
-                          size="sm"
-                          disabled={loading}
-                          onClick={() => void load(entries.length)}
-                        >
-                          {t('indexers.more')}
-                        </Button>
-                      </div>
-                    )}
-                    {!loading && entries.length === 0 && !error && (
-                      <div className={styles.empty}>
-                        <Text tone="secondary">
-                          {sync && sync.total === 0 ? t('indexers.none') : t('indexers.noMatch')}
-                        </Text>
-                      </div>
-                    )}
-                  </div>
-                </FocusGroup>
-                {sync && (
-                  <span role="status">
-                    <Text variant="caption" tone="secondary">
-                      {t('indexers.showing', { shown: entries.length, total })}
-                      {sync.total ? t('indexers.inTotal', { count: sync.total }) : ''}
-                    </Text>
-                  </span>
-                )}
-              </div>
-            </FocusGroup>
+            <IndexerCatalog onAdded={added} />
           )}
         </Section>
       </div>
 
       <div className={styles.setupPart}>
-        <FormSection
+        <StremioAddonForm
+          onAdded={added}
           title={t('indexers.stremioTitle')}
           description={t('indexers.stremioDescription')}
-          headingLevel={3}
-          onSubmit={() => void submitStremio()}
-          busy={stremio.isLoading}
-          actions={
-            <Button
-              type="submit"
-              navId={NAV.stremioSubmit}
-              loading={stremio.isLoading}
-              disabled={!addonUrl.trim()}
-            >
-              {t('indexers.addAddon')}
-            </Button>
-          }
-        >
-          {/* The link can hold the addon's settings and keys: keep it hidden like a password. */}
-          <PasswordField
-            navId={NAV.stremioUrl}
-            id="stremio-url"
-            label={t('indexers.stremioUrl')}
-            showLabel={t('indexers.showLink')}
-            hideLabel={t('indexers.hideLink')}
-            autoComplete="off"
-            placeholder="https://torrentio.strem.fun/manifest.json"
-            value={addonUrl}
-            onChange={event => setAddonUrl(event.target.value)}
-          />
-        </FormSection>
+        />
       </div>
 
       <div className={styles.setupPart}>
-        <FormSection
+        <TorznabForm
+          onAdded={added}
           title={t('indexers.torznabTitle')}
           description={t('indexers.torznabDescription')}
-          headingLevel={3}
-          onSubmit={() => void submitTorznab()}
-          busy={torznab.isLoading}
-          actions={
-            <Button
-              type="submit"
-              navId={NAV.torznabSubmit}
-              loading={torznab.isLoading}
-              disabled={!form.name.trim() || !form.baseUrl.trim()}
-            >
-              {t('indexers.addEndpoint')}
-            </Button>
-          }
-        >
-          <TextField
-            navId={NAV.torznabName}
-            id="torznab-name"
-            label={t('indexers.name')}
-            value={form.name}
-            onChange={event => setForm({ ...form, name: event.target.value })}
-          />
-          <TextField
-            navId={NAV.torznabUrl}
-            id="torznab-url"
-            label={t('indexers.url')}
-            type="url"
-            placeholder="http://jackett:9117/api/v2.0/indexers/all/results/torznab/"
-            value={form.baseUrl}
-            onChange={event => setForm({ ...form, baseUrl: event.target.value })}
-          />
-          <PasswordField
-            navId={NAV.torznabKey}
-            id="torznab-key"
-            label={t('indexers.apiKey')}
-            showLabel={t('indexers.showKey')}
-            hideLabel={t('indexers.hideKey')}
-            autoComplete="off"
-            value={form.apiKey}
-            onChange={event => setForm({ ...form, apiKey: event.target.value })}
-          />
-        </FormSection>
+        />
       </div>
     </>
   );

@@ -6,6 +6,12 @@ A source is a particular downloadable release of a movie or episode. Several sou
 
 Media is downloaded through BitTorrent, which transfers pieces of a file between participating computers. The group sharing a particular download is called its swarm. A provider, sometimes called an indexer, helps locate a release; it does not guarantee the swarm has enough people online to play it smoothly.
 
+## Adding providers
+
+Miauwatch comes with no providers. An administrator adds the ones they choose during first-run setup, or later under **Settings → Sources**, and turns them on; until at least one is on, no searches run. A provider starts switched off when it is added. Servers set up before this change keep the providers they had.
+
+Miauwatch doesn't recommend any site: check that the providers you add are legal to use where you live.
+
 ## Background and on-demand searches
 
 Miauwatch looks for sources in the background, so it can prepare titles before you press Watch. If a title still needs sources, it can search when you open or request it. Results arrive as providers respond rather than waiting for every provider to finish.
@@ -22,7 +28,7 @@ For TV shows, it can look for individual episodes or a whole-season download. A 
 
 Anime is recognised from a public list that links TMDB titles to AniList and AniDB entries; no setting is needed. TMDB often lists several anime seasons (cours) as one long season, while release groups number each cour from 1 ("2nd Season - 07") or count from the first episode ("- 31"). Miauwatch works out which cour and episode a TMDB episode is from the air dates, searches with the AniDB episode id where a provider supports it, and with the anime's romaji and English titles otherwise. It accepts a release only when its season and number fit, and finds the episode's file inside batch downloads.
 
-The AnimeTosho provider is on by default and is only used for anime; it marks the releases SeaDex recommends. Nyaa can be turned on as well. Specials and OVAs, a preference for recommended releases or particular groups, and Japanese audio by default are not implemented yet.
+Providers built for anime are only used for anime; Miauwatch marks the releases SeaDex recommends when a provider's definition reports them. Specials and OVAs, a preference for recommended releases or particular groups, and Japanese audio by default are not implemented yet.
 
 ## Checking sources before playback
 
@@ -46,7 +52,7 @@ This is a working integration. An arbitrary website address is not enough to cre
 
 ## Adding Stremio addons
 
-Stremio addons such as Torrentio, Comet or MediaFusion can be added by pasting the addon's install link under Sources → Advanced setup. Configure the addon on its own page first, because its settings (and any keys) are part of the link; Miauwatch keeps the link hidden after saving it. The built-in Torrentio provider works this way.
+Stremio addons that return torrents can be added by pasting the addon's install link under Sources → Advanced setup. Configure the addon on its own page first, because its settings (and any keys) are part of the link; Miauwatch keeps the link hidden after saving it.
 
 Only results that are torrents are used. Results that come from debrid services or other direct links are skipped for now, and anime is searched only through providers that support it.
 

@@ -7,6 +7,15 @@ Release notes for viewers and self-hosters. See the [detailed changelog](DETAILE
 ### Playback
 
 - Hover over the seek bar to preview the frame at that point. On Samsung TVs, Left and Right pause the video and show a strip of frames 10 seconds apart. OK or Play jumps to the selected frame, and Back returns to where you were.
+- A short buffering pause no longer makes the player switch sources in a loop. A source that has been playing reloads where you are instead of being dropped, and a new source is no longer marked as failed just because the server took a while to start it.
+
+### Sources
+
+- Miauwatch no longer comes with source providers. Setup now asks you to add the ones you choose: it explains the three kinds (Stremio addon, your own Jackett or Prowlarr, or an indexer from the public catalog), each on its own page with step-by-step instructions, and turns on each source you add (also on servers configured from `.env`, where an admin is asked while no source is on), and you can change them later under Settings → Sources. Existing servers keep the providers they had.
+
+### Samsung TV
+
+- Each release now includes the Samsung TV app (`miauwatch.wgt`). When installing it with Apps2Samsung, you can enter your server's address, or leave it empty and pick the server on the TV.
 
 ## 2026-11-23 v0.4.0 Rename into Miauwatch
 

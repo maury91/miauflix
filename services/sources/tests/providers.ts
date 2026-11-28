@@ -1,5 +1,9 @@
 import type { Database } from 'bun:sqlite';
 
+import { openDatabase } from '../src/db/database';
+import { TORRENTIO_ID, TORRENTIO_MANIFEST } from '../src/db/migrations';
+import { MIAUWATCH_SOURCE_KEY, PROWLARR_SOURCE_KEY } from '../src/providers/cardigann/sources';
+
 // Hosts without a dot are treated as internal, so the tests are not slowed by request spacing.
 /** A definition source nobody configures: test definitions are cached straight into the database. */
 export const TEST_SOURCE = 'tests.invalid/definitions';
@@ -124,4 +128,40 @@ export function useProviders(
       provider.priority
     );
   }
+}
+
+/**
+ * The built-in providers earlier versions created on every install, all switched off. A fresh
+ * install has none; tests about upgraded installs, or that need a few providers to act on, start
+ * from these.
+ */
+export function seedEarlierBuiltIns(dataDir: string): void {
+  const db = openDatabase(dataDir);
+  const insert = db.query(
+    "INSERT OR IGNORE INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES (?,?,'builtin:miauwatch',?,?,0,?)"
+  );
+  const cardigann = (source: string, slug: string, id: string, name: string, priority: number) =>
+    insert.run(
+      `${slug}-${id}`,
+      'cardigann',
+      name,
+      JSON.stringify({ cardigann: id, source }),
+      priority
+    );
+  cardigann(MIAUWATCH_SOURCE_KEY, 'maury91', 'therarbg-imdb', 'TheRARBG (IMDb)', 10);
+  cardigann(PROWLARR_SOURCE_KEY, 'prowlarr', 'yts', 'YTS', 20);
+  cardigann(MIAUWATCH_SOURCE_KEY, 'maury91', 'eztv-api', 'EZTV (API)', 30);
+  insert.run(
+    TORRENTIO_ID,
+    'stremio',
+    'Torrentio',
+    JSON.stringify({ baseUrl: TORRENTIO_MANIFEST }),
+    35
+  );
+  cardigann(MIAUWATCH_SOURCE_KEY, 'maury91', 'therarbg', 'TheRARBG', 40);
+  cardigann(MIAUWATCH_SOURCE_KEY, 'maury91', 'animetosho', 'AnimeTosho', 45);
+  cardigann(PROWLARR_SOURCE_KEY, 'prowlarr', 'nyaasi', 'Nyaa (Prowlarr)', 130);
+  cardigann(PROWLARR_SOURCE_KEY, 'prowlarr', 'eztv', 'EZTV (Prowlarr)', 140);
+  cardigann(PROWLARR_SOURCE_KEY, 'prowlarr', 'thepiratebay', 'The Pirate Bay (Prowlarr)', 150);
+  db.close();
 }

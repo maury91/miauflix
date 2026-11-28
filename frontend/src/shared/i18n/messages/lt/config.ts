@@ -47,6 +47,55 @@ export const config: Translation<typeof english> = {
   'config.reviewOptional': 'Išsaugokite pakeitimus arba grįžkite į papildomus nustatymus.',
   'config.fillRequired':
     'Užpildykite kiekvienos paslaugos privalomus laukus. Išsaugokite, kad galėtumėte tęsti.',
+  'config.sources.title': 'Pridėkite šaltinius',
+  'config.sources.description':
+    'Šaltinis nurodo Miauwatch, kur ieškoti filmų ir serialų. Pridėkite tokį, kurį galite naudoti savo šalyje, arba nustatykite vėliau.',
+  'config.sources.options': 'Šaltinio pridėjimo būdai',
+  'config.sources.about': 'Kas yra {name}?',
+  'config.sources.back': 'Atgal į šaltinius',
+  'config.sources.later': 'Nustatyti vėliau',
+  'config.sources.addedOn': '{name} pridėtas ir įjungtas.',
+  'config.sources.addedOff':
+    '{name} pridėtas, bet nepavyko jo įjungti: {error} Įjunkite jį skiltyje „Jūsų šaltiniai“.',
+  'config.sources.stremio.title': 'Stremio priedas',
+  'config.sources.stremio.summary': 'Naudokite priedo diegimo nuorodą',
+  'config.sources.stremio.info':
+    'Priedas yra Stremio programėlei skirta paslauga, kurioje ieškoti gali ir Miauwatch. Jį pridedate su diegimo nuoroda iš jo nustatymų puslapio. Veikia tik torentus randantys priedai.',
+  'config.sources.stremio.intro': 'Įklijuokite priedo, kurį turite teisę naudoti, diegimo nuorodą.',
+  'config.sources.stremio.step1':
+    'Atidarykite priedo nustatymų puslapį ir ten pasirinkite jo parinktis.',
+  'config.sources.stremio.step2':
+    'Nukopijuokite diegimo nuorodą: ji baigiasi manifest.json ir išsaugo jūsų parinktis.',
+  'config.sources.stremio.step3': 'Įklijuokite ją žemiau ir pridėkite.',
+  'config.sources.stremio.browse': 'Naršyti bendruomenės priedus (atsidaro naujame skirtuke)',
+  'config.sources.torznab.title': 'Jackett arba Prowlarr',
+  'config.sources.torznab.summary': 'Prijunkite savo serverį',
+  'config.sources.torznab.info':
+    'Jackett ir Prowlarr yra jūsų pačių paleidžiamos programos, kurios ieško daugelyje indeksuotojų už jus. Jei jau naudojate vieną iš jų, Miauwatch gali ieškoti jos indeksuotojuose per Torznab srautą.',
+  'config.sources.torznab.intro': 'Prijunkite indeksuotoją iš savo Jackett arba Prowlarr.',
+  'config.sources.torznab.step1':
+    'Jackett arba Prowlarr nukopijuokite indeksuotojo (arba visų) Torznab srauto nuorodą.',
+  'config.sources.torznab.step2': 'Nukopijuokite programoje rodomą API raktą.',
+  'config.sources.torznab.step3': 'Pavadinkite šaltinį, įklijuokite abu žemiau ir pridėkite.',
+  'config.sources.catalog.title': 'Rasti indeksuotoją',
+  'config.sources.catalog.summary': 'Ieškokite pagal pavadinimą',
+  'config.sources.catalog.info':
+    'Indeksuotojas yra svetainė, kurioje pateikiami atsisiuntimai. Miauwatch gali tiesiogiai ieškoti daugelyje viešų indeksuotojų pagal bendruomenės sąrašą, kuriame aprašyta, kaip kiekvienas veikia.',
+  'config.sources.catalog.intro':
+    'Ieškokite bendruomenės viešų indeksuotojų sąraše ir pridėkite tuos, kuriuos turite teisę naudoti. Pagal IMDb ID ieškantys indeksuotojai randa tikslų pavadinimą.',
+  'config.sources.addAnother': 'Pridėti kitą šaltinį',
+  'config.sources.yours': 'Jūsų šaltiniai',
+  'config.sources.loadFailed':
+    'Nepavyko įkelti šaltinių. Patikrinkite, ar veikia šaltinių paslauga, ir bandykite dar kartą, arba pridėkite juos vėliau skiltyje Nustatymai → Šaltiniai.',
+  'config.sources.continue': 'Tęsti į Miauwatch',
+  'config.sources.noneEnabled':
+    'Neįjungtas nė vienas šaltinis: kol nepridėsite ir neįjungsite bent vieno, Miauwatch nieko neras.',
+  'config.sources.enabledCount': {
+    one: 'Įjungtas {count} šaltinis',
+    few: 'Įjungti {count} šaltiniai',
+    many: 'Įjungta {count} šaltinio',
+    other: 'Įjungta {count} šaltinių',
+  },
   'config.requiredSteps': 'Privalomi konfigūravimo žingsniai',
   'config.testFailed': 'Nepavyko patikrinti paslaugos „{service}“.',
   'config.noTestResult': 'Paslaugos „{service}“ patikra negrąžino rezultato.',

@@ -7,13 +7,14 @@ import { sources } from '@miauwatch/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 
+import { openDatabase } from '../src/db/database';
 import { Store } from '../src/db/store';
 import type { HttpClient } from '../src/http/http-client';
 import { ProviderAdmin } from '../src/providers/admin';
 import type { Registry } from '../src/providers/registry';
 import { createSourcesService } from '../src/service';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
-import { idTitle, useProviders } from './providers';
+import { idTitle, seedEarlierBuiltIns, useProviders } from './providers';
 
 const dirs: string[] = [];
 const stops: Array<() => Promise<void>> = [];
@@ -29,9 +30,10 @@ const manifest = (version: string, extra: object[] = []) => [
   },
   ...extra,
 ];
-const setup = (handler: (url: URL) => Response | Promise<Response>) => {
+const setup = (handler: (url: URL) => Response | Promise<Response>, { fresh = false } = {}) => {
   const dir = mkdtempSync(join(tmpdir(), 'sources-admin-'));
   dirs.push(dir);
+  if (!fresh) seedEarlierBuiltIns(dir);
   const created = createSourcesService({
     animeListsUrl: '',
     dataDir: dir,
@@ -67,21 +69,30 @@ afterEach(async () => {
   for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
 
-it('lists the built-in providers in priority order', async () => {
+it('starts a fresh install with no providers', async () => {
+  const { client, ready } = setup(() => json({}), { fresh: true });
+  await ready();
+  // A fresh install searches nothing until an admin adds the sources they choose
+  expect(await client.providers()).toEqual([]);
+  // The built-in repository is only listed while it holds providers from an earlier install
+  expect(await client.repositories()).toEqual([]);
+});
+
+it('keeps the built-in providers an earlier install created, and their state', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'sources-builtins-'));
+  dirs.push(dir);
+  seedEarlierBuiltIns(dir);
+  const first = openDatabase(dir);
+  first.run("UPDATE providers SET enabled=1 WHERE id IN ('prowlarr-yts','maury91-torrentio')");
+  first.close();
+  const reopened = openDatabase(dir);
+  const enabled = reopened.query('SELECT id FROM providers WHERE enabled=1 ORDER BY id').all();
+  const count = reopened.query('SELECT COUNT(*) AS n FROM providers').get();
+  reopened.close();
+  expect(enabled).toEqual([{ id: 'maury91-torrentio' }, { id: 'prowlarr-yts' }]);
+  expect(count).toEqual({ n: 9 });
   const { client, ready } = setup(() => json({}));
   await ready();
-  const providers = await client.providers();
-  expect(providers.map(p => [p.id, p.priority, p.repositoryId, p.enabled]).slice(0, 4)).toEqual([
-    ['maury91-therarbg-imdb', 10, 'builtin:miauwatch', true],
-    ['prowlarr-yts', 20, 'builtin:miauwatch', true],
-    ['maury91-eztv-api', 30, 'builtin:miauwatch', true],
-    ['maury91-torrentio', 35, 'builtin:miauwatch', true],
-  ]);
-  expect(providers.find(p => p.id === 'maury91-animetosho')).toMatchObject({
-    priority: 45,
-    enabled: true,
-  });
-  expect(providers.slice(6).every(p => !p.enabled)).toBe(true);
   expect(await client.repositories()).toMatchObject([
     { id: 'builtin:miauwatch', name: 'Miauwatch', builtIn: true, providerCount: 9 },
   ]);

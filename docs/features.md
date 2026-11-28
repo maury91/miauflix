@@ -66,7 +66,7 @@ Miauwatch is a streaming app you run on your own computer or server. It brings t
 - Discover sources in the background and search when you open a title.
 - Search multiple providers and remove duplicate results.
 - Find individual episodes and episodes inside season downloads.
-- Search anime by AniDB episode and fansub naming (cour and absolute numbers, batches), with AnimeTosho for anime.
+- Search anime by AniDB episode and fansub naming (cour and absolute numbers, batches), with providers built for anime.
 - Check that a candidate source contains usable video.
 - Add supported Cardigann definitions or connect external Jackett/Prowlarr services through Torznab.
 - Manage providers: add, configure, enable, disable, test, reorder, and remove them where supported.

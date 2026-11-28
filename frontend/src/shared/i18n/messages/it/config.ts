@@ -41,6 +41,53 @@ export const config: Translation<typeof english> = {
   'config.completeRequired': 'Completa le impostazioni obbligatorie per continuare.',
   'config.reviewOptional': 'Salva le modifiche o torna alle impostazioni facoltative.',
   'config.fillRequired': 'Compila i campi obbligatori di ogni servizio. Salva per continuare.',
+  'config.sources.title': 'Aggiungi le fonti',
+  'config.sources.description':
+    'Una fonte dice a Miauwatch dove cercare film e serie. Aggiungine una che puoi usare dove vivi, oppure fallo più tardi.',
+  'config.sources.options': 'Modi per aggiungere una fonte',
+  'config.sources.about': 'Cos’è {name}?',
+  'config.sources.back': 'Torna alle fonti',
+  'config.sources.later': 'Configura più tardi',
+  'config.sources.addedOn': '{name} aggiunta e attivata.',
+  'config.sources.addedOff':
+    '{name} aggiunta, ma non è stato possibile attivarla: {error} Attivala da Le tue fonti.',
+  'config.sources.stremio.title': 'Addon di Stremio',
+  'config.sources.stremio.summary': 'Usa il link di installazione di un addon',
+  'config.sources.stremio.info':
+    'Un addon è un servizio pensato per l’app Stremio in cui anche Miauwatch può cercare. Lo aggiungi con il link di installazione dalla sua pagina di configurazione. Funzionano solo gli addon che trovano torrent.',
+  'config.sources.stremio.intro':
+    'Incolla il link di installazione di un addon che hai il permesso di usare.',
+  'config.sources.stremio.step1':
+    'Apri la pagina di configurazione dell’addon e scegli lì le sue opzioni.',
+  'config.sources.stremio.step2':
+    'Copia il link di installazione: finisce con manifest.json e contiene le opzioni scelte.',
+  'config.sources.stremio.step3': 'Incollalo qui sotto e aggiungilo.',
+  'config.sources.stremio.browse':
+    'Sfoglia gli addon della community (si apre in una nuova scheda)',
+  'config.sources.torznab.title': 'Jackett o Prowlarr',
+  'config.sources.torznab.summary': 'Collega il tuo server',
+  'config.sources.torznab.info':
+    'Jackett e Prowlarr sono app che gestisci tu e che cercano in molti indexer per te. Se ne usi già una, Miauwatch può cercare nei suoi indexer tramite il loro feed Torznab.',
+  'config.sources.torznab.intro': 'Collega un indexer del Jackett o Prowlarr che gestisci.',
+  'config.sources.torznab.step1':
+    'In Jackett o Prowlarr, copia il link del feed Torznab di un indexer (o di tutti).',
+  'config.sources.torznab.step2': 'Copia la chiave API mostrata nell’app.',
+  'config.sources.torznab.step3':
+    'Dai un nome alla fonte, incolla entrambi qui sotto e aggiungila.',
+  'config.sources.catalog.title': 'Trova un indexer',
+  'config.sources.catalog.summary': 'Cercane uno per nome',
+  'config.sources.catalog.info':
+    'Un indexer è un sito che elenca download. Miauwatch può cercare direttamente in molti indexer pubblici, grazie a un elenco della community che descrive come funziona ciascuno.',
+  'config.sources.catalog.intro':
+    'Cerca nell’elenco della community degli indexer pubblici e aggiungi quelli che hai il permesso di usare. Gli indexer che cercano per ID IMDb trovano il titolo esatto.',
+  'config.sources.addAnother': 'Aggiungi un’altra fonte',
+  'config.sources.yours': 'Le tue fonti',
+  'config.sources.loadFailed':
+    'Impossibile caricare le fonti. Controlla che il servizio delle fonti sia attivo e riprova, oppure aggiungile in seguito da Impostazioni → Fonti.',
+  'config.sources.continue': 'Continua su Miauwatch',
+  'config.sources.noneEnabled':
+    'Nessuna fonte attiva: Miauwatch non troverà nulla da guardare finché non ne aggiungi e attivi una.',
+  'config.sources.enabledCount': { one: '{count} fonte attiva', other: '{count} fonti attive' },
   'config.requiredSteps': 'Passaggi obbligatori',
   'config.testFailed': 'Test di {service} non riuscito.',
   'config.noTestResult': 'Il test di {service} non ha restituito risultati.',

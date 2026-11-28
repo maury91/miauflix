@@ -127,6 +127,16 @@ If you run the backend directly with that option unset or `false`, it instead ge
 
 An administrator can create additional accounts through the authenticated API. The account-creation screen is still planned. See [Accounts](../features/accounts.md) for current account features and [Environment Variables — Initial User](environment-variables.md#initial-user) for the setup modes.
 
+## Add your sources
+
+Miauwatch comes with no providers: a new install searches nothing until you add some and turn
+them on. The setup screens ask for them right after the required settings (or, when your `.env`
+already supplies those, as soon as an administrator signs in while no source is on). Add the ones
+you are allowed to use where you live, from the catalog of public indexer definitions, as a
+Stremio addon or as your own Jackett or Prowlarr, then turn them on. You can change them, reorder
+them or add more later under **Settings → Sources**. Servers that were set up before this change
+keep the providers they had. See [Finding something to play](../features/sources.md).
+
 ## What to try next
 
 Browse the [feature guide](../features.md) for movies and TV episodes, resume playback, personal watchlists, subtitles, Samsung TV support, and the current limitations. Future work is tracked separately in [ToDo.md](../../ToDo.md).

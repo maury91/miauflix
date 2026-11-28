@@ -467,6 +467,20 @@ describe('PlaybackSessionService', () => {
       expect(sourceHealth.markFailed).toHaveBeenCalledWith(1);
     });
 
+    it('does not count the time the source took to start against its swarm', async () => {
+      const { health, sourceHealth, start, tick } = setupMonitor();
+      // The stream opens 40s after the session: the server was still preparing the source.
+      health.streaming = false;
+      await start();
+      for (let second = 0; second < 40; second++) await tick(1_000);
+      health.streaming = true;
+      await tick(1_000);
+      expect(sourceHealth.markFailed).not.toHaveBeenCalled();
+      // Starving from the moment it opened is still judged, after the grace period.
+      for (let second = 0; second < 12; second++) await tick(1_000);
+      expect(sourceHealth.markFailed).toHaveBeenCalledWith(1);
+    });
+
     it('stops keeping a failed source for its viewers', async () => {
       const { downloads, sourceHealth, start } = setupMonitor();
       await start();

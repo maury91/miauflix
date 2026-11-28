@@ -91,15 +91,19 @@ type HeartbeatMessage = {
   visible: boolean;
 };
 
-/** A player diagnostic: the stall watchdog moved the playhead (see the frontend's audio-playback). */
+/**
+ * A player diagnostic: the stall watchdog moved the playhead (see the frontend's audio-playback),
+ * or the player rejected the stream (`media-error`, with what the player said in `detail`).
+ */
 type PlayerEventMessage = {
   type: 'player-event';
   playbackId?: string;
-  kind: 'frozen-seek' | 'gap-jump' | 'stall-seek';
+  kind: 'frozen-seek' | 'gap-jump' | 'media-error' | 'stall-seek';
   from: number;
   to: number;
   buffered: Array<[number, number]>;
   decodedFrames?: number;
+  detail?: string;
 };
 
 /** Player diagnostics logged per socket and minute; the rest are dropped. */
@@ -865,7 +869,10 @@ export class RealtimeGateway {
     return (
       (value.playbackId === undefined ||
         (typeof value.playbackId === 'string' && /^[a-f0-9]{32}$/.test(value.playbackId))) &&
-      (value.kind === 'gap-jump' || value.kind === 'stall-seek' || value.kind === 'frozen-seek') &&
+      (value.kind === 'gap-jump' ||
+        value.kind === 'stall-seek' ||
+        value.kind === 'frozen-seek' ||
+        value.kind === 'media-error') &&
       time(value.from) &&
       time(value.to) &&
       Array.isArray(value.buffered) &&
@@ -873,7 +880,9 @@ export class RealtimeGateway {
       value.buffered.every(
         range => Array.isArray(range) && range.length === 2 && time(range[0]) && time(range[1])
       ) &&
-      (value.decodedFrames === undefined || time(value.decodedFrames))
+      (value.decodedFrames === undefined || time(value.decodedFrames)) &&
+      (value.detail === undefined ||
+        (typeof value.detail === 'string' && value.detail.length <= 200))
     );
   }
 
@@ -887,6 +896,14 @@ export class RealtimeGateway {
     const buffered = event.buffered
       .map(([start, end]) => `${seconds(start)}-${seconds(end)}`)
       .join(' ');
+    if (event.kind === 'media-error') {
+      logger.warn(
+        'PlayerEvents',
+        `media-error at ${seconds(event.from)} (playback ${event.playbackId ?? 'unknown'}` +
+          `): ${event.detail ?? 'no detail'}`
+      );
+      return;
+    }
     logger.info(
       'PlayerEvents',
       `${event.kind} ${seconds(event.from)} -> ${seconds(event.to)}` +
