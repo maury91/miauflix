@@ -32,6 +32,7 @@ import { PlaybackTargetService } from '@services/playback/playback-target.servic
 import { SeekThumbnailService } from '@services/playback/seek-thumbnail.service';
 import { StreamService } from '@services/playback/stream.service';
 import { TvRemuxService } from '@services/playback/tv-remux.service';
+import { WatchOnceService } from '@services/playback/watch-once.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { SourceWarmupController } from '@services/preload/source-warmup.controller';
@@ -195,6 +196,10 @@ try {
     sourceWarmupController,
     db.getProgressRepository()
   );
+  const watchOnceService = new WatchOnceService({
+    mediaLoad: mediaLoadClient,
+    audio: audioPlaybackService,
+  });
   const playbackSessionService = new PlaybackSessionService({
     db,
     preparation: playablePreparationService,
@@ -207,6 +212,8 @@ try {
     progress: db.getProgressRepository(),
     playedSources: db.getContentSourceRepository(),
     remux: tvRemuxService,
+    watchOnce: watchOnceService,
+    users: db.getUserRepository(),
   });
   const audioSourcesService = new AudioSourcesService(
     mediaService,

@@ -4,6 +4,7 @@ import type { Database } from '@database/database';
 
 import { AudioConversionRequiredError, AudioPlaybackError } from './audio-playback.service';
 import { PlaybackSessionService, PlaybackUnavailableError } from './playback-session.service';
+import { WatchOnceRejectedError } from './watch-once.service';
 
 const movie = <T>(source: T) => ({ source, filePath: 'movie.mkv', matchKind: 'movie' as const });
 
@@ -1300,5 +1301,114 @@ describe('PlaybackSessionService', () => {
     expect(audio.inspect).not.toHaveBeenCalled();
     expect(session?.delivery).toBeUndefined();
     expect(grants.create).toHaveBeenCalledWith(expect.objectContaining({ sourceId: 3 }));
+  });
+
+  describe('watch-once gate', () => {
+    const playable = { kind: 'movie' as const, mediaId: 1 };
+    const preferences = { quality: 'auto' as const, allowHevc: false };
+    const setup = (watchOnce: boolean, prepare: jest.Mock) => {
+      const grants = { create: jest.fn() };
+      const users = { findById: jest.fn().mockResolvedValue({ watchOnce }) };
+      const verify = jest.fn(async (_target: { source: { id: number } }) => undefined);
+      const release = jest.fn(async (_sourceId: number) => ({ status: 'removed' }));
+      const service = new PlaybackSessionService({
+        db: { getPlaybackGrantRepository: () => grants } as never,
+        preparation: { prepare } as never,
+        config: { getOrThrow: () => 60_000 } as never,
+        audioPlaybackService: {
+          knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }),
+        } as never,
+        users: users as never,
+        watchOnce: { verify, release } as never,
+      });
+      return { service, grants, users, verify, release };
+    };
+
+    it('waits for verification and grants the target match kind', async () => {
+      const target = { source: { id: 1 }, filePath: 'Show.mkv', matchKind: 'combined' as const };
+      const prepare = jest.fn(async () => ({ source: { id: 1 }, target, state: 'ready' }));
+      const { service, grants, users, verify, release } = setup(true, prepare);
+      verify.mockImplementation(async () => {
+        expect(users.findById).toHaveBeenCalledWith('user');
+        expect(grants.create).not.toHaveBeenCalled();
+      });
+
+      const session = await service.create('user', playable, preferences);
+
+      expect(session).not.toBeNull();
+      expect(verify).toHaveBeenCalledWith(target);
+      expect(grants.create).toHaveBeenCalledWith(
+        expect.objectContaining({ watchOnce: true, matchKind: 'combined' })
+      );
+      expect(release).not.toHaveBeenCalled();
+    });
+
+    it('releases a rejected source, avoids it, and plays the next good source', async () => {
+      const prepare = jest
+        .fn()
+        .mockResolvedValueOnce({ source: { id: 1 }, target: movie({ id: 1 }), state: 'ready' })
+        .mockResolvedValueOnce({ source: { id: 2 }, target: movie({ id: 2 }), state: 'ready' });
+      const { service, grants, verify, release } = setup(true, prepare);
+      verify.mockImplementation(async (target: { source: { id: number } }) => {
+        if (target.source.id === 1) throw new WatchOnceRejectedError('not a video');
+      });
+
+      const session = await service.create('user', playable, preferences);
+
+      expect(release).toHaveBeenCalledWith(1);
+      expect(prepare).toHaveBeenCalledTimes(2);
+      expect(prepare).toHaveBeenNthCalledWith(
+        2,
+        playable,
+        expect.objectContaining({ avoidSourceIds: [1] })
+      );
+      expect(session?.source.id).toBe(2);
+      expect(verify).toHaveBeenCalledTimes(2);
+      expect(grants.create).toHaveBeenCalledTimes(1);
+      expect(grants.create).toHaveBeenCalledWith(
+        expect.objectContaining({ sourceId: 2, watchOnce: true, matchKind: 'movie' })
+      );
+    });
+
+    it('reports not_found when every prepared source is rejected', async () => {
+      const prepare = jest.fn(
+        async (_playable: unknown, options: { avoidSourceIds?: number[] }) => {
+          const id = [1, 2, 3].find(candidate => !options.avoidSourceIds?.includes(candidate));
+          return id === undefined
+            ? { source: null, target: null, state: 'cold' }
+            : { source: { id }, target: movie({ id }), state: 'ready' };
+        }
+      );
+      const { service, grants, verify, release } = setup(true, prepare);
+      verify.mockImplementation(async () => {
+        throw new WatchOnceRejectedError('no video stream');
+      });
+
+      await expect(service.create('user', playable, preferences)).rejects.toEqual(
+        new PlaybackUnavailableError('not_found')
+      );
+
+      expect(prepare).toHaveBeenCalledTimes(3);
+      expect(release.mock.calls.map(([sourceId]) => sourceId)).toEqual([1, 2, 3]);
+      expect(grants.create).not.toHaveBeenCalled();
+    });
+
+    it('skips the gate entirely when the user has watch-once off', async () => {
+      const prepare = jest.fn(async () => ({
+        source: { id: 1 },
+        target: movie({ id: 1 }),
+        state: 'ready',
+      }));
+      const { service, grants, verify, release } = setup(false, prepare);
+
+      await service.create('user', playable, preferences);
+
+      expect(verify).not.toHaveBeenCalled();
+      expect(release).not.toHaveBeenCalled();
+      expect(prepare).toHaveBeenCalledTimes(1);
+      expect(grants.create).toHaveBeenCalledWith(
+        expect.objectContaining({ watchOnce: false, matchKind: 'movie' })
+      );
+    });
   });
 });

@@ -11,6 +11,7 @@ import type { PlayableRef } from '@mytypes/playable.types';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
+import type { UserRepository } from '@repositories/user.repository';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type {
@@ -40,6 +41,7 @@ import {
   type RemuxRequest,
   type TvRemuxService,
 } from './tv-remux.service';
+import { WatchOnceRejectedError, type WatchOnceService } from './watch-once.service';
 
 /** How often live sessions' sources are sampled. */
 const HEALTH_SAMPLE_MS = 1_000;
@@ -202,6 +204,8 @@ export interface PlaybackSessionServiceOptions {
   progress?: Pick<ProgressRepository, 'findByKey'>;
   playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
   remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request' | 'status' | 'usable'>;
+  watchOnce?: WatchOnceService;
+  users?: Pick<UserRepository, 'findById'>;
 }
 
 export class PlaybackSessionService {
@@ -234,6 +238,8 @@ export class PlaybackSessionService {
     TvRemuxService,
     'existing' | 'onChange' | 'request' | 'status' | 'usable'
   >;
+  private readonly watchOnce?: WatchOnceService;
+  private readonly users?: Pick<UserRepository, 'findById'>;
 
   constructor({
     db,
@@ -247,6 +253,8 @@ export class PlaybackSessionService {
     progress,
     playedSources,
     remux,
+    watchOnce,
+    users,
   }: PlaybackSessionServiceOptions) {
     this.preparation = preparation;
     this.warmup = warmup;
@@ -257,6 +265,8 @@ export class PlaybackSessionService {
     this.progress = progress;
     this.playedSources = playedSources;
     this.remux = remux;
+    this.watchOnce = watchOnce;
+    this.users = users;
     this.grants = db.getPlaybackGrantRepository();
     this.ttlMs = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
     sourceHealth?.onFailed(sourceId => this.failOver(sourceId));
@@ -278,12 +288,15 @@ export class PlaybackSessionService {
       sessionId?: string;
     } = {}
   ): Promise<PlaybackSession | null> {
+    const user = await this.users?.findById(userId);
+    const watchOnce = user?.watchOnce === true ? this.watchOnce : undefined;
     // Warm where the player will resume, as the details warmup did, not over it from the start.
     const resumeFraction = options.deferDownload
       ? undefined
       : await findResumeFraction(this.progress, userId, playable);
     let lastAttempt: SourceAttempt | undefined;
-    const prepare = (allowHevc: boolean, avoid: readonly number[] = options.avoidSourceIds ?? []) =>
+    const avoidSourceIds = [...(options.avoidSourceIds ?? [])];
+    const prepare = (allowHevc: boolean, avoid: readonly number[] = avoidSourceIds) =>
       this.preparation.prepare(playable, {
         through: options.deferDownload ? 'sources' : 'warm',
         ...(resumeFraction ? { resumeFraction } : {}),
@@ -304,9 +317,29 @@ export class PlaybackSessionService {
       preferences.supportedMseVideoCodecs?.includes('hevc') === true ||
       (this.audioPlaybackService?.canConvertHevc?.() ?? false);
     let prepared = await prepare(allowHevc);
-    if (prepared.exhausted) throw new PlaybackUnavailableError('exhausted');
-    if (prepared.noRoom) throw new PlaybackUnavailableError('insufficient_storage');
-    if (!prepared.source) return null;
+    // Watch-once waits for a whole, real file before granting a session. Only source selection
+    // is retried here (three preparations at most); the audio-fallback loop below is unchanged.
+    for (let rejections = 0; ; ) {
+      if (prepared.exhausted) throw new PlaybackUnavailableError('exhausted');
+      if (prepared.noRoom) throw new PlaybackUnavailableError('insufficient_storage');
+      if (!prepared.source) {
+        if (rejections) throw new PlaybackUnavailableError('not_found');
+        return null;
+      }
+      if (!watchOnce || !prepared.target) break;
+      try {
+        await watchOnce.verify(prepared.target);
+        break;
+      } catch (error) {
+        // Infrastructure failures are not rejections: they must not delete an in-flight file.
+        if (!(error instanceof WatchOnceRejectedError)) throw error;
+        const rejectedId = prepared.source.id;
+        await watchOnce.release(rejectedId);
+        avoidSourceIds.push(rejectedId);
+        if (++rejections >= 3) throw new PlaybackUnavailableError('not_found');
+        prepared = await prepare(allowHevc);
+      }
+    }
     // Each viewer keeps what they started watching; another viewer's claim is independent.
     const ownerKey = this.watchOwnerKey(userId, playable);
     if (prepared.target && (prepared.state === 'ready' || prepared.state === 'warming')) {
@@ -381,7 +414,7 @@ export class PlaybackSessionService {
       const alternative = await this.conversionFreeCandidate(
         playable,
         { ...preferences, allowHevc },
-        [...(options.avoidSourceIds ?? []), converting],
+        [...avoidSourceIds, converting],
         'interactive'
       );
       // Candidate lookup does not warm the file. Release our old claim before the replacement
@@ -433,6 +466,8 @@ export class PlaybackSessionService {
       playableKind: playable.kind,
       playableKey: this.playableKey(playable),
       expiresAt,
+      watchOnce: !!watchOnce,
+      matchKind: prepared.target?.matchKind ?? 'single',
     });
 
     const playbackId = randomBytes(16).toString('hex');
