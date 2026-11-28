@@ -18,7 +18,7 @@ npm run test:backend:e2e
 ```
 
 The development stack (`npm run start:backend:e2e`) also runs the Sources service
-with hot reload, persistent provider settings, and the local YTS/TheRARBG mocks.
+with hot reload, persistent provider settings, and the local indexer mock.
 Both E2E runners pass their active Compose project to the encryption test so it
 copies the database from the matching backend container.
 

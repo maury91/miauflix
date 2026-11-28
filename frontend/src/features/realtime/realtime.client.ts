@@ -27,14 +27,18 @@ const MAP_COALESCE_MS = 50;
 const ARTWORK_BATCH_SIZE = 50;
 const MAX_ARTWORK_SUBSCRIPTIONS = 5_000;
 
-/** A stall-watchdog playhead move, logged by the backend to diagnose jumpy playback. */
+/**
+ * A player diagnostic logged by the backend: a stall-watchdog playhead move (to diagnose jumpy
+ * playback), or a stream the player rejected (`media-error`, at `from`, with what it said).
+ */
 export interface PlayerEventMessage {
   playbackId?: string;
-  kind: 'gap-jump' | 'stall-seek' | 'frozen-seek';
+  kind: 'gap-jump' | 'stall-seek' | 'frozen-seek' | 'media-error';
   from: number;
   to: number;
   buffered: Array<[number, number]>;
   decodedFrames?: number;
+  detail?: string;
 }
 
 export type RealtimeMediaRef =

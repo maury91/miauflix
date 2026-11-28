@@ -151,4 +151,31 @@ describe('resolveAppState', () => {
     expect(resolveAppState({ ...defaults, configEntries: [entry()] })).toBe('config_wizard');
     expect(resolveAppState(defaults)).toBe('home');
   });
+
+  it('asks an admin to choose sources while none is on, before optional settings', () => {
+    const off = [{ enabled: false }, { enabled: false }];
+    expect(resolveAppState({ ...defaults, providers: off })).toBe('sources_setup');
+    // Ahead of an optional integration that still needs setting up
+    const optionalMissing = {
+      ...defaults,
+      configEntries: [entry({ hasValue: true }), entry({ serviceGroup: 'LIST', hasValue: false })],
+    };
+    expect(resolveAppState({ ...optionalMissing, providers: off })).toBe('sources_setup');
+    expect(resolveAppState({ ...optionalMissing, providers: off, sourcesDismissed: true })).toBe(
+      'config'
+    );
+    // Not while the sources are loading or can't be listed, nor once one is on
+    expect(resolveAppState({ ...defaults })).toBe('home');
+    expect(
+      resolveAppState({ ...defaults, providers: [{ enabled: true }, { enabled: false }] })
+    ).toBe('home');
+    // The required wizard comes first; it asks for sources itself
+    expect(
+      resolveAppState({
+        ...defaults,
+        configEntries: [entry({ hasValue: false })],
+        providers: off,
+      })
+    ).toBe('config_wizard');
+  });
 });

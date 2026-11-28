@@ -46,8 +46,8 @@ const provider = (
   }) as unknown as ProviderView;
 
 const PROVIDERS = [
-  provider('yts', 'YTS', 10, { description: 'Movies in small sizes' }),
-  provider('eztv', 'EZTV', 20, {
+  provider('movies-api', 'Movies API', 10, { description: 'Movies in small sizes' }),
+  provider('shows-site', 'Shows Site', 20, {
     health: {
       state: 'cooldown',
       cooldownUntil: '2026-11-20T18:00:00Z',

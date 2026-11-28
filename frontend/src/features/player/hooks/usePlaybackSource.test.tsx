@@ -226,6 +226,37 @@ describe('usePlaybackSource', () => {
     expect(result.current.session).toBeNull();
   });
 
+  it('reloads a source that played for a while once before moving on', async () => {
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(1)) })
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(1)) })
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(2)) });
+    const { result } = renderSource(handlers);
+    await waitFor(() => expect(result.current.session?.source.id).toBe(1));
+    const play = (from: number, seconds: number) =>
+      act(() => {
+        for (let time = from; time <= from + seconds; time += 0.5)
+          result.current.notePlayhead(time);
+      });
+
+    // A seek is not playback: only the 30 seconds played around it count.
+    play(0, 20);
+    play(600, 10);
+    act(() => result.current.handleMediaError());
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+    expect(createSession).toHaveBeenLastCalledWith(expect.objectContaining({ sourceId: 1 }));
+    expect(createSession.mock.lastCall?.[0]).not.toHaveProperty('avoidSourceIds');
+
+    // Failing again before it proves itself anew moves on.
+    play(610, 5);
+    act(() => result.current.handleMediaError());
+    await waitFor(() => expect(result.current.session?.source.id).toBe(2));
+    expect(createSession).toHaveBeenLastCalledWith(
+      expect.objectContaining({ avoidSourceIds: [1] })
+    );
+    expect(createSession.mock.lastCall?.[0]).not.toHaveProperty('sourceId');
+  });
+
   it('plays the source the viewer chose, in its language, until it fails', async () => {
     createSession
       .mockReturnValueOnce({ unwrap: () => Promise.resolve(sessionFor(1)) })

@@ -82,6 +82,7 @@ vi.mock('@features/progress/api/progress.api', () => ({
 }));
 vi.mock('@features/realtime/realtime.middleware', () => ({
   saveProgressWithRealtime: (progress: unknown) => () => updateProgress(progress),
+  reportPlayerEvent: vi.fn(),
 }));
 
 import { realtimeActions, realtimeSlice } from '@store/slices/realtime';

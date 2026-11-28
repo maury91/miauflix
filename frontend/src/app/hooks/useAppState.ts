@@ -5,9 +5,14 @@ import {
   useGetServiceStatusesQuery,
 } from '@features/config/api/config.api';
 import { useCheckSetupStatusQuery } from '@features/setup/api/setup.api';
-import type { ConfigEntryView } from '@miauwatch/backend';
+import { useGetProvidersQuery } from '@features/sources/api/sources.api';
+import type { ConfigEntryView, ProviderView } from '@miauwatch/backend';
 import { useAppSelector } from '@store';
-import { selectConfigDismissed, selectSetupAvailable } from '@store/slices/appState';
+import {
+  selectConfigDismissed,
+  selectSetupAvailable,
+  selectSourcesDismissed,
+} from '@store/slices/appState';
 import { selectHasSessions, selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 
 export type AppState =
@@ -18,6 +23,8 @@ export type AppState =
   | 'profiles'
   | 'config'
   | 'config_wizard'
+  /** No source is on (a fresh install starts with all off): the admin chooses some. */
+  | 'sources_setup'
   | 'home';
 
 /**
@@ -71,6 +78,9 @@ export function resolveAppState(input: {
   configEntries: ConfigEntryView[] | undefined;
   serviceStatuses: ServiceStatuses | undefined;
   configDismissed: boolean;
+  /** The sources, once listed; undefined while loading or when they can't be (never blocks). */
+  providers?: Pick<ProviderView, 'enabled'>[];
+  sourcesDismissed?: boolean;
 }): AppState {
   const {
     setupCheckLoading,
@@ -84,6 +94,8 @@ export function resolveAppState(input: {
     configEntries,
     serviceStatuses,
     configDismissed,
+    providers,
+    sourcesDismissed = false,
   } = input;
 
   if (setupCheckLoading || sessionsLoading) return 'loading';
@@ -91,11 +103,17 @@ export function resolveAppState(input: {
   if (!authenticated) return hasSessions ? 'profiles' : 'login';
   if (!admin) return 'home';
   if (configLoading || serviceStatusesLoading) return 'loading';
-  return getConfigurationPageState(configEntries, serviceStatuses, configDismissed) ?? 'home';
+  const configState = getConfigurationPageState(configEntries, serviceStatuses, configDismissed);
+  if (configState === 'config_wizard') return configState;
+  // Before optional settings: without a source nothing can be played
+  if (!sourcesDismissed && providers && !providers.some(provider => provider.enabled))
+    return 'sources_setup';
+  return configState ?? 'home';
 }
 
 export function useAppState(): AppState {
   const configDismissed = useAppSelector(selectConfigDismissed);
+  const sourcesDismissed = useAppSelector(selectSourcesDismissed);
   const setupAvailable = useAppSelector(selectSetupAvailable);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const hasSessions = useAppSelector(selectHasSessions);
@@ -113,6 +131,9 @@ export function useAppState(): AppState {
     undefined,
     { skip: !isAuthenticated || !isAdmin }
   );
+  const { data: providers } = useGetProvidersQuery(undefined, {
+    skip: !isAuthenticated || !isAdmin,
+  });
 
   return resolveAppState({
     setupCheckLoading: isSetupCheckLoading,
@@ -126,5 +147,7 @@ export function useAppState(): AppState {
     configEntries: configData,
     serviceStatuses,
     configDismissed,
+    providers,
+    sourcesDismissed,
   });
 }

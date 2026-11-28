@@ -8,12 +8,31 @@ const mocks = vi.hoisted(() => ({
   useTestServiceConfigMutation: vi.fn(),
   useSaveServiceConfigMutation: vi.fn(),
 }));
+const sourcesMocks = vi.hoisted(() => ({
+  useGetProvidersQuery: vi.fn(),
+  useUpdateProviderMutation: vi.fn(),
+  useLoadDefinitionsMutation: vi.fn(),
+  useSyncDefinitionsMutation: vi.fn(),
+  useAddCardigannProviderMutation: vi.fn(),
+  useAddTorznabProviderMutation: vi.fn(),
+  useAddStremioProviderMutation: vi.fn(),
+}));
 
 vi.mock('@features/config/api/config.api', () => mocks);
+vi.mock('@features/sources/api/sources.api', () => sourcesMocks);
 vi.mock('framer-motion', () => ({ motion: { div: 'div', main: 'main' } }));
 
 import ConfigurationWizardPage from './ConfigurationWizardPage';
 import ConfigWizardPage from './ConfigWizardPage';
+
+const sourceView = (id: string, name: string, priority: number, enabled = false) => ({
+  id,
+  name,
+  priority,
+  enabled,
+  description: null,
+  kind: 'cardigann',
+});
 
 describe('ConfigWizardPage', () => {
   beforeEach(() => {
@@ -38,6 +57,20 @@ describe('ConfigWizardPage', () => {
     mocks.useUpdateConfigMutation.mockReturnValue([vi.fn(), { isLoading: false }]);
     mocks.useTestServiceConfigMutation.mockReturnValue([vi.fn()]);
     mocks.useSaveServiceConfigMutation.mockReturnValue([vi.fn()]);
+    // A server that already has a source on: the wizard skips choosing them
+    sourcesMocks.useGetProvidersQuery.mockReturnValue({
+      data: [sourceView('local-movies', 'Movies API', 20, true)],
+      isLoading: false,
+    });
+    sourcesMocks.useUpdateProviderMutation.mockReturnValue([vi.fn()]);
+    for (const hook of [
+      sourcesMocks.useLoadDefinitionsMutation,
+      sourcesMocks.useSyncDefinitionsMutation,
+      sourcesMocks.useAddCardigannProviderMutation,
+      sourcesMocks.useAddTorznabProviderMutation,
+      sourcesMocks.useAddStremioProviderMutation,
+    ])
+      hook.mockReturnValue([vi.fn(), { isLoading: false }]);
   });
 
   it('keeps the saved state until the service is edited again', async () => {
@@ -175,5 +208,131 @@ describe('ConfigWizardPage', () => {
     expect(screen.getByText('Catalog runtime')).toBeVisible();
     expect(screen.getByText('JWT')).toBeVisible();
     expect(screen.getByText('Connection to the background job queue.')).toBeVisible();
+  });
+
+  it('asks for sources after the required settings when none is on, and turns them on', async () => {
+    const providers = [
+      sourceView('local-ids', 'IDs API', 10),
+      sourceView('local-movies', 'Movies API', 20),
+    ];
+    sourcesMocks.useGetProvidersQuery.mockReturnValue({ data: providers, isLoading: false });
+    const update = vi.fn().mockReturnValue({ unwrap: () => Promise.resolve({}) });
+    sourcesMocks.useUpdateProviderMutation.mockReturnValue([update]);
+    mocks.useGetConfigQuery.mockReturnValue({
+      data: [
+        {
+          key: 'TMDB_API_URL',
+          value: 'https://api.themoviedb.org/3',
+          isSecret: false,
+          serviceGroup: 'CATALOG',
+          serviceDescription: 'Catalog',
+          description: 'TMDB API URL',
+          required: false,
+          hasValue: true,
+          inputType: 'text',
+        },
+      ],
+      isLoading: false,
+    });
+
+    const onSourcesChosen = vi.fn();
+    render(<ConfigurationWizardPage onDismiss={vi.fn()} onSourcesChosen={onSourcesChosen} />);
+
+    expect(screen.getByRole('heading', { name: 'Add your sources' })).toBeInTheDocument();
+    expect(screen.getByText(/Miauwatch will not find anything to play/)).toBeVisible();
+    const movies = screen.getByRole('switch', { name: /Movies API/ });
+    expect(movies).not.toBeChecked();
+    await act(async () => {
+      fireEvent.click(movies);
+    });
+    expect(update).toHaveBeenCalledWith({ id: 'local-movies', enabled: true });
+
+    // With no source on, moving on is setting them up later
+    fireEvent.click(screen.getByRole('button', { name: 'Set up later' }));
+    expect(screen.getByRole('heading', { name: 'Optional settings' })).toBeInTheDocument();
+    expect(onSourcesChosen).toHaveBeenCalledTimes(1);
+    // Previous goes back to the sources
+    fireEvent.click(screen.getByRole('button', { name: 'Previous step' }));
+    expect(screen.getByRole('heading', { name: 'Add your sources' })).toBeInTheDocument();
+  });
+
+  it('offers the ways to add a source on a fresh install, each saying what it is', () => {
+    sourcesMocks.useGetProvidersQuery.mockReturnValue({ data: [], isLoading: false });
+    mocks.useGetConfigQuery.mockReturnValue({ data: [], isLoading: false });
+
+    render(<ConfigurationWizardPage onDismiss={vi.fn()} />);
+
+    expect(screen.getByRole('heading', { name: 'Add your sources' })).toBeInTheDocument();
+    expect(screen.queryByRole('switch')).not.toBeInTheDocument();
+    for (const name of ['Stremio addon', 'Jackett or Prowlarr', 'Find an indexer'])
+      expect(screen.getByRole('button', { name })).toBeVisible();
+
+    const about = screen.getByRole('button', { name: 'What is Stremio addon?' });
+    expect(about).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getByText(/made for the Stremio app/)).not.toBeVisible();
+    fireEvent.click(about);
+    expect(about).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText(/made for the Stremio app/)).toBeVisible();
+    expect(screen.getByRole('link', { name: /Browse community addons/ })).toHaveAttribute(
+      'href',
+      'https://stremio-addons.net/addons?categories=torrents&sort=popular'
+    );
+  });
+
+  it('adds an addon on its own page, turns it on and returns to the list', async () => {
+    sourcesMocks.useGetProvidersQuery.mockReturnValue({ data: [], isLoading: false });
+    mocks.useGetConfigQuery.mockReturnValue({ data: [], isLoading: false });
+    const addStremio = vi.fn().mockReturnValue({
+      unwrap: () => Promise.resolve({ id: 'local-addon', name: 'My addon' }),
+    });
+    sourcesMocks.useAddStremioProviderMutation.mockReturnValue([addStremio, { isLoading: false }]);
+    const update = vi.fn().mockReturnValue({ unwrap: () => Promise.resolve({}) });
+    sourcesMocks.useUpdateProviderMutation.mockReturnValue([update]);
+
+    render(<ConfigurationWizardPage onDismiss={vi.fn()} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Stremio addon' }));
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Stremio addon' })).toBeInTheDocument();
+    expect(screen.getByText(/ends in manifest.json/)).toBeVisible();
+    fireEvent.change(screen.getByLabelText('Addon link', { selector: 'input' }), {
+      target: { value: 'https://addon.example.com/manifest.json' },
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Add addon' }));
+    });
+
+    expect(addStremio).toHaveBeenCalledWith({ url: 'https://addon.example.com/manifest.json' });
+    expect(update).toHaveBeenCalledWith({ id: 'local-addon', enabled: true });
+    expect(screen.getByRole('heading', { name: 'Add your sources' })).toBeInTheDocument();
+    expect(screen.getByText('Added My addon and turned it on.')).toBeVisible();
+  });
+
+  it("leaves a way's page with Back", () => {
+    sourcesMocks.useGetProvidersQuery.mockReturnValue({ data: [], isLoading: false });
+    mocks.useGetConfigQuery.mockReturnValue({ data: [], isLoading: false });
+
+    render(<ConfigurationWizardPage onDismiss={vi.fn()} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Jackett or Prowlarr' }));
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Jackett or Prowlarr' })
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to sources' }));
+    expect(screen.getByRole('heading', { name: 'Add your sources' })).toBeInTheDocument();
+  });
+
+  it('offers the sources step when the sources service cannot list them yet', () => {
+    sourcesMocks.useGetProvidersQuery.mockReturnValue({
+      data: undefined,
+      error: { status: 503 },
+      isLoading: false,
+      refetch: vi.fn(),
+    });
+    mocks.useGetConfigQuery.mockReturnValue({ data: [], isLoading: false });
+
+    render(<ConfigurationWizardPage onDismiss={vi.fn()} />);
+
+    expect(screen.getByRole('heading', { name: 'Add your sources' })).toBeInTheDocument();
+    expect(screen.getByText(/Could not load the sources/)).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Set up later' })).toBeEnabled();
   });
 });

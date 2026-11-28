@@ -68,6 +68,26 @@ describe('RealtimeGateway player events', () => {
     }
   });
 
+  it('logs a stream the player rejected with what the player said', async () => {
+    const { gateway, emit } = await setupTest();
+    try {
+      await emit({
+        ...event,
+        kind: 'media-error',
+        from: 171.2,
+        to: 171.2,
+        buffered: [],
+        detail: 'PLAYER_ERROR_CONNECTION_FAILED',
+      });
+      expect(logger.warn).toHaveBeenCalledWith(
+        'PlayerEvents',
+        `media-error at 171.20 (playback ${'a'.repeat(32)}): PLAYER_ERROR_CONNECTION_FAILED`
+      );
+    } finally {
+      gateway.close();
+    }
+  });
+
   it('rejects a malformed event without logging it', async () => {
     const { gateway, socket, emit } = await setupTest();
     try {

@@ -17,6 +17,8 @@ export type AppScreen =
   | { kind: 'optionalConfig' }
   /** Essential configuration is missing (or the admin is still finishing it). */
   | { kind: 'requiredConfig' }
+  /** No source is on: choose some (the admin may move on without). */
+  | { kind: 'sourcesSetup' }
   | { kind: 'configuration' }
   | { kind: 'storage' }
   | { kind: 'sources' }
@@ -40,6 +42,7 @@ export function resolveScreen({
   booted,
   homeEligible,
   requiredConfigActive,
+  sourcesSetupActive = false,
   isAdmin,
 }: {
   route: AppRoute;
@@ -50,6 +53,8 @@ export function resolveScreen({
   homeEligible: boolean;
   /** The required configuration wizard was opened and not yet dismissed. */
   requiredConfigActive: boolean;
+  /** Choosing sources was opened and not yet dismissed (it stays once one is turned on). */
+  sourcesSetupActive?: boolean;
   isAdmin: boolean;
 }): AppScreen {
   if (route.type === 'qrApproval')
@@ -62,8 +67,10 @@ export function resolveScreen({
   if (route.type === 'newProfile') return { kind: 'newProfile' };
   if (route.type === 'editProfile') return { kind: 'editProfile', userId: route.userId };
   if (appState === 'profiles') return { kind: 'whosWatching', startup: true };
-  if (appState === 'config') return { kind: 'optionalConfig' };
+  // Choosing sources, once open, stays until dismissed: turning one on can bring up optional settings
+  if (appState === 'config' && !sourcesSetupActive) return { kind: 'optionalConfig' };
   if (requiredConfigActive || appState === 'config_wizard') return { kind: 'requiredConfig' };
+  if (sourcesSetupActive) return { kind: 'sourcesSetup' };
   // Past the gates the user is signed in.
   if (route.type === 'configuration' || route.type === 'storage' || route.type === 'sources')
     return isAdmin ? { kind: route.type } : { kind: 'redirect', to: HOME };

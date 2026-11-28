@@ -6,7 +6,7 @@ import { Database } from 'bun:sqlite';
 import { expect, it } from 'bun:test';
 
 import { openDatabase } from '../src/db/database';
-import { migrations, TORRENTIO_MANIFEST } from '../src/db/migrations';
+import { migrations } from '../src/db/migrations';
 import {
   DEFAULT_SOURCES,
   LEGACY_SOURCE_KEY,
@@ -117,10 +117,6 @@ it('keeps cached definitions and the catalog when migrating to configurable sour
     ]);
     // Sync bookkeeping is per source from now on, so the old marker is dropped.
     expect(db.query('SELECT COUNT(*) AS n FROM cardigann_sync').get()).toEqual({ n: 0 });
-    // The built-in indexers come from Prowlarr's definitions.
-    expect(db.query("SELECT definition FROM providers WHERE id='prowlarr-nyaasi'").get()).toEqual({
-      definition: JSON.stringify({ cardigann: 'nyaasi', source: PROWLARR_SOURCE_KEY }),
-    });
     db.close();
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -150,28 +146,8 @@ it('drops the untouched Jackett built-ins left by earlier versions, and keeps on
     expect(
       db.query("SELECT id FROM providers WHERE id LIKE 'jackett-%' ORDER BY id").all()
     ).toEqual([{ id: 'jackett-nyaasi' }]);
-    expect(
-      db
-        .query(
-          "SELECT id FROM providers WHERE kind='cardigann' AND id NOT LIKE 'jackett-%' ORDER BY priority"
-        )
-        .all()
-    ).toEqual(
-      [
-        'maury91-therarbg-imdb',
-        'prowlarr-yts',
-        'maury91-eztv-api',
-        'maury91-therarbg',
-        'maury91-animetosho',
-        'prowlarr-nyaasi',
-        'prowlarr-eztv',
-        'prowlarr-thepiratebay',
-      ].map(id => ({ id }))
-    );
-    // Torrentio is searched as the Stremio addon it is.
-    expect(
-      db.query("SELECT kind, definition FROM providers WHERE id='maury91-torrentio'").get()
-    ).toEqual({ kind: 'stremio', definition: JSON.stringify({ baseUrl: TORRENTIO_MANIFEST }) });
+    // Nothing else is added in their place.
+    expect(db.query('SELECT COUNT(*) AS n FROM providers').get()).toEqual({ n: 1 });
     db.close();
   } finally {
     rmSync(dir, { recursive: true, force: true });

@@ -1,0 +1,26 @@
+{
+  "name": "Miauwatch",
+  "description": "TV app for Miauwatch, a self-hosted streaming server: browse, search and play from your own server.",
+  "category": "media",
+  "repo": "maury91/miauwatch",
+  "source": "release",
+  "branch": "main",
+  "assets": [{ "match": "miauwatch.wgt", "output_name": "Miauwatch.wgt" }],
+  "cert_level": "partner",
+  "preview_image": "https://raw.githubusercontent.com/maury91/miauwatch/main/frontend/e2e/home.storybook.spec.ts-snapshots/home-page-browse-1440x900-storybook-chromium-linux.png",
+  "user_settings": {
+    "help_url": "https://github.com/maury91/miauwatch/blob/main/docs/setup/samsung-tv.md#how-the-tv-finds-your-server",
+    "file": "index.html",
+    "fields": [
+      {
+        "key": "server_url",
+        "label": "Server address, e.g. https://miauwatch.example.com or http://192.168.1.10:3000 (leave empty to pick it on the TV)",
+        "type": "text",
+        "required": false,
+        "pattern": "^https?://[A-Za-z0-9.-]+(:[0-9]{1,5})?$",
+        "find": "window.API_URL = '/';",
+        "replace": "window.API_URL = '{value}';"
+      }
+    ]
+  }
+}

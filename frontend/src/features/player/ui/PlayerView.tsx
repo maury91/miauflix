@@ -14,6 +14,7 @@ import { getAvplay, type PlayerMedia } from '@features/player/lib/avplay-media';
 import { languageOptions, preferredAudioLanguage } from '@features/player/lib/language-options';
 import { mediaSubtitleKey } from '@features/player/lib/media-subtitles';
 import { languagePreferencesOf, titleLanguages } from '@features/profiles/lib/language-preferences';
+import { reportPlayerEvent } from '@features/realtime/realtime.middleware';
 import type { PlayableRef } from '@miauwatch/backend';
 import { builtForTizen } from '@shared/config/constants';
 import { Button } from '@shared/design-system';
@@ -286,6 +287,7 @@ function PlayerScreen({
     },
     onTimeUpdate: (event: { currentTarget: PlayerMedia }) => {
       if (audioPreparing.current) return;
+      source.notePlayhead(event.currentTarget.currentTime);
       prompts.handleTimeUpdate(event.currentTarget);
       subtitles.followPlayhead(event.currentTarget.currentTime);
       progress.readProgressSnapshot();
@@ -305,7 +307,10 @@ function PlayerScreen({
       progress.handleEnded();
       prompts.updateNextCountdown();
     },
-    onError: () => source.handleMediaError(),
+    onError: (event: { currentTarget: PlayerMedia }) => {
+      reportMediaError(source.session?.playbackId, event.currentTarget);
+      source.handleMediaError();
+    },
   };
 
   const navigation = useNavigation();
@@ -552,4 +557,23 @@ function PlayerScreen({
       </FocusScope>
     </main>
   );
+}
+
+/** Log what the player said about a stream it rejected, on the backend, to tell why it switched. */
+function reportMediaError(playbackId: string | undefined, media: PlayerMedia): void {
+  const detail =
+    'errorDetail' in media
+      ? (media.errorDetail as string | null)
+      : media instanceof HTMLMediaElement && media.error
+        ? `${media.error.code}: ${media.error.message}`
+        : null;
+  const at = Number.isFinite(media.currentTime) ? Math.max(0, media.currentTime) : 0;
+  reportPlayerEvent({
+    ...(playbackId ? { playbackId } : {}),
+    kind: 'media-error',
+    from: at,
+    to: at,
+    buffered: [],
+    ...(detail ? { detail: detail.slice(0, 200) } : {}),
+  });
 }

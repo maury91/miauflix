@@ -6,6 +6,7 @@ For how Miauwatch works today, use the [architecture references](../architecture
 
 | Document                                                    | Kind                 | Status                                          |
 | ----------------------------------------------------------- | -------------------- | ----------------------------------------------- |
+| [React Native plan](react-native-plan.md)                   | Plan                 | Proposed; Phase 0 not started                   |
 | [TV performance plan](tv-performance-plan.md)               | Plan                 | In progress; each phase records what has landed |
 | [TV GL rows plan](tv-gl-rows-plan.md)                       | Spike and plan       | Spike behind a flag; not decided                |
 | [TV GL production plan](tv-gl-production-plan.md)           | Plan                 | Phases 0–1 landed; TV numbers to re-measure     |

@@ -15,6 +15,7 @@ import { VersionBadge } from '@app/shell/VersionBadge';
 import { useMissingProfilePictures } from '@features/profiles/avatar/useMissingProfilePictures';
 import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
+import SourcesSetupPage from '@pages/config/SourcesSetupPage';
 import { selectMediaBoxSizes } from '@pages/home/home-layout';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
@@ -31,7 +32,7 @@ import { ErrorBoundary } from '@shared/components';
 import { builtForTizen } from '@shared/config/constants';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { useAppDispatch, useAppSelector } from '@store';
-import { dismissConfigWizard } from '@store/slices/appState';
+import { dismissConfigWizard, dismissSourcesPrompt } from '@store/slices/appState';
 import {
   selectIsAdmin,
   selectIsAuthenticated,
@@ -60,6 +61,7 @@ const STATIC_LOGO_SCREENS: ReadonlySet<AppScreen['kind']> = new Set([
   'login',
   'optionalConfig',
   'requiredConfig',
+  'sourcesSetup',
 ]);
 const PROFILES: AppRoute = { type: 'profiles' };
 
@@ -77,9 +79,14 @@ export function AppShell() {
   // Pictures for looks the server generated, once Home is up (not competing with the intro)
   useMissingProfilePictures(profiles, appState === 'home');
   const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
+  const [sourcesSetupActive, setSourcesSetupActive] = useState(false);
   /** The profile Who's watching focuses next (one just created). */
   const [profileFocus, setProfileFocus] = useState<string | null>(null);
-  const homeEligible = appState === 'home' && route.type === 'home' && !configurationWizardActive;
+  const homeEligible =
+    appState === 'home' &&
+    route.type === 'home' &&
+    !configurationWizardActive &&
+    !sourcesSetupActive;
   const logoWasHiddenRef = useRef(false);
   const {
     introPhase,
@@ -103,6 +110,10 @@ export function AppShell() {
     setConfigurationWizardActive(false);
     dispatch(dismissConfigWizard());
   }, [dispatch]);
+  const handleSourcesDismiss = useCallback(() => {
+    setSourcesSetupActive(false);
+    dispatch(dismissSourcesPrompt());
+  }, [dispatch]);
   const backTo = (parent: AppRoute) => () => navigateBack(parent);
 
   // The remote's Search key opens search from anywhere once signed in.
@@ -121,6 +132,12 @@ export function AppShell() {
       setConfigurationWizardActive(false);
     }
   }, [appState, isAdmin, isAuthenticated]);
+  // Opened once no source is on (not over the wizard, which asks itself), and kept until
+  // dismissed: turning a source on must not take the page away
+  useEffect(() => {
+    if (appState === 'sources_setup' && !configurationWizardActive) setSourcesSetupActive(true);
+    else if (!isAuthenticated || !isAdmin) setSourcesSetupActive(false);
+  }, [appState, configurationWizardActive, isAdmin, isAuthenticated]);
 
   const screen = resolveScreen({
     route,
@@ -128,6 +145,7 @@ export function AppShell() {
     booted,
     homeEligible,
     requiredConfigActive: configurationWizardActive,
+    sourcesSetupActive,
     isAdmin,
   });
   // The shared logo belongs to the signed-in pages and moves between them. It starts centred
@@ -225,7 +243,15 @@ export function AppShell() {
       case 'optionalConfig':
         return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} staticLogo />;
       case 'requiredConfig':
-        return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
+        return (
+          <ConfigurationWizardPage
+            key="config-wizard"
+            onDismiss={handleConfigDismiss}
+            onSourcesChosen={() => dispatch(dismissSourcesPrompt())}
+          />
+        );
+      case 'sourcesSetup':
+        return <SourcesSetupPage key="sources-setup" onDismiss={handleSourcesDismiss} />;
       case 'configuration':
         return <ConfigWizardPage key="route-configuration" onDismiss={backTo(HOME)} />;
       case 'storage':

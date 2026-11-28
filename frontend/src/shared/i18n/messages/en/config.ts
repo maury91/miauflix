@@ -39,6 +39,49 @@ export const config = {
   'config.completeRequired': 'Complete the required settings to continue.',
   'config.reviewOptional': 'Save your changes or return to optional settings.',
   'config.fillRequired': 'Fill in the required fields for each service. Save to continue.',
+  'config.sources.title': 'Add your sources',
+  'config.sources.description':
+    'A source tells Miauwatch where to look for movies and shows. Add one you have permission to use where you live, or set this up later.',
+  'config.sources.options': 'Ways to add a source',
+  'config.sources.about': 'What is {name}?',
+  'config.sources.back': 'Back to sources',
+  'config.sources.later': 'Set up later',
+  'config.sources.addedOn': 'Added {name} and turned it on.',
+  'config.sources.addedOff':
+    'Added {name}, but could not turn it on: {error} Turn it on under Your sources.',
+  'config.sources.stremio.title': 'Stremio addon',
+  'config.sources.stremio.summary': 'Use an addon install link',
+  'config.sources.stremio.info':
+    'An addon is a service made for the Stremio app that Miauwatch can search too. You add one with the install link from its setup page. Only addons that find torrents work.',
+  'config.sources.stremio.intro': 'Paste the install link of an addon you have permission to use.',
+  'config.sources.stremio.step1': 'Open the addon’s setup page and choose its options there.',
+  'config.sources.stremio.step2':
+    'Copy its install link: it ends in manifest.json. The link keeps the options you chose.',
+  'config.sources.stremio.step3': 'Paste it below and add it.',
+  'config.sources.stremio.browse': 'Browse community addons (opens a new tab)',
+  'config.sources.torznab.title': 'Jackett or Prowlarr',
+  'config.sources.torznab.summary': 'Connect your own server',
+  'config.sources.torznab.info':
+    'Jackett and Prowlarr are apps you run yourself that search many indexers for you. If you already use one, Miauwatch can search its indexers through their Torznab feed.',
+  'config.sources.torznab.intro': 'Connect an indexer from the Jackett or Prowlarr you run.',
+  'config.sources.torznab.step1':
+    'In Jackett or Prowlarr, copy the Torznab feed link of an indexer (or of all of them).',
+  'config.sources.torznab.step2': 'Copy the API key shown in the app.',
+  'config.sources.torznab.step3': 'Give the source a name, paste both below and add it.',
+  'config.sources.catalog.title': 'Find an indexer',
+  'config.sources.catalog.summary': 'Search for one by name',
+  'config.sources.catalog.info':
+    'An indexer is a website that lists downloads. Miauwatch can search many public ones directly, from a community list that describes how each one works.',
+  'config.sources.catalog.intro':
+    'Search the community list of public indexers and add the ones you have permission to use. Indexers that search by IMDb id find the exact title.',
+  'config.sources.addAnother': 'Add another source',
+  'config.sources.yours': 'Your sources',
+  'config.sources.loadFailed':
+    'Could not load the sources. Check that the sources service is running and try again, or add them later in Settings → Sources.',
+  'config.sources.continue': 'Continue to Miauwatch',
+  'config.sources.noneEnabled':
+    'No source is on: Miauwatch will not find anything to play until you add one and turn it on.',
+  'config.sources.enabledCount': { one: '{count} source on', other: '{count} sources on' },
   'config.requiredSteps': 'Required configuration steps',
   'config.testFailed': 'Failed to test {service}.',
   'config.noTestResult': 'The test for {service} returned no result.',

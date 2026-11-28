@@ -63,6 +63,14 @@ interface PlaybackSourceOptions {
 }
 
 /**
+ * Playing this long proves a source works here: a later stream error reloads it once before
+ * moving on, since a stall that outlasts the player's patience is not a source that cannot play.
+ */
+export const PROVEN_SOURCE_SECONDS = 30;
+/** Playhead steps longer than this are seeks, not playback. */
+const MAX_PLAY_STEP_SECONDS = 2;
+
+/**
  * Create the playback session for a target and walk its sources: a source whose stream fails
  * is reported to the backend through `avoidSourceIds`, so the next session brings the next
  * candidate; a repeat, or nothing left to try, ends in an error that offers a retry.
@@ -117,6 +125,14 @@ export function usePlaybackSource({
   const chosenSource = useRef<{ key: string; sourceId: number; audioLanguage: string } | null>(
     null
   );
+  /** A proven source whose stream failed: the next session reloads it, once. */
+  const reloadSource = useRef<{ key: string; sourceId: number } | null>(null);
+  /** Seconds the current session has played; a new session starts the count over. */
+  const played = useRef<{ playbackId: string | null; lastTime: number | null; seconds: number }>({
+    playbackId: null,
+    lastTime: null,
+    seconds: 0,
+  });
   const pushedAttempt = useSelector(selectSourceAttempt(playable));
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<PlaybackStatus>('checking');
@@ -233,10 +249,36 @@ export function usePlaybackSource({
     if (status === 'error' || status === 'exhausted') releasePicture();
   }, [status, releasePicture]);
 
+  /** Count playback from the playhead's moves (`timeupdate`), toward proving the source. */
+  const notePlayhead = useCallback((time: number) => {
+    const playbackId = sessionRef.current?.playbackId ?? null;
+    const current = played.current;
+    if (current.playbackId !== playbackId) {
+      played.current = { playbackId, lastTime: time, seconds: 0 };
+      return;
+    }
+    if (current.lastTime !== null) {
+      const step = time - current.lastTime;
+      if (step > 0 && step <= MAX_PLAY_STEP_SECONDS) current.seconds += step;
+    }
+    current.lastTime = time;
+  }, []);
+
   const failSource = useCallback(() => {
     const key = JSON.stringify(playable);
     if (failedSources.current.key !== key) failedSources.current = { key, ids: new Set() };
     const sourceId = sessionRequest.data?.source.id;
+    const proven =
+      played.current.playbackId === sessionRequest.data?.playbackId &&
+      played.current.seconds >= PROVEN_SOURCE_SECONDS;
+    if (sourceId !== undefined && proven) {
+      // It played: reload it where the viewer is. Failing again before it proves itself anew
+      // moves on to another source.
+      played.current = { playbackId: null, lastTime: null, seconds: 0 };
+      reloadSource.current = { key, sourceId };
+      restartSession(true);
+      return;
+    }
     // A chosen source that fails isn't asked for again
     if (chosenSource.current?.sourceId === sourceId) chosenSource.current = null;
     if (sourceId !== undefined && !failedSources.current.ids.has(sourceId)) {
@@ -248,7 +290,7 @@ export function usePlaybackSource({
     resetSessionRequest();
     setStatus('error');
     setError(t('player.failure.selectedSource', { title }));
-  }, [playable, resetSessionRequest, sessionRequest.data, title]);
+  }, [playable, resetSessionRequest, restartSession, sessionRequest.data, title]);
 
   /** The media element rejected the stream. */
   const handleMediaError = useCallback(() => {
@@ -284,6 +326,7 @@ export function usePlaybackSource({
   const retry = useCallback(() => {
     failedSources.current = { key: '', ids: new Set() };
     chosenSource.current = null;
+    reloadSource.current = null;
     setError(null);
     setStatus('checking');
     setAttempt(value => value + 1);
@@ -316,13 +359,16 @@ export function usePlaybackSource({
       failedSources.current.key === JSON.stringify(playable) ? [...failedSources.current.ids] : [];
     const chosen =
       chosenSource.current?.key === JSON.stringify(playable) ? chosenSource.current : null;
+    const reload =
+      reloadSource.current?.key === JSON.stringify(playable) ? reloadSource.current : null;
+    reloadSource.current = null;
     if (sessionInFlight.current?.key !== sessionKey)
       sessionInFlight.current = {
         key: sessionKey,
         promise: createSession({
           playable,
           ...(avoidSourceIds.length ? { avoidSourceIds } : {}),
-          ...(chosen ? { sourceId: chosen.sourceId } : {}),
+          ...(chosen ? { sourceId: chosen.sourceId } : reload ? { sourceId: reload.sourceId } : {}),
           preferences: playbackPreferences(
             avplay,
             chosen?.audioLanguage ?? audioLanguageRef.current
@@ -403,6 +449,7 @@ export function usePlaybackSource({
     error,
     failPlayback,
     failSource,
+    notePlayhead,
     restartSession,
     chooseSource,
     retry,

@@ -5,12 +5,22 @@ import {
   useTestServiceConfigMutation,
   useUpdateConfigMutation,
 } from '@features/config/api/config.api';
-import type { ConfigEntryView } from '@miauwatch/backend';
+import {
+  useAddCardigannProviderMutation,
+  useAddStremioProviderMutation,
+  useAddTorznabProviderMutation,
+  useGetProvidersQuery,
+  useLoadDefinitionsMutation,
+  useSyncDefinitionsMutation,
+  useUpdateProviderMutation,
+} from '@features/sources/api/sources.api';
+import type { ConfigEntryView, ProviderView } from '@miauwatch/backend';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn, mocked } from 'storybook/test';
+import { expect, fn, mocked, waitFor } from 'storybook/test';
 
 import ConfigurationWizardPage from './ConfigurationWizardPage';
 import ConfigWizardPage from './ConfigWizardPage';
+import SourcesSetupPage from './SourcesSetupPage';
 
 import { mutationTrigger, mutationTriggerFrom } from '@/__test-utils__/mutationTrigger';
 
@@ -94,7 +104,46 @@ const ENTRIES: ConfigEntryView[] = [
   }),
 ];
 
-function mockConfig(entries: ConfigEntryView[]) {
+const source = (id: string, name: string, priority: number, description: string | null = null) =>
+  ({ id, name, priority, description, kind: 'cardigann', enabled: false }) as ProviderView;
+
+/** Sources the admin added, switched off until they turn them on. */
+const SOURCES = [
+  source('local-movies-api', 'Movies API', 10, 'Movies and shows by IMDb id'),
+  source('local-shows-site', 'Shows Site', 20),
+  { ...source('local-addon', 'My addon', 30), kind: 'stremio' } as ProviderView,
+];
+
+/** The catalog of definitions the sources step browses, and the ways to add a source. */
+function mockAddSources() {
+  for (const hook of [
+    useAddCardigannProviderMutation,
+    useAddStremioProviderMutation,
+    useAddTorznabProviderMutation,
+    useSyncDefinitionsMutation,
+  ])
+    mocked(hook).mockReturnValue([mutationTrigger(), { isLoading: false }] as never);
+  mocked(useLoadDefinitionsMutation).mockReturnValue([
+    mutationTrigger({
+      entries: [],
+      total: 0,
+      sync: {
+        lastSyncAt: null,
+        syncing: false,
+        total: 0,
+        ready: 0,
+        failed: 0,
+        intervalMinutes: 60,
+        sources: [],
+      },
+    }),
+  ] as never);
+}
+
+function mockConfig(entries: ConfigEntryView[], sources: ProviderView[] = []) {
+  mockAddSources();
+  mocked(useGetProvidersQuery).mockReturnValue({ data: sources, isLoading: false } as never);
+  mocked(useUpdateProviderMutation).mockReturnValue([mutationTrigger()] as never);
   mocked(useGetConfigQuery).mockReturnValue({ data: entries, isLoading: false } as never);
   mocked(useGetServiceStatusesQuery).mockReturnValue({ data: {}, isLoading: false } as never);
   mocked(useUpdateConfigMutation).mockReturnValue([
@@ -154,8 +203,117 @@ export const WizardRequiredStep: Story = {
   render: args => <ConfigurationWizardPage {...args} />,
 };
 
-/** The wizard once everything required is set: optional services to review, or finish. */
-export const WizardOptional: Story = {
+/** The wizard's step after the required ones on a fresh install: no sources yet, add some. */
+export const WizardSources: Story = {
   beforeEach: () => mockConfig(ENTRIES.map(item => ({ ...item, hasValue: true }))),
+  render: args => <ConfigurationWizardPage {...args} />,
+};
+
+/** What a Stremio addon is: its info button pressed. */
+export const WizardSourcesInfo: Story = {
+  ...WizardSources,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'What is Stremio addon?' }));
+    await waitFor(() => expect(canvas.getByText(/made for the Stremio app/)).toBeVisible());
+  },
+};
+
+/** The Stremio addon page: how to get its install link, and the field to paste it. */
+export const WizardSourcesStremio: Story = {
+  ...WizardSources,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Stremio addon' }));
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: 'Back to sources' })).toBeVisible()
+    );
+  },
+};
+
+/** The Jackett or Prowlarr page: a Torznab feed, its API key and a name. */
+export const WizardSourcesJackett: Story = {
+  ...WizardSources,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Jackett or Prowlarr' }));
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: 'Back to sources' })).toBeVisible()
+    );
+  },
+};
+
+const indexer = (id: string, name: string, supports: Record<string, boolean>) => ({
+  id,
+  name,
+  source: 'example/definitions',
+  sourceLabel: 'example/definitions',
+  status: 'ready',
+  supported: true,
+  reason: null,
+  type: 'public',
+  language: 'en-US',
+  requiresFlareSolverr: false,
+  installed: false,
+  supports: {
+    imdb: false,
+    tmdb: false,
+    tvdb: false,
+    movies: false,
+    tv: false,
+    anime: false,
+    ...supports,
+  },
+});
+
+/** The indexer page: the community list of public indexers, searched and filtered. */
+export const WizardSourcesCatalog: Story = {
+  beforeEach: () => {
+    mockConfig(ENTRIES.map(item => ({ ...item, hasValue: true })));
+    mocked(useLoadDefinitionsMutation).mockReturnValue([
+      mutationTrigger({
+        entries: [
+          indexer('movies-api', 'Movies API', { imdb: true, movies: true }),
+          indexer('shows-site', 'Shows Site', { tv: true }),
+        ],
+        total: 2,
+        sync: {
+          lastSyncAt: new Date().toISOString(),
+          syncing: false,
+          total: 2,
+          ready: 2,
+          failed: 0,
+          intervalMinutes: 60,
+          sources: [],
+        },
+      }),
+    ] as never);
+  },
+  render: args => <ConfigurationWizardPage {...args} />,
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'Find an indexer' }));
+    await waitFor(() =>
+      expect(canvas.getByRole('button', { name: 'Back to sources' })).toBeVisible()
+    );
+  },
+};
+
+/**
+ * The sources page an admin gets when the wizard didn't run (settings from `.env`), with sources
+ * added and one on: Continue to Miauwatch.
+ */
+export const SourcesSetupAdded: Story = {
+  beforeEach: () =>
+    mockConfig(
+      ENTRIES.map(item => ({ ...item, hasValue: true })),
+      SOURCES.map((item, index) => ({ ...item, enabled: index === 0 }))
+    ),
+  render: () => <SourcesSetupPage onDismiss={fn()} />,
+};
+
+/** The wizard once everything required is set, with a source on: optional services, or finish. */
+export const WizardOptional: Story = {
+  beforeEach: () =>
+    mockConfig(
+      ENTRIES.map(item => ({ ...item, hasValue: true })),
+      SOURCES.map((item, index) => ({ ...item, enabled: index === 0 }))
+    ),
   render: args => <ConfigurationWizardPage {...args} />,
 };

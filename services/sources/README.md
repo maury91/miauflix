@@ -17,11 +17,11 @@ npm test --workspace @miauwatch/sources-service
 
 Bootstrap environment: `SOURCES_PORT` (3003), `SOURCES_HOST` (0.0.0.0), `SOURCES_DATA_DIR` (or `DATA_DIR`, otherwise ./data), `SOURCES_KEY_FILE` (defaults inside the data directory), and optional `SOURCES_ENCRYPTION_KEY`. Retain the data directory and key across restarts; replacing the key prevents decrypting existing settings/cache/references.
 
-The backend discovers and pushes the Sources configuration schema. Configure VPN checking, request timeout, hedge delay, minimum seeders, daily budget, the definition sources and the sync interval there. Existing `FLARESOLVERR_URL` stored values keep working. `SOURCES_PRELOAD_PROVIDERS` (a service environment variable, `<definition id>@<source URL>` entries separated by spaces or commas) installs and enables providers at startup, once, so a container can come up searching without anyone using the UI. `SOURCES_TRUSTED_HOSTS` (setting) lists the LAN hosts Stremio addons may run on; any other addon must resolve to a public address. `SOURCES_DISABLE_PROVIDERS` (provider ids) switches providers off at every startup; test environments use it to keep the built-in Torrentio, a live internet service, out of their searches.
+The backend discovers and pushes the Sources configuration schema. Configure VPN checking, request timeout, hedge delay, minimum seeders, daily budget, the definition sources and the sync interval there. Existing `FLARESOLVERR_URL` stored values keep working. `SOURCES_PRELOAD_PROVIDERS` (a service environment variable, `<definition id>@<source URL>` entries separated by spaces or commas) installs and enables providers at startup, once, so a container can come up searching without anyone using the UI. `SOURCES_TRUSTED_HOSTS` (setting) lists the LAN hosts Stremio addons may run on; any other addon must resolve to a public address. `SOURCES_DISABLE_PROVIDERS` (provider ids) switches providers off at every startup.
 
-SQLite runs in WAL mode. Ordered `PRAGMA user_version` migrations preserve existing data. Provider settings and cached search payloads are encrypted. The default providers (TheRARBG by IMDb and by title, YTS and EZTV from the default definition sources, Torrentio by IMDb as a Stremio addon, plus a few more switched off) are inserted only when absent.
+SQLite runs in WAL mode. Ordered `PRAGMA user_version` migrations preserve existing data. Provider settings and cached search payloads are encrypted. A fresh install has no providers: the admin adds them. Providers earlier versions inserted on their own stay, in the state the admin left them.
 
-Tests inject an offline fetch implementation; unexpected URLs fail. Provider behavior is tested with small synthetic definitions installed straight into the database (`tests/providers.ts`) and the hand-written ones in `tests/fixtures/cardigann`. The backend E2E suite serves fictional release data and its own test definitions from an indexer mock (`backend-e2e/docker/indexer`), loading them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`, with Torrentio switched off through `SOURCES_DISABLE_PROVIDERS`.
+Tests inject an offline fetch implementation; unexpected URLs fail. Provider behavior is tested with small synthetic definitions installed straight into the database (`tests/providers.ts`) and the hand-written ones in `tests/fixtures/cardigann`. The backend E2E suite serves fictional release data and its own test definitions from an indexer mock (`backend-e2e/docker/indexer`), loading them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`.
 
 ## Provider management
 
@@ -87,8 +87,7 @@ the README there for the GPL note.
 
 ## Stremio addons
 
-`src/providers/stremio/` searches Stremio addons that return torrents (Torrentio, Comet, MediaFusion,
-Knightcrawler and similar). It reads the addon's `manifest.json` and asks
+`src/providers/stremio/` searches Stremio addons that return torrents. It reads the addon's `manifest.json` and asks
 `/stream/movie/tt….json` or `/stream/series/tt…:<season>:<episode>.json`. Only streams with an
 `infoHash` are kept; debrid and other direct-link streams are skipped until sources can be HTTP.
 Release names, seeders (👤) and sizes (💾) are read from each stream's description.

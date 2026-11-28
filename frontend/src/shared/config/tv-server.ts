@@ -10,6 +10,19 @@ export function readTvServer(): string | null {
   }
 }
 
+/**
+ * The server the TV app was packaged with, or '' for none. Read from `window.API_URL`, which
+ * index.html sets in plain text, so an installer can rewrite it in a built package (Apps2Samsung's
+ * user settings look for `window.API_URL = '/';`); the build-time value is the fallback.
+ */
+export function packagedTvServer(buildTime: string): string {
+  const fromPage = typeof window === 'undefined' ? undefined : window.API_URL?.trim();
+  for (const candidate of [fromPage, buildTime]) {
+    if (candidate && /^https?:\/\/[^/]+/.test(candidate)) return candidate.replace(/\/+$/, '');
+  }
+  return '';
+}
+
 export function writeTvServer(url: string | null): void {
   if (url) window.localStorage.setItem(TV_SERVER_KEY, url);
   else window.localStorage.removeItem(TV_SERVER_KEY);
