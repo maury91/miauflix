@@ -27,7 +27,7 @@ export class ProgressService {
     /** Optional: absent means watch-once is off and no grant lookup happens. */
     private readonly grants?: Pick<
       PlaybackGrantRepository,
-      'deleteById' | 'findWatchOnceForCompletion'
+      'deleteById' | 'findWatchOnceForCompletion' | 'hasOtherActiveWatchOnceGrants'
     >,
     private readonly watchOnce?: Pick<WatchOnceService, 'release'>
   ) {
@@ -49,10 +49,19 @@ export class ProgressService {
           new Date()
         );
         if (grant) {
+          // A second live grant for the same playable may still be streaming this file.
+          // Consume the finished grant without releasing storage in that case.
+          const shared = await this.grants.hasOtherActiveWatchOnceGrants(
+            userId,
+            grant.playableKind,
+            grant.playableKey,
+            grant.id,
+            new Date()
+          );
           // Keep the grant while release is still retryable: a later completion report can
           // finish the cleanup. Combined files have no release, so their grant ends here.
           const outcome =
-            grant.matchKind === 'combined'
+            shared || grant.matchKind === 'combined'
               ? undefined
               : await this.watchOnce.release(grant.sourceId);
           if (!outcome || outcome.status === 'removed' || outcome.status === 'not_found')

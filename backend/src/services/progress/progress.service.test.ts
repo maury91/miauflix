@@ -181,6 +181,7 @@ const setupCompletionTest = (grant: PlaybackGrant | null) => {
   let active = grant;
   const grants = {
     findWatchOnceForCompletion: jest.fn(async (): Promise<PlaybackGrant | null> => active),
+    hasOtherActiveWatchOnceGrants: jest.fn(async (): Promise<boolean> => false),
     deleteById: jest.fn(async (id: number) => {
       if (active?.id === id) active = null;
     }),
@@ -285,6 +286,32 @@ describe('watch-once completion', () => {
     await expect(service.update('user-1', completed)).resolves.toBeUndefined();
 
     expect(repository.upsert).toHaveBeenCalledWith('user-1', completed);
+    expect(watchOnce.release).toHaveBeenCalledWith(42);
+  });
+
+  it('does not release while another active grant exists for the same playable', async () => {
+    const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+    grants.hasOtherActiveWatchOnceGrants.mockResolvedValueOnce(true);
+
+    await service.update('user-1', completed);
+
+    expect(grants.hasOtherActiveWatchOnceGrants).toHaveBeenCalledWith(
+      'user-1',
+      'movie',
+      'm:123',
+      7,
+      expect.any(Date)
+    );
+    expect(watchOnce.release).not.toHaveBeenCalled();
+    expect(grants.deleteById).toHaveBeenCalledWith(7);
+  });
+
+  it('releases when the only other grant for the playable has expired', async () => {
+    const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+    grants.hasOtherActiveWatchOnceGrants.mockResolvedValueOnce(false);
+
+    await service.update('user-1', completed);
+
     expect(watchOnce.release).toHaveBeenCalledWith(42);
   });
 });
