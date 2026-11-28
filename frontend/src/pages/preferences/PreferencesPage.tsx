@@ -1,4 +1,7 @@
-import { useUpdateLanguagePreferencesMutation } from '@features/profiles/api/profiles.api';
+import {
+  useUpdateLanguagePreferencesMutation,
+  useUpdateWatchOnceMutation,
+} from '@features/profiles/api/profiles.api';
 import {
   languagePreferencesOf,
   supportsAutoSubtitles,
@@ -32,6 +35,7 @@ const NAV = {
   subtitles: 'preferences-subtitles',
   autoSubtitles: 'preferences-auto-subtitles',
   animeSubtitles: 'preferences-anime-subtitles',
+  watchOnce: 'preferences-watch-once',
 } as const;
 
 type Kind = 'audio' | 'subtitles';
@@ -58,6 +62,7 @@ export default function PreferencesPage({ onDismiss }: { onDismiss: () => void }
   const user = useAppSelector(selectCurrentUser);
   const session = useAppSelector(selectCurrentSessionId);
   const [save, saving] = useUpdateLanguagePreferencesMutation();
+  const [updateWatchOnce] = useUpdateWatchOnceMutation();
   const [changed, setChanged] = useState(false);
   // Choices not yet saved. Each save replaces every preference, so later choices build on these
   // rather than on the stored profile; kept after a failure, so the next choice retries them.
@@ -137,6 +142,17 @@ export default function PreferencesPage({ onDismiss }: { onDismiss: () => void }
                 onChange={value => update({ ...preferences, interface: fromValue(value) })}
               />
             )}
+          />
+          <SettingRow
+            title={t('preferences.watchOnce')}
+            description={t('preferences.watchOnceDescription')}
+            toggle={{
+              navId: NAV.watchOnce,
+              checked: user?.watchOnce ?? false,
+              onCheckedChange: watchOnce => {
+                if (session) void updateWatchOnce({ session, watchOnce });
+              },
+            }}
           />
         </List>
       </Section>

@@ -167,6 +167,25 @@ export const profilesApi = createApi({
         return { data: updated.data };
       },
     }),
+
+    /** Turn watch-once downloads on or off for the session's profile. */
+    updateWatchOnce: builder.mutation<UserDto, { session: string; watchOnce: boolean }>({
+      async queryFn({ session, watchOnce }, { dispatch }) {
+        const updated = await authenticatedRequest<UserDto>({
+          requestFn: () =>
+            backendClient.api.auth.session['watch-once'].$put(
+              { json: { watchOnce } },
+              { headers: sessionHeaders(session) }
+            ),
+          session,
+          errorContext: t('api.failedToSaveThePreferences'),
+          onInvalidSession: onInvalidSession(dispatch, session),
+        });
+        if ('error' in updated) return updated;
+        dispatch(profileUpdated(updated.data));
+        return { data: updated.data };
+      },
+    }),
   }),
 });
 
@@ -174,6 +193,7 @@ export const {
   useCreateProfileMutation,
   useUpdateProfileMutation,
   useUpdateLanguagePreferencesMutation,
+  useUpdateWatchOnceMutation,
 } = profilesApi;
 
 const avatarImages = new Map<string, Promise<string | null>>();
