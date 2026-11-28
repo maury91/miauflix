@@ -4,7 +4,7 @@ import type { UserDto } from '@mytypes/user.types';
 
 /** The user fields a client may see. */
 export function toUserDto(
-  user: Partial<Pick<User, 'languagePreferences'>> &
+  user: Partial<Pick<User, 'languagePreferences' | 'watchOnce'>> &
     Pick<User, 'avatar' | 'avatarRenderedAt' | 'displayName' | 'email' | 'id' | 'role'>
 ): UserDto {
   return {
@@ -15,5 +15,6 @@ export function toUserDto(
     avatar: user.avatar ?? null,
     avatarVersion: user.avatarRenderedAt ? new Date(user.avatarRenderedAt).getTime() : null,
     languagePreferences: withDefaultLanguagePreferences(user.languagePreferences),
+    watchOnce: user.watchOnce ?? false,
   };
 }

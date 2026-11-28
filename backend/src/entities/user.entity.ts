@@ -39,6 +39,10 @@ export class User {
   @Column({ default: false })
   isEmailVerified: boolean;
 
+  /** Play a download once, then release its storage when playback completes. */
+  @Column({ default: false })
+  watchOnce?: boolean;
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   displayName: string | null;
 

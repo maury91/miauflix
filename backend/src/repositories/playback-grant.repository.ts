@@ -11,7 +11,7 @@ export class PlaybackGrantRepository {
   }
 
   async create(
-    grant: Pick<
+    grant: Partial<Pick<PlaybackGrant, 'matchKind' | 'watchOnce'>> & Pick<
       PlaybackGrant,
       'expiresAt' | 'keyHash' | 'playableKey' | 'playableKind' | 'sourceId' | 'userId'
     >
@@ -25,5 +25,26 @@ export class PlaybackGrantRepository {
       .where('grant.keyHash = :keyHash', { keyHash })
       .andWhere('grant.expiresAt > :now', { now })
       .getOne();
+  }
+
+  /** The still-valid watch-once grant for a playable, used to release storage on completion. */
+  async findWatchOnceForCompletion(
+    userId: string,
+    playableKind: PlaybackGrant['playableKind'],
+    playableKey: string,
+    now: Date
+  ): Promise<PlaybackGrant | null> {
+    return this.repository
+      .createQueryBuilder('grant')
+      .where('grant.userId = :userId', { userId })
+      .andWhere('grant.playableKind = :playableKind', { playableKind })
+      .andWhere('grant.playableKey = :playableKey', { playableKey })
+      .andWhere('grant.watchOnce = :watchOnce', { watchOnce: true })
+      .andWhere('grant.expiresAt > :now', { now })
+      .getOne();
+  }
+
+  async deleteById(id: number): Promise<void> {
+    await this.repository.delete(id);
   }
 }

@@ -22,6 +22,7 @@ const profile = (
       subtitles: { default: null, anime: null },
       autoSubtitles: false,
     },
+    watchOnce: false,
   },
 });
 

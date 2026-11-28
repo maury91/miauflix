@@ -3,7 +3,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import type { Database } from '@database/database';
+import { UserRole } from '@entities/user.entity';
 import type { UserRepository } from '@repositories/user.repository';
+import { toUserDto } from '@services/auth/user-dto.util';
 
 import {
   InvalidAvatarImageError,
@@ -85,6 +87,31 @@ describe('ProfileService', () => {
       expect(setup.userRepository.update).toHaveBeenCalledWith(USER_ID, {
         languagePreferences: { ...languages, autoSubtitles: false },
       });
+    });
+  });
+
+  describe('watch-once preference', () => {
+    it('saves the flag on the profile', async () => {
+      const setup = await setupTest();
+      dataDir = setup.dataDir;
+
+      const updated = await setup.service.updateWatchOnce('user-1', true);
+
+      expect(setup.userRepository.update).toHaveBeenCalledWith('user-1', { watchOnce: true });
+      expect(updated?.watchOnce).toBe(true);
+    });
+
+    it('defaults the flag to false in the API user when the entity has none', () => {
+      expect(
+        toUserDto({
+          id: USER_ID,
+          email: 'user@example.com',
+          displayName: 'Sam',
+          role: UserRole.USER,
+          avatar: null,
+          avatarRenderedAt: null,
+        }).watchOnce
+      ).toBe(false);
     });
   });
 

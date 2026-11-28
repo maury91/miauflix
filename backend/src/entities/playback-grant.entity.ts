@@ -24,6 +24,14 @@ export class PlaybackGrant {
   @Column({ type: 'datetime' })
   expiresAt: Date;
 
+  /** The grant was created for a watch-once download. */
+  @Column({ default: false })
+  watchOnce: boolean;
+
+  /** How the file matched the playable: a combined file must not be deleted per episode. */
+  @Column({ length: 16, default: 'single' })
+  matchKind: 'combined' | 'movie' | 'single';
+
   @CreateDateColumn()
   createdAt: Date;
 }
