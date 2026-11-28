@@ -322,7 +322,7 @@ export class SeekThumbnailService {
    * The frame from the file's mpv, started (at this frame) if none is open; with `MAX_WORKERS`
    * busy on other files, the request waits for one to go idle. A frame whose mpv failed for
    * another frame's sake (it stopped before this frame's turn, or the start this request only
-   * waited on failed) is tried once more, on the mpv open by then or a fresh one. A failure during
+   * waited on failed, even past its moment's end) is tried once more, on the mpv open by then or a fresh one. A failure during
    * this frame's own seek (or its own start) is the answer: a timeout stays a 504.
    */
   private async mpvFrame(
@@ -348,6 +348,8 @@ export class SeekThumbnailService {
         const release = this.hold(slot);
         /** Whether mpv worked on this frame (its turn came, or it started for it). */
         let ownCapture = !existing;
+        /** Whether the mpv joined here had started: a past-end before that was its start's moment. */
+        let joinedReady = false;
         try {
           let image: Uint8Array;
           if (existing) {
@@ -355,6 +357,7 @@ export class SeekThumbnailService {
             this.workers.delete(file);
             this.workers.set(file, existing);
             const worker = await this.waitOn(existing, existing.ready, signal, release);
+            joinedReady = true;
             image = await this.waitOn(
               existing,
               worker.frame(at, signal, () => {
@@ -376,7 +379,7 @@ export class SeekThumbnailService {
             attempt === 0 &&
             !signal.aborted &&
             error instanceof MpvFrameError &&
-            !(error instanceof MpvPastEndError) &&
+            !(error instanceof MpvPastEndError && joinedReady) &&
             !ownCapture;
           if (!retry) throw error;
           // The failed mpv may still be listed for a moment: nobody can use it

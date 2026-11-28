@@ -650,6 +650,24 @@ describe('SeekThumbnailService with mpv', () => {
     }
   });
 
+  it('answers 404 to a start past the end, and tries a frame that joined it on a fresh mpv', async () => {
+    const pastEnd = fakeMpv({ duration: 95, startDelayMs: 50 });
+    const fresh = fakeMpv({ duration: 95 });
+    const { service, spawn, target, frame } = setupMpv([pastEnd, fresh]);
+    try {
+      const start = service.thumbnail(target, 100, new AbortController().signal);
+      await new Promise(resolve => setTimeout(resolve, 10));
+      const joiner = frame(20);
+
+      await expect(start).rejects.toMatchObject({ status: 404 });
+      expect(await joiner).toBe('frame:20');
+      expect(spawn).toHaveBeenCalledTimes(2);
+      expect(spawn.mock.calls[1][1]).toContain('--start=20');
+    } finally {
+      service.close();
+    }
+  });
+
   it('answers 404 past a known runtime without starting mpv', async () => {
     const { service, spawn, target } = setupMpv([fakeMpv()]);
     try {
