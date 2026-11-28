@@ -49,8 +49,14 @@ export class ProgressService {
           new Date()
         );
         if (grant) {
-          await this.grants.deleteById(grant.id);
-          if (grant.matchKind !== 'combined') await this.watchOnce.release(grant.sourceId);
+          // Keep the grant while release is still retryable: a later completion report can
+          // finish the cleanup. Combined files have no release, so their grant ends here.
+          const outcome =
+            grant.matchKind === 'combined'
+              ? undefined
+              : await this.watchOnce.release(grant.sourceId);
+          if (!outcome || outcome.status === 'removed' || outcome.status === 'not_found')
+            await this.grants.deleteById(grant.id);
         }
       } catch (error) {
         // Cleanup is best-effort: a grant or storage failure must not lose the saved progress.

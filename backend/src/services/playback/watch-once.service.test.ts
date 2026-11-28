@@ -23,16 +23,17 @@ const setup = (overrides: Partial<WatchOnceServiceOptions> = {}) => {
   const removeStorageWithResult = jest.fn(
     async (): Promise<StorageRemovalResult> => ({ status: 'removed', bytes: 42 })
   );
-  const probeFile = jest.fn(
+  const probeFresh = jest.fn(
     async (): Promise<ProbeResult> => ({ streams: [{ codec_type: 'video' }] })
   );
+  const probeFile = jest.fn(async (): Promise<ProbeResult> => ({ streams: [] }));
   const sleep = jest.fn(async (ms: number) => {
     time += ms;
   });
   const now = jest.fn(() => time);
   const service = new WatchOnceService({
     mediaLoad: { isFileComplete, removeStorageWithResult } as unknown as MediaLoadClientService,
-    audio: { probeFile } as unknown as AudioPlaybackService,
+    audio: { probeFresh, probeFile } as unknown as AudioPlaybackService,
     sleep,
     now,
     timeoutMs: 3_000,
@@ -40,23 +41,23 @@ const setup = (overrides: Partial<WatchOnceServiceOptions> = {}) => {
     maxReleaseRetries: 2,
     ...overrides,
   });
-  return { service, isFileComplete, removeStorageWithResult, probeFile, sleep, now };
+  return { service, isFileComplete, removeStorageWithResult, probeFresh, probeFile, sleep, now };
 };
 
 describe('WatchOnceService.verify', () => {
   it('rejects an executable target without polling or probing it', async () => {
-    const { service, isFileComplete, probeFile, sleep } = setup();
+    const { service, isFileComplete, probeFresh, sleep } = setup();
 
     await expect(service.verify({ ...target, filePath: 'movie.exe' })).rejects.toBeInstanceOf(
       WatchOnceRejectedError
     );
     expect(isFileComplete).not.toHaveBeenCalled();
-    expect(probeFile).not.toHaveBeenCalled();
+    expect(probeFresh).not.toHaveBeenCalled();
     expect(sleep).not.toHaveBeenCalled();
   });
 
   it('rejects when the file stays incomplete past the timeout', async () => {
-    const { service, isFileComplete, probeFile, sleep } = setup();
+    const { service, isFileComplete, probeFresh, sleep } = setup();
     isFileComplete.mockResolvedValue(false);
 
     await expect(service.verify(target)).rejects.toBeInstanceOf(WatchOnceRejectedError);
@@ -64,24 +65,34 @@ describe('WatchOnceService.verify', () => {
     expect(isFileComplete).toHaveBeenCalledTimes(3);
     expect(sleep).toHaveBeenCalledTimes(3);
     expect(sleep).toHaveBeenCalledWith(1_000);
-    expect(probeFile).not.toHaveBeenCalled();
+    expect(probeFresh).not.toHaveBeenCalled();
   });
 
   it('resolves once the file is complete and the probe finds real video', async () => {
-    const { service, isFileComplete, probeFile, sleep } = setup();
+    const { service, isFileComplete, probeFresh, sleep } = setup();
 
     await expect(service.verify(target)).resolves.toBeUndefined();
     expect(isFileComplete).toHaveBeenCalledWith(7, 'movie.mkv');
-    expect(probeFile).toHaveBeenCalledWith(target);
+    expect(probeFresh).toHaveBeenCalledWith(target);
     expect(sleep).not.toHaveBeenCalled();
   });
 
-  it('rejects when the probe finds no video stream', async () => {
-    const { service, probeFile } = setup();
+  it('gates on a fresh probe, ignoring a cached probe that finds no video', async () => {
+    const { service, probeFresh, probeFile } = setup();
     probeFile.mockResolvedValue({ streams: [{ codec_type: 'audio' }] });
 
+    await expect(service.verify(target)).resolves.toBeUndefined();
+
+    expect(probeFresh).toHaveBeenCalledWith(target);
+    expect(probeFile).not.toHaveBeenCalled();
+  });
+
+  it('rejects when the probe finds no video stream', async () => {
+    const { service, probeFresh } = setup();
+    probeFresh.mockResolvedValue({ streams: [{ codec_type: 'audio' }] });
+
     await expect(service.verify(target)).rejects.toBeInstanceOf(WatchOnceRejectedError);
-    probeFile.mockResolvedValue({});
+    probeFresh.mockResolvedValue({});
     await expect(service.verify(target)).rejects.toBeInstanceOf(WatchOnceRejectedError);
   });
 });

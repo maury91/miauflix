@@ -5,8 +5,10 @@ import {
   deliveryFromProbe,
   explicitCredits,
   explicitIntro,
+  type ProbeResult,
   stageReporter,
 } from './audio-playback.service';
+import type { PlaybackTarget } from './playback-target';
 
 describe('audio playback delivery', () => {
   const setupTest = (audioCodec = 'ac3', videoCodec = 'h264') => ({
@@ -513,5 +515,75 @@ describe('stream stages', () => {
     cancelled.stop();
     jest.advanceTimersByTime(1000);
     expect(told).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('probeFresh for the watch-once gate', () => {
+  const target = {
+    source: { id: 9 },
+    filePath: 'movie.mkv',
+    matchKind: 'movie',
+  } as PlaybackTarget;
+  const fresh: ProbeResult = {
+    format: { duration: '120' },
+    streams: [{ codec_type: 'video', codec_name: 'h264' }],
+  };
+  const stale: ProbeResult = { streams: [{ codec_type: 'audio', codec_name: 'aac' }] };
+  const internals = (service: AudioPlaybackService) =>
+    service as unknown as {
+      probes: Map<string, { expires: number; value: Promise<ProbeResult>; result?: ProbeResult }>;
+      probe: (
+        target: PlaybackTarget,
+        speculative?: boolean,
+        signal?: AbortSignal
+      ) => Promise<ProbeResult>;
+    };
+  const store = (result: ProbeResult | null) => ({
+    find: jest.fn(async () => (result ? JSON.stringify(result) : null)),
+    save: jest.fn(async () => undefined),
+  });
+
+  it('reads the file again even when an in-memory probe is cached', async () => {
+    const mediaProbes = store(stale);
+    const service = new AudioPlaybackService({} as never, undefined, mediaProbes);
+    const state = internals(service);
+    state.probes.set('9:movie.mkv', {
+      expires: Date.now() + 60_000,
+      value: Promise.resolve(stale),
+      result: stale,
+    });
+    const probe = jest.fn(async () => fresh);
+    state.probe = probe;
+
+    await expect(service.probeFresh(target)).resolves.toEqual(fresh);
+
+    expect(probe).toHaveBeenCalledWith(target, true, undefined);
+    expect(mediaProbes.find).not.toHaveBeenCalled();
+    expect(mediaProbes.save).not.toHaveBeenCalled();
+    expect(state.probes.get('9:movie.mkv')?.result).toBe(stale);
+  });
+
+  it('reads the file again even when a probe is stored from an earlier session', async () => {
+    const mediaProbes = store(stale);
+    const service = new AudioPlaybackService({} as never, undefined, mediaProbes);
+    const probe = jest.fn(async () => fresh);
+    internals(service).probe = probe;
+
+    await expect(service.probeFresh(target)).resolves.toEqual(fresh);
+
+    expect(probe).toHaveBeenCalled();
+    expect(mediaProbes.find).not.toHaveBeenCalled();
+    expect(mediaProbes.save).not.toHaveBeenCalled();
+  });
+
+  it('keeps reusing stored probes for ordinary playback', async () => {
+    const mediaProbes = store(fresh);
+    const service = new AudioPlaybackService({} as never, undefined, mediaProbes);
+    const probe = jest.fn(async () => stale);
+    internals(service).probe = probe;
+
+    await expect(service.probeFile(target)).resolves.toEqual(fresh);
+
+    expect(probe).not.toHaveBeenCalled();
   });
 });

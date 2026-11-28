@@ -1427,13 +1427,31 @@ describe('PlaybackSessionService', () => {
       expect(users.findById).not.toHaveBeenCalled();
     });
 
-    it('never marks a target-less session as watch-once', async () => {
+    it('fails closed for a watch-once session whose file is not resolved', async () => {
       const prepare = jest.fn(async () => ({ source: { id: 7 }, target: null, state: 'cold' }));
       const { service, grants, verify, release } = setup(true, prepare);
 
-      const session = await service.create('user', playable, preferences);
+      await expect(service.create('user', playable, preferences)).rejects.toEqual(
+        new PlaybackUnavailableError('not_found')
+      );
 
-      expect(session?.source.id).toBe(7);
+      expect(verify).not.toHaveBeenCalled();
+      expect(release).not.toHaveBeenCalled();
+      expect(grants.create).not.toHaveBeenCalled();
+    });
+
+    it('never gates or releases sources for a deferDownload prefetch', async () => {
+      const prepare = jest.fn(async () => ({
+        source: { id: 4 },
+        target: movie({ id: 4 }),
+        state: 'cold',
+      }));
+      const { service, grants, users, verify, release } = setup(true, prepare);
+
+      const session = await service.create('user', playable, preferences, { deferDownload: true });
+
+      expect(session?.source.id).toBe(4);
+      expect(users.findWatchOnceById).not.toHaveBeenCalled();
       expect(verify).not.toHaveBeenCalled();
       expect(release).not.toHaveBeenCalled();
       expect(grants.create).toHaveBeenCalledWith(expect.objectContaining({ watchOnce: false }));

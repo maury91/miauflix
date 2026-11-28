@@ -1,5 +1,7 @@
 jest.mock('@logger', () => ({ logger: { warn: jest.fn() } }));
 
+import type { StorageRemovalResult } from '@miauwatch/service-contracts';
+
 import type { Database } from '@database/database';
 import type { PlaybackGrant } from '@entities/playback-grant.entity';
 import type { Progress } from '@entities/progress.entity';
@@ -183,7 +185,11 @@ const setupCompletionTest = (grant: PlaybackGrant | null) => {
       if (active?.id === id) active = null;
     }),
   };
-  const watchOnce = { release: jest.fn(async () => ({ status: 'removed' as const, bytes: 100 })) };
+  const watchOnce = {
+    release: jest.fn(
+      async (): Promise<StorageRemovalResult> => ({ status: 'removed', bytes: 100 })
+    ),
+  };
   const service = new ProgressService(database, undefined, undefined, grants, watchOnce);
   return { service, repository, grants, watchOnce };
 };
@@ -204,6 +210,35 @@ describe('watch-once completion', () => {
     expect(grants.deleteById).toHaveBeenCalledWith(7);
     expect(watchOnce.release).toHaveBeenCalledWith(42);
   });
+
+  it.each(['removed', 'not_found'] as const)(
+    'consumes the grant when release is terminal (%s)',
+    async status => {
+      const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+      watchOnce.release.mockResolvedValueOnce(
+        status === 'removed' ? { status, bytes: 100 } : { status }
+      );
+
+      await service.update('user-1', completed);
+
+      expect(grants.deleteById).toHaveBeenCalledTimes(1);
+    }
+  );
+
+  it.each(['active_playback', 'cleanup_failed'] as const)(
+    'keeps the grant for a later completed report when release is non-terminal (%s)',
+    async status => {
+      const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+      watchOnce.release.mockResolvedValueOnce({ status });
+
+      await service.update('user-1', completed);
+
+      expect(grants.deleteById).not.toHaveBeenCalled();
+      await service.update('user-1', completed);
+      expect(watchOnce.release).toHaveBeenCalledTimes(2);
+      expect(grants.deleteById).toHaveBeenCalledTimes(1);
+    }
+  );
 
   it('releases only once for two consecutive completed reports', async () => {
     const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());

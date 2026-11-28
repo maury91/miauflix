@@ -11,7 +11,7 @@ export class WatchOnceRejectedError extends Error {}
 
 export interface WatchOnceServiceOptions {
   mediaLoad: Pick<MediaLoadClientService, 'isFileComplete' | 'removeStorageWithResult'>;
-  audio: Pick<AudioPlaybackService, 'probeFile'>;
+  audio: Pick<AudioPlaybackService, 'probeFresh'>;
   sleep?: (ms: number) => Promise<void>;
   now?: () => number;
   timeoutMs?: number;
@@ -50,7 +50,7 @@ export class WatchOnceService {
       if (await this.mediaLoad.isFileComplete(target.source.id, target.filePath)) break;
       await this.sleep(this.intervalMs);
     }
-    const probe = await this.audio.probeFile(target);
+    const probe = await this.audio.probeFresh(target);
     if (!probe.streams?.some(stream => stream.codec_type === 'video'))
       throw new WatchOnceRejectedError(`No video stream: ${target.filePath}`);
   }

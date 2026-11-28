@@ -288,7 +288,8 @@ export class PlaybackSessionService {
       sessionId?: string;
     } = {}
   ): Promise<PlaybackSession | null> {
-    const user = await this.users?.findWatchOnceById(userId);
+    // Prefetches never download or download-verify a file, so watch-once does not apply to them.
+    const user = options.deferDownload ? undefined : await this.users?.findWatchOnceById(userId);
     const watchOnce = user?.watchOnce === true ? this.watchOnce : undefined;
     // Warm where the player will resume, as the details warmup did, not over it from the start.
     const resumeFraction = options.deferDownload
@@ -326,9 +327,8 @@ export class PlaybackSessionService {
       if (!watchOnce) return result;
       for (let rejections = 0; ; ) {
         if (!result.target) {
-          // Nothing resolved to stream yet: this session cannot be marked watch-once.
-          if (rejections) throw new PlaybackUnavailableError('not_found');
-          return result;
+          // No file resolved to verify: fail closed instead of serving unverified bytes later.
+          throw new PlaybackUnavailableError('not_found');
         }
         try {
           await watchOnce.verify(result.target);
