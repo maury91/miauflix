@@ -30,6 +30,10 @@ const setupTest = (authenticated = true) => {
       ...storedUser,
       languagePreferences,
     })),
+    updateWatchOnce: jest.fn(async (_userId: string, watchOnce: boolean) => ({
+      ...storedUser,
+      watchOnce,
+    })),
   };
   const app = new Hono();
   app.use('*', async (c, next) => {
@@ -80,6 +84,7 @@ describe('profile routes', () => {
       avatar: storedUser.avatar,
       avatarVersion: storedUser.avatarRenderedAt.getTime(),
       languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
+      watchOnce: false,
     });
   });
 
@@ -161,6 +166,36 @@ describe('profile routes', () => {
       const { app, profileService } = setupTest();
       expect((await putPreferences(app, body)).status).toBe(400);
       expect(profileService.updateLanguagePreferences).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('watch-once preference', () => {
+    const putWatchOnce = (app: Hono, body: unknown) =>
+      app.request('/auth/session/watch-once', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+    it('saves the flag for the signed-in profile and returns its user', async () => {
+      const { app, profileService } = setupTest();
+
+      const response = await putWatchOnce(app, { watchOnce: true });
+
+      expect(response.status).toBe(200);
+      expect(profileService.updateWatchOnce).toHaveBeenCalledWith(USER_ID, true);
+      expect(((await response.json()) as { watchOnce: boolean }).watchOnce).toBe(true);
+    });
+
+    it.each([{ watchOnce: 'yes' }, {}, { watchOnce: true, extra: 1 }])('rejects %j', async body => {
+      const { app, profileService } = setupTest();
+      expect((await putWatchOnce(app, body)).status).toBe(400);
+      expect(profileService.updateWatchOnce).not.toHaveBeenCalled();
+    });
+
+    it('requires a session', async () => {
+      const { app } = setupTest(false);
+      expect((await putWatchOnce(app, { watchOnce: true })).status).toBe(401);
     });
   });
 

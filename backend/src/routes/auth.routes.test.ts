@@ -203,6 +203,7 @@ describe('auth routes account creation', () => {
       avatar: created.avatar,
       avatarVersion: null,
       languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
+      watchOnce: false,
     });
   });
 

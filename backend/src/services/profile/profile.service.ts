@@ -103,6 +103,11 @@ export class ProfileService {
   }
 
   @traced('ProfileService')
+  async updateWatchOnce(userId: string, watchOnce: boolean): Promise<User | null> {
+    return this.userRepository.update(userId, { watchOnce });
+  }
+
+  @traced('ProfileService')
   async saveAvatarImage(userId: string, image: Uint8Array): Promise<User | null> {
     if (image.byteLength > MAX_AVATAR_IMAGE_BYTES) {
       throw new InvalidAvatarImageError('Avatar image is too large');

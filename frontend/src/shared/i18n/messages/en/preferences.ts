@@ -15,6 +15,9 @@ export const preferences = {
   'preferences.interface': 'Interface',
   'preferences.interfaceLanguage': 'Interface language',
   'preferences.interfaceLanguageDescription': 'Menus, buttons and messages.',
+  'preferences.watchOnce': 'Watch-once downloads',
+  'preferences.watchOnceDescription':
+    'Download the whole file before playing and delete it when playback finishes.',
   'preferences.audio': 'Audio',
   'preferences.subtitles': 'Subtitles',
   'preferences.moviesAndShows': 'Movies and TV shows',

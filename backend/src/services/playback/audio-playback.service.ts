@@ -569,6 +569,11 @@ export class AudioPlaybackService {
     return (await this.knownProbe(target)) ?? this.storedOrProbe(target, true, signal);
   }
 
+  /** Probe the bytes again for the watch-once gate; never reads or writes a cached/stored probe. */
+  async probeFresh(target: PlaybackTarget, signal?: AbortSignal): Promise<ProbeResult> {
+    return this.probe(target, true, signal);
+  }
+
   /** A torrent file never changes, so a stored probe is reused instead of reading it again. */
   private async storedOrProbe(
     target: PlaybackTarget,

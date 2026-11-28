@@ -380,6 +380,7 @@ describe('AuthService', () => {
         avatar: null,
         avatarVersion: null,
         languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
+        watchOnce: false,
       });
 
       expect(mockRefreshTokenRepository.updateToken).toHaveBeenCalledWith(
@@ -494,6 +495,7 @@ describe('AuthService', () => {
             avatar: null,
             avatarVersion: null,
             languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
+            watchOnce: false,
           },
         },
       ]);
@@ -548,6 +550,7 @@ describe('AuthService', () => {
             avatar: null,
             avatarVersion: null,
             languagePreferences: DEFAULT_LANGUAGE_PREFERENCES,
+            watchOnce: false,
           },
         },
       ]);

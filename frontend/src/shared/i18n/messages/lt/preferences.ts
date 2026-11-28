@@ -15,6 +15,9 @@ export const preferences: Translation<typeof english> = {
   'preferences.interface': 'Sąsaja',
   'preferences.interfaceLanguage': 'Sąsajos kalba',
   'preferences.interfaceLanguageDescription': 'Meniu, mygtukai ir pranešimai.',
+  'preferences.watchOnce': 'Vienkartiniai atsisiuntimai',
+  'preferences.watchOnceDescription':
+    'Atsisiunčia visą failą prieš peržiūrą ir ištrina jį pasibaigus peržiūrai.',
   'preferences.audio': 'Garsas',
   'preferences.subtitles': 'Subtitrai',
   'preferences.moviesAndShows': 'Filmai ir serialai',

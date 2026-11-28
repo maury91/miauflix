@@ -15,4 +15,5 @@ export interface UserDto {
   /** Changes whenever a new avatar image is saved; null when the profile has no image. */
   avatarVersion: number | null;
   languagePreferences: LanguagePreferences;
+  watchOnce: boolean;
 }

@@ -19,6 +19,11 @@ export class UserRepository {
     });
   }
 
+  /** Only the watch-once flag, for the session-creation path (no relations loaded). */
+  async findWatchOnceById(id: string): Promise<Pick<User, 'watchOnce'> | null> {
+    return this.repository.findOne({ select: { watchOnce: true }, where: { id } });
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     return this.repository.findOne({
       where: { email },

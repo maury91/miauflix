@@ -4,9 +4,11 @@ import type { Database } from '@database/database';
 import type { Progress } from '@entities/progress.entity';
 import { playableKey } from '@mytypes/playable.types';
 import type { ProgressEntry, ProgressUpdateRequest } from '@mytypes/progress.types';
+import type { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { EpisodeNumberingService } from '@services/media/episode-numbering.service';
+import type { WatchOnceService } from '@services/playback/watch-once.service';
 
 import { mergeProgress } from './progress.merge';
 
@@ -21,7 +23,13 @@ export class ProgressService {
     database: Database,
     private readonly listClient?: ListClientService,
     /** Trakt speaks TMDB's episode numbers; anime the catalog renumbers are translated. */
-    private readonly numbering?: EpisodeNumberingService
+    private readonly numbering?: EpisodeNumberingService,
+    /** Optional: absent means watch-once is off and no grant lookup happens. */
+    private readonly grants?: Pick<
+      PlaybackGrantRepository,
+      'deleteById' | 'findWatchOnceForCompletion' | 'hasOtherActiveWatchOnceGrants'
+    >,
+    private readonly watchOnce?: Pick<WatchOnceService, 'hasSiblingVideoFiles' | 'release'>
   ) {
     this.progressRepository = database.getProgressRepository();
   }
@@ -32,6 +40,44 @@ export class ProgressService {
    */
   async update(userId: string, update: ProgressUpdateRequest): Promise<void> {
     await this.progressRepository.upsert(userId, update);
+    if (update.state === 'completed' && this.grants && this.watchOnce) {
+      try {
+        const grant = await this.grants.findWatchOnceForCompletion(
+          userId,
+          update.playable.kind,
+          playableKey(update.playable),
+          new Date()
+        );
+        if (grant) {
+          // A second live grant for the same playable may still be streaming this file.
+          // Consume the finished grant without releasing storage in that case.
+          const shared = await this.grants.hasOtherActiveWatchOnceGrants(
+            userId,
+            grant.playableKind,
+            grant.playableKey,
+            grant.id,
+            new Date()
+          );
+          // A season pack shares one storage record: deleting it would also remove unplayed
+          // episodes. Keep the source until a per-file reclaim exists.
+          const siblings =
+            shared || grant.matchKind === 'combined'
+              ? false
+              : await this.watchOnce.hasSiblingVideoFiles(grant.sourceId);
+          // Keep the grant while release is still retryable: a later completion report can
+          // finish the cleanup. Combined files have no release, so their grant ends here.
+          const outcome =
+            shared || siblings || grant.matchKind === 'combined'
+              ? undefined
+              : await this.watchOnce.release(grant.sourceId);
+          if (!outcome || outcome.status === 'removed' || outcome.status === 'not_found')
+            await this.grants.deleteById(grant.id);
+        }
+      } catch (error) {
+        // Cleanup is best-effort: a grant or storage failure must not lose the saved progress.
+        logger.warn('Progress', 'Watch-once completion cleanup failed', error);
+      }
+    }
     if (this.listClient?.isReady()) {
       await this.exported(update)
         .then(exported => this.listClient!.syncPlayback(userId, exported))

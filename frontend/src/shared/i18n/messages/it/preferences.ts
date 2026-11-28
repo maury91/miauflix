@@ -15,6 +15,9 @@ export const preferences: Translation<typeof english> = {
   'preferences.interface': 'Interfaccia',
   'preferences.interfaceLanguage': "Lingua dell'interfaccia",
   'preferences.interfaceLanguageDescription': 'Menu, pulsanti e messaggi.',
+  'preferences.watchOnce': 'Download da guardare una sola volta',
+  'preferences.watchOnceDescription':
+    'Scarica l’intero file prima della riproduzione e lo elimina al termine.',
   'preferences.audio': 'Audio',
   'preferences.subtitles': 'Sottotitoli',
   'preferences.moviesAndShows': 'Film e serie TV',

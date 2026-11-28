@@ -10,6 +10,14 @@ Miauwatch downloads media through BitTorrent, which transfers pieces of a file f
 
 Startup time depends on the source, the people sharing it, your connection, and any conversion the server needs to do. A catalog entry alone does not promise immediate playback.
 
+## Watch-once downloads
+
+Turn on **Watch-once downloads** in Preferences for a profile. The setting is per profile and off by default; with it off, downloaded files are kept as before. With it on, Miauwatch claims the whole file first — not just the small range used for preloading — then waits for it to download before playback starts instead of playing the pieces that have arrived. It then checks that the file has a video extension and that a media probe finds a video stream. A file that fails either check is removed and Miauwatch tries another source. This confirms the file is playable video; it is not antivirus scanning, and no antivirus signatures were added.
+
+When the movie or episode reports that it finished, Miauwatch deletes the file and stops its torrent. Deletion waits while another viewer is streaming the same source, then runs when the last viewer leaves; the wait is bounded, so a stream that never ends can leave the file in place. A file containing several episodes is never deleted per episode: its watch-once claim is used up when one episode ends, but the shared file stays for the other episodes. A season pack with several video files is also kept intact, so finishing one episode never removes its unplayed siblings; those sources follow the normal storage budget instead.
+
+There is no rewatch of a deleted file. To see the title again it must be downloaded again from an available source. If you stop before the end, or playback never starts, watch-once does not delete anything; the file keeps following the normal [storage budget and cleanup](storage-privacy.md#automatic-space-management) rules. The feature reuses the existing download container and cleanup path; no second container was added.
+
 ## Automatic source selection and fallback
 
 Miauwatch chooses sources using quality, device compatibility, and bitrate preferences. Bitrate is roughly how much video data must arrive each second; a very large file may need a faster connection than a smaller one.

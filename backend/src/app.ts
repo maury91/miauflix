@@ -32,6 +32,7 @@ import { PlaybackTargetService } from '@services/playback/playback-target.servic
 import { SeekThumbnailService } from '@services/playback/seek-thumbnail.service';
 import { StreamService } from '@services/playback/stream.service';
 import { TvRemuxService } from '@services/playback/tv-remux.service';
+import { WatchOnceService } from '@services/playback/watch-once.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { SourceWarmupController } from '@services/preload/source-warmup.controller';
@@ -112,11 +113,6 @@ try {
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db, configurationService);
   const profileService = new ProfileService(db, configurationService);
-  const progressService = new ProgressService(
-    db,
-    listClient,
-    new EpisodeNumberingService(db, catalogClient)
-  );
   const notificationService = new NotificationService(db);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);
@@ -195,6 +191,17 @@ try {
     sourceWarmupController,
     db.getProgressRepository()
   );
+  const watchOnceService = new WatchOnceService({
+    mediaLoad: mediaLoadClient,
+    audio: audioPlaybackService,
+  });
+  const progressService = new ProgressService(
+    db,
+    listClient,
+    new EpisodeNumberingService(db, catalogClient),
+    db.getPlaybackGrantRepository(),
+    watchOnceService
+  );
   const playbackSessionService = new PlaybackSessionService({
     db,
     preparation: playablePreparationService,
@@ -207,6 +214,8 @@ try {
     progress: db.getProgressRepository(),
     playedSources: db.getContentSourceRepository(),
     remux: tvRemuxService,
+    watchOnce: watchOnceService,
+    users: db.getUserRepository(),
   });
   const audioSourcesService = new AudioSourcesService(
     mediaService,
