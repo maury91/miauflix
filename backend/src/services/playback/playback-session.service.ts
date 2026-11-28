@@ -205,7 +205,7 @@ export interface PlaybackSessionServiceOptions {
   playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>;
   remux?: Pick<TvRemuxService, 'existing' | 'onChange' | 'request' | 'status' | 'usable'>;
   watchOnce?: WatchOnceService;
-  users?: Pick<UserRepository, 'findById'>;
+  users?: Pick<UserRepository, 'findWatchOnceById'>;
 }
 
 export class PlaybackSessionService {
@@ -239,7 +239,7 @@ export class PlaybackSessionService {
     'existing' | 'onChange' | 'request' | 'status' | 'usable'
   >;
   private readonly watchOnce?: WatchOnceService;
-  private readonly users?: Pick<UserRepository, 'findById'>;
+  private readonly users?: Pick<UserRepository, 'findWatchOnceById'>;
 
   constructor({
     db,
@@ -288,7 +288,7 @@ export class PlaybackSessionService {
       sessionId?: string;
     } = {}
   ): Promise<PlaybackSession | null> {
-    const user = await this.users?.findById(userId);
+    const user = await this.users?.findWatchOnceById(userId);
     const watchOnce = user?.watchOnce === true ? this.watchOnce : undefined;
     // Warm where the player will resume, as the details warmup did, not over it from the start.
     const resumeFraction = options.deferDownload
@@ -316,30 +316,43 @@ export class PlaybackSessionService {
       preferences.allowHevc ||
       preferences.supportedMseVideoCodecs?.includes('hevc') === true ||
       (this.audioPlaybackService?.canConvertHevc?.() ?? false);
+    let verifiedTarget: PlaybackTarget | undefined;
+    /**
+     * Watch-once never serves bytes from an unverified file. Every target chosen for a session
+     * passes here, including replacements picked by the audio-fallback/switch paths below.
+     */
+    const admit = async (result: Awaited<ReturnType<typeof prepare>>, hevc: boolean) => {
+      verifiedTarget = undefined;
+      if (!watchOnce) return result;
+      for (let rejections = 0; ; ) {
+        if (!result.target) {
+          // Nothing resolved to stream yet: this session cannot be marked watch-once.
+          if (rejections) throw new PlaybackUnavailableError('not_found');
+          return result;
+        }
+        try {
+          await watchOnce.verify(result.target);
+          verifiedTarget = result.target;
+          return result;
+        } catch (error) {
+          // Infrastructure failures are not rejections: they must not delete an in-flight file.
+          if (!(error instanceof WatchOnceRejectedError)) throw error;
+          if (!result.source) throw new PlaybackUnavailableError('not_found');
+          const rejectedId = result.source.id;
+          await watchOnce.release(rejectedId);
+          if (!avoidSourceIds.includes(rejectedId)) avoidSourceIds.push(rejectedId);
+          if (++rejections >= 3) throw new PlaybackUnavailableError('not_found');
+          result = await prepare(hevc);
+          if (result.exhausted) throw new PlaybackUnavailableError('exhausted');
+          if (result.noRoom) throw new PlaybackUnavailableError('insufficient_storage');
+        }
+      }
+    };
     let prepared = await prepare(allowHevc);
-    // Watch-once waits for a whole, real file before granting a session. Only source selection
-    // is retried here (three preparations at most); the audio-fallback loop below is unchanged.
-    for (let rejections = 0; ; ) {
-      if (prepared.exhausted) throw new PlaybackUnavailableError('exhausted');
-      if (prepared.noRoom) throw new PlaybackUnavailableError('insufficient_storage');
-      if (!prepared.source) {
-        if (rejections) throw new PlaybackUnavailableError('not_found');
-        return null;
-      }
-      if (!watchOnce || !prepared.target) break;
-      try {
-        await watchOnce.verify(prepared.target);
-        break;
-      } catch (error) {
-        // Infrastructure failures are not rejections: they must not delete an in-flight file.
-        if (!(error instanceof WatchOnceRejectedError)) throw error;
-        const rejectedId = prepared.source.id;
-        await watchOnce.release(rejectedId);
-        avoidSourceIds.push(rejectedId);
-        if (++rejections >= 3) throw new PlaybackUnavailableError('not_found');
-        prepared = await prepare(allowHevc);
-      }
-    }
+    if (prepared.exhausted) throw new PlaybackUnavailableError('exhausted');
+    if (prepared.noRoom) throw new PlaybackUnavailableError('insufficient_storage');
+    if (!prepared.source) return null;
+    prepared = await admit(prepared, allowHevc);
     // Each viewer keeps what they started watching; another viewer's claim is independent.
     const ownerKey = this.watchOwnerKey(userId, playable);
     if (prepared.target && (prepared.state === 'ready' || prepared.state === 'warming')) {
@@ -369,7 +382,7 @@ export class PlaybackSessionService {
             const fallback = await prepare(false);
             if (fallback.source) {
               allowHevc = false;
-              prepared = fallback;
+              prepared = await admit(fallback, false);
               if (prepared.target && prepared.state !== 'cold') {
                 await this.warmup?.promote(prepared.target, this.playableKey(playable), ownerKey);
               }
@@ -422,18 +435,19 @@ export class PlaybackSessionService {
       const released = alternative && (await this.releaseWatched(converting, ownerKey));
       const switched = alternative && (await prepare(allowHevc, alternative.avoided));
       if (switched && switched.source?.id === alternative.sourceId && switched.target) {
+        prepared = await admit(switched, allowHevc);
         logger.info(
           'PlaybackSessionService',
-          `Source ${converting} needs audio conversion; playing source ${alternative.sourceId} instead`
+          `Source ${converting} needs audio conversion; playing source ${prepared.source?.id ?? alternative.sourceId} instead`
         );
-        prepared = switched;
+        const target = prepared.target!;
         if (prepared.state === 'ready' || prepared.state === 'warming')
-          await this.warmup?.promote(switched.target, this.playableKey(playable), ownerKey);
+          await this.warmup?.promote(target, this.playableKey(playable), ownerKey);
         const known = await this.audioPlaybackService
-          .knownDelivery(switched.target, preferences)
+          .knownDelivery(target, preferences)
           .catch(() => null);
         delivery = known ?? undefined;
-        pendingTarget = known ? undefined : switched.target;
+        pendingTarget = known ? undefined : target;
       } else if (
         released &&
         prepared.target &&
@@ -466,7 +480,7 @@ export class PlaybackSessionService {
       playableKind: playable.kind,
       playableKey: this.playableKey(playable),
       expiresAt,
-      watchOnce: !!watchOnce,
+      watchOnce: verifiedTarget !== undefined && verifiedTarget === prepared.target,
       matchKind: prepared.target?.matchKind ?? 'single',
     });
 
