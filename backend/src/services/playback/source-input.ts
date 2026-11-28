@@ -23,7 +23,7 @@ export const SOURCE_STALL_MS = 1000;
 
 /** A private loopback capability exposes only this file; no arbitrary URLs or plaintext files. */
 export async function openSourceInput(
-  mediaLoad: MediaLoadClientService,
+  mediaLoad: Pick<MediaLoadClientService, 'streamFile'>,
   target: PlaybackTarget,
   speculative = false,
   onRead?: (state: SourceReadState) => void,

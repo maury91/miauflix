@@ -13,7 +13,7 @@ ENV MALLOC_ARENA_MAX=2
 WORKDIR /usr/src/app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3 make g++ ffmpeg && \
+    apt-get install -y --no-install-recommends python3 make g++ ffmpeg mpv && \
     rm -rf /var/lib/apt/lists/*
 
 COPY package.json bun.lock tsconfig.json turbo.json ./
