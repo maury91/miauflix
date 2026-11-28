@@ -1,6 +1,7 @@
 jest.mock('@logger', () => ({ logger: { warn: jest.fn() } }));
 
 import type { Database } from '@database/database';
+import type { PlaybackGrant } from '@entities/playback-grant.entity';
 import type { Progress } from '@entities/progress.entity';
 import type { ProgressUpdateRequest } from '@mytypes/progress.types';
 import type { ListClientService } from '@services/list/list-client.service';
@@ -151,5 +152,104 @@ describe('ProgressService', () => {
     const error = new Error('database unavailable');
     repository.findByUser.mockRejectedValue(error);
     await expect(service.findByUser('user-1')).rejects.toBe(error);
+  });
+});
+
+const completed: ProgressUpdateRequest = { ...update, state: 'completed' };
+
+const watchOnceGrant = (matchKind: PlaybackGrant['matchKind'] = 'single'): PlaybackGrant => ({
+  id: 7,
+  keyHash: 'hash',
+  userId: 'user-1',
+  sourceId: 42,
+  playableKind: 'movie',
+  playableKey: 'm:123',
+  expiresAt: new Date('2026-12-01T00:00:00Z'),
+  watchOnce: true,
+  matchKind,
+  createdAt: new Date('2026-11-28T00:00:00Z'),
+});
+
+const setupCompletionTest = (grant: PlaybackGrant | null) => {
+  const repository = {
+    upsert: jest.fn().mockResolvedValue({}),
+    findByUser: jest.fn().mockResolvedValue([]),
+  };
+  const database = { getProgressRepository: () => repository } as unknown as Database;
+  let active = grant;
+  const grants = {
+    findWatchOnceForCompletion: jest.fn(async (): Promise<PlaybackGrant | null> => active),
+    deleteById: jest.fn(async (id: number) => {
+      if (active?.id === id) active = null;
+    }),
+  };
+  const watchOnce = { release: jest.fn(async () => ({ status: 'removed' as const, bytes: 100 })) };
+  const service = new ProgressService(database, undefined, undefined, grants, watchOnce);
+  return { service, repository, grants, watchOnce };
+};
+
+describe('watch-once completion', () => {
+  it('releases the grant source and consumes the grant when playback completes', async () => {
+    const { service, repository, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+
+    await expect(service.update('user-1', completed)).resolves.toBeUndefined();
+
+    expect(repository.upsert).toHaveBeenCalledWith('user-1', completed);
+    expect(grants.findWatchOnceForCompletion).toHaveBeenCalledWith(
+      'user-1',
+      'movie',
+      'm:123',
+      expect.any(Date)
+    );
+    expect(grants.deleteById).toHaveBeenCalledWith(7);
+    expect(watchOnce.release).toHaveBeenCalledWith(42);
+  });
+
+  it('releases only once for two consecutive completed reports', async () => {
+    const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+
+    await service.update('user-1', completed);
+    await service.update('user-1', completed);
+
+    expect(grants.deleteById).toHaveBeenCalledTimes(1);
+    expect(watchOnce.release).toHaveBeenCalledTimes(1);
+  });
+
+  it('consumes a combined grant without releasing shared storage', async () => {
+    const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant('combined'));
+
+    await service.update('user-1', completed);
+
+    expect(grants.deleteById).toHaveBeenCalledWith(7);
+    expect(watchOnce.release).not.toHaveBeenCalled();
+  });
+
+  it('does not look up a grant for paused progress', async () => {
+    const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+
+    await service.update('user-1', update);
+
+    expect(grants.findWatchOnceForCompletion).not.toHaveBeenCalled();
+    expect(grants.deleteById).not.toHaveBeenCalled();
+    expect(watchOnce.release).not.toHaveBeenCalled();
+  });
+
+  it('still saves progress when no watch-once grant matches', async () => {
+    const { service, repository, watchOnce } = setupCompletionTest(null);
+
+    await expect(service.update('user-1', completed)).resolves.toBeUndefined();
+
+    expect(repository.upsert).toHaveBeenCalledWith('user-1', completed);
+    expect(watchOnce.release).not.toHaveBeenCalled();
+  });
+
+  it('keeps progress saved when release fails', async () => {
+    const { service, repository, watchOnce } = setupCompletionTest(watchOnceGrant());
+    watchOnce.release.mockRejectedValueOnce(new Error('media-load offline'));
+
+    await expect(service.update('user-1', completed)).resolves.toBeUndefined();
+
+    expect(repository.upsert).toHaveBeenCalledWith('user-1', completed);
+    expect(watchOnce.release).toHaveBeenCalledWith(42);
   });
 });

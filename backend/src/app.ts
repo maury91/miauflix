@@ -113,11 +113,6 @@ try {
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db, configurationService);
   const profileService = new ProfileService(db, configurationService);
-  const progressService = new ProgressService(
-    db,
-    listClient,
-    new EpisodeNumberingService(db, catalogClient)
-  );
   const notificationService = new NotificationService(db);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);
@@ -200,6 +195,13 @@ try {
     mediaLoad: mediaLoadClient,
     audio: audioPlaybackService,
   });
+  const progressService = new ProgressService(
+    db,
+    listClient,
+    new EpisodeNumberingService(db, catalogClient),
+    db.getPlaybackGrantRepository(),
+    watchOnceService
+  );
   const playbackSessionService = new PlaybackSessionService({
     db,
     preparation: playablePreparationService,
