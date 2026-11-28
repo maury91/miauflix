@@ -1,4 +1,4 @@
-import type { StorageRemovalResult } from '@miauwatch/service-contracts';
+import type { ClaimRequest, StorageRemovalResult } from '@miauwatch/service-contracts';
 
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import { isVideoFile } from '@services/source/video-files';
@@ -10,7 +10,10 @@ import type { PlaybackTarget } from './playback-target';
 export class WatchOnceRejectedError extends Error {}
 
 export interface WatchOnceServiceOptions {
-  mediaLoad: Pick<MediaLoadClientService, 'isFileComplete' | 'removeStorageWithResult'>;
+  mediaLoad: Pick<
+    MediaLoadClientService,
+    'getMediaFiles' | 'isFileComplete' | 'predownload' | 'removeStorageWithResult'
+  >;
   audio: Pick<AudioPlaybackService, 'probeFresh'>;
   sleep?: (ms: number) => Promise<void>;
   now?: () => number;
@@ -38,6 +41,22 @@ export class WatchOnceService {
     this.timeoutMs = options.timeoutMs ?? 600_000;
     this.intervalMs = options.intervalMs ?? 1_000;
     this.maxReleaseRetries = options.maxReleaseRetries ?? 30;
+  }
+
+  /** Claim the whole file before polling, so pieces beyond the warmup range keep downloading. */
+  async claim(target: PlaybackTarget, ownerKey: string): Promise<void> {
+    const claim: ClaimRequest = { kind: 'watched', ownerKey, ttlMs: null };
+    await this.mediaLoad.predownload(target, claim);
+  }
+
+  /** A season pack shares one storage record across several video files; keep it intact. */
+  async hasSiblingVideoFiles(sourceId: number): Promise<boolean> {
+    const layout = await this.mediaLoad.getMediaFiles({
+      source: { id: sourceId },
+      filePath: '',
+      matchKind: 'movie',
+    } as PlaybackTarget);
+    return layout.files.filter(file => isVideoFile(file.path)).length > 1;
   }
 
   /** Reject unless the file is a complete, probed video. */

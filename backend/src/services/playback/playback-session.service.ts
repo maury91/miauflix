@@ -291,6 +291,7 @@ export class PlaybackSessionService {
     // Prefetches never download or download-verify a file, so watch-once does not apply to them.
     const user = options.deferDownload ? undefined : await this.users?.findWatchOnceById(userId);
     const watchOnce = user?.watchOnce === true ? this.watchOnce : undefined;
+    const watchOwner = this.watchOwnerKey(userId, playable);
     // Warm where the player will resume, as the details warmup did, not over it from the start.
     const resumeFraction = options.deferDownload
       ? undefined
@@ -331,6 +332,7 @@ export class PlaybackSessionService {
           throw new PlaybackUnavailableError('not_found');
         }
         try {
+          await watchOnce.claim(result.target, watchOwner);
           await watchOnce.verify(result.target);
           verifiedTarget = result.target;
           return result;
@@ -354,7 +356,7 @@ export class PlaybackSessionService {
     if (!prepared.source) return null;
     prepared = await admit(prepared, allowHevc);
     // Each viewer keeps what they started watching; another viewer's claim is independent.
-    const ownerKey = this.watchOwnerKey(userId, playable);
+    const ownerKey = watchOwner;
     if (prepared.target && (prepared.state === 'ready' || prepared.state === 'warming')) {
       await this.warmup?.promote(prepared.target, this.playableKey(playable), ownerKey);
     }

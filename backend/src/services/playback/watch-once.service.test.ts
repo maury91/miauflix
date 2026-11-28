@@ -20,6 +20,13 @@ const target = {
 const setup = (overrides: Partial<WatchOnceServiceOptions> = {}) => {
   let time = 0;
   const isFileComplete = jest.fn(async () => true);
+  const predownload = jest.fn(async () => true);
+  const getMediaFiles = jest.fn(async () => ({
+    storeName: 's',
+    filenameSalt: 'k',
+    pieceLength: 1,
+    files: [{ path: 'movie.mkv', length: 100, offset: 0 }],
+  }));
   const removeStorageWithResult = jest.fn(
     async (): Promise<StorageRemovalResult> => ({ status: 'removed', bytes: 42 })
   );
@@ -32,7 +39,12 @@ const setup = (overrides: Partial<WatchOnceServiceOptions> = {}) => {
   });
   const now = jest.fn(() => time);
   const service = new WatchOnceService({
-    mediaLoad: { isFileComplete, removeStorageWithResult } as unknown as MediaLoadClientService,
+    mediaLoad: {
+      isFileComplete,
+      predownload,
+      getMediaFiles,
+      removeStorageWithResult,
+    } as unknown as MediaLoadClientService,
     audio: { probeFresh, probeFile } as unknown as AudioPlaybackService,
     sleep,
     now,
@@ -41,7 +53,17 @@ const setup = (overrides: Partial<WatchOnceServiceOptions> = {}) => {
     maxReleaseRetries: 2,
     ...overrides,
   });
-  return { service, isFileComplete, removeStorageWithResult, probeFresh, probeFile, sleep, now };
+  return {
+    service,
+    isFileComplete,
+    predownload,
+    getMediaFiles,
+    removeStorageWithResult,
+    probeFresh,
+    probeFile,
+    sleep,
+    now,
+  };
 };
 
 describe('WatchOnceService.verify', () => {
@@ -128,5 +150,42 @@ describe('WatchOnceService.release', () => {
     await expect(service.release(7)).resolves.toEqual({ status: 'cleanup_failed' });
     expect(removeStorageWithResult).toHaveBeenCalledTimes(1);
     expect(sleep).not.toHaveBeenCalled();
+  });
+});
+
+describe('WatchOnceService file claims', () => {
+  it('claims the whole file with a non-expiring watched claim before waiting', async () => {
+    const { service, predownload } = setup();
+
+    await service.claim(target, 'owner-1');
+
+    expect(predownload).toHaveBeenCalledWith(target, {
+      kind: 'watched',
+      ownerKey: 'owner-1',
+      ttlMs: null,
+    });
+  });
+
+  it('detects a season pack with sibling video files', async () => {
+    const { service, getMediaFiles } = setup();
+    getMediaFiles.mockResolvedValueOnce({
+      storeName: 's',
+      filenameSalt: 'k',
+      pieceLength: 1,
+      files: [
+        { path: 'S01E01.mkv', length: 100, offset: 0 },
+        { path: 'S01E02.mkv', length: 100, offset: 100 },
+        { path: 'sample.txt', length: 2, offset: 200 },
+      ],
+    });
+
+    await expect(service.hasSiblingVideoFiles(7)).resolves.toBe(true);
+    expect(getMediaFiles).toHaveBeenCalledWith(expect.objectContaining({ source: { id: 7 } }));
+  });
+
+  it('does not treat a single video file as a season pack', async () => {
+    const { service } = setup();
+
+    await expect(service.hasSiblingVideoFiles(7)).resolves.toBe(false);
   });
 });

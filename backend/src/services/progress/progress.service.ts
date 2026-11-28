@@ -29,7 +29,7 @@ export class ProgressService {
       PlaybackGrantRepository,
       'deleteById' | 'findWatchOnceForCompletion' | 'hasOtherActiveWatchOnceGrants'
     >,
-    private readonly watchOnce?: Pick<WatchOnceService, 'release'>
+    private readonly watchOnce?: Pick<WatchOnceService, 'hasSiblingVideoFiles' | 'release'>
   ) {
     this.progressRepository = database.getProgressRepository();
   }
@@ -58,10 +58,16 @@ export class ProgressService {
             grant.id,
             new Date()
           );
+          // A season pack shares one storage record: deleting it would also remove unplayed
+          // episodes. Keep the source until a per-file reclaim exists.
+          const siblings =
+            shared || grant.matchKind === 'combined'
+              ? false
+              : await this.watchOnce.hasSiblingVideoFiles(grant.sourceId);
           // Keep the grant while release is still retryable: a later completion report can
           // finish the cleanup. Combined files have no release, so their grant ends here.
           const outcome =
-            shared || grant.matchKind === 'combined'
+            shared || siblings || grant.matchKind === 'combined'
               ? undefined
               : await this.watchOnce.release(grant.sourceId);
           if (!outcome || outcome.status === 'removed' || outcome.status === 'not_found')

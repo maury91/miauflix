@@ -190,6 +190,7 @@ const setupCompletionTest = (grant: PlaybackGrant | null) => {
     release: jest.fn(
       async (): Promise<StorageRemovalResult> => ({ status: 'removed', bytes: 100 })
     ),
+    hasSiblingVideoFiles: jest.fn(async (): Promise<boolean> => false),
   };
   const service = new ProgressService(database, undefined, undefined, grants, watchOnce);
   return { service, repository, grants, watchOnce };
@@ -313,5 +314,16 @@ describe('watch-once completion', () => {
     await service.update('user-1', completed);
 
     expect(watchOnce.release).toHaveBeenCalledWith(42);
+  });
+
+  it('keeps a season-pack source when sibling video files are still present', async () => {
+    const { service, grants, watchOnce } = setupCompletionTest(watchOnceGrant());
+    watchOnce.hasSiblingVideoFiles.mockResolvedValueOnce(true);
+
+    await service.update('user-1', completed);
+
+    expect(watchOnce.hasSiblingVideoFiles).toHaveBeenCalledWith(42);
+    expect(watchOnce.release).not.toHaveBeenCalled();
+    expect(grants.deleteById).toHaveBeenCalledWith(7);
   });
 });

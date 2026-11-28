@@ -1313,6 +1313,7 @@ describe('PlaybackSessionService', () => {
         findWatchOnceById: jest.fn().mockResolvedValue({ watchOnce }),
       };
       const verify = jest.fn(async (_target: { source: { id: number } }) => undefined);
+      const claim = jest.fn(async () => undefined);
       const release = jest.fn(async (_sourceId: number) => ({ status: 'removed' }));
       const audio = { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) };
       const service = new PlaybackSessionService({
@@ -1321,16 +1322,17 @@ describe('PlaybackSessionService', () => {
         config: { getOrThrow: () => 60_000 } as never,
         audioPlaybackService: audio as never,
         users: users as never,
-        watchOnce: { verify, release } as never,
+        watchOnce: { claim, verify, release } as never,
       });
-      return { service, grants, users, verify, release, audio };
+      return { service, grants, users, claim, verify, release, audio };
     };
 
     it('waits for verification and grants the target match kind', async () => {
       const target = { source: { id: 1 }, filePath: 'Show.mkv', matchKind: 'combined' as const };
       const prepare = jest.fn(async () => ({ source: { id: 1 }, target, state: 'ready' }));
-      const { service, grants, users, verify, release } = setup(true, prepare);
+      const { service, grants, users, claim, verify, release } = setup(true, prepare);
       verify.mockImplementation(async () => {
+        expect(claim).toHaveBeenCalledWith(target, 'user:user:m:1');
         expect(users.findWatchOnceById).toHaveBeenCalledWith('user');
         expect(grants.create).not.toHaveBeenCalled();
       });
@@ -1338,6 +1340,7 @@ describe('PlaybackSessionService', () => {
       const session = await service.create('user', playable, preferences);
 
       expect(session).not.toBeNull();
+      expect(claim).toHaveBeenCalledTimes(1);
       expect(verify).toHaveBeenCalledWith(target);
       expect(grants.create).toHaveBeenCalledWith(
         expect.objectContaining({ watchOnce: true, matchKind: 'combined' })
